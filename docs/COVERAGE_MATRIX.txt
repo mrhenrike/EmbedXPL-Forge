@@ -11,17 +11,17 @@ Termux / Android / NetHunter: Compatible by design, not tested effectively yet
 
 ## Global Capability Summary
 
-- Module tree (routerxpl/modules): 08f0a5bc65aded0db96ad1e9d5d6422f58e35744
-- Total modules indexed: 278
-- Distinct vendor/product entries: 278
-- Distinct CVEs mapped in modules: 23
+- Module tree (routerxpl/modules): b45c542523818b75417622c49fa14801d50b839a
+- Total modules indexed: 266
+- Distinct vendor/product entries: 266
+- Distinct CVEs mapped in modules: 21
 - Attack classes identified: auth_bypass, backdoor, creds_disclosure, dns_change, info_disclosure, password_reset_or_change, path_traversal, rce
 
 ### Module Type Counts
 - creds: 88
 - encoders: 13
 - exploits: 120
-- generic: 20
+- generic: 8
 - payloads: 32
 - scanners: 5
 
@@ -73,7 +73,7 @@ Termux / Android / NetHunter: Compatible by design, not tested effectively yet
 | L1 | Link | Physical | ethernet | 1 | yes | link_disruption_or_flap_induction, tap_or_span_blind_spot_abuse, physical_plane_availability_degradation | link_state_validation, duplex_speed_mismatch_detection, capture_integrity_verification | P2 | P2 | P2 |
 | L2 | Link | Data Link | arp | 0 | no | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P1 | P1 | P1 |
 | L2 | Link | Data Link | vlan_8021q_qinq | 0 | no | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P1 | P1 | P1 |
-| L2 | Link | Data Link | 802.11_wifi | 16 | yes | offline_wpa_crack, handshake_capture_replay, credential_harvest | ap_enumeration, station_mapping, handshake_extraction, cleartext_sniffing | P2 | P1 | P2 |
+| L2 | Link | Data Link | 802.11_wifi | 7 | yes | offline_wpa_crack, handshake_capture_replay, credential_harvest | ap_enumeration, station_mapping, handshake_extraction, cleartext_sniffing | P2 | P1 | P2 |
 | L2 | Link | Data Link | stp_rstp_mstp | 0 | no | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P2 | P1 | P2 |
 | L2 | Link | Data Link | lacp | 0 | no | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P2 | P1 | P2 |
 | L2 | Link | Data Link | lldp | 0 | no | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P2 | P2 | P2 |
@@ -87,11 +87,11 @@ Termux / Android / NetHunter: Compatible by design, not tested effectively yet
 | L5-L7 | Application | Session/Presentation/Application | dns | 6 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P2 |
 | L5-L7 | Application | Session/Presentation/Application | dhcp | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P2 |
 | L5-L7 | Application | Session/Presentation/Application | ntp_ptp | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P2 | P1 |
-| L5-L7 | Application | Session/Presentation/Application | snmp_snmpv3 | 4 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
+| L5-L7 | Application | Session/Presentation/Application | snmp_snmpv3 | 3 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
 | L5-L7 | Application | Session/Presentation/Application | ssh | 27 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
-| L5-L7 | Application | Session/Presentation/Application | telnet | 28 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P3 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | ftp_ftps_sftp | 29 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P2 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | http_https_api | 14 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
+| L5-L7 | Application | Session/Presentation/Application | telnet | 27 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P3 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | ftp_ftps_sftp | 28 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P2 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | http_https_api | 13 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
 | L5-L7 | Application | Session/Presentation/Application | radius_tacacs | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P2 | P3 |
 | L5-L7 | Application | Session/Presentation/Application | tr069_cwmp | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P3 | P3 |
 | L5-L7 | Application | Session/Presentation/Application | syslog | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P1 | P2 |
@@ -107,10 +107,10 @@ Termux / Android / NetHunter: Compatible by design, not tested effectively yet
 | Layer | Total Protocol Hits |
 |---|---:|
 | L1 Physical | 1 |
-| L2 Data Link | 16 |
+| L2 Data Link | 7 |
 | L3 Network | 0 |
 | L4 Transport | 37 |
-| L5-L7 Session/Presentation/Application | 108 |
+| L5-L7 Session/Presentation/Application | 104 |
 
 ## Market Priority Coverage (2010-2026)
 
@@ -1351,24 +1351,6 @@ billion/telnet_default_creds | modules=1 | exploits=0 creds=1 scanners=0 generic
   Module paths:
     - modules/creds/routers/billion/telnet_default_creds.py
 
-bluetooth/btle_enumerate | modules=1 | exploits=0 creds=0 scanners=0 generic=1 payloads=0 encoders=0
-  CVEs: none
-  Attacks: none
-  Module paths:
-    - modules/generic/bluetooth/btle_enumerate.py
-
-bluetooth/btle_scan | modules=1 | exploits=0 creds=0 scanners=0 generic=1 payloads=0 encoders=0
-  CVEs: none
-  Attacks: none
-  Module paths:
-    - modules/generic/bluetooth/btle_scan.py
-
-bluetooth/btle_write | modules=1 | exploits=0 creds=0 scanners=0 generic=1 payloads=0 encoders=0
-  CVEs: none
-  Attacks: none
-  Module paths:
-    - modules/generic/bluetooth/btle_write.py
-
 cisco/catalyst_2960_rocem | modules=1 | exploits=1 creds=0 scanners=0 generic=0 payloads=0 encoders=0
   CVEs: CVE-2017-3881
   Attacks: none
@@ -2202,60 +2184,6 @@ netsys/telnet_default_creds | modules=1 | exploits=0 creds=1 scanners=0 generic=
   Attacks: none
   Module paths:
     - modules/creds/routers/netsys/telnet_default_creds.py
-
-pcap/pcap_ap_station_mapper | modules=1 | exploits=0 creds=0 scanners=0 generic=1 payloads=0 encoders=0
-  CVEs: none
-  Attacks: none
-  Module paths:
-    - modules/generic/pcap/pcap_ap_station_mapper.py
-
-pcap/pcap_credential_sniffer | modules=1 | exploits=0 creds=0 scanners=0 generic=1 payloads=0 encoders=0
-  CVEs: none
-  Attacks: none
-  Module paths:
-    - modules/generic/pcap/pcap_credential_sniffer.py
-
-pcap/pcap_dragonblood | modules=1 | exploits=0 creds=0 scanners=0 generic=1 payloads=0 encoders=0
-  CVEs: CVE-2019-9494, CVE-2019-9496
-  Attacks: none
-  Module paths:
-    - modules/generic/pcap/pcap_dragonblood.py
-
-pcap/pcap_handshake_extractor | modules=1 | exploits=0 creds=0 scanners=0 generic=1 payloads=0 encoders=0
-  CVEs: none
-  Attacks: none
-  Module paths:
-    - modules/generic/pcap/pcap_handshake_extractor.py
-
-pcap/pcap_offline_wpa_crack | modules=1 | exploits=0 creds=0 scanners=0 generic=1 payloads=0 encoders=0
-  CVEs: none
-  Attacks: none
-  Module paths:
-    - modules/generic/pcap/pcap_offline_wpa_crack.py
-
-pcap/pcap_pmkid_attack | modules=1 | exploits=0 creds=0 scanners=0 generic=1 payloads=0 encoders=0
-  CVEs: none
-  Attacks: none
-  Module paths:
-    - modules/generic/pcap/pcap_pmkid_attack.py
-
-pcap/pcap_tkip_downgrade | modules=1 | exploits=0 creds=0 scanners=0 generic=1 payloads=0 encoders=0
-  CVEs: none
-  Attacks: none
-  Module paths:
-    - modules/generic/pcap/pcap_tkip_downgrade.py
-
-pcap/pcap_wep_crack | modules=1 | exploits=0 creds=0 scanners=0 generic=1 payloads=0 encoders=0
-  CVEs: none
-  Attacks: none
-  Module paths:
-    - modules/generic/pcap/pcap_wep_crack.py
-
-pcap/pcap_wpe_harvest | modules=1 | exploits=0 creds=0 scanners=0 generic=1 payloads=0 encoders=0
-  CVEs: none
-  Attacks: none
-  Module paths:
-    - modules/generic/pcap/pcap_wpe_harvest.py
 
 perl/base64 | modules=1 | exploits=0 creds=0 scanners=0 generic=0 payloads=0 encoders=1
   CVEs: none

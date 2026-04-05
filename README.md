@@ -1,6 +1,6 @@
 # RouterXPL-Forge
 
-Open-source framework for security testing of **embedded devices**, focused on **routers, Layer 2–3 switches, TAPs, and home/SOHO edge** (CPE, mixed edge). **Firewall / NGFW / UTM / WAF / cloud perimeter** coverage lives in the sibling project [**FirewallXPL-Forge**](https://github.com/mrhenrike/FirewallXPL-Forge) (private lab fork).
+Open-source framework for security testing of **embedded devices**, focused on **routers, Layer 2–3 switches, TAPs, and home/SOHO edge** (CPE, mixed edge). **Firewall / NGFW / perimeter:** [**FirewallXPL-Forge**](https://github.com/mrhenrike/FirewallXPL-Forge) (private). **802.11 / WPA / BLE lab:** [**WirelessXPL-Forge**](https://github.com/mrhenrike/WirelessXPL-Forge) (private).
 
 **Maintainer:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| [União Geek](https://github.com/Uniao-Geek)  
 **Upstream lineage:** [threat9/routersploit](https://github.com/threat9/routersploit)
@@ -21,7 +21,7 @@ RouterXPL-Forge provides **modules** that support **authorized** assessments (pe
 | **exploits** | Abuse known vulnerabilities (with `check()` where implemented) |
 | **creds** | Default credentials and brute force against network services |
 | **scanners** | Weakness identification; **autopwn** orchestrates modules with Nmap-like timing profiles |
-| **generic** | Cross-cutting utilities: SNMP, SSDP, offline PCAP/Wi‑Fi, **CVE lookup**, wordlist generator, Bluetooth LE |
+| **generic** | Cross-cutting utilities: SNMP, SSDP, **CVE lookup**, wordlist generator, external bridges *(Wi‑Fi/BLE PCAP → WirelessXPL-Forge)* |
 | **payloads** | Payload generation by architecture (ARM/MIPS/x86, reverse/bind shells) |
 | **encoders** | Payload encoding (Python, PHP, Perl) |
 
@@ -160,6 +160,10 @@ To publish on **GitHub Wiki**, copy the chosen locale folder (or both) into the 
 | `tools/incorporate_third_party_poc_tree.py` | Vendor third-party PoC snapshots into `arsenal/pocs/incorporated_third_party/` |
 
 ---
+
+## Release notes — 3.5.0
+
+- **Wireless split:** All `generic/pcap/*`, `generic/bluetooth/*`, and `core/pcap` / `core/bluetooth` moved to [**WirelessXPL-Forge**](https://github.com/mrhenrike/WirelessXPL-Forge). New tools: `tools/bootstrap_wirelessxpl_forge.py`, `tools/trim_routerxpl_wireless_scope.py`, `tools/trim_firewallxpl_wireless_scope.py`.
 
 ## Release notes — 3.4.9
 

@@ -128,5 +128,6 @@
       "ngfw",
       "isp_cpe"
     ]
-  }
+  },
+  "note": "Wireless / BLE PCAP and live BT modules live in WirelessXPL-Forge (https://github.com/mrhenrike/WirelessXPL-Forge)."
 }

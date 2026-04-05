@@ -2,7 +2,7 @@
 
 **Idioma:** **Português (pt-BR)**. **English (en-US, padrão do repositório):** [README.md](README.md)
 
-Framework open source para testes de segurança em **dispositivos embutidos**, com foco em **roteadores, switches camada 2–3, TAPs e edge SOHO/CPE**. **Firewall / NGFW / UTM / WAF / perímetro em nuvem** ficam no projeto irmão [**FirewallXPL-Forge**](https://github.com/mrhenrike/FirewallXPL-Forge) (fork privado de laboratório).
+Framework open source para testes de segurança em **dispositivos embutidos**, com foco em **roteadores, switches camada 2–3, TAPs e edge SOHO/CPE**. **Perímetro / NGFW:** [**FirewallXPL-Forge**](https://github.com/mrhenrike/FirewallXPL-Forge) (privado). **Wi‑Fi / WPA / BLE (PCAP):** [**WirelessXPL-Forge**](https://github.com/mrhenrike/WirelessXPL-Forge) (privado).
 
 **Mantenedor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| [União Geek](https://github.com/Uniao-Geek)  
 **Linhagem upstream:** [threat9/routersploit](https://github.com/threat9/routersploit)
@@ -134,6 +134,10 @@ O bootstrap regista em **`routerxpl.log`**.
 | [docs/FULL_CATALOG.md](docs/FULL_CATALOG.md) | Catálogo ampliado |
 
 ---
+
+## Notas de versão — 3.5.0
+
+- **Wi‑Fi / BLE:** Módulos `generic/pcap/*`, `generic/bluetooth/*` e `core/pcap` / `core/bluetooth` migrados para [**WirelessXPL-Forge**](https://github.com/mrhenrike/WirelessXPL-Forge). Novos *scripts*: `bootstrap_wirelessxpl_forge.py`, `trim_routerxpl_wireless_scope.py`, `trim_firewallxpl_wireless_scope.py`.
 
 ## Notas de versão — 3.4.9
 

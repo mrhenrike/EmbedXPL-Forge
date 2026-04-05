@@ -1,6 +1,6 @@
 RouterXPL-Forge - Full Module Catalog
 ========================================
-Generated: 2026-04-05T05:04:38.860777+00:00
+Generated: 2026-04-05T05:43:33.001607+00:00
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 
 SUMMARY
@@ -8,31 +8,31 @@ SUMMARY
   EXPLOITS: 120 modules, 34 vendor/group buckets
   CREDENTIAL MODULES: 88 modules, 38 vendor/group buckets
   SCANNERS: 5 modules, 3 vendor/group buckets
-  GENERIC MODULES: 20 modules, 7 vendor/group buckets
+  GENERIC MODULES: 8 modules, 5 vendor/group buckets
   ENCODERS: 13 modules, 3 vendor/group buckets
   PAYLOADS: 32 modules, 9 vendor/group buckets
-  TOTAL MODULES: 278
-  DISTINCT CVEs: 23
+  TOTAL MODULES: 266
+  DISTINCT CVEs: 21
 
 PROGRAM FOOTPRINT
 --------------------
 Repository root: D:\Projetos-SafeLabs\submodules\IoT\RouterXPL-Forge
 Total file bytes: 1.80 GiB
-Files (repo walk, excl. skipped dirs): 55464
-Files under routerxpl/: 54786
+Files (repo walk, excl. skipped dirs): 55445
+Files under routerxpl/: 54764
 
 Largest top-level paths:
   routerxpl                                1.79 GiB  (99.7%)
-  docs                                     4.57 MiB  (0.2%)
+  docs                                     4.54 MiB  (0.2%)
   tests                                  319.00 KiB  (0.0%)
-  tools                                  277.29 KiB  (0.0%)
+  tools                                  292.98 KiB  (0.0%)
   routerxpl.egg-info                      58.36 KiB  (0.0%)
-  (repo root files)                       44.07 KiB  (0.0%)
+  (repo root files)                       44.55 KiB  (0.0%)
 
 routerxpl/ first-level folders:
   resources                                1.79 GiB  (99.7%)
-  modules                                666.30 KiB  (0.0%)
-  core                                   226.88 KiB  (0.0%)
+  modules                                618.07 KiB  (0.0%)
+  core                                   166.31 KiB  (0.0%)
   (routerxpl root files)                  27.00 KiB  (0.0%)
   libs                                    13.68 KiB  (0.0%)
 
@@ -46,10 +46,10 @@ routerxpl/resources/* direct children (largest):
   ml                                       1.22 KiB  (0.0%)
 
 First-party .py file counts (excl. __pycache__):
-  routerxpl/core         46
-  routerxpl/modules      365
+  routerxpl/core         38
+  routerxpl/modules      351
   routerxpl/libs         5
-  tools                  37
+  tools                  40
   rxf.py                 1
 
 EXPLOITS (120)
@@ -1156,103 +1156,51 @@ SCANNERS (5)
      Module that scans for routers vulnerablities and weaknesses.
      Devices: Router
 
-GENERIC MODULES (20)
+GENERIC MODULES (8)
 ========================================
-
-[BLUETOOTH] (3)
-------------------------------
-  1. Bluetooth LE Enumerate
-     Path: generic/bluetooth/btle_enumerate.py
-     Enumerating services and characteristics of a given Bluetooth Low Energy devices.
-  2. Bluetooth LE Scan
-     Path: generic/bluetooth/btle_scan.py
-     Scans for Bluetooth Low Energy devices.
-  3. Bluetooth LE Write
-     Path: generic/bluetooth/btle_write.py
-     Writes data to target Bluetooth Low Energy device to given characteristic.
 
 [CVE] (1)
 ------------------------------
-  4. CVE Lookup by Banner / Vendor / Product
+  1. CVE Lookup by Banner / Vendor / Product
      Path: generic/cve/cve_lookup.py
      Queries the embedded CVE database for known vulnerabilities matching a target's vendor, product, version or raw banner. 
      Devices: Any — database covers routers, switches, firewalls, NGFW in scope
 
 [EXTERNAL] (4)
 ------------------------------
-  5. ExploitDB embedded lookup (CSV)
+  2. ExploitDB embedded lookup (CSV)
      Path: generic/external/exploitdb_embedded_lookup.py
      Searches files_exploits.csv in the bundled exploit-database__exploitdb tree (arsenal/pocs/incorporated_third_party). No 
      Devices: Research / catalog
-  6. Metasploit Console Bridge
+  3. Metasploit Console Bridge
      Path: generic/external/metasploit_console_bridge.py
      Invokes local msfconsole with 'use <module>; setg RHOSTS; …; check|run'. MSF modules and license remain under Rapid7/BSD
      Devices: Any (depends on chosen Metasploit module)
-  7. Metasploit Ruby Module Metadata (read-only)
+  4. Metasploit Ruby Module Metadata (read-only)
      Path: generic/external/metasploit_rb_inspect.py
      Loads a .rb path from your Metasploit tree and prints Name/Author/References heuristics. Does not run Ruby or MSF; origi
      Devices: Documentation
-  8. MikrotikAPI-BF Bridge
+  5. MikrotikAPI-BF Bridge
      Path: generic/external/mikrotikapi_bf_bridge.py
      Runs MikrotikAPI-BF (https://github.com/mrhenrike/MikrotikAPI-BF) via subprocess. Set script_path to your repo's mikroti
      Devices: MikroTik RouterOS
 
-[PCAP] (9)
-------------------------------
-  9. PCAP AP & Station Mapper
-     Path: generic/pcap/pcap_ap_station_mapper.py
-     Offline analysis of PCAP/PCAPNG captures to enumerate access points (BSSID, SSID, channel, encryption) and client statio
-     Devices: Any 802.11 wireless capture
-  10. PCAP Offline Credential Sniffer
-     Path: generic/pcap/pcap_credential_sniffer.py
-     Offline extraction of cleartext credentials from PCAP/PCAPNG captures. Detects HTTP Basic/Form auth, FTP USER/PASS, Teln
-     Devices: Any network capture with cleartext protocols
-  11. PCAP Offline EAP/WPE Credential Harvester
-     Path: generic/pcap/pcap_wpe_harvest.py
-     Extracts EAP identities and challenge-response pairs from 802.1X authentication captures (WPA-Enterprise). Supports EAP-
-     Devices: Any WPA-Enterprise / 802.1X network capture
-  12. PCAP Offline PMKID Attack (WPA/WPA2 Clientless)
-     Path: generic/pcap/pcap_pmkid_attack.py
-     Extracts PMKID from EAPOL message 1 for clientless WPA/WPA2 offline attacks. No full 4-way handshake required. Outputs h
-     Devices: Any WPA/WPA2-PSK network (most modern APs include PMKID)
-  13. PCAP Offline TKIP/Michael Attack Analysis
-     Path: generic/pcap/pcap_tkip_downgrade.py
-     Analyzes PCAP captures for TKIP vulnerabilities including Beck-Tews (QoS injection), Ohigashi-Morii (man-in-the-middle),
-     Devices: Any WPA-TKIP or WPA2-TKIP mixed-mode network capture
-  14. PCAP Offline WEP Key Recovery
-     Path: generic/pcap/pcap_wep_crack.py
-     Extracts WEP IVs from PCAP captures and runs offline statistical key recovery using aircrack-ng (FMS/PTW/KoreK). Reports
-     Devices: Any WEP-encrypted 802.11 network capture
-  15. PCAP Offline WPA/WPA2 Dictionary Attack
-     Path: generic/pcap/pcap_offline_wpa_crack.py
-     Runs an offline dictionary attack against WPA/WPA2 handshakes captured in PCAP files. Supports aircrack-ng (default) and
-     Devices: Any WPA/WPA2 PSK network (captured handshake required)
-  16. PCAP Offline WPA3 Dragonblood Analysis
-     Path: generic/pcap/pcap_dragonblood.py
-     Analyzes WPA3 SAE (Dragonfly) handshakes in PCAP captures for Dragonblood vulnerabilities: CVE-2019-9494 (timing side-ch
-     CVEs: CVE-2019-9494, CVE-2019-9496
-     Devices: Any WPA3-SAE or WPA3-Transition mode network capture
-  17. PCAP WPA/WPA2 Handshake Extractor
-     Path: generic/pcap/pcap_handshake_extractor.py
-     Offline extraction of EAPOL 4-way handshakes from PCAP/PCAPNG captures. Exports usable handshakes to individual PCAP fil
-     Devices: Any 802.11 WPA/WPA2 wireless capture
-
 [SNMP] (1)
 ------------------------------
-  18. SNMP Trap Listener
+  6. SNMP Trap Listener
      Path: generic/snmp/snmp_trap_listener.py
      Operational validation module for SNMP trap reception over UDP.
      Devices: Routers, Switches, TAPs, FW, NGFW
 
 [UPNP] (1)
 ------------------------------
-  19. SSDP M-SEARCH Info Discovery
+  7. SSDP M-SEARCH Info Discovery
      Path: generic/upnp/ssdp_msearch.py
      Sends M-SEARCH request to target and retrieve information from UPnP enabled systems.
 
 [WORDLIST] (1)
 ------------------------------
-  20. Interactive Wordlist Generator
+  8. Interactive Wordlist Generator
      Path: generic/wordlist/wordlist_generator.py
      Generates custom password and username wordlists based on target profile (corporate or personal). Applies mutation rules
      Devices: Any target — wordlist generation is target-independent
@@ -1434,7 +1382,7 @@ PAYLOADS (32)
      Path: payloads/x86/reverse_tcp.py
      Creates interactive tcp reverse shell for X86 architecture.
 
-CVE MASTER LIST (23)
+CVE MASTER LIST (21)
 ========================================
   1. CVE-2001-0537 -> exploits/routers/cisco/ios_http_authorization_bypass.py
   2. CVE-2008-0403 -> exploits/routers/belkin/g_plus_info_disclosure.py
@@ -1457,8 +1405,6 @@ CVE MASTER LIST (23)
   19. CVE-2018-6000 -> exploits/routers/asus/asuswrt_lan_rce.py
   20. CVE-2019-1652 -> exploits/routers/cisco/rv320_command_injection.py
   21. CVE-2019-16920 -> exploits/routers/dlink/dir_655_866_652_rce.py
-  22. CVE-2019-9494 -> generic/pcap/pcap_dragonblood.py
-  23. CVE-2019-9496 -> generic/pcap/pcap_dragonblood.py
 
 
 --- Generated by tools/generate_full_catalog.py ---
