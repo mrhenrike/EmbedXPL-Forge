@@ -88,6 +88,10 @@ Reconhecimento focado em superfície SSL-VPN / correlacionável a CVEs FortiGate
 
 AutoPwn específico para *vendor* HooToo (subconjunto de módulos).
 
+## `scanners/misc/soho_exploit_catalog_server`
+
+Serve o **catálogo SOHO** embutido (HTML/JS em `routerxpl/resources/arsenal/pocs/soho_exploit_catalog/`) via HTTP (**`127.0.0.1:8765`** por omissão). Uso em laboratório; `open_browser true` abre o *browser* predefinido.
+
 ---
 
 [Wiki hub](../README.md)

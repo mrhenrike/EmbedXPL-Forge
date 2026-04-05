@@ -39,6 +39,8 @@ Estilo hub-and-spoke (como no MikrotikAPI-BF). **Mermaid:** [diagrams/architectu
 
 ```bash
 python tools/generate_coverage_matrix.py
+python tools/generate_full_catalog.py
+python tools/refresh_cve_extended_catalog.py
 python tools/gen_wiki_module_index.py
 ```
 

@@ -1,0 +1,1037 @@
+{
+  "catalog_root": "D:/Projetos-SafeLabs/submodules/IoT/RouterXPL-Forge/routerxpl/resources/arsenal/pocs/soho_exploit_catalog",
+  "scripts_js": "routerxpl/resources/arsenal/pocs/soho_exploit_catalog/includes/scripts.js",
+  "function_count": 206,
+  "functions": [
+    {
+      "name": "b",
+      "line": 14,
+      "preview": "(function(r){function b(a,b,d){this.low=a|0;this.high=b|0;this.unsigned=!!d}var s={},t={};b.fromInt=function(a,c){var d;if(c){a>>>=0;if(0<=a&&256>a&&(d=t[a]))return d;d=new b(a,0>(a|0)?-1:0,!0);0<=a&&256>a&&(t[a]=d)}else{a|=0;if(-128<=a&&12"
+    },
+    {
+      "name": "cobhamaviatorsailorexplorer_serialreset",
+      "line": 40,
+      "preview": "function cobhamaviatorsailorexplorer_serialreset()"
+    },
+    {
+      "name": "binatone_dt850w_changeadmin",
+      "line": 68,
+      "preview": "function binatone_dt850w_changeadmin(ip)"
+    },
+    {
+      "name": "sitecom400xwpa",
+      "line": 80,
+      "preview": "function sitecom400xwpa(keylength) {"
+    },
+    {
+      "name": "img",
+      "line": 147,
+      "preview": "function img(query) {"
+    },
+    {
+      "name": "setip",
+      "line": 151,
+      "preview": "function setip(url) {"
+    },
+    {
+      "name": "setipssl",
+      "line": 156,
+      "preview": "function setipssl(url) {"
+    },
+    {
+      "name": "getxss",
+      "line": 161,
+      "preview": "function getxss() {"
+    },
+    {
+      "name": "dir514_pathequivalence",
+      "line": 173,
+      "preview": "function dir514_pathequivalence(ip)"
+    },
+    {
+      "name": "dslg624t_dirtraversal",
+      "line": 181,
+      "preview": "function dslg624t_dirtraversal(ip)"
+    },
+    {
+      "name": "hg110_dirtraversal",
+      "line": 189,
+      "preview": "function hg110_dirtraversal(ip)"
+    },
+    {
+      "name": "wb3300nr_factoryreset",
+      "line": 197,
+      "preview": "function wb3300nr_factoryreset(ip)"
+    },
+    {
+      "name": "wb3300nr_changedns",
+      "line": 209,
+      "preview": "function wb3300nr_changedns(ip)"
+    },
+    {
+      "name": "omnipcx_mastercgicommandexec",
+      "line": 226,
+      "preview": "function omnipcx_mastercgicommandexec(ip)"
+    },
+    {
+      "name": "dwr113_dos",
+      "line": 234,
+      "preview": "function dwr113_dos(ip)"
+    },
+    {
+      "name": "dir300615_commandexec",
+      "line": 249,
+      "preview": "function dir300615_commandexec(ip)"
+    },
+    {
+      "name": "lynx526_passwordreset",
+      "line": 258,
+      "preview": "function lynx526_passwordreset(ip)"
+    },
+    {
+      "name": "urlxss",
+      "line": 266,
+      "preview": "function urlxss(url) {"
+    },
+    {
+      "name": "HG824x",
+      "line": 271,
+      "preview": "function HG824x()"
+    },
+    {
+      "name": "hg866pass",
+      "line": 332,
+      "preview": "function hg866pass() {"
+    },
+    {
+      "name": "hg866passr",
+      "line": 341,
+      "preview": "function hg866passr() {"
+    },
+    {
+      "name": "dap1320_dirtraversal",
+      "line": 351,
+      "preview": "function dap1320_dirtraversal(ip)"
+    },
+    {
+      "name": "hg866dosr",
+      "line": 376,
+      "preview": "function hg866dosr() {"
+    },
+    {
+      "name": "rtn16_passdisclosure",
+      "line": 385,
+      "preview": "function rtn16_passdisclosure(ip)"
+    },
+    {
+      "name": "x2000_command",
+      "line": 392,
+      "preview": "function x2000_command(ip)"
+    },
+    {
+      "name": "wag200gb_command",
+      "line": 413,
+      "preview": "function wag200gb_command(ip)"
+    },
+    {
+      "name": "sph200d_dirtraversal",
+      "line": 483,
+      "preview": "function sph200d_dirtraversal(ip)"
+    },
+    {
+      "name": "omnipcx_commandexec",
+      "line": 494,
+      "preview": "function omnipcx_commandexec(ip)"
+    },
+    {
+      "name": "dwl2100ap_configdisclosure",
+      "line": 502,
+      "preview": "function dwl2100ap_configdisclosure(ip)"
+    },
+    {
+      "name": "dsl2750u_bypassauth",
+      "line": 509,
+      "preview": "function dsl2750u_bypassauth(ip)"
+    },
+    {
+      "name": "d615d3_changepass",
+      "line": 516,
+      "preview": "function d615d3_changepass(ip)"
+    },
+    {
+      "name": "d635_changepass",
+      "line": 525,
+      "preview": "function d635_changepass(ip)"
+    },
+    {
+      "name": "wndr3400_disclosure",
+      "line": 534,
+      "preview": "function wndr3400_disclosure(ip)"
+    },
+    {
+      "name": "n300d_bypassauth",
+      "line": 542,
+      "preview": "function n300d_bypassauth(ip)"
+    },
+    {
+      "name": "dsl2740b_disablemacfilter",
+      "line": 552,
+      "preview": "function dsl2740b_disablemacfilter(ip)"
+    },
+    {
+      "name": "dgn1000b_commandexec",
+      "line": 562,
+      "preview": "function dgn1000b_commandexec(ip)"
+    },
+    {
+      "name": "dir280_changepassword",
+      "line": 571,
+      "preview": "function dir280_changepassword(ip)"
+    },
+    {
+      "name": "dsl2740b_remote",
+      "line": 591,
+      "preview": "function dsl2740b_remote(ip)"
+    },
+    {
+      "name": "td8840t_resetauth",
+      "line": 610,
+      "preview": "function td8840t_resetauth(ip)"
+    },
+    {
+      "name": "dsl320b_configdisclosure",
+      "line": 618,
+      "preview": "function dsl320b_configdisclosure(ip)"
+    },
+    {
+      "name": "wrt54gl_remoteexec",
+      "line": 625,
+      "preview": "function wrt54gl_remoteexec(ip)"
+    },
+    {
+      "name": "wrt54gl_changepassword",
+      "line": 633,
+      "preview": "function wrt54gl_changepassword(ip)"
+    },
+    {
+      "name": "e4200_dirtraversal",
+      "line": 641,
+      "preview": "function e4200_dirtraversal(ip)"
+    },
+    {
+      "name": "themoon_remoteexec",
+      "line": 655,
+      "preview": "function themoon_remoteexec(ip)"
+    },
+    {
+      "name": "x3000_command",
+      "line": 671,
+      "preview": "function x3000_command(ip)"
+    },
+    {
+      "name": "dgn2200_commandexec",
+      "line": 690,
+      "preview": "function dgn2200_commandexec(ip)"
+    },
+    {
+      "name": "dgn2200_opentelnet",
+      "line": 706,
+      "preview": "function dgn2200_opentelnet(ip)"
+    },
+    {
+      "name": "wrt160nv2_command",
+      "line": 722,
+      "preview": "function wrt160nv2_command(ip)"
+    },
+    {
+      "name": "afterTwoSeconds",
+      "line": 739,
+      "preview": "function afterTwoSeconds() {"
+    },
+    {
+      "name": "wrt110_command",
+      "line": 744,
+      "preview": "function wrt110_command(ip)"
+    },
+    {
+      "name": "wr1043nd_dnscsrf",
+      "line": 756,
+      "preview": "function wr1043nd_dnscsrf(ip)"
+    },
+    {
+      "name": "epc3925_changepassword",
+      "line": 766,
+      "preview": "function epc3925_changepassword(ip)"
+    },
+    {
+      "name": "epc3925_postxss",
+      "line": 776,
+      "preview": "function epc3925_postxss(ip)"
+    },
+    {
+      "name": "x3000_addadmin",
+      "line": 790,
+      "preview": "function x3000_addadmin(ip)"
+    },
+    {
+      "name": "freeboxdosr",
+      "line": 821,
+      "preview": "function freeboxdosr() {"
+    },
+    {
+      "name": "brightbox_configdisclosure",
+      "line": 830,
+      "preview": "function brightbox_configdisclosure(ip)"
+    },
+    {
+      "name": "huapppr",
+      "line": 837,
+      "preview": "function huapppr(){"
+    },
+    {
+      "name": "rtn66uexe",
+      "line": 847,
+      "preview": "function rtn66uexe(){"
+    },
+    {
+      "name": "N56Uexe",
+      "line": 858,
+      "preview": "function N56Uexe(){"
+    },
+    {
+      "name": "huappp",
+      "line": 869,
+      "preview": "function huappp(){"
+    },
+    {
+      "name": "wireAddHosts",
+      "line": 876,
+      "preview": "function wireAddHosts() {"
+    },
+    {
+      "name": "wireAddHostsip",
+      "line": 883,
+      "preview": "function wireAddHostsip() {"
+    },
+    {
+      "name": "wirecrlfr",
+      "line": 893,
+      "preview": "function wirecrlfr() {"
+    },
+    {
+      "name": "wirecrlf",
+      "line": 899,
+      "preview": "function wirecrlf() {"
+    },
+    {
+      "name": "ssDefaultPass",
+      "line": 907,
+      "preview": "function ssDefaultPass() {"
+    },
+    {
+      "name": "thomsondom",
+      "line": 915,
+      "preview": "function thomsondom() {"
+    },
+    {
+      "name": "thomsondomr",
+      "line": 924,
+      "preview": "function thomsondomr() {"
+    },
+    {
+      "name": "thomsonadmin",
+      "line": 937,
+      "preview": "function thomsonadmin() {"
+    },
+    {
+      "name": "thomsonadminr",
+      "line": 945,
+      "preview": "function thomsonadminr() {"
+    },
+    {
+      "name": "thomsoncall",
+      "line": 956,
+      "preview": "function thomsoncall() {"
+    },
+    {
+      "name": "thomsoncallr",
+      "line": 963,
+      "preview": "function thomsoncallr() {"
+    },
+    {
+      "name": "btra",
+      "line": 974,
+      "preview": "function btra() {"
+    },
+    {
+      "name": "btrar",
+      "line": 981,
+      "preview": "function btrar() {"
+    },
+    {
+      "name": "btwifir",
+      "line": 992,
+      "preview": "function btwifir() {"
+    },
+    {
+      "name": "mt880admin",
+      "line": 1001,
+      "preview": "function mt880admin() {"
+    },
+    {
+      "name": "mt880adminr",
+      "line": 1007,
+      "preview": "function mt880adminr() {"
+    },
+    {
+      "name": "dc227backdoor",
+      "line": 1016,
+      "preview": "function dc227backdoor() {"
+    },
+    {
+      "name": "dsl2740b_disablefirewall",
+      "line": 1022,
+      "preview": "function dsl2740b_disablefirewall(ip)"
+    },
+    {
+      "name": "mt880fw",
+      "line": 1032,
+      "preview": "function mt880fw() {"
+    },
+    {
+      "name": "airoscmd",
+      "line": 1041,
+      "preview": "function airoscmd() {"
+    },
+    {
+      "name": "airoscmdr",
+      "line": 1047,
+      "preview": "function airoscmdr() {"
+    },
+    {
+      "name": "comcommand",
+      "line": 1056,
+      "preview": "function comcommand() {"
+    },
+    {
+      "name": "comcommandl",
+      "line": 1063,
+      "preview": "function comcommandl() {"
+    },
+    {
+      "name": "belkindns",
+      "line": 1072,
+      "preview": "function belkindns() {"
+    },
+    {
+      "name": "belkindnsr",
+      "line": 1089,
+      "preview": "function belkindnsr() {"
+    },
+    {
+      "name": "belkinrest",
+      "line": 1110,
+      "preview": "function belkinrest() {"
+    },
+    {
+      "name": "tF",
+      "line": 1119,
+      "preview": "function tF() {"
+    },
+    {
+      "name": "wrtadmin",
+      "line": 1128,
+      "preview": "function wrtadmin() {"
+    },
+    {
+      "name": "wrtadminr",
+      "line": 1136,
+      "preview": "function wrtadminr() {"
+    },
+    {
+      "name": "wdr740_dirtraversal",
+      "line": 1148,
+      "preview": "function wdr740_dirtraversal(ip)"
+    },
+    {
+      "name": "d615d3_commandexec",
+      "line": 1156,
+      "preview": "function d615d3_commandexec(ip)"
+    },
+    {
+      "name": "wag120pass",
+      "line": 1165,
+      "preview": "function wag120pass() {"
+    },
+    {
+      "name": "wag120passr",
+      "line": 1173,
+      "preview": "function wag120passr() {"
+    },
+    {
+      "name": "sagem2604",
+      "line": 1185,
+      "preview": "function sagem2604() {"
+    },
+    {
+      "name": "sagem2604r",
+      "line": 1192,
+      "preview": "function sagem2604r() {"
+    },
+    {
+      "name": "wag120add",
+      "line": 1203,
+      "preview": "function wag120add() {"
+    },
+    {
+      "name": "wag120addr",
+      "line": 1213,
+      "preview": "function wag120addr() {"
+    },
+    {
+      "name": "wrtradmin",
+      "line": 1227,
+      "preview": "function wrtradmin() { //fixed. thnx lightos"
+    },
+    {
+      "name": "wrtradminr",
+      "line": 1237,
+      "preview": "function wrtradminr() {"
+    },
+    {
+      "name": "wrtdefault",
+      "line": 1251,
+      "preview": "function wrtdefault() {"
+    },
+    {
+      "name": "wrtwifi",
+      "line": 1260,
+      "preview": "function wrtwifi() {"
+    },
+    {
+      "name": "wbrpass",
+      "line": 1269,
+      "preview": "function wbrpass() {"
+    },
+    {
+      "name": "wbrpassr",
+      "line": 1275,
+      "preview": "function wbrpassr() {"
+    },
+    {
+      "name": "dirpass",
+      "line": 1284,
+      "preview": "function dirpass() {"
+    },
+    {
+      "name": "dirpassr",
+      "line": 1290,
+      "preview": "function dirpassr() {"
+    },
+    {
+      "name": "dsltpass",
+      "line": 1299,
+      "preview": "function dsltpass() {"
+    },
+    {
+      "name": "dsltpassr",
+      "line": 1303,
+      "preview": "function dsltpassr() {"
+    },
+    {
+      "name": "DSL2640B",
+      "line": 1313,
+      "preview": "function DSL2640B() {"
+    },
+    {
+      "name": "DSL2640Br",
+      "line": 1320,
+      "preview": "function DSL2640Br() {"
+    },
+    {
+      "name": "ff2640U",
+      "line": 1330,
+      "preview": "function ff2640U(){"
+    },
+    {
+      "name": "ff1500WG",
+      "line": 1339,
+      "preview": "function ff1500WG(){"
+    },
+    {
+      "name": "singwiredosr",
+      "line": 1348,
+      "preview": "function singwiredosr() {"
+    },
+    {
+      "name": "setipadminadmin",
+      "line": 1357,
+      "preview": "function setipadminadmin() {"
+    },
+    {
+      "name": "zyxelxss",
+      "line": 1365,
+      "preview": "function zyxelxss() {"
+    },
+    {
+      "name": "zyxelxssr",
+      "line": 1374,
+      "preview": "function zyxelxssr() {"
+    },
+    {
+      "name": "zyxelxssp",
+      "line": 1387,
+      "preview": "function zyxelxssp() {"
+    },
+    {
+      "name": "zyxelxsspr",
+      "line": 1394,
+      "preview": "function zyxelxsspr() {"
+    },
+    {
+      "name": "zyxeldefault",
+      "line": 1405,
+      "preview": "function zyxeldefault() {"
+    },
+    {
+      "name": "shodan",
+      "line": 1413,
+      "preview": "function shodan() {"
+    },
+    {
+      "name": "macfind",
+      "line": 1421,
+      "preview": "function macfind() {"
+    },
+    {
+      "name": "isnaaa",
+      "line": 1429,
+      "preview": "function isnaaa(){"
+    },
+    {
+      "name": "isnagr",
+      "line": 1437,
+      "preview": "function isnagr(){"
+    },
+    {
+      "name": "isnggs",
+      "line": 1445,
+      "preview": "function isnggs(){"
+    },
+    {
+      "name": "isnser",
+      "line": 1453,
+      "preview": "function isnser(){"
+    },
+    {
+      "name": "motfirr",
+      "line": 1461,
+      "preview": "function motfirr(){"
+    },
+    {
+      "name": "motfir",
+      "line": 1467,
+      "preview": "function motfir(){"
+    },
+    {
+      "name": "motremr",
+      "line": 1474,
+      "preview": "function motremr(){"
+    },
+    {
+      "name": "motrem",
+      "line": 1480,
+      "preview": "function motrem(){"
+    },
+    {
+      "name": "motdnsr",
+      "line": 1487,
+      "preview": "function motdnsr(){"
+    },
+    {
+      "name": "motdns",
+      "line": 1493,
+      "preview": "function motdns(){"
+    },
+    {
+      "name": "motpasr",
+      "line": 1500,
+      "preview": "function motpasr(){"
+    },
+    {
+      "name": "motpas",
+      "line": 1507,
+      "preview": "function motpas(){"
+    },
+    {
+      "name": "SBG6580_motorola",
+      "line": 1515,
+      "preview": "function SBG6580_motorola(ip)"
+    },
+    {
+      "name": "ruggedcom",
+      "line": 1523,
+      "preview": "function ruggedcom(){"
+    },
+    {
+      "name": "acctongen",
+      "line": 1535,
+      "preview": "function acctongen(){"
+    },
+    {
+      "name": "printchar",
+      "line": 1549,
+      "preview": "function printchar() {"
+    },
+    {
+      "name": "mac2wepkey",
+      "line": 1573,
+      "preview": "function mac2wepkey(){"
+    },
+    {
+      "name": "trend23pwn",
+      "line": 1656,
+      "preview": "function trend23pwn(ip){"
+    },
+    {
+      "name": "netdos",
+      "line": 1667,
+      "preview": "function netdos(ip) {"
+    },
+    {
+      "name": "netbyp",
+      "line": 1676,
+      "preview": "function netbyp(){"
+    },
+    {
+      "name": "netund",
+      "line": 1686,
+      "preview": "function netund() {"
+    },
+    {
+      "name": "netundb",
+      "line": 1694,
+      "preview": "function netundb() {"
+    },
+    {
+      "name": "netcon",
+      "line": 1702,
+      "preview": "function netcon() {"
+    },
+    {
+      "name": "netconb",
+      "line": 1712,
+      "preview": "function netconb() {"
+    },
+    {
+      "name": "netlog",
+      "line": 1720,
+      "preview": "function netlog() {"
+    },
+    {
+      "name": "ciscowlc_addadmin",
+      "line": 1729,
+      "preview": "function ciscowlc_addadmin()"
+    },
+    {
+      "name": "ciscowlc_dos",
+      "line": 1746,
+      "preview": "function ciscowlc_dos()"
+    },
+    {
+      "name": "zyxel_660hwt1_v3_changessidpass",
+      "line": 1755,
+      "preview": "function zyxel_660hwt1_v3_changessidpass(ip)"
+    },
+    {
+      "name": "sagemtelnet",
+      "line": 1775,
+      "preview": "function sagemtelnet(){"
+    },
+    {
+      "name": "mash",
+      "line": 1777,
+      "preview": "function mash(a,b){"
+    },
+    {
+      "name": "sagemcable",
+      "line": 1807,
+      "preview": "function sagemcable(){"
+    },
+    {
+      "name": "easyboxwpa",
+      "line": 1820,
+      "preview": "function easyboxwpa(){"
+    },
+    {
+      "name": "readConfig",
+      "line": 1867,
+      "preview": "function readConfig() {"
+    },
+    {
+      "name": "xss",
+      "line": 1874,
+      "preview": "function xss(payload) { /* grax por el fix Alvaro Soto*/"
+    },
+    {
+      "name": "login",
+      "line": 1879,
+      "preview": "function login() {"
+    },
+    {
+      "name": "post",
+      "line": 1891,
+      "preview": "function post(url, fields) {"
+    },
+    {
+      "name": "posts",
+      "line": 1900,
+      "preview": "function posts(url, fields) {"
+    },
+    {
+      "name": "changeDNS",
+      "line": 1909,
+      "preview": "function changeDNS(server, ip) {"
+    },
+    {
+      "name": "dlidns",
+      "line": 1926,
+      "preview": "function dlidns(ip) {"
+    },
+    {
+      "name": "ddwrtexec",
+      "line": 1932,
+      "preview": "function ddwrtexec() {"
+    },
+    {
+      "name": "ddwrtexecr",
+      "line": 1938,
+      "preview": "function ddwrtexecr() {"
+    },
+    {
+      "name": "dns320",
+      "line": 1947,
+      "preview": "function dns320() { // Not used, this is a NAS, not a router, it doesn't have a default IP"
+    },
+    {
+      "name": "dns320r",
+      "line": 1953,
+      "preview": "function dns320r() {"
+    },
+    {
+      "name": "huados",
+      "line": 1962,
+      "preview": "function huados() {"
+    },
+    {
+      "name": "asmrce",
+      "line": 1970,
+      "preview": "function asmrce() {"
+    },
+    {
+      "name": "asmfile",
+      "line": 1979,
+      "preview": "function asmfile() {"
+    },
+    {
+      "name": "comtrendpass",
+      "line": 1988,
+      "preview": "function comtrendpass() {"
+    },
+    {
+      "name": "comtrendpassr",
+      "line": 1998,
+      "preview": "function comtrendpassr() {"
+    },
+    {
+      "name": "ea2700passr",
+      "line": 2011,
+      "preview": "function ea2700passr() {"
+    },
+    {
+      "name": "trendCSRF",
+      "line": 2023,
+      "preview": "function trendCSRF() {"
+    },
+    {
+      "name": "trendCSRF2",
+      "line": 2032,
+      "preview": "function trendCSRF2() {"
+    },
+    {
+      "name": "ea2700xssr",
+      "line": 2041,
+      "preview": "function ea2700xssr() {"
+    },
+    {
+      "name": "CSRFxssPWN",
+      "line": 2052,
+      "preview": "function CSRFxssPWN() {"
+    },
+    {
+      "name": "ea2700pathr",
+      "line": 2063,
+      "preview": "function ea2700pathr() {"
+    },
+    {
+      "name": "N56Ur",
+      "line": 2074,
+      "preview": "function N56Ur() {"
+    },
+    {
+      "name": "ncomtrendpass",
+      "line": 2083,
+      "preview": "function ncomtrendpass() {"
+    },
+    {
+      "name": "ncomtrendpassr",
+      "line": 2089,
+      "preview": "function ncomtrendpassr() {"
+    },
+    {
+      "name": "comtrendip",
+      "line": 2098,
+      "preview": "function comtrendip() {"
+    },
+    {
+      "name": "comtrendipr",
+      "line": 2104,
+      "preview": "function comtrendipr() {"
+    },
+    {
+      "name": "xavi",
+      "line": 2113,
+      "preview": "function xavi() {"
+    },
+    {
+      "name": "xavir",
+      "line": 2121,
+      "preview": "function xavir() {"
+    },
+    {
+      "name": "prosafe_configdisclosure",
+      "line": 2132,
+      "preview": "function prosafe_configdisclosure(ip)"
+    },
+    {
+      "name": "wxv10w300_changeadmin",
+      "line": 2139,
+      "preview": "function wxv10w300_changeadmin(ip)"
+    },
+    {
+      "name": "GenArrisPasswords",
+      "line": 2158,
+      "preview": "function GenArrisPasswords(startdate, enddate) {"
+    },
+    {
+      "name": "DIR865L",
+      "line": 2260,
+      "preview": "function DIR865L(ip){"
+    },
+    {
+      "name": "WR1043ND",
+      "line": 2267,
+      "preview": "function WR1043ND(ip){"
+    },
+    {
+      "name": "N900_csrf",
+      "line": 2282,
+      "preview": "function N900_csrf(ip){"
+    },
+    {
+      "name": "F5D8236_4v2_csrf_admin",
+      "line": 2302,
+      "preview": "function F5D8236_4v2_csrf_admin(ip){"
+    },
+    {
+      "name": "N300_csrf_admin",
+      "line": 2311,
+      "preview": "function N300_csrf_admin(ip){"
+    },
+    {
+      "name": "httpGet",
+      "line": 2324,
+      "preview": "function httpGet(url)"
+    },
+    {
+      "name": "zoomX_newadmin",
+      "line": 2333,
+      "preview": "function zoomX_newadmin(ip)"
+    },
+    {
+      "name": "i230w_auth",
+      "line": 2346,
+      "preview": "function i230w_auth(ip)"
+    },
+    {
+      "name": "dlink_command",
+      "line": 2356,
+      "preview": "function dlink_command(ip)"
+    },
+    {
+      "name": "i240w_command",
+      "line": 2367,
+      "preview": "function i240w_command(ip)"
+    },
+    {
+      "name": "N900_xss_psk",
+      "line": 2382,
+      "preview": "function N900_xss_psk(ip)"
+    },
+    {
+      "name": "N900_xss_ssid",
+      "line": 2394,
+      "preview": "function N900_xss_ssid(ip)"
+    },
+    {
+      "name": "ubecablemas_bypass",
+      "line": 2421,
+      "preview": "function ubecablemas_bypass(ip)"
+    },
+    {
+      "name": "twowire4011g5012nv_dirtraversal",
+      "line": 2431,
+      "preview": "function twowire4011g5012nv_dirtraversal(ip)"
+    },
+    {
+      "name": "ComputeChecksum",
+      "line": 2444,
+      "preview": "function ComputeChecksum(s){"
+    },
+    {
+      "name": "F",
+      "line": 2460,
+      "preview": "function F(n)"
+    },
+    {
+      "name": "FibGen",
+      "line": 2468,
+      "preview": "function FibGen(num){"
+    },
+    {
+      "name": "DG860A_wps_gen",
+      "line": 2471,
+      "preview": "function DG860A_wps_gen(strMac){"
+    },
+    {
+      "name": "belkinwpspin",
+      "line": 2542,
+      "preview": "function belkinwpspin()"
+    },
+    {
+      "name": "omniswitch_adduser",
+      "line": 2571,
+      "preview": "function omniswitch_adduser(ip)"
+    },
+    {
+      "name": "rtg32xss",
+      "line": 2586,
+      "preview": "function rtg32xss(ip)"
+    },
+    {
+      "name": "rt632csrfx",
+      "line": 2597,
+      "preview": "function rt632csrfx(ip)"
+    }
+  ]
+}

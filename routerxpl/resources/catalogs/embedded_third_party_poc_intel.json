@@ -1203,11 +1203,11 @@
       "matched_catalog_device_ids": [],
       "scope_keyword_hits": [
         "exploitdb",
-        "searchsploit"
+        "files_exploits.csv"
       ],
       "files_exploits_csv": "files_exploits.csv",
-      "rxforge_integration": "searchsploit_bridge",
-      "notes": "Mirror oficial ExploitDB. Integração RouterXPL: `searchsploit -j termo` / paths relativos a este clone; evitar ingestão linha-a-linha no catálogo estendido."
+      "rxforge_integration": "exploitdb_embedded_lookup",
+      "notes": "Cópia embarcada em routerxpl/resources/arsenal/pocs/incorporated_third_party/exploit-database__exploitdb; consulta offline: generic/external/exploitdb_embedded_lookup.py sobre files_exploits.csv (sem searchsploit)."
     },
     {
       "local_slug": "exploit-database__exploitdb-bin-sploits",
@@ -1218,11 +1218,11 @@
       "matched_catalog_device_ids": [],
       "scope_keyword_hits": [
         "exploitdb",
-        "searchsploit"
+        "bin-sploits"
       ],
       "files_exploits_csv": null,
-      "rxforge_integration": "searchsploit_bridge",
-      "notes": "Mirror oficial ExploitDB. Integração RouterXPL: `searchsploit -j termo` / paths relativos a este clone; evitar ingestão linha-a-linha no catálogo estendido."
+      "rxforge_integration": "exploitdb_embedded_lookup",
+      "notes": "Artefactos binários em incorporated_third_party/exploit-database__exploitdb-bin-sploits; metadados em files_exploits.csv (ExploitDB texto irmão); sem CLI searchsploit."
     },
     {
       "local_slug": "foreni-packages__cisco-global-exploiter",

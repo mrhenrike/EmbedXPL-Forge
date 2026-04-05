@@ -18,9 +18,9 @@
 
 ## Global Capability Summary
 
-- Module tree (routerxpl/modules): 6f7801faf88f0ac14cfd0966965322013bef5319
-- Total modules indexed: 295
-- Distinct vendor/product entries: 295
+- Module tree (routerxpl/modules): 5679ba400ba12bf17410c37e7ded059b5e507b92
+- Total modules indexed: 296
+- Distinct vendor/product entries: 296
 - Distinct CVEs mapped in modules: 32
 - Attack classes identified: auth_bypass, backdoor, creds_disclosure, dns_change, info_disclosure, password_reset_or_change, path_traversal, rce
 
@@ -30,7 +30,7 @@
 - exploits: 129
 - generic: 20
 - payloads: 32
-- scanners: 5
+- scanners: 6
 
 ## Protocol Coverage (Inferred)
 
@@ -98,7 +98,7 @@
 | L5-L7 | Application | Session/Presentation/Application | ssh | 32 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
 | L5-L7 | Application | Session/Presentation/Application | telnet | 30 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P3 | P2 |
 | L5-L7 | Application | Session/Presentation/Application | ftp_ftps_sftp | 32 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P2 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | http_https_api | 14 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
+| L5-L7 | Application | Session/Presentation/Application | http_https_api | 15 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
 | L5-L7 | Application | Session/Presentation/Application | radius_tacacs | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P2 | P3 |
 | L5-L7 | Application | Session/Presentation/Application | tr069_cwmp | 1 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P3 | P3 |
 | L5-L7 | Application | Session/Presentation/Application | syslog | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P1 | P2 |
@@ -117,7 +117,7 @@
 | L2 Data Link | 16 |
 | L3 Network | 0 |
 | L4 Transport | 37 |
-| L5-L7 Session/Presentation/Application | 119 |
+| L5-L7 Session/Presentation/Application | 120 |
 
 ## Market Priority Coverage (2010-2026)
 
@@ -178,20 +178,20 @@
 | 2010 | 5 | 6 | ok | 5 | 2 |
 | 2011 | 5 | 6 | ok | 4 | 1 |
 | 2012 | 5 | 7 | ok | 7 | 2 |
-| 2013 | 5 | 7 | ok | 6 | 0 |
-| 2014 | 5 | 7 | ok | 5 | 0 |
+| 2013 | 5 | 8 | ok | 6 | 0 |
+| 2014 | 5 | 8 | ok | 5 | 0 |
 | 2015 | 5 | 7 | ok | 5 | 1 |
-| 2016 | 5 | 8 | ok | 6 | 1 |
-| 2017 | 5 | 8 | ok | 6 | 0 |
-| 2018 | 5 | 10 | ok | 7 | 0 |
-| 2019 | 5 | 10 | ok | 6 | 0 |
+| 2016 | 5 | 9 | ok | 6 | 1 |
+| 2017 | 5 | 9 | ok | 6 | 0 |
+| 2018 | 5 | 12 | ok | 7 | 0 |
+| 2019 | 5 | 12 | ok | 6 | 0 |
 | 2020 | 5 | 11 | ok | 7 | 0 |
-| 2021 | 5 | 11 | ok | 6 | 0 |
-| 2022 | 5 | 11 | ok | 7 | 0 |
-| 2023 | 5 | 11 | ok | 7 | 0 |
-| 2024 | 5 | 11 | ok | 7 | 0 |
-| 2025 | 5 | 11 | ok | 7 | 0 |
-| 2026 | 5 | 11 | ok | 5 | 0 |
+| 2021 | 5 | 12 | ok | 6 | 0 |
+| 2022 | 5 | 12 | ok | 7 | 0 |
+| 2023 | 5 | 13 | ok | 7 | 0 |
+| 2024 | 5 | 13 | ok | 7 | 0 |
+| 2025 | 5 | 13 | ok | 7 | 0 |
+| 2026 | 5 | 13 | ok | 5 | 0 |
 
 ### Brazil Domestic Device List (2010-2026)
 
@@ -761,6 +761,7 @@
 | 2013 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2013 | Linksys | E4200 | router-home | yes | 0 |
 | 2013 | Google | Nest Wi-Fi | router-mesh | no | 0 |
+| 2013 | AT&T / Arris | NVG589 VDSL Gateway | isp-cpe/modem-router | no | 0 |
 | 2013 | Cisco | Catalyst 3850 | switch-enterprise | yes | 0 |
 | 2013 | Juniper | EX2300 | switch-enterprise | yes | 0 |
 | 2014 | TP-Link | Archer C7 | router-home | yes | 0 |
@@ -768,6 +769,7 @@
 | 2014 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2014 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 0 |
 | 2014 | Google | Nest Wi-Fi | router-mesh | no | 0 |
+| 2014 | AT&T / Arris | NVG599 VDSL Gateway | isp-cpe/modem-router | no | 0 |
 | 2014 | Cisco | Catalyst 3850 | switch-enterprise | yes | 0 |
 | 2014 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2015 | TP-Link | Archer C9 | router-home | yes | 1 |
@@ -782,6 +784,7 @@
 | 2016 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2016 | TP-Link | Archer C7 | router-home | yes | 0 |
 | 2016 | D-Link | DIR-822 | router-home | yes | 0 |
+| 2016 | AT&T / Pace | 5268AC U-Verse Gateway | isp-cpe/gateway | no | 0 |
 | 2016 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2016 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2016 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
@@ -790,6 +793,7 @@
 | 2017 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2017 | TP-Link | Archer C7 | router-home | yes | 0 |
 | 2017 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 0 |
+| 2017 | AT&T / Pace | 5268AC U-Verse Gateway | isp-cpe/gateway | no | 0 |
 | 2017 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2017 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2017 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
@@ -799,6 +803,8 @@
 | 2018 | TP-Link | Archer C7 | router-home | yes | 0 |
 | 2018 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 0 |
 | 2018 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2018 | AT&T / Pace | 5268AC U-Verse Gateway | isp-cpe/gateway | no | 0 |
+| 2018 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
 | 2018 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2018 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2018 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
@@ -809,6 +815,8 @@
 | 2019 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2019 | TP-Link | Deco M4 | router-mesh | yes | 0 |
 | 2019 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2019 | AT&T / Pace | 5268AC U-Verse Gateway | isp-cpe/gateway | no | 0 |
+| 2019 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
 | 2019 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2019 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2019 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
@@ -830,6 +838,7 @@
 | 2021 | TP-Link | Deco M4 | router-mesh | yes | 0 |
 | 2021 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2021 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2021 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
 | 2021 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2021 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2021 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
@@ -841,6 +850,7 @@
 | 2022 | TP-Link | Deco M4 | router-mesh | yes | 0 |
 | 2022 | Mercusys | MR60X | router-home | no | 0 |
 | 2022 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2022 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
 | 2022 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2022 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2022 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
@@ -852,6 +862,8 @@
 | 2023 | Huawei | AX3 Dual Core | router-home | yes | 0 |
 | 2023 | Mercusys | MR60X | router-home | no | 0 |
 | 2023 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2023 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
+| 2023 | AT&T / Nokia | BGW320-505 XGS-PON Gateway | isp-cpe/gateway | no | 0 |
 | 2023 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2023 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2023 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
@@ -863,6 +875,8 @@
 | 2024 | Mercusys | MR60X | router-home | no | 0 |
 | 2024 | Huawei | AX2S | router-home | yes | 0 |
 | 2024 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2024 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
+| 2024 | AT&T / Nokia | BGW320-505 XGS-PON Gateway | isp-cpe/gateway | no | 0 |
 | 2024 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2024 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2024 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
@@ -874,6 +888,8 @@
 | 2025 | eero | Max 7 | router-mesh | no | 0 |
 | 2025 | TP-Link | Archer BE550 | router-home | yes | 0 |
 | 2025 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2025 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
+| 2025 | AT&T / Nokia | BGW320-505 XGS-PON Gateway | isp-cpe/gateway | no | 0 |
 | 2025 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2025 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2025 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
@@ -885,6 +901,8 @@
 | 2026 | GL.iNet | Flint 3 (GL-BE9300) | router-home | no | 0 |
 | 2026 | Mercusys | MR80X | router-home | no | 0 |
 | 2026 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2026 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
+| 2026 | AT&T / Nokia | BGW320-505 XGS-PON Gateway | isp-cpe/gateway | no | 0 |
 | 2026 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2026 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2026 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
@@ -917,6 +935,7 @@
 
 | ID | Name | Type | Domain | Scope Alignment | Integration Status | Test Matrix | Source |
 |---|---|---|---|---|---|---|---|
+| forge-incorporated-third-party-pocs | Local mirror of third-party-router-poc clones (all slugs) | embedded-offline-tree | router-soho | high | embedded-in-forge | tracked | urn:routerxpl:incorporated-third-party-pocs |
 | belkin4xx-keygen | Belkin4xx key correlation script | algorithm-research | wifi-default-key | conditional | queued_for_analysis | tracked | https://bitbucket.org/dudux/belkin4xx/src/eb7545023f250589bfc2f944472964754a83f66d/belkin4xx.py?at=master |
 | pirelli-prg-eav4202n | PRG EAV4202N default WPA algorithm research | algorithm-research | wifi-default-key | conditional | queued_for_analysis | tracked | https://sviehb.wordpress.com/2011/12/04/prg-eav4202n-default-wpa-key-algorithm/ |
 | threat9-upnpfuzz | UPnPFuzz | fuzzing-tool | upnp-discovery-fuzzing | high | planned-adapter | tracked | https://github.com/threat9/upnpfuzz/?tab=readme-ov-file |
@@ -925,13 +944,62 @@
 | threat9-main | THREAT9 official site | vendor-context | project-context | reference | reference | tracked | https://threat9.com/ |
 | routerpwn-site | RouterPWN (SOHO router exploits, generators, advisories) | exploit-index | router-soho | high | queued_for_curation | tracked | https://routerpwn.com/ |
 | routerpwn-wayback | RouterPWN — Internet Archive (Wayback) catch-all | exploit-index-archive | router-soho | high | queued_for_curation | tracked | https://web.archive.org/web/*/http://routerpwn.com/ |
-| routerpwn-github-mirror | hkm/routerpwn.com (static mirror / offline bundle) | source-mirror | router-soho | high | queued_for_analysis | tracked | https://github.com/hkm/routerpwn.com |
+| routerpwn-github-mirror | hkm/routerpwn.com (static mirror / offline bundle) | source-mirror | router-soho | high | embedded-in-forge | tracked | https://github.com/hkm/routerpwn.com |
 | exploit-db-hardware-search | Exploit-DB — hardware / router vendor search | exploit-index | router-switch-fw | conditional | reference | tracked | https://www.exploit-db.com/ |
 | intelbras-vuln-checker-gist | Community Intelbras router vuln checklist (gist) | research-index | router-br | conditional | queued_for_curation | tracked | https://gist.github.com/MrCl0wnLab/2c325380cff786e0e1556c1fc8306098 |
 | metasploit-framework-github | Metasploit Framework (Rapid7) — upstream source | exploit-framework | orchestration-bridge | high | adapter-module | tracked | https://github.com/rapid7/metasploit-framework |
-| exploitdb-gitlab | Exploit-DB / searchsploit (OffSec) — upstream | exploit-database | research-cli | high | adapter-module | tracked | https://gitlab.com/exploit-database/exploitdb |
+| exploitdb-gitlab | Exploit-DB (OffSec) — upstream reference | exploit-database | research-cli | high | embedded-in-forge | tracked | https://gitlab.com/exploit-database/exploitdb |
 | mikrotikapi-bf-github | MikrotikAPI-BF — RouterOS toolkit (author) | vendor-toolkit | mikrotik-routeros | high | adapter-module | tracked | https://github.com/mrhenrike/MikrotikAPI-BF |
 | bitbucket-router-research | Bitbucket search — router / firmware / exploit keywords | discovery-hint | router-soho | low | reference | tracked | https://bitbucket.org/search?q=router |
+| local-poc-0vercl0k-zenith | 0vercl0k__zenith (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/0vercl0k/zenith.git |
+| local-poc-0xedh-mistrastar-mips-exploit | 0xedh__mistrastar-mips-exploit (clone local PoC) | local-git-submodule | iot_embedded_poc | conditional | embedded-local-mirror | tracked | https://github.com/0xedh/mistrastar-mips-exploit.git |
+| local-poc-0xyassine-poc-seeker | 0xyassine__poc-seeker (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/0xyassine/poc-seeker.git |
+| local-poc-649-pingpon-exploit | 649__Pingpon-Exploit (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/649/Pingpon-Exploit.git |
+| local-poc-acecilia-openwrtinvasion | acecilia__OpenWRTInvasion (clone local PoC) | local-git-submodule | iot_embedded_poc | conditional | embedded-local-mirror | tracked | https://github.com/acecilia/OpenWRTInvasion.git |
+| local-poc-afang5472-tp-link-wdr-router-command-injection_poc | afang5472__TP-Link-WDR-Router-Command-injection_POC (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/afang5472/TP-Link-WDR-Router-Command-injection_POC.git |
+| local-poc-arthastang-iot-home-guard | arthastang__IoT-Home-Guard (clone local PoC) | local-git-submodule | iot_embedded_poc | conditional | embedded-local-mirror | tracked | https://github.com/arthastang/IoT-Home-Guard.git |
+| local-poc-arthastang-iot-implant-toolkit | arthastang__IoT-Implant-Toolkit (clone local PoC) | local-git-submodule | iot_embedded_poc | conditional | embedded-local-mirror | tracked | https://github.com/arthastang/IoT-Implant-Toolkit.git |
+| local-poc-arthastang-router-exploit-shovel | arthastang__Router-Exploit-Shovel (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/arthastang/Router-Exploit-Shovel.git |
+| local-poc-coincoin7-wireless-router-vulnerability | coincoin7__Wireless-Router-Vulnerability (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/coincoin7/Wireless-Router-Vulnerability.git |
+| local-poc-cybervinner-tp-link-tl-wr820n-cve-2025-14175 | CyberVinner__TP-Link-TL-WR820N-CVE-2025-14175 (clone local PoC) | local-git-submodule | iot_embedded_poc | high | embedded-local-mirror | tracked | https://github.com/CyberVinner/TP-Link-TL-WR820N-CVE-2025-14175.git |
+| local-poc-dylvie-cve-2020-35575-tp-link-tl-wr841nd-password-disclosure | dylvie__CVE-2020-35575-TP-LINK-TL-WR841ND-password-disclosure (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/dylvie/CVE-2020-35575-TP-LINK-TL-WR841ND-password-disclosure.git |
+| local-poc-elbertavares-routers-exploit | ElberTavares__routers-exploit (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/ElberTavares/routers-exploit.git |
+| local-poc-entysec-hatasm | EntySec__HatAsm (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/EntySec/HatAsm.git |
+| local-poc-entysec-hatsploit | EntySec__HatSploit (clone local PoC) | local-git-submodule | iot_embedded_poc | high | embedded-local-mirror | tracked | https://github.com/EntySec/HatSploit.git |
+| local-poc-entysec-libload | EntySec__libload (clone local PoC) | local-git-submodule | iot_embedded_poc | conditional | embedded-local-mirror | tracked | https://github.com/EntySec/libload.git |
+| local-poc-entysec-pwny | EntySec__Pwny (clone local PoC) | local-git-submodule | iot_embedded_poc | conditional | embedded-local-mirror | tracked | https://github.com/EntySec/Pwny.git |
+| local-poc-entysec-rombuster | EntySec__RomBuster (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/EntySec/RomBuster.git |
+| local-poc-exploit-database-exploitdb | exploit-database__exploitdb (clone local PoC) | local-git-submodule | exploitdb_mirror | conditional | embedded-local-mirror | tracked | https://gitlab.com/exploit-database/exploitdb.git |
+| local-poc-exploit-database-exploitdb-bin-sploits | exploit-database__exploitdb-bin-sploits (clone local PoC) | local-git-submodule | exploitdb_mirror | conditional | embedded-local-mirror | tracked | https://gitlab.com/exploit-database/exploitdb-bin-sploits.git |
+| local-poc-foreni-packages-cisco-global-exploiter | foreni-packages__cisco-global-exploiter (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/foreni-packages/cisco-global-exploiter.git |
+| local-poc-g-bdennour-huawei | G-bdennour__Huawei (clone local PoC) | local-git-submodule | iot_embedded_poc | conditional | embedded-local-mirror | tracked | https://github.com/G-bdennour/Huawei.git |
+| local-poc-hkm-routerpwn.com | hkm__routerpwn.com (clone local PoC) | local-git-submodule | iot_embedded_poc | conditional | embedded-local-mirror | tracked | https://github.com/hkm/routerpwn.com.git |
+| local-poc-hook-s3c-cve-2018-18852 | hook-s3c__CVE-2018-18852 (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/hook-s3c/CVE-2018-18852.git |
+| local-poc-iridium-tapohax | iridium__tapohax (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/iridium/tapohax.git |
+| local-poc-j91321-rext | j91321__rext (clone local PoC) | local-git-submodule | iot_embedded_poc | high | embedded-local-mirror | tracked | https://github.com/j91321/rext.git |
+| local-poc-jackdoan-tp-link-archerc5-rce | JackDoan__TP-Link-ArcherC5-RCE (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/JackDoan/TP-Link-ArcherC5-RCE.git |
+| local-poc-johnoseni1-router-hacker-exploit-and-extract-user-and-password- | johnoseni1__Router-hacker-Exploit-and-extract-user-and-password- (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/johnoseni1/Router-hacker-Exploit-and-extract-user-and-password-.git |
+| local-poc-knqyf263-cve-2020-10749 | knqyf263__CVE-2020-10749 (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/knqyf263/CVE-2020-10749.git |
+| local-poc-kthemis-routerexploitscan | kthemis__RouterExploitScan (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/kthemis/RouterExploitScan.git |
+| local-poc-maherazzouzi-zte-f660-exploit | MaherAzzouzi__ZTE-F660-Exploit (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/MaherAzzouzi/ZTE-F660-Exploit.git |
+| local-poc-openwrt-xiaomi-xmir-patcher | openwrt-xiaomi__xmir-patcher (clone local PoC) | local-git-submodule | iot_embedded_poc | high | embedded-local-mirror | tracked | https://github.com/openwrt-xiaomi/xmir-patcher.git |
+| local-poc-oscommonjs-exp_iot | oscommonjs__EXP_IOT (clone local PoC) | local-git-submodule | iot_embedded_poc | high | embedded-local-mirror | tracked | https://github.com/oscommonjs/EXP_IOT.git |
+| local-poc-samyk-evercookie | samyk__evercookie (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/samyk/evercookie.git |
+| local-poc-samyk-magspoof | samyk__magspoof (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/samyk/magspoof.git |
+| local-poc-samyk-poisontap | samyk__poisontap (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/samyk/poisontap.git |
+| local-poc-samyk-pwnat | samyk__pwnat (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/samyk/pwnat.git |
+| local-poc-samyk-skyjack | samyk__skyjack (clone local PoC) | local-git-submodule | iot_embedded_poc | conditional | embedded-local-mirror | tracked | https://github.com/samyk/skyjack.git |
+| local-poc-samyk-slipstream | samyk__slipstream (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/samyk/slipstream.git |
+| local-poc-seclab-ucr-ccs24mesh | seclab-ucr__CCS24Mesh (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/seclab-ucr/CCS24Mesh.git |
+| local-poc-seclab-ucr-koobe | seclab-ucr__KOOBE (clone local PoC) | local-git-submodule | generic_or_offtopic | conditional | embedded-local-mirror | tracked | https://github.com/seclab-ucr/KOOBE.git |
+| local-poc-seclab-ucr-symtcp | seclab-ucr__SymTCP (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/seclab-ucr/SymTCP.git |
+| local-poc-seclab-ucr-tcp_exploit | seclab-ucr__tcp_exploit (clone local PoC) | local-git-submodule | iot_embedded_poc | conditional | embedded-local-mirror | tracked | https://github.com/seclab-ucr/tcp_exploit.git |
+| local-poc-stasinopoulos-ztexploit | stasinopoulos__ZTExploit (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/stasinopoulos/ZTExploit.git |
+| local-poc-tacnetsol-trendnetexploits | tacnetsol__TRENDNetExploits (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/tacnetsol/TRENDNetExploits.git |
+| local-poc-teteco-cve-2025-67070-intelbras-cftv-mfa-bypass | teteco__CVE-2025-67070-Intelbras-CFTV-MFA-Bypass (clone local PoC) | local-git-submodule | edge_network_poc | high | embedded-local-mirror | tracked | https://github.com/teteco/CVE-2025-67070-Intelbras-CFTV-MFA-Bypass.git |
+| local-poc-tg12-poc_cves | tg12__PoC_CVEs (clone local PoC) | local-git-submodule | iot_embedded_poc | conditional | embedded-local-mirror | tracked | https://github.com/tg12/PoC_CVEs.git |
+| local-poc-thomasrinsma-vmg8825scripts | ThomasRinsma__vmg8825scripts (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/ThomasRinsma/vmg8825scripts.git |
+| local-poc-zeyad-azima-huawei_thief | Zeyad-Azima__Huawei_Thief (clone local PoC) | local-git-submodule | edge_network_poc | conditional | embedded-local-mirror | tracked | https://github.com/Zeyad-Azima/Huawei_Thief.git |
 
 ## Discord Requested Devices Coverage
 
@@ -945,7 +1013,7 @@
 | ADB / Pirelli | PRG EAV4202N / PRGAV4202N | dsl-gateway | no | 0 | 0 | 0 | 0 | - | default WPA algorithm weakness discussion |
 | Technicolor | TG585v6 | dsl-gateway | yes | 7 | 4 | 3 | 0 | auth_bypass, creds_disclosure | legacy vulnerable fleet mentioned in thread |
 | EasyBox | EasyBox (German variants) | dsl-gateway | no | 0 | 0 | 0 | 0 | - | algorithm request in discussion comments |
-| Generic | Low-cost Chinese ONU/CPE | onu/isp-cpe | yes | 1 | 5 | 0 | 1 | auth_bypass, backdoor, info_disclosure, rce | claim that modern cheap ONUs are not covered |
+| Generic | Low-cost Chinese ONU/CPE | onu/isp-cpe | yes | 1 | 5 | 0 | 2 | auth_bypass, backdoor, info_disclosure, rce | claim that modern cheap ONUs are not covered |
 
 ## Architecture Inventory Snapshot
 
@@ -956,14 +1024,14 @@
 
 | Domain | Count |
 |---|---:|
-| catalogs | 12 |
+| catalogs | 17 |
 | wordlists | 10 |
 | ssh_keys | 8 |
 | vendors datasets | 2 |
 | mibs | 1758 |
 | modules.exploits | 129 |
 | modules.creds | 96 |
-| modules.scanners | 5 |
+| modules.scanners | 6 |
 | modules.generic | 20 |
 | modules.encoders | 13 |
 | modules.payloads | 32 |
@@ -975,7 +1043,7 @@
 | firmware | 2 |
 | intel | 6 |
 | mibs | 1 |
-| pocs | 2 |
+| pocs | 52608 |
 | wordlists | 1 |
 
 ## Workspace Reuse Inventory Snapshot
@@ -990,12 +1058,12 @@
 
 ## Deep Intel Backlog Snapshot
 
-- Total backlog items: 18
+- Total backlog items: 19
 - Total keyword hits across backlog: 125
 
 | Priority | Count |
 |---|---:|
-| p1 | 14 |
+| p1 | 15 |
 | p2 | 3 |
 | p3 | 1 |
 
@@ -1127,10 +1195,10 @@
 | dlink | multi_hnap_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | dlink | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | dlink | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| external | exploitdb_embedded_lookup | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | external | metasploit_console_bridge | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | external | metasploit_rb_inspect | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | external | mikrotikapi_bf_bridge | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
-| external | searchsploit_bridge | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | fortinet | fortigate_os_backdoor | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
 | fortinet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | fortinet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
@@ -1186,6 +1254,7 @@
 | mipsle | bind_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | mipsle | reverse_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | misc | misc_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| misc | soho_exploit_catalog_server | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
 | movistar | adsl_router_bhs_rta_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
 | movistar | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | movistar | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
@@ -2202,6 +2271,14 @@
 - Module paths:
   - `modules/creds/routers/dlink/telnet_default_creds.py`
 
+### external / exploitdb_embedded_lookup
+
+- Totals: modules=1, exploits=0, creds=0, scanners=0, generic=1, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/generic/external/exploitdb_embedded_lookup.py`
+
 ### external / metasploit_console_bridge
 
 - Totals: modules=1, exploits=0, creds=0, scanners=0, generic=1, payloads=0, encoders=0
@@ -2225,14 +2302,6 @@
 - Attack classes: none
 - Module paths:
   - `modules/generic/external/mikrotikapi_bf_bridge.py`
-
-### external / searchsploit_bridge
-
-- Totals: modules=1, exploits=0, creds=0, scanners=0, generic=1, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: none
-- Module paths:
-  - `modules/generic/external/searchsploit_bridge.py`
 
 ### fortinet / fortigate_os_backdoor
 
@@ -2673,6 +2742,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/scanners/misc/misc_scan.py`
+
+### misc / soho_exploit_catalog_server
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/misc/soho_exploit_catalog_server.py`
 
 ### movistar / adsl_router_bhs_rta_path_traversal
 

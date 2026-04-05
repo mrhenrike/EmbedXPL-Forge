@@ -35,6 +35,8 @@ We prefer **coordinated disclosure**: keep details private until a fix or agreed
 
 ## Safe use (operator responsibility)
 
+### Safe testing rules
+
 - Use only on assets you **own** or with **written authorization**.
 - Third-party production requires contract and clear rules of engagement.
 - Do not submit customer data, credentials, or dumps to this repository.

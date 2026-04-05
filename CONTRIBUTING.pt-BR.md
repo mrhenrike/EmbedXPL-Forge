@@ -46,6 +46,7 @@ Obrigado por considerar contribuir. A documentação é **bilíngue**: **en-US**
 
 ```bash
 python tools/env_doctor.py
+python tools/compile_first_party.py
 python tools/compat_smoke.py
 python tools/validate_market_priority_minimums.py
 python tools/generate_coverage_matrix.py

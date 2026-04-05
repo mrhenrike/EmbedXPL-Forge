@@ -48,10 +48,15 @@ Include:
 - Expected vs actual behavior
 - Traceback or `routerxpl.log` excerpt **without** real third-party IPs/tokens
 
+## Validation expectations
+
+PRs should pass the suggested local validation below when the change touches runtime code, modules, or catalogs. Documentation-only edits may skip parts that do not apply, but **describe what you ran** in the PR.
+
 ## Suggested local validation
 
 ```bash
 python tools/env_doctor.py
+python tools/compile_first_party.py
 python tools/compat_smoke.py
 python tools/validate_market_priority_minimums.py
 python tools/generate_coverage_matrix.py

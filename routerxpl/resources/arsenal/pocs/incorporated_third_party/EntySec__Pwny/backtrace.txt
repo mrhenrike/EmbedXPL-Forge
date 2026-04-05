@@ -1,0 +1,528 @@
+Unhandled exception: page fault on execute access to 0x000000000000b2f6 in 64-bit code (0x0000000000b2f6).
+Register dump:
+ rip:000000000000b2f6 rsp:000000000031d228 rbp:000000000031dad0 eflags:00000246 (   - --  I  Z- -P- )
+ rax:0000000000000026 rbx:00000000008db650 rcx:000000000031d34c rdx:0000000000000104
+ rsi:0000000000000003 rdi:00000000009aae50  r8:0000000000000000  r9:00006fffffa802d0 r10:00006fffffa80f00
+ r11:0000000000000202 r12:0000000000033c10 r13:00000000008db7d8 r14:000000000031d2c8 r15:00000000000d5600
+Stack dump:
+0x0000000031d228:  00006ffffe1b2f3f 00006ffffe1b55f5
+0x0000000031d238:  00000000000a09f0 000000000000000a
+0x0000000031d248:  0000000000001000 0000000000000002
+0x0000000031d258:  00006fffff9ea0c1 000000000031d400
+0x0000000031d268:  00006fffffa802d0 00006fffffa802d0
+0x0000000031d278:  0000000000000003 0000000000000000
+0x0000000031d288:  00006fffffa2e7b0 00000000009ab008
+0x0000000031d298:  00000001000a09f0 0000000000000002
+0x0000000031d2a8:  0000000300000000 00006fffffa802d0
+0x0000000031d2b8:  00000000008db650 00000001400a0bd9
+0x0000000031d2c8:  0000000000000000 0000000000000000
+0x0000000031d2d8:  0000000000000000 00000000ffffffff
+Backtrace:
+=>0 0x0000000000b2f6 (0x0000000031dad0)
+0x0000000000b2f6: -- no code accessible --
+Modules:
+Module  Address                                 Debug info      Name (437 modules, 2 for wow64 not listed)
+PE             140000000-       1400f1000       Deferred        main
+Mach-O         200000000-       200004000       Deferred        <wine-loader>
+Mach-O         208656000-       208713000       Deferred        ntdll.so
+Mach-O         208b12000-       208b24000       Deferred        bcrypt.so
+Mach-O         208b3c000-       208b5e000       Deferred        libbrotlicommon.1.2.0.dylib
+Mach-O         208b6b000-       208b80000       Deferred        libz.1.3.1.dylib
+Mach-O         208b99000-       208baa000       Deferred        libtasn1.6.dylib
+Mach-O         208bbf000-       208bc9000       Deferred        libffi.8.dylib
+Mach-O         208bdd000-       208bfa000       Deferred        libintl.8.dylib
+Mach-O         208c1e000-       208c2a000       Deferred        libbrotlidec.1.2.0.dylib
+Mach-O         208c3f000-       208c41000       Deferred        netapi32.so
+Mach-O         208c42000-       208c48000       Deferred        dnsapi.so
+Mach-O         208c51000-       208c68000       Deferred        libbz2.1.0.8.dylib
+Mach-O         208c91000-       208cc5000       Deferred        libidn2.0.dylib
+Mach-O         208cdb000-       208ce3000       Deferred        crypt32.so
+Mach-O         208cee000-       208cf5000       Deferred        ws2_32.so
+Mach-O         208d0a000-       208d15000       Deferred        secur32.so
+Mach-O         208d25000-       208d2a000       Deferred        msv1_0.so
+Mach-O         208d36000-       208d61000       Deferred        libpng16.16.dylib
+Mach-O         208dac000-       208e11000       Deferred        libnettle.8.9.dylib
+Mach-O         208e6f000-       208ec0000       Deferred        libhogweed.6.9.dylib
+Mach-O         208f46000-       208f4c000       Deferred        winspool.so
+Mach-O         208f56000-       209154000       Deferred        libgnutls.30.dylib
+Mach-O         20949f000-       209512000       Deferred        libgmp.10.dylib
+Mach-O         2097bf000-       2099aa000       Deferred        libp11-kit.0.dylib
+Mach-O         209baf000-       209da1000       Deferred        libunistring.5.dylib
+Mach-O         20a004000-       20a23d000       Deferred        win32u.so
+Mach-O         20a44d000-       20a4f1000       Deferred        libfreetype.6.dylib
+PE-Wine     6ffffe1b0000-    6ffffe23f000       Deferred        dbghelp
+PE-Wine     6ffffe250000-    6ffffe366000       Deferred        comctl32
+PE-Wine     6ffffe380000-    6ffffe39f000       Deferred        compstui
+PE-Wine     6ffffe3b0000-    6ffffe3e1000       Deferred        winspool
+PE-Wine     6ffffe400000-    6ffffe43d000       Deferred        wbemprox
+PE-Wine     6ffffe450000-    6ffffe462000       Deferred        msv1_0
+PE-Wine     6ffffe480000-    6ffffe4a0000       Deferred        secur32
+PE-Wine     6ffffe4b0000-    6ffffe4bd000       Deferred        version
+PE-Wine     6ffffe4d0000-    6ffffe4e8000       Deferred        shcore
+PE-Wine     6ffffe500000-    6ffffe556000       Deferred        shlwapi
+PE-Wine     6ffffe570000-    6ffffeea8000       Deferred        shell32
+PE-Wine     6ffffeec0000-    6ffffef9c000       Deferred        oleaut32
+PE-Wine     6ffffefb0000-    6ffffefcc000       Deferred        coml2
+PE-Wine     6ffffefe0000-    6fffff032000       Deferred        combase
+PE-Wine     6fffff050000-    6fffff110000       Deferred        ole32
+PE-Wine     6fffff120000-    6fffff12c000       Deferred        netutils
+PE-Wine     6fffff140000-    6fffff16e000       Deferred        netapi32
+PE-Wine     6fffff180000-    6fffff19c000       Deferred        bcrypt
+PE-Wine     6fffff1b0000-    6fffff288000       Deferred        crypt32
+PE-Wine     6fffff340000-    6fffff35e000       Deferred        dnsapi
+PE-Wine     6fffff390000-    6fffff39d000       Deferred        nsi
+PE-Wine     6fffff3b0000-    6fffff3df000       Deferred        iphlpapi
+PE-Wine     6fffff420000-    6fffff440000       Deferred        imm32
+PE-Wine     6fffff450000-    6fffff48a000       Deferred        win32u
+PE-Wine     6fffff4a0000-    6fffff52a000       Deferred        gdi32
+PE-Wine     6fffff540000-    6fffff707000       Deferred        user32
+PE-Wine     6fffff820000-    6fffff8a3000       Deferred        setupapi
+PE-Wine     6fffff8c0000-    6fffff8cd000       Deferred        cryptbase
+PE-Wine     6fffff8e0000-    6fffff970000       Deferred        rpcrt4
+PE-Wine     6fffff980000-    6fffff9a8000       Deferred        ws2_32
+PE-Wine     6fffff9c0000-    6fffffa9c000       Deferred        ucrtbase
+PE-Wine     6fffffab0000-    6fffffad0000       Deferred        sechost
+PE-Wine     6fffffae0000-    6fffffb8a000       Deferred        msvcrt
+PE-Wine     6fffffba0000-    6fffffbdf000       Deferred        advapi32
+PE-Wine     6fffffbf0000-    6fffffe9a000       Deferred        kernelbase
+PE-Wine     6fffffeb0000-    6ffffff1c000       Deferred        kernel32
+PE-Wine     6ffffff30000-    6ffffffec000       Deferred        ntdll
+Mach-O^     7ff80f58e000-    7ff80f58e400       Deferred        libobjc.a.dylib
+Mach-O^     7ff80f66e000-    7ff80f66e400       Deferred        libsystem_blocks.dylib
+Mach-O^     7ff80f672000-    7ff80f672400       Deferred        libxpc.dylib
+Mach-O^     7ff80f6b9000-    7ff80f6b9400       Deferred        libsystem_trace.dylib
+Mach-O^     7ff80f6d4000-    7ff80f6d4400       Deferred        libcorecrypto.dylib
+Mach-O^     7ff80f787000-    7ff80f787400       Deferred        libsystem_malloc.dylib
+Mach-O^     7ff80f7d2000-    7ff80f7d2400       Deferred        libdispatch.dylib
+Mach-O^     7ff80f81a000-    7ff80f81a400       Deferred        libsystem_featureflags.dylib
+Mach-O^     7ff80f81d000-    7ff80f81d400       Deferred        libsystem_c.dylib
+Mach-O^     7ff80f8a6000-    7ff80f8a6400       Deferred        libc++.1.dylib
+Mach-O^     7ff80f925000-    7ff80f925400       Deferred        libc++abi.dylib
+Mach-O      7ff80f93c000-    7ff80f979000       Deferred        libsystem_kernel.dylib
+Mach-O      7ff80f979000-    7ff80f985000       Deferred        libsystem_pthread.dylib
+Mach-O^     7ff80f985000-    7ff80f985400       Deferred        libdyld.dylib
+Mach-O      7ff80f9b4000-    7ff80f9be000       Deferred        libsystem_platform.dylib
+Mach-O^     7ff80f9be000-    7ff80f9be400       Deferred        libsystem_info.dylib
+Mach-O^     7ff80f9ec000-    7ff80f9ec400       Deferred        corefoundation
+Mach-O^     7ff80fe9f000-    7ff80fe9f400       Deferred        launchservices
+Mach-O^     7ff810197000-    7ff810197400       Deferred        metaltools
+Mach-O^     7ff810326000-    7ff810326400       Deferred        libblas.dylib
+Mach-O^     7ff8104f8000-    7ff8104f8400       Deferred        lexicon
+Mach-O^     7ff8105fc000-    7ff8105fc400       Deferred        libsparse.dylib
+Mach-O^     7ff810743000-    7ff810743400       Deferred        systemconfiguration
+Mach-O^     7ff8107c9000-    7ff8107c9400       Deferred        libcrfsuite.dylib
+Mach-O^     7ff810ab7000-    7ff810ab7400       Deferred        foundation
+Mach-O^     7ff811a5b000-    7ff811a5b400       Deferred        coredisplay
+Mach-O^     7ff811b86000-    7ff811b86400       Deferred        audiotoolboxcore
+Mach-O^     7ff811f48000-    7ff811f48400       Deferred        coretext
+Mach-O^     7ff812181000-    7ff812181400       Deferred        coreaudio
+Mach-O^     7ff8128c3000-    7ff8128c3400       Deferred        security
+Mach-O^     7ff812ca7000-    7ff812ca7400       Deferred        libicucore.a.dylib
+Mach-O^     7ff812f50000-    7ff812f50400       Deferred        libsystem_darwin.dylib
+Mach-O^     7ff812f5b000-    7ff812f5b400       Deferred        carboncore
+Mach-O^     7ff813244000-    7ff813244400       Deferred        coreservicesinternal
+Mach-O^     7ff813285000-    7ff813285400       Deferred        coreservicesstore
+Mach-O^     7ff8132c6000-    7ff8132c6400       Deferred        iokit
+Mach-O^     7ff81338c000-    7ff81338c400       Deferred        libsystem_notify.dylib
+Mach-O^     7ff8133f7000-    7ff8133f7400       Deferred        appkit
+Mach-O^     7ff81494a000-    7ff81494a400       Deferred        uifoundation
+Mach-O^     7ff814b26000-    7ff814b26400       Deferred        uniformtypeidentifiers
+Mach-O^     7ff81500e000-    7ff81500e400       Deferred        libboringssl.dylib
+Mach-O^     7ff8150e7000-    7ff8150e7400       Deferred        libnetwork.dylib
+Mach-O^     7ff8150e8000-    7ff8150e8400       Deferred        cfnetwork
+Mach-O^     7ff81548f000-    7ff81548f400       Deferred        libsystem_networkextension.dylib
+Mach-O^     7ff8154a9000-    7ff8154a9400       Deferred        libenergytrace.dylib
+Mach-O^     7ff8154aa000-    7ff8154aa400       Deferred        libmobilegestalt.dylib
+Mach-O^     7ff81551f000-    7ff81551f400       Deferred        libsystem_asl.dylib
+Mach-O^     7ff815537000-    7ff815537400       Deferred        tcc
+Mach-O^     7ff815557000-    7ff815557400       Deferred        skylight
+Mach-O^     7ff815a24000-    7ff815a24400       Deferred        coregraphics
+Mach-O^     7ff816317000-    7ff816317400       Deferred        colorsync
+Mach-O^     7ff8164cc000-    7ff8164cc400       Deferred        hiservices
+Mach-O^     7ff81697f000-    7ff81697f400       Deferred        coredata
+Mach-O^     7ff816e90000-    7ff816e90400       Deferred        protocolbuffer
+Mach-O^     7ff816eaa000-    7ff816eaa400       Deferred        libsqlite3.dylib
+Mach-O^     7ff8170fd000-    7ff8170fd400       Deferred        baseboard
+Mach-O^     7ff8171e0000-    7ff8171e0400       Deferred        runningboardservices
+Mach-O^     7ff817245000-    7ff817245400       Deferred        ae
+Mach-O^     7ff8172b5000-    7ff8172b5400       Deferred        libdns_services.dylib
+Mach-O^     7ff8172c5000-    7ff8172c5400       Deferred        libsystem_symptoms.dylib
+Mach-O^     7ff8172cd000-    7ff8172cd400       Deferred        network
+Mach-O^     7ff8183df000-    7ff8183df400       Deferred        coreanalytics
+Mach-O^     7ff81840d000-    7ff81840d400       Deferred        libdiagnosticmessagesclient.dylib
+Mach-O^     7ff81840f000-    7ff81840f400       Deferred        metadatautilities
+Mach-O^     7ff81846c000-    7ff81846c400       Deferred        metadata
+Mach-O^     7ff8184f4000-    7ff8184f4400       Deferred        diskarbitration
+Mach-O^     7ff8184fc000-    7ff8184fc400       Deferred        vimage
+Mach-O^     7ff81907a000-    7ff81907a400       Deferred        quartzcore
+Mach-O^     7ff819428000-    7ff819428400       Deferred        libfontregistry.dylib
+Mach-O^     7ff819475000-    7ff819475400       Deferred        coreui
+Mach-O^     7ff819700000-    7ff819700400       Deferred        performanceanalysis
+Mach-O^     7ff81970b000-    7ff81970b400       Deferred        opendirectory
+Mach-O^     7ff819717000-    7ff819717400       Deferred        cfopendirectory
+Mach-O^     7ff819733000-    7ff819733400       Deferred        fsevents
+Mach-O^     7ff819741000-    7ff819741400       Deferred        sharedfilelist
+Mach-O^     7ff819769000-    7ff819769400       Deferred        libapp_launch_measurement.dylib
+Mach-O^     7ff81976c000-    7ff81976c400       Deferred        coreautolayout
+Mach-O^     7ff8197b6000-    7ff8197b6400       Deferred        libxml2.2.dylib
+Mach-O^     7ff819899000-    7ff819899400       Deferred        corevideo
+Mach-O^     7ff8198ed000-    7ff8198ed400       Deferred        loginsupport
+Mach-O^     7ff81992b000-    7ff81992b400       Deferred        usermanagement
+Mach-O^     7ff81b1a3000-    7ff81b1a3400       Deferred        libsystem_containermanager.dylib
+Mach-O^     7ff81b1d2000-    7ff81b1d2400       Deferred        iosurface
+Mach-O^     7ff81b1ea000-    7ff81b1ea400       Deferred        ioaccelerator
+Mach-O^     7ff81b1f3000-    7ff81b1f3400       Deferred        metal
+Mach-O^     7ff81b476000-    7ff81b476400       Deferred        caulk
+Mach-O^     7ff81b49a000-    7ff81b49a400       Deferred        coremedia
+Mach-O^     7ff81b5ee000-    7ff81b5ee400       Deferred        libfontparser.dylib
+Mach-O^     7ff81b8b4000-    7ff81b8b4400       Deferred        hitoolbox
+Mach-O^     7ff81bb96000-    7ff81bb96400       Deferred        dfrfoundation
+Mach-O^     7ff81bba9000-    7ff81bba9400       Deferred        xcttargetbootstrap
+Mach-O^     7ff81bbae000-    7ff81bbae400       Deferred        coresvg
+Mach-O^     7ff81bbe6000-    7ff81bbe6400       Deferred        imageio
+Mach-O^     7ff81bf7d000-    7ff81bf7d400       Deferred        coreimage
+Mach-O^     7ff81c395000-    7ff81c395400       Deferred        mpscore
+Mach-O^     7ff81c450000-    7ff81c450400       Deferred        libsystem_configuration.dylib
+Mach-O^     7ff81c454000-    7ff81c454400       Deferred        libsystem_sandbox.dylib
+Mach-O^     7ff81c45b000-    7ff81c45b400       Deferred        aggregatedictionary
+Mach-O^     7ff81c45c000-    7ff81c45c400       Deferred        applesysteminfo
+Mach-O^     7ff81c461000-    7ff81c461400       Deferred        liblangid.dylib
+Mach-O^     7ff81c463000-    7ff81c463400       Deferred        corenlp
+Mach-O^     7ff81c571000-    7ff81c571400       Deferred        linguisticdata
+Mach-O^     7ff81c577000-    7ff81c577400       Deferred        libbnns.dylib
+Mach-O^     7ff81d269000-    7ff81d269400       Deferred        libvdsp.dylib
+Mach-O^     7ff81d45e000-    7ff81d45e400       Deferred        coreemoji
+Mach-O^     7ff81d48f000-    7ff81d48f400       Deferred        iomobileframebuffer
+Mach-O^     7ff81d51b000-    7ff81d51b400       Deferred        coreutils
+Mach-O^     7ff81d691000-    7ff81d691400       Deferred        mobilekeybag
+Mach-O^     7ff81d6ac000-    7ff81d6ac400       Deferred        assertionservices
+Mach-O^     7ff81d6b9000-    7ff81d6b9400       Deferred        securityfoundation
+Mach-O^     7ff81d743000-    7ff81d743400       Deferred        backgroundtaskmanagement
+Mach-O^     7ff81d77a000-    7ff81d77a400       Deferred        libquarantine.dylib
+Mach-O^     7ff81d77d000-    7ff81d77d400       Deferred        libcheckfix.dylib
+Mach-O^     7ff81d787000-    7ff81d787400       Deferred        libcoretls.dylib
+Mach-O^     7ff81d79f000-    7ff81d79f400       Deferred        libbsm.0.dylib
+Mach-O^     7ff81d7af000-    7ff81d7af400       Deferred        libmecab.dylib
+Mach-O^     7ff81d80a000-    7ff81d80a400       Deferred        libgermantok.dylib
+Mach-O^     7ff81d80d000-    7ff81d80d400       Deferred        liblinearalgebra.dylib
+Mach-O^     7ff81d823000-    7ff81d823400       Deferred        mpsneuralnetwork
+Mach-O^     7ff81db39000-    7ff81db39400       Deferred        mpsrayintersector
+Mach-O^     7ff81dd83000-    7ff81dd83400       Deferred        mpsmatrix
+Mach-O^     7ff81ddc2000-    7ff81ddc2400       Deferred        mpsndarray
+Mach-O^     7ff81df48000-    7ff81df48400       Deferred        mpsimage
+Mach-O^     7ff81dfed000-    7ff81dfed400       Deferred        applefscompression
+Mach-O^     7ff81dff8000-    7ff81dff8400       Deferred        libbz2.1.0.dylib
+Mach-O^     7ff81e007000-    7ff81e007400       Deferred        libsystem_coreservices.dylib
+Mach-O^     7ff81e00e000-    7ff81e00e400       Deferred        osservices
+Mach-O^     7ff81e3be000-    7ff81e3be400       Deferred        libz.1.dylib
+Mach-O^     7ff81e3d2000-    7ff81e3d2400       Deferred        libsystem_m.dylib
+Mach-O^     7ff81e449000-    7ff81e449400       Deferred        libcharset.1.dylib
+Mach-O^     7ff81e44a000-    7ff81e44a400       Deferred        libmacho.dylib
+Mach-O^     7ff81e44e000-    7ff81e44e400       Deferred        libkxld.dylib
+Mach-O^     7ff81e465000-    7ff81e465400       Deferred        libcommoncrypto.dylib
+Mach-O^     7ff81e472000-    7ff81e472400       Deferred        libunwind.dylib
+Mach-O^     7ff81e47b000-    7ff81e47b400       Deferred        liboah.dylib
+Mach-O^     7ff81e483000-    7ff81e483400       Deferred        libcopyfile.dylib
+Mach-O^     7ff81e48f000-    7ff81e48f400       Deferred        libcompiler_rt.dylib
+Mach-O^     7ff81e497000-    7ff81e497400       Deferred        libsystem_collections.dylib
+Mach-O^     7ff81e49c000-    7ff81e49c400       Deferred        libsystem_secinit.dylib
+Mach-O^     7ff81e49f000-    7ff81e49f400       Deferred        libremovefile.dylib
+Mach-O^     7ff81e4a2000-    7ff81e4a2400       Deferred        libkeymgr.dylib
+Mach-O^     7ff81e4a3000-    7ff81e4a3400       Deferred        libsystem_dnssd.dylib
+Mach-O^     7ff81e4ac000-    7ff81e4ac400       Deferred        libcache.dylib
+Mach-O^     7ff81e4b2000-    7ff81e4b2400       Deferred        libsystem.b.dylib
+Mach-O^     7ff81e4b4000-    7ff81e4b4400       Deferred        libfakelink.dylib
+Mach-O^     7ff81e4b7000-    7ff81e4b7400       Deferred        softlinking
+Mach-O^     7ff81e4ee000-    7ff81e4ee400       Deferred        libiconv.2.dylib
+Mach-O^     7ff81e506000-    7ff81e506400       Deferred        libarchive.2.dylib
+Mach-O^     7ff81e5e1000-    7ff81e5e1400       Deferred        searchkit
+Mach-O^     7ff81e639000-    7ff81e639400       Deferred        libthaitokenizer.dylib
+Mach-O^     7ff81e641000-    7ff81e641400       Deferred        applesauce
+Mach-O^     7ff81e663000-    7ff81e663400       Deferred        libapple_nghttp2.dylib
+Mach-O^     7ff81e67e000-    7ff81e67e400       Deferred        libsparseblas.dylib
+Mach-O^     7ff81e6a7000-    7ff81e6a7400       Deferred        metalperformanceshaders
+Mach-O^     7ff81e6a9000-    7ff81e6a9400       Deferred        libpam.2.dylib
+Mach-O^     7ff81e6af000-    7ff81e6af400       Deferred        libcompression.dylib
+Mach-O^     7ff81e78d000-    7ff81e78d400       Deferred        libquadrature.dylib
+Mach-O^     7ff81e793000-    7ff81e793400       Deferred        liblapack.dylib
+Mach-O^     7ff81fc19000-    7ff81fc19400       Deferred        dictionaryservices
+Mach-O^     7ff81fc67000-    7ff81fc67400       Deferred        liblzma.5.dylib
+Mach-O^     7ff81fc87000-    7ff81fc87400       Deferred        libcoretls_cfhelpers.dylib
+Mach-O^     7ff81fc89000-    7ff81fc89400       Deferred        apfs
+Mach-O^     7ff81fd01000-    7ff81fd01400       Deferred        libxar.1.dylib
+Mach-O^     7ff81fd0f000-    7ff81fd0f400       Deferred        libutil.dylib
+Mach-O^     7ff81fd13000-    7ff81fd13400       Deferred        libxslt.1.dylib
+Mach-O^     7ff81fd44000-    7ff81fd44400       Deferred        libvmisc.dylib
+Mach-O^     7ff81fee2000-    7ff81fee2400       Deferred        libate.dylib
+Mach-O^     7ff820010000-    7ff820010400       Deferred        libioreport.dylib
+Mach-O^     7ff820019000-    7ff820019400       Deferred        crashreportersupport
+Mach-O^     7ff82016c000-    7ff82016c400       Deferred        pluginkit
+Mach-O^     7ff82022e000-    7ff82022e400       Deferred        appleva
+Mach-O^     7ff82027c000-    7ff82027c400       Deferred        libexpat.1.dylib
+Mach-O^     7ff820298000-    7ff820298400       Deferred        libheimdal-asn1.dylib
+Mach-O^     7ff8202a1000-    7ff8202a1400       Deferred        iconfoundation
+Mach-O^     7ff8202ed000-    7ff8202ed400       Deferred        iconservices
+Mach-O^     7ff820384000-    7ff820384400       Deferred        mediaexperience
+Mach-O^     7ff82044d000-    7ff82044d400       Deferred        graphvisualizer
+Mach-O^     7ff82045c000-    7ff82045c400       Deferred        otsvg
+Mach-O^     7ff8204a2000-    7ff8204a2400       Deferred        appserversupport
+Mach-O^     7ff8204ad000-    7ff8204ad400       Deferred        libspindump.dylib
+Mach-O^     7ff8204b4000-    7ff8204b4400       Deferred        heimdal
+Mach-O^     7ff8207be000-    7ff8207be400       Deferred        applejpeg
+Mach-O^     7ff82080b000-    7ff82080b400       Deferred        libjp2.dylib
+Mach-O^     7ff8208f2000-    7ff8208f2400       Deferred        watchdogclient
+Mach-O^     7ff8208f4000-    7ff8208f4400       Deferred        multitouchsupport
+Mach-O^     7ff820938000-    7ff820938400       Deferred        videotoolbox
+Mach-O^     7ff820ed8000-    7ff820ed8400       Deferred        libaudiotoolboxutility.dylib
+Mach-O^     7ff820f0d000-    7ff820f0d400       Deferred        libpng.dylib
+Mach-O^     7ff820f3b000-    7ff820f3b400       Deferred        libtiff.dylib
+Mach-O^     7ff820fa3000-    7ff820fa3400       Deferred        iopresentment
+Mach-O^     7ff820fbf000-    7ff820fbf400       Deferred        gpuwrangler
+Mach-O^     7ff820fc6000-    7ff820fc6400       Deferred        libradiance.dylib
+Mach-O^     7ff820fc9000-    7ff820fc9400       Deferred        dsexternaldisplay
+Mach-O^     7ff820fcf000-    7ff820fcf400       Deferred        libjpeg.dylib
+Mach-O^     7ff821000000-    7ff821000400       Deferred        atsui
+Mach-O^     7ff82102f000-    7ff82102f400       Deferred        libgif.dylib
+Mach-O^     7ff821035000-    7ff821035400       Deferred        cmcapturecore
+Mach-O^     7ff821044000-    7ff821044400       Deferred        printcore
+Mach-O^     7ff8210b7000-    7ff8210b7400       Deferred        textureio
+Mach-O^     7ff821175000-    7ff821175400       Deferred        internationalsupport
+Mach-O^     7ff82147d000-    7ff82147d400       Deferred        datadetectorscore
+Mach-O^     7ff8214c4000-    7ff8214c4400       Deferred        useractivity
+Mach-O^     7ff821ef4000-    7ff821ef4400       Deferred        libusrtcp.dylib
+Mach-O^     7ff821f6c000-    7ff821f6c400       Deferred        libswiftcore.dylib
+Mach-O^     7ff8224ec000-    7ff8224ec400       Deferred        libsessionutility.dylib
+Mach-O^     7ff82252d000-    7ff82252d400       Deferred        audiotoolbox
+Mach-O^     7ff8226cb000-    7ff8226cb400       Deferred        audiosession
+Mach-O^     7ff822724000-    7ff822724400       Deferred        libaudiostatistics.dylib
+Mach-O^     7ff82273c000-    7ff82273c400       Deferred        speechsynthesis
+Mach-O^     7ff822766000-    7ff822766400       Deferred        ats
+Mach-O^     7ff8227df000-    7ff8227df400       Deferred        libresolv.9.dylib
+Mach-O^     7ff8227fc000-    7ff8227fc400       Deferred        libsasl2.2.dylib
+Mach-O^     7ff8229f6000-    7ff8229f6400       Deferred        libsmc.dylib
+Mach-O^     7ff822ad7000-    7ff822ad7400       Deferred        libcups.2.dylib
+Mach-O^     7ff822b3a000-    7ff822b3a400       Deferred        netauth
+Mach-O^     7ff822b45000-    7ff822b45400       Deferred        colorsynclegacy
+Mach-O^     7ff822b4d000-    7ff822b4d400       Deferred        qd
+Mach-O^     7ff822b57000-    7ff822b57400       Deferred        perfdata
+Mach-O^     7ff822b65000-    7ff822b65400       Deferred        libperfcheck.dylib
+Mach-O^     7ff822b74000-    7ff822b74400       Deferred        kerberos
+Mach-O^     7ff822b83000-    7ff822b83400       Deferred        gss
+Mach-O^     7ff822bcc000-    7ff822bcc400       Deferred        commonauth
+Mach-O^     7ff822d42000-    7ff822d42400       Deferred        corephonenumbers
+Mach-O^     7ff82404b000-    7ff82404b400       Deferred        iobluetooth
+Mach-O^     7ff8242c7000-    7ff8242c7400       Deferred        combine
+Mach-O^     7ff826015000-    7ff826015400       Deferred        remoteviewservices
+Mach-O^     7ff82603d000-    7ff82603d400       Deferred        speechrecognitioncore
+Mach-O^     7ff82604d000-    7ff82604d400       Deferred        speechrecognition
+Mach-O^     7ff8263d3000-    7ff8263d3400       Deferred        accessibility
+Mach-O^     7ff82642f000-    7ff82642f400       Deferred        veclib
+Mach-O^     7ff826458000-    7ff826458400       Deferred        coreservices
+Mach-O^     7ff826704000-    7ff826704400       Deferred        accelerate
+Mach-O^     7ff826751000-    7ff826751400       Deferred        mediaaccessibility
+Mach-O^     7ff826d6e000-    7ff826d6e400       Deferred        libswiftfoundation.dylib
+Mach-O^     7ff8272be000-    7ff8272be400       Deferred        corebluetooth
+Mach-O^     7ff8273b8000-    7ff8273b8400       Deferred        powerlog
+Mach-O^     7ff8273f4000-    7ff8273f4400       Deferred        discrecording
+Mach-O^     7ff82749a000-    7ff82749a400       Deferred        mediakit
+Mach-O^     7ff82822f000-    7ff82822f400       Deferred        libswiftdispatch.dylib
+Mach-O^     7ff8284a5000-    7ff8284a5400       Deferred        frontboardservices
+Mach-O^     7ff828573000-    7ff828573400       Deferred        boardservices
+Mach-O^     7ff828620000-    7ff828620400       Deferred        graphicsservices
+Mach-O^     7ff8289a3000-    7ff8289a3400       Deferred        debugsymbols
+Mach-O^     7ff8289c3000-    7ff8289c3400       Deferred        coresymbolication
+Mach-O^     7ff828ad5000-    7ff828ad5400       Deferred        coretime
+Mach-O^     7ff82a1d4000-    7ff82a1d4400       Deferred        backboardservices
+Mach-O^     7ff82a22e000-    7ff82a22e400       Deferred        ldap
+Mach-O^     7ff82a268000-    7ff82a268400       Deferred        trustevaluationagent
+Mach-O^     7ff82a39b000-    7ff82a39b400       Deferred        diskimages
+Mach-O^     7ff82a548000-    7ff82a548400       Deferred        libcurl.4.dylib
+Mach-O^     7ff82a8c4000-    7ff82a8c4400       Deferred        applicationservices
+Mach-O^     7ff82ace3000-    7ff82ace3400       Deferred        libheimdalproxy.dylib
+Mach-O^     7ff82ace4000-    7ff82ace4400       Deferred        audiounit
+Mach-O^     7ff82ad8b000-    7ff82ad8b400       Deferred        libswiftobjectivec.dylib
+Mach-O^     7ff82ad8f000-    7ff82ad8f400       Deferred        libswiftos.dylib
+Mach-O^     7ff82d182000-    7ff82d182400       Deferred        coremidi
+Mach-O^     7ff82dd59000-    7ff82dd59400       Deferred        iosurfaceaccelerator
+Mach-O^     7ff9105e9000-    7ff9105e9400       Deferred        renderbox
+Mach-O^     7ff91127f000-    7ff91127f400       Deferred        hid
+Mach-O^     7ff911f6b000-    7ff911f6b400       Deferred        axcoreutilities
+Mach-O^     7ff912010000-    7ff912010400       Deferred        libaccessibility.dylib
+Mach-O^     7ff915887000-    7ff915887400       Deferred        netfs
+Mach-O^     7ff915d4e000-    7ff915d4e400       Deferred        libswiftcoregraphics.dylib
+Mach-O^     7ff915d4f000-    7ff915d4f400       Deferred        libswiftdarwin.dylib
+Mach-O^     7ff917827000-    7ff917827400       Deferred        libquic.dylib
+Mach-O^     7ff917914000-    7ff917914400       Deferred        systempolicy
+Mach-O^     7ff91861e000-    7ff91861e400       Deferred        loggingsupport
+Mach-O^     7ff9186ac000-    7ff9186ac400       Deferred        mallocstacklogging
+Mach-O^     7ff9186dc000-    7ff9186dc400       Deferred        libmis.dylib
+Mach-O^     7ff91870e000-    7ff91870e400       Deferred        gpurawcounter
+Mach-O^     7ff918712000-    7ff918712400       Deferred        libswiftcoreaudio.dylib
+Mach-O^     7ff91872c000-    7ff91872c400       Deferred        libswiftcorefoundation.dylib
+Mach-O^     7ff91873c000-    7ff91873c400       Deferred        libswiftxpc.dylib
+Mach-O^     7ff918779000-    7ff918779400       Deferred        libswiftcoreimage.dylib
+Mach-O^     7ff91877a000-    7ff91877a400       Deferred        libswiftiokit.dylib
+Mach-O^     7ff91c192000-    7ff91c192400       Deferred        libswiftsimd.dylib
+Mach-O^     7ff91c23f000-    7ff91c23f400       Deferred        textinput
+Mach-O^     7ff91d6df000-    7ff91d6df400       Deferred        ioaccelmemoryinfo
+Mach-O^     7ff920ac3000-    7ff920ac3400       Deferred        attributegraph
+Mach-O^     7ff925608000-    7ff925608400       Deferred        libswiftmetal.dylib
+Mach-O^     7ff92977c000-    7ff92977c400       Deferred        osanalytics
+Mach-O^     7ff92aa55000-    7ff92aa55400       Deferred        libswiftquartzcore.dylib
+Mach-O^     7ff92ae5b000-    7ff92ae5b400       Deferred        kperf
+Mach-O^     7ff92af5b000-    7ff92af5b400       Deferred        mobilesystemservices
+Mach-O^     7ffa0f42f000-    7ffa0f42f400       Deferred        libswiftuniformtypeidentifiers.dylib
+Mach-O^     7ffa0f43e000-    7ffa0f43e400       Deferred        libswiftaccelerate.dylib
+Mach-O^     7ffa0fa73000-    7ffa0fa73400       Deferred        afkuser
+Mach-O^     7ffa1492c000-    7ffa1492c400       Deferred        libswiftoslog.dylib
+Mach-O^     7ffa18470000-    7ffa18470400       Deferred        symbolication
+Mach-O^     7ffa18b7e000-    7ffa18b7e400       Deferred        corematerial
+Mach-O^     7ffa1c8b9000-    7ffa1c8b9400       Deferred        oslog
+Mach-O^     7ffa1cae4000-    7ffa1cae4400       Deferred        internalswiftprotobuf
+Mach-O^     7ffa1ccca000-    7ffa1ccca400       Deferred        hiddisplay
+Mach-O^     7ffa238d2000-    7ffa238d2400       Deferred        featureflags
+Mach-O^     7ffa2bc93000-    7ffa2bc93400       Deferred        libswiftswiftononesupport.dylib
+Mach-O^     7ffa2c205000-    7ffa2c205400       Deferred        configprofilehelper
+Mach-O^     7ffb11c32000-    7ffb11c32400       Deferred        libcorefscache.dylib
+Mach-O^     7ffb11c39000-    7ffb11c39400       Deferred        libcorevmclient.dylib
+Mach-O^     7ffb11c3e000-    7ffb11c3e400       Deferred        opengl
+Mach-O^     7ffb11c4e000-    7ffb11c4e400       Deferred        libcvmspluginsupport.dylib
+Mach-O^     7ffb11c51000-    7ffb11c51400       Deferred        libgfxshared.dylib
+Mach-O^     7ffb11c5a000-    7ffb11c5a400       Deferred        libglimage.dylib
+Mach-O^     7ffb11c90000-    7ffb11c90400       Deferred        libglu.dylib
+Mach-O^     7ffb11e4d000-    7ffb11e4d400       Deferred        libgl.dylib
+Mach-O^     7ffb128ef000-    7ffb128ef400       Deferred        opencl
+Mach-O^     7ffb1305b000-    7ffb1305b400       Deferred        avfaudio
+Mach-O^     7ffb13fb1000-    7ffb13fb1400       Deferred        coretransferable
+Mach-O^     7ffb14455000-    7ffb14455400       Deferred        datadetection
+Mach-O^     7ffb14458000-    7ffb14458400       Deferred        developertoolssupport
+Mach-O^     7ffb14578000-    7ffb14578400       Deferred        extensionfoundation
+Mach-O^     7ffb16007000-    7ffb16007400       Deferred        mpsbenchmarkloop
+Mach-O^     7ffb16025000-    7ffb16025400       Deferred        mpsfunctions
+Mach-O^     7ffb18d16000-    7ffb18d16400       Deferred        swiftdata
+Mach-O^     7ffb18e3f000-    7ffb18e3f400       Deferred        swiftuicore
+Mach-O^     7ffb199a5000-    7ffb199a5400       Deferred        symbols
+Mach-O^     7ffb1e333000-    7ffb1e333400       Deferred        applekeystore
+Mach-O^     7ffb1eddd000-    7ffb1eddd400       Deferred        applemobilefileintegrity
+Mach-O^     7ffb1f1ac000-    7ffb1f1ac400       Deferred        audioanalytics
+Mach-O^     7ffb222c7000-    7ffb222c7400       Deferred        collectionviewcore
+Mach-O^     7ffb222ee000-    7ffb222ee400       Deferred        collectionsinternal
+Mach-O^     7ffb22caf000-    7ffb22caf400       Deferred        coreaudioorchestration
+Mach-O^     7ffb25e3d000-    7ffb25e3d400       Deferred        coreutilsextras
+Mach-O^     7ffb283c1000-    7ffb283c1400       Deferred        fontservices
+Mach-O^     7ffb283c2000-    7ffb283c2400       Deferred        libxtfontstaticregistrydata.dylib
+Mach-O^     7ffb2848c000-    7ffb2848c400       Deferred        framepacing
+Mach-O^     7ffb290a4000-    7ffb290a4400       Deferred        libgpucompilerutils.dylib
+Mach-O^     7ffb2d49c000-    7ffb2d49c400       Deferred        libllvm-flatbuffers.dylib
+Mach-O^     7ffc11415000-    7ffc11415400       Deferred        io80211
+Mach-O^     7ffc11c0c000-    7ffc11c0c400       Deferred        installedcontentlibrary
+Mach-O^     7ffc146db000-    7ffc146db400       Deferred        isolatedcoreaudioclient
+Mach-O^     7ffc15aad000-    7ffc15aad400       Deferred        mil
+Mach-O^     7ffc185ca000-    7ffc185ca400       Deferred        messagesecurity
+Mach-O^     7ffc1c459000-    7ffc1c459400       Deferred        parsinginternal
+Mach-O^     7ffc1f14f000-    7ffc1f14f400       Deferred        photosensitivityprocessing
+Mach-O^     7ffc1fe73000-    7ffc1fe73400       Deferred        prodisplaylibrary
+Mach-O^     7ffc20a22000-    7ffc20a22400       Deferred        reflectioninternal
+Mach-O^     7ffc215cc000-    7ffc215cc400       Deferred        runtimeinternal
+Mach-O^     7ffc216b4000-    7ffc216b4400       Deferred        sfsymbols
+Mach-O^     7ffc29c1a000-    7ffc29c1a400       Deferred        swiftasn1internal
+Mach-O^     7ffc2c661000-    7ffc2c661400       Deferred        tightbeam
+Mach-O^     7ffd0e6e3000-    7ffd0e6e3400       Deferred        uiintelligencesupport
+Mach-O^     7ffd10139000-    7ffd10139400       Deferred        videotoolboxparavirtualizationsupport
+Mach-O^     7ffd12426000-    7ffd12426400       Deferred        windowmanagement
+Mach-O^     7ffd132d1000-    7ffd132d1400       Deferred        writingtools
+Mach-O^     7ffd18f18000-    7ffd18f18400       Deferred        libaxsafecategorybundle.dylib
+Mach-O^     7ffd18f97000-    7ffd18f97400       Deferred        libapplearchive.dylib
+Mach-O^     7ffd190d8000-    7ffd190d8400       Deferred        libcoreentitlements.dylib
+Mach-O^     7ffd1920b000-    7ffd1920b400       Deferred        librosetta.dylib
+Mach-O^     7ffd19266000-    7ffd19266400       Deferred        libtle.dylib
+Mach-O^     7ffd195f9000-    7ffd195f9400       Deferred        libcrypto.46.dylib
+Mach-O^     7ffd1974f000-    7ffd1974f400       Deferred        libhvf.dylib
+Mach-O^     7ffd1a130000-    7ffd1a130400       Deferred        libssl.48.dylib
+Mach-O^     7ffd1a350000-    7ffd1a350400       Deferred        libswiftdatadetection.dylib
+Mach-O^     7ffd1a351000-    7ffd1a351400       Deferred        libswiftdistributed.dylib
+Mach-O^     7ffd1a37a000-    7ffd1a37a400       Deferred        libswiftobservation.dylib
+Mach-O^     7ffd1a396000-    7ffd1a396400       Deferred        libswiftregexbuilder.dylib
+Mach-O^     7ffd1a403000-    7ffd1a403400       Deferred        libswiftsynchronization.dylib
+Mach-O^     7ffd1a40d000-    7ffd1a40d400       Deferred        libswiftsystem.dylib
+Mach-O^     7ffd1a479000-    7ffd1a479400       Deferred        libswift_builtin_float.dylib
+Mach-O^     7ffd1a47c000-    7ffd1a47c400       Deferred        libswift_concurrency.dylib
+Mach-O^     7ffd1a517000-    7ffd1a517400       Deferred        libswift_regexparser.dylib
+Mach-O^     7ffd1a5c5000-    7ffd1a5c5400       Deferred        libswift_stringprocessing.dylib
+Mach-O^     7ffd1a64a000-    7ffd1a64a400       Deferred        libswift_errno.dylib
+Mach-O^     7ffd1a64c000-    7ffd1a64c400       Deferred        libswift_math.dylib
+Mach-O^     7ffd1a64f000-    7ffd1a64f400       Deferred        libswift_signal.dylib
+Mach-O^     7ffd1a650000-    7ffd1a650400       Deferred        libswift_stdio.dylib
+Mach-O^     7ffd1a651000-    7ffd1a651400       Deferred        libswift_time.dylib
+Mach-O^     7ffd1a652000-    7ffd1a652400       Deferred        libswiftsys_time.dylib
+Mach-O^     7ffd1a653000-    7ffd1a653400       Deferred        libswiftunistd.dylib
+Mach-O^     7ffd1a7ac000-    7ffd1a7ac400       Deferred        libsystem_darwindirectory.dylib
+Mach-O^     7ffd1a7b1000-    7ffd1a7b1400       Deferred        libsystem_eligibility.dylib
+Mach-O^     7ffd1a7b9000-    7ffd1a7b9400       Deferred        libsystem_sanitizers.dylib
+^ denotes modules for which image file couldn't be found
+Threads:
+process  tid      prio    name (all IDs are in hex)
+00000020 (D) Z:\Users\felix\Desktop\EntySec\Projects\Pwny\build-win64\main.exe
+	00000024    0 <== 
+	00000100    0     
+	00000104    0     
+	00000108    0     
+	0000010c    0     
+	00000110    0     
+	0000011c    0     
+00000030 services.exe
+	00000034    0     
+	00000038    0     wine_rpcrt4_server
+	00000044    0     wine_rpcrt4_io
+	00000068    0     wine_rpcrt4_io
+	00000094    0     wine_rpcrt4_io
+	000000c8    0     wine_rpcrt4_io
+	000000e4    0     
+	00000134    0     wine_rpcrt4_io
+	00000144    0     wine_rpcrt4_io
+0000003c winedevice.exe
+	00000040    0     
+	0000004c    0     
+	00000050    0     wine_sechost_service
+	00000054    0     
+	00000058    0     
+	0000005c    0     
+	000000bc    0     wine_nsi_notification
+00000060 svchost.exe
+	00000064    0     
+	0000006c    0     
+	00000070    0     wine_sechost_service
+00000088 plugplay.exe
+	0000008c    0     
+	00000098    0     
+	0000009c    0     wine_sechost_service
+	000000a0    0     wine_rpcrt4_server
+	000000f0    0     wine_rpcrt4_io
+000000c0 winedevice.exe
+	000000c4    0     
+	000000cc    0     
+	000000d0    0     wine_sechost_service
+	000000d4    0     
+	000000e0    0     
+	000000e8    0     
+	000000ec    0     
+000000f8 conhost.exe
+	000000fc    0     
+00000120 explorer.exe
+	00000124    0     
+	00000128    0     
+	0000012c    0     wine_explorer_display_settings_restorer
+	00000130    0     wine_rpcrt4_server
+0000013c rpcss.exe
+	00000140    0     
+	0000014c    0     
+	00000150    0     wine_sechost_service
+	00000154    0     wine_rpcrt4_server
+	00000158    0     wine_rpcrt4_server
+	0000015c    0     wine_rpcrt4_io
+System information:
+    Wine build: wine-11.0
+    Platform: x86_64 (guest: i386)
+    Version: Windows 7
+    Host system: Darwin
+    Host version: 24.5.0

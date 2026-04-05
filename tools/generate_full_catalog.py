@@ -11,16 +11,138 @@ Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-
 from __future__ import annotations
 
 import ast
-import json
 import logging
+import os
 import re
+from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Set, Tuple
+from typing import Any, Dict, List, Mapping, MutableMapping, Set, Tuple
 
 LOGGER = logging.getLogger("full_catalog")
 RE_CVE = re.compile(r"CVE-\d{4}-\d{4,7}", re.IGNORECASE)
 DISABLED_DOMAINS: Tuple[str, ...] = ("cameras", "printers", "dvr", "dvrs")
+_SKIP_WALK_DIRS: Set[str] = frozenset(
+    {".git", "__pycache__", ".pytest_cache", ".mypy_cache", ".tox", "node_modules"}
+)
+
+
+def _human_bytes(n: int) -> str:
+    """Human-readable size (binary prefixes)."""
+    if n < 0:
+        n = 0
+    for suf, div in (("TiB", 1 << 40), ("GiB", 1 << 30), ("MiB", 1 << 20), ("KiB", 1 << 10)):
+        if n >= div:
+            return "{:.2f} {}".format(n / div, suf)
+    return "{} B".format(n)
+
+
+def _count_py_files(root: Path) -> int:
+    """Count ``*.py`` files under root (ignore __pycache__)."""
+
+    if not root.is_dir():
+        return 0
+    n = 0
+    for p in root.rglob("*.py"):
+        if "__pycache__" in p.parts:
+            continue
+        n += 1
+    return n
+
+
+def _disk_snapshot(repo_root: Path) -> Dict[str, Any]:
+    """Aggregate byte sizes by top-level path and under ``routerxpl/``."""
+
+    repo_root = repo_root.resolve()
+    rx_root = repo_root / "routerxpl"
+    totals_repo: MutableMapping[str, int] = defaultdict(int)
+    totals_rx: MutableMapping[str, int] = defaultdict(int)
+    totals_res_child: MutableMapping[str, int] = defaultdict(int)
+    grand_total = 0
+    files_repo = 0
+    files_rx = 0
+
+    for dirpath, dirnames, filenames in os.walk(repo_root):
+        dp = Path(dirpath)
+        try:
+            rel = dp.relative_to(repo_root)
+        except ValueError:
+            continue
+        if rel.parts and rel.parts[0] in _SKIP_WALK_DIRS:
+            dirnames[:] = []
+            continue
+        dirnames[:] = [d for d in dirnames if d not in _SKIP_WALK_DIRS and not d.startswith(".")]
+        for name in filenames:
+            fp = dp / name
+            try:
+                sz = fp.stat().st_size
+            except OSError:
+                continue
+            grand_total += sz
+            files_repo += 1
+            if rel == Path("."):
+                totals_repo["(repo root files)"] += sz
+            else:
+                totals_repo[rel.parts[0]] += sz
+            try:
+                rel_rx = dp.relative_to(rx_root)
+            except ValueError:
+                continue
+            files_rx += 1
+            if rel_rx == Path("."):
+                totals_rx["(routerxpl root files)"] += sz
+            else:
+                totals_rx[rel_rx.parts[0]] += sz
+            if len(rel_rx.parts) >= 2 and rel_rx.parts[0] == "resources":
+                child = rel_rx.parts[1]
+                totals_res_child[child] += sz
+
+    return {
+        "grand_total_bytes": grand_total,
+        "repo_files_count": files_repo,
+        "routerxpl_files_count": files_rx,
+        "repo_by_top": dict(totals_repo),
+        "routerxpl_by_top": dict(totals_rx),
+        "resources_children": dict(totals_res_child),
+    }
+
+
+def _sorted_sizes(mapping: Mapping[str, int], *, limit: int = 25) -> List[Tuple[str, int]]:
+    """Largest first."""
+
+    rows = sorted(mapping.items(), key=lambda kv: (-kv[1], kv[0]))
+    return rows[:limit]
+
+
+def _module_category_stats(records: List[Dict[str, Any]]) -> Dict[str, Dict[str, int]]:
+    """Per category: module count and distinct vendor/group keys."""
+
+    stats: Dict[str, Dict[str, Any]] = {}
+    for r in records:
+        t = str(r["type"])
+        if t not in stats:
+            stats[t] = {"count": 0, "vendors": set()}
+        stats[t]["count"] += 1
+        stats[t]["vendors"].add(str(r["vendor"]))
+
+    out: Dict[str, Dict[str, int]] = {}
+    for t, d in stats.items():
+        out[t] = {"modules": d["count"], "vendor_groups": len(d["vendors"])}
+    return out
+
+
+def _first_party_py_counts(repo_root: Path) -> Dict[str, int]:
+    """Python file counts for framework code trees (not vendored resources)."""
+
+    rx = repo_root / "routerxpl"
+    counts: Dict[str, int] = {}
+    for name in ("core", "modules", "libs"):
+        p = rx / name
+        counts["routerxpl/{}".format(name)] = _count_py_files(p)
+    counts["tools"] = _count_py_files(repo_root / "tools")
+    root_py = repo_root / "rxf.py"
+    counts["rxf.py"] = 1 if root_py.is_file() else 0
+    return counts
 
 
 def _configure_logging() -> None:
@@ -97,7 +219,13 @@ def _collect_modules(modules_root: Path) -> List[Dict[str, Any]]:
     return records
 
 
-def _build_md(records: List[Dict[str, Any]], repo_root: Path) -> str:
+def _build_md(
+    records: List[Dict[str, Any]],
+    repo_root: Path,
+    disk: Mapping[str, Any],
+    py_counts: Mapping[str, int],
+    cat_stats: Mapping[str, Mapping[str, int]],
+) -> str:
     """Build the full catalog in Markdown."""
     now = datetime.now(timezone.utc).isoformat()
 
@@ -114,6 +242,15 @@ def _build_md(records: List[Dict[str, Any]], repo_root: Path) -> str:
         for cve in r["cves"]:
             all_cves.setdefault(cve, []).append(r["path"])
 
+    cat_rows = [
+        ("exploits", "Exploits"),
+        ("creds", "Credential Modules"),
+        ("scanners", "Scanners"),
+        ("generic", "Generic Modules"),
+        ("encoders", "Encoders"),
+        ("payloads", "Payloads"),
+    ]
+
     lines: List[str] = [
         "# RouterXPL-Forge — Full Module Catalog",
         "",
@@ -122,20 +259,75 @@ def _build_md(records: List[Dict[str, Any]], repo_root: Path) -> str:
         "",
         "## Summary",
         "",
-        "| Category | Count |",
-        "|---|---:|",
-        "| Exploits | {} |".format(len(exploits)),
-        "| Credential Modules | {} |".format(len(creds)),
-        "| Scanners | {} |".format(len(scanners)),
-        "| Generic Modules | {} |".format(len(generic)),
-        "| Encoders | {} |".format(len(encoders)),
-        "| Payloads | {} |".format(len(payloads)),
-        "| **Total Modules** | **{}** |".format(len(records)),
-        "| Distinct CVEs | {} |".format(len(all_cves)),
-        "",
-        "---",
-        "",
+        "| Category | Modules | Vendor / group buckets |",
+        "|---|---:|---:|",
     ]
+    for key, label in cat_rows:
+        st = cat_stats.get(key) or {"modules": 0, "vendor_groups": 0}
+        lines.append("| {} | {} | {} |".format(label, st["modules"], st["vendor_groups"]))
+    lines.append("| **Total Modules** | **{}** | — |".format(len(records)))
+    lines.append("| Distinct CVEs | {} | — |".format(len(all_cves)))
+
+    gt = int(disk.get("grand_total_bytes", 0) or 0)
+    lines.extend([
+        "",
+        "## Program footprint",
+        "",
+        "Approximate on-disk size (file bytes only; binary prefixes). "
+        "Walk skips caches such as ``__pycache__`` and ``.git``.",
+        "",
+        "| Metric | Value |",
+        "|---|---|",
+        "| Repository root | `{}` |".format(repo_root.resolve().as_posix()),
+        "| Total file bytes | {} |".format(_human_bytes(gt)),
+        "| Files (repo walk) | {} |".format(disk.get("repo_files_count", 0)),
+        "| Files under ``routerxpl/`` | {} |".format(disk.get("routerxpl_files_count", 0)),
+        "",
+        "### Largest top-level paths (repository)",
+        "",
+        "| Path | Size | Share of total |",
+        "|---|---:|---:|",
+    ])
+    for name, sz in _sorted_sizes(disk.get("repo_by_top") or {}, limit=15):
+        pct = (100.0 * sz / gt) if gt else 0.0
+        lines.append("| `{}` | {} | {:.1f}% |".format(name, _human_bytes(sz), pct))
+
+    lines.extend([
+        "",
+        "### ``routerxpl/`` breakdown (first-level folders)",
+        "",
+        "| Area | Size | Share of total |",
+        "|---|---:|---:|",
+    ])
+    for name, sz in _sorted_sizes(disk.get("routerxpl_by_top") or {}, limit=25):
+        pct = (100.0 * sz / gt) if gt else 0.0
+        lines.append("| `{}` | {} | {:.1f}% |".format(name, _human_bytes(sz), pct))
+
+    res_ch = disk.get("resources_children") or {}
+    if res_ch:
+        lines.extend([
+            "",
+            "### ``routerxpl/resources/*`` (largest direct children)",
+            "",
+            "| Subfolder | Size | Share of total |",
+            "|---|---:|---:|",
+        ])
+        for name, sz in _sorted_sizes(res_ch, limit=25):
+            pct = (100.0 * sz / gt) if gt else 0.0
+            lines.append("| `{}` | {} | {:.1f}% |".format(name, _human_bytes(sz), pct))
+
+    lines.extend([
+        "",
+        "### First-party Python files (``.py`` count, excluding ``__pycache__``)",
+        "",
+        "| Tree | Files |",
+        "|---|---:|",
+    ])
+    for key in ("routerxpl/core", "routerxpl/modules", "routerxpl/libs", "tools", "rxf.py"):
+        if key in py_counts:
+            lines.append("| `{}` | {} |".format(key, py_counts[key]))
+
+    lines.extend(["", "---", ""])
 
     def _section(title: str, items: List[Dict[str, Any]], show_cves: bool = True) -> List[str]:
         section_lines = ["## {} ({})".format(title, len(items)), ""]
@@ -229,7 +421,13 @@ def _build_md(records: List[Dict[str, Any]], repo_root: Path) -> str:
     return "\n".join(lines)
 
 
-def _build_txt(records: List[Dict[str, Any]]) -> str:
+def _build_txt(
+    records: List[Dict[str, Any]],
+    repo_root: Path,
+    disk: Mapping[str, Any],
+    py_counts: Mapping[str, int],
+    cat_stats: Mapping[str, Mapping[str, int]],
+) -> str:
     """Build the full catalog in plain text."""
     now = datetime.now(timezone.utc).isoformat()
     lines: List[str] = [
@@ -256,11 +454,45 @@ def _build_txt(records: List[Dict[str, Any]]) -> str:
 
     lines.append("SUMMARY")
     lines.append("-" * 20)
-    for t in type_labels:
-        count = sum(1 for r in records if r["type"] == t)
-        lines.append("  {}: {}".format(type_labels[t], count))
-    lines.append("  TOTAL: {}".format(len(records)))
+    for t, label in type_labels.items():
+        st = cat_stats.get(t) or {"modules": 0, "vendor_groups": 0}
+        lines.append(
+            "  {}: {} modules, {} vendor/group buckets".format(
+                label, st["modules"], st["vendor_groups"],
+            )
+        )
+    lines.append("  TOTAL MODULES: {}".format(len(records)))
     lines.append("  DISTINCT CVEs: {}".format(len(all_cves)))
+
+    gt = int(disk.get("grand_total_bytes", 0) or 0)
+    lines.extend([
+        "",
+        "PROGRAM FOOTPRINT",
+        "-" * 20,
+        "Repository root: {}".format(repo_root.resolve()),
+        "Total file bytes: {}".format(_human_bytes(gt)),
+        "Files (repo walk, excl. skipped dirs): {}".format(disk.get("repo_files_count", 0)),
+        "Files under routerxpl/: {}".format(disk.get("routerxpl_files_count", 0)),
+        "",
+        "Largest top-level paths:",
+    ])
+    for name, sz in _sorted_sizes(disk.get("repo_by_top") or {}, limit=15):
+        pct = (100.0 * sz / gt) if gt else 0.0
+        lines.append("  {:<36} {:>12}  ({:.1f}%)".format(name, _human_bytes(sz), pct))
+    lines.extend(["", "routerxpl/ first-level folders:",])
+    for name, sz in _sorted_sizes(disk.get("routerxpl_by_top") or {}, limit=25):
+        pct = (100.0 * sz / gt) if gt else 0.0
+        lines.append("  {:<36} {:>12}  ({:.1f}%)".format(name, _human_bytes(sz), pct))
+    res_ch = disk.get("resources_children") or {}
+    if res_ch:
+        lines.extend(["", "routerxpl/resources/* direct children (largest):",])
+        for name, sz in _sorted_sizes(res_ch, limit=25):
+            pct = (100.0 * sz / gt) if gt else 0.0
+            lines.append("  {:<36} {:>12}  ({:.1f}%)".format(name, _human_bytes(sz), pct))
+    lines.extend(["", "First-party .py file counts (excl. __pycache__):",])
+    for key in ("routerxpl/core", "routerxpl/modules", "routerxpl/libs", "tools", "rxf.py"):
+        if key in py_counts:
+            lines.append("  {:<22} {}".format(key, py_counts[key]))
     lines.append("")
 
     for mod_type, label in type_labels.items():
@@ -328,14 +560,23 @@ def main() -> int:
     modules_root = repo_root / "routerxpl" / "modules"
 
     records = _collect_modules(modules_root)
+    LOGGER.info("Computing disk metrics and first-party counts...")
+    disk = _disk_snapshot(repo_root)
+    py_counts = _first_party_py_counts(repo_root)
+    cat_stats = _module_category_stats(records)
+
     docs_dir = repo_root / "docs"
     docs_dir.mkdir(parents=True, exist_ok=True)
 
     md_path = docs_dir / "FULL_CATALOG.md"
     txt_path = docs_dir / "FULL_CATALOG.txt"
 
-    md_path.write_text(_build_md(records, repo_root), encoding="utf-8")
-    txt_path.write_text(_build_txt(records), encoding="utf-8")
+    md_path.write_text(
+        _build_md(records, repo_root, disk, py_counts, cat_stats), encoding="utf-8",
+    )
+    txt_path.write_text(
+        _build_txt(records, repo_root, disk, py_counts, cat_stats), encoding="utf-8",
+    )
 
     LOGGER.info("Full catalog generated: %s and %s (%d modules, %d CVEs)",
                 md_path, txt_path, len(records),

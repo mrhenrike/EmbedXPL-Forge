@@ -1,4 +1,4 @@
-## Type
+## Issue type
 - [ ] Bug
 - [ ] Feature
 - [ ] Catalog/coverage update
@@ -7,10 +7,14 @@
 **Languages / Idiomas:** Issues **English (en-US)** preferred for maintainers; you may add Portuguese below. | *Issues em **inglês** facilitam a triagem; pode acrescentar português.*
 
 ## Scope
+
+### Scope check
+
 - [ ] In-scope asset (router/switch/TAP/fw/NGFW)
 - [ ] Not camera/printer/DVR focused
 
-## Reproduction (bugs)
+## Steps to reproduce
+
 1.
 2.
 3.

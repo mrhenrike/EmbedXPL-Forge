@@ -1,14 +1,40 @@
 #!/usr/bin/env python3
 """Regenerate routerxpl/resources/catalogs/cve_extended_catalog.json from curated rows.
 
+Merges, in order: (1) static rows from ``build_entries()``; (2) CVE IDs listed under
+``related_cves_hint`` in ``external_tool_intel_sources.json`` (stubs keyed to source id);
+(3) CVE strings found under ``routerxpl/modules/**/*.py`` that are not already covered
+by (1) or by ``_EMBEDDED_CVES`` in ``cve_db.py`` (embedded wins — avoids replacing rich
+rows with stubs).
+
+(4) PoC repository URLs from vendored ``tg12__PoC_CVEs/cve_links.txt`` are merged **only**
+for CVE IDs in scope: all IDs present after (1–3) plus ``_EMBEDDED_CVES`` and
+``related_cves_hint`` in ``discord_requested_devices.json``. Appends ``references``
+(web URLs) and sets ``exploit_available`` when links are added.
+
+The tg12 index is global; filtering keeps the extended catalog aligned with monitored-edge scope.
+
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations
 
 import json
+import re
+import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set, Tuple
+
+_RX_CVE = re.compile(r"CVE-\d{4}-\d{4,7}", re.IGNORECASE)
+_RX_TG12_CVE_LINE = re.compile(r"CVE-\d{4}-\d+")
+_RX_GH_REF = re.compile(
+    r"https?://github\.com/([\w.-]+)/([\w.,-]+)(?:\.git)?/?(?:[#?].*)?$",
+    re.IGNORECASE,
+)
+_RX_GL_REF = re.compile(
+    r"https?://gitlab\.com/([\w./-]+)/([\w.-]+)(?:\.git)?/?(?:[#?].*)?$",
+    re.IGNORECASE,
+)
 
 
 def row(
@@ -169,15 +195,356 @@ def build_entries() -> List[Dict[str, Any]]:
             row("CVE-2023-27259", "tenda", "router", "Tenda", "RCE HTTPD", 8.1),
             row("CVE-2019-16920", "dlink", "router", "DIR-655 family", "RCE não autenticado", 9.8, exploit_available=True),
             row("CVE-2020-12105", "mikrotik", "routeros", "RouterOS", "Vulnerabilidade SMB RouterOS (corrigida em releases posteriores)", 5.5),
-            row("CVE-2019-5456", "ubiquiti", "unifi", "UniFi Controller", "CSRF / alteração de configuração", 8.8),
+            row("CVE-2019-5456", "ubiquiti", "unifi", "UniFi Controller", "CSRF / alteração de configuração", 8.8, exploit_available=True),
         ]
     )
     return e
 
 
+def _guess_vendor_from_intel_id(id_slug: str) -> str:
+    """Best-effort vendor token from ``local-poc-*`` style source id."""
+
+    s = id_slug.lower()
+    pairs: Tuple[Tuple[str, str], ...] = (
+        ("tp-link", "tplink"),
+        ("tplink", "tplink"),
+        ("cisco", "cisco"),
+        ("trendnet", "trendnet"),
+        ("mikrot", "mikrotik"),
+        ("intelbras", "intelbras"),
+        ("xiaomi", "xiaomi"),
+        ("openwrt", "openwrt"),
+        ("asus", "asus"),
+        ("d-link", "dlink"),
+        ("dlink", "dlink"),
+        ("netgear", "netgear"),
+        ("ubiquiti", "ubiquiti"),
+        ("fortinet", "fortinet"),
+        ("zyxel", "zyxel"),
+        ("palo", "paloalto"),
+        ("juniper", "juniper"),
+        ("hirschmann", "hirschmann"),
+        ("moxa", "moxa"),
+        ("draytek", "draytek"),
+        ("tenda", "tenda"),
+        ("arcadyan", "arcadyan"),
+        ("buffalo", "buffalo"),
+        ("realtek", "realtek"),
+        ("huawei", "huawei"),
+        ("hitron", "hitron"),
+        ("pace", "pace"),
+    )
+    for needle, vendor in pairs:
+        if needle in s:
+            return vendor
+    return "multi"
+
+
+def _vendor_product_from_module_path(rel_posix: str) -> Tuple[str, str]:
+    """Derive vendor/product hints from ``modules`` relative path."""
+
+    parts = rel_posix.split("/")
+    if len(parts) >= 3 and parts[0] == "exploits":
+        if parts[1] == "routers":
+            return parts[2], "router"
+        if parts[1] == "misc":
+            return parts[2], "device"
+        if parts[1] == "generic":
+            return "generic", Path(parts[2]).stem
+    if parts[0] == "creds" and len(parts) >= 3 and parts[1] == "routers":
+        return parts[2], "router"
+    if parts[0] == "scanners" and len(parts) >= 3 and parts[1] == "routers":
+        return parts[2], "router"
+    if parts[0] == "generic" and len(parts) >= 2:
+        return "generic", parts[1]
+    if parts[0] == "encoders":
+        return "encoder", parts[1] if len(parts) > 1 else "generic"
+    if parts[0] == "payloads":
+        return "payload", parts[1] if len(parts) > 1 else "generic"
+    return "routerxpl", parts[0]
+
+
+def _entries_from_external_intel(repo_root: Path, seen: Set[str]) -> List[Dict[str, Any]]:
+    path = repo_root / "routerxpl" / "resources" / "catalogs" / "external_tool_intel_sources.json"
+    if not path.is_file():
+        return []
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    out: List[Dict[str, Any]] = []
+    for source in data.get("sources") or []:
+        sid = str(source.get("id") or "")
+        name = str(source.get("name") or sid)
+        dom = str(source.get("domain") or "")
+        url = source.get("url")
+        for raw_cve in source.get("related_cves_hint") or []:
+            if not isinstance(raw_cve, str):
+                continue
+            m = _RX_CVE.search(raw_cve)
+            if not m:
+                continue
+            cve = m.group(0).upper()
+            if cve in seen:
+                continue
+            seen.add(cve)
+            vendor = _guess_vendor_from_intel_id(sid)
+            desc = (
+                "Referenciado em external_tool_intel_sources (id={}); domínio catalogado: {}. "
+                "PoC/repo local listado — validar com NVD/PSIRT."
+            ).format(sid, dom or "n/d")
+            ver = "Ver fonte: {} / NVD".format(name[:120])
+            out.append(
+                row(
+                    cve,
+                    vendor,
+                    "edge_research",
+                    ver,
+                    desc,
+                    0.0,
+                    exploit_available=True,
+                    ref=str(url) if url else None,
+                ),
+            )
+    return out
+
+
+def _entries_from_modules(repo_root: Path, seen: Set[str]) -> List[Dict[str, Any]]:
+    mods = repo_root / "routerxpl" / "modules"
+    if not mods.is_dir():
+        return []
+    out: List[Dict[str, Any]] = []
+    for py in sorted(mods.rglob("*.py")):
+        if py.name.startswith("__") or "__pycache__" in py.parts:
+            continue
+        rel = py.relative_to(mods).as_posix()
+        try:
+            text = py.read_text(encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
+        for m in _RX_CVE.findall(text):
+            cve = m.upper()
+            if cve in seen:
+                continue
+            seen.add(cve)
+            vendor, prod = _vendor_product_from_module_path(rel)
+            desc = (
+                "CVE citado no módulo RouterXPL ``{}``. "
+                "Confirmar produto/versões no fabricante (NVD).".format(rel)
+            )
+            out.append(
+                row(
+                    cve,
+                    vendor,
+                    prod,
+                    "Ver módulo: {}".format(rel),
+                    desc,
+                    0.0,
+                ),
+            )
+    return out
+
+
+def _strip_tg12_cell(line: str) -> str:
+    """Strip ASCII table padding and surrounding ``|`` cells (tg12 cve_links)."""
+
+    return line.strip().strip("|").strip()
+
+
+def _parse_tg12_txt_cve_url_blocks(path: Path) -> List[Dict[str, Any]]:
+    """Return list of dicts with cve_id and urls from tg12 ``cve_links.txt``."""
+
+    text = path.read_text(encoding="utf-8", errors="replace")
+    entries: List[Dict[str, Any]] = []
+    current: Optional[str] = None
+    buf_urls: List[str] = []
+
+    def flush() -> None:
+        nonlocal current, buf_urls
+        if current and buf_urls:
+            entries.append({"cve_id": current, "urls": list(buf_urls)})
+        buf_urls = []
+
+    for raw in text.splitlines():
+        line = raw.rstrip()
+        if not line.startswith("|"):
+            continue
+        cell = _strip_tg12_cell(line)
+        if not cell or cell.startswith("+") or set(cell) <= {"-", "+"}:
+            continue
+        if cell.startswith("CVE-"):
+            flush()
+            m = _RX_TG12_CVE_LINE.search(cell)
+            current = m.group(0).upper() if m else None
+            continue
+        if cell.startswith("http") and current:
+            buf_urls.append(cell.split()[0])
+            continue
+
+    flush()
+    return entries
+
+
+def _normalize_poc_repo_ref(url: str) -> Optional[str]:
+    """Normalize GitHub/GitLab clone/browse URL to a stable https reference."""
+
+    u = url.strip()
+    mg = _RX_GH_REF.match(u)
+    if mg:
+        return "https://github.com/{}/{}".format(mg.group(1), mg.group(2).rstrip("/"))
+    ml = _RX_GL_REF.match(u)
+    if ml:
+        op = ml.group(1).strip("/")
+        repo = ml.group(2).rstrip("/")
+        return "https://gitlab.com/{}/{}".format(op, repo)
+    return None
+
+
+def _tg12_cve_to_poc_refs(path: Path) -> Dict[str, List[str]]:
+    """CVE upper-case -> ordered unique PoC repository URLs from tg12 ``cve_links.txt``."""
+
+    if not path.is_file():
+        return {}
+    out: Dict[str, List[str]] = {}
+    for block in _parse_tg12_txt_cve_url_blocks(path):
+        cid = str(block["cve_id"]).upper()
+        bucket = out.setdefault(cid, [])
+        for raw_u in block.get("urls") or []:
+            norm = _normalize_poc_repo_ref(raw_u)
+            if norm and norm not in bucket:
+                bucket.append(norm)
+    return out
+
+
+def _discord_related_cve_hints(repo_root: Path) -> Set[str]:
+    path = repo_root / "routerxpl" / "resources" / "catalogs" / "discord_requested_devices.json"
+    if not path.is_file():
+        return set()
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    out: Set[str] = set()
+    for ent in data.get("entries") or []:
+        for raw in ent.get("related_cves_hint") or []:
+            if not isinstance(raw, str):
+                continue
+            m = _RX_CVE.search(raw)
+            if m:
+                out.add(m.group(0).upper())
+    return out
+
+
+def _ensure_refs_list(entry: Dict[str, Any]) -> List[str]:
+    r = entry.get("references")
+    if r is None:
+        entry["references"] = []
+        return entry["references"]
+    if isinstance(r, list):
+        return r
+    entry["references"] = [str(r)]
+    return entry["references"]
+
+
+def _merge_tg12_poc_refs_for_scope(
+    entries: List[Dict[str, Any]],
+    tg12_map: Dict[str, List[str]],
+    scope_cves: Set[str],
+    embedded_by_id: Dict[str, Dict[str, Any]],
+) -> Tuple[int, int, int]:
+    """Merge tg12 URLs into ``entries`` for IDs in ``scope_cves``.
+
+    Returns:
+        (refs_appended_to_existing, new_rows_from_embedded, new_stub_rows)
+    """
+
+    by_id: Dict[str, Dict[str, Any]] = {str(e["cve_id"]).upper(): e for e in entries}
+    added_refs = 0
+    new_from_emb = 0
+    new_stub = 0
+    skip_canonical = "https://github.com/tg12/PoC_CVEs"
+
+    for cve in sorted(scope_cves):
+        urls = tg12_map.get(cve)
+        if not urls:
+            continue
+        clean = [u for u in urls if not u.lower().startswith(skip_canonical.lower())]
+        if not clean:
+            continue
+        if cve in by_id:
+            refs = _ensure_refs_list(by_id[cve])
+            for u in clean:
+                if u not in refs:
+                    refs.append(u)
+                    added_refs += 1
+            by_id[cve]["exploit_available"] = True
+            continue
+        emb = embedded_by_id.get(cve)
+        if emb:
+            neo = {k: v for k, v in emb.items() if k != "references"}
+            neo["references"] = list(emb.get("references") or [])
+            for u in clean:
+                if u not in neo["references"]:
+                    neo["references"].append(u)
+            neo["exploit_available"] = True
+            by_id[cve] = neo
+            new_from_emb += 1
+            continue
+        neo = row(
+            cve,
+            "multi",
+            "edge_research",
+            "Ver NVD/PSIRT — linha derivada de tg12/cve_links (âmbito monitorado)",
+            "PoC listado no índice tg12 para CVE em âmbito RouterXPL; validar impacto e licença.",
+            0.0,
+            exploit_available=True,
+        )
+        rfs = _ensure_refs_list(neo)
+        for u in clean:
+            if u not in rfs:
+                rfs.append(u)
+        by_id[cve] = neo
+        new_stub += 1
+
+    entries[:] = sorted(by_id.values(), key=lambda r: str(r.get("cve_id", "")))
+    return added_refs, new_from_emb, new_stub
+
+
 def main() -> int:
     root = Path(__file__).resolve().parent.parent
-    entries = build_entries()
+    sys.path.insert(0, str(root))
+    from routerxpl.core.cve.cve_db import _EMBEDDED_CVES
+
+    embedded_ids: Set[str] = {str(x["cve_id"]).upper() for x in _EMBEDDED_CVES}
+    embedded_by_id: Dict[str, Dict[str, Any]] = {
+        str(x["cve_id"]).upper(): x for x in _EMBEDDED_CVES
+    }
+
+    base = build_entries()
+    seen: Set[str] = {str(e["cve_id"]).upper() for e in base} | embedded_ids
+
+    auto_intel = _entries_from_external_intel(root, seen)
+    auto_mod = _entries_from_modules(root, seen)
+
+    extra = auto_intel + sorted(auto_mod, key=lambda r: r["cve_id"])
+    entries = base + extra
+
+    tg12_txt = (
+        root
+        / "routerxpl"
+        / "resources"
+        / "arsenal"
+        / "pocs"
+        / "incorporated_third_party"
+        / "tg12__PoC_CVEs"
+        / "cve_links.txt"
+    )
+    tg12_map = _tg12_cve_to_poc_refs(tg12_txt)
+    scope_cves: Set[str] = (
+        {str(e["cve_id"]).upper() for e in entries} | embedded_ids | _discord_related_cve_hints(root)
+    )
+    tg_merged = _merge_tg12_poc_refs_for_scope(entries, tg12_map, scope_cves, embedded_by_id)
+
     payload = {
         "catalog_note": (
             "Índice estendido offline para RouterXPL-Forge (lookup). "
@@ -185,10 +552,27 @@ def main() -> int:
         ),
         "entry_count": len(entries),
         "entries": entries,
+        "seed_sources_note": (
+            "Linhas iniciais: matrix estática. Acrescimos: related_cves_hint em "
+            "external_tool_intel_sources.json; CVEs em routerxpl/modules exceto IDs já "
+            "presentes aqui ou em cve_db._EMBEDDED_CVES; referências PoC GitHub/GitLab a "
+            "partir de tg12__PoC_CVEs/cve_links.txt (filtrado por IDs em âmbito)."
+        ),
     }
     out = root / "routerxpl" / "resources" / "catalogs" / "cve_extended_catalog.json"
     out.write_text(json.dumps(payload, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
-    print("wrote {} entries -> {}".format(len(entries), out))
+    print(
+        "wrote {} entries (+{} intel, +{} modules) tg12: +{} ref appends, +{} from embedded, "
+        "+{} stubs -> {}".format(
+            len(entries),
+            len(auto_intel),
+            len(auto_mod),
+            tg_merged[0],
+            tg_merged[1],
+            tg_merged[2],
+            out,
+        ),
+    )
     return 0
 
 

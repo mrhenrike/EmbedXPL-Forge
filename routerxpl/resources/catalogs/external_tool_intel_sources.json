@@ -2,6 +2,21 @@
   "notes": "External tooling/code intelligence sources tracked for RouterXPL-Forge roadmap and test coverage.",
   "sources": [
     {
+      "id": "forge-incorporated-third-party-pocs",
+      "name": "Local mirror of third-party-router-poc clones (all slugs)",
+      "url": "urn:routerxpl:incorporated-third-party-pocs",
+      "type": "embedded-offline-tree",
+      "domain": "router-soho",
+      "scope_alignment": "high",
+      "integration_status": "embedded-in-forge",
+      "test_matrix_status": "tracked",
+      "forge_bundle_relative": "routerxpl/resources/arsenal/pocs/incorporated_third_party",
+      "index_catalog": "routerxpl/resources/catalogs/incorporated_third_party_index.json",
+      "regenerate_tool": "tools/incorporate_third_party_poc_tree.py",
+      "local_path_relative": "submodules/IoT/third-party-router-poc",
+      "notes": "Full tree mirrored from sibling checkout; excludes .git only. Re-run tool after submodule updates. Includes ExploitDB text + bin-sploits copies for offline use; respect upstream licenses (GPLv2 Exploit-DB, etc.)."
+    },
+    {
       "id": "belkin4xx-keygen",
       "name": "Belkin4xx key correlation script",
       "url": "https://bitbucket.org/dudux/belkin4xx/src/eb7545023f250589bfc2f944472964754a83f66d/belkin4xx.py?at=master",
@@ -90,8 +105,10 @@
       "type": "source-mirror",
       "domain": "router-soho",
       "scope_alignment": "high",
-      "integration_status": "queued_for_analysis",
-      "test_matrix_status": "tracked"
+      "integration_status": "embedded-in-forge",
+      "test_matrix_status": "tracked",
+      "embedded_bundle_relative": "routerxpl/resources/arsenal/pocs/soho_exploit_catalog",
+      "notes": "Bundled under arsenal/pocs; served locally via scanners/misc/soho_exploit_catalog_server.py; key algorithms in routerxpl/core/soho_exploit_catalog.py."
     },
     {
       "id": "exploit-db-hardware-search",
@@ -128,14 +145,14 @@
     },
     {
       "id": "exploitdb-gitlab",
-      "name": "Exploit-DB / searchsploit (OffSec) — upstream",
+      "name": "Exploit-DB (OffSec) — upstream reference",
       "url": "https://gitlab.com/exploit-database/exploitdb",
       "type": "exploit-database",
       "domain": "research-cli",
       "scope_alignment": "high",
-      "integration_status": "adapter-module",
+      "integration_status": "embedded-in-forge",
       "test_matrix_status": "tracked",
-      "notes": "RouterXPL: generic/external/searchsploit_bridge.py; GPLv2 applies to packaged DB/scripts."
+      "notes": "Cópia em incorporated_third_party/exploit-database__exploitdb (+ bin-sploits); pesquisa offline: generic/external/exploitdb_embedded_lookup.py. Sem integração com binário searchsploit. GPLv2 nos textos/scripts upstream."
     },
     {
       "id": "mikrotikapi-bf-github",
@@ -1139,6 +1156,7 @@
       "integration_status": "embedded-local-mirror",
       "test_matrix_status": "tracked",
       "local_path_relative": "submodules/IoT/third-party-router-poc/hkm__routerpwn.com",
+      "forge_bundle_relative": "routerxpl/resources/arsenal/pocs/soho_exploit_catalog",
       "related_cves_hint": [],
       "matched_catalog_device_ids": [
         "airport_extreme_2010",
@@ -1152,7 +1170,7 @@
         "tplink_archer_c9",
         "ubiquiti_usw"
       ],
-      "notes": "Ingerido por tools/embed_local_third_party_poc_intel.py; triagem contínua."
+      "notes": "Cópia funcional embarcada no pacote (arsenal/pocs/soho_exploit_catalog); repositório submodule permanece opcional para desenvolvimento."
     },
     {
       "id": "local-poc-hook-s3c-cve-2018-18852",

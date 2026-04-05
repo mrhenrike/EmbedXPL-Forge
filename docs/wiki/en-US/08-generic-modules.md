@@ -15,6 +15,10 @@ run
 
 Options: `banner`, `product`, `version`, `remote_only`, `show_physical`.
 
+## Exploit-DB (offline CSV) — `generic/external/exploitdb_embedded_lookup`
+
+Searches **`files_exploits.csv`** inside the bundled `exploit-database__exploitdb` tree under `routerxpl/resources/arsenal/pocs/incorporated_third_party/`. **No** `searchsploit` or external Exploit-DB CLI. Preserve GPLv2 notices when redistributing mirror contents.
+
 ## PCAP / Wi‑Fi offline — `generic/pcap/*`
 
 Requires **Scapy**. Lab / authorized forensic use.

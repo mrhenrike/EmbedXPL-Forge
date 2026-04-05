@@ -135,6 +135,15 @@ O bootstrap regista em **`routerxpl.log`**.
 
 ---
 
+## Notas de versão — 3.4.8
+
+- **Catálogo CVE:** `cve_extended_catalog.json` passa a fundir a matriz estática, *hints* de `external_tool_intel_sources.json`, CVEs citados em `routerxpl/modules`, o conjunto em `_EMBEDDED_CVES`, `related_cves_hint` do Discord e **URLs de repositórios PoC** normalizados a partir do tg12 `cve_links.txt` vendored (só IDs em âmbito edge/RouterXPL).
+- **Documentação:** `FULL_CATALOG` inclui **pegada em disco**, pastas mais pesadas e contagens de `.py` de primeira parte (`tools/generate_full_catalog.py`).
+- **Exploit-DB offline:** `generic/external/exploitdb_embedded_lookup` pesquisa o `files_exploits.csv` do espelho local (sem CLI `searchsploit`); o antigo módulo ponte SearchSploit foi removido.
+- **Arsenal:** espelhos PoC de terceiros em `routerxpl/resources/arsenal/pocs/incorporated_third_party/` (Exploit-DB GPLv2 e repos curados); índices JSON em `routerxpl/resources/catalogs/`. Catálogo SOHO estático + `scanners/misc/soho_exploit_catalog_server` para visualização HTTP em laboratório.
+
+---
+
 ## Testes sugeridos (contribuidores)
 
 ```bash

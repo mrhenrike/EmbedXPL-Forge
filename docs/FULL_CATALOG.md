@@ -1,20 +1,74 @@
 # RouterXPL-Forge — Full Module Catalog
 
-> Generated: 2026-04-04T03:24:07.813353+00:00
+> Generated: 2026-04-05T03:59:21.964367+00:00
 > Author: Andre Henrique (@mrhenrike) | Uniao Geek
 
 ## Summary
 
-| Category | Count |
+| Category | Modules | Vendor / group buckets |
+|---|---:|---:|
+| Exploits | 129 | 36 |
+| Credential Modules | 96 | 41 |
+| Scanners | 6 | 3 |
+| Generic Modules | 20 | 7 |
+| Encoders | 13 | 3 |
+| Payloads | 32 | 9 |
+| **Total Modules** | **296** | — |
+| Distinct CVEs | 32 | — |
+
+## Program footprint
+
+Approximate on-disk size (file bytes only; binary prefixes). Walk skips caches such as ``__pycache__`` and ``.git``.
+
+| Metric | Value |
+|---|---|
+| Repository root | `D:/Projetos-SafeLabs/submodules/IoT/RouterXPL-Forge` |
+| Total file bytes | 1.80 GiB |
+| Files (repo walk) | 55485 |
+| Files under ``routerxpl/`` | 54809 |
+
+### Largest top-level paths (repository)
+
+| Path | Size | Share of total |
+|---|---:|---:|
+| `routerxpl` | 1.79 GiB | 99.7% |
+| `docs` | 4.57 MiB | 0.2% |
+| `tests` | 319.00 KiB | 0.0% |
+| `tools` | 247.33 KiB | 0.0% |
+| `routerxpl.egg-info` | 58.36 KiB | 0.0% |
+| `(repo root files)` | 40.09 KiB | 0.0% |
+
+### ``routerxpl/`` breakdown (first-level folders)
+
+| Area | Size | Share of total |
+|---|---:|---:|
+| `resources` | 1.79 GiB | 99.7% |
+| `modules` | 712.45 KiB | 0.0% |
+| `core` | 226.88 KiB | 0.0% |
+| `(routerxpl root files)` | 27.00 KiB | 0.0% |
+| `libs` | 13.68 KiB | 0.0% |
+
+### ``routerxpl/resources/*`` (largest direct children)
+
+| Subfolder | Size | Share of total |
+|---|---:|---:|
+| `arsenal` | 1.68 GiB | 93.5% |
+| `mibs` | 83.21 MiB | 4.5% |
+| `catalogs` | 24.94 MiB | 1.4% |
+| `vendors` | 4.52 MiB | 0.2% |
+| `wordlists` | 44.91 KiB | 0.0% |
+| `ssh_keys` | 9.89 KiB | 0.0% |
+| `ml` | 1.22 KiB | 0.0% |
+
+### First-party Python files (``.py`` count, excluding ``__pycache__``)
+
+| Tree | Files |
 |---|---:|
-| Exploits | 129 |
-| Credential Modules | 96 |
-| Scanners | 5 |
-| Generic Modules | 20 |
-| Encoders | 13 |
-| Payloads | 32 |
-| **Total Modules** | **295** |
-| Distinct CVEs | 32 |
+| `routerxpl/core` | 46 |
+| `routerxpl/modules` | 388 |
+| `routerxpl/libs` | 5 |
+| `tools` | 35 |
+| `rxf.py` | 1 |
 
 ---
 
@@ -1323,7 +1377,7 @@
    - Module performs dictionary attack against Zyxel Router Telnet service. If valid credentials are found, they are displayed to the user.
    - Devices: Zyxel Router
 
-## Scanners (5)
+## Scanners (6)
 
 ### autopwn.py (1)
 
@@ -1332,27 +1386,32 @@
    - Module scans for vulnerabilities and weaknesses. Supports timing templates T0..T5 (default: balanced/T3).
    - Devices: Routers, Switches, TAPs, FW, NGFW
 
-### misc (1)
+### misc (2)
 
 2. **Misc Scanner**
    - Path: `scanners/misc/misc_scan.py`
    - Module that scans for misc devices vulnerablities and weaknesses.
    - Devices: Misc Device
 
+3. **SOHO Exploit Catalog (local HTTP)**
+   - Path: `scanners/misc/soho_exploit_catalog_server.py`
+   - Serves the embedded SOHO router exploit catalog (HTML + includes/scripts.js) over HTTP so browser one-click actions resolve relative assets offline.
+   - Devices: SOHO routers / CPEs (catalog scope)
+
 ### routers (3)
 
-3. **FortiGate SSL-VPN / Web CVE Correlation Scan**
+4. **FortiGate SSL-VPN / Web CVE Correlation Scan**
    - Path: `scanners/routers/fortigate_sslvpn_scan.py`
    - Fetches common FortiOS SSL-VPN paths (/remote/login, etc.), extracts version hints when present, and lists matching CVEs from the embedded + extended RouterXPL-Forge catalog (CVE-2018-13379, CVE-2022-
    - CVEs: CVE-2018-13379, CVE-2022-40684, CVE-2023-27997, CVE-2024-21762, CVE-2025-59718
    - Devices: Fortinet FortiGate / FortiOS SSL-VPN
 
-4. **HooToo Scanner**
+5. **HooToo Scanner**
    - Path: `scanners/routers/hootoo_scan.py`
    - Scanner module for HooToo routers
    - Devices: HooToo TripMate
 
-5. **Router Scanner**
+6. **Router Scanner**
    - Path: `scanners/routers/router_scan.py`
    - Module that scans for routers vulnerablities and weaknesses.
    - Devices: Router
@@ -1382,25 +1441,25 @@
 
 ### external (4)
 
-5. **Metasploit Console Bridge**
+5. **ExploitDB embedded lookup (CSV)**
+   - Path: `generic/external/exploitdb_embedded_lookup.py`
+   - Searches files_exploits.csv in the bundled exploit-database__exploitdb tree (arsenal/pocs/incorporated_third_party). No searchsploit / external CLI.
+   - Devices: Research / catalog
+
+6. **Metasploit Console Bridge**
    - Path: `generic/external/metasploit_console_bridge.py`
    - Invokes local msfconsole with 'use <module>; setg RHOSTS; …; check|run'. MSF modules and license remain under Rapid7/BSD at your install path — this module only orchestrates the CLI. Not legal advice:
    - Devices: Any (depends on chosen Metasploit module)
 
-6. **Metasploit Ruby Module Metadata (read-only)**
+7. **Metasploit Ruby Module Metadata (read-only)**
    - Path: `generic/external/metasploit_rb_inspect.py`
    - Loads a .rb path from your Metasploit tree and prints Name/Author/References heuristics. Does not run Ruby or MSF; original file is not modified. Credit remains with module authors and Rapid7 license.
    - Devices: Documentation
 
-7. **MikrotikAPI-BF Bridge**
+8. **MikrotikAPI-BF Bridge**
    - Path: `generic/external/mikrotikapi_bf_bridge.py`
    - Runs MikrotikAPI-BF (https://github.com/mrhenrike/MikrotikAPI-BF) via subprocess. Set script_path to your repo's mikrotikapi-bf.py or leave empty to use PATH (mikrotikapi-bf).
    - Devices: MikroTik RouterOS
-
-8. **Searchsploit Bridge**
-   - Path: `generic/external/searchsploit_bridge.py`
-   - Runs `searchsploit` against a term (optional JSON). Requires Exploit-DB package on host. Respect GPLv2 and upstream attribution for databases and scripts.
-   - Devices: Research / catalog
 
 ### pcap (9)
 

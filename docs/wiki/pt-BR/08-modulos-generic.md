@@ -19,6 +19,10 @@ Opções úteis: `banner`, `product`, `version`, `remote_only`, `show_physical`.
 
 Ideal **após** obter *banner* por outro scanner ou serviço.
 
+## Exploit-DB (CSV offline) — `generic/external/exploitdb_embedded_lookup`
+
+Pesquisa o **`files_exploits.csv`** do espelho `exploit-database__exploitdb` em `routerxpl/resources/arsenal/pocs/incorporated_third_party/`. **Sem** `searchsploit` nem CLI externo. Respeite avisos GPLv2 ao redistribuir o espelho.
+
 ## PCAP / Wi‑Fi offline — `generic/pcap/*`
 
 Requer **Scapy**. Útil para laboratório e análise forense **autorizada**.

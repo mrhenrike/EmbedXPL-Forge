@@ -60,6 +60,10 @@ SSL-VPN / FortiGate-oriented recon (authorized testing only).
 
 HooToo-focused AutoPwn-style scanner.
 
+## `scanners/misc/soho_exploit_catalog_server`
+
+Serves the bundled **SOHO exploit catalog** (static HTML/JS under `routerxpl/resources/arsenal/pocs/soho_exploit_catalog/`) on **`127.0.0.1:8765`** by default. Lab-only; use `open_browser true` to launch the default browser.
+
 ---
 
 [Wiki hub](../README.md)

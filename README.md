@@ -155,6 +155,18 @@ To publish on **GitHub Wiki**, copy the chosen locale folder (or both) into the 
 | `tools/report_market_priority_gaps.py` | Gap report vs market-priority catalog |
 | `tools/validate_market_priority_minimums.py` | Yearly minimum validation |
 | `tools/generate_coverage_matrix.py` | Regenerate matrix docs |
+| `tools/generate_full_catalog.py` | Regenerate `FULL_CATALOG` (footprint, sizes, module stats) |
+| `tools/refresh_cve_extended_catalog.py` | Regenerate merged `cve_extended_catalog.json` |
+| `tools/incorporate_third_party_poc_tree.py` | Vendor third-party PoC snapshots into `arsenal/pocs/incorporated_third_party/` |
+
+---
+
+## Release notes — 3.4.8
+
+- **CVE catalog:** `cve_extended_catalog.json` now merges the static matrix, `external_tool_intel_sources.json` hints, CVE strings from `routerxpl/modules`, embedded `_EMBEDDED_CVES` scope, Discord `related_cves_hint`, and **PoC repository URLs** normalized from the vendored tg12 `cve_links.txt` (in-scope IDs only; does not load the whole global index into RAM at runtime).
+- **Docs:** `FULL_CATALOG` adds **on-disk footprint**, largest paths, and first-party `.py` counts (`tools/generate_full_catalog.py`).
+- **Offline Exploit-DB:** `generic/external/exploitdb_embedded_lookup` searches the bundled `files_exploits.csv` tree (no `searchsploit` CLI); legacy SearchSploit bridge modules were removed.
+- **Arsenal:** Curated third-party PoC mirrors live under `routerxpl/resources/arsenal/pocs/incorporated_third_party/` (GPLv2 Exploit-DB and selected repos); indexes in `routerxpl/resources/catalogs/`. **SOHO exploit catalog** bundle + `scanners/misc/soho_exploit_catalog_server` for local HTTP viewing in lab.
 
 ---
 

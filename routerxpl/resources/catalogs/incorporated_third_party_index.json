@@ -1,0 +1,302 @@
+{
+  "source_root": "D:/Projetos-SafeLabs/submodules/IoT/third-party-router-poc",
+  "dest_root": "routerxpl/resources/arsenal/pocs/incorporated_third_party",
+  "folder_count": 49,
+  "entries": [
+    {
+      "slug": "0vercl0k__zenith",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/0vercl0k__zenith",
+      "size_bytes": 1821437,
+      "file_count": 15
+    },
+    {
+      "slug": "0xedh__mistrastar-mips-exploit",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/0xedh__mistrastar-mips-exploit",
+      "size_bytes": 41654,
+      "file_count": 3
+    },
+    {
+      "slug": "0xyassine__poc-seeker",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/0xyassine__poc-seeker",
+      "size_bytes": 37405,
+      "file_count": 2
+    },
+    {
+      "slug": "649__Pingpon-Exploit",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/649__Pingpon-Exploit",
+      "size_bytes": 31901,
+      "file_count": 4
+    },
+    {
+      "slug": "CyberVinner__TP-Link-TL-WR820N-CVE-2025-14175",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/CyberVinner__TP-Link-TL-WR820N-CVE-2025-14175",
+      "size_bytes": 180738,
+      "file_count": 10
+    },
+    {
+      "slug": "ElberTavares__routers-exploit",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/ElberTavares__routers-exploit",
+      "size_bytes": 68337,
+      "file_count": 7
+    },
+    {
+      "slug": "EntySec__HatAsm",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/EntySec__HatAsm",
+      "size_bytes": 513769,
+      "file_count": 36
+    },
+    {
+      "slug": "EntySec__HatSploit",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/EntySec__HatSploit",
+      "size_bytes": 1076671,
+      "file_count": 301
+    },
+    {
+      "slug": "EntySec__Pwny",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/EntySec__Pwny",
+      "size_bytes": 31245981,
+      "file_count": 444
+    },
+    {
+      "slug": "EntySec__RomBuster",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/EntySec__RomBuster",
+      "size_bytes": 31256,
+      "file_count": 11
+    },
+    {
+      "slug": "EntySec__libload",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/EntySec__libload",
+      "size_bytes": 404090,
+      "file_count": 45
+    },
+    {
+      "slug": "G-bdennour__Huawei",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/G-bdennour__Huawei",
+      "size_bytes": 773009,
+      "file_count": 3
+    },
+    {
+      "slug": "JackDoan__TP-Link-ArcherC5-RCE",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/JackDoan__TP-Link-ArcherC5-RCE",
+      "size_bytes": 60067,
+      "file_count": 5
+    },
+    {
+      "slug": "MaherAzzouzi__ZTE-F660-Exploit",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/MaherAzzouzi__ZTE-F660-Exploit",
+      "size_bytes": 2303168,
+      "file_count": 61
+    },
+    {
+      "slug": "ThomasRinsma__vmg8825scripts",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/ThomasRinsma__vmg8825scripts",
+      "size_bytes": 29579,
+      "file_count": 9
+    },
+    {
+      "slug": "Zeyad-Azima__Huawei_Thief",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/Zeyad-Azima__Huawei_Thief",
+      "size_bytes": 5054,
+      "file_count": 3
+    },
+    {
+      "slug": "acecilia__OpenWRTInvasion",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/acecilia__OpenWRTInvasion",
+      "size_bytes": 80662364,
+      "file_count": 38
+    },
+    {
+      "slug": "afang5472__TP-Link-WDR-Router-Command-injection_POC",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/afang5472__TP-Link-WDR-Router-Command-injection_POC",
+      "size_bytes": 1073,
+      "file_count": 1
+    },
+    {
+      "slug": "arthastang__IoT-Home-Guard",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/arthastang__IoT-Home-Guard",
+      "size_bytes": 22040015,
+      "file_count": 24
+    },
+    {
+      "slug": "arthastang__IoT-Implant-Toolkit",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/arthastang__IoT-Implant-Toolkit",
+      "size_bytes": 24575803,
+      "file_count": 159
+    },
+    {
+      "slug": "arthastang__Router-Exploit-Shovel",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/arthastang__Router-Exploit-Shovel",
+      "size_bytes": 89195342,
+      "file_count": 91
+    },
+    {
+      "slug": "coincoin7__Wireless-Router-Vulnerability",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/coincoin7__Wireless-Router-Vulnerability",
+      "size_bytes": 92563,
+      "file_count": 9
+    },
+    {
+      "slug": "dylvie__CVE-2020-35575-TP-LINK-TL-WR841ND-password-disclosure",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/dylvie__CVE-2020-35575-TP-LINK-TL-WR841ND-password-disclosure",
+      "size_bytes": 3551,
+      "file_count": 2
+    },
+    {
+      "slug": "exploit-database__exploitdb",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/exploit-database__exploitdb",
+      "size_bytes": 185482794,
+      "file_count": 47568
+    },
+    {
+      "slug": "exploit-database__exploitdb-bin-sploits",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/exploit-database__exploitdb-bin-sploits",
+      "size_bytes": 1151185033,
+      "file_count": 2338
+    },
+    {
+      "slug": "foreni-packages__cisco-global-exploiter",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/foreni-packages__cisco-global-exploiter",
+      "size_bytes": 43627,
+      "file_count": 12
+    },
+    {
+      "slug": "hkm__routerpwn.com",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/hkm__routerpwn.com",
+      "size_bytes": 1208269,
+      "file_count": 82
+    },
+    {
+      "slug": "hook-s3c__CVE-2018-18852",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/hook-s3c__CVE-2018-18852",
+      "size_bytes": 42060,
+      "file_count": 3
+    },
+    {
+      "slug": "iridium__tapohax",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/iridium__tapohax",
+      "size_bytes": 10765,
+      "file_count": 2
+    },
+    {
+      "slug": "j91321__rext",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/j91321__rext",
+      "size_bytes": 1470335,
+      "file_count": 96
+    },
+    {
+      "slug": "johnoseni1__Router-hacker-Exploit-and-extract-user-and-password-",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/johnoseni1__Router-hacker-Exploit-and-extract-user-and-password-",
+      "size_bytes": 12888,
+      "file_count": 5
+    },
+    {
+      "slug": "knqyf263__CVE-2020-10749",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/knqyf263__CVE-2020-10749",
+      "size_bytes": 57804419,
+      "file_count": 9
+    },
+    {
+      "slug": "kthemis__RouterExploitScan",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/kthemis__RouterExploitScan",
+      "size_bytes": 6451,
+      "file_count": 39
+    },
+    {
+      "slug": "openwrt-xiaomi__xmir-patcher",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/openwrt-xiaomi__xmir-patcher",
+      "size_bytes": 21237527,
+      "file_count": 306
+    },
+    {
+      "slug": "oscommonjs__EXP_IOT",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/oscommonjs__EXP_IOT",
+      "size_bytes": 3589897,
+      "file_count": 16
+    },
+    {
+      "slug": "samyk__evercookie",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/samyk__evercookie",
+      "size_bytes": 261328,
+      "file_count": 46
+    },
+    {
+      "slug": "samyk__magspoof",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/samyk__magspoof",
+      "size_bytes": 650235,
+      "file_count": 14
+    },
+    {
+      "slug": "samyk__poisontap",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/samyk__poisontap",
+      "size_bytes": 40438742,
+      "file_count": 344
+    },
+    {
+      "slug": "samyk__pwnat",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/samyk__pwnat",
+      "size_bytes": 171548,
+      "file_count": 32
+    },
+    {
+      "slug": "samyk__skyjack",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/samyk__skyjack",
+      "size_bytes": 15464,
+      "file_count": 8
+    },
+    {
+      "slug": "samyk__slipstream",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/samyk__slipstream",
+      "size_bytes": 4220519,
+      "file_count": 26
+    },
+    {
+      "slug": "seclab-ucr__CCS24Mesh",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/seclab-ucr__CCS24Mesh",
+      "size_bytes": 8495776,
+      "file_count": 38
+    },
+    {
+      "slug": "seclab-ucr__KOOBE",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/seclab-ucr__KOOBE",
+      "size_bytes": 0,
+      "file_count": 0
+    },
+    {
+      "slug": "seclab-ucr__SymTCP",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/seclab-ucr__SymTCP",
+      "size_bytes": 55530896,
+      "file_count": 127
+    },
+    {
+      "slug": "seclab-ucr__tcp_exploit",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/seclab-ucr__tcp_exploit",
+      "size_bytes": 355471,
+      "file_count": 31
+    },
+    {
+      "slug": "stasinopoulos__ZTExploit",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/stasinopoulos__ZTExploit",
+      "size_bytes": 7645425,
+      "file_count": 7
+    },
+    {
+      "slug": "tacnetsol__TRENDNetExploits",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/tacnetsol__TRENDNetExploits",
+      "size_bytes": 700065,
+      "file_count": 25
+    },
+    {
+      "slug": "teteco__CVE-2025-67070-Intelbras-CFTV-MFA-Bypass",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/teteco__CVE-2025-67070-Intelbras-CFTV-MFA-Bypass",
+      "size_bytes": 6575,
+      "file_count": 2
+    },
+    {
+      "slug": "tg12__PoC_CVEs",
+      "relative_dest": "routerxpl/resources/arsenal/pocs/incorporated_third_party/tg12__PoC_CVEs",
+      "size_bytes": 5957644,
+      "file_count": 6
+    }
+  ],
+  "notes": "Regenerated with --index-only (sizes from current tree)."
+}

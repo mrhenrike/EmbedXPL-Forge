@@ -247,10 +247,10 @@
 - `generic/bluetooth/btle_scan`
 - `generic/bluetooth/btle_write`
 - `generic/cve/cve_lookup`
+- `generic/external/exploitdb_embedded_lookup`
 - `generic/external/metasploit_console_bridge`
 - `generic/external/metasploit_rb_inspect`
 - `generic/external/mikrotikapi_bf_bridge`
-- `generic/external/searchsploit_bridge`
 - `generic/pcap/pcap_ap_station_mapper`
 - `generic/pcap/pcap_credential_sniffer`
 - `generic/pcap/pcap_dragonblood`
@@ -297,6 +297,7 @@
 - `payloads/x86/reverse_tcp`
 - `scanners/autopwn`
 - `scanners/misc/misc_scan`
+- `scanners/misc/soho_exploit_catalog_server`
 - `scanners/routers/fortigate_sslvpn_scan`
 - `scanners/routers/hootoo_scan`
 - `scanners/routers/router_scan`

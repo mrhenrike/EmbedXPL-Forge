@@ -288,12 +288,12 @@ def _scan_repo_body(body_dir: Path, slug: str) -> dict[str, Any]:
         "sample_scanned_relpaths": sample_paths,
         "readme_excerpt": readme_excerpt,
         "rxforge_integration": (
-            "searchsploit_bridge"
+            "exploitdb_embedded_lookup"
             if slug in SKIP_EXPLOITDB_BODY
             else "local_upstream_mirror_under_routerxpl_intel"
         ),
         "notes": (
-            "ExploitDB: use `searchsploit` or grep `files_exploits.csv`; não percorrer árvore completa em CI."
+            "ExploitDB espelhado em incorporated_third_party; consulta CSV via exploitdb_embedded_lookup.py (sem searchsploit)."
             if slug in SKIP_EXPLOITDB_BODY
             else "Triagem manual: licença, escopo autorizado, portar payloads para módulos RouterXPL quando aplicável."
         ),
@@ -314,12 +314,12 @@ def _exploitdb_row(body: Path, slug: str) -> dict[str, Any]:
         "classification": "exploitdb_mirror",
         "cves_found": [],
         "matched_catalog_device_ids": [],
-        "scope_keyword_hits": ["exploitdb", "searchsploit"],
+        "scope_keyword_hits": ["exploitdb", "files_exploits.csv"],
         "files_exploits_csv": str(csv_path.relative_to(body).as_posix()) if csv_exists else None,
-        "rxforge_integration": "searchsploit_bridge",
+        "rxforge_integration": "exploitdb_embedded_lookup",
         "notes": (
-            "Mirror oficial ExploitDB. Integração RouterXPL: `searchsploit -j termo` / paths relativos a este clone; "
-            "evitar ingestão linha-a-linha no catálogo estendido."
+            "Mirror ExploitDB; metadados em files_exploits.csv. RouterXPL: generic/external/exploitdb_embedded_lookup.py "
+            "(cópia em incorporated_third_party; sem searchsploit)."
         ),
     }
 

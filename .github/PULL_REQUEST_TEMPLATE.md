@@ -17,8 +17,10 @@ Reproducible steps and outcome.
 2.
 3.
 
-## Local checks
+## Required local checks
+
 - [ ] `python tools/env_doctor.py`
+- [ ] `python tools/compile_first_party.py`
 - [ ] `python tools/compat_smoke.py`
 - [ ] `python tools/validate_market_priority_minimums.py` (if catalogs changed)
 - [ ] `python tools/generate_coverage_matrix.py` (if modules/docs matrix affected)
