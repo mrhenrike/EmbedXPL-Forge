@@ -1,6 +1,6 @@
 # RouterXPL-Forge
 
-Open-source framework for security testing of **embedded devices**, focused on **routers, switches, TAPs, firewalls, and NGFW**.
+Open-source framework for security testing of **embedded devices**, focused on **routers, Layer 2–3 switches, TAPs, and home/SOHO edge** (CPE, mixed edge). **Firewall / NGFW / UTM / WAF / cloud perimeter** coverage lives in the sibling project [**FirewallXPL-Forge**](https://github.com/mrhenrike/FirewallXPL-Forge) (private lab fork).
 
 **Maintainer:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| [União Geek](https://github.com/Uniao-Geek)  
 **Upstream lineage:** [threat9/routersploit](https://github.com/threat9/routersploit)
@@ -160,6 +160,11 @@ To publish on **GitHub Wiki**, copy the chosen locale folder (or both) into the 
 | `tools/incorporate_third_party_poc_tree.py` | Vendor third-party PoC snapshots into `arsenal/pocs/incorporated_third_party/` |
 
 ---
+
+## Release notes — 3.4.9
+
+- **Repository split:** Perimeter-focused modules (Fortinet, WatchGuard, enterprise Cisco security appliances, pfSense/IPFire-style edge, **FortiGate SSL VPN scanner**, etc.) moved to [**FirewallXPL-Forge**](https://github.com/mrhenrike/FirewallXPL-Forge). RouterXPL-Forge keeps SOHO routers, switches, TAPs, and lighter edge scope; footprint and catalog docs were regenerated accordingly.
+- **Tools:** `tools/bootstrap_firewallxpl_forge.py` (clone + slim + rename to `firewallxpl`) and `tools/trim_routerxpl_edge_scope.py` (trim this tree after split).
 
 ## Release notes — 3.4.8
 

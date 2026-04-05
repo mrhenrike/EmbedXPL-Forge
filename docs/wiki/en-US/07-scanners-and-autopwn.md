@@ -52,9 +52,9 @@ run
 
 Use `show advanced` for the full set.
 
-## `scanners/routers/fortigate_sslvpn_scan`
+## Perimeter / NGFW scanners
 
-SSL-VPN / FortiGate-oriented recon (authorized testing only).
+SSL-VPN and FortiGate-oriented recon modules live in [**FirewallXPL-Forge**](https://github.com/mrhenrike/FirewallXPL-Forge) after the repository split (authorized testing only).
 
 ## `scanners/routers/hootoo_scan`
 

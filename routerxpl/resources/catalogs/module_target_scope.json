@@ -1,13 +1,13 @@
 {
   "version": "1.0.0",
-  "description": "Maps module paths (routers/foo/bar.py under exploits/ or creds/) to allowed target classes. AutoPwn option target_device_class filters modules. Value 'multi' disables filtering.",
+  "description": "Edge RouterXPL-Forge: routers, L2/L3 switches, ISP CPE, TAPs. NGFW / UTM / WAF / cloud perimeter modules: see FirewallXPL-Forge.",
   "operational_policy": {
     "prohibited_in_project_scope": [
       "operational_botnets_and_c2_infrastructure",
       "malware_persistence_campaigns_against_third_parties",
       "intentional_device_bricking_or_destructive_floods_outside_authorized_lab"
     ],
-    "note": "RouterXPL-Forge does not provide turnkey botnet/C2, zombie recruitment, or bricking modules. Use authorized lab tooling for controlled resilience tests."
+    "note": "RouterXPL-Forge (edge) does not provide turnkey botnet/C2. Firewall / NGFW lab coverage lives in FirewallXPL-Forge."
   },
   "default_allow_classes": [
     "router",
@@ -35,13 +35,6 @@
         "fw",
         "ngfw",
         "isp_cpe"
-      ]
-    },
-    {
-      "prefix": "routers/fortinet/",
-      "allow": [
-        "fw",
-        "ngfw"
       ]
     },
     {
@@ -80,24 +73,10 @@
       ]
     },
     {
-      "prefix": "misc/watchguard/",
-      "allow": [
-        "fw",
-        "ngfw"
-      ]
-    },
-    {
       "prefix": "routers/cisco/catalyst",
       "allow": [
         "switch",
         "router"
-      ]
-    },
-    {
-      "prefix": "routers/cisco/firepower",
-      "allow": [
-        "fw",
-        "ngfw"
       ]
     },
     {

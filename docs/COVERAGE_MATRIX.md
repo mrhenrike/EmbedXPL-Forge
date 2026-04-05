@@ -18,19 +18,19 @@
 
 ## Global Capability Summary
 
-- Module tree (routerxpl/modules): 5679ba400ba12bf17410c37e7ded059b5e507b92
-- Total modules indexed: 296
-- Distinct vendor/product entries: 296
-- Distinct CVEs mapped in modules: 32
+- Module tree (routerxpl/modules): 08f0a5bc65aded0db96ad1e9d5d6422f58e35744
+- Total modules indexed: 278
+- Distinct vendor/product entries: 278
+- Distinct CVEs mapped in modules: 23
 - Attack classes identified: auth_bypass, backdoor, creds_disclosure, dns_change, info_disclosure, password_reset_or_change, path_traversal, rce
 
 ### Module Type Counts
-- creds: 96
+- creds: 88
 - encoders: 13
-- exploits: 129
+- exploits: 120
 - generic: 20
 - payloads: 32
-- scanners: 6
+- scanners: 5
 
 ## Protocol Coverage (Inferred)
 
@@ -95,12 +95,12 @@
 | L5-L7 | Application | Session/Presentation/Application | dhcp | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P2 |
 | L5-L7 | Application | Session/Presentation/Application | ntp_ptp | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P2 | P1 |
 | L5-L7 | Application | Session/Presentation/Application | snmp_snmpv3 | 4 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
-| L5-L7 | Application | Session/Presentation/Application | ssh | 32 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
-| L5-L7 | Application | Session/Presentation/Application | telnet | 30 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P3 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | ftp_ftps_sftp | 32 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P2 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | http_https_api | 15 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
+| L5-L7 | Application | Session/Presentation/Application | ssh | 27 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
+| L5-L7 | Application | Session/Presentation/Application | telnet | 28 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P3 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | ftp_ftps_sftp | 29 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P2 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | http_https_api | 14 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
 | L5-L7 | Application | Session/Presentation/Application | radius_tacacs | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P2 | P3 |
-| L5-L7 | Application | Session/Presentation/Application | tr069_cwmp | 1 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P3 | P3 |
+| L5-L7 | Application | Session/Presentation/Application | tr069_cwmp | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P3 | P3 |
 | L5-L7 | Application | Session/Presentation/Application | syslog | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P1 | P2 |
 | L5-L7 | Application | Session/Presentation/Application | modbus_tcp | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
 | L5-L7 | Application | Session/Presentation/Application | dnp3 | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
@@ -117,7 +117,7 @@
 | L2 Data Link | 16 |
 | L3 Network | 0 |
 | L4 Transport | 37 |
-| L5-L7 Session/Presentation/Application | 120 |
+| L5-L7 Session/Presentation/Application | 108 |
 
 ## Market Priority Coverage (2010-2026)
 
@@ -153,23 +153,23 @@
 
 | Year | Required | Cataloged | Status | Vendor Covered Count | Keyword Hits |
 |---:|---:|---:|---|---:|---:|
-| 2010 | 13 | 13 | ok | 8 | 1 |
-| 2011 | 13 | 13 | ok | 8 | 1 |
-| 2012 | 15 | 15 | ok | 9 | 1 |
-| 2013 | 15 | 15 | ok | 9 | 0 |
-| 2014 | 15 | 15 | ok | 10 | 0 |
-| 2015 | 15 | 15 | ok | 10 | 0 |
-| 2016 | 15 | 15 | ok | 10 | 0 |
-| 2017 | 15 | 15 | ok | 10 | 0 |
-| 2018 | 17 | 17 | ok | 10 | 0 |
-| 2019 | 20 | 20 | ok | 10 | 0 |
-| 2020 | 20 | 20 | ok | 10 | 0 |
-| 2021 | 22 | 22 | ok | 10 | 0 |
-| 2022 | 23 | 23 | ok | 11 | 0 |
-| 2023 | 22 | 22 | ok | 13 | 0 |
-| 2024 | 24 | 24 | ok | 13 | 0 |
-| 2025 | 24 | 24 | ok | 13 | 0 |
-| 2026 | 24 | 24 | ok | 13 | 0 |
+| 2010 | 13 | 13 | ok | 7 | 1 |
+| 2011 | 13 | 13 | ok | 7 | 1 |
+| 2012 | 15 | 15 | ok | 8 | 1 |
+| 2013 | 15 | 15 | ok | 8 | 0 |
+| 2014 | 15 | 15 | ok | 8 | 0 |
+| 2015 | 15 | 15 | ok | 8 | 0 |
+| 2016 | 15 | 15 | ok | 8 | 0 |
+| 2017 | 15 | 15 | ok | 8 | 0 |
+| 2018 | 17 | 17 | ok | 8 | 0 |
+| 2019 | 20 | 20 | ok | 8 | 0 |
+| 2020 | 20 | 20 | ok | 8 | 0 |
+| 2021 | 22 | 22 | ok | 8 | 0 |
+| 2022 | 23 | 23 | ok | 9 | 0 |
+| 2023 | 22 | 22 | ok | 11 | 0 |
+| 2024 | 24 | 24 | ok | 11 | 0 |
+| 2025 | 24 | 24 | ok | 11 | 0 |
+| 2026 | 24 | 24 | ok | 11 | 0 |
 
 #### Global Coverage By Year
 
@@ -181,17 +181,17 @@
 | 2013 | 5 | 8 | ok | 6 | 0 |
 | 2014 | 5 | 8 | ok | 5 | 0 |
 | 2015 | 5 | 7 | ok | 5 | 1 |
-| 2016 | 5 | 9 | ok | 6 | 1 |
-| 2017 | 5 | 9 | ok | 6 | 0 |
-| 2018 | 5 | 12 | ok | 7 | 0 |
+| 2016 | 5 | 9 | ok | 5 | 1 |
+| 2017 | 5 | 9 | ok | 5 | 0 |
+| 2018 | 5 | 12 | ok | 6 | 0 |
 | 2019 | 5 | 12 | ok | 6 | 0 |
 | 2020 | 5 | 11 | ok | 7 | 0 |
 | 2021 | 5 | 12 | ok | 6 | 0 |
-| 2022 | 5 | 12 | ok | 7 | 0 |
-| 2023 | 5 | 13 | ok | 7 | 0 |
-| 2024 | 5 | 13 | ok | 7 | 0 |
-| 2025 | 5 | 13 | ok | 7 | 0 |
-| 2026 | 5 | 13 | ok | 5 | 0 |
+| 2022 | 5 | 12 | ok | 6 | 0 |
+| 2023 | 5 | 13 | ok | 6 | 0 |
+| 2024 | 5 | 13 | ok | 6 | 0 |
+| 2025 | 5 | 13 | ok | 6 | 0 |
+| 2026 | 5 | 13 | ok | 4 | 0 |
 
 ### Brazil Domestic Device List (2010-2026)
 
@@ -424,7 +424,7 @@
 | 2010 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2010 | Cisco | C1111-8P | router-corporate | yes | 0 |
 | 2010 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
-| 2010 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2010 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2010 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2010 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2010 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
@@ -437,7 +437,7 @@
 | 2011 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2011 | Cisco | C1111-8P | router-corporate | yes | 0 |
 | 2011 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
-| 2011 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2011 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2011 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2011 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2011 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
@@ -452,7 +452,7 @@
 | 2012 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2012 | Cisco | C1111-8P | router-corporate | yes | 0 |
 | 2012 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
-| 2012 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2012 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2012 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2012 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2012 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 0 |
@@ -467,7 +467,7 @@
 | 2013 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2013 | Cisco | C1111-8P | router-corporate | yes | 0 |
 | 2013 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
-| 2013 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2013 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2013 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2013 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2013 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 0 |
@@ -482,13 +482,13 @@
 | 2014 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2014 | Cisco | C1111-8P | router-corporate | yes | 0 |
 | 2014 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
-| 2014 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2014 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2014 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2014 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2014 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 0 |
 | 2014 | Cisco | Catalyst 3850 | switch-enterprise | yes | 0 |
 | 2014 | Intelbras | SG 1024 MR | switch-corporate | no | 0 |
-| 2014 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
+| 2014 | Fortinet | FortiGate 100F | ngfw-corporate | no | 0 |
 | 2014 | BrazilFW | BrazilFW Firewall Router | fw-opensource | no | 0 |
 | 2014 | DrayTek | Vigor2960 Firewall VPN | fw-smb | no | 0 |
 | 2015 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
@@ -497,13 +497,13 @@
 | 2015 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2015 | Cisco | C1111-8P | router-corporate | yes | 0 |
 | 2015 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
-| 2015 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2015 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2015 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2015 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2015 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 0 |
 | 2015 | Cisco | Catalyst 3850 | switch-enterprise | yes | 0 |
 | 2015 | Intelbras | SG 1024 MR | switch-corporate | no | 0 |
-| 2015 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
+| 2015 | Fortinet | FortiGate 100F | ngfw-corporate | no | 0 |
 | 2015 | BrazilFW | BrazilFW Firewall Router | fw-opensource | no | 0 |
 | 2015 | DrayTek | Vigor2960 Firewall VPN | fw-smb | no | 0 |
 | 2016 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
@@ -512,13 +512,13 @@
 | 2016 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2016 | Cisco | C1111-8P | router-corporate | yes | 0 |
 | 2016 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
-| 2016 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2016 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2016 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2016 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2016 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 0 |
 | 2016 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2016 | Intelbras | SG 1024 MR | switch-corporate | no | 0 |
-| 2016 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
+| 2016 | Fortinet | FortiGate 100F | ngfw-corporate | no | 0 |
 | 2016 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
 | 2016 | DrayTek | Vigor2960 Firewall VPN | fw-smb | no | 0 |
 | 2017 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
@@ -527,13 +527,13 @@
 | 2017 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2017 | Cisco | C1111-8P | router-corporate | yes | 0 |
 | 2017 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
-| 2017 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2017 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2017 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2017 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2017 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 0 |
 | 2017 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2017 | Intelbras | SG 1024 MR | switch-corporate | no | 0 |
-| 2017 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
+| 2017 | Fortinet | FortiGate 100F | ngfw-corporate | no | 0 |
 | 2017 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
 | 2017 | DrayTek | Vigor2960 Firewall VPN | fw-smb | no | 0 |
 | 2018 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
@@ -542,14 +542,14 @@
 | 2018 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2018 | Cisco | C1111-8P | router-corporate | yes | 0 |
 | 2018 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
-| 2018 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2018 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2018 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2018 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2018 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 0 |
 | 2018 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2018 | Aruba | Instant On 1930 | switch-corporate | no | 0 |
 | 2018 | Intelbras | SG 2404 PoE | switch-poe | no | 0 |
-| 2018 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
+| 2018 | Fortinet | FortiGate 100F | ngfw-corporate | no | 0 |
 | 2018 | SonicWall | TZ Series | fw-smb | no | 0 |
 | 2018 | Blockbit | Blockbit NGFW/UTM | ngfw-corporate | no | 0 |
 | 2018 | DrayTek | Vigor2960 Firewall VPN | fw-smb | no | 0 |
@@ -559,7 +559,7 @@
 | 2019 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2019 | Cisco | C1111-8P | router-corporate | yes | 0 |
 | 2019 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
-| 2019 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2019 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2019 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2019 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2019 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 0 |
@@ -567,7 +567,7 @@
 | 2019 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2019 | Aruba | Instant On 1930 | switch-corporate | no | 0 |
 | 2019 | Intelbras | SG 2404 PoE | switch-poe | no | 0 |
-| 2019 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
+| 2019 | Fortinet | FortiGate 100F | ngfw-corporate | no | 0 |
 | 2019 | SonicWall | TZ Series | fw-smb | no | 0 |
 | 2019 | Netgate | pfSense | fw-opensource | no | 0 |
 | 2019 | Starti | Edge Protect NGFW | ngfw-smb | no | 0 |
@@ -579,14 +579,14 @@
 | 2020 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2020 | Cisco | C1111-8P | router-corporate | yes | 0 |
 | 2020 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
-| 2020 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2020 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2020 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2020 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2020 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 0 |
 | 2020 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2020 | Aruba | Instant On 1930 | switch-corporate | no | 0 |
 | 2020 | Intelbras | SG 2404 PoE | switch-poe | no | 0 |
-| 2020 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
+| 2020 | Fortinet | FortiGate 100F | ngfw-corporate | no | 0 |
 | 2020 | SonicWall | TZ Series | fw-smb | no | 0 |
 | 2020 | Netgate | pfSense | fw-opensource | no | 0 |
 | 2020 | Starti | Edge Protect NGFW | ngfw-smb | no | 0 |
@@ -599,7 +599,7 @@
 | 2021 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2021 | Cisco | C1111-8P | router-corporate | yes | 0 |
 | 2021 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
-| 2021 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2021 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2021 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2021 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2021 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 0 |
@@ -607,7 +607,7 @@
 | 2021 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2021 | Aruba | Instant On 1930 | switch-corporate | no | 0 |
 | 2021 | Intelbras | SG 2404 PoE | switch-poe | no | 0 |
-| 2021 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
+| 2021 | Fortinet | FortiGate 100F | ngfw-corporate | no | 0 |
 | 2021 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
 | 2021 | Netgate | pfSense | fw-opensource | no | 0 |
 | 2021 | Starti | Edge Protect NGFW | ngfw-smb | no | 0 |
@@ -621,7 +621,7 @@
 | 2022 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2022 | Cisco | C1111-8P | router-corporate | yes | 0 |
 | 2022 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
-| 2022 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2022 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2022 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2022 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2022 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 0 |
@@ -629,7 +629,7 @@
 | 2022 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2022 | Aruba | Instant On 1930 | switch-corporate | no | 0 |
 | 2022 | Intelbras | SG 2404 PoE | switch-poe | no | 0 |
-| 2022 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
+| 2022 | Fortinet | FortiGate 200F | ngfw-corporate | no | 0 |
 | 2022 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
 | 2022 | Netgate | pfSense | fw-opensource | no | 0 |
 | 2022 | Cisco | Business CBS250 | switch-corporate | yes | 0 |
@@ -645,13 +645,13 @@
 | 2023 | MikroTik | CRS326 | switch-corporate | yes | 0 |
 | 2023 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2023 | Cisco | C1111-8P | router-corporate | yes | 0 |
-| 2023 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2023 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2023 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
 | 2023 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2023 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2023 | Aruba | Instant On 1930 | switch-corporate | no | 0 |
 | 2023 | Intelbras | SG 2404 PoE | switch-poe | no | 0 |
-| 2023 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
+| 2023 | Fortinet | FortiGate 200F | ngfw-corporate | no | 0 |
 | 2023 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
 | 2023 | Cisco | Business CBS350 | switch-corporate | yes | 0 |
 | 2023 | Ubiquiti | UniFi Switch 8/16/24/48 PoE | switch-corporate | yes | 0 |
@@ -667,14 +667,14 @@
 | 2024 | MikroTik | CRS326 | switch-corporate | yes | 0 |
 | 2024 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2024 | Cisco | C1111-8P | router-corporate | yes | 0 |
-| 2024 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2024 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2024 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
 | 2024 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2024 | OpenWrt | OpenWrt 23.05 Generic Targets | router-firmware | no | 0 |
 | 2024 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2024 | Aruba | Instant On 1930 | switch-corporate | no | 0 |
 | 2024 | Intelbras | SG 2404 PoE | switch-poe | no | 0 |
-| 2024 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
+| 2024 | Fortinet | FortiGate 200F | ngfw-corporate | no | 0 |
 | 2024 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
 | 2024 | Cisco | Business CBS350 | switch-corporate | yes | 0 |
 | 2024 | Ubiquiti | UniFi Switch 8/16/24/48 PoE | switch-corporate | yes | 0 |
@@ -691,14 +691,14 @@
 | 2025 | MikroTik | CRS326 | switch-corporate | yes | 0 |
 | 2025 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2025 | Cisco | C1111-8P | router-corporate | yes | 0 |
-| 2025 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2025 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2025 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
 | 2025 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2025 | OpenWrt | OpenWrt 23.05 Generic Targets | router-firmware | no | 0 |
 | 2025 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2025 | Aruba | Instant On 1930 | switch-corporate | no | 0 |
 | 2025 | Intelbras | SG 2404 PoE | switch-poe | no | 0 |
-| 2025 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
+| 2025 | Fortinet | FortiGate 200F | ngfw-corporate | no | 0 |
 | 2025 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
 | 2025 | Cisco | Business CBS350 | switch-corporate | yes | 0 |
 | 2025 | Ubiquiti | UniFi Switch 8/16/24/48 PoE | switch-corporate | yes | 0 |
@@ -715,14 +715,14 @@
 | 2026 | MikroTik | CRS326 | switch-corporate | yes | 0 |
 | 2026 | Cisco | ISR 4331 | router-corporate | yes | 0 |
 | 2026 | Cisco | C1111-8P | router-corporate | yes | 0 |
-| 2026 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
+| 2026 | Fortinet | FortiGate 60F | ngfw-corporate | no | 0 |
 | 2026 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
 | 2026 | Aruba | 2930F | switch-corporate | no | 0 |
 | 2026 | OpenWrt | OpenWrt 23.05 Generic Targets | router-firmware | no | 0 |
 | 2026 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2026 | Aruba | Instant On 1930 | switch-corporate | no | 0 |
 | 2026 | Intelbras | SG 2404 PoE | switch-poe | no | 0 |
-| 2026 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
+| 2026 | Fortinet | FortiGate 200F | ngfw-corporate | no | 0 |
 | 2026 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
 | 2026 | Cisco | Business CBS350 | switch-corporate | yes | 0 |
 | 2026 | Ubiquiti | UniFi Switch 8/16/24/48 PoE | switch-corporate | yes | 0 |
@@ -787,7 +787,7 @@
 | 2016 | AT&T / Pace | 5268AC U-Verse Gateway | isp-cpe/gateway | no | 0 |
 | 2016 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2016 | Arista | 7000 Series | switch-datacenter | no | 0 |
-| 2016 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
+| 2016 | Fortinet | FortiGate 100F | ngfw-corporate | no | 0 |
 | 2017 | TP-Link | Deco M4 | router-mesh | yes | 0 |
 | 2017 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2017 | Google | Nest Wi-Fi | router-mesh | no | 0 |
@@ -796,7 +796,7 @@
 | 2017 | AT&T / Pace | 5268AC U-Verse Gateway | isp-cpe/gateway | no | 0 |
 | 2017 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2017 | Arista | 7000 Series | switch-datacenter | no | 0 |
-| 2017 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
+| 2017 | Fortinet | FortiGate 100F | ngfw-corporate | no | 0 |
 | 2018 | TP-Link | Deco M4 | router-mesh | yes | 0 |
 | 2018 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2018 | Google | Nest Wi-Fi | router-mesh | no | 0 |
@@ -808,7 +808,7 @@
 | 2018 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2018 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2018 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
-| 2018 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
+| 2018 | Fortinet | FortiGate 100F | ngfw-corporate | no | 0 |
 | 2019 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2019 | TP-Link | Archer C7 | router-home | yes | 0 |
 | 2019 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 0 |
@@ -854,7 +854,7 @@
 | 2022 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2022 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2022 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
-| 2022 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
+| 2022 | Fortinet | FortiGate 200F | ngfw-corporate | no | 0 |
 | 2022 | Palo Alto Networks | PA-450 | ngfw-corporate | no | 0 |
 | 2023 | TP-Link | Archer AX73 | router-home | yes | 0 |
 | 2023 | TP-Link | Deco M4 | router-mesh | yes | 0 |
@@ -867,7 +867,7 @@
 | 2023 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2023 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2023 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
-| 2023 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
+| 2023 | Fortinet | FortiGate 200F | ngfw-corporate | no | 0 |
 | 2023 | Palo Alto Networks | PA-450 | ngfw-corporate | no | 0 |
 | 2024 | TP-Link | Archer AX73 | router-home | yes | 0 |
 | 2024 | ASUS | AX5400 | router-home | yes | 0 |
@@ -880,7 +880,7 @@
 | 2024 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2024 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2024 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
-| 2024 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
+| 2024 | Fortinet | FortiGate 200F | ngfw-corporate | no | 0 |
 | 2024 | Palo Alto Networks | PA-450 | ngfw-corporate | no | 0 |
 | 2025 | TP-Link | Archer AXE75 | router-home | yes | 0 |
 | 2025 | ASUS | ROG Rapture GT-BE98 Pro | router-home | yes | 0 |
@@ -893,7 +893,7 @@
 | 2025 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2025 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2025 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
-| 2025 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
+| 2025 | Fortinet | FortiGate 200F | ngfw-corporate | no | 0 |
 | 2025 | Palo Alto Networks | PA-3200 | ngfw-enterprise | no | 0 |
 | 2026 | TP-Link | Archer BE900 | router-home | yes | 0 |
 | 2026 | TP-Link | Archer BE550 | router-home | yes | 0 |
@@ -906,7 +906,7 @@
 | 2026 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2026 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2026 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
-| 2026 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
+| 2026 | Fortinet | FortiGate 200F | ngfw-corporate | no | 0 |
 | 2026 | Palo Alto Networks | PA-3200 | ngfw-enterprise | no | 0 |
 
 ### Yearly Reference (2010-2026)
@@ -1043,18 +1043,18 @@
 | firmware | 2 |
 | intel | 6 |
 | mibs | 1 |
-| pocs | 52608 |
+| pocs | 55060 |
 | wordlists | 1 |
 
 ## Workspace Reuse Inventory Snapshot
 
-- Total assets discovered: 28121
+- Total assets discovered: 65650
 
 | Classification | Count |
 |---|---:|
-| catalog_only | 1728 |
-| integrate_core | 6061 |
-| reject | 20332 |
+| catalog_only | 3677 |
+| integrate_core | 41627 |
+| reject | 20346 |
 
 ## Deep Intel Backlog Snapshot
 
@@ -1135,17 +1135,11 @@
 | bluetooth | btle_write | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | cisco | catalyst_2960_rocem | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-3881 | - |
 | cisco | dpc2420_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
-| cisco | firepower_management60_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6435 | path_traversal |
-| cisco | firepower_management60_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6433 | backdoor, rce |
 | cisco | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | cisco | ios_http_authorization_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2001-0537 | - |
 | cisco | rv320_command_injection | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1652 | rce |
-| cisco | secure_acs_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
 | cisco | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | cisco | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
-| cisco | ucm_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-7030 | info_disclosure |
-| cisco | ucs_manager_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
-| cisco | unified_multi_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2011-3315 | path_traversal |
 | cmd | awk_bind_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | cmd | awk_bind_udp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | cmd | awk_reverse_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
@@ -1199,10 +1193,6 @@
 | external | metasploit_console_bridge | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | external | metasploit_rb_inspect | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | external | mikrotikapi_bf_bridge | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
-| fortinet | fortigate_os_backdoor | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
-| fortinet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
-| fortinet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
-| fortinet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | ftp_bruteforce.py | ftp_bruteforce | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | ftp_default.py | ftp_default | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | heartbleed.py | heartbleed | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
@@ -1224,12 +1214,9 @@
 | huawei | hg866_password_change | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | password_reset_or_change |
 | huawei | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | huawei | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
-| ipfire | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | ipfire | ipfire_oinkcode_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | ipfire | ipfire_proxy_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | ipfire | ipfire_shellshock | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
-| ipfire | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
-| ipfire | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | juniper | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | juniper | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | juniper | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
@@ -1300,8 +1287,6 @@
 | perl | reverse_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | perl | rot13 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
 | perl | url | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
-| pfsense | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
-| pfsense | webinterface_http_form_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | php | base64 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
 | php | bind_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | php | hex | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
@@ -1317,7 +1302,6 @@
 | python | reverse_udp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | python | rot13 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
 | python | url | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
-| routers | fortigate_sslvpn_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2018-13379, CVE-2022-40684, CVE-2023-27997, CVE-2024-21762, CVE-2025-59718 | - |
 | routers | hootoo_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
 | routers | router_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
 | scanners | autopwn | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
@@ -1358,7 +1342,6 @@
 | ubiquiti | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | ubiquiti | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | upnp | ssdp_msearch | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
-| watchguard | xcs_9_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | wepresent | wipg1000_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | wordlist | wordlist_generator | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | x64 | bind_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
@@ -1379,7 +1362,6 @@
 | zyxel | p660hn_t_v2_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | zyxel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | zyxel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
-| zyxel | zywall_usg_extract_hashes | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass, creds_disclosure |
 
 ## Modules By Vendor/Product
 
@@ -1791,22 +1773,6 @@
 - Module paths:
   - `modules/exploits/routers/cisco/dpc2420_info_disclosure.py`
 
-### cisco / firepower_management60_path_traversal
-
-- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: CVE-2016-6435
-- Attack classes: path_traversal
-- Module paths:
-  - `modules/exploits/routers/cisco/firepower_management60_path_traversal.py`
-
-### cisco / firepower_management60_rce
-
-- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: CVE-2016-6433
-- Attack classes: backdoor, rce
-- Module paths:
-  - `modules/exploits/routers/cisco/firepower_management60_rce.py`
-
 ### cisco / ftp_default_creds
 
 - Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
@@ -1831,14 +1797,6 @@
 - Module paths:
   - `modules/exploits/routers/cisco/rv320_command_injection.py`
 
-### cisco / secure_acs_bypass
-
-- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: auth_bypass
-- Module paths:
-  - `modules/exploits/routers/cisco/secure_acs_bypass.py`
-
 ### cisco / ssh_default_creds
 
 - Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
@@ -1854,30 +1812,6 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/routers/cisco/telnet_default_creds.py`
-
-### cisco / ucm_info_disclosure
-
-- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: CVE-2013-7030
-- Attack classes: info_disclosure
-- Module paths:
-  - `modules/exploits/routers/cisco/ucm_info_disclosure.py`
-
-### cisco / ucs_manager_rce
-
-- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: rce
-- Module paths:
-  - `modules/exploits/routers/cisco/ucs_manager_rce.py`
-
-### cisco / unified_multi_path_traversal
-
-- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: CVE-2011-3315
-- Attack classes: path_traversal
-- Module paths:
-  - `modules/exploits/routers/cisco/unified_multi_path_traversal.py`
 
 ### cmd / awk_bind_tcp
 
@@ -2303,38 +2237,6 @@
 - Module paths:
   - `modules/generic/external/mikrotikapi_bf_bridge.py`
 
-### fortinet / fortigate_os_backdoor
-
-- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: backdoor
-- Module paths:
-  - `modules/exploits/routers/fortinet/fortigate_os_backdoor.py`
-
-### fortinet / ftp_default_creds
-
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: none
-- Module paths:
-  - `modules/creds/routers/fortinet/ftp_default_creds.py`
-
-### fortinet / ssh_default_creds
-
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: none
-- Module paths:
-  - `modules/creds/routers/fortinet/ssh_default_creds.py`
-
-### fortinet / telnet_default_creds
-
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: none
-- Module paths:
-  - `modules/creds/routers/fortinet/telnet_default_creds.py`
-
 ### ftp_bruteforce.py / ftp_bruteforce
 
 - Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
@@ -2503,14 +2405,6 @@
 - Module paths:
   - `modules/creds/routers/huawei/telnet_default_creds.py`
 
-### ipfire / ftp_default_creds
-
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: none
-- Module paths:
-  - `modules/creds/routers/ipfire/ftp_default_creds.py`
-
 ### ipfire / ipfire_oinkcode_rce
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -2534,22 +2428,6 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/ipfire/ipfire_shellshock.py`
-
-### ipfire / ssh_default_creds
-
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: none
-- Module paths:
-  - `modules/creds/routers/ipfire/ssh_default_creds.py`
-
-### ipfire / telnet_default_creds
-
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: none
-- Module paths:
-  - `modules/creds/routers/ipfire/telnet_default_creds.py`
 
 ### juniper / ftp_default_creds
 
@@ -3111,22 +2989,6 @@
 - Module paths:
   - `modules/encoders/perl/url.py`
 
-### pfsense / ssh_default_creds
-
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: none
-- Module paths:
-  - `modules/creds/routers/pfsense/ssh_default_creds.py`
-
-### pfsense / webinterface_http_form_default_creds
-
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: none
-- Module paths:
-  - `modules/creds/routers/pfsense/webinterface_http_form_default_creds.py`
-
 ### php / base64
 
 - Totals: modules=1, exploits=0, creds=0, scanners=0, generic=0, payloads=0, encoders=1
@@ -3246,14 +3108,6 @@
 - Attack classes: none
 - Module paths:
   - `modules/encoders/python/url.py`
-
-### routers / fortigate_sslvpn_scan
-
-- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
-- CVEs: CVE-2018-13379, CVE-2022-40684, CVE-2023-27997, CVE-2024-21762, CVE-2025-59718
-- Attack classes: none
-- Module paths:
-  - `modules/scanners/routers/fortigate_sslvpn_scan.py`
 
 ### routers / hootoo_scan
 
@@ -3575,14 +3429,6 @@
 - Module paths:
   - `modules/generic/upnp/ssdp_msearch.py`
 
-### watchguard / xcs_9_rce
-
-- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: rce
-- Module paths:
-  - `modules/exploits/misc/watchguard/xcs_9_rce.py`
-
 ### wepresent / wipg1000_rce
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3742,11 +3588,3 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/routers/zyxel/telnet_default_creds.py`
-
-### zyxel / zywall_usg_extract_hashes
-
-- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
-- CVEs: none
-- Attack classes: auth_bypass, creds_disclosure
-- Module paths:
-  - `modules/exploits/routers/zyxel/zywall_usg_extract_hashes.py`

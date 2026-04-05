@@ -2,7 +2,7 @@
 
 **Idioma:** **Português (pt-BR)**. **English (en-US, padrão do repositório):** [README.md](README.md)
 
-Framework open source para testes de segurança em **dispositivos embutidos**, com foco em **roteadores, switches, TAPs, firewalls e NGFW**.
+Framework open source para testes de segurança em **dispositivos embutidos**, com foco em **roteadores, switches camada 2–3, TAPs e edge SOHO/CPE**. **Firewall / NGFW / UTM / WAF / perímetro em nuvem** ficam no projeto irmão [**FirewallXPL-Forge**](https://github.com/mrhenrike/FirewallXPL-Forge) (fork privado de laboratório).
 
 **Mantenedor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| [União Geek](https://github.com/Uniao-Geek)  
 **Linhagem upstream:** [threat9/routersploit](https://github.com/threat9/routersploit)
@@ -134,6 +134,11 @@ O bootstrap regista em **`routerxpl.log`**.
 | [docs/FULL_CATALOG.md](docs/FULL_CATALOG.md) | Catálogo ampliado |
 
 ---
+
+## Notas de versão — 3.4.9
+
+- **Divisão de repositório:** Módulos de **perímetro** (Fortinet, WatchGuard, *appliances* Cisco de segurança empresarial, edge estilo pfSense/IPFire, scanner **FortiGate SSL VPN**, etc.) foram movidos para [**FirewallXPL-Forge**](https://github.com/mrhenrike/FirewallXPL-Forge). O RouterXPL-Forge mantém roteadores SOHO, switches, TAPs e um escopo de borda mais leve; catálogos e documentação foram regenerados.
+- **Ferramentas:** `tools/bootstrap_firewallxpl_forge.py` (clone + *slim* + renomear para `firewallxpl`) e `tools/trim_routerxpl_edge_scope.py` (aparar esta árvore após o *split*).
 
 ## Notas de versão — 3.4.8
 

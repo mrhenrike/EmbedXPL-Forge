@@ -80,3 +80,5 @@ venv/
 Pipfile
 Pipfile.lock
 
+# Local-only logs and handoff (agent / workstation)
+.log/

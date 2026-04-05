@@ -80,9 +80,9 @@ run
 
 Consulte `show advanced` para todas as opções finas.
 
-## `scanners/routers/fortigate_sslvpn_scan`
+## Scanners de perímetro / NGFW
 
-Reconhecimento focado em superfície SSL-VPN / correlacionável a CVEs FortiGate (uso autorizado apenas).
+Módulos de reconhecimento SSL-VPN / FortiGate estão em [**FirewallXPL-Forge**](https://github.com/mrhenrike/FirewallXPL-Forge) após a divisão do repositório (uso autorizado apenas).
 
 ## `scanners/routers/hootoo_scan`
 
