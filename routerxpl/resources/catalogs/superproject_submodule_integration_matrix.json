@@ -1,0 +1,159 @@
+{
+  "metadata": {
+    "title": "Projetos-SafeLabs submodule → XPL-Forge integration map",
+    "version": "1.0.0",
+    "curator": "André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek",
+    "scope_note": "Survey of superproject .gitmodules (GitHub-facing paths). Azure DevOps trees (Safelabs-Harpia, Mantis, etc.) are excluded from code merge — mirror or policy review first.",
+    "incorporation_modes": [
+      "vendor_as_git_submodule",
+      "curate_intel_json_only",
+      "port_module_with_license_review",
+      "reference_upstream_fork",
+      "out_of_scope"
+    ]
+  },
+  "forge_routerxpl": {
+    "summary": "Embedded / SOHO router, switch, TAP, CPE exploitation and cred scanners.",
+    "high_fit": [
+      {
+        "path": "submodules/IoT/routersploit",
+        "url": "https://github.com/threat9/routersploit.git",
+        "fit": "reference_upstream_fork",
+        "notes": "Semantic ancestor; diff for vendor modules and PoC alignment."
+      },
+      {
+        "path": "submodules/IoT/MikrotikAPI-BF",
+        "url": "https://github.com/mrhenrike/MikrotikAPI-BF.git",
+        "fit": "port_module_with_license_review",
+        "notes": "RouterOS API abuse patterns → creds/scanners under Mikrotik class."
+      },
+      {
+        "path": "submodules/IoT/third-party-router-poc",
+        "url": "aggregated_tree",
+        "fit": "curate_intel_json_only",
+        "notes": "Already ingested style in third_party_router_exploit_repos / PoC indexes — do not bulk-merge foreign code."
+      },
+      {
+        "path": "submodules/PoC-Arsenal",
+        "url": "https://github.com/mrhenrike/PoC-Arsenal.git",
+        "fit": "curate_intel_json_only",
+        "notes": "Cross-link CVE and exploit metadata into extended catalogs."
+      },
+      {
+        "path": "submodules/Wordlists/SecLists",
+        "url": "https://github.com/mrhenrike/SecLists.git",
+        "fit": "vendor_as_git_submodule",
+        "notes": "Wordlist packs for scoped cred tests (respect SecLists license/attribution)."
+      },
+      {
+        "path": "submodules/Wordlists/WordListsForHacking",
+        "url": "https://github.com/mrhenrike/WordListsForHacking.git",
+        "fit": "curate_intel_json_only",
+        "notes": "Subset integration into router_scope wordlists."
+      },
+      {
+        "path": "submodules/PCAPTrafficAnalysis",
+        "url": "https://github.com/mrhenrike/PCAPTrafficAnalysis.git",
+        "fit": "port_module_with_license_review",
+        "notes": "Offline PCAP workflows adjacent to cred/session heuristics for router contexts."
+      },
+      {
+        "path": "submodules/IoT/nullkia",
+        "url": "https://github.com/bad-antics/nullkia.git",
+        "fit": "curate_intel_json_only",
+        "notes": "Third-party IoT exploit pack — intel only unless license cleared."
+      }
+    ],
+    "low_or_reference": [
+      {
+        "path": "submodules/Hacking/BruteForge",
+        "fit": "curate_intel_json_only",
+        "notes": "Brute patterns; different codebase — extract wordlist/protocol ideas only with attribution."
+      },
+      {
+        "path": "submodules/IoT/PrinterReaper",
+        "fit": "out_of_scope",
+        "notes": "Printer class explicitly out_of_scope in module_target_scope; keep external."
+      }
+    ]
+  },
+  "forge_wirelessxpl": {
+    "summary": "802.11 / WPA3 / BLE lab shell, PCAP tooling, offline analysis.",
+    "high_fit": [
+      {
+        "path": "submodules/IoT/wireless-research",
+        "url": "aggregated_tree",
+        "fit": "curate_intel_json_only",
+        "notes": "Research repos (WPA3, deauth, evil twin writeups) → wifi_lab / catalogs / wiki references; no wholesale copy."
+      },
+      {
+        "path": "submodules/PCAPTrafficAnalysis",
+        "url": "https://github.com/mrhenrike/PCAPTrafficAnalysis.git",
+        "fit": "port_module_with_license_review",
+        "notes": "Shared PCAP pipeline DNA with WirelessXPL offline modules."
+      },
+      {
+        "path": "submodules/IoT/third-party-router-poc/tg12__PoC_CVEs",
+        "url": "https://github.com/tg12/PoC_CVEs.git",
+        "fit": "curate_intel_json_only",
+        "notes": "CVE PoC listing — extend cve_extended_catalog / ingest tools."
+      }
+    ],
+    "low_or_reference": [
+      {
+        "path": "submodules/IoT/routersploit",
+        "fit": "reference_upstream_fork",
+        "notes": "Few wireless-adjacent modules; primary home remains RouterXPL-Forge."
+      }
+    ]
+  },
+  "forge_firewallxpl": {
+    "summary": "NGFW, UTM, WAF, cloud perimeter lab.",
+    "high_fit": [
+      {
+        "path": "submodules/Hacking/offensive/caldera",
+        "url": "https://github.com/mitre/caldera.git",
+        "fit": "curate_intel_json_only",
+        "notes": "Purple-team orchestration — optional adapter for lab chain, not direct exploit merge."
+      },
+      {
+        "path": "submodules/Hacking/offensive/atomic-red-team",
+        "url": "https://github.com/redcanaryco/atomic-red-team.git",
+        "fit": "curate_intel_json_only",
+        "notes": "Atomic tests for validation of detections on perimeter stacks."
+      }
+    ],
+    "low_or_reference": [
+      {
+        "path": "submodules/OT/isf",
+        "fit": "out_of_scope",
+        "notes": "ICS exploit framework — wrong trust model for NGFW core; keep OT-separated."
+      },
+      {
+        "path": "submodules/SOC/SOC-Detection-Lab",
+        "url": "https://github.com/Uniao-Geek/SOC-Detection-Lab.git",
+        "fit": "curate_intel_json_only",
+        "notes": "Defensive lab — correlate rules with firewall logging tests only."
+      }
+    ]
+  },
+  "excluded_azure_or_corporate": {
+    "patterns": [
+      "submodules/Safelabs-Harpia/**",
+      "submodules/Safelabs-Mantis/**",
+      "submodules/Safelabs-Intel-Operations-Team/**",
+      "submodules/Safelabs-Operacao-Desenvolvimento/**"
+    ],
+    "notes": "Do not publish or merge into public forges without contractual mirror and redaction."
+  },
+  "ot_cluster_general": {
+    "paths_sample": [
+      "submodules/OT/Modbus-Process-Simulator",
+      "submodules/OT/VirtualPlants-For-OT",
+      "submodules/OT/ICS-Cybersecurity-Arsenal",
+      "submodules/OT/GRIDSTRIKE"
+    ],
+    "default_fit": "out_of_scope",
+    "notes": "OT/ICS belongs to separate arsenal; FirewallXPL may reference perimeter segmentation narratives only."
+  }
+}

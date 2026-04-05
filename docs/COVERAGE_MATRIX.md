@@ -18,7 +18,7 @@
 
 ## Global Capability Summary
 
-- Module tree (routerxpl/modules): b45c542523818b75417622c49fa14801d50b839a
+- Module tree (routerxpl/modules): 625483fc6752cf7014fc9b53b4c33ff36b1216a2
 - Total modules indexed: 266
 - Distinct vendor/product entries: 266
 - Distinct CVEs mapped in modules: 21
@@ -1024,15 +1024,15 @@
 
 | Domain | Count |
 |---|---:|
-| catalogs | 17 |
+| catalogs | 18 |
 | wordlists | 10 |
 | ssh_keys | 8 |
 | vendors datasets | 2 |
 | mibs | 1758 |
-| modules.exploits | 129 |
-| modules.creds | 96 |
-| modules.scanners | 6 |
-| modules.generic | 20 |
+| modules.exploits | 120 |
+| modules.creds | 88 |
+| modules.scanners | 5 |
+| modules.generic | 8 |
 | modules.encoders | 13 |
 | modules.payloads | 32 |
 

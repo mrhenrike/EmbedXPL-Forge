@@ -6,7 +6,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="routerxpl",
-    version="3.5.0",
+    version="1.0.0b0",
     description="Exploitation Framework for Embedded Devices",
     long_description=long_description,
     author="Threat9",
