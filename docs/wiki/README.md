@@ -29,6 +29,24 @@
 
 - **Module path index (language-neutral):** [ANEXO-INDICE-MODULOS.md](ANEXO-INDICE-MODULOS.md) — regenerate with `python tools/gen_wiki_module_index.py`
 
+## Related products / Produtos relacionados
+
+| Repository | Role |
+|------------|------|
+| [WirelessXPL-Forge](https://github.com/mrhenrike/WirelessXPL-Forge) | 802.11 / WPA3 / BLE / PCAP lab shell |
+| [FirewallXPL-Forge](https://github.com/mrhenrike/FirewallXPL-Forge) | NGFW / UTM / perimeter lab |
+
+## Governance & CI / Governança e CI
+
+| Topic | Links |
+|-------|--------|
+| License | [LICENSE](../../LICENSE) (BSD; upstream Threat9 notice retained) |
+| Code of Conduct | [CODE_OF_CONDUCT.md](../../CODE_OF_CONDUCT.md) · [CODE_OF_CONDUCT.pt-BR.md](../../CODE_OF_CONDUCT.pt-BR.md) |
+| Security | [SECURITY.md](../../SECURITY.md) · [SECURITY.pt-BR.md](../../SECURITY.pt-BR.md) |
+| Contributing | [CONTRIBUTING.md](../../CONTRIBUTING.md) · [CONTRIBUTING.pt-BR.md](../../CONTRIBUTING.pt-BR.md) |
+| Contributors | [CONTRIBUTORS.md](../../CONTRIBUTORS.md) · [CONTRIBUTORS.pt-BR.md](../../CONTRIBUTORS.pt-BR.md) |
+| GitHub Actions | [compat-matrix.yml](../../.github/workflows/compat-matrix.yml) |
+
 ## Repository root / Raiz do repositório
 
 - [README.md](../../README.md) (en-US) · [README.pt-BR.md](../../README.pt-BR.md)
