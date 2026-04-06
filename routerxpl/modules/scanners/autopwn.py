@@ -268,6 +268,25 @@ class Exploit(Exploit):
         self._print_timing_help()
         self._configure_runtime_profile()
 
+        # Initialize ML advisor if enabled
+        advisor = None
+        advisor_ctx = None
+        if self.ml_advisor:
+            try:
+                advisor = AttackAdvisor()
+                advisor_ctx = advisor_context_from_autopwn(self)
+                print_status("ML advisor enabled (CVSS + CVE recency + attack type scoring).")
+                if self.ml_auto_timing:
+                    suggested, ranked = advisor.suggest_timing_template(advisor_ctx, use_gpu=bool(self.ml_use_gpu))
+                    print_status("ML advisor suggests timing: {} (probabilities: {})".format(
+                        suggested.upper(),
+                        ", ".join("{}={:.1%}".format(l, p) for l, p in ranked[:3]),
+                    ))
+            except Exception as exc:
+                print_error("ML advisor initialization failed: {}".format(exc))
+                advisor = None
+                advisor_ctx = None
+
         tcls = normalize_target_class(str(self.target_device_class))
         if tcls == "tap":
             print_info(
