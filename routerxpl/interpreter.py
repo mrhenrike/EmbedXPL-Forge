@@ -162,7 +162,11 @@ class BaseInterpreter:
             print_info("stdin is not a TTY. Ensure `stdin_open` and `tty` are set")
             sys.exit(1)
         
-        print_info(self.banner)
+        if hasattr(self, "_rich_banner") and self._rich_banner:
+            from routerxpl.core.exploit.printer import console as _con
+            _con.print(self._rich_banner)
+        elif self.banner:
+            print_info(self.banner)
         printer_queue.join()
         
         while True:
@@ -283,23 +287,33 @@ class RouterXPLInterpreter(BaseInterpreter):
         self.__parse_prompt()
 
         total_modules = sum(self.modules_count.values())
-        self.banner = """
- \033[96m ____  __  __ _____ \033[0m
- \033[96m|  _ \\ \\ \\/ /|  ___|\033[0m   \033[1mRouterXPL-Forge\033[0m v0.4.0-beta
- \033[96m| |_) | \\  / | |_   \033[0m   Network Device Security Assessment Framework
- \033[96m|  _ <  /  \\ |  _|  \033[0m
- \033[96m|_| \\_\\/_/\\_\\|_|    \033[0m   \033[90mAuthor: André Henrique (@mrhenrike) | União Geek\033[0m
+        from rich.text import Text
+        from routerxpl.core.exploit.printer import console as _con
 
- \033[94mTarget scope:\033[0m Routers · Switches L2/L3 · TAPs · SOHO Edge
-
- \033[92m[modules]\033[0m {total} total — Exploits: {exploits} | Scanners: {scanners} | Creds: {creds} | Generic: {generic} | Payloads: {payloads} | Encoders: {encoders}
-""".format(total=total_modules,
-           exploits=self.modules_count["exploits"],
-           scanners=self.modules_count["scanners"],
-           creds=self.modules_count["creds"],
-           generic=self.modules_count["generic"],
-           payloads=self.modules_count["payloads"],
-           encoders=self.modules_count["encoders"])
+        banner_lines = [
+            "",
+            " [bold cyan] ____  __  __ _____ [/bold cyan]",
+            " [bold cyan]|  _ \\\\ \\\\ \\\\/ /|  ___| [/bold cyan]  [bold]RouterXPL-Forge[/bold] v0.4.0-beta",
+            " [bold cyan]| |_) | \\\\  / | |_   [/bold cyan]  Network Device Security Assessment Framework",
+            " [bold cyan]|  _ <  /  \\\\ |  _|  [/bold cyan]",
+            " [bold cyan]|_| \\\\_\\\\/_/\\\\_\\\\|_|    [/bold cyan]  [dim]Author: Andre Henrique (@mrhenrike) | Uniao Geek[/dim]",
+            "",
+            " [blue]Target scope:[/blue] Routers - Switches L2/L3 - TAPs - SOHO Edge",
+            "",
+            " [green]\\[modules][/green] {total} total -- Exploits: {exploits} | Scanners: {scanners} | Creds: {creds} | Generic: {generic} | Payloads: {payloads} | Encoders: {encoders}",
+            "",
+        ]
+        formatted = "\n".join(banner_lines).format(
+            total=total_modules,
+            exploits=self.modules_count["exploits"],
+            scanners=self.modules_count["scanners"],
+            creds=self.modules_count["creds"],
+            generic=self.modules_count["generic"],
+            payloads=self.modules_count["payloads"],
+            encoders=self.modules_count["encoders"],
+        )
+        self.banner = ""  # Clear for print_banner below
+        self._rich_banner = formatted
 
     def __parse_prompt(self):
         raw_prompt_default_template = "\001\033[4m\002{host}\001\033[0m\002 > "
@@ -743,10 +757,14 @@ class RouterXPLInterpreter(BaseInterpreter):
             found = humanize_path(module)
 
             if len(keyword):
+                from routerxpl.core.exploit.printer import console as _con
+                from rich.text import Text
+                text_obj = Text(found)
                 for word in keyword.split():
-                    found = found.replace(word, "\033[31m{}\033[0m".format(word))
-
-            print_info(found)
+                    text_obj.highlight_words([word], style="bold red")
+                _con.print(text_obj)
+            else:
+                print_info(found)
 
     @stop_after(2)
     def complete_search(self, text, *args, **kwargs):

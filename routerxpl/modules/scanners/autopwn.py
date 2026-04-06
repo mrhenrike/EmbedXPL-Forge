@@ -4,6 +4,7 @@ from concurrent.futures import TimeoutError
 
 from routerxpl.core.exploit import *
 from routerxpl.core.exploit.exploit import Protocol
+from routerxpl.core.exploit.printer import print_warning
 from routerxpl.core.exploit.module_target_scope import (
     is_module_permitted_for_class,
     normalize_target_class,
@@ -289,16 +290,12 @@ class Exploit(Exploit):
 
         tcls = normalize_target_class(str(self.target_device_class))
         if tcls == "tap":
-            print_info(
-                "\033[93m[!]\033[0m",
-                (
-                    "target_device_class=tap: passive TAPs usually have no in-scope management plane; "
-                    "most modules will be skipped. Use multi only for lab misconfiguration scenarios."
-                ),
+            print_warning(
+                "target_device_class=tap: passive TAPs usually have no in-scope management plane; "
+                "most modules will be skipped. Use multi only for lab misconfiguration scenarios."
             )
         elif tcls not in ("multi",):
-            print_info(
-                "\033[94m[*]\033[0m",
+            print_status(
                 "Device class filter active: {} (modules outside module_target_scope.json rules are skipped)".format(tcls),
             )
 
@@ -309,7 +306,7 @@ class Exploit(Exploit):
         if self.check_exploits:
             # vulnerabilities
             print_info()
-            print_info("\033[94m[*]\033[0m", "{} Starting vulnerability check...".format(self.target))
+            print_status("{} Starting vulnerability check...".format(self.target))
 
             modules = []
             for directory in self._exploits_directories:
@@ -326,7 +323,7 @@ class Exploit(Exploit):
         if self.check_creds:
             # default creds
             print_info()
-            print_info("\033[94m[*]\033[0m", "{} Starting default credentials check...".format(self.target))
+            print_status("{} Starting default credentials check...".format(self.target))
             modules = []
             for directory in self._creds_directories:
                 for module in utils.iter_modules(directory):
@@ -342,43 +339,36 @@ class Exploit(Exploit):
         # results:
         print_info()
         if self.not_verified:
-            print_info("\033[94m[*]\033[0m", "{} Could not verify exploitability:".format(self.target))
+            print_status("{} Could not verify exploitability:".format(self.target))
             for v in self.not_verified:
                 print_info(" - {}:{} {} {}".format(*v))
             print_info()
 
         if self.vulnerabilities:
-            print_info("\033[92m[+]\033[0m", "{} Device is vulnerable:".format(self.target))
+            print_success("{} Device is vulnerable:".format(self.target))
             headers = ("Target", "Port", "Service", "Exploit")
             print_table(headers, *self.vulnerabilities)
             print_info()
         else:
-            print_info(
-                "\033[91m[-]\033[0m",
-                (
-                    "{} During this AutoPwn run, no exploitable weakness was confirmed by the current RouterXPL-Forge "
-                    "module base. This does not mean the target is secure, does not exclude unknown vectors/zero-days, "
-                    "and does not replace broader assessment methods.\n"
-                ).format(self.target),
+            print_error(
+                "{} During this AutoPwn run, no exploitable weakness was confirmed by the current RouterXPL-Forge "
+                "module base. This does not mean the target is secure, does not exclude unknown vectors/zero-days, "
+                "and does not replace broader assessment methods.".format(self.target),
             )
 
         if self.creds:
-            print_info("\033[92m[+]\033[0m", "{} Found default credentials:".format(self.target))
+            print_success("{} Found default credentials:".format(self.target))
             headers = ("Target", "Port", "Service", "Username", "Password")
             print_table(headers, *self.creds)
             print_info()
         else:
-            print_info(
-                "\033[91m[-]\033[0m",
-                (
-                    "{} During this AutoPwn run, no valid default credential was confirmed with the current "
-                    "credential datasets and checks."
-                ).format(self.target),
+            print_error(
+                "{} During this AutoPwn run, no valid default credential was confirmed with the current "
+                "credential datasets and checks.".format(self.target),
             )
 
         if self._scope_skipped and tcls != "multi":
-            print_info(
-                "\033[94m[*]\033[0m",
+            print_status(
                 "Skipped {} module(s) not permitted for target_device_class={}".format(self._scope_skipped, tcls),
             )
 
@@ -465,8 +455,7 @@ class Exploit(Exploit):
                     confirmed = True
                     for _ in range(max(0, self._active_profile["confirm_passes"] - 1)):
                         if self._profiled_check(exploit) is not True:
-                            print_info(
-                                "\033[94m[*]\033[0m",
+                            print_status(
                                 "{}:{} {} {} positive result was not confirmed under profile checks".format(
                                     exploit.target, exploit.port, exploit.target_protocol, exploit
                                 ),
@@ -478,14 +467,14 @@ class Exploit(Exploit):
                         continue
 
                 if response is True:
-                    print_info("\033[92m[+]\033[0m", "{}:{} {} {} is vulnerable".format(
+                    print_success("{}:{} {} {} is vulnerable".format(
                                exploit.target, exploit.port, exploit.target_protocol, exploit))
                     self.vulnerabilities.append((exploit.target, exploit.port, exploit.target_protocol, str(exploit)))
                 elif response is False:
-                    print_info("\033[91m[-]\033[0m", "{}:{} {} {} is not vulnerable".format(
+                    print_error("{}:{} {} {} is not vulnerable".format(
                                exploit.target, exploit.port, exploit.target_protocol, exploit))
                 else:
-                    print_info("\033[94m[*]\033[0m", "{}:{} {} {} Could not be verified".format(
+                    print_status("{}:{} {} {} Could not be verified".format(
                                exploit.target, exploit.port, exploit.target_protocol, exploit))
                     self.not_verified.append((exploit.target, exploit.port, exploit.target_protocol, str(exploit)))
 
@@ -563,11 +552,11 @@ class Exploit(Exploit):
                     self.not_verified.append((exploit.target, exploit.port, exploit.target_protocol, str(exploit)))
                     continue
                 if response:
-                    print_info("\033[92m[+]\033[0m", "{}:{} {} {} is vulnerable".format(
+                    print_success("{}:{} {} {} is vulnerable".format(
                                exploit.target, exploit.port, exploit.target_protocol, exploit))
 
                     for creds in response:
                         self.creds.append(creds)
                 else:
-                    print_info("\033[91m[-]\033[0m", "{}:{} {} {} is not vulnerable".format(
+                    print_error("{}:{} {} {} is not vulnerable".format(
                                exploit.target, exploit.port, exploit.target_protocol, exploit))
