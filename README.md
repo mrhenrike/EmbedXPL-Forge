@@ -2,7 +2,7 @@
 
 **Network Device Security Assessment Framework**
 
-RouterXPL-Forge is an open-source exploitation framework designed for security professionals to audit routers, switches, TAPs, and SOHO edge devices. It provides 271 modules covering credential testing, vulnerability exploitation, network scanning, payload generation, and encoding.
+RouterXPL-Forge is an open-source exploitation framework designed for security professionals to audit routers, switches, TAPs, and SOHO edge devices. It provides 575 modules covering credential testing, vulnerability exploitation, network scanning, payload generation, and encoding — with 330 CVEs mapped across 49 vendors.
 
 > **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 
@@ -10,26 +10,27 @@ RouterXPL-Forge is an open-source exploitation framework designed for security p
 
 ## Features
 
-- **125 exploit modules** — RCE, auth bypass, path traversal, info disclosure, DNS hijacking
+- **429 exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor
 - **88 credential modules** — dictionary attacks against FTP, SSH, Telnet, HTTP, SNMP, SFTP
 - **5 scanner modules** — AutoPwn, device-specific scanners
 - **32 payload modules** — reverse/bind TCP shells for x86, x64, ARM, MIPS, Python, Perl, PHP
 - **13 encoder modules** — Base64 and hex encoding for Python, PHP, Perl
 - **8 generic modules** — Heartbleed, ShellShock, UPnP SSDP, SNMP, CVE lookup
+- **330 CVEs mapped** — from 2001 to 2025, covering all major vulnerability classes
 - **23 vendor-specific wordlists** — externalized default credentials per vendor
 
 ## Supported Device Types
 
 | Type | Coverage | Description |
 |------|----------|-------------|
-| **Routers** | 187 modules | SOHO routers, enterprise gateways, CPE |
+| **Routers** | 497 modules | SOHO routers, enterprise gateways, CPE |
 | **Switches L2/L3** | 3 modules | Managed and unmanaged switches |
-| **SOHO Edge** | 7 modules | Travel routers, NAS, wireless APs, smart plugs |
+| **SOHO Edge** | 12 modules | Travel routers, NAS, wireless APs, smart plugs, firewalls |
 | **TAPs** | Planned | Network TAP devices |
 
 ## Supported Vendors
 
-2Wire · 3Com · Asmax · ASUS · Belkin · BHU · Billion · Cisco · Comtrend · D-Link · HooToo · Huawei · IPFire · Juniper · LG · Linksys · MikroTik · Movistar · Netcore · NETGEAR · Netsys · Shuttle · Technicolor · Thomson · TP-Link · Ubiquiti · ZTE · ZyXEL
+2Wire · 3Com · ActionTec · Arris · Aruba · Asmax · ASUS · Belkin · BHU · Billion · Calix · CERIO · Cisco · Comtrend · D-Link · Draytek · FiberHome · Fortinet · GPON · HooToo · Huawei · Intelbras · IPFire · Juniper · LG · Linksys · Mercury · MikroTik · MitraStar · Movistar · Netcore · NETGEAR · Netsys · OpenWrt · Ruijie · SerComm · Shuttle · SonicWall · Technicolor · Tenda · Thomson · TOTOLINK · TP-Link · TRENDnet · Ubiquiti · Wavlink · Xiaomi · Zhone · ZTE · ZyXEL
 
 ## Quick Start
 

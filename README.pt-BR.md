@@ -2,7 +2,7 @@
 
 **Framework de Avaliação de Segurança em Dispositivos de Rede**
 
-RouterXPL-Forge é um framework de exploração open-source projetado para profissionais de segurança auditarem roteadores, switches, TAPs e dispositivos SOHO edge. Oferece 271 módulos cobrindo testes de credenciais, exploração de vulnerabilidades, varredura de rede, geração de payloads e encoding.
+RouterXPL-Forge é um framework de exploração open-source projetado para profissionais de segurança auditarem roteadores, switches, TAPs e dispositivos SOHO edge. Oferece 575 módulos cobrindo testes de credenciais, exploração de vulnerabilidades, varredura de rede, geração de payloads e encoding — com 330 CVEs mapeados em 49 fabricantes.
 
 > **Autor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 
@@ -10,26 +10,27 @@ RouterXPL-Forge é um framework de exploração open-source projetado para profi
 
 ## Funcionalidades
 
-- **125 módulos de exploit** — RCE, auth bypass, path traversal, info disclosure, DNS hijacking
+- **429 módulos de exploit** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor
 - **88 módulos de credenciais** — ataques de dicionário contra FTP, SSH, Telnet, HTTP, SNMP, SFTP
 - **5 módulos de scanner** — AutoPwn, scanners específicos por dispositivo
 - **32 módulos de payload** — reverse/bind TCP shells para x86, x64, ARM, MIPS, Python, Perl, PHP
 - **13 módulos de encoder** — Base64 e hex encoding para Python, PHP, Perl
 - **8 módulos genéricos** — Heartbleed, ShellShock, UPnP SSDP, SNMP, consulta CVE
+- **330 CVEs mapeados** — de 2001 a 2025, cobrindo todas as classes de vulnerabilidade
 - **23 wordlists por vendor** — credenciais padrão externalizadas por fabricante
 
 ## Tipos de Dispositivos Suportados
 
 | Tipo | Cobertura | Descrição |
 |------|-----------|-----------|
-| **Roteadores** | 187 módulos | Roteadores SOHO, gateways enterprise, CPE |
+| **Roteadores** | 497 módulos | Roteadores SOHO, gateways enterprise, CPE |
 | **Switches L2/L3** | 3 módulos | Switches gerenciados e não-gerenciados |
-| **SOHO Edge** | 7 módulos | Roteadores de viagem, NAS, APs wireless, smart plugs |
+| **SOHO Edge** | 12 módulos | Roteadores de viagem, NAS, APs wireless, smart plugs, firewalls |
 | **TAPs** | Planejado | Dispositivos TAP de rede |
 
 ## Fabricantes Suportados
 
-2Wire · 3Com · Asmax · ASUS · Belkin · BHU · Billion · Cisco · Comtrend · D-Link · HooToo · Huawei · IPFire · Juniper · LG · Linksys · MikroTik · Movistar · Netcore · NETGEAR · Netsys · Shuttle · Technicolor · Thomson · TP-Link · Ubiquiti · ZTE · ZyXEL
+2Wire · 3Com · ActionTec · Arris · Aruba · Asmax · ASUS · Belkin · BHU · Billion · Calix · CERIO · Cisco · Comtrend · D-Link · Draytek · FiberHome · Fortinet · GPON · HooToo · Huawei · Intelbras · IPFire · Juniper · LG · Linksys · Mercury · MikroTik · MitraStar · Movistar · Netcore · NETGEAR · Netsys · OpenWrt · Ruijie · SerComm · Shuttle · SonicWall · Technicolor · Tenda · Thomson · TOTOLINK · TP-Link · TRENDnet · Ubiquiti · Wavlink · Xiaomi · Zhone · ZTE · ZyXEL
 
 ## Início Rápido
 
