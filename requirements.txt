@@ -10,3 +10,4 @@ rich>=13.0
 aiohttp>=3.9
 numpy>=1.24
 psutil>=5.9
+python-nmap>=0.7.1

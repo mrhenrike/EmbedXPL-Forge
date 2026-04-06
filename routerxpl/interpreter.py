@@ -27,6 +27,7 @@ from routerxpl.core.exploit.printer import (
     print_success,
     print_error,
     print_status,
+    print_warning,
     print_table,
     pprint_dict_in_order,
     PrinterThread,
@@ -252,6 +253,9 @@ class RouterXPLInterpreter(BaseInterpreter):
     use <module>                Select a module for usage
     exec <shell command> <args> Execute a command in a shell
     search <search term>        Search for appropriate module
+    sysinfo                     Show detected hardware (CPU, RAM, GPU)
+    compute <cpu|gpu|hybrid|auto>  Set compute mode for ML/GPU operations
+    discover <subnet/CIDR>      Scan network and match targets to exploit catalog
     exit                        Exit RouterXPL"""
 
     module_help = """Module commands:
@@ -274,7 +278,7 @@ class RouterXPLInterpreter(BaseInterpreter):
         self.show_sub_commands = ("info", "options", "advanced", "devices", "all", "encoders", "creds", "exploits", "scanners", "wordlists")
         self.search_sub_commands = ("type", "device", "language", "payload", "vendor")
 
-        self.global_commands = sorted(["use ", "exec ", "help", "exit", "show ", "search "])
+        self.global_commands = sorted(["use ", "exec ", "help", "exit", "show ", "search ", "sysinfo", "compute ", "discover "])
         self.module_commands = ["run", "back", "set ", "setg ", "check"]
         self.module_commands.extend(self.global_commands)
         self.module_commands.sort()
@@ -286,9 +290,20 @@ class RouterXPLInterpreter(BaseInterpreter):
 
         self.__parse_prompt()
 
+        from routerxpl.core.hw_profiler import HWProfiler
+        from routerxpl.core import config as rxf_config
+        self._hw_profile = HWProfiler.detect()
+
+        saved_mode = rxf_config.get("compute_mode", "auto")
+        if saved_mode in ("cpu", "gpu", "hybrid", "auto"):
+            self._hw_profile.compute_mode = saved_mode
+        self._validate_compute_mode(silent=True)
+
         total_modules = sum(self.modules_count.values())
         from rich.text import Text
         from routerxpl.core.exploit.printer import console as _con
+
+        hw_line = self._hw_profile.one_liner()
 
         banner_lines = [
             "",
@@ -301,6 +316,7 @@ class RouterXPLInterpreter(BaseInterpreter):
             " [blue]Target scope:[/blue] Routers - Switches L2/L3 - TAPs - SOHO Edge",
             "",
             " [green]\\[modules][/green] {total} total -- Exploits: {exploits} | Scanners: {scanners} | Creds: {creds} | Generic: {generic} | Payloads: {payloads} | Encoders: {encoders}",
+            " [yellow]\\[system][/yellow]  {hw_line}",
             "",
         ]
         formatted = "\n".join(banner_lines).format(
@@ -311,8 +327,9 @@ class RouterXPLInterpreter(BaseInterpreter):
             generic=self.modules_count["generic"],
             payloads=self.modules_count["payloads"],
             encoders=self.modules_count["encoders"],
+            hw_line=hw_line,
         )
-        self.banner = ""  # Clear for print_banner below
+        self.banner = ""
         self._rich_banner = formatted
 
     def __parse_prompt(self):
@@ -772,6 +789,247 @@ class RouterXPLInterpreter(BaseInterpreter):
             return [command for command in self.search_sub_commands if command.startswith(text)]
         else:
             return self.search_sub_commands
+
+    def _validate_compute_mode(self, silent: bool = False) -> bool:
+        """Validate current compute_mode against available hardware.
+
+        If mode is ``gpu`` or ``hybrid`` but no GPU is present, falls back
+        to ``cpu`` and optionally warns the user.
+
+        Returns:
+            True if the mode is valid as-is, False if a fallback occurred.
+        """
+        mode = self._hw_profile.compute_mode
+        has_gpu = self._hw_profile.has_gpu()
+
+        if mode in ("gpu", "hybrid") and not has_gpu:
+            self._hw_profile.compute_mode = "cpu"
+            if not silent:
+                print_warning(
+                    "No GPU detected -- falling back to compute_mode=cpu"
+                )
+            return False
+        return True
+
+    def command_sysinfo(self, *args, **kwargs):
+        """Display detailed hardware profile of the host machine."""
+        from routerxpl.core.hw_profiler import HWProfiler
+        from routerxpl.core.exploit.printer import console as _con
+        from rich.table import Table
+        from rich.panel import Panel
+
+        profile = HWProfiler.detect(force=True)
+        self._hw_profile = profile
+
+        from routerxpl.core import config as rxf_config
+        saved_mode = rxf_config.get("compute_mode", "auto")
+        if saved_mode in ("cpu", "gpu", "hybrid", "auto"):
+            profile.compute_mode = saved_mode
+
+        cpu_table = Table(title="CPU", show_header=True, header_style="bold cyan",
+                          border_style="dim", pad_edge=True)
+        cpu_table.add_column("Property", style="bold")
+        cpu_table.add_column("Value")
+        cpu_table.add_row("Model", profile.cpu_model)
+        cpu_table.add_row("Architecture", profile.cpu_arch)
+        cpu_table.add_row("Cores", str(profile.cpu_cores))
+        cpu_table.add_row("Threads", str(profile.cpu_threads))
+        freq_str = "{} MHz".format(profile.cpu_freq_mhz) if profile.cpu_freq_mhz else "N/A"
+        cpu_table.add_row("Frequency", freq_str)
+        _con.print(cpu_table)
+
+        ram_table = Table(title="Memory (RAM)", show_header=True, header_style="bold cyan",
+                          border_style="dim", pad_edge=True)
+        ram_table.add_column("Property", style="bold")
+        ram_table.add_column("Value")
+        ram_table.add_row("Total", "{:,} MB".format(profile.ram_total_mb))
+        ram_table.add_row("Available", "{:,} MB".format(profile.ram_available_mb))
+        _con.print(ram_table)
+
+        if profile.gpus:
+            gpu_table = Table(title="GPU Devices", show_header=True, header_style="bold cyan",
+                              border_style="dim", pad_edge=True)
+            gpu_table.add_column("#", style="dim")
+            gpu_table.add_column("Name", style="bold")
+            gpu_table.add_column("Vendor")
+            gpu_table.add_column("VRAM")
+            gpu_table.add_column("Backend")
+            gpu_table.add_column("Driver")
+            gpu_table.add_column("Compute Cap")
+            for g in profile.gpus:
+                vram = "{:,} MB".format(g.vram_mb) if g.vram_mb else "N/A"
+                gpu_table.add_row(
+                    str(g.index), g.name, g.vendor, vram,
+                    g.backend, g.driver or "N/A", g.compute_cap or "N/A",
+                )
+            _con.print(gpu_table)
+        else:
+            print_warning("No GPU detected on this system")
+
+        mode = profile.compute_mode
+        if mode == "auto":
+            resolved = "hybrid" if profile.has_gpu() else "cpu"
+            mode_display = "auto -> {}".format(resolved)
+        else:
+            mode_display = mode
+        _con.print(
+            "\n [bold]Compute mode:[/bold] [cyan]{}[/cyan]  |  "
+            "[bold]Best backend:[/bold] [cyan]{}[/cyan]\n".format(
+                mode_display, profile.best_backend
+            )
+        )
+
+    def command_compute(self, *args, **kwargs):
+        """Set the compute mode for ML/GPU operations.
+
+        Usage: compute <cpu|gpu|hybrid|auto>
+        """
+        from routerxpl.core import config as rxf_config
+
+        try:
+            mode = args[0].strip().lower()
+        except (IndexError, AttributeError):
+            mode = ""
+
+        valid_modes = ("cpu", "gpu", "hybrid", "auto")
+        if mode not in valid_modes:
+            print_error(
+                "Invalid compute mode '{}'. Choose from: {}".format(
+                    mode, ", ".join(valid_modes)
+                )
+            )
+            return
+
+        self._hw_profile.compute_mode = mode
+        if not self._validate_compute_mode():
+            rxf_config.set_val("compute_mode", self._hw_profile.compute_mode)
+            return
+
+        rxf_config.set_val("compute_mode", mode)
+        print_success("compute_mode => {}".format(mode))
+
+        if mode == "auto":
+            resolved = "hybrid" if self._hw_profile.has_gpu() else "cpu"
+            print_info("  auto resolves to: {}".format(resolved))
+
+    @stop_after(2)
+    def complete_compute(self, text, *args, **kwargs):
+        modes = ["cpu", "gpu", "hybrid", "auto"]
+        if text:
+            return [m for m in modes if m.startswith(text)]
+        return modes
+
+    def command_discover(self, *args, **kwargs):
+        """Scan a subnet and match live hosts against the exploit catalog.
+
+        Usage: discover <subnet/CIDR>
+        Examples:
+            discover 192.168.1.0/24
+            discover 10.0.0.1
+        """
+        from routerxpl.core.discovery import NetworkDiscovery
+        from routerxpl.core.exploit.printer import console as _con
+        from rich.table import Table
+        from rich.panel import Panel
+
+        try:
+            target = args[0].strip()
+        except (IndexError, AttributeError):
+            print_error("Usage: discover <subnet/CIDR>  (e.g. discover 192.168.1.0/24)")
+            return
+
+        try:
+            import ipaddress
+            ipaddress.ip_network(target, strict=False)
+        except ValueError:
+            try:
+                ipaddress.ip_address(target)
+            except ValueError:
+                print_error("Invalid target: '{}'. Use IP or CIDR notation.".format(target))
+                return
+
+        def progress_cb(stage: str, detail: str) -> None:
+            print_status("[{}] {}".format(stage, detail))
+
+        print_info()
+        print_status("Starting network discovery on {}".format(target))
+        discovery = NetworkDiscovery(target)
+
+        try:
+            hosts = discovery.scan(callback=progress_cb)
+        except KeyboardInterrupt:
+            print_warning("Discovery cancelled by user")
+            hosts = discovery.hosts
+        except Exception as exc:
+            print_error("Discovery failed: {}".format(exc))
+            return
+
+        if not hosts:
+            print_warning("No live hosts found on {}".format(target))
+            return
+
+        results_table = Table(
+            title="Discovered Hosts ({})".format(len(hosts)),
+            show_header=True,
+            header_style="bold cyan",
+            border_style="dim",
+            pad_edge=True,
+        )
+        results_table.add_column("IP", style="bold")
+        results_table.add_column("MAC")
+        results_table.add_column("Hostname")
+        results_table.add_column("Ports")
+        results_table.add_column("Vendor", style="bold green")
+        results_table.add_column("Model")
+        results_table.add_column("Confidence")
+        results_table.add_column("Modules", style="bold yellow")
+
+        for h in hosts:
+            ports = ",".join(str(p) for p in h.open_ports[:8])
+            conf_str = "{:.0%}".format(h.fingerprint_confidence) if h.fingerprint_confidence else "-"
+            mod_count = str(len(h.matched_modules)) if h.matched_modules else "-"
+            results_table.add_row(
+                h.ip,
+                h.mac or "-",
+                h.hostname or "-",
+                ports or "-",
+                h.vendor_guess or "-",
+                h.model_guess or "-",
+                conf_str,
+                mod_count,
+            )
+
+        _con.print(results_table)
+
+        targets_with_mods = discovery.hosts_with_modules()
+        if targets_with_mods:
+            print_success(
+                "\n{} host(s) matched against the exploit catalog:".format(len(targets_with_mods))
+            )
+            for h in targets_with_mods:
+                vendor_tag = "[{}]".format(h.vendor_guess) if h.vendor_guess else ""
+                model_tag = h.model_guess or ""
+                _con.print(
+                    "  [bold]{ip}[/bold] {vendor} {model} -- "
+                    "[yellow]{count}[/yellow] exploit module(s)".format(
+                        ip=h.ip,
+                        vendor=vendor_tag,
+                        model=model_tag,
+                        count=len(h.matched_modules),
+                    )
+                )
+                for mod in h.matched_modules[:10]:
+                    _con.print("    [dim]use {}[/dim]".format(mod.replace(".", "/")))
+                if len(h.matched_modules) > 10:
+                    _con.print(
+                        "    [dim]... and {} more[/dim]".format(
+                            len(h.matched_modules) - 10
+                        )
+                    )
+        else:
+            print_info("No discovered hosts matched the exploit catalog.")
+
+        print_info()
 
     def command_exit(self, *args, **kwargs):
         raise EOFError
