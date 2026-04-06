@@ -6,7 +6,7 @@
 
 O **RouterXPL-Forge** é um framework modular em **Python** para testes de segurança **autorizados** em roteadores, switches, TAPs e dispositivos de borda SOHO. Reúne verificação de credenciais, módulos orientados a vulnerabilidades, scanners, payloads e utilitários de apoio.
 
-- **263** módulos organizados por função e vendor.
+- **271** módulos organizados por função e vendor.
 - **28+** famílias orientadas a vendor mais blocos genéricos.
 
 ## Requisitos

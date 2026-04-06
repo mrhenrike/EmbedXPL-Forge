@@ -29,12 +29,6 @@ setup(
         "scapy",
     ],
     extras_require={
-        "tests": [
-            "pytest",
-            "pytest-forked",
-            "pytest-xdist",
-            "flake8",
-        ],
         # Optional: heavyweight; enables CUDA logits in AutoPwn ml_use_gpu when PyTorch sees CUDA.
         "ml-gpu": [
             "torch>=2.0.0",
