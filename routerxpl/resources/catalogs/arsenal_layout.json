@@ -1,9 +1,9 @@
 {
   "name": "RouterXPL-Forge Curated Arsenal Layout",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scope": {
-    "in_scope": ["routers", "switches", "taps", "fw", "ngfw", "wireless-offline-pcap"],
-    "out_of_scope": ["cameras", "printers", "dvr", "dvrs"]
+    "in_scope": ["routers", "switches", "taps", "soho_edge"],
+    "out_of_scope": ["cameras", "printers", "dvr", "dvrs", "fw", "ngfw", "wireless"]
   },
   "curated_subfolders": [
     {
@@ -32,23 +32,24 @@
     },
     {
       "path": "routerxpl/resources/arsenal/intel",
-      "purpose": "External intel snapshots and ingestion outputs for phase-6 backlog."
+      "purpose": "External intel snapshots and ingestion outputs."
     }
   ],
   "dependency_groups": {
     "runtime": ["requirements.txt"],
-    "development": ["requirements-dev.txt"],
     "tools": [
       "tools/build_arsenal_index.py",
       "tools/validate_arsenal_architecture.py",
-      "tools/workspace_reuse_inventory.py",
-      "tools/deep_intel_backlog.py",
-      "tools/phase6_sync_external_intel.py",
-      "tools/phase6b_honeypot_validation.py",
       "tools/build_osi_tcpip_attack_matrix.py",
-      "tools/compile_first_party.py",
-      "tools/validate_governance.py",
-      "tools/run_scoped_tests.py"
+      "tools/build_soho_catalog_js_index.py",
+      "tools/compat_smoke.py",
+      "tools/env_doctor.py",
+      "tools/gen_wiki_module_index.py",
+      "tools/generate_coverage_matrix.py",
+      "tools/generate_full_catalog.py",
+      "tools/refresh_cve_extended_catalog.py",
+      "tools/sync_mibs.py",
+      "tools/sync_scope_wordlists.py"
     ]
   },
   "ingestion_policy": {
