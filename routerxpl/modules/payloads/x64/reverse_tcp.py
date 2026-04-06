@@ -12,7 +12,8 @@ class Payload(ReverseTCPPayloadMixin, ArchitectureSpecificPayload):
         "description": "Creates interactive tcp reverse shell for X64 architecture.",
         "authors": (
             "ricky",  # metasploit module
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         )
     }
 

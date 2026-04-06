@@ -6,3 +6,4 @@ pycryptodome
 scapy
 setuptools
 telnetlib3; python_version >= "3.13"
+colorama

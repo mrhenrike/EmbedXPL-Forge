@@ -1,10 +1,10 @@
-# Architecture diagrams — RouterXPL-Forge
+# Architecture Diagrams — RouterXPL-Forge
 
-**Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
+**Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
 
-**Languages:** Diagram labels are **English (en-US)** by default (aligned with tool output). **Português (pt-BR):** [README.pt-BR.md](README.pt-BR.md).
+**Languages:** Diagram labels are **English (en-US)** by default. **Português (pt-BR):** [README.pt-BR.md](README.pt-BR.md).
 
-Diagrams follow the same visual language as **MikrotikAPI-BF** (`img/mikrotik_*`): central device core, **access vectors** as spokes, **✓ / ✗** for coverage in RouterXPL-Forge (`creds`, `exploits`, `scanners`, `generic`), optional CVE callouts.
+Diagrams show device attack surfaces with coverage indicators for RouterXPL-Forge modules (`creds`, `exploits`, `scanners`, `generic`).
 
 ## Files
 
@@ -21,15 +21,15 @@ Diagrams follow the same visual language as **MikrotikAPI-BF** (`img/mikrotik_*`
 
 | PNG | Source |
 |-----|--------|
-| [../../img/architecture/rxf_arch_router_soho.png](../../img/architecture/rxf_arch_router_soho.png) | SOHO router |
-| [../../img/architecture/rxf_arch_switch_l2l3.png](../../img/architecture/rxf_arch_switch_l2l3.png) | Switch |
-| [../../img/architecture/rxf_arch_ngfw_utm.png](../../img/architecture/rxf_arch_ngfw_utm.png) | NGFW / UTM |
-| [../../img/architecture/rxf_arch_isp_cpe.png](../../img/architecture/rxf_arch_isp_cpe.png) | ISP CPE |
-| [../../img/architecture/rxf_arch_edge_mixed.png](../../img/architecture/rxf_arch_edge_mixed.png) | Mixed edge |
+| [rxf_arch_router_soho.png](../../img/architecture/rxf_arch_router_soho.png) | SOHO router |
+| [rxf_arch_switch_l2l3.png](../../img/architecture/rxf_arch_switch_l2l3.png) | Switch |
+| [rxf_arch_ngfw_utm.png](../../img/architecture/rxf_arch_ngfw_utm.png) | NGFW / UTM |
+| [rxf_arch_isp_cpe.png](../../img/architecture/rxf_arch_isp_cpe.png) | ISP CPE |
+| [rxf_arch_edge_mixed.png](../../img/architecture/rxf_arch_edge_mixed.png) | Mixed edge |
 
-### Gallery (embedded)
+### Gallery
 
-| SOHO router | Switch |
+| SOHO Router | Switch |
 |:---:|:---:|
 | ![SOHO router](../../img/architecture/rxf_arch_router_soho.png) | ![Switch](../../img/architecture/rxf_arch_switch_l2l3.png) |
 
@@ -37,13 +37,13 @@ Diagrams follow the same visual language as **MikrotikAPI-BF** (`img/mikrotik_*`
 |:---:|:---:|
 | ![NGFW / UTM](../../img/architecture/rxf_arch_ngfw_utm.png) | ![ISP CPE](../../img/architecture/rxf_arch_isp_cpe.png) |
 
-| Mixed edge |
+| Mixed Edge |
 |:---:|
 | ![Mixed edge](../../img/architecture/rxf_arch_edge_mixed.png) |
 
 **TAP / passive devices:** see Mermaid source [06-network-tap.mmd](06-network-tap.mmd) — PNG optional (low remote attack surface).
 
-## Render locally (optional)
+## Render Locally
 
 With [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli):
 
@@ -51,11 +51,6 @@ With [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli):
 npx @mermaid-js/mermaid-cli -i docs/diagrams/architecture/01-router-soho.mmd -o docs/img/architecture/router_soho.png -b transparent
 ```
 
-## Português (pt-BR)
-
-- **✓ Coberto:** módulos existentes em `routerxpl/modules/` para aquele vetor (ex.: `creds`, `exploits`, `generic` PCAP/CVE).
-- **✗ Parcial / não focado:** depende de modelo; usar `generic/cve/cve_lookup`, `scanners/autopwn` e pesquisa por *vendor*.
-
 ---
 
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrique)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

@@ -8,7 +8,8 @@ class Exploit(FTPDefault):
         "description": "Module performs dictionary attack against Technicolor Router FTP service. "
                        "If valid credentials are found, they are displayed to the user.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "Technicolor Router",
@@ -19,4 +20,4 @@ class Exploit(FTPDefault):
     port = OptPort(21, "Target FTP port")
 
     threads = OptInteger(1, "Number of threads")
-    defaults = OptWordlist("admin:admin,admin:password,admin:1234,Administrator:", "User:Pass or file with default credentials (file://)")
+    defaults = OptWordlist("file://wordlists/vendors/technicolor_defaults.txt", "User:Pass or file with default credentials (file://)")

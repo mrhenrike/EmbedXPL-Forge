@@ -10,7 +10,8 @@ class Exploit(SSHDefault):
         "description": "Module performs dictionary attack against 3Com Router SSH service. "
                        "If valid credentials are found, they are displayed to the user.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "3Com Router",
@@ -21,4 +22,4 @@ class Exploit(SSHDefault):
     port = OptPort(22, "Target SSH port")
 
     threads = OptInteger(1, "Number of threads")
-    defaults = OptWordlist("admin:admin", "User:Pass or file with default credentials (file://)")
+    defaults = OptWordlist("file://wordlists/vendors/3com_defaults.txt", "User:Pass or file with default credentials (file://)")

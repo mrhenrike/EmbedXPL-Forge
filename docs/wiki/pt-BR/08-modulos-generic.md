@@ -1,44 +1,39 @@
-# Módulos `generic` — CVE, wordlist, SNMP, UPnP, external
+# Módulos genéricos
 
-**Idioma:** pt-BR. **English (en-US):** [../en-US/08-generic-modules.md](../en-US/08-generic-modules.md)
+**Idioma: Português (pt-BR)**. **en-US:** [../en-US/08-generic-modules.md](../en-US/08-generic-modules.md)
 
-Área de **utilitários** transversais ao ecossistema de testes.
+## Mapa de módulos
 
-## CVE — `generic/cve/cve_lookup`
+| Módulo | Função |
+|--------|--------|
+| `cve_lookup` | Associa identificadores CVE a metadados locais |
+| `snmp_bruteforce` | Tentativa de community SNMP |
+| `ssdp_msearch` | Descoberta SSDP `M-SEARCH` |
+| `heartbleed` | Checagem orientada a OpenSSL Heartbleed |
+| `shellshock` | Testes de padrão CGI / Bash `shellshock` |
+| `wordlists` | Ajudantes sobre wordlists embutidas |
 
-Consulta **base embutida** (`routerxpl.core.cve`) com correspondência vendor/produto/versão/*banner*.
+## Exemplo CVE lookup
 
 ```text
-use generic/cve/cve_lookup
-set vendor cisco
-set product rv320
-run
+RouterXPL-Forge > use generic/cve_lookup
+RouterXPL-Forge (cve_lookup) > set cve CVE-2014-0160
+RouterXPL-Forge (cve_lookup) > run
 ```
 
-Opções úteis: `banner`, `product`, `version`, `remote_only`, `show_physical`.
+## Exemplo descoberta UPnP
 
-Ideal **após** obter *banner* por outro scanner ou serviço.
+```text
+RouterXPL-Forge > use generic/ssdp_msearch
+RouterXPL-Forge (ssdp_msearch) > run
+```
 
-## Exploit-DB (CSV offline) — `generic/external/exploitdb_embedded_lookup`
-
-Pesquisa o **`files_exploits.csv`** do espelho `exploit-database__exploitdb` em `routerxpl/resources/arsenal/pocs/incorporated_third_party/`. **Sem** `searchsploit` nem CLI externo. Respeite avisos GPLv2 ao redistribuir o espelho.
-
-## 802.11 / BLE / PCAP (mudou de repositório)
-
-Módulos **PCAP Wi‑Fi**, análise **WPA/WPA3** e **Bluetooth LE** estão em [**WirelessXPL-Forge**](https://github.com/mrhenrike/WirelessXPL-Forge).
-
-## Wordlist — `generic/wordlist/wordlist_generator`
-
-Gera *wordlists* parametrizáveis (perfil corporativo vs pessoal, variações). Integra-se conceitualmente com bruteforce (`ssh_bruteforce`, etc.) via export para ficheiro.
-
-## SNMP — `generic/snmp/snmp_trap_listener`
-
-*Listener* de traps para cenários de teste.
-
-## UPnP — `generic/upnp/ssdp_msearch`
-
-Descoberta SSDP / *M-SEARCH* em LAN.
+Ajuste opções com `show options` antes de executar.
 
 ---
 
-[Wiki hub](../README.md)
+[Hub wiki](../README.md)
+
+---
+
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

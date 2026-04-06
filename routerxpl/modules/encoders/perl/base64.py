@@ -8,7 +8,8 @@ class Encoder(BaseEncoder):
         "name": "Perl Base64 Encoder",
         "description": "Module encodes PERL payload to Base64 format.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
     }
 

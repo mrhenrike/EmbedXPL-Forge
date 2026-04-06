@@ -2,7 +2,7 @@
 
 **Idioma:** pt-BR. **English (en-US):** [README.md](README.md)
 
-**Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrique)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
+**Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
 
 O estilo replica o hub-and-spoke do **MikrotikAPI-BF** (`mikrotik_full_attack_surface.png`, `mikrotik_access_vectors.png`): núcleo do dispositivo, vetores de acesso em volta, legenda de cobertura.
 
@@ -38,4 +38,4 @@ Ver também [README.md](README.md) (en-US).
 
 ---
 
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrique)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

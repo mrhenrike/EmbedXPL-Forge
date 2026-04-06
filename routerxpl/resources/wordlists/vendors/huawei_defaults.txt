@@ -1,0 +1,9 @@
+Admin:admin
+admin:
+admin:admin
+digicel:digicel
+root:admin
+telecomadmin:admintelecom
+user:HuaweiUser
+user:user
+vodafone:vodafone

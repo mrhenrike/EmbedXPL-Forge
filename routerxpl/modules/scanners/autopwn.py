@@ -17,10 +17,8 @@ class Exploit(Exploit):
         "name": "AutoPwn",
         "description": "Module scans for vulnerabilities and weaknesses. Supports timing templates T0..T5 (default: balanced/T3).",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
-        ),
-        "subcredits": (
-            "RouterXPL-Forge modifications by André Henrique (@mrhenrike) | União Geek",
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "Routers",

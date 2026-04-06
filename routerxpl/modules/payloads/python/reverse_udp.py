@@ -13,7 +13,7 @@ class Payload(ReverseTCPPayloadMixin, GenericPayload):
         "description": "Creates interactive udp reverse shell by using python.",
         "authors": (
             "Andre Marques (zc00l)",  # shellpop
-            "Marcin Bury <marcin[at]threat9.com>"  # routerxpl module
+            "Marcin Bury"
         ),
     }
 

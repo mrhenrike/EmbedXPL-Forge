@@ -8,7 +8,8 @@ class Exploit(SSHDefault):
         "description": "Module performs dictionary attack against Zyxel Router SSH service. "
                        "If valid credentials are found, they are displayed to the user.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "Zyxel Router",
@@ -19,4 +20,4 @@ class Exploit(SSHDefault):
     port = OptPort(22, "Target SSH port")
 
     threads = OptInteger(1, "Number of threads")
-    defaults = OptWordlist("admin:admin,admin:1234,admin:user,admin:Zyxel*2012*", "User:Pass or file with default credentials (file://)")
+    defaults = OptWordlist("file://wordlists/vendors/zyxel_defaults.txt", "User:Pass or file with default credentials (file://)")

@@ -1,25 +1,18 @@
-# Introduction, scope, and installation
+# Introduction, Scope, and Installation
 
 **Language:** English (en-US). **pt-BR:** [../pt-BR/01-introducao-e-instalacao.md](../pt-BR/01-introducao-e-instalacao.md)
 
 ## What RouterXPL-Forge is
 
-A **modular Python framework** for **authorized** security testing of embedded network gear (routers, switches, TAPs, firewalls, NGFW): credential tests, public vulnerability checks, scanners, PCAP/CVE utilities, etc.
+**RouterXPL-Forge** is a modular **Python** framework for **authorized** security testing of routers, switches, TAPs, and SOHO edge devices. It bundles credential checks, vulnerability-oriented modules, scanners, payloads, and supporting utilities.
 
-**Architecture overview (SOHO router example — full gallery in [wiki hub README](../README.md)):**
-
-![SOHO router — attack surface & tool coverage](../../img/architecture/rxf_arch_router_soho.png)
-
-## Legal and ethical use
-
-**Use only on networks and devices you own or have explicit written permission to test.** Maintainers are not responsible for misuse. Follow your contract and rules of engagement.
+- **263** modules organized by role and vendor.
+- **28+** vendor-oriented families plus generic building blocks.
 
 ## Requirements
 
 - **Python 3.8–3.13**
-- Dependencies in `requirements.txt`
-- **Python 3.13+:** `telnetlib3` replaces removed stdlib `telnetlib`
-- **PCAP modules** need **Scapy**; live capture on Windows may need Npcap — offline `.pcap` analysis often works with Python only
+- Install dependencies from `requirements.txt` after cloning the repository.
 
 ## Install
 
@@ -34,28 +27,27 @@ python3 -m pip install -r requirements.txt
 
 ## Diagnostics
 
+Run the environment check:
+
 ```bash
 python tools/env_doctor.py
 ```
 
-Checks core imports. Scapy is not in the doctor today; fix Scapy manually if `generic/pcap/*` imports fail.
-
-## Start the app
+## Start the interactive shell
 
 ```bash
 python rxf.py
 ```
 
-Interactive mode needs a **TTY**. For automation use `-m` / `-s` (see [04-non-interactive-mode.md](04-non-interactive-mode.md)).
+## Log file and history
 
-## Log file
-
-**`routerxpl.log`** in the current working directory receives bootstrap logging.
-
-## Command history
-
-Readline history is typically `~/.rxf_history`.
+- **Log file:** `routerxpl.log` (created in the current working directory).
+- **Command history:** typically `~/.rxf_history`.
 
 ---
 
 [Wiki hub](../README.md)
+
+---
+
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

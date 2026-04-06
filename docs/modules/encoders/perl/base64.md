@@ -21,5 +21,5 @@ Description:
 Module encodes PERL payload to Base64 format.
 
 Authors:
--  Marcin Bury <marcin[at]threat9.com>
+-  Marcin Bury, Andre Henrique (@mrhenrike)
 ```

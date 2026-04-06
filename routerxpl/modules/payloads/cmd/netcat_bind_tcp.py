@@ -7,7 +7,8 @@ class Payload(BindTCPPayloadMixin, GenericPayload):
         "name": "Netcat Bind TCP",
         "description": "Creates interactive tcp bind shell by using netcat.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
     }
 

@@ -1,55 +1,36 @@
-# Catálogos, matrizes e ferramentas (`tools/`)
+# Catálogos e ferramentas
 
-**Idioma:** pt-BR. **English (en-US):** [../en-US/10-catalogs-and-tools.md](../en-US/10-catalogs-and-tools.md)
+**Idioma: Português (pt-BR)**. **en-US:** [../en-US/10-catalogs-and-tools.md](../en-US/10-catalogs-and-tools.md)
 
-## Catálogos em `routerxpl/resources/catalogs/`
+## Catálogos JSON
 
-| Ficheiro | Conteúdo |
-|----------|----------|
-| `market_priority_devices_2010_2026.json` | *Device pool* e listas anuais (Brasil/global) |
-| `module_target_scope.json` | Política de escopo e mapeamento *device class* para AutoPwn |
-| `cve_extended_catalog.json` | Extensão do `CVEDatabase` (merge matriz + intel + módulos + URLs PoC tg12 para IDs em âmbito) |
-| `discord_requested_devices.json` | Pedidos da comunidade / Discord |
-| `external_tool_intel_sources.json` | Fontes externas para roadmap (RouterPwn, EDB, Metasploit, …) |
-| `external_framework_clones.json` | URLs oficiais para clonar Metasploit / Exploit-DB / MikrotikAPI-BF (licenças e pontes `generic/external/*`) |
-| `incorporated_third_party_index.json` | Índice dos espelhos PoC em `arsenal/pocs/incorporated_third_party/` |
-| `soho_catalog_js_index.json` | Metadados da *build* do catálogo SOHO HTML/JS |
-| `third_party_upstream_open_work.json` | *Snapshot* de PRs/issues abertos nos *mirrors* upstream |
-| `deep_intel_backlog.json` | Itens de intel pendentes de triagem |
+| Arquivo | Função |
+|---------|--------|
+| `market_priority_devices_2010_2026.json` | Entrada para matriz de cobertura de devices prioritários de mercado |
+| `module_target_scope.json` | Metadados módulo ↔ escopo de target |
+| `cve_extended_catalog.json` | Dados estendidos de referência CVE |
+| `arsenal_layout.json` | Descrição de layout do arsenal para ferramentas |
 
-## Diagramas de arquitetura
-
-PNG por classe de dispositivo e fontes Mermaid: [../../diagrams/architecture/README.md](../../diagrams/architecture/README.md).
-
-## Documentação gerada
-
-- `docs/COVERAGE_MATRIX.md` — matriz de cobertura e tabelas de intel externa
-- `docs/FULL_CATALOG.md` — catálogo textual ampliado
-
-Regeneração da matriz:
-
-```bash
-python tools/generate_coverage_matrix.py
-python tools/generate_full_catalog.py
-```
-
-## Scripts úteis
+## Ferramentas (`tools/`)
 
 | Script | Função |
 |--------|--------|
-| `tools/env_doctor.py` | Dependências base |
-| `tools/compat_smoke.py` | Fumo de compatibilidade |
-| `tools/validate_market_priority_minimums.py` | Valida catálogo de prioridade |
-| `tools/report_market_priority_gaps.py` | Gera `.log/market_priority_gaps.csv` |
-| `tools/gen_wiki_module_index.py` | Regenera `docs/wiki/ANEXO-INDICE-MODULOS.md` |
-| `tools/phase6_sync_external_intel.py` | *Snapshots* de intel externa (rede / `gh` conforme ambiente) |
-| `tools/generate_full_catalog.py` | Regenera `docs/FULL_CATALOG.*` (pegada em disco + estatísticas) |
-| `tools/refresh_cve_extended_catalog.py` | Regenera `cve_extended_catalog.json` (merge + URLs PoC tg12) |
-| `tools/embed_local_third_party_poc_intel.py` | Actualiza JSON de intel PoC embutido |
-| `tools/incorporate_third_party_poc_tree.py` | Copia/sincroniza árvores PoC para `incorporated_third_party/` |
-| `tools/build_soho_catalog_js_index.py` | Reconstrói índice JS do catálogo SOHO |
-| `tools/compile_first_party.py` | Helper de empacotamento (*first-party*) |
+| `env_doctor.py` | Diagnóstico de ambiente |
+| `compat_smoke.py` | Smoke de compatibilidade |
+| `gen_wiki_module_index.py` | Regenerar anexo da wiki |
+| `generate_coverage_matrix.py` | Gerar artefatos da matriz de cobertura |
+| `generate_full_catalog.py` | Gerar saídas de catálogo completo |
+| `refresh_cve_extended_catalog.py` | Atualizar catálogo estendido CVE |
+| `validate_market_priority_minimums.py` | Validar mínimos de prioridade de mercado |
+| `build_arsenal_index.py` | Construir índice do arsenal |
+| `sync_scope_wordlists.py` | Sincronizar wordlists relacionadas ao escopo |
+
+Execute os scripts a partir da raiz do repositório salvo indicação contrária na documentação da ferramenta.
 
 ---
 
-[Wiki hub](../README.md)
+[Hub wiki](../README.md)
+
+---
+
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

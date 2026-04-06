@@ -1,0 +1,4 @@
+admin:<<< %s(un='%s') = %u.
+admin:<<< %s(un=\'%s\') = %u.
+admin:abc123
+super:juniper123

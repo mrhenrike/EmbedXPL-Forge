@@ -13,7 +13,8 @@ class Payload(ReverseTCPPayloadMixin, ArchitectureSpecificPayload):
         "authors": (
             "Ramon de C Valle",  # metasploit module
             "joev",  # metasploit module
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         )
     }
 

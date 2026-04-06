@@ -8,10 +8,8 @@ class Exploit(SNMPClient):
         "name": "SNMPv3 Default Creds",
         "description": "Module validates default SNMPv3 credentials against target service.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
-        ),
-        "subcredits": (
-            "RouterXPL-Forge modifications by André Henrique (@mrhenrike) | União Geek",
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "Routers",

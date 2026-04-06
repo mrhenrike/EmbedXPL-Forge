@@ -8,7 +8,8 @@ class Exploit(TelnetDefault):
         "description": "Module performs dictionary attack against Juniper Router Telnet service. "
                        "If valid credentials are foundm they are displayed to the user.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "Juniper Router",
@@ -19,4 +20,4 @@ class Exploit(TelnetDefault):
     port = OptPort(23, "Target Telnet port")
 
     threads = OptInteger(1, "Number of threads")
-    defaults = OptWordlist("admin:abc123,super:juniper123,admin:<<< %s(un=\'%s\') = %u.", "User:Pass or file with default credentials (file://)")
+    defaults = OptWordlist("file://wordlists/vendors/juniper_defaults.txt", "User:Pass or file with default credentials (file://)")

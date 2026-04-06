@@ -45,8 +45,6 @@
       "tools/deep_intel_backlog.py",
       "tools/phase6_sync_external_intel.py",
       "tools/phase6b_honeypot_validation.py",
-      "tools/embed_local_third_party_poc_intel.py",
-      "tools/incorporate_third_party_poc_tree.py",
       "tools/build_osi_tcpip_attack_matrix.py",
       "tools/compile_first_party.py",
       "tools/validate_governance.py",

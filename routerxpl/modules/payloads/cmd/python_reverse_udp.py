@@ -7,7 +7,8 @@ class Payload(PythonBindUDP):
         "name": "Python Reverse UDP One-Liner",
         "description": "Creates interactive udp reverse shell by using python one-liner.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         )
     }
 

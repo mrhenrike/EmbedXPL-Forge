@@ -12,7 +12,8 @@ class Payload(ReverseTCPPayloadMixin, GenericPayload):
         "name": "PHP Reverse TCP",
         "description": "Creates interactive tcp reverse shell by using php.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
     }
 

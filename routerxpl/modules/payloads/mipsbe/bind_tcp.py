@@ -11,7 +11,8 @@ class Payload(BindTCPPayloadMixin, ArchitectureSpecificPayload):
         "name": "MIPSBE Bind TCP",
         "description": "Creates interactive tcp bind shell for MIPSBE architecture.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
     }
 

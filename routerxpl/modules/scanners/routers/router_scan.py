@@ -6,7 +6,8 @@ class Exploit(Exploit):
         "name": "Router Scanner",
         "description": "Module that scans for routers vulnerablities and weaknesses.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "Router",

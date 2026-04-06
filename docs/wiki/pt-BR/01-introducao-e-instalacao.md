@@ -1,30 +1,18 @@
 # Introdução, escopo e instalação
 
-**Idioma:** pt-BR. **English (en-US):** [../en-US/01-introduction-and-installation.md](../en-US/01-introduction-and-installation.md)
+**Idioma: Português (pt-BR)**. **en-US:** [../en-US/01-introduction-and-installation.md](../en-US/01-introduction-and-installation.md)
 
-## Para que serve o RouterXPL-Forge
+## O que é o RouterXPL-Forge
 
-É um **framework modular** em Python para apoiar testes de intrusão **autorizados** contra equipamentos de rede embutidos (roteadores, switches, TAPs, firewalls, NGFW). Os módulos implementam, por exemplo:
+O **RouterXPL-Forge** é um framework modular em **Python** para testes de segurança **autorizados** em roteadores, switches, TAPs e dispositivos de borda SOHO. Reúne verificação de credenciais, módulos orientados a vulnerabilidades, scanners, payloads e utilitários de apoio.
 
-- tentativas de login com listas de credenciais;
-- exploração de vulnerabilidades públicas documentadas;
-- varreduras que sugerem módulos aplicáveis;
-- utilitários (PCAP, consulta a CVE embutidas, wordlists, SNMP, etc.).
-
-**Visão de arquitetura (exemplo router SOHO — galeria completa no [README da wiki](../README.md)):**
-
-![Router SOHO — superfície de ataque e cobertura da ferramenta](../../img/architecture/rxf_arch_router_soho.png)
-
-## Uso legal e ético
-
-**Utilize apenas em redes e equipamentos para os quais você tenha autorização explícita.** O mantenedor e colaboradores **não** se responsabilizam pelo uso indevido. Em ambientes corporativos, siga o contrato de pentest e o roteiro aprovado.
+- **263** módulos organizados por função e vendor.
+- **28+** famílias orientadas a vendor mais blocos genéricos.
 
 ## Requisitos
 
-- **Python 3.8 a 3.13**
-- Dependências em `requirements.txt` (instale com `pip install -r requirements.txt`)
-- Em **Python 3.13+**, o pacote `telnetlib3` substitui o `telnetlib` removido da biblioteca padrão
-- Módulos **PCAP** dependem de **Scapy**; instalação do Scapy no Windows pode exigir Npcap/WinPcap para captura ao vivo — para análise **offline** de arquivos `.pcap` costuma bastar o interpretador Python
+- **Python 3.8–3.13**
+- Dependências em `requirements.txt` após clonar o repositório.
 
 ## Instalação
 
@@ -43,24 +31,21 @@ python3 -m pip install -r requirements.txt
 python tools/env_doctor.py
 ```
 
-Verifica importação de depend núcleo (`requests`, `paramiko`, `pysnmp`, `Crypto`, `setuptools`). **Scapy** não aparece no *doctor* atual; se módulos `generic/pcap/*` falharem ao importar, instale/resolva o Scapy manualmente.
-
-## Iniciar o programa
+## Iniciar o shell interativo
 
 ```bash
 python rxf.py
 ```
 
-O shell interativo exige **TTY** (`stdin` interativo). Para automação use o modo `-m`/`-s` (ver [04-modo-nao-interativo.md](04-modo-nao-interativo.md)).
+## Log e histórico
 
-## Arquivo de log
-
-O arquivo **`routerxpl.log`** (na pasta de trabalho de onde você invocou `rxf.py`) recebe mensagens de logging do bootstrap. Gire ou apague o arquivo em ambientes de laboratório para não acumular dados sensíveis.
-
-## Histórico de comandos
-
-O interpretador usa `~/.rxf_history` (ou equivalente no perfil do usuário) para histórico do *readline*, quando disponível.
+- **Arquivo de log:** `routerxpl.log` (no diretório de trabalho atual).
+- **Histórico de comandos:** em geral `~/.rxf_history`.
 
 ---
 
-[Wiki hub](../README.md)
+[Hub wiki](../README.md)
+
+---
+
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

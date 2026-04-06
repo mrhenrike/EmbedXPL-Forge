@@ -7,7 +7,8 @@ class Payload(ReverseTCPPayloadMixin, GenericPayload):
         "name": "Netcat Reverse TCP",
         "description": "Creates interactive tcp reverse shell by using netcat.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
     }
 

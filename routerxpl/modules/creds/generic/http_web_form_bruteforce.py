@@ -48,9 +48,6 @@ class Exploit(HTTPClient):
         "authors": (
             "André Henrique <https://github.com/mrhenrike>",
         ),
-        "subcredits": (
-            "RouterXPL-Forge | União Geek — https://github.com/Uniao-Geek",
-        ),
         "devices": (
             "Routers",
             "Switches",

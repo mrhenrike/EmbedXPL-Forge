@@ -13,7 +13,7 @@ class Payload(BindTCPPayloadMixin, GenericPayload):
         "description": "Creates interactive tcp bind shell by using php.",
         "authors": (
             "Andre Marques (zc00l)",  # shellpop
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
         ),
     }
 

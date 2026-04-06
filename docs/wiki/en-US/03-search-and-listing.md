@@ -1,47 +1,38 @@
-# Search and listing
+# Search and Listing
 
 **Language:** English (en-US). **pt-BR:** [../pt-BR/03-busca-e-listagem.md](../pt-BR/03-busca-e-listagem.md)
 
 ## `search`
 
-### Minimal
+Examples:
 
 ```text
-search tplink
+search dlink
+search creds
+search scanner
 ```
 
-Keywords lowercased; **all** space-separated words must appear in the module path (logical **AND**).
+## `show` listings
 
-```text
-search type=exploits vendor=linksys wrt
-```
+| Command | Lists |
+|---------|-------|
+| `show all` | All module categories |
+| `show creds` | Credential modules |
+| `show exploits` | Exploit modules |
+| `show scanners` | Scanner modules |
+| `show payloads` | Payload modules |
+| `show encoders` | Encoder modules |
 
-### Named filters
+Use `show devices` where supported to inspect device-oriented entries.
 
-| Key | Effect |
-|-----|--------|
-| `type=` | Top-level type: `exploits`, `creds`, `scanners`, `generic`, `payloads`, `encoders` |
-| `device=` | Subpackage under `exploits` (e.g. `routers`) |
-| `language=` | Under `encoders` |
-| `payload=` | Under `payloads` |
-| `vendor=` | Path segment (e.g. `dlink`) |
+## Full path index
 
-Invalid filter values print an error and return without results.
-
-## `show`
-
-Useful subcommands include: `all`, `scanners`, `exploits`, `creds`, `wordlists`, `encoders`; plus with a module loaded: `info`, `options`, `advanced`, `devices`.
-
-For a **full** path list see [../ANEXO-INDICE-MODULOS.md](../ANEXO-INDICE-MODULOS.md) or run:
-
-```bash
-python tools/gen_wiki_module_index.py
-```
-
-## `use` path mapping
-
-`use creds/generic/ssh_default` maps to Python package `routerxpl.modules.creds.generic.ssh_default`.
+For every module path in the tree, see [Module path index (all locales)](../ANEXO-INDICE-MODULOS.md).
 
 ---
 
 [Wiki hub](../README.md)
+
+---
+
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

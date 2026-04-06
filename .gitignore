@@ -82,3 +82,9 @@ Pipfile.lock
 
 # Local-only logs and handoff (agent / workstation)
 .log/
+
+# Temp local
+.tmp/
+
+# Package metadata
+routerxpl.egg-info/

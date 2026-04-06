@@ -12,7 +12,8 @@ class Payload(BindTCPPayloadMixin, ArchitectureSpecificPayload):
         "description": "Creates interactive tcp bind shell for X64 architecture.",
         "authors": (
             "ricky",  # metasploit module
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         )
     }
 

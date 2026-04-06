@@ -1,2 +1,0 @@
-recursive-include hatasm/exe/templates *
-recursive-include hatasm/exe/formats *

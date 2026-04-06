@@ -9,7 +9,8 @@ class Exploit(SNMPClient):
         "description": "Module performs bruteforce attack against SNMP service. "
                        "If valid community string is found, it is displayed to the user",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "Multiple devices",

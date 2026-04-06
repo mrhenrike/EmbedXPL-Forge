@@ -1,0 +1,3 @@
+admin:admin
+root:ubnt
+ubnt:ubnt

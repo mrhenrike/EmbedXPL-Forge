@@ -1,53 +1,47 @@
-# Pasta `docs/` — documentação do repositório
+# Documentação — RouterXPL-Forge
 
-**Idioma:** Português (Brazil). **English (en-US, default):** [README.md](README.md)
+**Autor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
 
-**Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
+**Idiomas:** Arquivos neste diretório são primariamente **English (en-US)**. **Português (pt-BR)** Wiki: [wiki/pt-BR/README.md](wiki/pt-BR/README.md).
 
-## Ficheiros principais
+## Conteúdo
 
-| Ficheiro | Idioma do corpo | Descrição |
-|----------|-----------------|-----------|
-| [COVERAGE_MATRIX.md](COVERAGE_MATRIX.md) | en-US (gerado) | Matriz de cobertura e tabelas de intel externa |
-| [FULL_CATALOG.md](FULL_CATALOG.md) | en-US (gerado) | Catálogo textual de módulos |
-| [wiki/README.md](wiki/README.md) | Hub bilíngue | Índice da wiki (en-US + pt-BR) |
-| [diagrams/architecture/](diagrams/architecture/) | en-US + pt-BR | Diagramas de arquitetura / superfície de ataque |
-| [img/architecture/](img/architecture/) | rótulos en-US nos PNG | Imagens exportadas |
+| Caminho | Idioma | Descrição |
+|---------|--------|-----------|
+| [wiki/README.md](wiki/README.md) | hub bilíngue | Índice da wiki (en-US + pt-BR) |
+| [diagrams/architecture/README.md](diagrams/architecture/README.md) | en-US + pt-BR | Diagramas de arquitetura de superfície de ataque (Mermaid) |
+| [img/architecture/](img/architecture/) | labels en-US | PNGs exportados de arquitetura |
+| [modules/](modules/) | en-US | Documentação por módulo |
 
-## Arquitetura / superfície de ataque (PNGs)
+## Arquitetura de Superfície de Ataque (PNGs)
 
-Estilo hub-and-spoke (como no MikrotikAPI-BF). **Mermaid:** [diagrams/architecture/](diagrams/architecture/).
+Fontes Mermaid: [diagrams/architecture/](diagrams/architecture/). Galeria:
 
-| Router SOHO | Switch |
+| Roteador SOHO | Switch |
 |:---:|:---:|
-| ![SOHO](img/architecture/rxf_arch_router_soho.png) | ![Switch](img/architecture/rxf_arch_switch_l2l3.png) |
+| ![Roteador SOHO](img/architecture/rxf_arch_router_soho.png) | ![Switch](img/architecture/rxf_arch_switch_l2l3.png) |
 
-| NGFW / UTM | CPE ISP |
+| NGFW / UTM | ISP CPE |
 |:---:|:---:|
-| ![NGFW](img/architecture/rxf_arch_ngfw_utm.png) | ![CPE](img/architecture/rxf_arch_isp_cpe.png) |
+| ![NGFW](img/architecture/rxf_arch_ngfw_utm.png) | ![ISP CPE](img/architecture/rxf_arch_isp_cpe.png) |
 
-| Edge misto |
+| Edge Misto |
 |:---:|
 | ![Edge misto](img/architecture/rxf_arch_edge_mixed.png) |
 
-## Wiki
+## Idiomas da Wiki
 
-- **Português:** [wiki/pt-BR/README.md](wiki/pt-BR/README.md)
-- **English:** [wiki/en-US/README.md](wiki/en-US/README.md)
+- **English (padrão):** [wiki/en-US/README.md](wiki/en-US/README.md)
+- **Português (Brasil):** [wiki/pt-BR/README.md](wiki/pt-BR/README.md)
 
-## Regenerar artefactos
+## Regeneração
 
 ```bash
 python tools/generate_coverage_matrix.py
 python tools/generate_full_catalog.py
-python tools/refresh_cve_extended_catalog.py
 python tools/gen_wiki_module_index.py
 ```
 
-## Nota sobre `docs/modules/`
-
-Ficheiros Markdown sob `docs/modules/` são sobretudo **inglês** (metadados gerados ou legados). Para guias de utilização em **pt-BR**, use a wiki em [wiki/pt-BR/](wiki/pt-BR/).
-
 ---
 
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
+> **Autor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

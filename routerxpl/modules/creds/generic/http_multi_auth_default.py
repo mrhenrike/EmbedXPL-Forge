@@ -10,10 +10,8 @@ class Exploit(HTTPClient):
         "name": "HTTP/HTTPS Multi-Auth Default Creds",
         "description": "Module validates multiple HTTP auth methods (basic, digest, bearer, custom headers, form).",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
-        ),
-        "subcredits": (
-            "RouterXPL-Forge modifications by André Henrique (@mrhenrike) | União Geek",
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "Routers",

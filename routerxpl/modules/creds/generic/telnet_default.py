@@ -9,10 +9,8 @@ class Exploit(TelnetClient):
         "description": "Module performs dictionary attack with default credentials against Telnet service. "
                        "If valid credentials are found, they are displayed to the user.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
-        ),
-        "subcredits": (
-            "RouterXPL-Forge modifications by André Henrique (@mrhenrike) | União Geek",
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "Multiple devices",

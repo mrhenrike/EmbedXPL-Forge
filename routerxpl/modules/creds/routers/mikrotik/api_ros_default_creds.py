@@ -13,10 +13,8 @@ class Exploit(TCPClient):
         "description": "Module performs dictionary attack against Mikrotik API and API-SSL. "
                        "If valid credentials are found they are displayed to the user.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
-        ),
-        "subcredits": (
-            "RouterXPL-Forge modifications by André Henrique (@mrhenrike) | União Geek",
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "Mikrotik Router",

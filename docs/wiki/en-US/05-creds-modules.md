@@ -1,52 +1,46 @@
-# `creds` modules
+# Credential Modules
 
 **Language:** English (en-US). **pt-BR:** [../pt-BR/05-modulos-creds.md](../pt-BR/05-modulos-creds.md)
 
-Credential modules test authentication against network services (SSH, Telnet, FTP/SFTP, HTTP, SNMP, …).
+## Scope
+
+Credential modules exercise **SSH**, **Telnet**, **FTP**, **HTTP**, **SNMP**, and related login surfaces against **authorized** targets.
 
 ## Typical flow
 
-```text
-use creds/generic/ssh_default
-set target 192.168.1.1
-show options
-run
-```
+1. `use` a `creds/...` module.
+2. `set target` (and `port` if needed).
+3. Optional: tune threads, wordlists, and verbosity.
+4. `run`.
 
-## Common options (example: `ssh_default`)
+## Common options
 
-| Option | Typical meaning |
-|--------|-----------------|
-| `target` | IP, IPv6, or `file://` list with `ip:port` |
+| Option | Role |
+|--------|------|
+| `target` | Hostname or IP |
 | `port` | Service port |
-| `threads` | Parallelism |
-| `defaults` | Embedded `user:pass` list or `file://` |
+| `threads` | Parallelism for brute-force style modules |
+| `defaults` | Try vendor default username/password pairs when supported |
 | `stop_on_success` | Stop after first success |
-| `verbosity` | Print attempts |
+| `verbosity` | Log detail level |
 
-Always run `show options` — names vary (`rhost` on some older bases).
+## Generic vs vendor modules
 
-## Generic vs vendor
+- **Vendor** modules live under `creds/routers/`, `creds/switches/`, etc.
+- **Generic** helpers complement vendor coverage.
 
-- `creds/generic/*` — broadly applicable bruteforce/default tests.
-- `creds/routers/<vendor>/*` — vendor-focused lists.
+## Wordlists
 
-## SNMP / HTTP
+External wordlists ship under `routerxpl/resources/wordlists/vendors/` and related paths; point modules to them when an option accepts a file path.
 
-- `creds/generic/http_basic_digest_default` / `http_basic_digest_bruteforce`
-- `creds/generic/http_multi_auth_default` — multiple auth modes including form
-- `creds/generic/http_web_form_bruteforce` — web login dictionary attack with Hydra-style success/failure rules (`show options`)
+## HTTP authentication
 
-See full paths in [../ANEXO-INDICE-MODULOS.md](../ANEXO-INDICE-MODULOS.md).
-
-## `setg` example
-
-```text
-setg target 10.0.0.1
-use creds/routers/tplink/ssh_default_creds
-run
-```
+HTTP `401/407`-style login checks live under the `creds` tree; combine with `target`, `port`, and path options as documented per module.
 
 ---
 
 [Wiki hub](../README.md)
+
+---
+
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

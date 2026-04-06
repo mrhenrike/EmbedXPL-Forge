@@ -1,0 +1,4 @@
+admin:1234
+admin:Zyxel*2012*
+admin:admin
+admin:user

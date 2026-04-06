@@ -1,217 +1,117 @@
 # RouterXPL-Forge
 
-Open-source framework for security testing of **embedded devices**, focused on **routers, Layer 2–3 switches, TAPs, and home/SOHO edge** (CPE, mixed edge). **Firewall / NGFW / perimeter:** [**FirewallXPL-Forge**](https://github.com/mrhenrike/FirewallXPL-Forge) (private). **802.11 / WPA / BLE lab:** [**WirelessXPL-Forge**](https://github.com/mrhenrike/WirelessXPL-Forge) (private).
+**Network Device Security Assessment Framework**
 
-**Maintainer:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| [União Geek](https://github.com/Uniao-Geek)  
-**Upstream lineage:** [threat9/routersploit](https://github.com/threat9/routersploit)
+RouterXPL-Forge is an open-source exploitation framework designed for security professionals to audit routers, switches, TAPs, and SOHO edge devices. It provides 271 modules covering credential testing, vulnerability exploitation, network scanning, payload generation, and encoding.
 
-**Language:** **English (en-US)** — this file is the default. **Português (pt-BR):** [README.pt-BR.md](README.pt-BR.md)
-
-[![Python 3.8–3.13](https://img.shields.io/badge/Python-3.8--3.13-blue.svg)](https://www.python.org/downloads/)
-[![CI](https://github.com/mrhenrike/RouterXPL-Forge/actions/workflows/compat-matrix.yml/badge.svg)](https://github.com/mrhenrike/RouterXPL-Forge/actions)
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 
 ---
 
-## What the project does
+## Features
 
-RouterXPL-Forge provides **modules** that support **authorized** assessments (pentesting, lab work, controlled red team):
+- **125 exploit modules** — RCE, auth bypass, path traversal, info disclosure, DNS hijacking
+- **88 credential modules** — dictionary attacks against FTP, SSH, Telnet, HTTP, SNMP, SFTP
+- **5 scanner modules** — AutoPwn, device-specific scanners
+- **32 payload modules** — reverse/bind TCP shells for x86, x64, ARM, MIPS, Python, Perl, PHP
+- **13 encoder modules** — Base64 and hex encoding for Python, PHP, Perl
+- **8 generic modules** — Heartbleed, ShellShock, UPnP SSDP, SNMP, CVE lookup
+- **23 vendor-specific wordlists** — externalized default credentials per vendor
 
-| Type | Role |
-|------|------|
-| **exploits** | Abuse known vulnerabilities (with `check()` where implemented) |
-| **creds** | Default credentials and brute force against network services |
-| **scanners** | Weakness identification; **autopwn** orchestrates modules with Nmap-like timing profiles |
-| **generic** | Cross-cutting utilities: SNMP, SSDP, **CVE lookup**, wordlist generator, external bridges *(Wi‑Fi/BLE PCAP → WirelessXPL-Forge)* |
-| **payloads** | Payload generation by architecture (ARM/MIPS/x86, reverse/bind shells) |
-| **encoders** | Payload encoding (Python, PHP, Perl) |
+## Supported Device Types
 
-**Out of scope in this repository:** modules whose primary target is IP cameras, printers, or DVRs.
+| Type | Coverage | Description |
+|------|----------|-------------|
+| **Routers** | 187 modules | SOHO routers, enterprise gateways, CPE |
+| **Switches L2/L3** | 3 modules | Managed and unmanaged switches |
+| **SOHO Edge** | 7 modules | Travel routers, NAS, wireless APs, smart plugs |
+| **TAPs** | Planned | Network TAP devices |
 
-### Attack-surface architecture (by device class)
+## Supported Vendors
 
-Hub-and-spoke diagrams (same idea as [MikrotikAPI-BF](https://github.com/mrhenrike/MikrotikAPI-BF) `img/mikrotik_*`): device core, remote **access vectors**, and how they map to **RouterXPL-Forge** coverage. Mermaid sources: [docs/diagrams/architecture/](docs/diagrams/architecture/).
+2Wire · 3Com · Asmax · ASUS · Belkin · BHU · Billion · Cisco · Comtrend · D-Link · HooToo · Huawei · IPFire · Juniper · LG · Linksys · MikroTik · Movistar · Netcore · NETGEAR · Netsys · Shuttle · Technicolor · Thomson · TP-Link · Ubiquiti · ZTE · ZyXEL
 
-| SOHO / home router | Managed L2–L3 switch |
-|:---:|:---:|
-| ![SOHO router — attack surface & RXF coverage](docs/img/architecture/rxf_arch_router_soho.png) | ![Switch — attack surface & RXF coverage](docs/img/architecture/rxf_arch_switch_l2l3.png) |
-
-| NGFW / UTM | ISP CPE / residential gateway |
-|:---:|:---:|
-| ![NGFW UTM — attack surface & RXF coverage](docs/img/architecture/rxf_arch_ngfw_utm.png) | ![ISP CPE — attack surface & RXF coverage](docs/img/architecture/rxf_arch_isp_cpe.png) |
-
-| Mixed edge (router + UTM-lite) |
-|:---:|
-| ![Mixed edge — attack surface & RXF coverage](docs/img/architecture/rxf_arch_edge_mixed.png) |
-
----
-
-## Compatibility notice
-
-> Some platforms have **not** been field-tested. If something breaks, open an issue with OS, Python version, and traceback.
-
-| Platform | Status |
-|----------|--------|
-| Windows 10/11 | CI + local validation |
-| WSL / Debian / Ubuntu | CI + local validation |
-| Kali Linux | Validated locally |
-| macOS | CI (limited field validation) |
-| RHEL / Fedora / Termux | Expected compatible — not validated |
-
-**Python:** 3.8 through 3.13. Includes a shim for removed `telnetlib` on 3.13+ (`telnetlib3`).
-
----
-
-## Quick install
-
-### Dependencies (`requirements.txt`)
-
-- `requests`, `paramiko`, `pysnmp`, `pycryptodome`, `scapy`, `setuptools`
-- `telnetlib3` on Python ≥ 3.13
-
-### Clone and run
+## Quick Start
 
 ```bash
+# Clone the repository
 git clone https://github.com/mrhenrike/RouterXPL-Forge.git
 cd RouterXPL-Forge
-python3 -m venv .venv
-# Linux/macOS:
-source .venv/bin/activate
-# Windows:
-# .venv\Scripts\activate
-python3 -m pip install -r requirements.txt
-python3 rxf.py
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Launch the interactive shell
+python rxf.py
+
+# Or run a specific module non-interactively
+python rxf.py -m exploits/routers/dlink/dir_300_600_rce -s target 192.168.1.1
 ```
 
-### Environment diagnostics
+## Usage
 
-```bash
-python tools/env_doctor.py
+### Interactive Shell
+
+```
+rxf > use exploits/routers/dlink/dir_300_600_rce
+rxf (D-Link DIR-300 & DIR-600 RCE) > show options
+rxf (D-Link DIR-300 & DIR-600 RCE) > set target 192.168.1.1
+rxf (D-Link DIR-300 & DIR-600 RCE) > check
+rxf (D-Link DIR-300 & DIR-600 RCE) > run
 ```
 
----
+### Common Commands
 
-## Usage overview
+| Command | Description |
+|---------|-------------|
+| `use <module>` | Select a module |
+| `show options` | Display configurable options |
+| `show info` | Display module metadata and references |
+| `show devices` | List supported device types |
+| `set <option> <value>` | Configure an option |
+| `check` | Verify if target is vulnerable |
+| `run` | Execute the module |
+| `search <term>` | Search modules by keyword |
 
-### Interactive shell
+### AutoPwn Scanner
 
-After `python rxf.py`:
-
-```text
-help                          # global help (+ module help if one is loaded)
-use creds/generic/ssh_default # load module (slashes like paths)
-set target 192.168.0.1
-show options                  # editable options
-show info                     # module metadata
-check                         # check if target looks vulnerable (if implemented)
-run                           # execute
-back                          # unload module
-search exit                   # modules whose path contains "exit"
-search type=exploits vendor=linksys wrt
-exec uname -a                 # OS shell command
-exit                          # Ctrl+D also exits
+```
+rxf > use scanners/autopwn
+rxf (AutoPwn) > set target 192.168.1.0/24
+rxf (AutoPwn) > run
 ```
 
-**Search:** space-separated words are **AND**ed (all must appear in the module path). Filters: `type=`, `device=`, `language=`, `payload=`, `vendor=`.
+## Module Structure
 
-**Global options:** `setg name value` applies across modules; `unsetg name` removes.
-
-**Prompt:** environment variables `RXF_RAW_PROMPT` and `RXF_MODULE_PROMPT` (see `routerxpl/interpreter.py`).
-
-### Non-interactive mode
-
-```bash
-python rxf.py -m creds/generic/ssh_default -s "target 192.168.0.1" -s "port 22"
+```
+routerxpl/modules/
+├── creds/             # Credential testing (FTP, SSH, Telnet, HTTP, SNMP)
+│   ├── generic/       # Protocol-agnostic bruteforce and defaults
+│   └── routers/       # Vendor-specific default credentials
+├── exploits/          # Vulnerability exploitation
+│   ├── generic/       # Cross-vendor (Heartbleed, ShellShock)
+│   ├── routers/       # Router exploits by vendor
+│   ├── switches/      # Switch exploits (Cisco, D-Link, NETGEAR)
+│   └── soho_edge/     # SOHO edge device exploits
+├── scanners/          # Network scanning and AutoPwn
+├── payloads/          # Reverse/bind shells (multi-arch)
+├── encoders/          # Payload encoding (Base64, Hex)
+└── generic/           # CVE lookup, SNMP, UPnP, wordlist tools
 ```
 
-`-s` may repeat; each string is parsed like interactive `set`.
+## Requirements
 
-### Logs
+- Python 3.8+
+- Dependencies: `requests`, `paramiko`, `pysnmp`, `pycryptodome`, `scapy`, `colorama`
 
-Bootstrap logging writes to **`routerxpl.log`** (rotating log in the current working directory).
+## Legal Disclaimer
 
----
-
-## Full documentation (Wiki)
-
-Syntax, examples by module family, troubleshooting, and the module index:
-
-- **English (en-US, default):** [docs/wiki/en-US/README.md](docs/wiki/en-US/README.md)  
-- **Português (pt-BR):** [docs/wiki/pt-BR/README.md](docs/wiki/pt-BR/README.md)  
-- **Hub (both):** [docs/wiki/README.md](docs/wiki/README.md)
-
-To publish on **GitHub Wiki**, copy the chosen locale folder (or both) into the wiki repository (separate Git clone).
-
----
-
-## Other docs in the repo
-
-| Path | Contents |
-|------|----------|
-| [docs/README.md](docs/README.md) · [docs/README.pt-BR.md](docs/README.pt-BR.md) | Documentation hub (en-US + pt-BR) |
-| [docs/diagrams/architecture/](docs/diagrams/architecture/) | Attack-surface architecture (MikrotikAPI-BF style) + [PNGs](docs/img/architecture/) |
-| [docs/COVERAGE_MATRIX.md](docs/COVERAGE_MATRIX.md) | Coverage matrix and external intel (en-US body) |
-| [docs/FULL_CATALOG.md](docs/FULL_CATALOG.md) | Extended device/CVE-oriented catalog (en-US body) |
-| `routerxpl/resources/catalogs/` | JSON catalogs (market, Discord, extended CVE, etc.) |
-| `tools/report_market_priority_gaps.py` | Gap report vs market-priority catalog |
-| `tools/validate_market_priority_minimums.py` | Yearly minimum validation |
-| `tools/generate_coverage_matrix.py` | Regenerate matrix docs |
-| `tools/generate_full_catalog.py` | Regenerate `FULL_CATALOG` (footprint, sizes, module stats) |
-| `tools/refresh_cve_extended_catalog.py` | Regenerate merged `cve_extended_catalog.json` |
-| `tools/incorporate_third_party_poc_tree.py` | Vendor third-party PoC snapshots into `arsenal/pocs/incorporated_third_party/` |
-
----
-
-## Release notes — 3.5.0
-
-- **Wireless split:** All `generic/pcap/*`, `generic/bluetooth/*`, and `core/pcap` / `core/bluetooth` moved to [**WirelessXPL-Forge**](https://github.com/mrhenrike/WirelessXPL-Forge). New tools: `tools/bootstrap_wirelessxpl_forge.py`, `tools/trim_routerxpl_wireless_scope.py`, `tools/trim_firewallxpl_wireless_scope.py`.
-
-## Release notes — 3.4.9
-
-- **Repository split:** Perimeter-focused modules (Fortinet, WatchGuard, enterprise Cisco security appliances, pfSense/IPFire-style edge, **FortiGate SSL VPN scanner**, etc.) moved to [**FirewallXPL-Forge**](https://github.com/mrhenrike/FirewallXPL-Forge). RouterXPL-Forge keeps SOHO routers, switches, TAPs, and lighter edge scope; footprint and catalog docs were regenerated accordingly.
-- **Tools:** `tools/bootstrap_firewallxpl_forge.py` (clone + slim + rename to `firewallxpl`) and `tools/trim_routerxpl_edge_scope.py` (trim this tree after split).
-
-## Release notes — 3.4.8
-
-- **CVE catalog:** `cve_extended_catalog.json` now merges the static matrix, `external_tool_intel_sources.json` hints, CVE strings from `routerxpl/modules`, embedded `_EMBEDDED_CVES` scope, Discord `related_cves_hint`, and **PoC repository URLs** normalized from the vendored tg12 `cve_links.txt` (in-scope IDs only; does not load the whole global index into RAM at runtime).
-- **Docs:** `FULL_CATALOG` adds **on-disk footprint**, largest paths, and first-party `.py` counts (`tools/generate_full_catalog.py`).
-- **Offline Exploit-DB:** `generic/external/exploitdb_embedded_lookup` searches the bundled `files_exploits.csv` tree (no `searchsploit` CLI); legacy SearchSploit bridge modules were removed.
-- **Arsenal:** Curated third-party PoC mirrors live under `routerxpl/resources/arsenal/pocs/incorporated_third_party/` (GPLv2 Exploit-DB and selected repos); indexes in `routerxpl/resources/catalogs/`. **SOHO exploit catalog** bundle + `scanners/misc/soho_exploit_catalog_server` for local HTTP viewing in lab.
-
----
-
-## Tests and quality (contributors)
-
-```bash
-python tools/compat_smoke.py
-python tools/validate_market_priority_minimums.py
-python tools/generate_coverage_matrix.py
-```
-
----
-
-## Governance (bilingual files)
-
-| English (default) | Português (pt-BR) |
-|-------------------|---------------------|
-| [CONTRIBUTING.md](CONTRIBUTING.md) | [CONTRIBUTING.pt-BR.md](CONTRIBUTING.pt-BR.md) |
-| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | [CODE_OF_CONDUCT.pt-BR.md](CODE_OF_CONDUCT.pt-BR.md) |
-| [SECURITY.md](SECURITY.md) | [SECURITY.pt-BR.md](SECURITY.pt-BR.md) |
-| [CONTRIBUTORS.md](CONTRIBUTORS.md) | [CONTRIBUTORS.pt-BR.md](CONTRIBUTORS.pt-BR.md) |
-
----
+RouterXPL-Forge is intended for authorized security testing and research only. Use this tool exclusively on systems you own or have explicit written permission to test. Unauthorized access to computer systems is illegal. The authors assume no liability for misuse.
 
 ## License
 
-BSD — see [LICENSE](LICENSE). The license file may reference upstream; current maintenance is described here and in fork metadata.
+BSD License — see [LICENSE](LICENSE) for details.
 
 ---
 
-## Acknowledgments
-
-- [Riposte](https://github.com/fwkz/riposte) — interactive shell pattern
-- Community and authors of upstream [threat9/routersploit](https://github.com/threat9/routersploit)
-- Contributors listed in [CONTRIBUTORS.md](CONTRIBUTORS.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

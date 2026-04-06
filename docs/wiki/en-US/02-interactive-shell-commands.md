@@ -1,55 +1,42 @@
-# Interactive shell — core commands
+# Interactive Shell Commands
 
 **Language:** English (en-US). **pt-BR:** [../pt-BR/02-shell-interativo-comandos.md](../pt-BR/02-shell-interativo-comandos.md)
 
-The default prompt is configurable via `RXF_RAW_PROMPT` and `RXF_MODULE_PROMPT` in `routerxpl/interpreter.py`.
+## Command reference
 
-## Global commands
+| Command | Purpose |
+|---------|---------|
+| `use` | Load a module by path |
+| `back` | Leave the current module context |
+| `show options` | List module options |
+| `show info` | Show module metadata |
+| `show devices` | List known devices / targets catalog view (when applicable) |
+| `set` | Set an option for the current module |
+| `setg` | Set a global option |
+| `unset` | Clear a module-local option |
+| `unsetg` | Clear a global option |
+| `check` | Run a module-specific availability check when implemented |
+| `run` / `exploit` | Execute the loaded module |
+| `search` | Search modules by keyword |
+| `help` | Built-in help |
+| `exit` | Quit the shell |
 
-| Command | Description |
-|---------|-------------|
-| `help` | Global help; with a loaded module, also shows module commands |
-| `use <path>` | Load module using slashes: `use exploits/routers/dlink/multi_hnap_rce` |
-| `search ...` | Search modules ([03-search-and-listing.md](03-search-and-listing.md)) |
-| `show <sub>` | Global inventory ([03-search-and-listing.md](03-search-and-listing.md)) |
-| `exec <cmd>` | Run OS shell command (avoid untrusted input) |
-| `exit` | Quit (EOF / Ctrl+D also) |
-
-## With a module selected
-
-| Command | Description |
-|---------|-------------|
-| `run` / `exploit` | Execute current module |
-| `set option value` | Set option |
-| `setg option value` | Set **global** option |
-| `unsetg option` | Remove global option |
-| `show info` | `__info__` metadata |
-| `show options` / `show advanced` | Option sets |
-| `check` | Call `check()` if implemented |
-| `back` | Unload module |
-
-## `set` syntax
-
-First word is the option name; remainder is the value:
+## Example session
 
 ```text
-set target 192.168.0.10
-set port 443
-set ssl true
+RouterXPL-Forge > use exploits/routers/dlink/dir_300_600_rce
+RouterXPL-Forge (dir_300_600_rce) > show options
+RouterXPL-Forge (dir_300_600_rce) > set target 192.168.0.1
+RouterXPL-Forge (dir_300_600_rce) > check
+RouterXPL-Forge (dir_300_600_rce) > run
 ```
 
-Use `show options` to see exact option names per module.
-
-## Global options
-
-`setg` persists across modules until `unsetg`.
-
-## Keys
-
-- **Tab:** completion
-- **Ctrl+C** during `run`: interrupt attempt (module-dependent)
-- **Ctrl+D:** exit interpreter
+**Tab completion** is available for commands and module paths where the readline layer is active.
 
 ---
 
 [Wiki hub](../README.md)
+
+---
+
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

@@ -1,14 +1,14 @@
-# RouterXPL-Forge wiki (en-US)
+# RouterXPL-Forge Wiki (en-US)
 
-**Language:** English (United States) — **default** for this repository. **Português (pt-BR):** [../pt-BR/README.md](../pt-BR/README.md)
+**Language:** English (en-US). **Português (pt-BR):** [../pt-BR/README.md](../pt-BR/README.md)
 
-**Maintainer:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| [União Geek](https://github.com/Uniao-Geek)
+**Maintainer:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| União Geek
 
-Official usage documentation. Read on GitHub or copy into the **GitHub Wiki** (separate Git repository).
+Official usage documentation for the framework. Read on GitHub or copy into the **GitHub Wiki** (separate Git repository).
 
 ## Architecture diagrams (device classes)
 
-PNG gallery (MikrotikAPI-BF–style). Mermaid sources: [../../diagrams/architecture/README.md](../../diagrams/architecture/README.md).
+PNG gallery. Mermaid sources: [../../diagrams/architecture/README.md](../../diagrams/architecture/README.md).
 
 | SOHO router | Managed switch |
 |:---:|:---:|
@@ -26,24 +26,18 @@ PNG gallery (MikrotikAPI-BF–style). Mermaid sources: [../../diagrams/architect
 
 | Doc | Topics |
 |-----|--------|
-| [01-introduction-and-installation.md](01-introduction-and-installation.md) | Goals, legal scope, Python, `pip`, `env_doctor`, logs, architecture figure |
-| [02-interactive-shell-commands.md](02-interactive-shell-commands.md) | `use`, `set`, `setg`, `show`, `run`, `check`, `back`, `exit`, `help` |
-| [03-search-and-listing.md](03-search-and-listing.md) | `search`, filters, `show all/scanners/...` |
+| [01-introduction-and-installation.md](01-introduction-and-installation.md) | Introduction, scope, Python, install, diagnostics, logs |
+| [02-interactive-shell-commands.md](02-interactive-shell-commands.md) | Interactive commands and session flow |
+| [03-search-and-listing.md](03-search-and-listing.md) | `search`, `show`, listing modules and devices |
 | [04-non-interactive-mode.md](04-non-interactive-mode.md) | `rxf.py -m` / `-s`, automation |
-| [05-creds-modules.md](05-creds-modules.md) | Default creds and brute force |
-| [06-exploits-modules.md](06-exploits-modules.md) | Exploits, `check()`, common options |
-| [07-scanners-and-autopwn.md](07-scanners-and-autopwn.md) | `router_scan`, `autopwn`, FortiGate SSL-VPN scanner |
-| [08-generic-modules.md](08-generic-modules.md) | PCAP, CVE lookup, wordlists, SNMP, UPnP, BTLE |
+| [05-creds-modules.md](05-creds-modules.md) | Credential modules and options |
+| [06-exploits-modules.md](06-exploits-modules.md) | Exploit modules, `check`, layout |
+| [07-scanners-and-autopwn.md](07-scanners-and-autopwn.md) | Scanners and AutoPwn |
+| [08-generic-modules.md](08-generic-modules.md) | Generic cross-vendor modules |
 | [09-payloads-and-encoders.md](09-payloads-and-encoders.md) | Payloads and encoders |
-| [10-catalogs-and-tools.md](10-catalogs-and-tools.md) | JSON catalogs, `tools/` |
-| [11-troubleshooting.md](11-troubleshooting.md) | Common failures |
-| [Module path index (all locales)](../ANEXO-INDICE-MODULOS.md) | Full path list |
-
-## Regenerate the annex
-
-```bash
-python tools/gen_wiki_module_index.py
-```
+| [10-catalogs-and-tools.md](10-catalogs-and-tools.md) | JSON catalogs and `tools/` scripts |
+| [11-troubleshooting.md](11-troubleshooting.md) | Common failures and fixes |
+| [Module path index (all locales)](../ANEXO-INDICE-MODULOS.md) | Full module path list |
 
 ## See also
 
@@ -53,4 +47,4 @@ python tools/gen_wiki_module_index.py
 
 ---
 
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrique)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

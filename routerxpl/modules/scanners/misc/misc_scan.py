@@ -6,7 +6,8 @@ class Exploit(Exploit):
         "name": "Misc Scanner",
         "description": "Module that scans for misc devices vulnerablities and weaknesses.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "Misc Device",

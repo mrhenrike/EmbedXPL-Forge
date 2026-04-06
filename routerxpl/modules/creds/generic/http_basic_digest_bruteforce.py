@@ -11,11 +11,9 @@ class Exploit(HTTPClient):
         "description": "Module performs bruteforce attack against HTTP Basic/Digest Auth service. "
                        "If valid credentials are found, they are displayed to the user.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
-            "Alexander Yakovlev <https://github.com/toxydose>",  # upgrading to perform bruteforce attack against HTTP Digest Auth service
-        ),
-        "subcredits": (
-            "RouterXPL-Forge modifications by André Henrique (@mrhenrike) | União Geek",
+            "Marcin Bury",
+            "Alexander Yakovlev <https://github.com/toxydose>",  # upgrading to perform bruteforce attack against HTTP Digest Auth service,
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "Multiple devices",

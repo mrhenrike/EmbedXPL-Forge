@@ -7,7 +7,8 @@ class Payload(PHPBindTCP):
         "name": "PHP Bind TCP One-Liner",
         "description": "Creates interactive tcp bind shell by using php one-liner.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
     }
 

@@ -1,45 +1,27 @@
 # Payloads e encoders
 
-**Idioma:** pt-BR. **English (en-US):** [../en-US/09-payloads-and-encoders.md](../en-US/09-payloads-and-encoders.md)
+**Idioma: Português (pt-BR)**. **en-US:** [../en-US/09-payloads-and-encoders.md](../en-US/09-payloads-and-encoders.md)
 
-## Payloads — `payloads/*`
+## Payloads
 
-Geram **trechos de código** ou comandos para *bind* / *reverse shell* em várias arquiteturas e linguagens *one-liner*.
+Há **32** módulos de payload cobrindo **x86**, **x64**, **armle**, **mipsbe**, **mipsle**, além das categorias **`cmd`**, **`perl`**, **`php`** e **`python`** para embutir em exploits ou testes manuais.
 
-Categorias típicas (veja anexo):
-
-- **Arquiteturas:** `armle`, `mipsbe`, `mipsle`, `x86`, `x64`
-- **Linha de comando:** `cmd/` — netcat, bash, perl, php, python, awk, …
-- **Linguagens embutidas:** `python/`, `perl/`, `php/`
-
-### Uso típico no framework
-
-Muitos *workflows* carregam um payload como módulo, definem `lhost`/`lport` (quando aplicável) e copiam a saída para outra ferramenta ou módulo de entrega.
+## Exemplo de uso
 
 ```text
-use payloads/python/reverse_tcp
-show options
-set lhost 192.168.56.1
-set lport 4444
-run
+RouterXPL-Forge > use payloads/cmd/bind_tcp
+RouterXPL-Forge (bind_tcp) > show options
+RouterXPL-Forge (bind_tcp) > run
 ```
 
-**Leia `show info`** — *payloads* podem ser detectados por EDR; use só em ambiente de teste.
+## Encoders
 
-## Encoders — `encoders/<lang>/*`
-
-Transformam representações de *payload* (Base64, hex, URL, ROT13, …) nas linguagens:
-
-- `encoders/python/`
-- `encoders/php/`
-- `encoders/perl/`
-
-```text
-use encoders/python/base64
-show options
-run
-```
+**13** módulos encoder oferecem transformações **Python**, **PHP** e **Perl** (incluindo variantes **base64** e **hex**) para ofuscar ou transportar bytes de payload.
 
 ---
 
-[Wiki hub](../README.md)
+[Hub wiki](../README.md)
+
+---
+
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

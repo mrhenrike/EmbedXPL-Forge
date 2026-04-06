@@ -6,13 +6,13 @@ with open("README.md", "r") as f:
 
 setup(
     name="routerxpl",
-    version="1.0.0b0",
-    description="Exploitation Framework for Embedded Devices",
+    version="0.4.0b0",
+    description="Network Device Security Assessment Framework",
     long_description=long_description,
-    author="Threat9",
-    author_email="marcin@threat9.com",
-    url="https://www.threat9.com",
-    download_url="https://github.com/threat9/routerxpl/",
+    author="André Henrique",
+    author_email="andre@uniaogeek.com.br",
+    url="https://github.com/mrhenrike/RouterXPL-Forge",
+    download_url="https://github.com/mrhenrike/RouterXPL-Forge",
     packages=find_packages(),
     include_package_data=True,
     scripts=('rxf.py',),
@@ -25,6 +25,8 @@ setup(
         "pycryptodome",
         "setuptools",
         "telnetlib3; python_version >= '3.13'",
+        "colorama",
+        "scapy",
     ],
     extras_require={
         "tests": [
@@ -40,6 +42,7 @@ setup(
     },
     classifiers=[
         "Operating System :: POSIX",
+        "Operating System :: Microsoft :: Windows",
         "Environment :: Console",
         "Environment :: Console :: Curses",
         "License :: OSI Approved :: BSD License",

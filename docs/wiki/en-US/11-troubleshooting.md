@@ -2,46 +2,34 @@
 
 **Language:** English (en-US). **pt-BR:** [../pt-BR/11-troubleshooting.md](../pt-BR/11-troubleshooting.md)
 
-## `ModuleNotFoundError: routerxpl`
+## ImportError on startup
 
-Install deps and run from repo root, or `pip install -e .`.
+Re-run `python -m pip install -r requirements.txt` inside the active virtual environment. If a single optional stack fails, install its extra dependency (for example **Scapy** for PCAP-oriented generic modules).
 
-## `stdin is not a TTY`
+## Telnet on Python 3.13+
 
-Use non-interactive mode: `python rxf.py -m ... -s "..."`.
+The standard library removed `telnetlib`; install and use **`telnetlib3`** as described in `requirements.txt` for Telnet-oriented modules.
 
-## Paramiko / SSL issues
+## Scapy errors
 
-Recreate venv; upgrade `pip`; match Python and wheel support.
+Confirm **Scapy** is installed and that live capture prerequisites (for example **Npcap** on Windows) are present when a module performs raw capture.
 
-## SNMP timeouts
+## No colors on Windows
 
-Firewall UDP/161, wrong community, SNMP disabled on device.
+Install **`colorama`** (pulled via `requirements.txt`) so ANSI colors render in standard consoles.
 
-## Python 3.13+ Telnet
+## Module not found after moving files
 
-Ensure `telnetlib3` is installed.
+Run from the repository root and ensure `PYTHONPATH` is not overriding package discovery. Prefer `python rxf.py` without relocating `routerxpl/`.
 
-## Scapy / PCAP `ImportError`
+## Permission denied on Linux
 
-`pip install scapy`. On Windows, live capture may need Npcap; offline reads often work without.
-
-## Windows readline
-
-Tab completion may differ from Linux; commands still work typed fully.
-
-## AutoPwn overloads target
-
-Lower `threads`, use `paranoid`/`polite` template, tune `module_timeout_s`.
-
-## Unknown command
-
-Ensure you are at the `rxf` prompt; commands are case-sensitive.
-
-## Large `routerxpl.log`
-
-Delete or rotate; never commit secrets.
+Raw sockets and some capture paths require elevated capability or `sudo` where the OS mandates it—use the least privilege consistent with your engagement rules.
 
 ---
 
 [Wiki hub](../README.md)
+
+---
+
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

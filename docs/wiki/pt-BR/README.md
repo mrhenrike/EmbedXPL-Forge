@@ -1,22 +1,22 @@
 # Wiki RouterXPL-Forge (pt-BR)
 
-**Idioma:** Português (Brazil). **English (en-US, default):** [../en-US/README.md](../en-US/README.md)
+**Idioma: Português (pt-BR)**. **English (en-US):** [../en-US/README.md](../en-US/README.md)
 
-**Mantenedor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| [União Geek](https://github.com/Uniao-Geek)
+**Mantenedor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| União Geek
 
-Documentação de uso do framework. Pode ser lida no GitHub ou copiada para o repositório **GitHub Wiki** (clone Git separado).
+Documentação de uso do framework. Leia no GitHub ou copie para o repositório **GitHub Wiki** (clone Git separado).
 
-## Diagramas de arquitetura (por classe de dispositivo)
+## Diagramas de arquitetura (classes de dispositivo)
 
-Galeria PNG (estilo MikrotikAPI-BF). Fontes Mermaid: [../../diagrams/architecture/README.md](../../diagrams/architecture/README.md).
+Galeria PNG. Fontes Mermaid: [../../diagrams/architecture/README.md](../../diagrams/architecture/README.md).
 
-| Router SOHO | Switch gerido |
+| Router SOHO | Switch gerenciado |
 |:---:|:---:|
 | ![SOHO](../../img/architecture/rxf_arch_router_soho.png) | ![Switch](../../img/architecture/rxf_arch_switch_l2l3.png) |
 
 | NGFW / UTM | CPE ISP |
 |:---:|:---:|
-| ![NGFW](../../img/architecture/rxf_arch_ngfw_utm.png) | ![CPE](../../img/architecture/rxf_arch_isp_cpe.png) |
+| ![NGFW](../../img/architecture/rxf_arch_ngfw_utm.png) | ![CPE ISP](../../img/architecture/rxf_arch_isp_cpe.png) |
 
 | Edge misto |
 |:---:|
@@ -26,30 +26,24 @@ Galeria PNG (estilo MikrotikAPI-BF). Fontes Mermaid: [../../diagrams/architectur
 
 | Documento | Conteúdo |
 |-----------|----------|
-| [01-introducao-e-instalacao.md](01-introducao-e-instalacao.md) | Objetivos, escopo legal, Python, `pip`, `env_doctor`, logs, figura de arquitetura |
-| [02-shell-interativo-comandos.md](02-shell-interativo-comandos.md) | `use`, `set`, `setg`, `show`, `run`, `check`, `back`, `exit`, `help` |
-| [03-busca-e-listagem.md](03-busca-e-listagem.md) | `search`, filtros, `show all/scanners/...` |
+| [01-introducao-e-instalacao.md](01-introducao-e-instalacao.md) | Introdução, escopo, Python, instalação, diagnóstico, logs |
+| [02-shell-interativo-comandos.md](02-shell-interativo-comandos.md) | Comandos interativos e fluxo de sessão |
+| [03-busca-e-listagem.md](03-busca-e-listagem.md) | `search`, `show`, listagem de módulos e devices |
 | [04-modo-nao-interativo.md](04-modo-nao-interativo.md) | `rxf.py -m` / `-s`, automação |
-| [05-modulos-creds.md](05-modulos-creds.md) | Credenciais e brute force |
-| [06-modulos-exploits.md](06-modulos-exploits.md) | Exploits, `check()`, opções comuns |
-| [07-scanners-e-autopwn.md](07-scanners-e-autopwn.md) | `router_scan`, `autopwn`, FortiGate SSL-VPN |
-| [08-modulos-generic.md](08-modulos-generic.md) | PCAP, CVE lookup, wordlists, SNMP, UPnP, BTLE |
+| [05-modulos-creds.md](05-modulos-creds.md) | Módulos de credenciais e opções |
+| [06-modulos-exploits.md](06-modulos-exploits.md) | Módulos de exploit, `check`, layout |
+| [07-scanners-e-autopwn.md](07-scanners-e-autopwn.md) | Scanners e AutoPwn |
+| [08-modulos-generic.md](08-modulos-generic.md) | Módulos genéricos multi-vendor |
 | [09-payloads-e-encoders.md](09-payloads-e-encoders.md) | Payloads e encoders |
-| [10-catalogos-e-ferramentas.md](10-catalogos-e-ferramentas.md) | Catálogos JSON, `tools/` |
-| [11-troubleshooting.md](11-troubleshooting.md) | Erros frequentes |
-| [Anexo: índice de módulos](../ANEXO-INDICE-MODULOS.md) | Lista completa de caminhos |
-
-## Regenerar o anexo
-
-```bash
-python tools/gen_wiki_module_index.py
-```
+| [10-catalogos-e-ferramentas.md](10-catalogos-e-ferramentas.md) | Catálogos JSON e scripts em `tools/` |
+| [11-troubleshooting.md](11-troubleshooting.md) | Falhas comuns e correções |
+| [Anexo: índice de módulos](../ANEXO-INDICE-MODULOS.md) | Lista completa de caminhos de módulos |
 
 ## Ver também
 
-- [README.pt-BR.md](../../README.pt-BR.md)
-- [CONTRIBUTING.pt-BR.md](../../CONTRIBUTING.pt-BR.md)
-- [docs/COVERAGE_MATRIX.md](../COVERAGE_MATRIX.md)
+- [README.md](../../../README.md)
+- [CONTRIBUTING.md](../../../CONTRIBUTING.md)
+- [docs/COVERAGE_MATRIX.md](../../COVERAGE_MATRIX.md)
 
 ---
 

@@ -1,40 +1,39 @@
-# `generic` modules (CVE, wordlist, SNMP, UPnP, external)
+# Generic Modules
 
 **Language:** English (en-US). **pt-BR:** [../pt-BR/08-modulos-generic.md](../pt-BR/08-modulos-generic.md)
 
-## CVE — `generic/cve/cve_lookup`
+## Module map
 
-Queries the **embedded** CVE database.
+| Module | Role |
+|--------|------|
+| `cve_lookup` | Map CVE identifiers to local metadata |
+| `snmp_bruteforce` | SNMP community guessing |
+| `ssdp_msearch` | SSDP `M-SEARCH` discovery |
+| `heartbleed` | OpenSSL Heartbleed-oriented check |
+| `shellshock` | CGI / Bash `shellshock` pattern tests |
+| `wordlists` | Helpers around bundled wordlists |
+
+## CVE lookup example
 
 ```text
-use generic/cve/cve_lookup
-set vendor cisco
-set product rv320
-run
+RouterXPL-Forge > use generic/cve_lookup
+RouterXPL-Forge (cve_lookup) > set cve CVE-2014-0160
+RouterXPL-Forge (cve_lookup) > run
 ```
 
-Options: `banner`, `product`, `version`, `remote_only`, `show_physical`.
+## UPnP discovery example
 
-## Exploit-DB (offline CSV) — `generic/external/exploitdb_embedded_lookup`
+```text
+RouterXPL-Forge > use generic/ssdp_msearch
+RouterXPL-Forge (ssdp_msearch) > run
+```
 
-Searches **`files_exploits.csv`** inside the bundled `exploit-database__exploitdb` tree under `routerxpl/resources/arsenal/pocs/incorporated_third_party/`. **No** `searchsploit` or external Exploit-DB CLI. Preserve GPLv2 notices when redistributing mirror contents.
-
-## 802.11 / BLE / PCAP (moved)
-
-All **offline Wi‑Fi PCAP**, **WPA/WPA3 analysis**, and **Bluetooth LE** modules live in [**WirelessXPL-Forge**](https://github.com/mrhenrike/WirelessXPL-Forge) (private lab repo). RouterXPL keeps router/switch-oriented `generic` utilities only.
-
-## Wordlist — `wordlist_generator`
-
-Parameterized list generation for feeding bruteforce modules.
-
-## SNMP — `snmp_trap_listener`
-
-Trap listener for lab scenarios.
-
-## UPnP — `ssdp_msearch`
-
-SSDP discovery on LAN.
+Adjust options with `show options` before execution.
 
 ---
 
 [Wiki hub](../README.md)
+
+---
+
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

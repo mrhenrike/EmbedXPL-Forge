@@ -8,7 +8,8 @@ class Encoder(BaseEncoder):
         "name": "PHP Hex Encoder",
         "description": "Module encodes PHP payload to Hex format.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
     }
 

@@ -12,7 +12,8 @@ class Payload(BindTCPPayloadMixin, GenericPayload):
         "name": "Python Bind TCP",
         "description": "Creates interactive tcp bind shell by using python.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
     }
 

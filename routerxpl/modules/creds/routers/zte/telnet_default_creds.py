@@ -8,7 +8,8 @@ class Exploit(TelnetDefault):
         "description": "Module performs dictionary attack against ZTE Router Telnet service. "
                        "If valid credentials are found, they are displayed to the user.",
         "authors": (
-            "Marcin Bury <marcin[at]threat9.com>",  # routerxpl module
+            "Marcin Bury",
+            "André Henrique (@mrhenrike)",
         ),
         "devices": (
             "ZTE Router",
@@ -19,4 +20,4 @@ class Exploit(TelnetDefault):
     port = OptPort(23, "Target Telnet port")
 
     threads = OptInteger(1, "Number of threads")
-    defaults = OptWordlist("admin:admin,ZXDSL:ZXDSL,user:user,on:on,root:Zte521,root:W!n0&oO7.", "User:Pass or file with default credentials (file://)")
+    defaults = OptWordlist("file://wordlists/vendors/zte_defaults.txt", "User:Pass or file with default credentials (file://)")

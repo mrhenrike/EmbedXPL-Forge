@@ -282,28 +282,24 @@ class RouterXPLInterpreter(BaseInterpreter):
 
         self.__parse_prompt()
 
-        self.banner = """ ______            _            _____       _       _ _
- | ___ \\          | |          /  ___|     | |     (_) |
- | |_/ /___  _   _| |_ ___ _ __\\ `--. _ __ | | ___  _| |_
- |    // _ \\| | | | __/ _ \\ '__|`--. \\ '_ \\| |/ _ \\| | __|
- | |\\ \\ (_) | |_| | ||  __/ |  /\\__/ / |_) | | (_) | | |_
- \\_| \\_\\___/ \\__,_|\\__\\___|_|  \\____/| .__/|_|\\___/|_|\\__|
-                                     | |
-       Exploitation Framework for    |_|    RouterXPL-Forge
-            Embedded Devices
+        total_modules = sum(self.modules_count.values())
+        self.banner = """
+ \033[96m ____  __  __ _____ \033[0m
+ \033[96m|  _ \\ \\ \\/ /|  ___|\033[0m   \033[1mRouterXPL-Forge\033[0m v0.4.0-beta
+ \033[96m| |_) | \\  / | |_   \033[0m   Network Device Security Assessment Framework
+ \033[96m|  _ <  /  \\ |  _|  \033[0m
+ \033[96m|_| \\_\\/_/\\_\\|_|    \033[0m   \033[90mAuthor: André Henrique (@mrhenrike) | União Geek\033[0m
 
- Codename   : I Knew You Were Trouble
- Version    : 3.4.7
- Maintained : André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
- Upstream   : threat9/routersploit (legacy lineage)
+ \033[94mTarget scope:\033[0m Routers · Switches L2/L3 · TAPs · SOHO Edge
 
- Exploits: {exploits_count} Scanners: {scanners_count} Creds: {creds_count} Generic: {generic_count} Payloads: {payloads_count} Encoders: {encoders_count}
-""".format(exploits_count=self.modules_count["exploits"],
-           scanners_count=self.modules_count["scanners"],
-           creds_count=self.modules_count["creds"],
-           generic_count=self.modules_count["generic"],
-           payloads_count=self.modules_count["payloads"],
-           encoders_count=self.modules_count["encoders"])
+ \033[92m[modules]\033[0m {total} total — Exploits: {exploits} | Scanners: {scanners} | Creds: {creds} | Generic: {generic} | Payloads: {payloads} | Encoders: {encoders}
+""".format(total=total_modules,
+           exploits=self.modules_count["exploits"],
+           scanners=self.modules_count["scanners"],
+           creds=self.modules_count["creds"],
+           generic=self.modules_count["generic"],
+           payloads=self.modules_count["payloads"],
+           encoders=self.modules_count["encoders"])
 
     def __parse_prompt(self):
         raw_prompt_default_template = "\001\033[4m\002{host}\001\033[0m\002 > "
@@ -631,6 +627,28 @@ class RouterXPLInterpreter(BaseInterpreter):
 
     def _show_creds(self, *args, **kwargs):
         self.__show_modules('creds')
+
+    def _show_devices(self, *args, **kwargs):
+        """Display supported device types and vendor coverage."""
+        from routerxpl.core.exploit.printer import print_table, print_info
+        vendors = set()
+        for mod in self.modules:
+            parts = mod.split(".")
+            if len(parts) >= 3:
+                vendors.add(parts[2])
+        vendors.discard("generic")
+        vendors.discard("multi")
+
+        device_types = [
+            ("Routers", "SOHO routers, enterprise gateways, CPE", "Primary"),
+            ("Switches L2/L3", "Managed and unmanaged network switches", "Expanding"),
+            ("TAPs", "Network TAP devices", "Planned"),
+            ("SOHO Edge", "Small office / home office edge appliances", "Expanding"),
+        ]
+        headers = ("Device Type", "Description", "Coverage")
+        print_table(headers, *device_types)
+        print_info("  Vendors covered: {}".format(", ".join(sorted(vendors))))
+        print_info()
 
     def command_show(self, *args, **kwargs):
         sub_command = args[0]

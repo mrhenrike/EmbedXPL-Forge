@@ -1,34 +1,26 @@
-# Non-interactive (batch) CLI
+# Non-Interactive Mode
 
 **Language:** English (en-US). **pt-BR:** [../pt-BR/04-modo-nao-interativo.md](../pt-BR/04-modo-nao-interativo.md)
 
-## Syntax
+## Usage
 
 ```bash
-python rxf.py -m <module/path> [-s "option value"] ...
+python rxf.py -m <module_path> -s <option> <value> [-s <option> <value> ...]
 ```
 
-- `-m` / `--module`: module path (internal normalization accepts slashes).
-- `-s` / `--set`: repeat; each string parsed like interactive `set` (first word = option name).
-
-## Example
+## Examples
 
 ```bash
-python rxf.py -m creds/generic/ssh_default -s "target 192.168.0.50" -s "port 22" -s "threads 4"
+python rxf.py -m creds/routers/dlink/telnet_default -s target 192.168.1.1
+python rxf.py -m exploits/routers/dlink/dir_300_600_rce -s target 192.168.0.1 -s port 80
 ```
 
-Flow: `use` → each `set` → one `run`/`exploit`.
-
-## Help
-
-```bash
-python rxf.py -h
-```
-
-## Pipelines
-
-Redirect output carefully — it may contain credentials or banners. There is no universal JSON mode.
+Repeat `-s` for each option. This mode suits **automation**, CI-style smoke checks, and scripted assessments on systems you are allowed to test.
 
 ---
 
 [Wiki hub](../README.md)
+
+---
+
+> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

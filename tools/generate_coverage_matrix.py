@@ -618,98 +618,6 @@ def _market_priority_section(records: List[ModuleRecord], repo_root: Path) -> st
     return "\n".join(lines)
 
 
-def _external_intel_section(repo_root: Path) -> str:
-    """Render external intelligence sources currently tracked in matrix."""
-    source_file = repo_root / "routerxpl" / "resources" / "catalogs" / "external_tool_intel_sources.json"
-    if not source_file.exists():
-        return "## External Tooling and Code Intelligence\n\n- No external intelligence catalog found."
-
-    payload = json.loads(source_file.read_text(encoding="utf-8"))
-    sources = payload.get("sources", [])
-    lines = [
-        "## External Tooling and Code Intelligence",
-        "",
-        "| ID | Name | Type | Domain | Scope Alignment | Integration Status | Test Matrix | Source |",
-        "|---|---|---|---|---|---|---|---|",
-    ]
-    for item in sources:
-        lines.append(
-            "| {} | {} | {} | {} | {} | {} | {} | {} |".format(
-                item.get("id", ""),
-                item.get("name", ""),
-                item.get("type", ""),
-                item.get("domain", ""),
-                item.get("scope_alignment", ""),
-                item.get("integration_status", ""),
-                item.get("test_matrix_status", ""),
-                item.get("url", ""),
-            )
-        )
-    return "\n".join(lines)
-
-
-def _discord_requested_section(records: List[ModuleRecord], repo_root: Path) -> str:
-    """Render Discord-requested devices/vendors/models coverage snapshot."""
-    catalog_path = repo_root / "routerxpl" / "resources" / "catalogs" / "discord_requested_devices.json"
-    if not catalog_path.exists():
-        return "## Discord Requested Devices Coverage\n\n- Discord requested catalog not found."
-
-    payload = json.loads(catalog_path.read_text(encoding="utf-8"))
-    entries = payload.get("entries", [])
-
-    lines = [
-        "## Discord Requested Devices Coverage",
-        "",
-        "| Vendor | Model | Segment | Vendor Covered | Model Keyword Hits | Exploits | Creds | Scanners | Attack Classes | Context |",
-        "|---|---|---|---|---:|---:|---:|---:|---|---|",
-    ]
-
-    for entry in entries:
-        vendor = str(entry.get("vendor", ""))
-        model = str(entry.get("model", ""))
-        segment = str(entry.get("segment", ""))
-        context = str(entry.get("context", "")).replace("|", "/")
-        vendor_norm = _normalize_vendor_name(vendor)
-        keywords = [str(item).lower() for item in entry.get("match_keywords", [])]
-
-        vendor_records = []
-        for record in records:
-            rec_vendor_norm = _normalize_vendor_name(record.vendor)
-            if vendor_norm == "generic":
-                if rec_vendor_norm in {"generic", "multi", "misc"}:
-                    vendor_records.append(record)
-            elif rec_vendor_norm == vendor_norm:
-                vendor_records.append(record)
-
-        keyword_hits = 0
-        for rec in vendor_records:
-            blob = "{} {} {}".format(rec.module_path.lower(), rec.module_name.lower(), rec.description.lower())
-            if any(_keyword_matches(blob, keyword) for keyword in keywords):
-                keyword_hits += 1
-
-        exploit_count = sum(1 for r in vendor_records if r.module_type == "exploits")
-        creds_count = sum(1 for r in vendor_records if r.module_type == "creds")
-        scanner_count = sum(1 for r in vendor_records if r.module_type == "scanners")
-        attack_classes = sorted({attack for rec in vendor_records for attack in rec.attack_classes})
-
-        lines.append(
-            "| {} | {} | {} | {} | {} | {} | {} | {} | {} | {} |".format(
-                vendor,
-                model,
-                segment,
-                "yes" if vendor_records else "no",
-                keyword_hits,
-                exploit_count,
-                creds_count,
-                scanner_count,
-                ", ".join(attack_classes) if attack_classes else "-",
-                context,
-            )
-        )
-
-    return "\n".join(lines)
-
-
 def _architecture_inventory_section(repo_root: Path) -> str:
     """Render architecture inventory snapshot from arsenal index."""
     index_path = repo_root / "routerxpl" / "resources" / "catalogs" / "arsenal_index.json"
@@ -878,9 +786,7 @@ def _build_markdown(records: List[ModuleRecord], matrix: Dict[Tuple[str, str], C
         "",
         _market_priority_section(records, Path(__file__).resolve().parent.parent),
         "",
-        _external_intel_section(Path(__file__).resolve().parent.parent),
         "",
-        _discord_requested_section(records, Path(__file__).resolve().parent.parent),
         "",
         _architecture_inventory_section(Path(__file__).resolve().parent.parent),
         "",
@@ -944,9 +850,7 @@ def _build_plain_text(records: List[ModuleRecord], matrix: Dict[Tuple[str, str],
         "",
         _market_priority_section(records, Path(__file__).resolve().parent.parent),
         "",
-        _external_intel_section(Path(__file__).resolve().parent.parent),
         "",
-        _discord_requested_section(records, Path(__file__).resolve().parent.parent),
         "",
         _architecture_inventory_section(Path(__file__).resolve().parent.parent),
         "",
