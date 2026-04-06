@@ -8,3 +8,5 @@ setuptools
 telnetlib3; python_version >= "3.13"
 colorama
 aiohttp>=3.9
+numpy>=1.24
+psutil>=5.9
