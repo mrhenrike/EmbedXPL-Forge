@@ -1,6 +1,6 @@
 import os
 import time
-from concurrent.futures import ThreadPoolExecutor, TimeoutError
+from concurrent.futures import TimeoutError
 
 from routerxpl.core.exploit import *
 from routerxpl.core.exploit.exploit import Protocol
@@ -8,6 +8,7 @@ from routerxpl.core.exploit.module_target_scope import (
     is_module_permitted_for_class,
     normalize_target_class,
 )
+from routerxpl.core.pool import SmartPool, PoolStrategy
 from routerxpl.core.ml.advisor import AttackAdvisor, advisor_context_from_autopwn
 from routerxpl.core.ml.gpu import gpu_capability_summary
 
@@ -124,6 +125,7 @@ class Exploit(Exploit):
         self.creds = []
         self.not_verified = []
         self._active_profile = self.TIMING_PROFILES["t3"]
+        self._timeout_pool = None
         self._exploits_directories = [os.path.join(utils.MODULES_DIR, "exploits", module) for module in self.modules]
         self._creds_directories = [os.path.join(utils.MODULES_DIR, "creds", module) for module in self.modules]
 
@@ -231,24 +233,32 @@ class Exploit(Exploit):
 
         return response
 
+    def _ensure_timeout_pool(self) -> SmartPool:
+        """Lazily create a shared SmartPool for module timeout execution."""
+        if self._timeout_pool is None:
+            workers = max(2, self._active_profile.get("threads", 8))
+            self._timeout_pool = SmartPool(
+                max_workers=workers,
+                strategy=PoolStrategy.THREADS,
+                thread_name_prefix="rxf-autopwn",
+            )
+        return self._timeout_pool
+
     def _run_with_timeout(self, fn):
+        """Execute fn with timeout using the shared SmartPool."""
         timeout = int(self.module_timeout_s)
         if timeout <= 0:
             return fn()
 
-        executor = ThreadPoolExecutor(max_workers=1)
-        future = executor.submit(fn)
+        pool = self._ensure_timeout_pool()
+        future = pool.submit(fn)
         try:
             return future.result(timeout=timeout)
         except TimeoutError:
             future.cancel()
-            executor.shutdown(wait=False, cancel_futures=True)
             raise RuntimeError(
                 "Module execution timed out after {}s (set module_timeout_s=0 to disable)".format(timeout)
             )
-        finally:
-            if not future.cancelled():
-                executor.shutdown(wait=False, cancel_futures=True)
 
     def run(self):
         self.vulnerabilities = []
