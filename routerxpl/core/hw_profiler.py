@@ -419,7 +419,9 @@ class HWProfiler:
             for i in range(torch.cuda.device_count()):
                 name = torch.cuda.get_device_name(i)
                 props = torch.cuda.get_device_properties(i)
-                vram = int(props.total_mem / (1024 * 1024))
+                # PyTorch >=2.11 renamed total_mem -> total_memory
+                raw_mem = getattr(props, "total_memory", None) or getattr(props, "total_mem", 0)
+                vram = int(raw_mem / (1024 * 1024))
                 cc = "{}.{}".format(props.major, props.minor)
                 gpu = GPUDevice(
                     name=name, vendor="nvidia", vram_mb=vram,

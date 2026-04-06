@@ -67,7 +67,9 @@ class CUDABackend(ComputeBackend):
         torch = _try_torch()
         if torch:
             dev = torch.cuda.get_device_name(0)
-            vram = torch.cuda.get_device_properties(0).total_mem // (1024 * 1024)
+            props = torch.cuda.get_device_properties(0)
+            raw_mem = getattr(props, "total_memory", None) or getattr(props, "total_mem", 0)
+            vram = raw_mem // (1024 * 1024)
             return "CUDA [PyTorch] {} ({}MB)".format(dev, vram)
         cupy = _try_cupy()
         if cupy:
