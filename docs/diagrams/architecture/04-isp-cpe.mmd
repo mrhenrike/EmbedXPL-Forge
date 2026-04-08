@@ -1,28 +1,38 @@
-%% RouterXPL-Forge — ISP CPE / residential gateway (en-US)
+%% RouterXPL-Forge — ISP CPE / GPON ONT residential gateway (en-US)
 flowchart TB
-  CORE(("ISP CPE modem/router<br/>Broadcom/ECONET SoC<br/>Firmware from ISP + OEM"))
+  CORE(("ISP CPE / GPON ONT\nHuawei EchoLife / OptiXstar\nDopra Linux · BBSP/ASP stack"))
 
-  DOCSIS["DOCSIS / PON optics<br/>◐ L1/L2 — out of RXF process scope"]
+  GPON["GPON/XGS-PON uplink\n⚠ OMCI channel — ISP-controlled\nOLT authentication via SN/LOID"]
+  TR69["TR-069 / CWMP (ACS)\n⚠ ISP remote provisioning\nPort 37443 — management plane"]
+  WAN["WAN / PPPoE / IPoE\n✓ PPPoE username exposed via\nauthenticated ASP endpoint"]
 
-  TR69["TR-069 / CWMP from ACS<br/>◐ no dedicated ACS simulator in Forge"]
+  WEBUI["Web Management UI (HTTP :80)\n✓ Base64 creds over HTTP (no TLS)\n✓ Static CSRF token (non-validated)\n✓ CheckPwdNotLogin.asp user enum\n✓ dealDataWithFun() eval-based JS\n✓ Epuser session kick (DoS)\n✓ MdfPwdNormalNoLg.cgi pre-auth\n✓ eg8145x6_autopwn — 9-phase chain"]
 
-  LAN["LAN Wi‑Fi + DHCP<br/>✓ same as SOHO vectors"]
+  BRUTEFORCE["Brute-force / Default Creds\n✓ Rate-limit: 3 attempts then lock ~60s\n✓ Bypass: session rotation per user\n✓ ISP wordlist: Epuser/Epadmin/telecomadmin\n✓ huawei_defaults.txt (50+ entries)"]
 
-  HTTP["Remote admin HTTP<br/>✓ Technicolor / ZTE / Huawei style exploits"]
+  UPNP["UPnP IGD (port 49652)\n✓ AddPortMapping without auth\n✓ GetExternalIPAddress\n✓ ForceTermination (WAN DoS)\n✓ Event SUBSCRIBE accepted\n✓ DNS rebinding vector\n✓ igd_exploit.py module"]
 
-  SSH["SSH / Telnet sometimes disabled<br/>✓ when open — creds"]
+  SNMP["SNMP (UDP :161)\n◐ community string scan\n✓ ssdp_msearch.py / snmp module"]
 
-  SNMP["SNMP<br/>✓ when exposed"]
+  TELNET["Telnet / SSH (:22/:23)\n◐ filtered by ISP firewall\n✓ Enable via hw_ctree.xml config mod\n✓ root:adminHW after config patch"]
 
-  GPON["OMCI / GPON ONU — ◐ limited"]
+  CONFIG["Config File (hw_ctree.xml)\n◐ requires auth or physical\n✓ Universal AES decrypt key available\n✓ eg8145x6_config_decrypt.py"]
 
-  CVE["CVE-class: config disclosure • DNS hijack via CSRF • RCE in HTTP<br/>✓ isp_cpe + router overlap in module_target_scope"]
+  PHYSICAL["Physical Access — UART/JTAG\n⚠ disassembly required\n✓ documented in wiki page 12\n✓ root shell on Dopra Linux"]
 
-  DOCSIS --- CORE
+  WIFI["Wi-Fi SSIDs (2.4G + 5G)\n✓ PSK in JS (Epuser auth req.)\n✓ Accessible via simplewificfg.asp\n→ WirelessXPL-Forge for OTA attacks\n✓ eg8145x6_wifi_credential_extractor.py"]
+
+  CSRF["CSRF Attack Surface\n✓ Static token = forgeable\n✓ DNS poisoning via CSRF\n✓ Password change via CSRF\n✓ eg8145x6_csrf_payload_generator.py\n✓ eg8145x6_dns_poison_csrf.py"]
+
+  GPON --- CORE
   TR69 --- CORE
-  LAN --- CORE
-  CORE --- HTTP
-  CORE --- SSH
+  WAN --- CORE
+  CORE --- WEBUI
+  CORE --- UPNP
   CORE --- SNMP
-  CORE --- GPON
-  HTTP --- CVE
+  CORE --- TELNET
+  CORE --- WIFI
+  WEBUI --- BRUTEFORCE
+  WEBUI --- CSRF
+  WEBUI --- CONFIG
+  CORE --- PHYSICAL

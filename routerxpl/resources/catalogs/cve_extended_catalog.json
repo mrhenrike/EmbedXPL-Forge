@@ -1,6 +1,8 @@
 {
   "catalog_note": "CVE index for RouterXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 330,
+  "entry_count": 338,
+  "last_updated": "2026-04-05",
+  "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
     {
       "cve_id": "CVE-2001-0537",
@@ -3739,6 +3741,150 @@
         "Tenda AC20 16.03.08.12"
       ],
       "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2025-49599",
+      "vendor": "huawei",
+      "modules": [
+        "exploits/routers/huawei/eg8145x6_epuser_firewall_bypass.py"
+      ],
+      "devices": [
+        "Huawei OptiXstar EG8145X6-10",
+        "Huawei EchoLife EG8145X6",
+        "Huawei EchoLife EG8145V5-V2",
+        "Huawei EchoLife EG8145V5",
+        "Huawei EchoLife EG8141A5",
+        "Huawei HN8145X6"
+      ],
+      "exploit_available": true,
+      "note": "BFLA firewall bypass via Epuser account. V5-V2 confirmed affected (<=V5R021C00S184). V5 (<=V5R019C00S100). EG8141A5 (<=V5R019C00S100)."
+    },
+    {
+      "cve_id": "RXPL-2026-HW-001",
+      "vendor": "huawei",
+      "modules": [
+        "exploits/routers/huawei/eg8145x6_info_disclosure.py"
+      ],
+      "devices": [
+        "Huawei OptiXstar EG8145X6-10",
+        "Huawei EchoLife EG8145X6",
+        "Huawei EchoLife EG8145V5-V2",
+        "Huawei EchoLife EG8145V5"
+      ],
+      "exploit_available": true,
+      "note": "Pre-auth firmware metadata, CSRF tokens, build info disclosure. Same BBSP/ASP stack on Dopra Linux across V5/V5-V2/X6."
+    },
+    {
+      "cve_id": "RXPL-2026-HW-002",
+      "vendor": "huawei",
+      "modules": [
+        "exploits/routers/huawei/eg8145x6_csrf_static_token.py"
+      ],
+      "devices": [
+        "Huawei OptiXstar EG8145X6-10",
+        "Huawei EchoLife EG8145X6",
+        "Huawei EchoLife EG8145V5-V2",
+        "Huawei EchoLife EG8145V5"
+      ],
+      "exploit_available": true,
+      "note": "Static CSRF token + server does not validate token at all. Same getRandString.asp on V5/V5-V2/X6."
+    },
+    {
+      "cve_id": "RXPL-2026-HW-003",
+      "vendor": "huawei",
+      "modules": [
+        "exploits/routers/huawei/eg8145x6_preauth_password_enum.py"
+      ],
+      "devices": [
+        "Huawei OptiXstar EG8145X6-10",
+        "Huawei EchoLife EG8145X6",
+        "Huawei EchoLife EG8145V5-V2",
+        "Huawei EchoLife EG8145V5"
+      ],
+      "exploit_available": true,
+      "note": "Pre-auth user enumeration via CheckPwdNotLogin.asp differential response. Same BBSP endpoint across Dopra Linux family."
+    },
+    {
+      "cve_id": "RXPL-2026-HW-004",
+      "vendor": "huawei",
+      "modules": [
+        "exploits/routers/huawei/eg8145x6_bruteforce_login.py"
+      ],
+      "devices": [
+        "Huawei OptiXstar EG8145X6-10",
+        "Huawei EchoLife EG8145X6",
+        "Huawei EchoLife EG8145V5-V2",
+        "Huawei EchoLife EG8145V5"
+      ],
+      "exploit_available": true,
+      "note": "Rate-limit bypass via session rotation. Client-side only on all V5/X6 models."
+    },
+    {
+      "cve_id": "RXPL-2026-HW-005",
+      "vendor": "huawei",
+      "modules": [
+        "exploits/routers/huawei/eg8145x6_config_decrypt.py"
+      ],
+      "devices": [
+        "Huawei OptiXstar EG8145X6-10",
+        "Huawei EchoLife EG8145X6",
+        "Huawei EchoLife EG8145V5-V2",
+        "Huawei EchoLife EG8145V5",
+        "Huawei HS8145X6",
+        "Huawei HS8145V5",
+        "Huawei HN8145X6",
+        "Huawei HG8245Q2",
+        "Huawei HG8245H5",
+        "Huawei EG8141A5"
+      ],
+      "exploit_available": true,
+      "note": "Universal AES key hex:13395537D2730554A176799F6D56A239 for hw_ctree.xml. Affects ALL Huawei ONTs using Dopra Linux."
+    },
+    {
+      "cve_id": "RXPL-2026-HW-006",
+      "vendor": "huawei",
+      "modules": [
+        "exploits/routers/huawei/eg8145x6_mitm_credential_intercept.py"
+      ],
+      "devices": [
+        "Huawei OptiXstar EG8145X6-10",
+        "Huawei EchoLife EG8145X6",
+        "Huawei EchoLife EG8145V5-V2",
+        "Huawei EchoLife EG8145V5"
+      ],
+      "exploit_available": true,
+      "note": "Base64 password over HTTP + dealDataWithFun() RCE via MitM. Same util.js/safelogin.js across V5/X6 platform."
+    },
+    {
+      "cve_id": "RXPL-2026-HW-007",
+      "vendor": "huawei",
+      "modules": [
+        "exploits/routers/huawei/eg8145x6_telnet_enable.py"
+      ],
+      "devices": [
+        "Huawei OptiXstar EG8145X6-10",
+        "Huawei EchoLife EG8145X6",
+        "Huawei EchoLife EG8145V5-V2",
+        "Huawei EchoLife EG8145V5",
+        "Huawei HS8145V5"
+      ],
+      "exploit_available": true,
+      "note": "Telnet enablement via hw_ctree.xml X_HW_CLITelnetAccess modification. Works on all Dopra Linux ONTs."
+    },
+    {
+      "cve_id": "RXPL-2026-HW-008",
+      "vendor": "huawei",
+      "modules": [
+        "exploits/routers/huawei/eg8145x6_autopwn.py"
+      ],
+      "devices": [
+        "Huawei OptiXstar EG8145X6-10",
+        "Huawei EchoLife EG8145X6",
+        "Huawei EchoLife EG8145V5-V2",
+        "Huawei EchoLife EG8145V5"
+      ],
+      "exploit_available": true,
+      "note": "Chained exploit: enumeration + brute-force + CSRF + info disclosure. Full chain validated on X6-10, applicable to V5/V5-V2 (same BBSP stack)."
     }
   ]
 }

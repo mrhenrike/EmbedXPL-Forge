@@ -1,9 +1,76 @@
-Admin:admin
-admin:
+# Huawei GPON ONT / EchoLife / OptiXstar — Default & Known Credentials
+# Format: username:password
+# Sources: IEEE, vendor docs, ISP configs, CVE disclosures, forum research
+#
+# --- Factory defaults ---
 admin:admin
-digicel:digicel
+admin:
+admin:password
+admin:admin123
+Admin:admin
 root:admin
+root:root
+root:adminHW
+user:user
+user:HuaweiUser
+# --- EG-series specific (EG8145X6, EG8141A5, EG8145V5-V2, etc.) ---
+Epadmin:adminEp
+Epuser:userEp
+Eproot:admin
+Eproot:adminEp
+Eproot:root
+# --- ISP-generated per-device passwords (Epuser) ---
+# Pattern: 8-char alphanumeric random (uppercase+lowercase+digits)
+# Loga Internet (ES/BR) — OptiXstar EG8145X6-10
+Epuser:QFYqt7pU
+# Sumicity/Giga+ (ES/BR) — EchoLife EG8145V5-V2
+Epuser:pXU89goU
+# --- Super admin / ISP provisioning ---
 telecomadmin:admintelecom
+telecomadmin:nE7jA%5m
+telecomadmin:NWTF5x%RaijkX
+telecomadmin:
+telecomadmin:F0xB734Fr3@j%YEP
+# --- Post-unlock / Personalizador ONT patch ---
+superadmin:HW@root123
+superadmin:superadmin
+# --- Telnet / CLI ---
+telnetadmin:telnetadmin
+root:adminHW
+# --- User-level / OptiXstar generic ---
 user:HuaweiUser
 user:user
+# --- ISP-specific (Brazil — Sumicity/Giga+, Loga, Vivo, Oi, Claro) ---
+admin:gpon
+admin:Gpon1234
+support:support
+admin:Web@0063
+admin:sumicity
+admin:loga
+admin:giga+
+admin:gigamais
+admin:vivo
+admin:claro
+admin:oi
+admin:algar
+admin:brisanet
+# --- TR-069 ACS default credentials ---
+admin:admin
+acs:acs
+# --- ISP-specific (LATAM / Europe) ---
+digicel:digicel
 vodafone:vodafone
+useradmin:admin
+useradmin:password
+# --- Alternate / uncommon ---
+admin:1234
+admin:huawei
+admin:system
+admin:hg8245
+admin:hg532e
+tecnician:tecnician
+maintenance:maintenance
+guest:guest
+# --- SHA256(MD5(password)) variations ---
+# Used internally by hw_ctree.xml config files
+# AES key for config decrypt: hex:13395537D2730554A176799F6D56A239

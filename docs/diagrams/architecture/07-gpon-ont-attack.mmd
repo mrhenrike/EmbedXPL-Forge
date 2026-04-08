@@ -1,0 +1,63 @@
+%% RouterXPL-Forge — GPON ONT Attack Surface Map (en-US)
+%% Validated against Huawei EG8145X6-10 (OptiXstar) and EG8145V5-V2 (EchoLife)
+flowchart LR
+  subgraph ISP["ISP / Carrier Side"]
+    OLT["OLT — Optical Line Terminal\nOMCI management channel\nSN/LOID authentication"]
+    ACS["ACS — Auto Config Server\nTR-069/CWMP provisioning\nFirmware push · config wipe"]
+  end
+
+  subgraph ONT["GPON ONT / CPE — Attack Surface"]
+    GPON_IF["GPON Interface\nXGS-PON / GPON uplink\n⚠ out of RouterXPL scope"]
+    WEBUI["Web UI — HTTP :80\nBBSP/ASP stack\nDopra Linux 5.10"]
+    MGMT["Management Port :37443\nTR-069 listener\n◐ ISP-only access"]
+    UPNP_SVC["UPnP IGD — port 49652\nWANIPConnection:1\nlibupnp 1.14.12"]
+    WIFI_SVC["Wi-Fi AP (2.4G + 5G)\nWPA2/WPA3 PSK\nEasyMesh controller"]
+    SNMP_SVC["SNMP — UDP :161\nCommunity: public (common)"]
+    TELNET_SVC["Telnet :23 / SSH :22\nFiltered (ISP firewall)\nEnable via config patch"]
+    UART["UART/JTAG — Physical\nRoot shell (Dopra Linux)"]
+  end
+
+  subgraph LAN["LAN / Attacker Side"]
+    ATK["Attacker on LAN\n192.168.x.y"]
+    VICTIM["Admin browser\n(logged into Web UI)"]
+  end
+
+  subgraph MODULES["RouterXPL-Forge Modules"]
+    M1["eg8145x6_info_disclosure\nPre-auth firmware vars"]
+    M2["eg8145x6_bruteforce_login\nRate-limit bypass"]
+    M3["eg8145x6_csrf_static_token\nCSRF non-validation"]
+    M4["eg8145x6_preauth_password_enum\nUser enum via CheckPwdNotLogin"]
+    M5["eg8145x6_config_decrypt\nAES decrypt hw_ctree.xml"]
+    M6["eg8145x6_epuser_firewall_bypass\nCVE-2025-49599"]
+    M7["eg8145x6_csrf_payload_generator\nPhishing / DNS hijack payloads"]
+    M8["eg8145x6_dns_poison_csrf\nDNS poisoning via CSRF"]
+    M9["eg8145x6_wifi_credential_extractor\nPSK / PPPoE extraction"]
+    M10["eg8145x6_autopwn\n9-phase chained exploit"]
+    M11["generic/upnp/igd_exploit\nUPnP full exploitation"]
+  end
+
+  OLT -->|"OMCI"| GPON_IF
+  ACS -->|"TR-069 :37443"| MGMT
+  GPON_IF --> WEBUI
+  GPON_IF --> UPNP_SVC
+  GPON_IF --> WIFI_SVC
+  GPON_IF --> SNMP_SVC
+  GPON_IF --> TELNET_SVC
+  GPON_IF --> UART
+
+  ATK -->|"HTTP :80"| WEBUI
+  ATK -->|"SOAP :49652"| UPNP_SVC
+  ATK -->|"UDP :161"| SNMP_SVC
+  VICTIM -->|"CSRF attack"| WEBUI
+
+  WEBUI --> M1
+  WEBUI --> M2
+  WEBUI --> M3
+  WEBUI --> M4
+  WEBUI --> M5
+  WEBUI --> M6
+  WEBUI --> M7
+  WEBUI --> M8
+  WEBUI --> M9
+  WEBUI --> M10
+  UPNP_SVC --> M11

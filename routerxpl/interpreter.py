@@ -256,6 +256,7 @@ class RouterXPLInterpreter(BaseInterpreter):
     sysinfo                     Show detected hardware (CPU, RAM, GPU)
     compute <cpu|gpu|hybrid|auto>  Set compute mode for ML/GPU operations
     discover <subnet/CIDR>      Scan network and match targets to exploit catalog
+    sessions [list|show|delete|purge|export]  Manage scan session history
     exit                        Exit RouterXPL"""
 
     module_help = """Module commands:
@@ -278,7 +279,7 @@ class RouterXPLInterpreter(BaseInterpreter):
         self.show_sub_commands = ("info", "options", "advanced", "devices", "all", "encoders", "creds", "exploits", "scanners", "wordlists")
         self.search_sub_commands = ("type", "device", "language", "payload", "vendor")
 
-        self.global_commands = sorted(["use ", "exec ", "help", "exit", "show ", "search ", "sysinfo", "compute ", "discover "])
+        self.global_commands = sorted(["use ", "exec ", "help", "exit", "show ", "search ", "sysinfo", "compute ", "discover ", "sessions "])
         self.module_commands = ["run", "back", "set ", "setg ", "check"]
         self.module_commands.extend(self.global_commands)
         self.module_commands.sort()
@@ -292,7 +293,9 @@ class RouterXPLInterpreter(BaseInterpreter):
 
         from routerxpl.core.hw_profiler import HWProfiler
         from routerxpl.core import config as rxf_config
+        from routerxpl.core.session import SessionManager
         self._hw_profile = HWProfiler.detect()
+        self._session_mgr = SessionManager()
 
         saved_mode = rxf_config.get("compute_mode", "auto")
         if saved_mode in ("cpu", "gpu", "hybrid", "auto"):
@@ -465,17 +468,36 @@ class RouterXPLInterpreter(BaseInterpreter):
     @module_required
     def command_run(self, *args, **kwargs):
         print_status("Running module {}...".format(self.current_module))
+        import time as _time
+        from routerxpl.core.session import ModuleResult
+
         previous_sigint_handler = signal.getsignal(signal.SIGINT)
+        t0 = _time.monotonic()
+        mod_path = str(self.current_module)
+        target_ip = getattr(self.current_module, "target", "")
+        error_msg = None
+
         try:
             signal.signal(signal.SIGINT, self.__command_sigint_handler)
             self.current_module.run()
         except KeyboardInterrupt:
             print_info()
             print_error("Operation cancelled by user")
+            error_msg = "cancelled"
         except Exception:
             print_error(traceback.format_exc())
+            error_msg = traceback.format_exc().splitlines()[-1] if traceback.format_exc() else "unknown"
         finally:
             signal.signal(signal.SIGINT, previous_sigint_handler)
+
+        elapsed = _time.monotonic() - t0
+        self._record_module_result(
+            target_ip, mod_path,
+            vulnerable=None,
+            error=error_msg,
+            elapsed=elapsed,
+            port=getattr(self.current_module, "port", 0),
+        )
 
 
     def command_exploit(self, *args, **kwargs):
@@ -699,17 +721,38 @@ class RouterXPLInterpreter(BaseInterpreter):
 
     @module_required
     def command_check(self, *args, **kwargs):
+        import time as _time
+        from routerxpl.core.session import ModuleResult
+
+        t0 = _time.monotonic()
+        mod_path = str(self.current_module)
+        target_ip = getattr(self.current_module, "target", "")
+        vuln_result = None
+        error_msg = None
+
         try:
             result = self.current_module.check()
         except Exception as error:
             print_error(error)
+            error_msg = str(error)
         else:
             if result is True:
                 print_success("Target is vulnerable")
+                vuln_result = True
             elif result is False:
                 print_error("Target is not vulnerable")
+                vuln_result = False
             else:
                 print_status("Target could not be verified")
+
+        elapsed = _time.monotonic() - t0
+        self._record_module_result(
+            target_ip, mod_path,
+            vulnerable=vuln_result,
+            error=error_msg,
+            elapsed=elapsed,
+            port=getattr(self.current_module, "port", 0),
+        )
 
     def command_help(self, *args, **kwargs):
         print_info(self.global_help)
@@ -922,18 +965,33 @@ class RouterXPLInterpreter(BaseInterpreter):
     def command_discover(self, *args, **kwargs):
         """Scan a subnet and match live hosts against the exploit catalog.
 
-        Usage: discover <subnet/CIDR>
+        Session-aware: if a host was scanned before (same IP+MAC), shows
+        previous findings and offers to resume (skip already-tested modules)
+        or restart from scratch.
+
+        Usage:
+            discover <subnet/CIDR>
+            discover <subnet/CIDR> --fresh   (ignore session, full rescan)
+
         Examples:
             discover 192.168.1.0/24
             discover 10.0.0.1
+            discover 192.168.18.0/24 --fresh
         """
+        import time as _time
+        from datetime import datetime
         from routerxpl.core.discovery import NetworkDiscovery
+        from routerxpl.core.session import SessionManager, host_id as _host_id
         from routerxpl.core.exploit.printer import console as _con
         from rich.table import Table
         from rich.panel import Panel
 
         try:
-            target = args[0].strip()
+            raw_args = list(args)
+            force_fresh = "--fresh" in raw_args
+            if force_fresh:
+                raw_args.remove("--fresh")
+            target = raw_args[0].strip()
         except (IndexError, AttributeError):
             print_error("Usage: discover <subnet/CIDR>  (e.g. discover 192.168.1.0/24)")
             return
@@ -968,6 +1026,75 @@ class RouterXPLInterpreter(BaseInterpreter):
             print_warning("No live hosts found on {}".format(target))
             return
 
+        # --- Session integration: check for existing sessions ---
+        sessions_resumed = 0
+        sessions_new = 0
+
+        for h in hosts:
+            session, is_existing = self._session_mgr.get_or_create(h.ip, h.mac)
+
+            if is_existing and not force_fresh:
+                sessions_resumed += 1
+                prev_tested = len(session.modules_tested())
+                prev_vulns = len(session.vulns_found)
+                last_dt = datetime.fromtimestamp(session.last_scanned).strftime("%Y-%m-%d %H:%M")
+
+                _con.print(
+                    "\n[bold yellow]SESSION FOUND[/bold yellow] for "
+                    "[bold]{ip}[/bold] ({mac}) — "
+                    "last scan: {dt}, tested: {t}, vulns: {v}".format(
+                        ip=h.ip,
+                        mac=h.mac or "no-mac",
+                        dt=last_dt,
+                        t=prev_tested,
+                        v=prev_vulns,
+                    )
+                )
+
+                pending = session.modules_pending()
+                if pending:
+                    _con.print(
+                        "  [dim]{} module(s) already tested, "
+                        "{} pending — resuming from where it stopped[/dim]".format(
+                            prev_tested, len(pending),
+                        )
+                    )
+
+                if session.vulns_found:
+                    _con.print("  [bold red]Previous vulns:[/bold red]")
+                    for v in session.vulns_found:
+                        _con.print("    [red]• {}[/red]".format(v))
+            else:
+                sessions_new += 1
+
+            session.merge_discovery(
+                ip=h.ip,
+                mac=h.mac,
+                hostname=h.hostname,
+                vendor=h.vendor_guess,
+                model=h.model_guess,
+                open_ports=h.open_ports,
+                banners={str(k): v for k, v in h.banners.items()},
+                fingerprint_confidence=h.fingerprint_confidence,
+                matched_modules=h.matched_modules,
+                has_wireless=h.has_wireless,
+                wireless_ssids=h.wireless_ssids,
+                wireless_recommendation=h.wireless_recommendation,
+            )
+            self._session_mgr.save(session)
+
+        if sessions_resumed:
+            _con.print()
+            print_success(
+                "{} host(s) resumed from session history, {} new".format(
+                    sessions_resumed, sessions_new,
+                )
+            )
+            _con.print("[dim]Use 'discover {} --fresh' to ignore history and rescan from zero[/dim]".format(target))
+        elif sessions_new:
+            print_info("{} new session(s) created".format(sessions_new))
+
+        # --- Results table ---
         results_table = Table(
             title="Discovered Hosts ({})".format(len(hosts)),
             show_header=True,
@@ -983,11 +1110,20 @@ class RouterXPLInterpreter(BaseInterpreter):
         results_table.add_column("Model")
         results_table.add_column("Confidence")
         results_table.add_column("Modules", style="bold yellow")
+        results_table.add_column("Tested", style="green")
+        results_table.add_column("Pending", style="red")
+        results_table.add_column("WiFi", style="cyan")
 
         for h in hosts:
             ports = ",".join(str(p) for p in h.open_ports[:8])
             conf_str = "{:.0%}".format(h.fingerprint_confidence) if h.fingerprint_confidence else "-"
             mod_count = str(len(h.matched_modules)) if h.matched_modules else "-"
+            wifi_flag = "Yes" if h.has_wireless else "-"
+
+            session = self._session_mgr.load(h.ip, h.mac)
+            tested_count = str(len(session.modules_tested())) if session else "0"
+            pending_count = str(len(session.modules_pending())) if session else mod_count
+
             results_table.add_row(
                 h.ip,
                 h.mac or "-",
@@ -997,10 +1133,14 @@ class RouterXPLInterpreter(BaseInterpreter):
                 h.model_guess or "-",
                 conf_str,
                 mod_count,
+                tested_count,
+                pending_count,
+                wifi_flag,
             )
 
         _con.print(results_table)
 
+        # --- Module matching details ---
         targets_with_mods = discovery.hosts_with_modules()
         if targets_with_mods:
             print_success(
@@ -1009,6 +1149,11 @@ class RouterXPLInterpreter(BaseInterpreter):
             for h in targets_with_mods:
                 vendor_tag = "[{}]".format(h.vendor_guess) if h.vendor_guess else ""
                 model_tag = h.model_guess or ""
+
+                session = self._session_mgr.load(h.ip, h.mac)
+                tested_set = set(session.modules_tested()) if session else set()
+                vuln_set = set(session.vulns_found) if session else set()
+
                 _con.print(
                     "  [bold]{ip}[/bold] {vendor} {model} -- "
                     "[yellow]{count}[/yellow] exploit module(s)".format(
@@ -1018,18 +1163,285 @@ class RouterXPLInterpreter(BaseInterpreter):
                         count=len(h.matched_modules),
                     )
                 )
-                for mod in h.matched_modules[:10]:
-                    _con.print("    [dim]use {}[/dim]".format(mod.replace(".", "/")))
-                if len(h.matched_modules) > 10:
+
+                for mod in h.matched_modules[:15]:
+                    if mod in vuln_set:
+                        status_tag = " [bold red]VULN[/bold red]"
+                    elif mod in tested_set:
+                        status_tag = " [green]tested[/green]"
+                    else:
+                        status_tag = " [dim]pending[/dim]"
+                    _con.print("    use {mod}{st}".format(
+                        mod=mod.replace(".", "/"),
+                        st=status_tag,
+                    ))
+                if len(h.matched_modules) > 15:
                     _con.print(
                         "    [dim]... and {} more[/dim]".format(
-                            len(h.matched_modules) - 10
+                            len(h.matched_modules) - 15
                         )
                     )
         else:
             print_info("No discovered hosts matched the exploit catalog.")
 
+        # --- WirelessXPL-Forge cross-reference ---
+        wifi_hosts = discovery.hosts_with_wireless()
+        if wifi_hosts:
+            _con.print()
+            for h in wifi_hosts:
+                if h.wireless_recommendation:
+                    ssid_label = ""
+                    if h.wireless_ssids:
+                        ssid_label = "  SSIDs: {}".format(", ".join(h.wireless_ssids))
+                    tag = "[bold magenta]RECOMMENDED[/bold magenta]" if not h.matched_modules else "[bold cyan]COMPLEMENTARY[/bold cyan]"
+                    _con.print(Panel(
+                        "{tag} {ip} ({vendor} {model}){ssid}\n\n"
+                        "[dim]{rec}[/dim]".format(
+                            tag=tag,
+                            ip=h.ip,
+                            vendor=h.vendor_guess or "Unknown",
+                            model=h.model_guess or "",
+                            ssid=ssid_label,
+                            rec=h.wireless_recommendation,
+                        ),
+                        title="[bold]WirelessXPL-Forge[/bold]",
+                        border_style="magenta" if not h.matched_modules else "cyan",
+                        expand=False,
+                    ))
+
         print_info()
+
+    def command_sessions(self, *args, **kwargs):
+        """Manage scan session history (like John the Ripper's --restore).
+
+        Usage:
+            sessions                     List all saved sessions
+            sessions list                Same as above
+            sessions show <ip>           Show detailed session for a host
+            sessions delete <ip>         Delete session for a host
+            sessions export <ip>         Export session as JSON
+            sessions purge               Delete ALL sessions (asks confirmation)
+        """
+        from routerxpl.core.exploit.printer import console as _con
+        from rich.table import Table
+        from rich.panel import Panel
+        from datetime import datetime
+
+        sub = ""
+        sub_args: list = []
+        if args:
+            parts = args[0].strip().split() if isinstance(args[0], str) else list(args)
+            if parts:
+                sub = parts[0].lower()
+                sub_args = parts[1:]
+
+        if sub in ("", "list"):
+            sessions = self._session_mgr.list_sessions()
+            if not sessions:
+                print_info("No saved sessions. Run 'discover <target>' to create one.")
+                return
+
+            tbl = Table(
+                title="Saved Sessions ({})".format(len(sessions)),
+                show_header=True,
+                header_style="bold cyan",
+                border_style="dim",
+            )
+            tbl.add_column("#", style="dim")
+            tbl.add_column("IP", style="bold")
+            tbl.add_column("MAC")
+            tbl.add_column("Vendor", style="green")
+            tbl.add_column("Model")
+            tbl.add_column("Scans", style="yellow")
+            tbl.add_column("Tested", style="green")
+            tbl.add_column("Pending", style="red")
+            tbl.add_column("Vulns", style="bold red")
+            tbl.add_column("Last Scan")
+            tbl.add_column("ID", style="dim")
+
+            for i, s in enumerate(sessions, 1):
+                last_dt = "-"
+                if s.get("last_scanned"):
+                    last_dt = datetime.fromtimestamp(s["last_scanned"]).strftime("%Y-%m-%d %H:%M")
+                tbl.add_row(
+                    str(i),
+                    s.get("ip", "?"),
+                    s.get("mac", "-"),
+                    s.get("vendor", "-"),
+                    s.get("model", "-"),
+                    str(s.get("total_scans", 0)),
+                    str(s.get("tested", 0)),
+                    str(s.get("pending", 0)),
+                    str(s.get("vulns", 0)),
+                    last_dt,
+                    s.get("host_id", "?")[:8],
+                )
+            _con.print(tbl)
+            _con.print("[dim]Use 'sessions show <ip>' for details[/dim]")
+            return
+
+        if sub == "show":
+            if not sub_args:
+                print_error("Usage: sessions show <ip>")
+                return
+            ip = sub_args[0]
+            session = self._session_mgr.load(ip)
+            if not session:
+                print_warning("No session found for {}".format(ip))
+                return
+
+            first_dt = datetime.fromtimestamp(session.first_seen).strftime("%Y-%m-%d %H:%M") if session.first_seen else "-"
+            last_dt = datetime.fromtimestamp(session.last_scanned).strftime("%Y-%m-%d %H:%M") if session.last_scanned else "-"
+
+            header = (
+                "[bold]{ip}[/bold] ({mac})\n"
+                "Vendor: [green]{vendor}[/green]  Model: {model}\n"
+                "First seen: {first}  Last scan: {last}\n"
+                "Total scans: [yellow]{scans}[/yellow]  "
+                "Ports: {ports}\n"
+                "WiFi: {wifi}{ssids}"
+            ).format(
+                ip=session.ip,
+                mac=session.mac or "no-mac",
+                vendor=session.vendor or "?",
+                model=session.model or "?",
+                first=first_dt,
+                last=last_dt,
+                scans=session.total_scans,
+                ports=",".join(str(p) for p in session.open_ports[:12]) or "-",
+                wifi="Yes" if session.has_wireless else "No",
+                ssids=" ({})".format(", ".join(session.wireless_ssids)) if session.wireless_ssids else "",
+            )
+            _con.print(Panel(header, title="[bold]Session Detail[/bold]", border_style="cyan"))
+
+            # Module results breakdown
+            tested = session.modules_tested()
+            vulns = session.modules_vulnerable()
+            safe = session.modules_safe()
+            errored = session.modules_errored()
+            pending = session.modules_pending()
+
+            _con.print("\n[bold]Module Execution Summary:[/bold]")
+            _con.print("  Matched:  [yellow]{}[/yellow]".format(len(session.matched_modules)))
+            _con.print("  Tested:   [green]{}[/green]".format(len(tested)))
+            _con.print("  Pending:  [red]{}[/red]".format(len(pending)))
+            _con.print("  Vuln:     [bold red]{}[/bold red]".format(len(vulns)))
+            _con.print("  Safe:     [green]{}[/green]".format(len(safe)))
+            _con.print("  Errored:  [yellow]{}[/yellow]".format(len(errored)))
+
+            if vulns:
+                _con.print("\n[bold red]Confirmed Vulnerabilities:[/bold red]")
+                for v in vulns:
+                    _con.print("  [red]• {}[/red]".format(v))
+
+            if pending:
+                _con.print("\n[bold]Pending Modules (not yet tested):[/bold]")
+                for m in pending[:20]:
+                    _con.print("  [dim]• {}[/dim]".format(m))
+                if len(pending) > 20:
+                    _con.print("  [dim]... and {} more[/dim]".format(len(pending) - 20))
+
+            if session.module_results:
+                _con.print("\n[bold]Execution History (last 20):[/bold]")
+                hist_tbl = Table(show_header=True, header_style="dim", border_style="dim", pad_edge=True)
+                hist_tbl.add_column("Module")
+                hist_tbl.add_column("Result")
+                hist_tbl.add_column("Time")
+                hist_tbl.add_column("Elapsed")
+
+                for r in session.module_results[-20:]:
+                    if r.vulnerable is True:
+                        res_str = "[bold red]VULNERABLE[/bold red]"
+                    elif r.vulnerable is False:
+                        res_str = "[green]safe[/green]"
+                    elif r.error:
+                        res_str = "[yellow]error[/yellow]"
+                    else:
+                        res_str = "[dim]unknown[/dim]"
+                    ts = datetime.fromtimestamp(r.timestamp).strftime("%m-%d %H:%M") if r.timestamp else "-"
+                    hist_tbl.add_row(
+                        r.module_path.split(".")[-1] if "." in r.module_path else r.module_path,
+                        res_str,
+                        ts,
+                        "{:.1f}s".format(r.elapsed_s),
+                    )
+                _con.print(hist_tbl)
+
+            if session.notes:
+                _con.print("\n[bold]Notes:[/bold]")
+                for note in session.notes:
+                    _con.print("  [dim]{}[/dim]".format(note))
+
+            return
+
+        if sub == "delete":
+            if not sub_args:
+                print_error("Usage: sessions delete <ip>")
+                return
+            ip = sub_args[0]
+            if self._session_mgr.delete(ip):
+                print_success("Session for {} deleted".format(ip))
+            else:
+                print_warning("No session found for {}".format(ip))
+            return
+
+        if sub == "export":
+            if not sub_args:
+                print_error("Usage: sessions export <ip>")
+                return
+            ip = sub_args[0]
+            data = self._session_mgr.export_session(ip)
+            if data:
+                _con.print(data)
+            else:
+                print_warning("No session found for {}".format(ip))
+            return
+
+        if sub == "purge":
+            _con.print("[bold red]WARNING: This will delete ALL saved sessions![/bold red]")
+            try:
+                confirm = input("Type 'yes' to confirm: ").strip().lower()
+            except (EOFError, KeyboardInterrupt):
+                print_info("Cancelled")
+                return
+            if confirm == "yes":
+                count = self._session_mgr.purge_all()
+                print_success("Purged {} session(s)".format(count))
+            else:
+                print_info("Cancelled")
+            return
+
+        print_error("Unknown sub-command '{}'. Use: list, show, delete, export, purge".format(sub))
+
+    def _record_module_result(
+        self,
+        target_ip: str,
+        module_path: str,
+        vulnerable=None,
+        error=None,
+        elapsed: float = 0.0,
+        port: int = 0,
+    ) -> None:
+        """Record a module execution result into the session for the target host."""
+        if not target_ip:
+            return
+        from routerxpl.core.session import ModuleResult
+        import time as _time
+
+        session = self._session_mgr.load(target_ip)
+        if not session:
+            session, _ = self._session_mgr.get_or_create(target_ip)
+
+        result = ModuleResult(
+            module_path=module_path,
+            vulnerable=vulnerable,
+            error=error,
+            elapsed_s=elapsed,
+            port=port,
+            timestamp=_time.time(),
+        )
+        session.add_result(result)
+        self._session_mgr.save(session)
 
     def command_exit(self, *args, **kwargs):
         raise EOFError

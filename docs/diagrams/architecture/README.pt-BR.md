@@ -34,6 +34,8 @@ Caminhos em `docs/img/architecture/`. Galeria:
 |:---:|
 | ![Edge misto](../../img/architecture/rxf_arch_edge_mixed.png) |
 
+**Diagrama GPON ONT:** ver [07-gpon-ont-attack.mmd](07-gpon-ont-attack.mmd) — validado contra Huawei EG8145X6-10 (OptiXstar, Loga Internet) e EG8145V5-V2 (EchoLife, Sumicity/Giga+). Mapeia todos os 11 módulos específicos com seus vetores de ataque.
+
 Ver também [README.md](README.md) (en-US).
 
 ---

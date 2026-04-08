@@ -13,9 +13,10 @@ Diagrams show device attack surfaces with coverage indicators for RouterXPL-Forg
 | [01-router-soho.mmd](01-router-soho.mmd) | SOHO / home gateway (Linux / RTOS firmware) |
 | [02-switch-l2-l3.mmd](02-switch-l2-l3.mmd) | Managed L2/L3 switch |
 | [03-ngfw-utm.mmd](03-ngfw-utm.mmd) | NGFW / UTM / enterprise firewall appliance |
-| [04-isp-cpe.mmd](04-isp-cpe.mmd) | ISP CPE / residential gateway |
+| [04-isp-cpe.mmd](04-isp-cpe.mmd) | ISP CPE / GPON ONT (Huawei EchoLife/OptiXstar, validated) |
 | [05-edge-mixed.mmd](05-edge-mixed.mmd) | Mixed small-office edge (router + UTM-lite) |
 | [06-network-tap.mmd](06-network-tap.mmd) | Network TAP / passive broker (mgmt-only vectors) |
+| [07-gpon-ont-attack.mmd](07-gpon-ont-attack.mmd) | GPON ONT full attack surface map (validated on EG8145X6-10) |
 
 ## Rendered PNGs
 
@@ -42,6 +43,8 @@ Diagrams show device attack surfaces with coverage indicators for RouterXPL-Forg
 | ![Mixed edge](../../img/architecture/rxf_arch_edge_mixed.png) |
 
 **TAP / passive devices:** see Mermaid source [06-network-tap.mmd](06-network-tap.mmd) — PNG optional (low remote attack surface).
+
+**GPON ONT attack map:** see [07-gpon-ont-attack.mmd](07-gpon-ont-attack.mmd) — validated against Huawei EG8145X6-10 (OptiXstar, Loga Internet) and EG8145V5-V2 (EchoLife, Sumicity/Giga+).
 
 ## Render Locally
 
