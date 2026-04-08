@@ -1,6 +1,6 @@
 {
   "catalog_note": "CVE index for RouterXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 347,
+  "entry_count": 350,
   "last_updated": "2026-04-08",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
@@ -3998,6 +3998,49 @@
         "Nucom NC-WR644GACV firmware <= STA 005"
       ],
       "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2023-50224",
+      "vendor": "tplink",
+      "modules": [
+        "exploits/routers/tplink/wr841n_credential_disclosure_cve_2023_50224.py",
+        "exploits/routers/tplink/apt28_full_chain_autopwn.py"
+      ],
+      "devices": [
+        "TP-Link TL-WR841N v9-v14"
+      ],
+      "exploit_available": true,
+      "note": "CISA KEV. APT28/GRU initial access vector (NCSC Apr 2026). Unauth credential disclosure via /loginFs/ path bypass."
+    },
+    {
+      "cve_id": "CVE-2025-9377",
+      "vendor": "tplink",
+      "modules": [
+        "exploits/routers/tplink/wr841n_parental_control_rce_cve_2025_9377.py",
+        "exploits/routers/tplink/apt28_full_chain_autopwn.py"
+      ],
+      "devices": [
+        "TP-Link TL-WR841N v9-v14",
+        "TP-Link TL-WR841ND"
+      ],
+      "exploit_available": true,
+      "note": "Post-auth RCE via Parental Control url_0 injection. Second stage of Quad 7 / APT28 chain."
+    },
+    {
+      "cve_id": "APT28-DNS-HIJACK-TTP",
+      "vendor": "multi",
+      "modules": [
+        "exploits/routers/tplink/multi_dns_hijack_apt28.py",
+        "exploits/routers/mikrotik/routeros_dns_hijack_apt28.py",
+        "generic/dns_hijack_detector.py",
+        "generic/aitm_credential_interceptor.py"
+      ],
+      "devices": [
+        "TP-Link Archer C5/C7, WDR3500/3600/4300, WR740N-WR941ND, MR3420/MR6400",
+        "MikroTik RouterOS (all models)"
+      ],
+      "exploit_available": true,
+      "note": "NCSC Apr 2026 advisory. Full APT28/GRU DNS hijack TTP: DHCP DNS rewrite + AITM credential harvest for Outlook/O365."
     }
   ]
 }
