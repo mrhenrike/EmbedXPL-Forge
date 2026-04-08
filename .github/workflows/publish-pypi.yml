@@ -166,6 +166,14 @@ jobs:
         with:
           print-hash: true
           verbose: true
+          # Fallback: set PYPI_API_TOKEN secret if Trusted Publisher is not configured yet.
+          # To configure Trusted Publisher: https://pypi.org/manage/account/publishing/
+          #   Project name : routerxpl
+          #   Owner        : mrhenrike
+          #   Repository   : RouterXPL-Forge
+          #   Workflow     : publish-pypi.yml
+          #   Environment  : pypi
+          password: ${{ secrets.PYPI_API_TOKEN }}
 
   # ------------------------------------------------------------------ #
   # Dry-run on TestPyPI (manual dispatch only)                          #

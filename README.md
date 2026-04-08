@@ -2,7 +2,7 @@
 
 **Network Device Security Assessment Framework**
 
-RouterXPL-Forge is an open-source exploitation framework designed for security professionals to audit routers, switches, TAPs, and SOHO edge devices. It provides **657 modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, and encoding — with **338 CVEs** mapped across **49 vendors**.
+RouterXPL-Forge is an open-source exploitation framework designed for security professionals to audit routers, switches, TAPs, and SOHO edge devices. It provides **666 modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, and encoding — with **338 CVEs** mapped across **51 vendors**.
 
 > **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 
@@ -10,12 +10,12 @@ RouterXPL-Forge is an open-source exploitation framework designed for security p
 
 ## Features
 
-- **510 exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt
+- **516 exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt
 - **88 credential modules** — dictionary attacks against FTP, SSH, Telnet, HTTP, SNMP, SFTP
 - **5 scanner modules** — AutoPwn, device-specific scanners
 - **32 payload modules** — reverse/bind TCP shells for x86, x64, ARM, MIPS, Python, Perl, PHP
 - **13 encoder modules** — Base64 and hex encoding for Python, PHP, Perl
-- **9 generic modules** — Heartbleed, ShellShock, UPnP SSDP, UPnP IGD full exploitation, SNMP, CVE lookup
+- **12 generic modules** — Heartbleed, ShellShock, UPnP SSDP/IGD, SNMP bruteforce, TCP Xmas scan, UDP amplification test, CVE lookup
 - **338 CVEs mapped** — from 2001 to 2026, covering all major vulnerability classes
 - **23 vendor-specific wordlists** — externalized default credentials per vendor (incl. ISP-specific Brazil)
 - **Network discovery** — SSDP, ARP, Nmap, Scapy fallback, OUI lookup (IEEE database), T0–T5 timing profiles

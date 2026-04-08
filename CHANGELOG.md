@@ -6,6 +6,49 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [0.6.2] — 2026-04-08
+
+### Added
+- **2 new vendor families**: `dlink_dsl` (D-Link DSL modems), `juniper` (enterprise)
+- **Exploit modules**:
+  - `dlink_dsl/dsl_2750b_remote_code_execution_cve_2016_20017` — unauthenticated RCE (no auth)
+  - `dlink_dsl/dsl_2640b_wps_rce_cve_2013_5223` — WPS PIN command injection
+  - `juniper/junos_backdoor_cve_2015_7755` — NSA/GCHQ backdoor password (CVSS 10.0)
+  - `juniper/junos_web_auth_bypass_cve_2023_36845` — J-Web PHP env RCE (CVSS 9.8)
+  - `netgear/dgn1000_unauthenticated_rce` — setup.cgi syscmd no auth
+  - `multi/netusb_kernel_stack_overflow_cve_2021_45388` — KCodes NetUSB crash/DoS (20+ brands)
+- **Generic modules** (RouterSploit gaps):
+  - `generic/snmp/snmp_bruteforce` — SNMP community string bruteforce
+  - `generic/tcp_xmas` — TCP Xmas scan for firewall evasion testing
+  - `generic/udp_amplification` — UDP amplification factor tester (DNS/NTP/SSDP/SNMP/CharGen)
+- **CI scripts** (5 missing tools created):
+  - `tools/run_scoped_tests.py` — module syntax + __info__ key validation gate
+  - `tools/validate_market_priority_minimums.py` — coverage threshold checks
+  - `tools/validate_governance.py` — governance file baseline check
+  - `tools/deep_intel_backlog.py` — catalog enrichment report (non-gating)
+  - `tools/phase6b_honeypot_validation.py` — honeypot ref snapshot (non-gating)
+- `CONTRIBUTING.md` — governance baseline file
+
+### Fixed
+- `publish-pypi.yml` — added `PYPI_API_TOKEN` secret fallback for OIDC Trusted Publisher
+  (configure on PyPI at https://pypi.org/manage/account/publishing/)
+
+### Changed
+- `pyproject.toml`: 0.6.1 → 0.6.2
+- README.md: 657 → **666 modules**, 510 → **516 exploits**, 9 → **12 generic**, 49 → **51 vendors**
+- COVERAGE_MATRIX.md: updated to v0.6.2
+
+### Module Counts
+
+| Category | 0.6.1 | 0.6.2 |
+|----------|-------|-------|
+| Exploits | 510 | **516** |
+| Generic | 9 | **12** |
+| **Total** | **657** | **666** |
+| Vendors | 49 | **51** |
+
+---
+
 ## [0.6.1] — 2026-04-08
 
 ### Added
