@@ -9,7 +9,7 @@ O **RouterXPL-Forge** é um framework modular em **Python** para testes de segur
 - **647** módulos organizados por função e vendor (500 exploits, 88 creds, 9 genéricos, 5 scanners, 32 payloads, 13 encoders).
 - **49** famílias de vendor cobertas, **338 CVEs** mapeados.
 - **Discovery de rede** com perfis de timing T0–T5, lookup OUI e gerenciamento de sessões.
-- **Autopwn Huawei EG8145X6-10** — cadeia de exploração de 9 fases (validado).
+- **Módulos autopwn encadeados** — cadeias de exploração multi-fase para vendors validados (ex: série GPON ONT Huawei).
 
 ## Classes de dispositivo suportadas
 

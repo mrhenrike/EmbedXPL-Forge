@@ -9,7 +9,7 @@
 - **647** modules organized by role and vendor (500 exploits, 88 creds, 9 generic, 5 scanners, 32 payloads, 13 encoders).
 - **49** vendor families covered, **338 CVEs** mapped.
 - **Network discovery** with T0–T5 timing profiles, OUI lookup, and session management.
-- **Huawei EG8145X6-10 autopwn** — 9-phase chained exploitation chain (validated).
+- **Chained autopwn modules** — multi-phase exploitation chains for validated vendors (e.g. Huawei GPON ONT series).
 
 ## Supported Device Classes
 

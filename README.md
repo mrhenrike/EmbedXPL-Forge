@@ -20,7 +20,7 @@ RouterXPL-Forge is an open-source exploitation framework designed for security p
 - **23 vendor-specific wordlists** — externalized default credentials per vendor (incl. ISP-specific Brazil)
 - **Network discovery** — SSDP, ARP, Nmap, Scapy fallback, OUI lookup (IEEE database), T0–T5 timing profiles
 - **Session management** — persistent scan history per host (IP+MAC), resume/restart, full findings index
-- **Huawei EG8145X6 autopwn** — 9-phase chained exploitation with generic module fallback and WiFi detection
+- **Chained autopwn modules** — multi-phase vendor-specific exploitation chains (Huawei GPON ONT, D-Link, TP-Link, etc.)
 
 ## Supported Device Types
 
@@ -142,7 +142,7 @@ routerxpl/modules/
 │   └── routers/       # Vendor-specific default credentials
 ├── exploits/          # Vulnerability exploitation
 │   ├── generic/       # Cross-vendor (Heartbleed, ShellShock, GPON)
-│   ├── routers/       # Router exploits by vendor (incl. Huawei EG8145X6 chain)
+│   ├── routers/       # Router exploits by vendor (44 vendor folders)
 │   ├── switches/      # Switch exploits (Cisco, D-Link, NETGEAR)
 │   └── soho_edge/     # SOHO edge device exploits
 ├── scanners/          # Network scanning and AutoPwn

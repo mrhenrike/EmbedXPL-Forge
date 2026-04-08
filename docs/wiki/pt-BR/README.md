@@ -37,7 +37,6 @@ Galeria PNG. Fontes Mermaid: [../../diagrams/architecture/README.md](../../diagr
 | [09-payloads-e-encoders.md](09-payloads-e-encoders.md) | Payloads e encoders |
 | [10-catalogos-e-ferramentas.md](10-catalogos-e-ferramentas.md) | Catálogos JSON e scripts em `tools/` |
 | [11-troubleshooting.md](11-troubleshooting.md) | Falhas comuns e correções |
-| [12-huawei-eg8145x6-vetores-de-ataque.md](12-huawei-eg8145x6-vetores-de-ataque.md) | Vetores de ataque Huawei EG8145X6-10 e guia de PoC |
 | [Anexo: índice de módulos](../ANEXO-INDICE-MODULOS.md) | Lista completa de caminhos de módulos |
 
 ## Ver também
