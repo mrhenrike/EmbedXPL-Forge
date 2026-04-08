@@ -26,13 +26,13 @@ Caminhos em `docs/img/architecture/`. Galeria:
 |:---:|:---:|
 | ![SOHO](../../img/architecture/rxf_arch_router_soho.png) | ![Switch](../../img/architecture/rxf_arch_switch_l2l3.png) |
 
-| NGFW / UTM | CPE ISP |
+| NGFW / UTM | CPE ISP / GPON ONT |
 |:---:|:---:|
 | ![NGFW](../../img/architecture/rxf_arch_ngfw_utm.png) | ![CPE](../../img/architecture/rxf_arch_isp_cpe.png) |
 
-| Edge misto |
-|:---:|
-| ![Edge misto](../../img/architecture/rxf_arch_edge_mixed.png) |
+| Edge misto | Mapa de ataque GPON ONT |
+|:---:|:---:|
+| ![Edge misto](../../img/architecture/rxf_arch_edge_mixed.png) | ![GPON ONT](../../img/architecture/rxf_arch_gpon_ont_attack.png) |
 
 **Diagrama GPON ONT:** ver [07-gpon-ont-attack.mmd](07-gpon-ont-attack.mmd) — validado contra Huawei EG8145X6-10 (OptiXstar, Loga Internet) e EG8145V5-V2 (EchoLife, Sumicity/Giga+). Mapeia todos os 11 módulos específicos com seus vetores de ataque.
 

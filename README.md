@@ -164,6 +164,10 @@ Mermaid diagrams for all supported device categories are in [`docs/diagrams/arch
 |:----------:|:----------:|
 | ![NGFW](docs/img/architecture/rxf_arch_ngfw_utm.png) | ![Mixed edge](docs/img/architecture/rxf_arch_edge_mixed.png) |
 
+| GPON ONT Full Attack Map |
+|:------------------------:|
+| ![GPON ONT attack map](docs/img/architecture/rxf_arch_gpon_ont_attack.png) |
+
 ## Requirements
 
 - Python 3.8+
