@@ -4,14 +4,25 @@
 
 ## What RouterXPL-Forge is
 
-**RouterXPL-Forge** is a modular **Python** framework for **authorized** security testing of routers, switches, TAPs, and SOHO edge devices. It bundles credential checks, vulnerability-oriented modules, scanners, payloads, and supporting utilities.
+**RouterXPL-Forge** is a modular **Python** framework for **authorized** security testing of routers, GPON ONTs, CPE devices, and SOHO edge equipment. It bundles credential checks, vulnerability-oriented modules, scanners, payloads, and supporting utilities.
 
-- **271** modules organized by role and vendor.
-- **28+** vendor-oriented families plus generic building blocks.
+- **647** modules organized by role and vendor (500 exploits, 88 creds, 9 generic, 5 scanners, 32 payloads, 13 encoders).
+- **49** vendor families covered, **338 CVEs** mapped.
+- **Network discovery** with T0–T5 timing profiles, OUI lookup, and session management.
+- **Huawei EG8145X6-10 autopwn** — 9-phase chained exploitation chain (validated).
+
+## Supported Device Classes
+
+| Class | Coverage |
+|-------|----------|
+| **Routers / GPON ONT / CPE** | Primary focus — 580+ modules, 49 vendors |
+| **Managed Switches L2/L3** | Limited — 3 exploit modules (Cisco, D-Link, NETGEAR) |
+| **SOHO Edge** (NAS, APs, travel routers) | 9 exploit modules |
 
 ## Requirements
 
 - **Python 3.8–3.13**
+- Optional: `nmap` binary for enhanced network discovery
 - Install dependencies from `requirements.txt` after cloning the repository.
 
 ## Install
@@ -43,6 +54,7 @@ python rxf.py
 
 - **Log file:** `routerxpl.log` (created in the current working directory).
 - **Command history:** typically `~/.rxf_history`.
+- **Session data:** `~/.rxf_sessions/` — persistent scan history per host.
 
 ---
 

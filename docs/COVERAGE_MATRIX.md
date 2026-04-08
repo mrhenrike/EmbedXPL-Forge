@@ -1,7 +1,7 @@
 # RouterXPL-Forge — Coverage Matrix
 
 > Auto-generated from module metadata.
-> **Version:** 0.5.0-beta | **Modules:** 575 | **CVEs:** 330 | **Vendors:** 46+
+> **Version:** 0.6.0 | **Modules:** 647 | **CVEs:** 338 | **Vendors:** 49
 >
 > Author: André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 
@@ -11,16 +11,16 @@
 
 | Metric | Count |
 |---|---|
-| Total modules | 575 |
-| Exploit modules | 429 |
+| Total modules | 647 |
+| Exploit modules | 500 |
 | Credential modules | 88 |
 | Payload modules | 32 |
 | Encoder modules | 13 |
-| Generic modules | 8 |
+| Generic modules | 9 |
 | Scanner modules | 5 |
-| Unique CVEs | 330 |
+| Unique CVEs | 338 |
 | Hardware vendors (exploits + creds) | 49 |
-| Unique device models affected | 672+ |
+| Unique device models affected | 700+ |
 
 ---
 

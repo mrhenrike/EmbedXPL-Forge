@@ -11,11 +11,9 @@ Diagrams show device attack surfaces with coverage indicators for RouterXPL-Forg
 | File | Category |
 |------|----------|
 | [01-router-soho.mmd](01-router-soho.mmd) | SOHO / home gateway (Linux / RTOS firmware) |
-| [02-switch-l2-l3.mmd](02-switch-l2-l3.mmd) | Managed L2/L3 switch |
-| [03-ngfw-utm.mmd](03-ngfw-utm.mmd) | NGFW / UTM / enterprise firewall appliance |
+| [02-switch-l2-l3.mmd](02-switch-l2-l3.mmd) | Managed L2/L3 switch (limited coverage — 3 modules) |
 | [04-isp-cpe.mmd](04-isp-cpe.mmd) | ISP CPE / GPON ONT (Huawei EchoLife/OptiXstar, validated) |
-| [05-edge-mixed.mmd](05-edge-mixed.mmd) | Mixed small-office edge (router + UTM-lite) |
-| [06-network-tap.mmd](06-network-tap.mmd) | Network TAP / passive broker (mgmt-only vectors) |
+| [05-edge-mixed.mmd](05-edge-mixed.mmd) | Mixed small-office edge (router + basic security combo) |
 | [07-gpon-ont-attack.mmd](07-gpon-ont-attack.mmd) | GPON ONT full attack surface map (validated on EG8145X6-10) |
 
 ## Rendered PNGs
@@ -24,7 +22,6 @@ Diagrams show device attack surfaces with coverage indicators for RouterXPL-Forg
 |-----|--------|
 | [rxf_arch_router_soho.png](../../img/architecture/rxf_arch_router_soho.png) | SOHO router |
 | [rxf_arch_switch_l2l3.png](../../img/architecture/rxf_arch_switch_l2l3.png) | Switch |
-| [rxf_arch_ngfw_utm.png](../../img/architecture/rxf_arch_ngfw_utm.png) | NGFW / UTM |
 | [rxf_arch_isp_cpe.png](../../img/architecture/rxf_arch_isp_cpe.png) | ISP CPE / GPON ONT |
 | [rxf_arch_edge_mixed.png](../../img/architecture/rxf_arch_edge_mixed.png) | Mixed edge |
 | [rxf_arch_gpon_ont_attack.png](../../img/architecture/rxf_arch_gpon_ont_attack.png) | GPON ONT full attack map |
@@ -35,15 +32,13 @@ Diagrams show device attack surfaces with coverage indicators for RouterXPL-Forg
 |:---:|:---:|
 | ![SOHO router](../../img/architecture/rxf_arch_router_soho.png) | ![Switch](../../img/architecture/rxf_arch_switch_l2l3.png) |
 
-| NGFW / UTM | ISP CPE / GPON ONT |
+| ISP CPE / GPON ONT | Mixed Edge |
 |:---:|:---:|
-| ![NGFW / UTM](../../img/architecture/rxf_arch_ngfw_utm.png) | ![ISP CPE](../../img/architecture/rxf_arch_isp_cpe.png) |
+| ![ISP CPE](../../img/architecture/rxf_arch_isp_cpe.png) | ![Mixed edge](../../img/architecture/rxf_arch_edge_mixed.png) |
 
-| Mixed Edge | GPON ONT Full Attack Map |
-|:---:|:---:|
-| ![Mixed edge](../../img/architecture/rxf_arch_edge_mixed.png) | ![GPON ONT](../../img/architecture/rxf_arch_gpon_ont_attack.png) |
-
-**TAP / passive devices:** see Mermaid source [06-network-tap.mmd](06-network-tap.mmd) — PNG optional (low remote attack surface).
+| GPON ONT Full Attack Map |
+|:---:|
+| ![GPON ONT](../../img/architecture/rxf_arch_gpon_ont_attack.png) |
 
 **GPON ONT attack map:** validated against Huawei EG8145X6-10 (OptiXstar, Loga Internet) and EG8145V5-V2 (EchoLife, Sumicity/Giga+). Maps all 11 exploit modules with their attack vectors.
 

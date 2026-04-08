@@ -26,10 +26,9 @@ RouterXPL-Forge is an open-source exploitation framework designed for security p
 
 | Type | Coverage | Description |
 |------|----------|-------------|
-| **Routers** | 580+ modules | SOHO routers, enterprise gateways, GPON CPE/ONT |
-| **Switches L2/L3** | 3 modules | Managed and unmanaged switches |
-| **SOHO Edge** | 12 modules | Travel routers, NAS, wireless APs, smart plugs, firewalls |
-| **TAPs** | Planned | Network TAP devices |
+| **Routers / GPON ONT / CPE** | 580+ modules | SOHO routers, enterprise gateways, GPON CPE/ONT (primary focus) |
+| **Switches L2/L3** | 3 modules | Managed switches (Cisco, D-Link, NETGEAR) — limited coverage |
+| **SOHO Edge** | 9 modules | Travel routers, NAS, wireless APs |
 
 ## Supported Vendors
 
@@ -160,13 +159,9 @@ Mermaid diagrams for all supported device categories are in [`docs/diagrams/arch
 |:-----------:|:------------------:|
 | ![SOHO router](docs/img/architecture/rxf_arch_router_soho.png) | ![ISP CPE](docs/img/architecture/rxf_arch_isp_cpe.png) |
 
-| NGFW / UTM | Mixed Edge |
-|:----------:|:----------:|
-| ![NGFW](docs/img/architecture/rxf_arch_ngfw_utm.png) | ![Mixed edge](docs/img/architecture/rxf_arch_edge_mixed.png) |
-
-| GPON ONT Full Attack Map |
-|:------------------------:|
-| ![GPON ONT attack map](docs/img/architecture/rxf_arch_gpon_ont_attack.png) |
+| Mixed Edge | GPON ONT Full Attack Map |
+|:----------:|:------------------------:|
+| ![Mixed edge](docs/img/architecture/rxf_arch_edge_mixed.png) | ![GPON ONT attack map](docs/img/architecture/rxf_arch_gpon_ont_attack.png) |
 
 ## Requirements
 

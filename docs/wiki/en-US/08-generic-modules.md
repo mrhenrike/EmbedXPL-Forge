@@ -2,30 +2,73 @@
 
 **Language:** English (en-US). **pt-BR:** [../pt-BR/08-modulos-generic.md](../pt-BR/08-modulos-generic.md)
 
-## Module map
+Generic modules operate across vendors and device classes — they target common protocols and services rather than vendor-specific vulnerabilities.
 
-| Module | Role |
-|--------|------|
-| `cve_lookup` | Map CVE identifiers to local metadata |
-| `snmp_bruteforce` | SNMP community guessing |
-| `ssdp_msearch` | SSDP `M-SEARCH` discovery |
-| `heartbleed` | OpenSSL Heartbleed-oriented check |
-| `shellshock` | CGI / Bash `shellshock` pattern tests |
-| `wordlists` | Helpers around bundled wordlists |
+## Module Map
 
-## CVE lookup example
+| Module | Path | Role |
+|--------|------|------|
+| `cve_lookup` | `generic/cve/cve_lookup` | Map CVE identifiers to local metadata |
+| `snmp_bruteforce` | `generic/snmp/snmp_bruteforce` | SNMP community string guessing |
+| `ssdp_msearch` | `generic/upnp/ssdp_msearch` | SSDP M-SEARCH discovery (basic) |
+| `igd_exploit` | `generic/upnp/igd_exploit` | UPnP IGD full exploitation suite |
+| `heartbleed` | `generic/heartbleed` | OpenSSL Heartbleed-oriented check |
+| `shellshock` | `generic/shellshock` | CGI / Bash shellshock pattern tests |
+| `wordlists` | `generic/wordlist` | Helpers around bundled wordlists |
+
+## UPnP IGD Full Exploitation
+
+`igd_exploit` is the most comprehensive UPnP module. It chains:
+
+1. **SSDP M-SEARCH** — discovers all IGD services on the target
+2. **Device description XML parsing** — extracts model, serial number, service list
+3. **SCPD enumeration** — lists all available SOAP actions per service
+4. **GetExternalIPAddress** — discloses WAN/external IP without authentication
+5. **GetGenericPortMappingEntry** — enumerates all existing NAT port mappings
+6. **AddPortMapping** — adds firewall bypass rules without authentication (CRITICAL)
+7. **DeletePortMapping** — removes NAT rules
+8. **GetStatusInfo / GetNATRSIPStatus** — WAN connection status and uptime
+9. **WANCommonInterfaceConfig** — traffic statistics (bytes/packets sent/received, link type)
+10. **ForceTermination** — WAN disconnect capability (DoS) — skipped by default
+11. **Event SUBSCRIBE** — monitors WAN events in real-time
 
 ```text
-RouterXPL-Forge > use generic/cve_lookup
+RouterXPL-Forge > use generic/upnp/igd_exploit
+RouterXPL-Forge (igd_exploit) > set target 192.168.1.1
+RouterXPL-Forge (igd_exploit) > show options
+RouterXPL-Forge (igd_exploit) > run
+
+# Skip dangerous actions (ForceTermination):
+RouterXPL-Forge (igd_exploit) > set skip_dangerous yes
+RouterXPL-Forge (igd_exploit) > run
+
+# Test specific external port for AddPortMapping:
+RouterXPL-Forge (igd_exploit) > set test_port 31337
+RouterXPL-Forge (igd_exploit) > run
+```
+
+## UPnP SSDP Discovery (basic)
+
+```text
+RouterXPL-Forge > use generic/upnp/ssdp_msearch
+RouterXPL-Forge (ssdp_msearch) > set target 192.168.1.1
+RouterXPL-Forge (ssdp_msearch) > run
+```
+
+## CVE Lookup
+
+```text
+RouterXPL-Forge > use generic/cve/cve_lookup
 RouterXPL-Forge (cve_lookup) > set cve CVE-2014-0160
 RouterXPL-Forge (cve_lookup) > run
 ```
 
-## UPnP discovery example
+## SNMP Bruteforce
 
 ```text
-RouterXPL-Forge > use generic/ssdp_msearch
-RouterXPL-Forge (ssdp_msearch) > run
+RouterXPL-Forge > use generic/snmp/snmp_bruteforce
+RouterXPL-Forge (snmp_bruteforce) > set target 192.168.1.1
+RouterXPL-Forge (snmp_bruteforce) > run
 ```
 
 Adjust options with `show options` before execution.
