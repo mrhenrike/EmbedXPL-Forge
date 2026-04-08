@@ -1,7 +1,7 @@
 {
   "catalog_note": "CVE index for RouterXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 338,
-  "last_updated": "2026-04-05",
+  "entry_count": 343,
+  "last_updated": "2026-04-08",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
     {
@@ -3885,6 +3885,70 @@
       ],
       "exploit_available": true,
       "note": "Chained exploit: enumeration + brute-force + CSRF + info disclosure. Full chain validated on X6-10, applicable to V5/V5-V2 (same BBSP stack)."
+    },
+    {
+      "cve_id": "CVE-2011-3315",
+      "vendor": "cisco",
+      "modules": [
+        "exploits/routers/cisco/unified_multi_path_traversal_cve_2011_3315.py"
+      ],
+      "devices": [
+        "Cisco Unified Communications Manager 5.x-8.x",
+        "Cisco Unified Contact Center Express",
+        "Cisco Unified IP Interactive Voice Response"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2013-7030",
+      "vendor": "cisco",
+      "modules": [
+        "exploits/routers/cisco/ucm_tftp_info_disclosure_cve_2013_7030.py"
+      ],
+      "devices": [
+        "Cisco Unified Communications Manager"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2025-14175",
+      "vendor": "tplink",
+      "modules": [
+        "exploits/routers/tplink/tl_wr820n_ssh_weak_crypto_cve_2025_14175.py"
+      ],
+      "devices": [
+        "TP-Link TL-WR820N v2.80"
+      ],
+      "exploit_available": true,
+      "note": "Weak SSH cryptographic algorithms (CWE-327). Scanner/check module."
+    },
+    {
+      "cve_id": "CVE-2023-26319",
+      "vendor": "xiaomi",
+      "modules": [
+        "exploits/routers/xiaomi/mi_router_command_injection_cve_2023_26319.py"
+      ],
+      "devices": [
+        "Xiaomi Mi Router R2100",
+        "Xiaomi Mi Router R3600",
+        "Xiaomi Mi Router RA67",
+        "Xiaomi Mi Router RA70",
+        "Xiaomi Mi Router RB03"
+      ],
+      "exploit_available": true,
+      "note": "Post-auth OS command injection via smartcontroller API."
+    },
+    {
+      "cve_id": "CVE-2025-67070",
+      "vendor": "intelbras",
+      "modules": [
+        "exploits/routers/intelbras/nvd_9032_mfa_bypass_cve_2025_67070.py"
+      ],
+      "devices": [
+        "Intelbras NVD 9032 R Ftd"
+      ],
+      "exploit_available": true,
+      "note": "Client-side MFA bypass allows unauthenticated admin password reset (CWE-284)."
     }
   ]
 }
