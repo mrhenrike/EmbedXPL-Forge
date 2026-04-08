@@ -9,7 +9,8 @@ Scanning strategy (multi-phase, with automatic fallback):
   Phase 1 — Nmap smart host discovery (multi-method: TCP SYN/ACK + ICMP + UDP)
             For single hosts (/32): uses -Pn (skip discovery, scan the specific target)
             For subnets: uses -PS/-PA/-PE/-PP/-PU to discover live hosts first
-  Phase 2 — Scapy ARP scan (if nmap unavailable)
+  Phase 1b — Masscan (fast SYN scanner, ideal for large subnets when nmap unavailable)
+  Phase 2 — Scapy ARP scan (if nmap and masscan unavailable)
   Phase 3 — Socket-based TCP probe (universal fallback, no special privileges)
 
 IMPORTANT: -Pn is ONLY used for single-host targets.  Using -Pn on
@@ -18,7 +19,7 @@ is down, leading to extreme delays and false positives (ports shown
 as "filtered" on non-existent hosts).
 
 Author: André Henrique (LinkedIn/X: @mrhenrike)
-Version: 0.4.0
+Version: 0.5.0
 """
 
 from __future__ import annotations
@@ -371,11 +372,15 @@ class NetworkDiscovery:
         if self._is_local_subnet():
             self._arp_sweep(callback, seen_ips)
 
-        # Phase 1+: Nmap (smart discovery for subnets, -Pn for single hosts)
+        # Phase 1+: Nmap -> Masscan -> Scapy -> Socket fallback
         if self.use_nmap and self._nmap_available():
             if callback:
                 callback("scan", "Using Nmap scanner")
             self._scan_nmap(callback, seen_ips)
+        elif self._masscan_available():
+            if callback:
+                callback("scan", "Using Masscan (fast SYN scanner)")
+            self._scan_masscan(callback, seen_ips)
         elif self.use_scapy and self._scapy_available():
             if callback:
                 callback("scan", "Using Scapy ARP scanner")
@@ -516,6 +521,18 @@ class NetworkDiscovery:
             import nmap
             nm = nmap.PortScanner()
             return True
+        except Exception:
+            return False
+
+    @staticmethod
+    def _masscan_available() -> bool:
+        """Check if masscan binary is in PATH."""
+        try:
+            r = subprocess.run(
+                ["masscan", "--version"],
+                capture_output=True, timeout=5,
+            )
+            return r.returncode == 0
         except Exception:
             return False
 
@@ -683,6 +700,59 @@ class NetworkDiscovery:
 
         if callback:
             callback("scan", "Nmap found {} new hosts (total: {})".format(new_hosts, len(self._hosts)))
+
+    def _scan_masscan(self, callback: Optional[Callable] = None, seen_ips: Optional[Set[str]] = None) -> None:
+        """Fast host discovery via masscan (ideal for large subnets)."""
+        if seen_ips is None:
+            seen_ips = set()
+        port_str = ",".join(str(p) for p in self.ports[:20])
+        rate = str(self.timing_profile.max_workers * 100)
+
+        cmd = [
+            "masscan", self.target,
+            "-p", port_str,
+            "--rate", rate,
+            "--wait", "3",
+            "-oL", "-",
+        ]
+
+        if callback:
+            callback("scan", "Masscan scanning {} (rate {})".format(self.target, rate))
+
+        logger.info("Running masscan: %s", " ".join(cmd))
+        try:
+            result = subprocess.run(
+                cmd, capture_output=True, text=True, timeout=120,
+            )
+        except subprocess.TimeoutExpired:
+            logger.warning("Masscan timed out after 120s")
+            return
+        except Exception as exc:
+            logger.warning("Masscan failed: %s", exc)
+            return
+
+        for line in result.stdout.splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = line.split()
+            if len(parts) >= 4 and parts[0] == "open":
+                ip = parts[3]
+                port = int(parts[2])
+                if ip not in seen_ips:
+                    seen_ips.add(ip)
+                    host = self._create_host(ip)
+                    host.open_ports.append(port)
+                    self._hosts.append(host)
+                else:
+                    for h in self._hosts:
+                        if h.ip == ip and port not in h.open_ports:
+                            h.open_ports.append(port)
+
+        if callback:
+            callback("scan", "Masscan found {} live hosts".format(
+                len([h for h in self._hosts if h.ip in seen_ips])
+            ))
 
     def _scan_scapy(self, callback: Optional[Callable] = None, seen_ips: Optional[Set[str]] = None) -> None:
         """ARP scan for same-subnet discovery via scapy."""

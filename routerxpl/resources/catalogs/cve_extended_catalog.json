@@ -1,6 +1,6 @@
 {
   "catalog_note": "CVE index for RouterXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 343,
+  "entry_count": 347,
   "last_updated": "2026-04-08",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
@@ -3949,6 +3949,55 @@
       ],
       "exploit_available": true,
       "note": "Client-side MFA bypass allows unauthenticated admin password reset (CWE-284)."
+    },
+    {
+      "cve_id": "CVE-2021-36260",
+      "vendor": "hikvision",
+      "modules": [
+        "exploits/routers/hikvision/ip_camera_command_injection_cve_2021_36260.py"
+      ],
+      "devices": [
+        "Hikvision DS-2CDxxxx series",
+        "Hikvision DS-2DExxxx series",
+        "Hikvision HWI-xxxx series",
+        "Hikvision IPC-xxxx series"
+      ],
+      "exploit_available": true,
+      "note": "CISA KEV. Unauth RCE via PUT /SDK/webLanguage XML injection. CVSS 9.8."
+    },
+    {
+      "cve_id": "CVE-2020-15894",
+      "vendor": "dlink",
+      "modules": [
+        "exploits/routers/dlink/dir_816l_multi_vuln.py"
+      ],
+      "devices": [
+        "D-Link DIR-816L firmware 2.06"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2026-4180",
+      "vendor": "dlink",
+      "modules": [
+        "exploits/routers/dlink/dir_816l_multi_vuln.py"
+      ],
+      "devices": [
+        "D-Link DIR-816 firmware 1.10CNB05"
+      ],
+      "exploit_available": true,
+      "note": "Auth bypass via token_id manipulation in redirect.asp (goahead)."
+    },
+    {
+      "cve_id": "CVE-2018-8755",
+      "vendor": "nucom",
+      "modules": [
+        "exploits/routers/nucom/nc_wr644gacv_config_download_cve_2018_8755.py"
+      ],
+      "devices": [
+        "Nucom NC-WR644GACV firmware <= STA 005"
+      ],
+      "exploit_available": true
     }
   ]
 }
