@@ -1443,5 +1443,144 @@ class RouterXPLInterpreter(BaseInterpreter):
         session.add_result(result)
         self._session_mgr.save(session)
 
+    def command_apt(self, *args, **kwargs):
+        """Browse and execute APT group attack chains.
+
+        Usage:
+            apt                          List all APT groups
+            apt list                     Same as above
+            apt show <group_id>          Show attacks for a group
+            apt search <keyword>         Search groups by device/CVE
+            apt run <group_id>           Run ALL attacks for a group (interactive)
+            apt run <group_id> <attack#> Run a specific attack by index
+        """
+        from routerxpl.core.apt_catalog import get_catalog, get_group, list_groups, find_groups_by_device, find_groups_by_cve
+        from routerxpl.core.exploit.printer import console as _con
+        from rich.table import Table
+        from rich.panel import Panel
+
+        sub = ""
+        sub_args: list = []
+        if args:
+            parts = args[0].strip().split() if isinstance(args[0], str) else list(args)
+            if parts:
+                sub = parts[0].lower()
+                sub_args = parts[1:]
+
+        if sub in ("", "list"):
+            groups = list_groups()
+            tbl = Table(
+                title="APT Groups Targeting Network Devices ({})".format(len(groups)),
+                show_header=True, header_style="bold cyan", border_style="dim",
+            )
+            tbl.add_column("ID", style="bold")
+            tbl.add_column("Name", style="green")
+            tbl.add_column("Country")
+            tbl.add_column("Aliases", style="dim")
+            tbl.add_column("Attacks", justify="center")
+            tbl.add_column("MITRE")
+
+            for g in groups:
+                tbl.add_row(
+                    g.id, g.name, g.country,
+                    ", ".join(g.aliases[:3]),
+                    str(len(g.attacks)),
+                    g.mitre_id,
+                )
+            _con.print(tbl)
+            print_info("Use 'apt show <group_id>' for details or 'apt run <group_id>' to execute")
+            return
+
+        if sub == "show":
+            if not sub_args:
+                print_error("Usage: apt show <group_id>")
+                return
+            group = get_group(sub_args[0])
+            if not group:
+                print_error("Unknown group: {}".format(sub_args[0]))
+                return
+
+            header = "[bold]{name}[/bold] ({country})\n{desc}".format(
+                name=group.name, country=group.country, desc=group.description,
+            )
+            _con.print(Panel(header, title="APT Profile: {}".format(group.id), border_style="red"))
+
+            tbl = Table(show_header=True, header_style="bold red", border_style="dim")
+            tbl.add_column("#", style="dim", width=3)
+            tbl.add_column("Phase", style="cyan")
+            tbl.add_column("Attack", style="bold")
+            tbl.add_column("CVEs", style="yellow")
+            tbl.add_column("Modules", style="green")
+            tbl.add_column("Devices")
+            tbl.add_column("Auth", justify="center")
+
+            for i, atk in enumerate(group.attacks):
+                tbl.add_row(
+                    str(i), atk.phase, atk.name,
+                    "\n".join(atk.cves) if atk.cves else "-",
+                    "\n".join(atk.modules),
+                    "\n".join(atk.target_devices[:2]),
+                    "Yes" if atk.requires_auth else "No",
+                )
+            _con.print(tbl)
+            print_info("Use 'apt run {} [attack#]' to execute".format(group.id))
+            return
+
+        if sub == "search":
+            keyword = " ".join(sub_args) if sub_args else ""
+            if not keyword:
+                print_error("Usage: apt search <device_or_cve>")
+                return
+
+            results = find_groups_by_device(keyword) if not keyword.upper().startswith("CVE-") else find_groups_by_cve(keyword)
+            if not results:
+                print_info("No APT groups found for '{}'".format(keyword))
+                return
+
+            for g in results:
+                print_success("{} ({}) — {} attacks".format(g.name, g.country, len(g.attacks)))
+                for atk in g.attacks:
+                    if keyword.lower() in " ".join(atk.target_devices).lower() or keyword.upper() in atk.cves:
+                        print_info("  -> {} [{}]".format(atk.name, ", ".join(atk.cves) if atk.cves else atk.phase))
+            return
+
+        if sub == "run":
+            if not sub_args:
+                print_error("Usage: apt run <group_id> [attack_index]")
+                return
+            group = get_group(sub_args[0])
+            if not group:
+                print_error("Unknown group: {}".format(sub_args[0]))
+                return
+
+            attack_idx = None
+            if len(sub_args) > 1:
+                try:
+                    attack_idx = int(sub_args[1])
+                except ValueError:
+                    print_error("Attack index must be a number")
+                    return
+
+            attacks_to_run = [group.attacks[attack_idx]] if attack_idx is not None else group.attacks
+
+            for atk in attacks_to_run:
+                if not atk.modules:
+                    print_status("Skipping '{}' — no executable module".format(atk.name))
+                    continue
+
+                module_path = atk.modules[0]
+                print_status("[{}] {} — loading {}".format(atk.phase, atk.name, module_path))
+
+                try:
+                    self.command_use(module_path)
+                    if hasattr(self, "current_module") and self.current_module:
+                        print_status("Module loaded. Set target and run with 'run' or 'check'")
+                        return
+                except Exception as exc:
+                    print_error("Failed to load {}: {}".format(module_path, exc))
+            return
+
+        print_error("Unknown subcommand: {}. Use 'apt', 'apt list', 'apt show', 'apt search', 'apt run'".format(sub))
+
     def command_exit(self, *args, **kwargs):
         raise EOFError

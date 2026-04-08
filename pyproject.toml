@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "routerxpl"
-version = "0.8.0"
-description = "Network Device Security Assessment Framework — 700 modules, 350 CVEs, 55 vendors"
+version = "0.9.0"
+description = "Network Device Security Assessment Framework — 700 modules, 350 CVEs, 55 vendors, APT Group Attack Engine"
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
