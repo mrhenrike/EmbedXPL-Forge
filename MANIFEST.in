@@ -1,6 +1,12 @@
 # Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+#
+# Controls what goes into the SOURCE DISTRIBUTION (sdist / .tar.gz).
+# The wheel (.whl) already contains only routerxpl* via pyproject.toml.
+#
+# Include: package runtime files + essential metadata
+# Exclude: dev tools, docs, CI files, generated artifacts
 
-# Root files
+# === Essential metadata ===
 include README.md
 include README.pt-BR.md
 include LICENSE
@@ -8,23 +14,50 @@ include CHANGELOG.md
 include pyproject.toml
 include requirements.txt
 
-# Package data — resources
+# === Package data — runtime resources ===
 recursive-include routerxpl/resources/catalogs     *.json
 recursive-include routerxpl/resources/wordlists    *.txt
 recursive-include routerxpl/resources/ssh_keys     *.json *.key
 recursive-include routerxpl/resources/vendors      *.dat *.csv
 recursive-include routerxpl/resources/mibs         *
-recursive-include routerxpl/resources/arsenal      *
 recursive-include routerxpl/resources/ml           *.json
 
-# IEEE OUI database
+# IEEE OUI database (used at runtime for MAC vendor lookup)
 include routerxpl/data/oui.txt
 
-# Exclude generated / local-only artifacts
+# === Explicit exclusions from sdist ===
+
+# Dev tools — not part of runtime
+prune tools
+
+# Documentation — not needed for package execution
+prune docs
+
+# CI / CD — not needed for package users
+exclude .github
+prune .github
+exclude .travis.yml
+prune .travis
+
+# Legacy packaging
+exclude setup.py
+exclude Makefile
+
+# Generated artifacts — never ship to PyPI
+exclude docs/COVERAGE_MATRIX.md
+exclude docs/COVERAGE_MATRIX.txt
+exclude routerxpl/resources/catalogs/arsenal_index.json
+exclude routerxpl/modules/audit_report.json
+
+# Python artifacts
 global-exclude __pycache__
 global-exclude *.py[cod]
 global-exclude *.so
+global-exclude *.pyd
 global-exclude .env
 global-exclude *.log
+global-exclude .DS_Store
 recursive-exclude .log *
 recursive-exclude .git *
+recursive-exclude .venv *
+recursive-exclude venv *

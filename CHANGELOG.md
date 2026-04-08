@@ -6,6 +6,15 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [0.6.3] — 2026-04-08
+
+### Changed
+- Removed generated artifacts from git tracking (COVERAGE_MATRIX.md/.txt, arsenal_index.json)
+- Removed obsolete Travis CI configuration (.travis.yml, .travis/)
+- MANIFEST.in: explicitly excludes tools/, docs/, .github/, .travis/ from sdist
+- .gitignore: comprehensive exclusion of all generated and dev-only artifacts
+- Package sdist now contains ONLY: routerxpl/ package + runtime resources + README/LICENSE/CHANGELOG
+
 ## [0.6.2] — 2026-04-08
 
 ### Added
