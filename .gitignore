@@ -79,6 +79,11 @@ routerxpl/resources/catalogs/arsenal_index.json
 routerxpl/modules/audit_report.json
 *.audit_report.json
 
+# === Environment / secrets (NEVER commit) ===
+.env
+.env.*
+*.env
+
 # === Pipenv ===
 Pipfile
 Pipfile.lock
