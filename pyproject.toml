@@ -1,0 +1,108 @@
+# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "routerxpl"
+version = "0.6.0"
+description = "Network Device Security Assessment Framework — 647 modules, 338 CVEs, 49 vendors"
+readme = { file = "README.md", content-type = "text/markdown" }
+license = { file = "LICENSE" }
+authors = [
+    { name = "André Henrique", email = "henrique.santos@uniaogeek.com.br" },
+]
+maintainers = [
+    { name = "André Henrique", email = "henrique.santos@uniaogeek.com.br" },
+]
+keywords = [
+    "security", "pentesting", "router", "iot", "exploit",
+    "network-security", "vulnerability-scanner", "gpon", "cve",
+    "ethical-hacking", "red-team", "routersploit", "automation",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Telecommunications Industry",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: System :: Networking",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "requests>=2.32.4",
+    "paramiko>=3.0",
+    "pysnmp>=4.4.12",
+    "pycryptodome>=3.18",
+    "scapy>=2.5",
+    "setuptools>=68",
+    "colorama>=0.4.6",
+    "rich>=13.0",
+    "aiohttp>=3.9",
+    "psutil>=5.9",
+    "python-nmap>=0.7.1",
+    "telnetlib3>=2.0.0; python_version >= '3.13'",
+]
+
+[project.optional-dependencies]
+ml = [
+    "numpy>=1.24",
+    "scikit-learn>=1.3",
+]
+ml-gpu = [
+    "torch>=2.0.0",
+    "numpy>=1.24",
+]
+dev = [
+    "build>=1.0",
+    "twine>=5.0",
+    "flake8>=6.0",
+    "bandit>=1.7",
+    "pip-audit>=2.6",
+    "pytest>=7.0",
+]
+
+[project.urls]
+Homepage       = "https://github.com/mrhenrike/RouterXPL-Forge"
+Repository     = "https://github.com/mrhenrike/RouterXPL-Forge"
+Documentation  = "https://github.com/mrhenrike/RouterXPL-Forge/wiki"
+"Bug Tracker"  = "https://github.com/mrhenrike/RouterXPL-Forge/issues"
+Changelog      = "https://github.com/mrhenrike/RouterXPL-Forge/releases"
+
+[project.scripts]
+rxf = "routerxpl.__main__:main"
+routerxpl = "routerxpl.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["routerxpl*"]
+
+[tool.setuptools.package-data]
+"routerxpl.data"       = ["oui.txt"]
+"routerxpl.resources"  = [
+    "catalogs/*.json",
+    "wordlists/**/*.txt",
+    "wordlists/*.txt",
+    "ssh_keys/*.json",
+    "ssh_keys/*.key",
+    "vendors/*.dat",
+    "vendors/*.csv",
+    "mibs/*",
+    "arsenal/*",
+    "ml/*.json",
+]

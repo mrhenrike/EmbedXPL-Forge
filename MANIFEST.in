@@ -1,7 +1,30 @@
-recursive-include routerxpl/resources/ssh_keys *.json *.key
-recursive-include routerxpl/resources/vendors *.dat *.csv
-recursive-include routerxpl/resources/wordlists *.txt
-recursive-include routerxpl/resources/mibs *.*
-recursive-include routerxpl/resources/catalogs *.json
-recursive-include routerxpl/resources/arsenal *.*
-recursive-include routerxpl/resources/ml *.json
+# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+
+# Root files
+include README.md
+include README.pt-BR.md
+include LICENSE
+include CHANGELOG.md
+include pyproject.toml
+include requirements.txt
+
+# Package data — resources
+recursive-include routerxpl/resources/catalogs     *.json
+recursive-include routerxpl/resources/wordlists    *.txt
+recursive-include routerxpl/resources/ssh_keys     *.json *.key
+recursive-include routerxpl/resources/vendors      *.dat *.csv
+recursive-include routerxpl/resources/mibs         *
+recursive-include routerxpl/resources/arsenal      *
+recursive-include routerxpl/resources/ml           *.json
+
+# IEEE OUI database
+include routerxpl/data/oui.txt
+
+# Exclude generated / local-only artifacts
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *.so
+global-exclude .env
+global-exclude *.log
+recursive-exclude .log *
+recursive-exclude .git *
