@@ -18,6 +18,7 @@
     "curated_layout_catalog": "routerxpl/resources/catalogs/arsenal_layout.json"
   },
   "catalogs": [
+    "arsenal_index.json",
     "arsenal_layout.json",
     "cve_extended_catalog.json",
     "market_priority_devices_2010_2026.json",
