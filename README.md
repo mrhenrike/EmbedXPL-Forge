@@ -2,7 +2,7 @@
 
 **Network Device Security Assessment Framework**
 
-RouterXPL-Forge is an open-source exploitation framework designed for security professionals to audit routers, switches, TAPs, and SOHO edge devices. It provides **647 modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, and encoding — with **338 CVEs** mapped across **49 vendors**.
+RouterXPL-Forge is an open-source exploitation framework designed for security professionals to audit routers, switches, TAPs, and SOHO edge devices. It provides **657 modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, and encoding — with **338 CVEs** mapped across **49 vendors**.
 
 > **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 
@@ -10,7 +10,7 @@ RouterXPL-Forge is an open-source exploitation framework designed for security p
 
 ## Features
 
-- **500 exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt
+- **510 exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt
 - **88 credential modules** — dictionary attacks against FTP, SSH, Telnet, HTTP, SNMP, SFTP
 - **5 scanner modules** — AutoPwn, device-specific scanners
 - **32 payload modules** — reverse/bind TCP shells for x86, x64, ARM, MIPS, Python, Perl, PHP

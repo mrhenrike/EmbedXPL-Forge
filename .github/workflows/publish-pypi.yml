@@ -131,9 +131,14 @@ jobs:
           VERSION="${{ needs.version-check.outputs.version }}"
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "v$VERSION" -m "RouterXPL-Forge v$VERSION (auto-tagged by CI)"
-          git push origin "v$VERSION"
-          echo "Tagged v$VERSION"
+          # Only create tag if it doesn't already exist on remote
+          if git ls-remote --tags origin "refs/tags/v$VERSION" | grep -q "v$VERSION"; then
+            echo "Tag v$VERSION already exists on remote — skipping tag creation"
+          else
+            git tag -a "v$VERSION" -m "RouterXPL-Forge v$VERSION (auto-tagged by CI)"
+            git push origin "v$VERSION"
+            echo "Tagged v$VERSION"
+          fi
 
   # ------------------------------------------------------------------ #
   # Publish to PyPI (production)                                        #

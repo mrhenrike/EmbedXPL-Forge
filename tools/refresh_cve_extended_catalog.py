@@ -14,7 +14,7 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 _RX_CVE = re.compile(r"CVE-\d{4}-\d{4,7}", re.IGNORECASE)
 
