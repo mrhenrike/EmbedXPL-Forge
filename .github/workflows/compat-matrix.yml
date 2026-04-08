@@ -2,14 +2,11 @@
 
 name: compatibility-matrix
 
-# Triggers: manual only (workflow_dispatch) to avoid consuming Actions minutes
-# on a private repository. Run this workflow manually before releases.
-# Re-enable push/pull_request triggers when the account has an active paid plan.
 on:
-  workflow_dispatch:
   push:
-    tags:
-      - "v*"
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
