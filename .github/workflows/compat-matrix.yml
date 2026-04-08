@@ -102,20 +102,16 @@ jobs:
         run: |
           python tools/validate_arsenal_architecture.py
 
-      - name: Regenerate coverage matrix and commit if changed
+      - name: Validate generated coverage matrix is up to date
+        # Non-gating: regenerate and show diff for awareness.
+        # The matrix is auto-generated and may differ by platform line-endings.
+        # Run locally: python tools/generate_coverage_matrix.py && python tools/build_arsenal_index.py
+        continue-on-error: true
         run: |
           python tools/generate_coverage_matrix.py
           python tools/build_arsenal_index.py
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/COVERAGE_MATRIX.md docs/COVERAGE_MATRIX.txt routerxpl/resources/catalogs/arsenal_index.json
-          if git diff --cached --quiet; then
-            echo "Coverage matrix and arsenal index are up to date."
-          else
-            git commit -m "ci: auto-update coverage matrix and arsenal index [skip ci]"
-            git push
-            echo "Coverage matrix updated and pushed."
-          fi
+          git diff --stat -- docs/COVERAGE_MATRIX.md docs/COVERAGE_MATRIX.txt routerxpl/resources/catalogs/arsenal_index.json || true
+          echo "Coverage matrix regenerated (diff shown above — non-gating)."
 
       - name: Dependency vulnerability audit
         run: |
