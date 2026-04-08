@@ -166,6 +166,7 @@ jobs:
         with:
           print-hash: true
           verbose: true
+          skip_existing: true
           # Fallback: set PYPI_API_TOKEN secret if Trusted Publisher is not configured yet.
           # To configure Trusted Publisher: https://pypi.org/manage/account/publishing/
           #   Project name : routerxpl

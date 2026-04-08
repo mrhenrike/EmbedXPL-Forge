@@ -88,3 +88,6 @@ Pipfile.lock
 
 # Package metadata
 routerxpl.egg-info/
+
+routerxpl/modules/audit_report.json
+*.audit_report.json
