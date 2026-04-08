@@ -35,21 +35,45 @@ RouterXPL-Forge is an open-source exploitation framework designed for security p
 
 2Wire · 3Com · ActionTec · Arris · Aruba · Asmax · ASUS · Belkin · BHU · Billion · Calix · CERIO · Cisco · Comtrend · D-Link · Draytek · FiberHome · Fortinet · GPON · HooToo · Huawei · Intelbras · IPFire · Juniper · LG · Linksys · Mercury · MikroTik · MitraStar · Movistar · Netcore · NETGEAR · Netsys · OpenWrt · Ruijie · SerComm · Shuttle · SonicWall · Technicolor · Tenda · Thomson · TOTOLINK · TP-Link · TRENDnet · Ubiquiti · Wavlink · Xiaomi · Zhone · ZTE · ZyXEL
 
+## Installation
+
+### Option 1 — PyPI (recommended)
+
+```bash
+pip install routerxpl
+routerxpl
+```
+
+### Option 2 — From source
+
+```bash
+git clone https://github.com/mrhenrike/RouterXPL-Forge.git
+cd RouterXPL-Forge
+pip install -r requirements.txt
+python rxf.py
+```
+
+### Option 3 — Python module
+
+```bash
+pip install routerxpl
+python -m routerxpl
+```
+
 ## Quick Start
 
 ```bash
-# Clone the repository
-git clone https://github.com/mrhenrike/RouterXPL-Forge.git
-cd RouterXPL-Forge
+# Install
+pip install routerxpl
 
-# Install dependencies
-pip install -r requirements.txt
+# Launch interactive shell
+routerxpl
 
-# Launch the interactive shell
-python rxf.py
+# Run a specific module directly
+routerxpl -m exploits/routers/tplink/wr841n_credential_disclosure_cve_2023_50224 -s target 192.168.1.1
 
-# Or run a specific module non-interactively
-python rxf.py -m exploits/routers/dlink/dir_300_600_rce -s target 192.168.1.1
+# Network discovery
+routerxpl -c "discover 192.168.1.0/24"
 ```
 
 ## Usage
@@ -175,17 +199,46 @@ routerxpl/modules/
 └── generic/           # CVE lookup, SNMP, UPnP SSDP, UPnP IGD exploit, wordlist tools
 ```
 
-## Architecture Diagrams
+## Architecture & Attack Surface Maps
 
-Mermaid diagrams for all supported device categories are in [`docs/diagrams/architecture/`](docs/diagrams/architecture/). Rendered PNGs are in [`docs/img/architecture/`](docs/img/architecture/).
+Attack surface maps showing module coverage per access vector, in the style of operational security diagrams.
+Source files in [`docs/diagrams/architecture/`](docs/diagrams/architecture/).
 
-| SOHO Router | ISP CPE / GPON ONT |
-|:-----------:|:------------------:|
-| ![SOHO router](docs/img/architecture/rxf_arch_router_soho.png) | ![ISP CPE](docs/img/architecture/rxf_arch_isp_cpe.png) |
+### Module Architecture Overview
 
-| Mixed Edge | GPON ONT Full Attack Map |
-|:----------:|:------------------------:|
-| ![Mixed edge](docs/img/architecture/rxf_arch_edge_mixed.png) | ![GPON ONT attack map](docs/img/architecture/rxf_arch_gpon_ont_attack.png) |
+<p align="center">
+  <img src="docs/diagrams/architecture/rxf_arch_overview.png" width="900" alt="RouterXPL-Forge Architecture Overview"/>
+</p>
+
+### APT Group Attack Chains
+
+<p align="center">
+  <img src="docs/diagrams/architecture/rxf_arch_apt_chains.png" width="900" alt="APT Group Attack Chains"/>
+</p>
+
+### SOHO Router Attack Surface
+
+<p align="center">
+  <img src="docs/diagrams/architecture/rxf_arch_soho_router.png" width="900" alt="SOHO Router Attack Surface"/>
+</p>
+
+### TP-Link Attack Surface (APT28/GRU Campaign)
+
+<p align="center">
+  <img src="docs/diagrams/architecture/rxf_arch_tplink_apt28.png" width="900" alt="TP-Link APT28 Attack Surface"/>
+</p>
+
+### MikroTik RouterOS Attack Surface
+
+<p align="center">
+  <img src="docs/diagrams/architecture/rxf_arch_mikrotik.png" width="900" alt="MikroTik Attack Surface"/>
+</p>
+
+### GPON ONT Attack Surface (Huawei EG8145)
+
+<p align="center">
+  <img src="docs/diagrams/architecture/rxf_arch_gpon_ont.png" width="900" alt="GPON ONT Attack Surface"/>
+</p>
 
 ## Requirements
 
