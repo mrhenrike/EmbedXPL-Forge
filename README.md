@@ -2,7 +2,7 @@
 
 **Network Device Security Assessment Framework**
 
-RouterXPL-Forge is an open-source exploitation framework designed for security professionals to audit routers, switches, TAPs, and SOHO edge devices. It provides **690 modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, and encoding — with **343 CVEs** mapped across **53 vendors**.
+RouterXPL-Forge is an open-source exploitation framework designed for security professionals to audit routers, switches, TAPs, and SOHO edge devices. It provides **700 modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, and encoding — with **350 CVEs** mapped across **55 vendors** and an **APT Group Attack Engine** that reproduces real-world nation-state attack chains.
 
 > **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 
@@ -10,17 +10,18 @@ RouterXPL-Forge is an open-source exploitation framework designed for security p
 
 ## Features
 
-- **516 exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt
+- **540+ exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt
 - **88 credential modules** — dictionary attacks against FTP, SSH, Telnet, HTTP, SNMP, SFTP
 - **5 scanner modules** — AutoPwn, device-specific scanners
 - **32 payload modules** — reverse/bind TCP shells for x86, x64, ARM, MIPS, Python, Perl, PHP
 - **13 encoder modules** — Base64 and hex encoding for Python, PHP, Perl
-- **12 generic modules** — Heartbleed, ShellShock, UPnP SSDP/IGD, SNMP bruteforce, TCP Xmas scan, UDP amplification test, CVE lookup
-- **343 CVEs mapped** — from 2001 to 2026, covering all major vulnerability classes
+- **14 generic modules** — Heartbleed, ShellShock, UPnP IGD, SNMP bruteforce, TCP Xmas, UDP amplification, CVE lookup, DNS hijack detector, AITM interceptor
+- **350 CVEs mapped** — from 2001 to 2026, covering all major vulnerability classes
+- **APT Group Attack Engine** — browse and reproduce attack chains from APT28, Volt Typhoon, Sandworm, Quad7, Turla, APT40 with MITRE ATT&CK mapping
 - **23 vendor-specific wordlists** — externalized default credentials per vendor (incl. ISP-specific Brazil)
-- **Network discovery** — SSDP, ARP, Nmap, Scapy fallback, OUI lookup (IEEE database), T0–T5 timing profiles
+- **Network discovery** — SSDP, ARP, Nmap, Masscan, Scapy fallback, OUI lookup (IEEE database), T0–T5 timing profiles
 - **Session management** — persistent scan history per host (IP+MAC), resume/restart, full findings index
-- **Chained autopwn modules** — multi-phase vendor-specific exploitation chains (Huawei GPON ONT, D-Link, TP-Link, etc.)
+- **Chained autopwn modules** — multi-phase vendor-specific exploitation chains (Huawei GPON ONT, D-Link, TP-Link APT28 chain, etc.)
 
 ## Supported Device Types
 
@@ -77,6 +78,29 @@ rxf (D-Link DIR-300 & DIR-600 RCE) > run
 | `search <term>` | Search modules by keyword |
 | `discover [subnet] [--timing T0-T5] [--fresh]` | Scan subnet, fingerprint targets, suggest modules |
 | `sessions list\|show\|delete\|export\|purge` | Manage persistent scan history per host |
+| `apt` | List APT groups with reproducible attack chains |
+| `apt show <group>` | View attack chain details (MITRE ATT&CK, CVEs, modules) |
+| `apt search <device\|CVE>` | Find APT groups targeting a device or CVE |
+| `apt run <group> [#]` | Execute APT attack chain (all or specific attack) |
+
+### APT Group Attack Engine
+
+```
+# List all cataloged threat actors
+rxf > apt list
+
+# Show APT28 attack chain details
+rxf > apt show apt28
+
+# Search for groups targeting MikroTik
+rxf > apt search mikrotik
+
+# Execute the full APT28 DNS hijack chain (interactive)
+rxf > apt run apt28
+
+# Execute only the credential disclosure attack (#0)
+rxf > apt run apt28 0
+```
 
 ### Network Discovery
 
