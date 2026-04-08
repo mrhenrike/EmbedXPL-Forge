@@ -6,6 +6,35 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [0.7.0] — 2026-04-08
+
+### Added
+- **Full RouterSploit parity** — 9 modules (4 new, 5 stubs upgraded with real exploit logic):
+  - `cisco/secure_acs_5_x_unauthorized_password_change` — SOAP auth bypass
+  - `cisco/ucm_tftp_info_disclosure_cve_2013_7030` — TFTP credential leak
+  - `cisco/unified_multi_path_traversal_cve_2011_3315` — unauthenticated LFI
+  - `zyxel/zywall_usg_config_hash_extraction` — config + hash download
+  - Upgraded stubs: Firepower LFI/RCE (CVE-2016-6435/6433), UCS Shellshock (CVE-2014-6278), DGS-1510 (CVE-2017-6206), FortiGate SSH backdoor (CVE-2016-1909)
+- **RouterPwn integration** — 13 high-value modules converted from routerpwn.com JS corpus:
+  - D-Link: DIR-300/615 RCE, DSL-2750U auth bypass, DSL-320B config disclosure
+  - Linksys: WRT54GL RCE, X2000 RCE
+  - Netgear: DGN1000B RCE, WNDR3400 password disclosure
+  - ASUS: RT-N16 password disclosure, RT-N66U/AC66U RCE
+  - Cisco: EPC3925 CSRF password change
+  - Ubiquiti: AirOS pre-auth RCE
+  - Huawei: SmartAX MT880 admin add
+  - TP-Link: TD-8840T password reset
+- **Third-party CVE incorporation** — 3 priority modules:
+  - `tplink/tl_wr820n_ssh_weak_crypto_cve_2025_14175` — SSH weak algo scanner
+  - `xiaomi/mi_router_command_injection_cve_2023_26319` — post-auth smartcontroller RCE
+  - `intelbras/nvd_9032_mfa_bypass_cve_2025_67070` — client-side MFA bypass
+- **New vendor**: `xiaomi` (Mi Router family)
+- CVE catalog: 338 → 343 entries (+5)
+
+### Changed
+- Module counts: 670 → 690 total, 520 → 540 exploits, 51 → 53 vendors
+- `pyproject.toml` version bump to 0.7.0
+
 ## [0.6.3] — 2026-04-08
 
 ### Changed
