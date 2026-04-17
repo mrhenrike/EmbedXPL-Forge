@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "1.4.0"
-description = "Embedded Device Security Assessment Framework — 2035+ modules, ICS protocol coverage: ENIP/CIP/Profinet/VxWorks/QNX, Modbus active attacks FC1-FC6/FC15/FC16, firewall creds expansion"
+version = "1.5.0"
+description = "Embedded Device Security Assessment Framework — 2114+ modules, ICS/OT protocols, FirewallXPL full integration: enterprise perimeter+NGFW+LB+NAC+WAF exploits (Cisco/Palo Alto/Fortinet/SonicWall/Sophos/Juniper/Zyxel), VPN coverage expansion (Citrix/eWON/Secomea), 72 firewall exploit modules"
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
