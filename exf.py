@@ -27,11 +27,11 @@ def embedxpl(argv):
         print("Optional diagnostics: python tools/env_doctor.py")
         raise SystemExit(1)
 
-    rxf = EmbedXPLInterpreter()
+    exf = EmbedXPLInterpreter()
     if len(argv[1:]):
-        rxf.nonInteractive(argv)
+        exf.nonInteractive(argv)
     else:
-        rxf.start()
+        exf.start()
 
 if __name__ == "__main__":
     try:

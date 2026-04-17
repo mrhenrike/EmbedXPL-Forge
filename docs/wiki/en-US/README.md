@@ -12,15 +12,15 @@ PNG gallery. Mermaid sources: [../../diagrams/architecture/README.md](../../diag
 
 | SOHO Router | Managed Switch |
 |:-----------:|:--------------:|
-| ![SOHO](../../img/architecture/rxf_arch_router_soho.png) | ![Switch](../../img/architecture/rxf_arch_switch_l2l3.png) |
+| ![SOHO](../../img/architecture/exf_arch_router_soho.png) | ![Switch](../../img/architecture/exf_arch_switch_l2l3.png) |
 
 | ISP CPE / GPON ONT | Mixed Edge |
 |:------------------:|:----------:|
-| ![ISP CPE](../../img/architecture/rxf_arch_isp_cpe.png) | ![Mixed edge](../../img/architecture/rxf_arch_edge_mixed.png) |
+| ![ISP CPE](../../img/architecture/exf_arch_isp_cpe.png) | ![Mixed edge](../../img/architecture/exf_arch_edge_mixed.png) |
 
 | GPON ONT Full Attack Map |
 |:------------------------:|
-| ![GPON ONT attack map](../../img/architecture/rxf_arch_gpon_ont_attack.png) |
+| ![GPON ONT attack map](../../img/architecture/exf_arch_gpon_ont_attack.png) |
 
 ## Table of Contents
 
@@ -29,7 +29,7 @@ PNG gallery. Mermaid sources: [../../diagrams/architecture/README.md](../../diag
 | [01-introduction-and-installation.md](01-introduction-and-installation.md) | Introduction, scope, Python, install, diagnostics, logs |
 | [02-interactive-shell-commands.md](02-interactive-shell-commands.md) | Interactive commands, discover, sessions |
 | [03-search-and-listing.md](03-search-and-listing.md) | `search`, `show`, listing modules and devices |
-| [04-non-interactive-mode.md](04-non-interactive-mode.md) | `rxf.py -m` / `-s`, automation |
+| [04-non-interactive-mode.md](04-non-interactive-mode.md) | `exf.py -m` / `-s`, automation |
 | [05-creds-modules.md](05-creds-modules.md) | Credential modules and options |
 | [06-exploits-modules.md](06-exploits-modules.md) | Exploit modules, `check`, layout |
 | [07-scanners-and-autopwn.md](07-scanners-and-autopwn.md) | Scanners and AutoPwn |

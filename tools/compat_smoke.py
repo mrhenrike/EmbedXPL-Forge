@@ -99,8 +99,8 @@ def _telnet_backend_check() -> bool:
 
 
 def _run_cli_help(repo_root: Path) -> tuple[bool, str]:
-    """Execute `rxf.py -h` and return status + first output lines."""
-    cmd: List[str] = [sys.executable, str(repo_root / "rxf.py"), "-h"]
+    """Execute `exf.py -h` and return status + first output lines."""
+    cmd: List[str] = [sys.executable, str(repo_root / "exf.py"), "-h"]
     try:
         completed: subprocess.CompletedProcess[str] = subprocess.run(
             cmd,

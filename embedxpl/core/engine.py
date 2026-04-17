@@ -215,7 +215,7 @@ class AsyncScanEngine:
         self._semaphore = asyncio.Semaphore(self.max_workers)
         self._executor = ThreadPoolExecutor(
             max_workers=self.max_workers,
-            thread_name_prefix="rxf-scan",
+            thread_name_prefix="exf-scan",
         )
         self._results = []
         self._cancelled = False
@@ -281,7 +281,7 @@ class AsyncScanEngine:
         self._semaphore = asyncio.Semaphore(self.max_workers)
         self._executor = ThreadPoolExecutor(
             max_workers=self.max_workers,
-            thread_name_prefix="rxf-scan",
+            thread_name_prefix="exf-scan",
         )
         self._results = []
         self._cancelled = False

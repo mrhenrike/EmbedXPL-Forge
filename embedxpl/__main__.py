@@ -1,4 +1,4 @@
-"""Entry point for `python -m embedxpl` and `rxf` / `embedxpl` console scripts.
+"""Entry point for `python -m embedxpl` and `exf` / `embedxpl` console scripts.
 
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
@@ -38,11 +38,11 @@ def main() -> None:
         print("Optional diagnostics: python tools/env_doctor.py")
         raise SystemExit(1)
 
-    rxf = EmbedXPLInterpreter()
+    exf = EmbedXPLInterpreter()
     if len(sys.argv[1:]):
-        rxf.nonInteractive(sys.argv)
+        exf.nonInteractive(sys.argv)
     else:
-        rxf.start()
+        exf.start()
 
 
 if __name__ == "__main__":

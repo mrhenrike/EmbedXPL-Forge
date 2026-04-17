@@ -4,15 +4,15 @@ Module encodes Perl payload to base64 format.
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use encoders/perl/base64`
   3. Do: `show info`
 
 ## Scenarios
 
 ```
-rxf > use encoders/perl/base64
-rxf (Perl Base64 Encoder) > show info
+exf > use encoders/perl/base64
+exf (Perl Base64 Encoder) > show info
 
 Name:
 Perl Base64 Encoder

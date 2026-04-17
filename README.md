@@ -50,7 +50,7 @@ embedxpl
 git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
 cd EmbedXPL-Forge
 pip install -r requirements.txt
-python rxf.py
+python exf.py
 ```
 
 ### Option 3 — Python module
@@ -81,11 +81,11 @@ embedxpl -c "discover 192.168.1.0/24"
 ### Interactive Shell
 
 ```
-rxf > use exploits/routers/dlink/dir_300_600_rce
-rxf (D-Link DIR-300 & DIR-600 RCE) > show options
-rxf (D-Link DIR-300 & DIR-600 RCE) > set target 192.168.1.1
-rxf (D-Link DIR-300 & DIR-600 RCE) > check
-rxf (D-Link DIR-300 & DIR-600 RCE) > run
+exf > use exploits/routers/dlink/dir_300_600_rce
+exf (D-Link DIR-300 & DIR-600 RCE) > show options
+exf (D-Link DIR-300 & DIR-600 RCE) > set target 192.168.1.1
+exf (D-Link DIR-300 & DIR-600 RCE) > check
+exf (D-Link DIR-300 & DIR-600 RCE) > run
 ```
 
 ### Common Commands
@@ -111,32 +111,32 @@ rxf (D-Link DIR-300 & DIR-600 RCE) > run
 
 ```
 # List all cataloged threat actors
-rxf > apt list
+exf > apt list
 
 # Show APT28 attack chain details
-rxf > apt show apt28
+exf > apt show apt28
 
 # Search for groups targeting MikroTik
-rxf > apt search mikrotik
+exf > apt search mikrotik
 
 # Execute the full APT28 DNS hijack chain (interactive)
-rxf > apt run apt28
+exf > apt run apt28
 
 # Execute only the credential disclosure attack (#0)
-rxf > apt run apt28 0
+exf > apt run apt28 0
 ```
 
 ### Network Discovery
 
 ```
 # Auto-detect subnet from active interfaces and scan (default timing T3)
-rxf > discover
+exf > discover
 
 # Scan specific subnet with stealth timing
-rxf > discover 192.168.1.0/24 --timing T1
+exf > discover 192.168.1.0/24 --timing T1
 
 # Force fresh scan, ignore previous session history
-rxf > discover 192.168.1.0/24 --fresh
+exf > discover 192.168.1.0/24 --fresh
 ```
 
 Discovery uses a multi-phase pipeline: ARP sweep → Nmap (multi-method host probes) → Scapy → TCP connect fallback. Results are matched against the module catalog and filtered by vendor/model. The IEEE OUI database (`embedxpl/data/oui.txt`) resolves MAC addresses to vendors with online-first lookup and local fallback. When a host exposes WiFi capabilities, the tool recommends [WirelessXPL-Forge](https://github.com/mrhenrike/WirelessXPL-Forge) for wireless-specific attacks.
@@ -156,29 +156,29 @@ Discovery uses a multi-phase pipeline: ARP sweep → Nmap (multi-method host pro
 
 ```
 # List all hosts with scan history
-rxf > sessions list
+exf > sessions list
 
 # Full history for one host: tested modules, findings, timestamps
-rxf > sessions show 192.168.1.1
+exf > sessions show 192.168.1.1
 
 # Export session as JSON
-rxf > sessions export 192.168.1.1
+exf > sessions export 192.168.1.1
 
 # Delete one session
-rxf > sessions delete 192.168.1.1
+exf > sessions delete 192.168.1.1
 
 # Purge all sessions
-rxf > sessions purge
+exf > sessions purge
 ```
 
-Sessions are stored in `~/.rxf_sessions/` as JSON, keyed by SHA-256 of IP+MAC. On re-discovery of a known host, already-tested modules are shown as `[Tested]` and skipped by default.
+Sessions are stored in `~/.exf_sessions/` as JSON, keyed by SHA-256 of IP+MAC. On re-discovery of a known host, already-tested modules are shown as `[Tested]` and skipped by default.
 
 ### AutoPwn Scanner
 
 ```
-rxf > use scanners/autopwn
-rxf (AutoPwn) > set target 192.168.1.0/24
-rxf (AutoPwn) > run
+exf > use scanners/autopwn
+exf (AutoPwn) > set target 192.168.1.0/24
+exf (AutoPwn) > run
 ```
 
 ## Module Structure
@@ -207,37 +207,37 @@ Source files in [`docs/diagrams/architecture/`](docs/diagrams/architecture/).
 ### Module Architecture Overview
 
 <p align="center">
-  <img src="docs/diagrams/architecture/rxf_arch_overview.png" width="900" alt="EmbedXPL-Forge Architecture Overview"/>
+  <img src="docs/diagrams/architecture/exf_arch_overview.png" width="900" alt="EmbedXPL-Forge Architecture Overview"/>
 </p>
 
 ### APT Group Attack Chains
 
 <p align="center">
-  <img src="docs/diagrams/architecture/rxf_arch_apt_chains.png" width="900" alt="APT Group Attack Chains"/>
+  <img src="docs/diagrams/architecture/exf_arch_apt_chains.png" width="900" alt="APT Group Attack Chains"/>
 </p>
 
 ### SOHO Router Attack Surface
 
 <p align="center">
-  <img src="docs/diagrams/architecture/rxf_arch_soho_router.png" width="900" alt="SOHO Router Attack Surface"/>
+  <img src="docs/diagrams/architecture/exf_arch_soho_router.png" width="900" alt="SOHO Router Attack Surface"/>
 </p>
 
 ### TP-Link Attack Surface (APT28/GRU Campaign)
 
 <p align="center">
-  <img src="docs/diagrams/architecture/rxf_arch_tplink_apt28.png" width="900" alt="TP-Link APT28 Attack Surface"/>
+  <img src="docs/diagrams/architecture/exf_arch_tplink_apt28.png" width="900" alt="TP-Link APT28 Attack Surface"/>
 </p>
 
 ### MikroTik RouterOS Attack Surface
 
 <p align="center">
-  <img src="docs/diagrams/architecture/rxf_arch_mikrotik.png" width="900" alt="MikroTik Attack Surface"/>
+  <img src="docs/diagrams/architecture/exf_arch_mikrotik.png" width="900" alt="MikroTik Attack Surface"/>
 </p>
 
 ### GPON ONT Attack Surface (Huawei EG8145)
 
 <p align="center">
-  <img src="docs/diagrams/architecture/rxf_arch_gpon_ont.png" width="900" alt="GPON ONT Attack Surface"/>
+  <img src="docs/diagrams/architecture/exf_arch_gpon_ont.png" width="900" alt="GPON ONT Attack Surface"/>
 </p>
 
 ## Requirements

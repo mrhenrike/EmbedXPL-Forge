@@ -43,10 +43,10 @@ cd EmbedXPL-Forge
 pip install -r requirements.txt
 
 # Iniciar o shell interativo
-python rxf.py
+python exf.py
 
 # Ou executar um módulo específico não-interativamente
-python rxf.py -m exploits/routers/dlink/dir_300_600_rce -s target 192.168.1.1
+python exf.py -m exploits/routers/dlink/dir_300_600_rce -s target 192.168.1.1
 ```
 
 ## Uso
@@ -54,11 +54,11 @@ python rxf.py -m exploits/routers/dlink/dir_300_600_rce -s target 192.168.1.1
 ### Shell Interativo
 
 ```
-rxf > use exploits/routers/dlink/dir_300_600_rce
-rxf (D-Link DIR-300 & DIR-600 RCE) > show options
-rxf (D-Link DIR-300 & DIR-600 RCE) > set target 192.168.1.1
-rxf (D-Link DIR-300 & DIR-600 RCE) > check
-rxf (D-Link DIR-300 & DIR-600 RCE) > run
+exf > use exploits/routers/dlink/dir_300_600_rce
+exf (D-Link DIR-300 & DIR-600 RCE) > show options
+exf (D-Link DIR-300 & DIR-600 RCE) > set target 192.168.1.1
+exf (D-Link DIR-300 & DIR-600 RCE) > check
+exf (D-Link DIR-300 & DIR-600 RCE) > run
 ```
 
 ### Comandos Principais
@@ -77,9 +77,9 @@ rxf (D-Link DIR-300 & DIR-600 RCE) > run
 ### Scanner AutoPwn
 
 ```
-rxf > use scanners/autopwn
-rxf (AutoPwn) > set target 192.168.1.0/24
-rxf (AutoPwn) > run
+exf > use scanners/autopwn
+exf (AutoPwn) > set target 192.168.1.0/24
+exf (AutoPwn) > run
 ```
 
 ## Estrutura de Módulos

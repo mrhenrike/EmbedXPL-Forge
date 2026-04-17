@@ -11,7 +11,7 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 ### Changed (Breaking — Rebranding)
 - **Project renamed**: RouterXPL-Forge → **EmbedXPL-Forge**
 - **PyPI package**: `routerxpl` → **`embedxpl`** (`pip install embedxpl`)
-- **CLI commands**: `routerxpl` → **`embedxpl`**; `rxf` alias preserved
+- **CLI commands**: `routerxpl` → **`embedxpl`**; `exf` alias preserved
 - **Python package**: `routerxpl/` → `embedxpl/` (all imports updated)
 - **Classes**: `RouterXPLInterpreter` → `EmbedXPLInterpreter`, `RouterXPLException` → `EmbedXPLException`
 - **Log file**: `routerxpl.log` → `embedxpl.log`
@@ -157,10 +157,10 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 - **`eg8145x6_autopwn`** — 9-phase chained exploitation: fingerprint → info disclosure → CSRF → user enum → brute-force → config decrypt → JS capture → port scan → report + generic fallback (v1.1.0)
 - **`generic/upnp/igd_exploit`** — UPnP IGD full exploitation: SSDP discovery, GetExternalIPAddress, AddPortMapping (firewall bypass without auth), GetGenericPortMappingEntry, traffic stats, ForceTermination DoS check, event SUBSCRIBE
 - **`core/oui.py`** — IEEE OUI database with online-first lookup and local fallback
-- **`core/session.py`** — Persistent scan history per host (SHA-256 of IP+MAC), `~/.rxf_sessions/`
+- **`core/session.py`** — Persistent scan history per host (SHA-256 of IP+MAC), `~/.exf_sessions/`
 - **`core/discovery.py`** — T0–T5 timing profiles, multi-method host discovery, wireless detection, WirelessXPL-Forge recommendations, session integration
 - **`embedxpl/data/oui.txt`** — Full IEEE OUI database (39k+ entries)
-- **`embedxpl/__main__.py`** — `python -m embedxpl` and `rxf` / `embedxpl` console scripts
+- **`embedxpl/__main__.py`** — `python -m embedxpl` and `exf` / `embedxpl` console scripts
 - **`pyproject.toml`** — PEP 517/518 packaging (replaces legacy setup.py)
 - **GitHub Actions** — `publish-pypi.yml` for Trusted Publishing (OIDC, no API tokens)
 - Wiki pages 01–12 (en-US + pt-BR)
@@ -176,7 +176,7 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 ### Removed
 - `docs/diagrams/architecture/03-ngfw-utm.mmd` — no dedicated NGFW modules
 - `docs/diagrams/architecture/06-network-tap.mmd` — TAP support was planned only
-- `docs/img/architecture/rxf_arch_ngfw_utm.png`
+- `docs/img/architecture/exf_arch_ngfw_utm.png`
 
 ### Module Counts
 

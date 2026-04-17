@@ -4,7 +4,7 @@ Module generates payload that creates interactive tcp bind shell for ARMLE archi
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use payloads/armle/bind_tcp`
   3. Do: `set rport 4321`
   4. Do: `run`
@@ -13,10 +13,10 @@ Module generates payload that creates interactive tcp bind shell for ARMLE archi
 ## Scenarios
 
 ```
-rxf > use payloads/armle/bind_tcp
-rxf (ARMLE Bind TCP) > set rport 4321
+exf > use payloads/armle/bind_tcp
+exf (ARMLE Bind TCP) > set rport 4321
 [+] rport => 4321
-rxf (ARMLE Bind TCP) > run
+exf (ARMLE Bind TCP) > run
 [*] Running module...
 [*] Generating payload
 [+] Building payload for python

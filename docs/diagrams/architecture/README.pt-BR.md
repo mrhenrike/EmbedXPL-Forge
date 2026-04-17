@@ -24,15 +24,15 @@ Caminhos em `docs/img/architecture/`. Galeria:
 
 | Router SOHO | Switch |
 |:---:|:---:|
-| ![SOHO](../../img/architecture/rxf_arch_router_soho.png) | ![Switch](../../img/architecture/rxf_arch_switch_l2l3.png) |
+| ![SOHO](../../img/architecture/exf_arch_router_soho.png) | ![Switch](../../img/architecture/exf_arch_switch_l2l3.png) |
 
 | CPE ISP / GPON ONT | Edge misto |
 |:---:|:---:|
-| ![CPE](../../img/architecture/rxf_arch_isp_cpe.png) | ![Edge misto](../../img/architecture/rxf_arch_edge_mixed.png) |
+| ![CPE](../../img/architecture/exf_arch_isp_cpe.png) | ![Edge misto](../../img/architecture/exf_arch_edge_mixed.png) |
 
 | Mapa de ataque GPON ONT |
 |:---:|
-| ![GPON ONT](../../img/architecture/rxf_arch_gpon_ont_attack.png) |
+| ![GPON ONT](../../img/architecture/exf_arch_gpon_ont_attack.png) |
 
 **Diagrama GPON ONT:** ver [07-gpon-ont-attack.mmd](07-gpon-ont-attack.mmd) — validado contra Huawei EG8145X6-10 (OptiXstar, Loga Internet) e EG8145V5-V2 (EchoLife, Sumicity/Giga+). Mapeia todos os 11 módulos específicos com seus vetores de ataque.
 

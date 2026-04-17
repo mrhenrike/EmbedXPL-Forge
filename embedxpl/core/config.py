@@ -1,7 +1,7 @@
 """Persistent user configuration for EmbedXPL-Forge.
 
 Stores preferences (compute_mode, etc.) in a JSON file
-at ``~/.rxf_config.json`` so they survive across sessions.
+at ``~/.exf_config.json`` so they survive across sessions.
 
 Author: André Henrique (LinkedIn/X: @mrhenrike)
 Version: 0.1.0
@@ -17,7 +17,7 @@ from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
 
-_CONFIG_FILE = Path(os.path.expanduser("~/.rxf_config.json"))
+_CONFIG_FILE = Path(os.path.expanduser("~/.exf_config.json"))
 
 _DEFAULTS: Dict[str, Any] = {
     "compute_mode": "auto",

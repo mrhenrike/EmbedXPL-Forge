@@ -18,7 +18,7 @@ class Exploit(Exploit):
         "name": "CVE Lookup by Banner / Vendor / Product",
         "description": "Queries the embedded CVE database for known vulnerabilities "
                        "matching a target's vendor, product, version or raw banner. "
-                       "Classifies each CVE as REMOTE (exploitable by rxf), LOCAL or "
+                       "Classifies each CVE as REMOTE (exploitable by exf), LOCAL or "
                        "PHYSICAL. Lists available EmbedXPL-Forge exploit modules. "
                        "Use after banner grabbing or service discovery to enumerate "
                        "attack surface.",
@@ -47,10 +47,10 @@ class Exploit(Exploit):
 
         # Show database stats
         stats = db.summary()
-        print_status("CVE Database: {} entries | {} remote | {} with rxf module | {} vendors".format(
+        print_status("CVE Database: {} entries | {} remote | {} with exf module | {} vendors".format(
             stats["total_cves"],
             stats["remote"],
-            stats["exploitable_by_rxf"],
+            stats["exploitable_by_exf"],
             stats["vendors_covered"],
         ))
         print_status("")
@@ -79,8 +79,8 @@ class Exploit(Exploit):
             return
 
         # Classify results
-        remote_exploitable = [e for e in results if e.is_exploitable_by_rxf]
-        remote_no_module = [e for e in results if e.is_remote and not e.is_exploitable_by_rxf]
+        remote_exploitable = [e for e in results if e.is_exploitable_by_exf]
+        remote_no_module = [e for e in results if e.is_remote and not e.is_exploitable_by_exf]
         non_remote = [e for e in results if not e.is_remote]
 
         print_status("--- CVE Results ({} total) ---".format(len(results)))
@@ -94,7 +94,7 @@ class Exploit(Exploit):
             print_status("")
 
         if remote_no_module:
-            print_status("=== REMOTE — no rxf module yet ({}) ===".format(len(remote_no_module)))
+            print_status("=== REMOTE — no exf module yet ({}) ===".format(len(remote_no_module)))
             print_status("")
             for entry in remote_no_module:
                 self._print_entry(entry, "REMOTE")
@@ -111,7 +111,7 @@ class Exploit(Exploit):
         # Summary
         print_status("--- Summary ---")
         print_info("  Total CVEs matched:        {}".format(len(results)))
-        print_info("  Exploitable by rxf:        {}".format(len(remote_exploitable)))
+        print_info("  Exploitable by exf:        {}".format(len(remote_exploitable)))
         print_info("  Remote (no module yet):    {}".format(len(remote_no_module)))
         print_info("  Local/Physical only:       {}".format(len(non_remote)))
 
@@ -119,7 +119,7 @@ class Exploit(Exploit):
             print_status("")
             print_success("Quick exploit commands:")
             for entry in remote_exploitable:
-                print_info("  use {}".format(entry.rxf_module.replace("/", os.sep) if hasattr(os, 'sep') else entry.rxf_module))
+                print_info("  use {}".format(entry.exf_module.replace("/", os.sep) if hasattr(os, 'sep') else entry.exf_module))
 
     def _print_entry(self, entry, tag: str) -> None:
         """Print a single CVE entry with formatting."""
@@ -135,8 +135,8 @@ class Exploit(Exploit):
             entry.vendor, entry.product, entry.affected_versions or "all"))
         print_info("    {}".format(entry.description))
 
-        if entry.rxf_module:
-            print_success("    Module: {}".format(entry.rxf_module))
+        if entry.exf_module:
+            print_success("    Module: {}".format(entry.exf_module))
 
     @mute
     def check(self):

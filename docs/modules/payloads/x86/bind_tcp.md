@@ -4,7 +4,7 @@ Module generates payload that creates interactive tcp bind shell for X86 archite
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use payloads/x86/bind_tcp`
   3. Do: `set rport 4321`
   4. Do: `run`
@@ -13,10 +13,10 @@ Module generates payload that creates interactive tcp bind shell for X86 archite
 ## Scenarios
 
 ```
-rxf > use payloads/x86/bind_tcp
-rxf (X86 Bind TCP) > set rport 4321
+exf > use payloads/x86/bind_tcp
+exf (X86 Bind TCP) > set rport 4321
 [+] rport => 4321
-rxf (X86 Bind TCP) > run
+exf (X86 Bind TCP) > run
 [*] Running module...
 [*] Generating payload
 [+] Building payload for python

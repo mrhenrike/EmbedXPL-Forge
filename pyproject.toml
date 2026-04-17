@@ -85,7 +85,7 @@ Documentation  = "https://github.com/mrhenrike/EmbedXPL-Forge/wiki"
 Changelog      = "https://github.com/mrhenrike/EmbedXPL-Forge/releases"
 
 [project.scripts]
-rxf = "embedxpl.__main__:main"
+exf = "embedxpl.__main__:main"
 embedxpl = "embedxpl.__main__:main"
 
 [tool.setuptools.packages.find]

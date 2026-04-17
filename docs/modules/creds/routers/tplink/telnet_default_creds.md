@@ -5,7 +5,7 @@ If valid credentials are found, they are displayed to the user.
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use creds/routers/tplink/telnet_default_creds`
   3. Do: `set target [TargetIP]`
   4. Do: `run`
@@ -14,10 +14,10 @@ If valid credentials are found, they are displayed to the user.
 ## Scenarios
 
 ```
-rxf > use creds/routers/tplink/telnet_default_creds
-rxf (TP-Link Router Default Telnet Creds) > set target 192.168.1.1
+exf > use creds/routers/tplink/telnet_default_creds
+exf (TP-Link Router Default Telnet Creds) > set target 192.168.1.1
 [+] target => 192.168.1.1
-rxf (TP-Link Router Default Telnet Creds) > run
+exf (TP-Link Router Default Telnet Creds) > run
 [*] Running module...
 [*] Target exposes Telnet service
 [*] Starting default credentials attack against Telnet service

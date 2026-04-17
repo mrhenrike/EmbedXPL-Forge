@@ -20,25 +20,25 @@ Diagrams show device attack surfaces with coverage indicators for EmbedXPL-Forge
 
 | PNG | Source |
 |-----|--------|
-| [rxf_arch_router_soho.png](../../img/architecture/rxf_arch_router_soho.png) | SOHO router |
-| [rxf_arch_switch_l2l3.png](../../img/architecture/rxf_arch_switch_l2l3.png) | Switch |
-| [rxf_arch_isp_cpe.png](../../img/architecture/rxf_arch_isp_cpe.png) | ISP CPE / GPON ONT |
-| [rxf_arch_edge_mixed.png](../../img/architecture/rxf_arch_edge_mixed.png) | Mixed edge |
-| [rxf_arch_gpon_ont_attack.png](../../img/architecture/rxf_arch_gpon_ont_attack.png) | GPON ONT full attack map |
+| [exf_arch_router_soho.png](../../img/architecture/exf_arch_router_soho.png) | SOHO router |
+| [exf_arch_switch_l2l3.png](../../img/architecture/exf_arch_switch_l2l3.png) | Switch |
+| [exf_arch_isp_cpe.png](../../img/architecture/exf_arch_isp_cpe.png) | ISP CPE / GPON ONT |
+| [exf_arch_edge_mixed.png](../../img/architecture/exf_arch_edge_mixed.png) | Mixed edge |
+| [exf_arch_gpon_ont_attack.png](../../img/architecture/exf_arch_gpon_ont_attack.png) | GPON ONT full attack map |
 
 ### Gallery
 
 | SOHO Router | Switch |
 |:---:|:---:|
-| ![SOHO router](../../img/architecture/rxf_arch_router_soho.png) | ![Switch](../../img/architecture/rxf_arch_switch_l2l3.png) |
+| ![SOHO router](../../img/architecture/exf_arch_router_soho.png) | ![Switch](../../img/architecture/exf_arch_switch_l2l3.png) |
 
 | ISP CPE / GPON ONT | Mixed Edge |
 |:---:|:---:|
-| ![ISP CPE](../../img/architecture/rxf_arch_isp_cpe.png) | ![Mixed edge](../../img/architecture/rxf_arch_edge_mixed.png) |
+| ![ISP CPE](../../img/architecture/exf_arch_isp_cpe.png) | ![Mixed edge](../../img/architecture/exf_arch_edge_mixed.png) |
 
 | GPON ONT Full Attack Map |
 |:---:|
-| ![GPON ONT](../../img/architecture/rxf_arch_gpon_ont_attack.png) |
+| ![GPON ONT](../../img/architecture/exf_arch_gpon_ont_attack.png) |
 
 **GPON ONT attack map:** validated against Huawei EG8145X6-10 (OptiXstar, Loga Internet) and EG8145V5-V2 (EchoLife, Sumicity/Giga+). Maps all 11 exploit modules with their attack vectors.
 

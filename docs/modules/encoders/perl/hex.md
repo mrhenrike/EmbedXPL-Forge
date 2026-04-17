@@ -4,15 +4,15 @@ Module encodes Perl payload to hex format.
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use encoders/perl/hex`
   3. Do: `show info`
 
 ## Scenarios
 
 ```
-rxf > use encoders/perl/hex
-rxf (Perl Hex Encoder) > show info
+exf > use encoders/perl/hex
+exf (Perl Hex Encoder) > show info
 
 Name:
 Perl Hex Encoder

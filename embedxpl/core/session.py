@@ -2,11 +2,11 @@
 
 Tracks scan history per host (keyed by IP+MAC) so subsequent runs
 can resume where they left off — similar to John the Ripper's session
-restore.  All data is stored as JSON in ``~/.rxf_sessions/``.
+restore.  All data is stored as JSON in ``~/.exf_sessions/``.
 
 Storage layout::
 
-    ~/.rxf_sessions/
+    ~/.exf_sessions/
         <host_id>.json      # one file per unique host
         _index.json          # lightweight index: host_id -> summary
 
@@ -35,7 +35,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
-_SESSIONS_DIR = Path(os.path.expanduser("~/.rxf_sessions"))
+_SESSIONS_DIR = Path(os.path.expanduser("~/.exf_sessions"))
 _INDEX_FILE = _SESSIONS_DIR / "_index.json"
 
 

@@ -31,7 +31,7 @@ ROUTER_KW = [
 ]
 
 
-def load_rxf_cves() -> set:
+def load_exf_cves() -> set:
     cves = set()
     for root, _, files in os.walk(MODULES_DIR):
         for f in files:
@@ -44,8 +44,8 @@ def load_rxf_cves() -> set:
 
 
 def main() -> None:
-    rxf_cves = load_rxf_cves()
-    print(f"Current EmbedXPL CVE count: {len(rxf_cves)}")
+    exf_cves = load_exf_cves()
+    print(f"Current EmbedXPL CVE count: {len(exf_cves)}")
 
     candidates = []
     for subdir in ("webapps", "remote", "local", "dos"):
@@ -60,7 +60,7 @@ def main() -> None:
                 content = fh.read()
 
             cves = list({c.upper() for c in re.findall(r"CVE-\d{4}-\d+", content, re.I)})
-            new_cves = [c for c in cves if c not in rxf_cves]
+            new_cves = [c for c in cves if c not in exf_cves]
             if not new_cves:
                 continue
 

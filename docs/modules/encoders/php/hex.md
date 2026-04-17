@@ -4,15 +4,15 @@ Module encodes PHP payload to Hex format.
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use encoders/php/hex`
   3. Do: `show info`
 
 ## Scenarios
 
 ```
-rxf > use encoders/php/hex
-rxf (PHP Hex Encoder) > show info
+exf > use encoders/php/hex
+exf (PHP Hex Encoder) > show info
 
 Name:
 PHP Hex Encoder

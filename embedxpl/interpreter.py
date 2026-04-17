@@ -247,7 +247,7 @@ class BaseInterpreter:
 
 
 class EmbedXPLInterpreter(BaseInterpreter):
-    history_file = os.path.expanduser("~/.rxf_history")
+    history_file = os.path.expanduser("~/.exf_history")
     global_help = """Global commands:
     help                        Print this help menu
     use <module>                Select a module for usage
@@ -275,7 +275,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         self.current_module = None
         self.raw_prompt_template = None
         self.module_prompt_template = None
-        self.prompt_hostname = "rxf"
+        self.prompt_hostname = "exf"
         self.show_sub_commands = ("info", "options", "advanced", "devices", "all", "encoders", "creds", "exploits", "scanners", "wordlists")
         self.search_sub_commands = ("type", "device", "language", "payload", "vendor")
 
@@ -292,12 +292,12 @@ class EmbedXPLInterpreter(BaseInterpreter):
         self.__parse_prompt()
 
         from embedxpl.core.hw_profiler import HWProfiler
-        from embedxpl.core import config as rxf_config
+        from embedxpl.core import config as exf_config
         from embedxpl.core.session import SessionManager
         self._hw_profile = HWProfiler.detect()
         self._session_mgr = SessionManager()
 
-        saved_mode = rxf_config.get("compute_mode", "auto")
+        saved_mode = exf_config.get("compute_mode", "auto")
         if saved_mode in ("cpu", "gpu", "hybrid", "auto"):
             self._hw_profile.compute_mode = saved_mode
         self._validate_compute_mode(silent=True)
@@ -337,11 +337,11 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
     def __parse_prompt(self):
         raw_prompt_default_template = "\001\033[4m\002{host}\001\033[0m\002 > "
-        raw_prompt_template = os.getenv("RXF_RAW_PROMPT", raw_prompt_default_template).replace('\\033', '\033')
+        raw_prompt_template = os.getenv("EXF_RAW_PROMPT", raw_prompt_default_template).replace('\\033', '\033')
         self.raw_prompt_template = raw_prompt_template if '{host}' in raw_prompt_template else raw_prompt_default_template
 
         module_prompt_default_template = "\001\033[4m\002{host}\001\033[0m\002 (\001\033[91m\002{module}\001\033[0m\002) > "
-        module_prompt_template = os.getenv("RXF_MODULE_PROMPT", module_prompt_default_template).replace('\\033', '\033')
+        module_prompt_template = os.getenv("EXF_MODULE_PROMPT", module_prompt_default_template).replace('\\033', '\033')
         self.module_prompt_template = module_prompt_template if all(map(lambda x: x in module_prompt_template, ['{host}', "{module}"])) else module_prompt_default_template
 
     def __handle_if_noninteractive(self, argv):
@@ -864,8 +864,8 @@ class EmbedXPLInterpreter(BaseInterpreter):
         profile = HWProfiler.detect(force=True)
         self._hw_profile = profile
 
-        from embedxpl.core import config as rxf_config
-        saved_mode = rxf_config.get("compute_mode", "auto")
+        from embedxpl.core import config as exf_config
+        saved_mode = exf_config.get("compute_mode", "auto")
         if saved_mode in ("cpu", "gpu", "hybrid", "auto"):
             profile.compute_mode = saved_mode
 
@@ -927,7 +927,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
         Usage: compute <cpu|gpu|hybrid|auto>
         """
-        from embedxpl.core import config as rxf_config
+        from embedxpl.core import config as exf_config
 
         try:
             mode = args[0].strip().lower()
@@ -945,10 +945,10 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
         self._hw_profile.compute_mode = mode
         if not self._validate_compute_mode():
-            rxf_config.set_val("compute_mode", self._hw_profile.compute_mode)
+            exf_config.set_val("compute_mode", self._hw_profile.compute_mode)
             return
 
-        rxf_config.set_val("compute_mode", mode)
+        exf_config.set_val("compute_mode", mode)
         print_success("compute_mode => {}".format(mode))
 
         if mode == "auto":

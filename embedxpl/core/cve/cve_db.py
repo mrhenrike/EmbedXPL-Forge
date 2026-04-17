@@ -39,7 +39,7 @@ class CVEEntry:
     cvss_score: float = 0.0
     access_vector: str = "REMOTE"  # REMOTE | LOCAL | PHYSICAL | ADJACENT
     exploit_available: bool = False
-    rxf_module: str = ""  # EmbedXPL-Forge module path if available
+    exf_module: str = ""  # EmbedXPL-Forge module path if available
     references: List[str] = field(default_factory=list)
 
     @property
@@ -47,15 +47,15 @@ class CVEEntry:
         return self.access_vector.upper() in ("REMOTE", "NETWORK")
 
     @property
-    def is_exploitable_by_rxf(self) -> bool:
-        return self.is_remote and bool(self.rxf_module)
+    def is_exploitable_by_exf(self) -> bool:
+        return self.is_remote and bool(self.exf_module)
 
     @property
     def status_label(self) -> str:
-        if self.is_exploitable_by_rxf:
-            return "EXPLOITABLE (rxf module available)"
+        if self.is_exploitable_by_exf:
+            return "EXPLOITABLE (exf module available)"
         if self.is_remote:
-            return "REMOTE (no rxf module yet)"
+            return "REMOTE (no exf module yet)"
         return "{} access required".format(self.access_vector.upper())
 
 
@@ -290,7 +290,7 @@ class CVEDatabase:
         for entry in self._entries:
             cid = entry.cve_id.upper()
             if cid in self._module_map:
-                entry.rxf_module = self._module_map[cid]
+                entry.exf_module = self._module_map[cid]
                 entry.exploit_available = True
 
     @property
@@ -303,7 +303,7 @@ class CVEDatabase:
 
     @property
     def exploitable_count(self) -> int:
-        return sum(1 for e in self._entries if e.is_exploitable_by_rxf)
+        return sum(1 for e in self._entries if e.is_exploitable_by_exf)
 
     def lookup(
         self,
@@ -397,7 +397,7 @@ class CVEDatabase:
         return {
             "total_cves": self.total,
             "remote": self.remote_count,
-            "exploitable_by_rxf": self.exploitable_count,
+            "exploitable_by_exf": self.exploitable_count,
             "access_vectors": vectors,
             "vendors_covered": len(vendors),
         }

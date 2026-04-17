@@ -241,7 +241,7 @@ class Exploit(Exploit):
             self._timeout_pool = SmartPool(
                 max_workers=workers,
                 strategy=PoolStrategy.THREADS,
-                thread_name_prefix="rxf-autopwn",
+                thread_name_prefix="exf-autopwn",
             )
         return self._timeout_pool
 

@@ -19,15 +19,15 @@ Fontes Mermaid: [diagrams/architecture/](diagrams/architecture/). Galeria:
 
 | Roteador SOHO | Switch |
 |:---:|:---:|
-| ![Roteador SOHO](img/architecture/rxf_arch_router_soho.png) | ![Switch](img/architecture/rxf_arch_switch_l2l3.png) |
+| ![Roteador SOHO](img/architecture/exf_arch_router_soho.png) | ![Switch](img/architecture/exf_arch_switch_l2l3.png) |
 
 | NGFW / UTM | ISP CPE |
 |:---:|:---:|
-| ![NGFW](img/architecture/rxf_arch_ngfw_utm.png) | ![ISP CPE](img/architecture/rxf_arch_isp_cpe.png) |
+| ![NGFW](img/architecture/exf_arch_ngfw_utm.png) | ![ISP CPE](img/architecture/exf_arch_isp_cpe.png) |
 
 | Edge Misto |
 |:---:|
-| ![Edge misto](img/architecture/rxf_arch_edge_mixed.png) |
+| ![Edge misto](img/architecture/exf_arch_edge_mixed.png) |
 
 ## Idiomas da Wiki
 

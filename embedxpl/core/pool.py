@@ -61,7 +61,7 @@ class SmartPool:
         self,
         max_workers: int = 0,
         strategy: PoolStrategy = PoolStrategy.AUTO,
-        thread_name_prefix: str = "rxf-pool",
+        thread_name_prefix: str = "exf-pool",
     ):
         self._cpus = cpu_count()
         self._strategy = strategy

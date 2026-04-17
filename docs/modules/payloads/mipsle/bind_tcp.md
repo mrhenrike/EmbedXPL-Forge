@@ -4,7 +4,7 @@ Module generates payload that creates interactive tcp bind shell for MIPSLE arch
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use payloads/mipsle/bind_tcp`
   3. Do: `set rport 4321`
   4. Do: `run`
@@ -13,10 +13,10 @@ Module generates payload that creates interactive tcp bind shell for MIPSLE arch
 ## Scenarios
 
 ```
-rxf > use payloads/mipsle/bind_tcp
-rxf (MIPSLE Bind TCP) > set rport 4321
+exf > use payloads/mipsle/bind_tcp
+exf (MIPSLE Bind TCP) > set rport 4321
 [+] rport => 4321
-rxf (MIPSLE Bind TCP) > run
+exf (MIPSLE Bind TCP) > run
 [*] Running module...
 [*] Generating payload
 [+] Building payload for python

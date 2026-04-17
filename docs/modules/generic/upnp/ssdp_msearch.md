@@ -4,7 +4,7 @@ Module sends M-SEARCH request to target and retrieve information from UPnP enabl
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use generic/upnp/ssdp_msearch`
   3. Do: `set target [TargetIP]`
   4. Do: `run`
@@ -13,10 +13,10 @@ Module sends M-SEARCH request to target and retrieve information from UPnP enabl
 ## Scenarios
 
 ```
-rxf > use generic/upnp/ssdp_msearch
-rxf (SSDP M-SEARCH Info Discovery) > set target 192.168.1.1
+exf > use generic/upnp/ssdp_msearch
+exf (SSDP M-SEARCH Info Discovery) > set target 192.168.1.1
 [+] target => 192.168.1.1
-rxf (SSDP M-SEARCH Info Discovery) > run
+exf (SSDP M-SEARCH Info Discovery) > run
 [*] Running module...
 [*] 192.168.1.1:1900 | Custom/1.0 UPnP/1.0 Proc/Ver | http://192.168.1.1:5431/dyndev/uuid:ec2280e5-e804-04e8-e580-22ec22e50400 | uuid:ec2280e5-e804-04e8-e580-22ec22e50400::upnp:rootdevice
 ```

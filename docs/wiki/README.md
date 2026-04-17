@@ -15,15 +15,15 @@ PNG gallery. Mermaid sources: [../diagrams/architecture/README.md](../diagrams/a
 
 | SOHO Router | Managed Switch |
 |:-----------:|:--------------:|
-| ![SOHO](../img/architecture/rxf_arch_router_soho.png) | ![Switch](../img/architecture/rxf_arch_switch_l2l3.png) |
+| ![SOHO](../img/architecture/exf_arch_router_soho.png) | ![Switch](../img/architecture/exf_arch_switch_l2l3.png) |
 
 | ISP CPE / GPON ONT | Mixed Edge |
 |:------------------:|:----------:|
-| ![ISP CPE](../img/architecture/rxf_arch_isp_cpe.png) | ![Mixed edge](../img/architecture/rxf_arch_edge_mixed.png) |
+| ![ISP CPE](../img/architecture/exf_arch_isp_cpe.png) | ![Mixed edge](../img/architecture/exf_arch_edge_mixed.png) |
 
 | GPON ONT Full Attack Map |
 |:------------------------:|
-| ![GPON ONT](../img/architecture/rxf_arch_gpon_ont_attack.png) |
+| ![GPON ONT](../img/architecture/exf_arch_gpon_ont_attack.png) |
 
 ## Shared Resources
 

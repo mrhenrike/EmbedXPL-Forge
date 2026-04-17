@@ -161,7 +161,7 @@ def diagram_soho_router():
     _legend(ax, 0.01, 0.01, covered_count=9, total_count=14,
             title="SOHO Router · 700 modules · 55 vendors")
     plt.tight_layout(rect=[0, 0.04, 1, 0.97])
-    out = OUT / "rxf_arch_soho_router.png"
+    out = OUT / "exf_arch_soho_router.png"
     plt.savefig(out, dpi=150, bbox_inches="tight")
     plt.close()
     print(f"  [+] {out.name}")
@@ -216,7 +216,7 @@ def diagram_tplink_apt28():
     _legend(ax, 0.01, 0.01, covered_count=7, total_count=12,
             title="TP-Link multi-model · APT28/GRU campaign (NCSC Apr 2026)")
     plt.tight_layout(rect=[0, 0.04, 1, 0.97])
-    out = OUT / "rxf_arch_tplink_apt28.png"
+    out = OUT / "exf_arch_tplink_apt28.png"
     plt.savefig(out, dpi=150, bbox_inches="tight")
     plt.close()
     print(f"  [+] {out.name}")
@@ -271,7 +271,7 @@ def diagram_mikrotik():
     _legend(ax, 0.01, 0.01, covered_count=8, total_count=13,
             title="MikroTik RouterOS · Volt Typhoon + APT28 targets")
     plt.tight_layout(rect=[0, 0.04, 1, 0.97])
-    out = OUT / "rxf_arch_mikrotik.png"
+    out = OUT / "exf_arch_mikrotik.png"
     plt.savefig(out, dpi=150, bbox_inches="tight")
     plt.close()
     print(f"  [+] {out.name}")
@@ -327,7 +327,7 @@ def diagram_gpon_ont():
     _legend(ax, 0.01, 0.01, covered_count=8, total_count=13,
             title="Huawei GPON ONT · 11 dedicated modules")
     plt.tight_layout(rect=[0, 0.04, 1, 0.97])
-    out = OUT / "rxf_arch_gpon_ont.png"
+    out = OUT / "exf_arch_gpon_ont.png"
     plt.savefig(out, dpi=150, bbox_inches="tight")
     plt.close()
     print(f"  [+] {out.name}")
@@ -392,7 +392,7 @@ def diagram_apt_chain():
     _legend(ax, 0.01, 0.01, covered_count=6, total_count=6,
             title="6 APT groups · 20+ reproducible attack chains · MITRE ATT&CK mapped")
     plt.tight_layout(rect=[0, 0.04, 1, 0.97])
-    out = OUT / "rxf_arch_apt_chains.png"
+    out = OUT / "exf_arch_apt_chains.png"
     plt.savefig(out, dpi=150, bbox_inches="tight")
     plt.close()
     print(f"  [+] {out.name}")
@@ -445,7 +445,7 @@ def diagram_module_architecture():
             bbox=dict(boxstyle="round,pad=0.3", fc="#E3F2FD", ec="#1565C0", lw=1.2))
 
     plt.tight_layout(rect=[0, 0.04, 1, 0.97])
-    out = OUT / "rxf_arch_overview.png"
+    out = OUT / "exf_arch_overview.png"
     plt.savefig(out, dpi=150, bbox_inches="tight")
     plt.close()
     print(f"  [+] {out.name}")

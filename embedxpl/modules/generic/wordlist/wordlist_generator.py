@@ -162,8 +162,8 @@ class Exploit(Exploit):
 
         out_dir = self.output_dir if self.output_dir else os.getcwd()
 
-        pwd_filename = "rxf_generated_passwords_{}.txt".format(profile_type)
-        usr_filename = "rxf_generated_usernames_{}.txt".format(profile_type)
+        pwd_filename = "exf_generated_passwords_{}.txt".format(profile_type)
+        usr_filename = "exf_generated_usernames_{}.txt".format(profile_type)
 
         pwd_path = save_wordlist(result.passwords, os.path.join(out_dir, pwd_filename), "passwords")
         result.passwords_file = str(pwd_path)

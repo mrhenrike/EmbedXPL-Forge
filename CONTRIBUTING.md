@@ -88,7 +88,7 @@ pip install ".[dev]"
 python tools/run_scoped_tests.py
 python tools/validate_governance.py
 python tools/validate_market_priority_minimums.py
-python -m flake8 tools rxf.py --count --select=E9,F63,F7,F82
+python -m flake8 tools exf.py --count --select=E9,F63,F7,F82
 ```
 
 ## License

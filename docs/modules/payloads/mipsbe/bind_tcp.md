@@ -4,7 +4,7 @@ Module generates payload that creates interactive tcp bind shell for MIPSBE arch
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use payloads/mipsbe/bind_tcp`
   3. Do: `set rport 4321`
   4. Do: `run`
@@ -13,10 +13,10 @@ Module generates payload that creates interactive tcp bind shell for MIPSBE arch
 ## Scenarios
 
 ```
-rxf > use payloads/mipsbe/bind_tcp
-rxf (MIPSBE Bind TCP) > set rport 4321
+exf > use payloads/mipsbe/bind_tcp
+exf (MIPSBE Bind TCP) > set rport 4321
 [+] rport => 4321
-rxf (MIPSBE Bind TCP) > run
+exf (MIPSBE Bind TCP) > run
 [*] Running module...
 [*] Generating payload
 [+] Building payload for python

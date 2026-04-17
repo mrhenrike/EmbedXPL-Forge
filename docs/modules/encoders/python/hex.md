@@ -4,15 +4,15 @@ Module encodes Python payload to hex format.
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use encoders/python/hex`
   3. Do: `show info`
 
 ## Scenarios
 
 ```
-rxf > use encoders/python/hex
-rxf (Python Hex Encoder) > show info
+exf > use encoders/python/hex
+exf (Python Hex Encoder) > show info
 
 Name:
 Python Hex Encoder

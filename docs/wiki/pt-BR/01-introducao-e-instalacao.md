@@ -45,14 +45,14 @@ python tools/env_doctor.py
 ## Iniciar o shell interativo
 
 ```bash
-python rxf.py
+python exf.py
 ```
 
 ## Log e histórico
 
 - **Arquivo de log:** `embedxpl.log` (no diretório de trabalho atual).
-- **Histórico de comandos:** em geral `~/.rxf_history`.
-- **Dados de sessão:** `~/.rxf_sessions/` — histórico persistente de scan por host.
+- **Histórico de comandos:** em geral `~/.exf_history`.
+- **Dados de sessão:** `~/.exf_sessions/` — histórico persistente de scan por host.
 
 ---
 

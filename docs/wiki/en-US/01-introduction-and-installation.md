@@ -47,14 +47,14 @@ python tools/env_doctor.py
 ## Start the interactive shell
 
 ```bash
-python rxf.py
+python exf.py
 ```
 
 ## Log file and history
 
 - **Log file:** `embedxpl.log` (created in the current working directory).
-- **Command history:** typically `~/.rxf_history`.
-- **Session data:** `~/.rxf_sessions/` — persistent scan history per host.
+- **Command history:** typically `~/.exf_history`.
+- **Session data:** `~/.exf_sessions/` — persistent scan history per host.
 
 ---
 

@@ -5,7 +5,7 @@ If valid credentials are found, they are displayed to the user.
 
 ## Verification Steps
 
-  1. Start `./rxf.py`
+  1. Start `./exf.py`
   2. Do: `use creds/routers/technicolor/ftp_default_creds`
   3. Do: `set target [TargetIP]`
   4. Do: `run`
@@ -14,10 +14,10 @@ If valid credentials are found, they are displayed to the user.
 ## Scenarios
 
 ```
-rxf > use creds/routers/technicolor/ftp_default_creds
-rxf (Technicolor Router Default FTP Creds) > set target 192.168.1.1
+exf > use creds/routers/technicolor/ftp_default_creds
+exf (Technicolor Router Default FTP Creds) > set target 192.168.1.1
 [+] target => 192.168.1.1
-rxf (Technicolor Router Default FTP Creds) > run
+exf (Technicolor Router Default FTP Creds) > run
 [*] Running module...
 [*] Target exposes FTP service
 [*] Starting attack against FTP service
