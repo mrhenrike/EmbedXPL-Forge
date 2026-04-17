@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "1.0.0"
+version = "1.1.0"
 description = "Embedded Device Security Assessment Framework — 700 modules, 350 CVEs, 55 vendors, APT Group Attack Engine"
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }

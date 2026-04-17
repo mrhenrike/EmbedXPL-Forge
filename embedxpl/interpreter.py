@@ -532,6 +532,17 @@ class EmbedXPLInterpreter(BaseInterpreter):
             self.current_module = import_exploit(module_path)()
         except EmbedXPLException as err:
             print_error(str(err))
+            return
+
+        # Apply globally-set options (setg) to the newly loaded module
+        if GLOBAL_OPTS:
+            for key, value in GLOBAL_OPTS.items():
+                if key in self.current_module.options:
+                    try:
+                        setattr(self.current_module, key, value)
+                        self.current_module.exploit_attributes[key][0] = value
+                    except Exception:
+                        pass
 
     @stop_after(2)
     def complete_use(self, text, *args, **kwargs):
