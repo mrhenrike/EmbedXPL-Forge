@@ -256,6 +256,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
     sysinfo                     Show detected hardware (CPU, RAM, GPU)
     compute <cpu|gpu|hybrid|auto>  Set compute mode for ML/GPU operations
     discover <subnet/CIDR>      Scan network and match targets to exploit catalog
+    discover -T <targets.txt>   Scan multiple IPs/CIDRs listed in a file (one per line)
     sessions [list|show|delete|purge|export]  Manage scan session history
     exit                        Exit EmbedXPL"""
 
@@ -356,23 +357,46 @@ class EmbedXPLInterpreter(BaseInterpreter):
         """
         module = ""
         set_opts = []
+        targets_file = ""
 
         try:
-            opts, args = getopt.getopt(argv[1:], "hm:s:", ["help=", "module=", "set="])
+            opts, args = getopt.getopt(
+                argv[1:],
+                "hm:s:T:",
+                ["help=", "module=", "set=", "targets="],
+            )
         except getopt.GetoptError:
-            print_info("{} -m <module> -s \"<option> <value>\"".format(argv[0]))
+            print_info(
+                "{} -m <module> -s \"<option> <value>\"\n"
+                "       {} -T <targets.txt>  (multi-target scan from file)".format(
+                    argv[0], argv[0]
+                )
+            )
             printer_queue.join()
             return
 
         for opt, arg in opts:
             if opt in ("-h", "--help"):
-                print_info("{} -m <module> -s \"<option> <value>\"".format(argv[0]))
+                print_info(
+                    "{} -m <module> -s \"<option> <value>\"\n"
+                    "       {} -T <targets.txt>  (multi-target scan from file)".format(
+                        argv[0], argv[0]
+                    )
+                )
                 printer_queue.join()
                 return
             elif opt in ("-m", "--module"):
                 module = arg
             elif opt in ("-s", "--set"):
                 set_opts.append(arg)
+            elif opt in ("-T", "--targets"):
+                targets_file = arg
+
+        # -T mode: scan all targets from file, then exit
+        if targets_file:
+            self._scan_from_targets_file(targets_file)
+            printer_queue.join()
+            return
 
         if not len(module):
             print_error('A module is required when running non-interactively')
@@ -390,6 +414,60 @@ class EmbedXPLInterpreter(BaseInterpreter):
         printer_queue.join()
 
         return
+
+    def _scan_from_targets_file(self, targets_file: str) -> None:
+        """Run multi-target network discovery from a targets file (-T flag).
+
+        Reads IPs/CIDRs one per line (skips blank lines and # comments),
+        scans each target in parallel using :func:`~embedxpl.core.discovery.scan_from_file`,
+        and prints results as they complete.
+
+        Args:
+            targets_file: Path to a plain-text file with one IP or CIDR per line.
+        """
+        import os as _os
+        from embedxpl.core.discovery import scan_from_file as _scan_from_file
+
+        if not _os.path.isfile(targets_file):
+            print_error("Targets file not found: {}".format(targets_file))
+            return
+
+        print_status("Multi-target scan from file: {}".format(targets_file))
+
+        def progress_cb(target: str, stage: str, detail: str) -> None:
+            if stage == "done":
+                print_success("[{}] done — {}".format(target, detail))
+            else:
+                print_status("[{}] [{}] {}".format(target, stage, detail))
+
+        try:
+            results = _scan_from_file(
+                targets_file,
+                timing=3,
+                callback=progress_cb,
+                max_file_workers=4,
+            )
+        except KeyboardInterrupt:
+            print_warning("Multi-target scan cancelled by user")
+            return
+        except Exception as exc:
+            print_error("Multi-target scan failed: {}".format(exc))
+            return
+
+        total_hosts = sum(len(v) for v in results.values())
+        print_success(
+            "\nScan complete — {} target(s), {} total host(s) found".format(
+                len(results), total_hosts
+            )
+        )
+
+        for target, hosts in sorted(results.items()):
+            if not hosts:
+                print_info("  {} — no live hosts".format(target))
+                continue
+            print_info("  {} — {} host(s):".format(target, len(hosts)))
+            for h in hosts:
+                print_info("    {}".format(h.summary()))
 
     @property
     def module_metadata(self):
@@ -963,7 +1041,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         return modes
 
     def command_discover(self, *args, **kwargs):
-        """Scan a subnet and match live hosts against the exploit catalog.
+        """Scan a subnet (or multiple targets from a file) and match live hosts against the exploit catalog.
 
         Session-aware: if a host was scanned before (same IP+MAC), shows
         previous findings and offers to resume (skip already-tested modules)
@@ -971,12 +1049,15 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
         Usage:
             discover <subnet/CIDR>
-            discover <subnet/CIDR> --fresh   (ignore session, full rescan)
+            discover <subnet/CIDR> --fresh        (ignore session, full rescan)
+            discover -T <targets.txt>              (scan all IPs/CIDRs listed in file)
+            discover -T <targets.txt> --fresh
 
         Examples:
             discover 192.168.1.0/24
             discover 10.0.0.1
             discover 192.168.18.0/24 --fresh
+            discover -T /path/to/targets.txt
         """
         import time as _time
         from datetime import datetime
@@ -986,14 +1067,28 @@ class EmbedXPLInterpreter(BaseInterpreter):
         from rich.table import Table
         from rich.panel import Panel
 
+        raw_args = list(args)
+        force_fresh = "--fresh" in raw_args
+        if force_fresh:
+            raw_args.remove("--fresh")
+
+        # -T <file> handling inside interactive shell
+        if "-T" in raw_args:
+            t_idx = raw_args.index("-T")
+            try:
+                t_file = raw_args[t_idx + 1]
+            except IndexError:
+                print_error("Usage: discover -T <targets.txt>")
+                return
+            self._scan_from_targets_file(t_file)
+            return
+
         try:
-            raw_args = list(args)
-            force_fresh = "--fresh" in raw_args
-            if force_fresh:
-                raw_args.remove("--fresh")
             target = raw_args[0].strip()
         except (IndexError, AttributeError):
-            print_error("Usage: discover <subnet/CIDR>  (e.g. discover 192.168.1.0/24)")
+            print_error(
+                "Usage: discover <subnet/CIDR>  |  discover -T <targets.txt>"
+            )
             return
 
         try:

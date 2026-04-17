@@ -1406,3 +1406,101 @@ class NetworkDiscovery:
     def hosts_with_wireless(self) -> List[DiscoveredHost]:
         """Return hosts that have wireless capabilities."""
         return [h for h in self._hosts if h.has_wireless]
+
+
+def scan_from_file(
+    targets_file: str,
+    *,
+    timing: int = 3,
+    callback: Optional[Callable] = None,
+    max_file_workers: int = 4,
+) -> Dict[str, List[DiscoveredHost]]:
+    """Scan multiple targets listed in a file, one IP/CIDR per line.
+
+    Lines beginning with ``#`` and blank lines are skipped.  Each unique
+    target is scanned in parallel up to ``max_file_workers`` concurrent
+    :class:`NetworkDiscovery` instances.
+
+    Args:
+        targets_file: Path to a plain-text file with one IP or CIDR per line.
+        timing: Nmap-style timing level (0–5) passed to each :class:`NetworkDiscovery`.
+        callback: Optional ``(target, stage, detail)`` progress callback.
+        max_file_workers: Maximum number of targets scanned concurrently.
+
+    Returns:
+        Mapping of *target* string → list of :class:`DiscoveredHost` objects.
+    """
+    targets = _parse_targets_file(targets_file)
+    if not targets:
+        logger.warning("scan_from_file: no targets parsed from '%s'", targets_file)
+        return {}
+
+    results: Dict[str, List[DiscoveredHost]] = {}
+    lock = threading.Lock()
+
+    def _scan_one(target: str) -> None:
+        def _cb(stage: str, detail: str) -> None:
+            if callback:
+                callback(target, stage, detail)
+
+        try:
+            nd = NetworkDiscovery(target, timing=timing)
+            hosts = nd.scan(callback=_cb)
+        except Exception as exc:
+            logger.warning("scan_from_file: scan of '%s' failed: %s", target, exc)
+            hosts = []
+
+        with lock:
+            results[target] = hosts
+
+        if callback:
+            callback(target, "done", "{} host(s) found".format(len(hosts)))
+
+    with ThreadPoolExecutor(max_workers=max_file_workers) as pool:
+        futures = {pool.submit(_scan_one, t): t for t in targets}
+        for future in as_completed(futures):
+            try:
+                future.result()
+            except Exception as exc:
+                logger.warning("scan_from_file worker error: %s", exc)
+
+    return results
+
+
+def _parse_targets_file(path: str) -> List[str]:
+    """Read a targets file and return a deduplicated list of IP/CIDR strings.
+
+    Skips blank lines and lines whose first non-whitespace character is ``#``.
+    Validates each entry as an IPv4/IPv6 address or network in CIDR notation.
+    """
+    targets: List[str] = []
+    seen: Set[str] = set()
+
+    try:
+        with open(path, "r", encoding="utf-8", errors="replace") as fh:
+            for raw_line in fh:
+                line = raw_line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                # Strip inline comments
+                line = line.split("#", 1)[0].strip()
+                if not line:
+                    continue
+                # Validate
+                try:
+                    ipaddress.ip_network(line, strict=False)
+                    entry = line
+                except ValueError:
+                    try:
+                        ipaddress.ip_address(line)
+                        entry = line
+                    except ValueError:
+                        logger.warning("scan_from_file: invalid entry '%s' — skipped", line)
+                        continue
+                if entry not in seen:
+                    seen.add(entry)
+                    targets.append(entry)
+    except OSError as exc:
+        logger.error("scan_from_file: cannot open '%s': %s", path, exc)
+
+    return targets
