@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "1.3.0"
-description = "Embedded Device Security Assessment Framework — 2004+ modules, 45 new ExploitDB/Metasploit ports, NAS/ICS/Camera/Router/Misc exploit coverage"
+version = "1.4.0"
+description = "Embedded Device Security Assessment Framework — 2035+ modules, ICS protocol coverage: ENIP/CIP/Profinet/VxWorks/QNX, Modbus active attacks FC1-FC6/FC15/FC16, firewall creds expansion"
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
