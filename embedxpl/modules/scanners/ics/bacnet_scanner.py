@@ -53,7 +53,7 @@ _VENDOR_NAMES = {
     24: "Andover Controls",
     36: "Alerton",
     61: "Distech Controls",
-    086: "Delta Controls",
+    86: "Delta Controls",
     95: "Cylon Controls",
     135: "Automated Logic",
     149: "Reliable Controls",

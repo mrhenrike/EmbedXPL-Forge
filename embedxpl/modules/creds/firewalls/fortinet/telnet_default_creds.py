@@ -19,4 +19,4 @@ class Exploit(TelnetDefault):
     port = OptPort(23, "Target Telnet port")
 
     threads = OptInteger(1, "Number of threads")
-    defaults = OptWordlist("file:///D:/Projetos-SafeLabs/submodules/IoT/FirewallXPL-Forge/firewallxpl/resources/wordlists/vendors/fortinet_defaults.txt", "User:Pass or file with default credentials (file://)")
+    defaults = OptWordlist("admin:,admin:admin,maintainer:admin,admin:fortinet,admin:fortigate,admin:password,admin:123456", "User:Pass or file with default credentials (file://)")

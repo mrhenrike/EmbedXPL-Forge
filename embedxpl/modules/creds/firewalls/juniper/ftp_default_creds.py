@@ -19,4 +19,4 @@ class Exploit(FTPDefault):
     port = OptPort(21, "Target FTP port")
 
     threads = OptInteger(1, "Number of threads")
-    defaults = OptWordlist("file:///D:/Projetos-SafeLabs/submodules/IoT/FirewallXPL-Forge/firewallxpl/resources/wordlists/vendors/juniper_defaults.txt", "User:Pass or file with default credentials (file://)")
+    defaults = OptWordlist("admin:abc123,admin:netscreen,netscreen:netscreen,super:juniper123,admin:,root:,admin:password", "User:Pass or file with default credentials (file://)")
