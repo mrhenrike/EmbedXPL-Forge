@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "1.2.0"
-description = "Embedded Device Security Assessment Framework — 1293 credential modules, 350 vendors, 9 device categories, APT Group Attack Engine"
+version = "1.3.0"
+description = "Embedded Device Security Assessment Framework — 2004+ modules, 45 new ExploitDB/Metasploit ports, NAS/ICS/Camera/Router/Misc exploit coverage"
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
