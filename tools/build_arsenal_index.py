@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
-"""Build a curated arsenal index for RouterXPL-Forge."""
+"""Build a curated arsenal index for EmbedXPL-Forge."""
 
 from __future__ import annotations
 
@@ -30,8 +30,8 @@ def _read_requirements(path: Path) -> List[str]:
 
 def main() -> int:
     repo_root = Path(__file__).resolve().parents[1]
-    resources_root = repo_root / "routerxpl" / "resources"
-    modules_root = repo_root / "routerxpl" / "modules"
+    resources_root = repo_root / "embedxpl" / "resources"
+    modules_root = repo_root / "embedxpl" / "modules"
     arsenal_root = resources_root / "arsenal"
     catalogs_root = resources_root / "catalogs"
     output_path = resources_root / "catalogs" / "arsenal_index.json"
@@ -51,11 +51,11 @@ def main() -> int:
 
     index: Dict[str, object] = {
         "metadata": {
-            "name": "RouterXPL-Forge Arsenal Index",
+            "name": "EmbedXPL-Forge Arsenal Index",
             "scope": ["routers", "switches", "taps", "fw", "ngfw"],
             "out_of_scope": ["cameras", "printers", "dvr", "dvrs"],
             "generated_by": "tools/build_arsenal_index.py",
-            "curated_layout_catalog": "routerxpl/resources/catalogs/arsenal_layout.json",
+            "curated_layout_catalog": "embedxpl/resources/catalogs/arsenal_layout.json",
         },
         "catalogs": _list_files(catalogs_root, "*.json"),
         "wordlists": _list_files(resources_root / "wordlists", "*.txt"),
@@ -67,7 +67,7 @@ def main() -> int:
             "development": dev_deps,
         },
         "curated_arsenal": {
-            "root": "routerxpl/resources/arsenal",
+            "root": "embedxpl/resources/arsenal",
             "domains": {name: _list_files(arsenal_root / name, "*") for name in curated_domains},
         },
         "modules": {

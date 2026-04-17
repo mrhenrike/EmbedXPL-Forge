@@ -1,4 +1,4 @@
-"""Automated stub enricher for RouterXPL-Forge.
+"""Automated stub enricher for EmbedXPL-Forge.
 
 Upgrades generic stub modules (Tier B/C) with CVE-specific exploit logic,
 proper check paths, payloads, and fingerprinting.
@@ -12,7 +12,7 @@ import re
 import sys
 from pathlib import Path
 
-MODULES_ROOT = Path(__file__).resolve().parent.parent / "routerxpl" / "modules"
+MODULES_ROOT = Path(__file__).resolve().parent.parent / "embedxpl" / "modules"
 
 # CVE-specific enrichment data: keyed by partial filename pattern
 # Each entry provides the full module source code replacement
@@ -22,8 +22,8 @@ ENRICHMENTS = {}
 # CVE-2018-10562 -- GPON Home Gateway RCE (auth bypass + command injection)
 # ---------------------------------------------------------------------------
 ENRICHMENTS["gpon/home_gateway_rce_cve_2018_10562.py"] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -112,8 +112,8 @@ class Exploit(HTTPClient):
 # ---------------------------------------------------------------------------
 ENRICHMENTS["multi/allegrosoft_rompager_auth_bypass.py"] = '''\
 import re
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -206,7 +206,7 @@ class Exploit(HTTPClient):
 ENRICHMENTS["mikrotik/winbox_cred_disclosure_cve_2018_14847.py"] = '''\
 import socket
 import struct
-from routerxpl.core.exploit import *
+from embedxpl.core.exploit import *
 
 
 class Exploit(Exploit):
@@ -334,8 +334,8 @@ class Exploit(Exploit):
 # ---------------------------------------------------------------------------
 ENRICHMENTS["dlink/dir845l_cred_disclosure_cve_2024_33113.py"] = '''\
 import re
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -420,8 +420,8 @@ class Exploit(HTTPClient):
 # CVE-2013-7389 -- D-Link HNAP/Hedwig RCE
 # ---------------------------------------------------------------------------
 ENRICHMENTS["dlink/hedwig_rce_cve_2013_7389.py"] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -500,8 +500,8 @@ class Exploit(HTTPClient):
 # CVE-2014-2321 -- ZTE F460/F660 RCE via hidden management interface
 # ---------------------------------------------------------------------------
 ENRICHMENTS["zte/f460_f660_rce_cve_2014_2321.py"] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -575,8 +575,8 @@ class Exploit(HTTPClient):
 ENRICHMENTS["tplink/wr841nd_password_disclosure_cve_2020_35575.py"] = '''\
 import re
 import base64
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -662,8 +662,8 @@ class Exploit(HTTPClient):
 # CVE-2014-2943 -- Cobham admin reset
 # ---------------------------------------------------------------------------
 ENRICHMENTS["multi/cobham_admin_reset_cve_2014_2943.py"] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -738,8 +738,8 @@ class Exploit(HTTPClient):
 # CVE-2010-1573 -- Linksys WAP54Gv3 debug RCE
 # ---------------------------------------------------------------------------
 ENRICHMENTS["linksys/wap54gv3_debug_rce_cve_2010_1573.py"] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -801,8 +801,8 @@ class Exploit(HTTPClient):
 # ---------------------------------------------------------------------------
 ENRICHMENTS["multi/rompager_password_disclosure_cve_2014_4019.py"] = '''\
 import re
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -912,7 +912,7 @@ def apply_enrichments():
 
 def main():
     print("=" * 60)
-    print("RouterXPL-Forge Stub Enricher")
+    print("EmbedXPL-Forge Stub Enricher")
     print("=" * 60)
     print()
     print("Enrichments available: {}".format(len(ENRICHMENTS)))

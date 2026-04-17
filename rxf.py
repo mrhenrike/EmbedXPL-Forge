@@ -4,13 +4,13 @@ import logging.handlers
 import platform
 import sys
 if sys.version_info.major < 3:
-    print("RouterXPL supports only Python3. Rerun application in Python3 environment.")
+    print("EmbedXPL supports only Python3. Rerun application in Python3 environment.")
     exit(1)
 if sys.version_info < (3, 8):
-    print("RouterXPL requires Python 3.8+ (detected: {}).".format(platform.python_version()))
+    print("EmbedXPL requires Python 3.8+ (detected: {}).".format(platform.python_version()))
     exit(1)
 
-log_handler = logging.handlers.RotatingFileHandler(filename="routerxpl.log", maxBytes=500000)
+log_handler = logging.handlers.RotatingFileHandler(filename="embedxpl.log", maxBytes=500000)
 log_formatter = logging.Formatter("%(asctime)s %(levelname)s %(name)s       %(message)s")
 log_handler.setFormatter(log_formatter)
 LOGGER = logging.getLogger()
@@ -18,16 +18,16 @@ LOGGER.setLevel(logging.DEBUG)
 LOGGER.addHandler(log_handler)
 
 
-def routerxpl(argv):
+def embedxpl(argv):
     try:
-        from routerxpl.interpreter import RouterXPLInterpreter
+        from embedxpl.interpreter import EmbedXPLInterpreter
     except ModuleNotFoundError as err:
-        print("RouterXPL bootstrap error: missing Python dependency: {}".format(err))
+        print("EmbedXPL bootstrap error: missing Python dependency: {}".format(err))
         print("Run: python -m pip install -r requirements.txt")
         print("Optional diagnostics: python tools/env_doctor.py")
         raise SystemExit(1)
 
-    rxf = RouterXPLInterpreter()
+    rxf = EmbedXPLInterpreter()
     if len(argv[1:]):
         rxf.nonInteractive(argv)
     else:
@@ -35,6 +35,6 @@ def routerxpl(argv):
 
 if __name__ == "__main__":
     try:
-        routerxpl(sys.argv)
+        embedxpl(sys.argv)
     except (KeyboardInterrupt, SystemExit):
         pass

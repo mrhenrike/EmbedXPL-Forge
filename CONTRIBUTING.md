@@ -1,8 +1,8 @@
-# Contributing to RouterXPL-Forge
+# Contributing to EmbedXPL-Forge
 
 > **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 
-Thank you for your interest in contributing to RouterXPL-Forge!
+Thank you for your interest in contributing to EmbedXPL-Forge!
 
 ## Important: Legal Notice
 
@@ -12,7 +12,7 @@ All contributions must be for **authorized security testing and research only**.
 
 ### Reporting bugs / requesting features
 
-Open an [Issue](https://github.com/mrhenrike/RouterXPL-Forge/issues) with:
+Open an [Issue](https://github.com/mrhenrike/EmbedXPL-Forge/issues) with:
 - A clear title
 - Steps to reproduce (for bugs)
 - Expected vs. actual behavior
@@ -21,7 +21,7 @@ Open an [Issue](https://github.com/mrhenrike/RouterXPL-Forge/issues) with:
 ### Contributing a module
 
 1. **Fork** the repository and create a branch: `feat/vendor-cve-XXXX`
-2. **Add your module** in the correct vendor folder under `routerxpl/modules/exploits/routers/<vendor>/`
+2. **Add your module** in the correct vendor folder under `embedxpl/modules/exploits/routers/<vendor>/`
 3. **Follow the module template** (see below)
 4. **Run local checks**: `python tools/run_scoped_tests.py`
 5. **Open a Pull Request** with a description of the CVE, affected devices, and test evidence
@@ -34,8 +34,8 @@ Open an [Issue](https://github.com/mrhenrike/RouterXPL-Forge/issues) with:
 Author: Your Name | Organization
 """
 
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 __info__ = {
     "name": "Vendor Product — Vulnerability Type",
@@ -68,14 +68,14 @@ class Exploit(HTTPClient):
 - Python 3.8+ compatible
 - Type hints on public methods
 - Google-style docstrings
-- No `print()` — use `print_success()`, `print_error()`, `print_status()` from `routerxpl.core.exploit`
+- No `print()` — use `print_success()`, `print_error()`, `print_status()` from `embedxpl.core.exploit`
 - No hardcoded credentials in module code (use wordlists)
 
 ## Development Setup
 
 ```bash
-git clone https://github.com/mrhenrike/RouterXPL-Forge.git
-cd RouterXPL-Forge
+git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
+cd EmbedXPL-Forge
 python -m venv .venv
 source .venv/bin/activate  # Linux/macOS
 pip install -r requirements.txt

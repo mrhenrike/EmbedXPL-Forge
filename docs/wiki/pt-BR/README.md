@@ -1,4 +1,4 @@
-# Wiki RouterXPL-Forge (pt-BR)
+# Wiki EmbedXPL-Forge (pt-BR)
 
 **Idioma: Português (pt-BR)**. **English (en-US):** [../en-US/README.md](../en-US/README.md)
 

@@ -1,10 +1,10 @@
-# Architecture Diagrams — RouterXPL-Forge
+# Architecture Diagrams — EmbedXPL-Forge
 
 **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
 
 **Languages:** Diagram labels are **English (en-US)** by default. **Português (pt-BR):** [README.pt-BR.md](README.pt-BR.md).
 
-Diagrams show device attack surfaces with coverage indicators for RouterXPL-Forge modules (`creds`, `exploits`, `scanners`, `generic`).
+Diagrams show device attack surfaces with coverage indicators for EmbedXPL-Forge modules (`creds`, `exploits`, `scanners`, `generic`).
 
 ## Files
 

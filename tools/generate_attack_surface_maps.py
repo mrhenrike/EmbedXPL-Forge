@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Generate RouterXPL-Forge Attack Surface Map diagrams.
+"""Generate EmbedXPL-Forge Attack Surface Map diagrams.
 
 Produces professional PNG diagrams in the style of router attack surface maps,
 showing coverage status per access vector.
@@ -117,7 +117,7 @@ def diagram_soho_router():
     fig.patch.set_facecolor(C_GREY_BG)
     ax.set_xlim(0, 14); ax.set_ylim(0, 9)
     ax.axis("off")
-    fig.suptitle("RouterXPL-Forge v0.9.0 — SOHO Router Attack Surface Map",
+    fig.suptitle("EmbedXPL-Forge v1.0.0 — SOHO Router Attack Surface Map",
                  fontsize=13, fontweight="bold", color=C_DARK_TEXT, y=0.97)
 
     cx, cy = 7.0, 4.5
@@ -176,7 +176,7 @@ def diagram_tplink_apt28():
     ax.set_facecolor(C_GREY_BG); fig.patch.set_facecolor(C_GREY_BG)
     ax.set_xlim(0, 14); ax.set_ylim(0, 9); ax.axis("off")
     fig.suptitle(
-        "RouterXPL-Forge — TP-Link Attack Surface Map with APT28/GRU Coverage",
+        "EmbedXPL-Forge — TP-Link Attack Surface Map with APT28/GRU Coverage",
         fontsize=12, fontweight="bold", color=C_DARK_TEXT, y=0.97)
 
     cx, cy = 7.0, 5.0
@@ -231,7 +231,7 @@ def diagram_mikrotik():
     ax.set_facecolor(C_GREY_BG); fig.patch.set_facecolor(C_GREY_BG)
     ax.set_xlim(0, 14); ax.set_ylim(0, 9); ax.axis("off")
     fig.suptitle(
-        "RouterXPL-Forge — MikroTik RouterOS Attack Surface Map with Coverage Status",
+        "EmbedXPL-Forge — MikroTik RouterOS Attack Surface Map with Coverage Status",
         fontsize=12, fontweight="bold", color=C_DARK_TEXT, y=0.97)
 
     cx, cy = 7.0, 5.0
@@ -286,7 +286,7 @@ def diagram_gpon_ont():
     ax.set_facecolor(C_GREY_BG); fig.patch.set_facecolor(C_GREY_BG)
     ax.set_xlim(0, 15); ax.set_ylim(0, 9); ax.axis("off")
     fig.suptitle(
-        "RouterXPL-Forge — GPON ONT Attack Surface Map (Huawei EG8145X6-10 / EG8145V5-V2)",
+        "EmbedXPL-Forge — GPON ONT Attack Surface Map (Huawei EG8145X6-10 / EG8145V5-V2)",
         fontsize=12, fontweight="bold", color=C_DARK_TEXT, y=0.97)
 
     cx, cy = 7.5, 5.0
@@ -342,12 +342,12 @@ def diagram_apt_chain():
     ax.set_facecolor(C_GREY_BG); fig.patch.set_facecolor(C_GREY_BG)
     ax.set_xlim(0, 15); ax.set_ylim(0, 9); ax.axis("off")
     fig.suptitle(
-        "RouterXPL-Forge — APT Group Attack Chains Against Network Devices",
+        "EmbedXPL-Forge — APT Group Attack Chains Against Network Devices",
         fontsize=12, fontweight="bold", color=C_DARK_TEXT, y=0.97)
 
-    # central node = RouterXPL engine
+    # central node = EmbedXPL engine
     cx, cy = 7.5, 5.0
-    _draw_core(ax, cx, cy, "RouterXPL-Forge\nAPT Engine\n700 modules")
+    _draw_core(ax, cx, cy, "EmbedXPL-Forge\nAPT Engine\n700 modules")
 
     # APT groups
     groups = [
@@ -407,12 +407,12 @@ def diagram_module_architecture():
     ax.set_facecolor(C_GREY_BG); fig.patch.set_facecolor(C_GREY_BG)
     ax.set_xlim(0, 14); ax.set_ylim(0, 8); ax.axis("off")
     fig.suptitle(
-        "RouterXPL-Forge v0.9.0 — Module Architecture Overview",
+        "EmbedXPL-Forge v1.0.0 — Module Architecture Overview",
         fontsize=12, fontweight="bold", color=C_DARK_TEXT, y=0.97)
 
     # core engine
     cx, cy = 7.0, 4.5
-    _draw_core(ax, cx, cy, "RouterXPL Engine\nInterpreter · Discovery\nAPT Catalog · Session Mgr")
+    _draw_core(ax, cx, cy, "EmbedXPL Engine\nInterpreter · Discovery\nAPT Catalog · Session Mgr")
 
     # module families
     families = [
@@ -440,7 +440,7 @@ def diagram_module_architecture():
         _arrow(ax, cx, cy, x, y)
 
     # pip install note
-    ax.text(7.0, 0.35, "pip install routerxpl   |   python -m routerxpl",
+    ax.text(7.0, 0.35, "pip install embedxpl   |   python -m embedxpl",
             ha="center", fontsize=9, color="#1565C0", fontweight="bold",
             bbox=dict(boxstyle="round,pad=0.3", fc="#E3F2FD", ec="#1565C0", lw=1.2))
 
@@ -456,7 +456,7 @@ def diagram_module_architecture():
 # ─────────────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    print("Generating RouterXPL-Forge attack surface maps...")
+    print("Generating EmbedXPL-Forge attack surface maps...")
     diagram_soho_router()
     diagram_tplink_apt28()
     diagram_mikrotik()

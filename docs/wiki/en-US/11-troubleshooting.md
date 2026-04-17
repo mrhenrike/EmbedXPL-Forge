@@ -20,7 +20,7 @@ Install **`colorama`** (pulled via `requirements.txt`) so ANSI colors render in 
 
 ## Module not found after moving files
 
-Run from the repository root and ensure `PYTHONPATH` is not overriding package discovery. Prefer `python rxf.py` without relocating `routerxpl/`.
+Run from the repository root and ensure `PYTHONPATH` is not overriding package discovery. Prefer `python rxf.py` without relocating `embedxpl/`.
 
 ## Permission denied on Linux
 

@@ -1,7 +1,7 @@
 # Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 #
 # Controls what goes into the SOURCE DISTRIBUTION (sdist / .tar.gz).
-# The wheel (.whl) already contains only routerxpl* via pyproject.toml.
+# The wheel (.whl) already contains only embedxpl* via pyproject.toml.
 #
 # Include: package runtime files + essential metadata
 # Exclude: dev tools, docs, CI files, generated artifacts
@@ -15,15 +15,15 @@ include pyproject.toml
 include requirements.txt
 
 # === Package data — runtime resources ===
-recursive-include routerxpl/resources/catalogs     *.json
-recursive-include routerxpl/resources/wordlists    *.txt
-recursive-include routerxpl/resources/ssh_keys     *.json *.key
-recursive-include routerxpl/resources/vendors      *.dat *.csv
-recursive-include routerxpl/resources/mibs         *
-recursive-include routerxpl/resources/ml           *.json
+recursive-include embedxpl/resources/catalogs     *.json
+recursive-include embedxpl/resources/wordlists    *.txt
+recursive-include embedxpl/resources/ssh_keys     *.json *.key
+recursive-include embedxpl/resources/vendors      *.dat *.csv
+recursive-include embedxpl/resources/mibs         *
+recursive-include embedxpl/resources/ml           *.json
 
 # IEEE OUI database (used at runtime for MAC vendor lookup)
-include routerxpl/data/oui.txt
+include embedxpl/data/oui.txt
 
 # === Explicit exclusions from sdist ===
 
@@ -46,8 +46,8 @@ exclude Makefile
 # Generated artifacts — never ship to PyPI
 exclude docs/COVERAGE_MATRIX.md
 exclude docs/COVERAGE_MATRIX.txt
-exclude routerxpl/resources/catalogs/arsenal_index.json
-exclude routerxpl/modules/audit_report.json
+exclude embedxpl/resources/catalogs/arsenal_index.json
+exclude embedxpl/modules/audit_report.json
 
 # Python artifacts
 global-exclude __pycache__

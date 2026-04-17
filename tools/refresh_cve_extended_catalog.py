@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Regenerate routerxpl/resources/catalogs/cve_extended_catalog.json from curated rows.
+"""Regenerate embedxpl/resources/catalogs/cve_extended_catalog.json from curated rows.
 
 Merges, in order: (1) static rows from ``build_entries()``; (2) CVE strings found under
-``routerxpl/modules/**/*.py`` that are not already covered by (1) or by
+``embedxpl/modules/**/*.py`` that are not already covered by (1) or by
 ``_EMBEDDED_CVES`` in ``cve_db.py`` (embedded wins — avoids replacing rich rows with stubs).
 
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
@@ -244,11 +244,11 @@ def _vendor_product_from_module_path(rel_posix: str) -> Tuple[str, str]:
         return "encoder", parts[1] if len(parts) > 1 else "generic"
     if parts[0] == "payloads":
         return "payload", parts[1] if len(parts) > 1 else "generic"
-    return "routerxpl", parts[0]
+    return "embedxpl", parts[0]
 
 
 def _entries_from_external_intel(repo_root: Path, seen: Set[str]) -> List[Dict[str, Any]]:
-    path = repo_root / "routerxpl" / "resources" / "catalogs" / "external_tool_intel_sources.json"
+    path = repo_root / "embedxpl" / "resources" / "catalogs" / "external_tool_intel_sources.json"
     if not path.is_file():
         return []
     try:
@@ -293,7 +293,7 @@ def _entries_from_external_intel(repo_root: Path, seen: Set[str]) -> List[Dict[s
 
 
 def _entries_from_modules(repo_root: Path, seen: Set[str]) -> List[Dict[str, Any]]:
-    mods = repo_root / "routerxpl" / "modules"
+    mods = repo_root / "embedxpl" / "modules"
     if not mods.is_dir():
         return []
     out: List[Dict[str, Any]] = []
@@ -312,7 +312,7 @@ def _entries_from_modules(repo_root: Path, seen: Set[str]) -> List[Dict[str, Any
             seen.add(cve)
             vendor, prod = _vendor_product_from_module_path(rel)
             desc = (
-                "CVE citado no módulo RouterXPL ``{}``. "
+                "CVE citado no módulo EmbedXPL ``{}``. "
                 "Confirmar produto/versões no fabricante (NVD).".format(rel)
             )
             out.append(
@@ -332,7 +332,7 @@ def _entries_from_modules(repo_root: Path, seen: Set[str]) -> List[Dict[str, Any
 def main() -> int:
     root = Path(__file__).resolve().parent.parent
     sys.path.insert(0, str(root))
-    from routerxpl.core.cve.cve_db import _EMBEDDED_CVES
+    from embedxpl.core.cve.cve_db import _EMBEDDED_CVES
 
     embedded_ids: Set[str] = {str(x["cve_id"]).upper() for x in _EMBEDDED_CVES}
     embedded_by_id: Dict[str, Dict[str, Any]] = {
@@ -354,17 +354,17 @@ def main() -> int:
 
     payload = {
         "catalog_note": (
-            "Índice estendido offline para RouterXPL-Forge (lookup). "
+            "Índice estendido offline para EmbedXPL-Forge (lookup). "
             "Não substitui NVD/CISA; cruze sempre com firmware e PSIRT do fabricante."
         ),
         "entry_count": len(entries),
         "entries": entries,
         "seed_sources_note": (
-            "Linhas iniciais: matrix estatica. Acrescimos: CVEs em routerxpl/modules "
+            "Linhas iniciais: matrix estatica. Acrescimos: CVEs em embedxpl/modules "
             "exceto IDs ja presentes aqui ou em cve_db._EMBEDDED_CVES."
         ),
     }
-    out = root / "routerxpl" / "resources" / "catalogs" / "cve_extended_catalog.json"
+    out = root / "embedxpl" / "resources" / "catalogs" / "cve_extended_catalog.json"
     out.write_text(json.dumps(payload, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
     print(
         "wrote {} entries (+{} intel, +{} modules) -> {}".format(

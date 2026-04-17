@@ -33,42 +33,42 @@ Generic modules operate across vendors and device classes — they target common
 11. **Event SUBSCRIBE** — monitors WAN events in real-time
 
 ```text
-RouterXPL-Forge > use generic/upnp/igd_exploit
-RouterXPL-Forge (igd_exploit) > set target 192.168.1.1
-RouterXPL-Forge (igd_exploit) > show options
-RouterXPL-Forge (igd_exploit) > run
+EmbedXPL-Forge > use generic/upnp/igd_exploit
+EmbedXPL-Forge (igd_exploit) > set target 192.168.1.1
+EmbedXPL-Forge (igd_exploit) > show options
+EmbedXPL-Forge (igd_exploit) > run
 
 # Skip dangerous actions (ForceTermination):
-RouterXPL-Forge (igd_exploit) > set skip_dangerous yes
-RouterXPL-Forge (igd_exploit) > run
+EmbedXPL-Forge (igd_exploit) > set skip_dangerous yes
+EmbedXPL-Forge (igd_exploit) > run
 
 # Test specific external port for AddPortMapping:
-RouterXPL-Forge (igd_exploit) > set test_port 31337
-RouterXPL-Forge (igd_exploit) > run
+EmbedXPL-Forge (igd_exploit) > set test_port 31337
+EmbedXPL-Forge (igd_exploit) > run
 ```
 
 ## UPnP SSDP Discovery (basic)
 
 ```text
-RouterXPL-Forge > use generic/upnp/ssdp_msearch
-RouterXPL-Forge (ssdp_msearch) > set target 192.168.1.1
-RouterXPL-Forge (ssdp_msearch) > run
+EmbedXPL-Forge > use generic/upnp/ssdp_msearch
+EmbedXPL-Forge (ssdp_msearch) > set target 192.168.1.1
+EmbedXPL-Forge (ssdp_msearch) > run
 ```
 
 ## CVE Lookup
 
 ```text
-RouterXPL-Forge > use generic/cve/cve_lookup
-RouterXPL-Forge (cve_lookup) > set cve CVE-2014-0160
-RouterXPL-Forge (cve_lookup) > run
+EmbedXPL-Forge > use generic/cve/cve_lookup
+EmbedXPL-Forge (cve_lookup) > set cve CVE-2014-0160
+EmbedXPL-Forge (cve_lookup) > run
 ```
 
 ## SNMP Bruteforce
 
 ```text
-RouterXPL-Forge > use generic/snmp/snmp_bruteforce
-RouterXPL-Forge (snmp_bruteforce) > set target 192.168.1.1
-RouterXPL-Forge (snmp_bruteforce) > run
+EmbedXPL-Forge > use generic/snmp/snmp_bruteforce
+EmbedXPL-Forge (snmp_bruteforce) > set target 192.168.1.1
+EmbedXPL-Forge (snmp_bruteforce) > run
 ```
 
 Adjust options with `show options` before execution.

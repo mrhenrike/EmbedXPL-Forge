@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CATALOG = ROOT / "routerxpl" / "resources" / "catalogs" / "cve_extended_catalog.json"
+CATALOG = ROOT / "embedxpl" / "resources" / "catalogs" / "cve_extended_catalog.json"
 
 
 def main() -> int:

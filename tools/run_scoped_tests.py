@@ -23,7 +23,7 @@ sys.path.insert(0, str(ROOT))
 
 # references is optional (creds modules often omit it)
 REQUIRED_INFO_KEYS = {"name", "description", "authors"}
-MODULES_DIR = ROOT / "routerxpl" / "modules"
+MODULES_DIR = ROOT / "embedxpl" / "modules"
 
 _errors: List[Tuple[str, str]] = []
 

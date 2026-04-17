@@ -39,7 +39,7 @@ def main() -> int:
     """Validate curated architecture shape and dependency alignment."""
     _configure_logging()
     repo_root = Path(__file__).resolve().parents[1]
-    resources_root = repo_root / "routerxpl" / "resources"
+    resources_root = repo_root / "embedxpl" / "resources"
     catalogs_root = resources_root / "catalogs"
     arsenal_root = resources_root / "arsenal"
 
@@ -74,7 +74,7 @@ def main() -> int:
 
         # Validate index curated root.
         curated = index.get("curated_arsenal", {})
-        expected_root = "routerxpl/resources/arsenal"
+        expected_root = "embedxpl/resources/arsenal"
         if curated.get("root") != expected_root:
             errors.append("arsenal_index curated root mismatch: expected {}".format(expected_root))
 

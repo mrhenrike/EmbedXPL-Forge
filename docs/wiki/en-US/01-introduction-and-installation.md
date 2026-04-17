@@ -2,9 +2,9 @@
 
 **Language:** English (en-US). **pt-BR:** [../pt-BR/01-introducao-e-instalacao.md](../pt-BR/01-introducao-e-instalacao.md)
 
-## What RouterXPL-Forge is
+## What EmbedXPL-Forge is
 
-**RouterXPL-Forge** is a modular **Python** framework for **authorized** security testing of routers, GPON ONTs, CPE devices, and SOHO edge equipment. It bundles credential checks, vulnerability-oriented modules, scanners, payloads, and supporting utilities.
+**EmbedXPL-Forge** is a modular **Python** framework for **authorized** security testing of routers, GPON ONTs, CPE devices, and SOHO edge equipment. It bundles credential checks, vulnerability-oriented modules, scanners, payloads, and supporting utilities.
 
 - **647** modules organized by role and vendor (500 exploits, 88 creds, 9 generic, 5 scanners, 32 payloads, 13 encoders).
 - **49** vendor families covered, **338 CVEs** mapped.
@@ -28,8 +28,8 @@
 ## Install
 
 ```bash
-git clone https://github.com/mrhenrike/RouterXPL-Forge.git
-cd RouterXPL-Forge
+git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
+cd EmbedXPL-Forge
 python3 -m venv .venv
 source .venv/bin/activate   # Linux/macOS
 # .venv\Scripts\activate    # Windows
@@ -52,7 +52,7 @@ python rxf.py
 
 ## Log file and history
 
-- **Log file:** `routerxpl.log` (created in the current working directory).
+- **Log file:** `embedxpl.log` (created in the current working directory).
 - **Command history:** typically `~/.rxf_history`.
 - **Session data:** `~/.rxf_sessions/` — persistent scan history per host.
 

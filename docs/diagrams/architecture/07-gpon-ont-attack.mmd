@@ -1,4 +1,4 @@
-%% RouterXPL-Forge — GPON ONT Attack Surface Map (en-US)
+%% EmbedXPL-Forge — GPON ONT Attack Surface Map (en-US)
 %% Validated against Huawei EG8145X6-10 (OptiXstar) and EG8145V5-V2 (EchoLife)
 flowchart LR
   subgraph ISP["ISP / Carrier Side"]
@@ -7,7 +7,7 @@ flowchart LR
   end
 
   subgraph ONT["GPON ONT / CPE — Attack Surface"]
-    GPON_IF["GPON Interface\nXGS-PON / GPON uplink\n⚠ out of RouterXPL scope"]
+    GPON_IF["GPON Interface\nXGS-PON / GPON uplink\n⚠ out of EmbedXPL scope"]
     WEBUI["Web UI — HTTP :80\nBBSP/ASP stack\nDopra Linux 5.10"]
     MGMT["Management Port :37443\nTR-069 listener\n◐ ISP-only access"]
     UPNP_SVC["UPnP IGD — port 49652\nWANIPConnection:1\nlibupnp 1.14.12"]
@@ -22,7 +22,7 @@ flowchart LR
     VICTIM["Admin browser\n(logged into Web UI)"]
   end
 
-  subgraph MODULES["RouterXPL-Forge Modules"]
+  subgraph MODULES["EmbedXPL-Forge Modules"]
     M1["eg8145x6_info_disclosure\nPre-auth firmware vars"]
     M2["eg8145x6_bruteforce_login\nRate-limit bypass"]
     M3["eg8145x6_csrf_static_token\nCSRF non-validation"]

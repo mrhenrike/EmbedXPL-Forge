@@ -28,7 +28,7 @@ MINIMUMS: Dict[str, int] = {
 
 def count_exploit_modules() -> int:
     """Count non-__init__ .py files under exploits/."""
-    base = ROOT / "routerxpl" / "modules" / "exploits"
+    base = ROOT / "embedxpl" / "modules" / "exploits"
     return sum(
         1 for p in base.rglob("*.py")
         if p.name != "__init__.py" and "__pycache__" not in str(p)
@@ -37,7 +37,7 @@ def count_exploit_modules() -> int:
 
 def count_cve_entries() -> int:
     """Count entries in the CVE catalog."""
-    catalog = ROOT / "routerxpl" / "resources" / "catalogs" / "cve_extended_catalog.json"
+    catalog = ROOT / "embedxpl" / "resources" / "catalogs" / "cve_extended_catalog.json"
     if not catalog.exists():
         return 0
     with catalog.open() as f:
@@ -48,7 +48,7 @@ def count_cve_entries() -> int:
 
 def count_vendors() -> int:
     """Count vendor folders under exploits/routers/."""
-    base = ROOT / "routerxpl" / "modules" / "exploits" / "routers"
+    base = ROOT / "embedxpl" / "modules" / "exploits" / "routers"
     return sum(
         1 for d in base.iterdir()
         if d.is_dir() and d.name != "__pycache__"
@@ -57,7 +57,7 @@ def count_vendors() -> int:
 
 def count_cred_modules() -> int:
     """Count non-__init__ .py files under creds/."""
-    base = ROOT / "routerxpl" / "modules" / "creds"
+    base = ROOT / "embedxpl" / "modules" / "creds"
     return sum(
         1 for p in base.rglob("*.py")
         if p.name != "__init__.py" and "__pycache__" not in str(p)

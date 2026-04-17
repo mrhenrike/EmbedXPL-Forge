@@ -1,8 +1,8 @@
-# RouterXPL-Forge
+# EmbedXPL-Forge
 
-**Network Device Security Assessment Framework**
+**Embedded Device Security Assessment Framework**
 
-RouterXPL-Forge is an open-source exploitation framework designed for security professionals to audit routers, switches, TAPs, and SOHO edge devices. It provides **700 modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, and encoding — with **350 CVEs** mapped across **55 vendors** and an **APT Group Attack Engine** that reproduces real-world nation-state attack chains.
+EmbedXPL-Forge is an open-source exploitation framework designed for security professionals to audit routers, switches, IP cameras, GPON ONTs, ISP CPEs, and IoT/embedded edge devices. It provides **700 modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, and encoding — with **350 CVEs** mapped across **55 vendors** and an **APT Group Attack Engine** that reproduces real-world nation-state attack chains.
 
 > **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 
@@ -40,15 +40,15 @@ RouterXPL-Forge is an open-source exploitation framework designed for security p
 ### Option 1 — PyPI (recommended)
 
 ```bash
-pip install routerxpl
-routerxpl
+pip install embedxpl
+embedxpl
 ```
 
 ### Option 2 — From source
 
 ```bash
-git clone https://github.com/mrhenrike/RouterXPL-Forge.git
-cd RouterXPL-Forge
+git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
+cd EmbedXPL-Forge
 pip install -r requirements.txt
 python rxf.py
 ```
@@ -56,24 +56,24 @@ python rxf.py
 ### Option 3 — Python module
 
 ```bash
-pip install routerxpl
-python -m routerxpl
+pip install embedxpl
+python -m embedxpl
 ```
 
 ## Quick Start
 
 ```bash
 # Install
-pip install routerxpl
+pip install embedxpl
 
 # Launch interactive shell
-routerxpl
+embedxpl
 
 # Run a specific module directly
-routerxpl -m exploits/routers/tplink/wr841n_credential_disclosure_cve_2023_50224 -s target 192.168.1.1
+embedxpl -m exploits/routers/tplink/wr841n_credential_disclosure_cve_2023_50224 -s target 192.168.1.1
 
 # Network discovery
-routerxpl -c "discover 192.168.1.0/24"
+embedxpl -c "discover 192.168.1.0/24"
 ```
 
 ## Usage
@@ -139,7 +139,7 @@ rxf > discover 192.168.1.0/24 --timing T1
 rxf > discover 192.168.1.0/24 --fresh
 ```
 
-Discovery uses a multi-phase pipeline: ARP sweep → Nmap (multi-method host probes) → Scapy → TCP connect fallback. Results are matched against the module catalog and filtered by vendor/model. The IEEE OUI database (`routerxpl/data/oui.txt`) resolves MAC addresses to vendors with online-first lookup and local fallback. When a host exposes WiFi capabilities, the tool recommends [WirelessXPL-Forge](https://github.com/mrhenrike/WirelessXPL-Forge) for wireless-specific attacks.
+Discovery uses a multi-phase pipeline: ARP sweep → Nmap (multi-method host probes) → Scapy → TCP connect fallback. Results are matched against the module catalog and filtered by vendor/model. The IEEE OUI database (`embedxpl/data/oui.txt`) resolves MAC addresses to vendors with online-first lookup and local fallback. When a host exposes WiFi capabilities, the tool recommends [WirelessXPL-Forge](https://github.com/mrhenrike/WirelessXPL-Forge) for wireless-specific attacks.
 
 **Timing profiles (T0–T5)** mirror Nmap conventions:
 
@@ -184,7 +184,7 @@ rxf (AutoPwn) > run
 ## Module Structure
 
 ```
-routerxpl/modules/
+embedxpl/modules/
 ├── creds/             # Credential testing (FTP, SSH, Telnet, HTTP, SNMP)
 │   ├── generic/       # Protocol-agnostic bruteforce and defaults
 │   └── routers/       # Vendor-specific default credentials
@@ -207,7 +207,7 @@ Source files in [`docs/diagrams/architecture/`](docs/diagrams/architecture/).
 ### Module Architecture Overview
 
 <p align="center">
-  <img src="docs/diagrams/architecture/rxf_arch_overview.png" width="900" alt="RouterXPL-Forge Architecture Overview"/>
+  <img src="docs/diagrams/architecture/rxf_arch_overview.png" width="900" alt="EmbedXPL-Forge Architecture Overview"/>
 </p>
 
 ### APT Group Attack Chains
@@ -250,7 +250,7 @@ Full list: [`requirements.txt`](requirements.txt)
 
 ## Legal Disclaimer
 
-RouterXPL-Forge is intended for authorized security testing and research only. Use this tool exclusively on systems you own or have explicit written permission to test. Unauthorized access to computer systems is illegal. The authors assume no liability for misuse.
+EmbedXPL-Forge is intended for authorized security testing and research only. Use this tool exclusively on systems you own or have explicit written permission to test. Unauthorized access to computer systems is illegal. The authors assume no liability for misuse.
 
 ## License
 

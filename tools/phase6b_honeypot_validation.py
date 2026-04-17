@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 def main() -> int:
     """Run honeypot validation snapshot — always exits 0 (non-gating)."""
-    modules_dir = ROOT / "routerxpl" / "modules"
+    modules_dir = ROOT / "embedxpl" / "modules"
 
     # Count modules that reference honeypot or canary detection patterns
     honeypot_refs = []

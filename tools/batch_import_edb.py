@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Batch import of ExploitDB hardware exploits as RouterXPL stub modules.
+"""Batch import of ExploitDB hardware exploits as EmbedXPL stub modules.
 
 Author: André Henrique (@mrhenrike) | União Geek
 """
@@ -10,7 +10,7 @@ import textwrap
 
 MODULES_BASE = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "routerxpl", "modules", "exploits", "routers",
+    "embedxpl", "modules", "exploits", "routers",
 )
 CANDIDATES = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
@@ -38,8 +38,8 @@ VENDOR_MAP = {
 }
 
 TEMPLATE = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):

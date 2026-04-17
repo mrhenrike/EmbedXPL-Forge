@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
-"""Environment diagnostics for RouterXPL-Forge runtime dependencies."""
+"""Environment diagnostics for EmbedXPL-Forge runtime dependencies."""
 
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ def _check_import(name: str) -> Tuple[str, bool, str]:
 
 
 def main() -> int:
-    print("RouterXPL-Forge Environment Doctor")
+    print("EmbedXPL-Forge Environment Doctor")
     print("python_version={}".format(platform.python_version()))
     print("platform={}".format(platform.platform()))
     print("executable={}".format(sys.executable))
@@ -50,7 +50,7 @@ def main() -> int:
         return 1
 
     print("")
-    print("Environment looks ready for RouterXPL-Forge.")
+    print("Environment looks ready for EmbedXPL-Forge.")
     return 0
 
 

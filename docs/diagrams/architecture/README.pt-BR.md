@@ -1,4 +1,4 @@
-# Diagramas de arquitetura — RouterXPL-Forge
+# Diagramas de arquitetura — EmbedXPL-Forge
 
 **Idioma:** pt-BR. **English (en-US):** [README.md](README.md)
 
@@ -10,7 +10,7 @@ O estilo replica o hub-and-spoke do **MikrotikAPI-BF** (`mikrotik_full_attack_su
 
 | Símbolo | Significado |
 |---------|-------------|
-| ✓ (verde) | Coberto por módulos `creds`, `exploits`, `scanners` ou `generic` no RouterXPL-Forge |
+| ✓ (verde) | Coberto por módulos `creds`, `exploits`, `scanners` ou `generic` no EmbedXPL-Forge |
 | ◐ (amarelo) | Cobertura parcial ou só genérica (banner, CVE lookup, rede IP) |
 | ✗ / ausente | Fora do foco do projeto ou sem módulo dedicado |
 

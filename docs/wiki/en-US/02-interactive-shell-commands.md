@@ -26,11 +26,11 @@
 ## Example Session
 
 ```text
-RouterXPL-Forge > use exploits/routers/dlink/dir_300_600_rce
-RouterXPL-Forge (dir_300_600_rce) > show options
-RouterXPL-Forge (dir_300_600_rce) > set target 192.168.0.1
-RouterXPL-Forge (dir_300_600_rce) > check
-RouterXPL-Forge (dir_300_600_rce) > run
+EmbedXPL-Forge > use exploits/routers/dlink/dir_300_600_rce
+EmbedXPL-Forge (dir_300_600_rce) > show options
+EmbedXPL-Forge (dir_300_600_rce) > set target 192.168.0.1
+EmbedXPL-Forge (dir_300_600_rce) > check
+EmbedXPL-Forge (dir_300_600_rce) > run
 ```
 
 ## Network Discovery
@@ -39,16 +39,16 @@ The `discover` command performs multi-phase network scanning to identify known d
 
 ```text
 # Scan the current default subnet (auto-detected from active interfaces)
-RouterXPL-Forge > discover
+EmbedXPL-Forge > discover
 
 # Scan a specific subnet with T4 (aggressive) timing
-RouterXPL-Forge > discover 192.168.1.0/24 --timing T4
+EmbedXPL-Forge > discover 192.168.1.0/24 --timing T4
 
 # Scan a single host
-RouterXPL-Forge > discover 192.168.1.1
+EmbedXPL-Forge > discover 192.168.1.1
 
 # Ignore session history and run a full fresh scan
-RouterXPL-Forge > discover --fresh
+EmbedXPL-Forge > discover --fresh
 ```
 
 ### Timing Profiles (T0–T5)
@@ -64,9 +64,9 @@ RouterXPL-Forge > discover --fresh
 
 Discovery pipeline: **ARP sweep → Nmap (multi-method host probes) → Scapy → TCP connect fallback**.
 
-OUI vendor resolution uses the [IEEE OUI database](https://standards-oui.ieee.org/oui/oui.txt) with online-first lookup and local `routerxpl/data/oui.txt` fallback.
+OUI vendor resolution uses the [IEEE OUI database](https://standards-oui.ieee.org/oui/oui.txt) with online-first lookup and local `embedxpl/data/oui.txt` fallback.
 
-When a discovered host exposes wireless capabilities, RouterXPL-Forge will display a recommendation to use [WirelessXPL-Forge](https://github.com/mrhenrike/WirelessXPL-Forge) for WiFi-specific attacks.
+When a discovered host exposes wireless capabilities, EmbedXPL-Forge will display a recommendation to use [WirelessXPL-Forge](https://github.com/mrhenrike/WirelessXPL-Forge) for WiFi-specific attacks.
 
 ## Session Management
 
@@ -76,19 +76,19 @@ Sessions are stored in `~/.rxf_sessions/`.
 
 ```text
 # List all known hosts with scan history
-RouterXPL-Forge > sessions list
+EmbedXPL-Forge > sessions list
 
 # Show full history for a host: modules tested, findings, timestamps
-RouterXPL-Forge > sessions show 192.168.1.1
+EmbedXPL-Forge > sessions show 192.168.1.1
 
 # Export session to JSON file
-RouterXPL-Forge > sessions export 192.168.1.1
+EmbedXPL-Forge > sessions export 192.168.1.1
 
 # Delete session for one host
-RouterXPL-Forge > sessions delete 192.168.1.1
+EmbedXPL-Forge > sessions delete 192.168.1.1
 
 # Delete all sessions
-RouterXPL-Forge > sessions purge
+EmbedXPL-Forge > sessions purge
 ```
 
 ## Tab Completion

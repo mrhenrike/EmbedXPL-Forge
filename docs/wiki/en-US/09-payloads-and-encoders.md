@@ -9,9 +9,9 @@ There are **32** payload modules spanning **x86**, **x64**, **armle**, **mipsbe*
 ## Usage example
 
 ```text
-RouterXPL-Forge > use payloads/cmd/bind_tcp
-RouterXPL-Forge (bind_tcp) > show options
-RouterXPL-Forge (bind_tcp) > run
+EmbedXPL-Forge > use payloads/cmd/bind_tcp
+EmbedXPL-Forge (bind_tcp) > show options
+EmbedXPL-Forge (bind_tcp) > run
 ```
 
 ## Encoders

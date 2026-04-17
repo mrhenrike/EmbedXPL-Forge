@@ -33,30 +33,30 @@ Módulos genéricos operam entre vendors e classes de dispositivo — focam em p
 11. **Event SUBSCRIBE** — monitora eventos WAN em tempo real
 
 ```text
-RouterXPL-Forge > use generic/upnp/igd_exploit
-RouterXPL-Forge (igd_exploit) > set target 192.168.1.1
-RouterXPL-Forge (igd_exploit) > show options
-RouterXPL-Forge (igd_exploit) > run
+EmbedXPL-Forge > use generic/upnp/igd_exploit
+EmbedXPL-Forge (igd_exploit) > set target 192.168.1.1
+EmbedXPL-Forge (igd_exploit) > show options
+EmbedXPL-Forge (igd_exploit) > run
 
 # Pular ações perigosas (ForceTermination):
-RouterXPL-Forge (igd_exploit) > set skip_dangerous yes
-RouterXPL-Forge (igd_exploit) > run
+EmbedXPL-Forge (igd_exploit) > set skip_dangerous yes
+EmbedXPL-Forge (igd_exploit) > run
 ```
 
 ## Descoberta SSDP (básico)
 
 ```text
-RouterXPL-Forge > use generic/upnp/ssdp_msearch
-RouterXPL-Forge (ssdp_msearch) > set target 192.168.1.1
-RouterXPL-Forge (ssdp_msearch) > run
+EmbedXPL-Forge > use generic/upnp/ssdp_msearch
+EmbedXPL-Forge (ssdp_msearch) > set target 192.168.1.1
+EmbedXPL-Forge (ssdp_msearch) > run
 ```
 
 ## CVE Lookup
 
 ```text
-RouterXPL-Forge > use generic/cve/cve_lookup
-RouterXPL-Forge (cve_lookup) > set cve CVE-2014-0160
-RouterXPL-Forge (cve_lookup) > run
+EmbedXPL-Forge > use generic/cve/cve_lookup
+EmbedXPL-Forge (cve_lookup) > set cve CVE-2014-0160
+EmbedXPL-Forge (cve_lookup) > run
 ```
 
 Ajuste opções com `show options` antes de executar.

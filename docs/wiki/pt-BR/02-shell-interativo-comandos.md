@@ -26,11 +26,11 @@
 ## Sessão de Exemplo
 
 ```text
-RouterXPL-Forge > use exploits/routers/dlink/dir_300_600_rce
-RouterXPL-Forge (dir_300_600_rce) > show options
-RouterXPL-Forge (dir_300_600_rce) > set target 192.168.0.1
-RouterXPL-Forge (dir_300_600_rce) > check
-RouterXPL-Forge (dir_300_600_rce) > run
+EmbedXPL-Forge > use exploits/routers/dlink/dir_300_600_rce
+EmbedXPL-Forge (dir_300_600_rce) > show options
+EmbedXPL-Forge (dir_300_600_rce) > set target 192.168.0.1
+EmbedXPL-Forge (dir_300_600_rce) > check
+EmbedXPL-Forge (dir_300_600_rce) > run
 ```
 
 ## Discovery de Rede
@@ -39,16 +39,16 @@ O comando `discover` realiza varredura multi-fase para identificar devices conhe
 
 ```text
 # Varrer a subnet padrão (detectada automaticamente pelas interfaces ativas)
-RouterXPL-Forge > discover
+EmbedXPL-Forge > discover
 
 # Varrer subnet específica com timing T4 (agressivo)
-RouterXPL-Forge > discover 192.168.1.0/24 --timing T4
+EmbedXPL-Forge > discover 192.168.1.0/24 --timing T4
 
 # Varrer um host único
-RouterXPL-Forge > discover 192.168.1.1
+EmbedXPL-Forge > discover 192.168.1.1
 
 # Ignorar histórico de sessão e fazer varredura completa
-RouterXPL-Forge > discover --fresh
+EmbedXPL-Forge > discover --fresh
 ```
 
 ### Perfis de Timing (T0–T5)
@@ -64,9 +64,9 @@ RouterXPL-Forge > discover --fresh
 
 Pipeline de discovery: **ARP sweep → Nmap (probes multi-método) → Scapy → TCP connect fallback**.
 
-A resolução de vendor por MAC usa a [base OUI da IEEE](https://standards-oui.ieee.org/oui/oui.txt) com busca online prioritária e fallback local (`routerxpl/data/oui.txt`).
+A resolução de vendor por MAC usa a [base OUI da IEEE](https://standards-oui.ieee.org/oui/oui.txt) com busca online prioritária e fallback local (`embedxpl/data/oui.txt`).
 
-Quando um host descoberto expõe capacidades wireless, o RouterXPL-Forge exibe uma recomendação para usar [WirelessXPL-Forge](https://github.com/mrhenrike/WirelessXPL-Forge) para ataques específicos de WiFi.
+Quando um host descoberto expõe capacidades wireless, o EmbedXPL-Forge exibe uma recomendação para usar [WirelessXPL-Forge](https://github.com/mrhenrike/WirelessXPL-Forge) para ataques específicos de WiFi.
 
 ## Gerenciamento de Sessões
 
@@ -76,19 +76,19 @@ Sessões são armazenadas em `~/.rxf_sessions/`.
 
 ```text
 # Listar todos os hosts com histórico
-RouterXPL-Forge > sessions list
+EmbedXPL-Forge > sessions list
 
 # Exibir histórico completo de um host: módulos testados, findings, timestamps
-RouterXPL-Forge > sessions show 192.168.1.1
+EmbedXPL-Forge > sessions show 192.168.1.1
 
 # Exportar sessão como arquivo JSON
-RouterXPL-Forge > sessions export 192.168.1.1
+EmbedXPL-Forge > sessions export 192.168.1.1
 
 # Deletar sessão de um host
-RouterXPL-Forge > sessions delete 192.168.1.1
+EmbedXPL-Forge > sessions delete 192.168.1.1
 
 # Deletar todas as sessões
-RouterXPL-Forge > sessions purge
+EmbedXPL-Forge > sessions purge
 ```
 
 ## Completação por Tab

@@ -51,10 +51,10 @@ def _count_py_files(root: Path) -> int:
 
 
 def _disk_snapshot(repo_root: Path) -> Dict[str, Any]:
-    """Aggregate byte sizes by top-level path and under ``routerxpl/``."""
+    """Aggregate byte sizes by top-level path and under ``embedxpl/``."""
 
     repo_root = repo_root.resolve()
-    rx_root = repo_root / "routerxpl"
+    rx_root = repo_root / "embedxpl"
     totals_repo: MutableMapping[str, int] = defaultdict(int)
     totals_rx: MutableMapping[str, int] = defaultdict(int)
     totals_res_child: MutableMapping[str, int] = defaultdict(int)
@@ -90,7 +90,7 @@ def _disk_snapshot(repo_root: Path) -> Dict[str, Any]:
                 continue
             files_rx += 1
             if rel_rx == Path("."):
-                totals_rx["(routerxpl root files)"] += sz
+                totals_rx["(embedxpl root files)"] += sz
             else:
                 totals_rx[rel_rx.parts[0]] += sz
             if len(rel_rx.parts) >= 2 and rel_rx.parts[0] == "resources":
@@ -100,9 +100,9 @@ def _disk_snapshot(repo_root: Path) -> Dict[str, Any]:
     return {
         "grand_total_bytes": grand_total,
         "repo_files_count": files_repo,
-        "routerxpl_files_count": files_rx,
+        "embedxpl_files_count": files_rx,
         "repo_by_top": dict(totals_repo),
-        "routerxpl_by_top": dict(totals_rx),
+        "embedxpl_by_top": dict(totals_rx),
         "resources_children": dict(totals_res_child),
     }
 
@@ -134,11 +134,11 @@ def _module_category_stats(records: List[Dict[str, Any]]) -> Dict[str, Dict[str,
 def _first_party_py_counts(repo_root: Path) -> Dict[str, int]:
     """Python file counts for framework code trees (not vendored resources)."""
 
-    rx = repo_root / "routerxpl"
+    rx = repo_root / "embedxpl"
     counts: Dict[str, int] = {}
     for name in ("core", "modules", "libs"):
         p = rx / name
-        counts["routerxpl/{}".format(name)] = _count_py_files(p)
+        counts["embedxpl/{}".format(name)] = _count_py_files(p)
     counts["tools"] = _count_py_files(repo_root / "tools")
     root_py = repo_root / "rxf.py"
     counts["rxf.py"] = 1 if root_py.is_file() else 0
@@ -252,7 +252,7 @@ def _build_md(
     ]
 
     lines: List[str] = [
-        "# RouterXPL-Forge — Full Module Catalog",
+        "# EmbedXPL-Forge — Full Module Catalog",
         "",
         "> Generated: {}".format(now),
         "> Author: Andre Henrique (@mrhenrike) | Uniao Geek",
@@ -281,7 +281,7 @@ def _build_md(
         "| Repository root | `{}` |".format(repo_root.resolve().as_posix()),
         "| Total file bytes | {} |".format(_human_bytes(gt)),
         "| Files (repo walk) | {} |".format(disk.get("repo_files_count", 0)),
-        "| Files under ``routerxpl/`` | {} |".format(disk.get("routerxpl_files_count", 0)),
+        "| Files under ``embedxpl/`` | {} |".format(disk.get("embedxpl_files_count", 0)),
         "",
         "### Largest top-level paths (repository)",
         "",
@@ -294,12 +294,12 @@ def _build_md(
 
     lines.extend([
         "",
-        "### ``routerxpl/`` breakdown (first-level folders)",
+        "### ``embedxpl/`` breakdown (first-level folders)",
         "",
         "| Area | Size | Share of total |",
         "|---|---:|---:|",
     ])
-    for name, sz in _sorted_sizes(disk.get("routerxpl_by_top") or {}, limit=25):
+    for name, sz in _sorted_sizes(disk.get("embedxpl_by_top") or {}, limit=25):
         pct = (100.0 * sz / gt) if gt else 0.0
         lines.append("| `{}` | {} | {:.1f}% |".format(name, _human_bytes(sz), pct))
 
@@ -307,7 +307,7 @@ def _build_md(
     if res_ch:
         lines.extend([
             "",
-            "### ``routerxpl/resources/*`` (largest direct children)",
+            "### ``embedxpl/resources/*`` (largest direct children)",
             "",
             "| Subfolder | Size | Share of total |",
             "|---|---:|---:|",
@@ -323,7 +323,7 @@ def _build_md(
         "| Tree | Files |",
         "|---|---:|",
     ])
-    for key in ("routerxpl/core", "routerxpl/modules", "routerxpl/libs", "tools", "rxf.py"):
+    for key in ("embedxpl/core", "embedxpl/modules", "embedxpl/libs", "tools", "rxf.py"):
         if key in py_counts:
             lines.append("| `{}` | {} |".format(key, py_counts[key]))
 
@@ -393,7 +393,7 @@ def _build_md(
 
     # Access vector classification from CVE DB
     try:
-        from routerxpl.core.cve.cve_db import CVEDatabase
+        from embedxpl.core.cve.cve_db import CVEDatabase
         db = CVEDatabase()
         lines.extend([
             "",
@@ -431,7 +431,7 @@ def _build_txt(
     """Build the full catalog in plain text."""
     now = datetime.now(timezone.utc).isoformat()
     lines: List[str] = [
-        "RouterXPL-Forge - Full Module Catalog",
+        "EmbedXPL-Forge - Full Module Catalog",
         "=" * 40,
         "Generated: {}".format(now),
         "Author: Andre Henrique (@mrhenrike) | Uniao Geek",
@@ -472,25 +472,25 @@ def _build_txt(
         "Repository root: {}".format(repo_root.resolve()),
         "Total file bytes: {}".format(_human_bytes(gt)),
         "Files (repo walk, excl. skipped dirs): {}".format(disk.get("repo_files_count", 0)),
-        "Files under routerxpl/: {}".format(disk.get("routerxpl_files_count", 0)),
+        "Files under embedxpl/: {}".format(disk.get("embedxpl_files_count", 0)),
         "",
         "Largest top-level paths:",
     ])
     for name, sz in _sorted_sizes(disk.get("repo_by_top") or {}, limit=15):
         pct = (100.0 * sz / gt) if gt else 0.0
         lines.append("  {:<36} {:>12}  ({:.1f}%)".format(name, _human_bytes(sz), pct))
-    lines.extend(["", "routerxpl/ first-level folders:",])
-    for name, sz in _sorted_sizes(disk.get("routerxpl_by_top") or {}, limit=25):
+    lines.extend(["", "embedxpl/ first-level folders:",])
+    for name, sz in _sorted_sizes(disk.get("embedxpl_by_top") or {}, limit=25):
         pct = (100.0 * sz / gt) if gt else 0.0
         lines.append("  {:<36} {:>12}  ({:.1f}%)".format(name, _human_bytes(sz), pct))
     res_ch = disk.get("resources_children") or {}
     if res_ch:
-        lines.extend(["", "routerxpl/resources/* direct children (largest):",])
+        lines.extend(["", "embedxpl/resources/* direct children (largest):",])
         for name, sz in _sorted_sizes(res_ch, limit=25):
             pct = (100.0 * sz / gt) if gt else 0.0
             lines.append("  {:<36} {:>12}  ({:.1f}%)".format(name, _human_bytes(sz), pct))
     lines.extend(["", "First-party .py file counts (excl. __pycache__):",])
-    for key in ("routerxpl/core", "routerxpl/modules", "routerxpl/libs", "tools", "rxf.py"):
+    for key in ("embedxpl/core", "embedxpl/modules", "embedxpl/libs", "tools", "rxf.py"):
         if key in py_counts:
             lines.append("  {:<22} {}".format(key, py_counts[key]))
     lines.append("")
@@ -531,7 +531,7 @@ def _build_txt(
 
     # Access vector
     try:
-        from routerxpl.core.cve.cve_db import CVEDatabase
+        from embedxpl.core.cve.cve_db import CVEDatabase
         db = CVEDatabase()
         lines.append("CVE ACCESS VECTOR CLASSIFICATION")
         lines.append("=" * 40)
@@ -557,7 +557,7 @@ def main() -> int:
     """Generate the full catalog documents."""
     _configure_logging()
     repo_root = Path(__file__).resolve().parent.parent
-    modules_root = repo_root / "routerxpl" / "modules"
+    modules_root = repo_root / "embedxpl" / "modules"
 
     records = _collect_modules(modules_root)
     LOGGER.info("Computing disk metrics and first-party counts...")

@@ -14,7 +14,7 @@ from typing import Dict, List
 def main() -> int:
     """Export normalized OSI protocol attack/test matrix."""
     repo_root = Path(__file__).resolve().parents[1]
-    catalog_path = repo_root / "routerxpl" / "resources" / "catalogs" / "osi_tcpip_priority_matrix.json"
+    catalog_path = repo_root / "embedxpl" / "resources" / "catalogs" / "osi_tcpip_priority_matrix.json"
     payload = json.loads(catalog_path.read_text(encoding="utf-8"))
     layers: List[Dict[str, object]] = payload.get("layers", [])
 

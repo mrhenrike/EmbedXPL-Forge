@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Batch import of third-party exploits into RouterXPL-Forge format.
+"""Batch import of third-party exploits into EmbedXPL-Forge format.
 
 Author: André Henrique (@mrhenrike) | União Geek
 """
@@ -8,7 +8,7 @@ import textwrap
 
 MODULES_BASE = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "routerxpl", "modules", "exploits", "routers",
+    "embedxpl", "modules", "exploits", "routers",
 )
 
 
@@ -34,8 +34,8 @@ MODULES = {}
 
 MODULES[("dlink", "dir890l_soapaction_rce.py")] = '''\
 import telnetlib
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -106,8 +106,8 @@ class Exploit(HTTPClient):
 
 MODULES[("linksys", "ea6100_auth_bypass.py")] = '''\
 import re
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -176,8 +176,8 @@ class Exploit(HTTPClient):
 '''
 
 MODULES[("netgear", "prosafe_rce.py")] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -233,8 +233,8 @@ class Exploit(HTTPClient):
 '''
 
 MODULES[("netgear", "rp614_auth_bypass.py")] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -283,8 +283,8 @@ class Exploit(HTTPClient):
 
 MODULES[("netgear", "wg102_wn604_rce.py")] = '''\
 import datetime
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -356,8 +356,8 @@ class Exploit(HTTPClient):
 
 MODULES[("netgear", "wndr_soap_auth_bypass.py")] = '''\
 import re
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -445,8 +445,8 @@ class Exploit(HTTPClient):
 # ---------- PHASE 2: REXT Misc ----------
 
 MODULES[("multi", "accton_switch_backdoor_password.py")] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.exploit.exploit import Exploit as BaseExploit
+from embedxpl.core.exploit import *
+from embedxpl.core.exploit.exploit import Exploit as BaseExploit
 
 
 class Exploit(BaseExploit):
@@ -499,8 +499,8 @@ class Exploit(BaseExploit):
 MODULES[("arris", "tm602a_password_of_the_day.py")] = '''\
 import datetime
 import math
-from routerxpl.core.exploit import *
-from routerxpl.core.exploit.exploit import Exploit as BaseExploit
+from embedxpl.core.exploit import *
+from embedxpl.core.exploit.exploit import Exploit as BaseExploit
 
 
 class Exploit(BaseExploit):
@@ -569,8 +569,8 @@ class Exploit(BaseExploit):
 MODULES[("draytek", "vigor_master_key.py")] = '''\
 import re
 from binascii import unhexlify
-from routerxpl.core.exploit import *
-from routerxpl.core.exploit.exploit import Exploit as BaseExploit
+from embedxpl.core.exploit import *
+from embedxpl.core.exploit.exploit import Exploit as BaseExploit
 
 
 class Exploit(BaseExploit):
@@ -641,8 +641,8 @@ class Exploit(BaseExploit):
 '''
 
 MODULES[("multi", "sagem_fast_telnet_password.py")] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.exploit.exploit import Exploit as BaseExploit
+from embedxpl.core.exploit import *
+from embedxpl.core.exploit.exploit import Exploit as BaseExploit
 
 
 class Exploit(BaseExploit):
@@ -701,8 +701,8 @@ class Exploit(BaseExploit):
 
 MODULES[("multi", "airlive_wt2000arm_info_disclosure.py")] = '''\
 import re
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -754,8 +754,8 @@ class Exploit(HTTPClient):
 
 MODULES[("multi", "3com_ap8670_cred_disclosure.py")] = '''\
 import re
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -798,8 +798,8 @@ class Exploit(HTTPClient):
 '''
 
 MODULES[("dlink", "dcs_cred_disclosure_cve_2020_25078.py")] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -849,8 +849,8 @@ class Exploit(HTTPClient):
 '''
 
 MODULES[("siemens", "ccms2025_cred_disclosure.py")] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -894,8 +894,8 @@ class Exploit(HTTPClient):
 '''
 
 MODULES[("siemens", "ccms2025_path_traversal.py")] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -938,8 +938,8 @@ class Exploit(HTTPClient):
 # ---------- PHASE 4: Standalone PoCs ----------
 
 MODULES[("tplink", "wdr5620_cmd_injection.py")] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -989,8 +989,8 @@ class Exploit(HTTPClient):
 '''
 
 MODULES[("tplink", "wr849n_traceroute_rce.py")] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -1046,8 +1046,8 @@ class Exploit(HTTPClient):
 '''
 
 MODULES[("zyxel", "vmg8825_ping_cmd_injection.py")] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -1087,8 +1087,8 @@ class Exploit(HTTPClient):
 '''
 
 MODULES[("netgear", "dgn1000_setup_cgi_rce.py")] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -1131,8 +1131,8 @@ class Exploit(HTTPClient):
 '''
 
 MODULES[("netgear", "jwnr2010v5_password_leak.py")] = '''\
-from routerxpl.core.exploit import *
-from routerxpl.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
@@ -1173,7 +1173,7 @@ class Exploit(HTTPClient):
 
 
 def main() -> None:
-    print("=== RouterXPL-Forge Batch Import ===\n")
+    print("=== EmbedXPL-Forge Batch Import ===\n")
     created = 0
     for (vendor, filename), content in MODULES.items():
         write_module(vendor, filename, content)

@@ -1,4 +1,4 @@
-# Contributors — RouterXPL-Forge
+# Contributors — EmbedXPL-Forge
 
 **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
 

@@ -1,4 +1,4 @@
-# Security Policy — RouterXPL-Forge
+# Security Policy — EmbedXPL-Forge
 
 **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
 
@@ -6,13 +6,13 @@
 
 ## Supported scope
 
-- **In scope:** flaws in **RouterXPL-Forge itself** (Python code, declared dependencies, `tools/` scripts) affecting the **operator** (RCE on the analyst machine, unsafe input handling, etc.).
+- **In scope:** flaws in **EmbedXPL-Forge itself** (Python code, declared dependencies, `tools/` scripts) affecting the **operator** (RCE on the analyst machine, unsafe input handling, etc.).
 - **Out of scope:** “0-day” on third-party **devices** found while using the framework; report through vendor or their bug bounty.
 - **Functional scope:** routers, switches, TAPs, firewalls, NGFW. Camera/printer/DVR-primary modules are outside the project scope.
 
 ## Reporting a vulnerability
 
-1. Use GitHub **private vulnerability reporting**: **Security → Report a vulnerability** on `mrhenrike/RouterXPL-Forge`.
+1. Use GitHub **private vulnerability reporting**: **Security → Report a vulnerability** on `mrhenrike/EmbedXPL-Forge`.
 2. Do not file a public issue with a full exploit before triage.
 3. Include:
    - Affected commit or tag

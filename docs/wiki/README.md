@@ -1,4 +1,4 @@
-# RouterXPL-Forge — Wiki (bilingual)
+# EmbedXPL-Forge — Wiki (bilingual)
 
 **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 

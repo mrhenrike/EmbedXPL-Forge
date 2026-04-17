@@ -80,7 +80,7 @@ jobs:
 
       - name: Validate Python syntax compilation
         run: |
-          python -m compileall -q routerxpl tools
+          python -m compileall -q embedxpl tools
 
       - name: Validate market priority yearly minimums
         run: |
@@ -110,7 +110,7 @@ jobs:
         run: |
           python tools/generate_coverage_matrix.py
           python tools/build_arsenal_index.py
-          git diff --stat -- docs/COVERAGE_MATRIX.md docs/COVERAGE_MATRIX.txt routerxpl/resources/catalogs/arsenal_index.json || true
+          git diff --stat -- docs/COVERAGE_MATRIX.md docs/COVERAGE_MATRIX.txt embedxpl/resources/catalogs/arsenal_index.json || true
           echo "Coverage matrix regenerated (diff shown above — non-gating)."
 
       - name: Dependency vulnerability audit

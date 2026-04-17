@@ -2,7 +2,7 @@
 # Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """Sync router/switch/tap scoped credential wordlists from local sources.
 
-This script updates RouterXPL-Forge scoped wordlists by merging:
+This script updates EmbedXPL-Forge scoped wordlists by merging:
 - existing bundled wordlists;
 - SecLists router vendor defaults under Passwords/Default-Credentials/Routers.
 
@@ -85,7 +85,7 @@ def _extract_from_pairs(pairs: Iterable[str]) -> Tuple[List[str], List[str]]:
 
 def main() -> int:
     repo_root = Path(__file__).resolve().parents[1]
-    wordlists_dir = repo_root / "routerxpl" / "resources" / "wordlists"
+    wordlists_dir = repo_root / "embedxpl" / "resources" / "wordlists"
     seclists_routers = (
         repo_root.parents[2]
         / "Wordlists"

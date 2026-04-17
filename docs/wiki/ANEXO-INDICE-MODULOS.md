@@ -1,4 +1,4 @@
-# RouterXPL-Forge — Module Index
+# EmbedXPL-Forge — Module Index
 
 > **Total modules:** 575 | **Version:** 0.5.0-beta
 >

@@ -5,9 +5,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "routerxpl"
-version = "0.9.0"
-description = "Network Device Security Assessment Framework — 700 modules, 350 CVEs, 55 vendors, APT Group Attack Engine"
+name = "embedxpl"
+version = "1.0.0"
+description = "Embedded Device Security Assessment Framework — 700 modules, 350 CVEs, 55 vendors, APT Group Attack Engine"
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
@@ -18,8 +18,8 @@ maintainers = [
 ]
 keywords = [
     "security", "pentesting", "router", "iot", "exploit",
-    "network-security", "vulnerability-scanner", "gpon", "cve",
-    "ethical-hacking", "red-team", "routersploit", "automation",
+    "embedded", "firmware", "network-security", "vulnerability-scanner",
+    "gpon", "cve", "ethical-hacking", "red-team", "routersploit", "automation",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -78,23 +78,23 @@ dev = [
 ]
 
 [project.urls]
-Homepage       = "https://github.com/mrhenrike/RouterXPL-Forge"
-Repository     = "https://github.com/mrhenrike/RouterXPL-Forge"
-Documentation  = "https://github.com/mrhenrike/RouterXPL-Forge/wiki"
-"Bug Tracker"  = "https://github.com/mrhenrike/RouterXPL-Forge/issues"
-Changelog      = "https://github.com/mrhenrike/RouterXPL-Forge/releases"
+Homepage       = "https://github.com/mrhenrike/EmbedXPL-Forge"
+Repository     = "https://github.com/mrhenrike/EmbedXPL-Forge"
+Documentation  = "https://github.com/mrhenrike/EmbedXPL-Forge/wiki"
+"Bug Tracker"  = "https://github.com/mrhenrike/EmbedXPL-Forge/issues"
+Changelog      = "https://github.com/mrhenrike/EmbedXPL-Forge/releases"
 
 [project.scripts]
-rxf = "routerxpl.__main__:main"
-routerxpl = "routerxpl.__main__:main"
+rxf = "embedxpl.__main__:main"
+embedxpl = "embedxpl.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["routerxpl*"]
+include = ["embedxpl*"]
 
 [tool.setuptools.package-data]
-"routerxpl.data"       = ["oui.txt"]
-"routerxpl.resources"  = [
+"embedxpl.data"       = ["oui.txt"]
+"embedxpl.resources"  = [
     "catalogs/*.json",
     "wordlists/**/*.txt",
     "wordlists/*.txt",

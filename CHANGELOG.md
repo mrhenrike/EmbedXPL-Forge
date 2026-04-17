@@ -1,8 +1,33 @@
 # Changelog
 
-All notable changes to RouterXPL-Forge are documented here.
+All notable changes to EmbedXPL-Forge are documented here.
 
 Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
+
+---
+
+## [1.0.0] — 2026-04-17
+
+### Changed (Breaking — Rebranding)
+- **Project renamed**: RouterXPL-Forge → **EmbedXPL-Forge**
+- **PyPI package**: `routerxpl` → **`embedxpl`** (`pip install embedxpl`)
+- **CLI commands**: `routerxpl` → **`embedxpl`**; `rxf` alias preserved
+- **Python package**: `routerxpl/` → `embedxpl/` (all imports updated)
+- **Classes**: `RouterXPLInterpreter` → `EmbedXPLInterpreter`, `RouterXPLException` → `EmbedXPLException`
+- **Log file**: `routerxpl.log` → `embedxpl.log`
+- **GitHub repo**: `mrhenrike/RouterXPL-Forge` → `mrhenrike/EmbedXPL-Forge`
+
+### Changed (Scope)
+- **Target scope expanded**: framework now explicitly covers Routers, Switches L2/L3, IP Cameras, GPON ONTs, ISP CPEs, and IoT/Embedded Edge devices
+- Banner updated to reflect expanded scope
+- `pyproject.toml`: added `embedded`, `firmware` keywords; description updated
+
+### Infrastructure
+- CI/CD guard conditions updated to `mrhenrike/EmbedXPL-Forge`
+- PyPI OIDC Trusted Publisher re-bound to `embedxpl` project + `EmbedXPL-Forge` repo
+- All 6 architecture PNG diagrams regenerated with EmbedXPL-Forge branding (v1.0.0)
+- All 5 Mermaid source files updated
+- All 26 wiki pages updated (en-US + pt-BR)
 
 ---
 
@@ -42,7 +67,7 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 - Removed obsolete Travis CI configuration (.travis.yml, .travis/)
 - MANIFEST.in: explicitly excludes tools/, docs/, .github/, .travis/ from sdist
 - .gitignore: comprehensive exclusion of all generated and dev-only artifacts
-- Package sdist now contains ONLY: routerxpl/ package + runtime resources + README/LICENSE/CHANGELOG
+- Package sdist now contains ONLY: embedxpl/ package + runtime resources + README/LICENSE/CHANGELOG
 
 ## [0.6.2] — 2026-04-08
 
@@ -134,8 +159,8 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 - **`core/oui.py`** — IEEE OUI database with online-first lookup and local fallback
 - **`core/session.py`** — Persistent scan history per host (SHA-256 of IP+MAC), `~/.rxf_sessions/`
 - **`core/discovery.py`** — T0–T5 timing profiles, multi-method host discovery, wireless detection, WirelessXPL-Forge recommendations, session integration
-- **`routerxpl/data/oui.txt`** — Full IEEE OUI database (39k+ entries)
-- **`routerxpl/__main__.py`** — `python -m routerxpl` and `rxf` / `routerxpl` console scripts
+- **`embedxpl/data/oui.txt`** — Full IEEE OUI database (39k+ entries)
+- **`embedxpl/__main__.py`** — `python -m embedxpl` and `rxf` / `embedxpl` console scripts
 - **`pyproject.toml`** — PEP 517/518 packaging (replaces legacy setup.py)
 - **GitHub Actions** — `publish-pypi.yml` for Trusted Publishing (OIDC, no API tokens)
 - Wiki pages 01–12 (en-US + pt-BR)

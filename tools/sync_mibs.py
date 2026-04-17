@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
-"""Sync MIB corpus for RouterXPL-Forge SNMP validations."""
+"""Sync MIB corpus for EmbedXPL-Forge SNMP validations."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ MIB_EXTENSIONS = (".mib", ".my", ".smi", ".txt")
 
 
 def _http_get(url: str, timeout: int = 15) -> bytes:
-    req = urllib.request.Request(url, headers={"User-Agent": "RouterXPL-Forge-MIBSync/1.0"})
+    req = urllib.request.Request(url, headers={"User-Agent": "EmbedXPL-Forge-MIBSync/1.0"})
     with urllib.request.urlopen(req, timeout=timeout) as response:
         return response.read()
 
@@ -146,8 +146,8 @@ def _download_repo_mibs(
 
 def main() -> int:
     repo_root = Path(__file__).resolve().parents[1]
-    modules_root = repo_root / "routerxpl" / "modules"
-    mibs_root = repo_root / "routerxpl" / "resources" / "mibs"
+    modules_root = repo_root / "embedxpl" / "modules"
+    mibs_root = repo_root / "embedxpl" / "resources" / "mibs"
     mibs_root.mkdir(parents=True, exist_ok=True)
 
     vendor_tokens = _collect_vendor_tokens(modules_root)

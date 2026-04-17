@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Scan ExploitDB hardware folder for router CVEs not yet in RouterXPL."""
+"""Scan ExploitDB hardware folder for router CVEs not yet in EmbedXPL."""
 import os
 import re
 import json
 
 MODULES_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "routerxpl", "modules",
+    "embedxpl", "modules",
 )
 EDB_BASE = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
@@ -45,7 +45,7 @@ def load_rxf_cves() -> set:
 
 def main() -> None:
     rxf_cves = load_rxf_cves()
-    print(f"Current RouterXPL CVE count: {len(rxf_cves)}")
+    print(f"Current EmbedXPL CVE count: {len(rxf_cves)}")
 
     candidates = []
     for subdir in ("webapps", "remote", "local", "dos"):

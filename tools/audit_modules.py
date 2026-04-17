@@ -1,4 +1,4 @@
-"""Automated module quality auditor for RouterXPL-Forge.
+"""Automated module quality auditor for EmbedXPL-Forge.
 
 Scans all exploit modules and classifies them into quality tiers:
   Tier S: Full exploit logic, specific paths/payloads, real check
@@ -16,7 +16,7 @@ import re
 import sys
 from collections import defaultdict
 
-MODULES_ROOT = os.path.join(os.path.dirname(__file__), "..", "routerxpl", "modules")
+MODULES_ROOT = os.path.join(os.path.dirname(__file__), "..", "embedxpl", "modules")
 
 STUB_TEMPLATE_PATTERNS = [
     'response = self.http_request(method="GET", path="/")',
@@ -136,7 +136,7 @@ def main():
     total = len(all_modules)
 
     print("=" * 70)
-    print("RouterXPL-Forge Module Audit Report")
+    print("EmbedXPL-Forge Module Audit Report")
     print("=" * 70)
     print()
     print("Total modules scanned: {}".format(total))

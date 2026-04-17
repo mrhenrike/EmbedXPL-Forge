@@ -1,4 +1,4 @@
-# Code of Conduct — RouterXPL-Forge
+# Code of Conduct — EmbedXPL-Forge
 
 **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
 
@@ -6,7 +6,7 @@
 
 ## Our pledge
 
-To foster an open and respectful environment, maintainers, contributors, and users of RouterXPL-Forge pledge to participate free of harassment, regardless of age, body size, disability, ethnicity, gender identity, experience level, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
+To foster an open and respectful environment, maintainers, contributors, and users of EmbedXPL-Forge pledge to participate free of harassment, regardless of age, body size, disability, ethnicity, gender identity, experience level, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
 ## Scope
 
@@ -51,7 +51,7 @@ Depending on severity: private warning, content removal, thread closure, or loss
 
 ## Attribution
 
-Inspired by common open-source Code of Conduct practice; adapted to RouterXPL-Forge scope and governance.
+Inspired by common open-source Code of Conduct practice; adapted to EmbedXPL-Forge scope and governance.
 
 ---
 

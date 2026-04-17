@@ -31,7 +31,7 @@ Credential modules exercise **SSH**, **Telnet**, **FTP**, **HTTP**, **SNMP**, an
 
 ## Wordlists
 
-External wordlists ship under `routerxpl/resources/wordlists/vendors/` and related paths; point modules to them when an option accepts a file path.
+External wordlists ship under `embedxpl/resources/wordlists/vendors/` and related paths; point modules to them when an option accepts a file path.
 
 ## HTTP authentication
 

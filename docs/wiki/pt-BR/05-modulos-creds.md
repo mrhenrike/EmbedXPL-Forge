@@ -31,7 +31,7 @@ Módulos de credenciais exercitam **SSH**, **Telnet**, **FTP**, **HTTP**, **SNMP
 
 ## Wordlists
 
-Wordlists externas ficam em `routerxpl/resources/wordlists/vendors/` e caminhos relacionados; aponte os módulos para elas quando a opção aceitar arquivo.
+Wordlists externas ficam em `embedxpl/resources/wordlists/vendors/` e caminhos relacionados; aponte os módulos para elas quando a opção aceitar arquivo.
 
 ## Autenticação HTTP
 

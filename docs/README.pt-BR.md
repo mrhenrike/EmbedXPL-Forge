@@ -1,4 +1,4 @@
-# Documentação — RouterXPL-Forge
+# Documentação — EmbedXPL-Forge
 
 **Autor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
 

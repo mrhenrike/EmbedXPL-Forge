@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cross-platform compatibility smoke check for RouterXPL-Forge."""
+"""Cross-platform compatibility smoke check for EmbedXPL-Forge."""
 
 from __future__ import annotations
 

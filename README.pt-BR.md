@@ -1,8 +1,8 @@
-# RouterXPL-Forge
+# EmbedXPL-Forge
 
 **Framework de Avaliação de Segurança em Dispositivos de Rede**
 
-RouterXPL-Forge é um framework de exploração open-source projetado para profissionais de segurança auditarem roteadores, switches, TAPs e dispositivos SOHO edge. Oferece 575 módulos cobrindo testes de credenciais, exploração de vulnerabilidades, varredura de rede, geração de payloads e encoding — com 330 CVEs mapeados em 49 fabricantes.
+EmbedXPL-Forge é um framework de exploração open-source projetado para profissionais de segurança auditarem roteadores, switches, TAPs e dispositivos SOHO edge. Oferece 575 módulos cobrindo testes de credenciais, exploração de vulnerabilidades, varredura de rede, geração de payloads e encoding — com 330 CVEs mapeados em 49 fabricantes.
 
 > **Autor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 
@@ -36,8 +36,8 @@ RouterXPL-Forge é um framework de exploração open-source projetado para profi
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/mrhenrike/RouterXPL-Forge.git
-cd RouterXPL-Forge
+git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
+cd EmbedXPL-Forge
 
 # Instalar dependências
 pip install -r requirements.txt
@@ -85,7 +85,7 @@ rxf (AutoPwn) > run
 ## Estrutura de Módulos
 
 ```
-routerxpl/modules/
+embedxpl/modules/
 ├── creds/             # Testes de credenciais (FTP, SSH, Telnet, HTTP, SNMP)
 │   ├── generic/       # Bruteforce e defaults agnósticos de protocolo
 │   └── routers/       # Credenciais padrão por fabricante
@@ -107,7 +107,7 @@ routerxpl/modules/
 
 ## Aviso Legal
 
-RouterXPL-Forge é destinado exclusivamente para testes de segurança autorizados e pesquisa. Use esta ferramenta apenas em sistemas que você possui ou tem permissão explícita e escrita para testar. Acesso não autorizado a sistemas computacionais é ilegal. Os autores não assumem responsabilidade por uso indevido.
+EmbedXPL-Forge é destinado exclusivamente para testes de segurança autorizados e pesquisa. Use esta ferramenta apenas em sistemas que você possui ou tem permissão explícita e escrita para testar. Acesso não autorizado a sistemas computacionais é ilegal. Os autores não assumem responsabilidade por uso indevido.
 
 ## Licença
 

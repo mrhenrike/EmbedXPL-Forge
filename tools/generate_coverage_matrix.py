@@ -22,10 +22,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _matrix_source_revision(repo_root: Path) -> str:
-    """Return git tree id for routerxpl/modules (stable for a checkout; not the commit hash)."""
+    """Return git tree id for embedxpl/modules (stable for a checkout; not the commit hash)."""
     try:
         completed = subprocess.run(
-            ["git", "rev-parse", "HEAD:routerxpl/modules"],
+            ["git", "rev-parse", "HEAD:embedxpl/modules"],
             cwd=str(repo_root),
             capture_output=True,
             text=True,
@@ -288,7 +288,7 @@ def _token_hits(records: List[ModuleRecord], tokens: List[str]) -> int:
 
 def _osi_tcpip_coverage_section(records: List[ModuleRecord], repo_root: Path) -> str:
     """Render OSI/TCP-IP coverage by layer, protocol and environment priority."""
-    catalog_path = repo_root / "routerxpl" / "resources" / "catalogs" / "osi_tcpip_priority_matrix.json"
+    catalog_path = repo_root / "embedxpl" / "resources" / "catalogs" / "osi_tcpip_priority_matrix.json"
     if not catalog_path.exists():
         return "## OSI/TCP-IP Coverage Matrix\n\n- osi_tcpip_priority_matrix.json not found."
 
@@ -440,7 +440,7 @@ def _keyword_matches(blob: str, keyword: str) -> bool:
 
 def _market_priority_section(records: List[ModuleRecord], repo_root: Path) -> str:
     """Render market-priority coverage with yearly domestic/corporate/global splits."""
-    catalog_path = repo_root / "routerxpl" / "resources" / "catalogs" / "market_priority_devices_2010_2026.json"
+    catalog_path = repo_root / "embedxpl" / "resources" / "catalogs" / "market_priority_devices_2010_2026.json"
     if not catalog_path.exists():
         return "## Market Priority Coverage (2010-2026)\n\n- Catalog file not found."
 
@@ -620,7 +620,7 @@ def _market_priority_section(records: List[ModuleRecord], repo_root: Path) -> st
 
 def _architecture_inventory_section(repo_root: Path) -> str:
     """Render architecture inventory snapshot from arsenal index."""
-    index_path = repo_root / "routerxpl" / "resources" / "catalogs" / "arsenal_index.json"
+    index_path = repo_root / "embedxpl" / "resources" / "catalogs" / "arsenal_index.json"
     if not index_path.exists():
         return "## Architecture Inventory Snapshot\n\n- arsenal_index.json not found."
 
@@ -659,7 +659,7 @@ def _architecture_inventory_section(repo_root: Path) -> str:
 
 def _workspace_reuse_inventory_section(repo_root: Path) -> str:
     """Render workspace reuse inventory summary for phase 2B traceability."""
-    inv_path = repo_root / "routerxpl" / "resources" / "catalogs" / "workspace_reuse_inventory.json"
+    inv_path = repo_root / "embedxpl" / "resources" / "catalogs" / "workspace_reuse_inventory.json"
     if not inv_path.exists():
         return "## Workspace Reuse Inventory Snapshot\n\n- workspace_reuse_inventory.json not found."
 
@@ -680,7 +680,7 @@ def _workspace_reuse_inventory_section(repo_root: Path) -> str:
 
 def _deep_intel_backlog_section(repo_root: Path) -> str:
     """Render deep-intel backlog summary for phase 6 tracking."""
-    backlog_path = repo_root / "routerxpl" / "resources" / "catalogs" / "deep_intel_backlog.json"
+    backlog_path = repo_root / "embedxpl" / "resources" / "catalogs" / "deep_intel_backlog.json"
     if not backlog_path.exists():
         return "## Deep Intel Backlog Snapshot\n\n- deep_intel_backlog.json not found."
 
@@ -709,7 +709,7 @@ def _deep_intel_backlog_section(repo_root: Path) -> str:
 
 def _honeypot_campaign_section(repo_root: Path) -> str:
     """Render phase6b honeypot campaign readiness snapshot."""
-    campaign_path = repo_root / "routerxpl" / "resources" / "arsenal" / "intel" / "honeypot_validation_campaign.json"
+    campaign_path = repo_root / "embedxpl" / "resources" / "arsenal" / "intel" / "honeypot_validation_campaign.json"
     if not campaign_path.exists():
         return "## Honeypot Final Validation Snapshot\n\n- honeypot_validation_campaign.json not found."
 
@@ -759,7 +759,7 @@ def _build_summary(records: List[ModuleRecord], matrix: Dict[Tuple[str, str], Co
     lines: List[str] = [
         "## Global Capability Summary",
         "",
-        f"- Module tree (routerxpl/modules): {_matrix_source_revision(REPO_ROOT)}",
+        f"- Module tree (embedxpl/modules): {_matrix_source_revision(REPO_ROOT)}",
         f"- Total modules indexed: {len(records)}",
         f"- Distinct vendor/product entries: {len(matrix)}",
         f"- Distinct CVEs mapped in modules: {len(cves)}",
@@ -776,7 +776,7 @@ def _build_summary(records: List[ModuleRecord], matrix: Dict[Tuple[str, str], Co
 def _build_markdown(records: List[ModuleRecord], matrix: Dict[Tuple[str, str], CoverageEntry]) -> str:
     """Render matrix document in Markdown format."""
     lines: List[str] = [
-        "# RouterXPL-Forge Coverage Matrix",
+        "# EmbedXPL-Forge Coverage Matrix",
         "",
         _platform_section(),
         "",
@@ -833,7 +833,7 @@ def _build_markdown(records: List[ModuleRecord], matrix: Dict[Tuple[str, str], C
 def _build_plain_text(records: List[ModuleRecord], matrix: Dict[Tuple[str, str], CoverageEntry]) -> str:
     """Render matrix document in plain text format."""
     lines: List[str] = [
-        "RouterXPL-Forge Coverage Matrix",
+        "EmbedXPL-Forge Coverage Matrix",
         "=" * 33,
         "",
         "Platform Compatibility Status",
@@ -885,7 +885,7 @@ def main() -> int:
     """Generate coverage matrix in Markdown and plain text."""
     _configure_logging()
     repo_root = Path(__file__).resolve().parent.parent
-    modules_root = repo_root / "routerxpl" / "modules"
+    modules_root = repo_root / "embedxpl" / "modules"
 
     records: List[ModuleRecord] = []
     for module_file in sorted(modules_root.rglob("*.py")):
