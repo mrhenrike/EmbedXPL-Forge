@@ -1,0 +1,3 @@
+admin:admin
+author:author
+guest:guest

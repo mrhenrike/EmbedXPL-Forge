@@ -1,0 +1,2 @@
+admin:admin
+user:12345

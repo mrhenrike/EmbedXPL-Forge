@@ -1,0 +1,72 @@
+1234:0000
+1234:1234
+1234:abcd12345
+1234:admin
+1234:belong
+1234:gvt12345
+1234:home
+1234:menara
+1234:provided by optus
+1234:serial number found on bottom of router
+1234:sky
+1234:unknown
+Admin:0000
+Admin:1234
+Admin:abcd12345
+Admin:admin
+Admin:belong
+Admin:gvt12345
+Admin:home
+Admin:menara
+Admin:provided by optus
+Admin:serial number found on bottom of router
+Admin:sky
+Admin:unknown
+admin:0000
+admin:1234
+admin:abcd12345
+admin:admin
+admin:belong
+admin:gvt12345
+admin:home
+admin:menara
+admin:provided by optus
+admin:serial number found on bottom of router
+admin:sky
+admin:unknown
+home:0000
+home:1234
+home:abcd12345
+home:admin
+home:belong
+home:gvt12345
+home:home
+home:menara
+home:provided by optus
+home:serial number found on bottom of router
+home:sky
+home:unknown
+menara:0000
+menara:1234
+menara:abcd12345
+menara:admin
+menara:belong
+menara:gvt12345
+menara:home
+menara:menara
+menara:provided by optus
+menara:serial number found on bottom of router
+menara:sky
+menara:unknown
+optus:0000
+optus:1234
+optus:abcd12345
+optus:admin
+optus:belong
+optus:gvt12345
+optus:home
+optus:menara
+optus:provided by optus
+optus:serial number found on bottom of router
+optus:sky
+optus:unknown

@@ -1,4 +1,182 @@
-Administrator:
+Admin:1234
+Admin:4135279
+Admin:SerialNumber
+Admin:Techni1789#
+Admin:Telstra
+Admin:access key on label
+Admin:admin
+Admin:bEn2o#US9s
+Admin:draadloos
+Admin:meo
+Admin:password
+Admin:same as default WPA key, printed on router
+Admin:unknown
+Admin:user
+Administrator:1234
+Administrator:4135279
+Administrator:SerialNumber
+Administrator:Techni1789#
+Administrator:Telstra
+Administrator:access key on label
+Administrator:admin
+Administrator:bEn2o#US9s
+Administrator:draadloos
+Administrator:meo
+Administrator:password
+Administrator:same as default WPA key, printed on router
+Administrator:unknown
+Administrator:user
+Expert:1234
+Expert:4135279
+Expert:SerialNumber
+Expert:Techni1789#
+Expert:Telstra
+Expert:access key on label
+Expert:admin
+Expert:bEn2o#US9s
+Expert:draadloos
+Expert:meo
+Expert:password
+Expert:same as default WPA key, printed on router
+Expert:unknown
+Expert:user
+MaxisBB:1234
+MaxisBB:4135279
+MaxisBB:SerialNumber
+MaxisBB:Techni1789#
+MaxisBB:Telstra
+MaxisBB:access key on label
+MaxisBB:admin
+MaxisBB:bEn2o#US9s
+MaxisBB:draadloos
+MaxisBB:meo
+MaxisBB:password
+MaxisBB:same as default WPA key, printed on router
+MaxisBB:unknown
+MaxisBB:user
+TELMEX:1234
+TELMEX:4135279
+TELMEX:SerialNumber
+TELMEX:Techni1789#
+TELMEX:Telstra
+TELMEX:access key on label
+TELMEX:admin
+TELMEX:bEn2o#US9s
+TELMEX:draadloos
+TELMEX:meo
+TELMEX:password
+TELMEX:same as default WPA key, printed on router
+TELMEX:unknown
+TELMEX:user
+User:1234
+User:4135279
+User:SerialNumber
+User:Techni1789#
+User:Telstra
+User:access key on label
+User:admin
+User:bEn2o#US9s
+User:draadloos
+User:meo
+User:password
+User:same as default WPA key, printed on router
+User:unknown
+User:user
+access key on label:1234
+access key on label:4135279
+access key on label:SerialNumber
+access key on label:Techni1789#
+access key on label:Telstra
+access key on label:access key on label
+access key on label:admin
+access key on label:bEn2o#US9s
+access key on label:draadloos
+access key on label:meo
+access key on label:password
+access key on label:same as default WPA key, printed on router
+access key on label:unknown
+access key on label:user
 admin:1234
+admin:4135279
+admin:SerialNumber
+admin:Techni1789#
+admin:Telstra
+admin:access key on label
 admin:admin
+admin:bEn2o#US9s
+admin:draadloos
+admin:meo
 admin:password
+admin:same as default WPA key, printed on router
+admin:unknown
+admin:user
+cusadmin:1234
+cusadmin:4135279
+cusadmin:SerialNumber
+cusadmin:Techni1789#
+cusadmin:Telstra
+cusadmin:access key on label
+cusadmin:admin
+cusadmin:bEn2o#US9s
+cusadmin:draadloos
+cusadmin:meo
+cusadmin:password
+cusadmin:same as default WPA key, printed on router
+cusadmin:unknown
+cusadmin:user
+fastweb:1234
+fastweb:4135279
+fastweb:SerialNumber
+fastweb:Techni1789#
+fastweb:Telstra
+fastweb:access key on label
+fastweb:admin
+fastweb:bEn2o#US9s
+fastweb:draadloos
+fastweb:meo
+fastweb:password
+fastweb:same as default WPA key, printed on router
+fastweb:unknown
+fastweb:user
+meo:1234
+meo:4135279
+meo:SerialNumber
+meo:Techni1789#
+meo:Telstra
+meo:access key on label
+meo:admin
+meo:bEn2o#US9s
+meo:draadloos
+meo:meo
+meo:password
+meo:same as default WPA key, printed on router
+meo:unknown
+meo:user
+user:1234
+user:4135279
+user:SerialNumber
+user:Techni1789#
+user:Telstra
+user:access key on label
+user:admin
+user:bEn2o#US9s
+user:draadloos
+user:meo
+user:password
+user:same as default WPA key, printed on router
+user:unknown
+user:user
+ziggo:1234
+ziggo:4135279
+ziggo:SerialNumber
+ziggo:Techni1789#
+ziggo:Telstra
+ziggo:access key on label
+ziggo:admin
+ziggo:bEn2o#US9s
+ziggo:draadloos
+ziggo:meo
+ziggo:password
+ziggo:same as default WPA key, printed on router
+ziggo:unknown
+ziggo:user

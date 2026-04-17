@@ -1,0 +1,3 @@
+admin:admin
+admin:imsa7.0
+root:trendimsa1.0

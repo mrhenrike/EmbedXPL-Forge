@@ -1,0 +1,45 @@
+Admin:1234
+Admin:Same as network key or WIFI key. Can be found on a sticker on the back of the modem.
+Admin:admin
+Admin:ipbbx
+Admin:password
+Admin:root
+Admin:sky
+Admin:telus
+Admin:user
+admin:1234
+admin:Same as network key or WIFI key. Can be found on a sticker on the back of the modem.
+admin:admin
+admin:ipbbx
+admin:password
+admin:root
+admin:sky
+admin:telus
+admin:user
+ipbbx:1234
+ipbbx:Same as network key or WIFI key. Can be found on a sticker on the back of the modem.
+ipbbx:admin
+ipbbx:ipbbx
+ipbbx:password
+ipbbx:root
+ipbbx:sky
+ipbbx:telus
+ipbbx:user
+root:1234
+root:Same as network key or WIFI key. Can be found on a sticker on the back of the modem.
+root:admin
+root:ipbbx
+root:password
+root:root
+root:sky
+root:telus
+root:user
+user:1234
+user:Same as network key or WIFI key. Can be found on a sticker on the back of the modem.
+user:admin
+user:ipbbx
+user:password
+user:root
+user:sky
+user:telus
+user:user

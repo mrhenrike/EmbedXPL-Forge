@@ -1,0 +1,6 @@
+:Fireport
+:password
+VNC:winterm
+rapport:r@p8p0r+
+root:
+root:wyse

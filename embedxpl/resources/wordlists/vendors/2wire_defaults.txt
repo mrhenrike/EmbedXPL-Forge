@@ -1,1 +1,7 @@
+NOLOGIN:NOLOGIN
+NOLOGIN:admin
+NOLOGIN:user
+admin:NOLOGIN
 admin:admin
+admin:user
+http:

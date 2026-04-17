@@ -1,1 +1,10 @@
+admin:123456
 admin:admin
+admin:dsmart
+admin:password
+admin:ttnet
+root:123456
+root:admin
+root:dsmart
+root:password
+root:ttnet

@@ -1,4 +1,18 @@
-1234:1234
+:admin
+:private
+:public
+Admin:
+Alphanetworks:wrgg15_di524
+D-Link:D-Link
+admin:
 admin:admin
-root:12345
-root:root
+admin:gvt12345
+admin:none
+admin:password
+admin:public
+admin:year2000
+dont need one:admin
+none:private
+root:admin
+user:
+user:none

@@ -1,3 +1,79 @@
-admin:
+admim:1234
+admim:WPA key on the label, uppercase
+admim:admin
+admim:changeme
+admim:epicrouter
+admim:password
+admim:telstra
+admim:unknown
 admin:1234
+admin:WPA key on the label, uppercase
 admin:admin
+admin:changeme
+admin:epicrouter
+admin:password
+admin:telstra
+admin:unknown
+attadmin:1234
+attadmin:WPA key on the label, uppercase
+attadmin:admin
+attadmin:changeme
+attadmin:epicrouter
+attadmin:password
+attadmin:telstra
+attadmin:unknown
+comcast:1234
+comcast:WPA key on the label, uppercase
+comcast:admin
+comcast:changeme
+comcast:epicrouter
+comcast:password
+comcast:telstra
+comcast:unknown
+cusadmin:1234
+cusadmin:WPA key on the label, uppercase
+cusadmin:admin
+cusadmin:changeme
+cusadmin:epicrouter
+cusadmin:password
+cusadmin:telstra
+cusadmin:unknown
+root:1234
+root:WPA key on the label, uppercase
+root:admin
+root:changeme
+root:epicrouter
+root:password
+root:telstra
+root:unknown
+superuser:1234
+superuser:WPA key on the label, uppercase
+superuser:admin
+superuser:changeme
+superuser:epicrouter
+superuser:password
+superuser:telstra
+superuser:unknown
+voo:1234
+voo:WPA key on the label, uppercase
+voo:admin
+voo:changeme
+voo:epicrouter
+voo:password
+voo:telstra
+voo:unknown
+:1234
+:admin
+:private
+:zebra
+:password
+Admin:password
+Gearguy:Geardog
+admin:
+admin:draadloos
+admin:infrant1
+admin:netgear1
+admin:setup
+cusadmin:highspeed
+super:5777364
+superman:21241036

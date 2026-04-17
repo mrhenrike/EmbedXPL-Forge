@@ -1,0 +1,10 @@
+(any):TENmanUFactOryPOWER
+:serial number of the Call-UPS
+:serial number of the Share-UPS
+:TENmanUFactOryPOWER
+:backdoor
+POWERCHUTE:APC
+apc:apc
+device:apc
+device:device
+readonly:apc

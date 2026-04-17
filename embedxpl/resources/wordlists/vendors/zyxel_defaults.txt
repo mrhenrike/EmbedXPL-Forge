@@ -1,4 +1,80 @@
+1234:1234
+1234:1234567890
+1234:admin
+1234:chtnvdsl
+1234:password
+1234:telus
+1234:unknown
+1234:user
+1234:wireless key printed on the back of the device
+Admin:1234
+Admin:1234567890
+Admin:admin
+Admin:chtnvdsl
+Admin:password
+Admin:telus
+Admin:unknown
+Admin:user
+Admin:wireless key printed on the back of the device
+Administrator:1234
+Administrator:1234567890
+Administrator:admin
+Administrator:chtnvdsl
+Administrator:password
+Administrator:telus
+Administrator:unknown
+Administrator:user
+Administrator:wireless key printed on the back of the device
 admin:1234
-admin:Zyxel*2012*
+admin:1234567890
 admin:admin
+admin:chtnvdsl
+admin:password
+admin:telus
+admin:unknown
 admin:user
+admin:wireless key printed on the back of the device
+adminpldt:1234
+adminpldt:1234567890
+adminpldt:admin
+adminpldt:chtnvdsl
+adminpldt:password
+adminpldt:telus
+adminpldt:unknown
+adminpldt:user
+adminpldt:wireless key printed on the back of the device
+cht:1234
+cht:1234567890
+cht:admin
+cht:chtnvdsl
+cht:password
+cht:telus
+cht:unknown
+cht:user
+cht:wireless key printed on the back of the device
+user:1234
+user:1234567890
+user:admin
+user:chtnvdsl
+user:password
+user:telus
+user:unknown
+user:user
+user:wireless key printed on the back of the device
+webadmin:1234
+webadmin:1234567890
+webadmin:admin
+webadmin:chtnvdsl
+webadmin:password
+webadmin:telus
+webadmin:unknown
+webadmin:user
+webadmin:wireless key printed on the back of the device
+192.168.1.1 60020:@dsl_xilno
+:1234
+:admin
+Admin:atc456
+admin:0000
+admin:
+root:1234
+zyfwp:PrOw!aN_fXp

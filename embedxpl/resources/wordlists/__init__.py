@@ -54,11 +54,43 @@ def _infer_protocol(module_name: str) -> Optional[str]:
     return None
 
 
-def _resolve_router_vendor_uri(module_name: str) -> Optional[str]:
-    marker = ".modules.creds.routers."
-    if marker not in module_name:
+# All device categories that support vendor-specific wordlist resolution
+_VENDOR_CATEGORIES = frozenset([
+    "routers",
+    "switches",
+    "firewalls",
+    "printers",
+    "nas",
+    "voip",
+    "ics",
+    "cameras",
+    "ispcpes",
+    "soho_edge",
+    "taps",
+])
+
+
+def _resolve_vendor_uri(module_name: str) -> Optional[str]:
+    """Resolve a vendor-specific wordlist URI for any supported device category.
+
+    Searches for ``{vendor}_{protocol}_defaults.txt`` then ``{vendor}_defaults.txt``
+    inside the ``vendors/`` sub-directory.  Returns ``None`` if no wordlist is found
+    so that the caller can fall back to inline defaults.
+    """
+    vendors_dir = Path(__file__).resolve().parent / "vendors"
+
+    # Detect which category marker is in the module name
+    category: Optional[str] = None
+    for cat in _VENDOR_CATEGORIES:
+        marker = f".modules.creds.{cat}."
+        if marker in module_name:
+            category = cat
+            break
+
+    if category is None:
         return None
 
+    marker = f".modules.creds.{category}."
     suffix = module_name.split(marker, 1)[1]
     if "." not in suffix:
         return None
@@ -71,28 +103,33 @@ def _resolve_router_vendor_uri(module_name: str) -> Optional[str]:
     if protocol is None:
         return None
 
-    if vendor == "mikrotik":
+    if category == "routers" and vendor == "mikrotik":
         return mikrotik_api
 
-    # Vendor-specific wordlist filenames (optional)
     candidates = (
-        f"{vendor}_{protocol}_defaults.txt",
-        f"{vendor}_defaults.txt",
+        vendors_dir / f"{vendor}_{protocol}_defaults.txt",
+        vendors_dir / f"{vendor}_defaults.txt",
     )
 
-    for filename in candidates:
-        local_path = Path(__file__).resolve().parent / filename
-        if local_path.exists():
-            return _wordlist_uri(filename)
+    for path in candidates:
+        if path.exists():
+            return path.resolve().as_uri()
 
-    # Fallback for all router vendor protocol modules:
-    # always use file-based defaults instead of inline script literals.
-    return defaults
+    # For router category always fall back to generic router defaults
+    if category == "routers":
+        return defaults
+
+    return None
+
+
+def _resolve_router_vendor_uri(module_name: str) -> Optional[str]:
+    """Legacy router-only resolver — kept for backwards compatibility."""
+    return _resolve_vendor_uri(module_name)
 
 
 def resolve_default_pairs(module_name: str, current_defaults: List[str]) -> List[str]:
     """Resolve default credential pairs from file-based sources for modules."""
-    source_uri = _resolve_router_vendor_uri(module_name)
+    source_uri = _resolve_vendor_uri(module_name)
     if source_uri is None:
         return current_defaults
     return _load_entries(source_uri)

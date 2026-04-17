@@ -1,0 +1,6 @@
+:wg
+admin:admin
+admin:readwrite
+status:readonly
+admin:
+user:pass
