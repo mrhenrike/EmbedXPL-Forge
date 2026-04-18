@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "2.1.0"
-description = "Embedded & Perimeter Security Assessment Framework — 950+ modules, 500+ CVEs, 70+ vendors. Unified from FirewallXPL-Forge (81 perimeter modules), ISF OT/ICS protocol clients (Modbus/S7/CIP/WDB2), and deep ExploitDB/Metasploit coverage across routers, cameras, NAS, ICS/SCADA, printers, firewalls, VPN, NAC, WAF, LB"
+version = "2.2.0"
+description = "Embedded & Perimeter Security Assessment Framework — 3000+ modules, 600+ CVEs, 80+ vendors. Unified from FirewallXPL-Forge (81 perimeter modules), ISF OT/ICS protocol clients (Modbus/S7/CIP/WDB2), and deep ExploitDB/Metasploit coverage across routers, cameras, NAS, ICS/SCADA, printers, firewalls, VPN, NAC, WAF, Smart TVs, OT/SCADA"
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
