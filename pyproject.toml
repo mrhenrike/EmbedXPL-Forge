@@ -87,6 +87,8 @@ Changelog      = "https://github.com/mrhenrike/EmbedXPL-Forge/releases"
 exf = "embedxpl.__main__:main"
 embedxpl = "embedxpl.__main__:main"
 fxf = "embedxpl.__main__:main"
+firmware-dl = "embedxpl.tools.firmware_downloader:main"
+firmware-analyze = "embedxpl.tools.firmware_analyzer:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -94,7 +96,7 @@ include = ["embedxpl*"]
 
 [tool.setuptools.package-data]
 "embedxpl.data"       = ["oui.txt"]
-"embedxpl.resources"  = [
+    "embedxpl.resources"  = [
     "catalogs/*.json",
     "wordlists/**/*.txt",
     "wordlists/*.txt",
@@ -105,4 +107,6 @@ include = ["embedxpl*"]
     "mibs/*",
     "arsenal/*",
     "ml/*.json",
+    "*.yaml",
+    "**/*.yaml",
 ]

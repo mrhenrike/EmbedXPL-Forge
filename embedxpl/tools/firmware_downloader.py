@@ -61,7 +61,7 @@ def list_vendors(sources: Dict[str, Any]) -> None:
     for key, info in sources.items():
         login_flag = "[requires-login]" if info.get("requires_login") else ""
         print(
-            "  {:20s} — {:15s} {} {}".format(
+            "  {:20s} | {:15s} {} {}".format(
                 key,
                 info.get("category", "unknown"),
                 info.get("name", ""),
