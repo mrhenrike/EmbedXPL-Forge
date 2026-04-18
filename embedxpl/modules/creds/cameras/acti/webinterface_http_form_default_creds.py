@@ -74,6 +74,7 @@ class Exploit(HTTPClient):
             except StopIteration:
                 break
 
+    @mute
     def check(self) -> bool:
         response = self.http_request(method="GET", path="/video.htm")
         if response and ">Password<" in response.text:

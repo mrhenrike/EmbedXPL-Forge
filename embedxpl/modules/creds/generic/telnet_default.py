@@ -66,6 +66,7 @@ class Exploit(TelnetClient):
             except StopIteration:
                 break
 
+    @mute
     def check(self):
         telnet_client = self.telnet_create()
         if telnet_client.test_connect():

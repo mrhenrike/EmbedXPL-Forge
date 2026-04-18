@@ -85,6 +85,7 @@ class Exploit(HTTPClient):
             except StopIteration:
                 break
 
+    @mute
     def check(self):
         response = self.http_request(
             method="GET",

@@ -72,6 +72,7 @@ class Exploit(HTTPClient):
         8211: "PAPI main (this scanner)",
     }
 
+    @mute
     def check(self) -> bool:
         """Always returns True — scanner is discovery-mode."""
         return True

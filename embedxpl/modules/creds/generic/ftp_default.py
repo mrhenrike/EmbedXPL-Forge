@@ -70,6 +70,7 @@ class Exploit(FTPClient):
 
         ftp_client.close()
 
+    @mute
     def check(self):
         ftp_client = self.ftp_create()
         if ftp_client.test_connect():

@@ -105,6 +105,7 @@ class Exploit(TCPClient):
             except StopIteration:
                 break
 
+    @mute
     def check(self):
         tcp_client = self.tcp_create()
         if tcp_client.connect():

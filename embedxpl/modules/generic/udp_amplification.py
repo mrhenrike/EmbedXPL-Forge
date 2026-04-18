@@ -118,6 +118,7 @@ class Exploit(HTTPClient):
         finally:
             sock.close()
 
+    @mute
     def check(self) -> bool:
         """Check if any UDP service responds."""
         for name, (port, payload) in list(_PROBES.items())[:3]:

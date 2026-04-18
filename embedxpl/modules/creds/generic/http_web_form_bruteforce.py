@@ -375,6 +375,7 @@ class Exploit(HTTPClient):
             if delay > 0:
                 time.sleep(delay)
 
+    @mute
     def check(self) -> bool:
         """Return True if HTTP service answers (probe GET /)."""
         if self.http_test_connect():

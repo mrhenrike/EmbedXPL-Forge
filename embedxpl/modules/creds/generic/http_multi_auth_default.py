@@ -103,6 +103,7 @@ class Exploit(HTTPClient):
                     verbose=self.verbosity,
                 )
 
+    @mute
     def check(self):
         response = self.http_request("GET", self.path)
         return response is not None

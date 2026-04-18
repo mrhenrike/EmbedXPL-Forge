@@ -63,6 +63,7 @@ class Exploit(SFTPClient):
             except StopIteration:
                 break
 
+    @mute
     def check(self):
         sftp_client = self.sftp_create()
         if sftp_client.test_connect():

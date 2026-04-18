@@ -87,6 +87,7 @@ class Exploit(HTTPClient):
         ("/login", "username", "password"),                   # AirWave
     ]
 
+    @mute
     def check(self) -> bool:
         """Detect Aruba management interface."""
         try:

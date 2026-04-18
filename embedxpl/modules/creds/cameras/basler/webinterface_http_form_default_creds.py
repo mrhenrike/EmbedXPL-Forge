@@ -69,6 +69,7 @@ class Exploit(HTTPClient):
             except StopIteration:
                 break
 
+    @mute
     def check(self) -> bool:
         response = self.http_request(
             method="POST",

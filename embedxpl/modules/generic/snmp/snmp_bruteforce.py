@@ -98,6 +98,7 @@ class Exploit(HTTPClient):
         if not found:
             print_error(f"No valid community strings found ({len(communities)} tested)")
 
+    @mute
     def check(self) -> bool:
         """Check if SNMP port is responding."""
         import socket

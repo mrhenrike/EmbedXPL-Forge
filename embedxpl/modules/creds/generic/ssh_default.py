@@ -66,6 +66,7 @@ class Exploit(SSHClient):
             except StopIteration:
                 break
 
+    @mute
     def check(self):
         ssh_client = self.ssh_create()
         if ssh_client.test_connect():

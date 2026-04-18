@@ -77,6 +77,7 @@ class Exploit(HTTPClient):
         if open_filtered:
             print_success(f"Open/filtered ports: {open_filtered}")
 
+    @mute
     def check(self) -> bool:
         """Quick check — scapy available and target is reachable."""
         try:

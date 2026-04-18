@@ -91,6 +91,7 @@ class Exploit(SNMPClient):
                 if self.stop_on_success:
                     running.clear()
 
+    @mute
     def check(self):
         raise NotImplementedError("Check method is not available")
 
