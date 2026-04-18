@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "1.5.0"
-description = "Embedded Device Security Assessment Framework — 2114+ modules, ICS/OT protocols, FirewallXPL full integration: enterprise perimeter+NGFW+LB+NAC+WAF exploits (Cisco/Palo Alto/Fortinet/SonicWall/Sophos/Juniper/Zyxel), VPN coverage expansion (Citrix/eWON/Secomea), 72 firewall exploit modules"
+version = "2.0.0"
+description = "Embedded & Perimeter Security Assessment Framework — 950+ modules, 500+ CVEs, 70+ vendors. Unified from FirewallXPL-Forge (81 perimeter modules), ISF OT/ICS protocol clients (Modbus/S7/CIP/WDB2), and deep ExploitDB/Metasploit coverage across routers, cameras, NAS, ICS/SCADA, printers, firewalls, VPN, NAC, WAF, LB"
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
@@ -86,6 +86,7 @@ Changelog      = "https://github.com/mrhenrike/EmbedXPL-Forge/releases"
 [project.scripts]
 exf = "embedxpl.__main__:main"
 embedxpl = "embedxpl.__main__:main"
+fxf = "embedxpl.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
