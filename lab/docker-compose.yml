@@ -68,3 +68,22 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+
+  mirai-cnc-sim:
+    build:
+      context: ./targets/mirai-cnc-sim
+      dockerfile: Dockerfile
+    container_name: embedxpl-lab-cnc
+    ports:
+      - "13778:3778"    # Mirai CnC bot listener (decoded from table.c: 0xdeadbeef)
+      - "19555:9555"    # Mirai scan-callback / loader report port
+      - "13306:3306"    # MySQL C2 backend (mirai schema)
+    networks:
+      embedxpl-lab:
+        ipv4_address: 172.20.0.40
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8888/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped

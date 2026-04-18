@@ -24,7 +24,14 @@ MITRE ATT&CK:
   T1078.001 — Valid Accounts: Default Accounts
   T1110.001 — Brute Force: Password Guessing
 
-Version: 1.0.0
+v1.0.0: initial 62-pair table (mirai/bot/scanner.c generic + table.c)
+v1.1.0: extended with Condi-Mirai scanner.c XOR-decoded pairs
+        (lion001am-condi/bot/scanner.c, jgamblin-mirai-source/mirai/bot/scanner.c)
+        Added: hi3518, cat1029, GM8182, 7ujMko0vizxv, uClinux, 5up, jvc,
+               jvbzd, ivdev, zlxx, calvin, fidel123, epicrouter, ZmqVfoSIP,
+               motorola, OxhlwSG8, tlJwpbo6, S2fGqNFs (18 new pairs)
+
+Version: 1.1.0
 """
 
 from __future__ import annotations
@@ -117,6 +124,35 @@ _MIRAI_FULL_CREDS: List[Tuple[str, str]] = [
     ("admin",      "admin123"),
     ("root",       "r00tme"),
     ("root",       "root1234"),
+    # Extended: lion001am-condi/bot/scanner.c XOR-decoded pairs
+    # Source: jgamblin-mirai-source/mirai/bot/scanner.c comments
+    ("root",       "hi3518"),
+    ("root",       "cat1029"),
+    ("root",       "GM8182"),
+    ("root",       "7ujMko0vizxv"),
+    ("root",       "7ujMko0admin"),
+    ("root",       "uClinux"),
+    ("root",       "5up"),
+    ("root",       "jvc"),
+    ("root",       "jvbzd"),
+    ("root",       "ivdev"),
+    ("root",       "klv123"),
+    ("root",       "klv1234"),
+    ("root",       "zlxx"),
+    ("root",       "calvin"),
+    ("root",       "fidel123"),
+    ("admin",      "epicrouter"),
+    ("admin",      "ZmqVfoSIP"),
+    ("admin",      "motorola"),
+    ("default",    "OxhlwSG8"),
+    ("default",    "tlJwpbo6"),
+    ("default",    "S2fGqNFs"),
+    # Condi-specific additional creds
+    ("root",       "Zte521"),
+    ("root",       "HuiZhouDGT"),
+    ("root",       "GiMiShare"),
+    ("root",       "mobile"),
+    ("root",       "tsgoingon"),
 ]
 
 

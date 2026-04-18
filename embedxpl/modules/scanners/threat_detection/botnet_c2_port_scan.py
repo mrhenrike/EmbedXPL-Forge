@@ -9,6 +9,8 @@ offline correlation with known C2 infrastructure.
 C2 port list (rationale):
   23    — Telnet (Mirai propagation + C2 fallback)
   2323  — Alt-Telnet (Mirai/Gafgyt)
+  3778  — Mirai/Condi CnC bot listener (decoded: table.c bytes[0x2C,0xE0] XOR 0xdeadbeef)
+  9555  — Mirai scan-callback / loader report port (decoded: [0x07,0x71] XOR 0xdeadbeef)
   7547  — TR-069 CWMP (Mirai Eir variant, CVE-2016-10372)
   37215 — Huawei HG532 TR-069 (CVE-2017-17215, Satori/Mirai)
   52869 — MiniUPnP (CVE-2013-0230, Mirai)
@@ -61,6 +63,8 @@ logger = logging.getLogger("embedxpl.scanners.threat_detection.botnet_c2_port_sc
 _C2_PORTS: Dict[int, str] = {
     23:    "Telnet — Mirai/Gafgyt propagation",
     2323:  "Alt-Telnet — Mirai/Gafgyt/Condi",
+    3778:  "Mirai/Condi CnC bot listener (table.c decoded)",
+    9555:  "Mirai scan-callback / loader report (table.c decoded)",
     7547:  "TR-069 CWMP — Mirai Eir (CVE-2016-10372)",
     37215: "Huawei TR-069 — Satori/Mirai (CVE-2017-17215)",
     52869: "MiniUPnP — Mirai (CVE-2013-0230)",
