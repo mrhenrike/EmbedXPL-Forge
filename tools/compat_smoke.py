@@ -139,11 +139,17 @@ def main() -> int:
     if python_note:
         result.notes.append(python_note)
 
-    # Core dependencies for runtime.
-    result.imports["requests"] = _import_check("requests")
-    result.imports["paramiko"] = _import_check("paramiko")
-    result.imports["pysnmp"] = _import_check("pysnmp")
-    result.imports["Crypto"] = _import_check("Crypto")
+    # All declared required dependencies.
+    for import_name in (
+        "requests", "paramiko", "pysnmp", "Crypto",
+        "rich", "aiohttp", "psutil", "colorama", "scapy",
+    ):
+        result.imports[import_name] = _import_check(import_name)
+
+    # Optional deps — failure is non-fatal.
+    for import_name in ("nmap", "numpy", "sklearn", "yaml"):
+        result.imports["opt_" + import_name] = _import_check(import_name)
+
     result.imports["telnet_backend"] = _telnet_backend_check()
 
     cli_ok, cli_output = _run_cli_help(repo_root)
@@ -152,9 +158,11 @@ def main() -> int:
 
     hard_fail: bool = (not result.python_ok) or (not result.cli_ok)
     for module_name, is_ok in result.imports.items():
-        if not is_ok:
-            result.notes.append(f"Missing import: {module_name}")
+        if not is_ok and not module_name.startswith("opt_"):
+            result.notes.append("Missing required import: {}".format(module_name))
             hard_fail = True
+        elif not is_ok and module_name.startswith("opt_"):
+            result.notes.append("Optional import missing (degraded): {}".format(module_name))
 
     # Classify Linux flavor when available.
     if result.platform == "linux" and result.distribution:
