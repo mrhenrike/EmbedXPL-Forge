@@ -15,11 +15,14 @@ Version: 1.0.0
 import argparse
 import logging
 import os
+import shutil
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -159,12 +162,9 @@ def _find_firmwalker() -> Optional[str]:
     for c in candidates:
         if os.path.isfile(c):
             return c
-        try:
-            result = subprocess.run(["which", c], capture_output=True, text=True, timeout=3)
-            if result.returncode == 0 and result.stdout.strip():
-                return result.stdout.strip()
-        except Exception:
-            pass
+        found = shutil.which(c)
+        if found:
+            return found
     return None
 
 

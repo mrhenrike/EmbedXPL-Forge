@@ -18,11 +18,14 @@ import os
 import sys
 from pathlib import Path
 from typing import Any, Dict, Optional
-from urllib.request import urlretrieve, Request
+from urllib.request import Request
 from urllib.error import URLError, HTTPError
 import urllib.request
 
 import yaml
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 logging.basicConfig(
     level=logging.INFO,
