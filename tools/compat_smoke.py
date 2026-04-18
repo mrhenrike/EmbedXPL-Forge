@@ -111,7 +111,7 @@ def _run_cli_help(repo_root: Path) -> tuple[bool, str]:
             timeout=60,
         )
     except Exception as exc:
-        return False, f"Failed to execute CLI: {exc!r}"
+        return False, "Failed to execute CLI: {!r}".format(exc)
 
     output: str = (completed.stdout or "") + (completed.stderr or "")
     clipped: str = "\n".join(output.splitlines()[:20])
