@@ -350,26 +350,42 @@ class EmbedXPLInterpreter(BaseInterpreter):
         self.nonInteractive(argv)
 
     def nonInteractive(self, argv):
-        """ Execute specific command and return result without launching the interactive CLI
+        """ Execute specific command and return result without launching the interactive CLI.
 
-        :return:
+        Supports standard module flags as well as infrastructure context flags:
 
+            exf -m <module> -s "<option> <value>"
+            exf -T <targets.txt>
+            exf --infra ot --context ics --target 192.168.1.0/24
+            exf --infra wizard
+
+        Returns:
+            None
         """
         module = ""
         set_opts = []
         targets_file = ""
+        infra_type = ""
+        infra_context = ""
+        infra_target = ""
+        infra_wizard = False
 
         try:
             opts, args = getopt.getopt(
                 argv[1:],
                 "hm:s:T:",
-                ["help=", "module=", "set=", "targets="],
+                [
+                    "help=", "module=", "set=", "targets=",
+                    "infra=", "context=", "target=", "wizard",
+                ],
             )
         except getopt.GetoptError:
             print_info(
-                "{} -m <module> -s \"<option> <value>\"\n"
-                "       {} -T <targets.txt>  (multi-target scan from file)".format(
-                    argv[0], argv[0]
+                "{prog} -m <module> -s \"<option> <value>\"\n"
+                "       {prog} -T <targets.txt>  (multi-target scan from file)\n"
+                "       {prog} --infra ot --context ics --target 192.168.1.0/24\n"
+                "       {prog} --infra wizard  (interactive infrastructure selection)".format(
+                    prog=argv[0]
                 )
             )
             printer_queue.join()
@@ -378,9 +394,11 @@ class EmbedXPLInterpreter(BaseInterpreter):
         for opt, arg in opts:
             if opt in ("-h", "--help"):
                 print_info(
-                    "{} -m <module> -s \"<option> <value>\"\n"
-                    "       {} -T <targets.txt>  (multi-target scan from file)".format(
-                        argv[0], argv[0]
+                    "{prog} -m <module> -s \"<option> <value>\"\n"
+                    "       {prog} -T <targets.txt>  (multi-target scan from file)\n"
+                    "       {prog} --infra ot --context ics --target 192.168.1.0/24\n"
+                    "       {prog} --infra wizard  (interactive infrastructure selection)".format(
+                        prog=argv[0]
                     )
                 )
                 printer_queue.join()
@@ -391,6 +409,27 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 set_opts.append(arg)
             elif opt in ("-T", "--targets"):
                 targets_file = arg
+            elif opt == "--infra":
+                if arg.lower() == "wizard":
+                    infra_wizard = True
+                else:
+                    infra_type = arg.lower()
+            elif opt == "--context":
+                infra_context = arg.lower()
+            elif opt == "--target":
+                infra_target = arg
+
+        # --infra wizard mode: interactive taxonomy selection
+        if infra_wizard:
+            self._run_infra_wizard()
+            printer_queue.join()
+            return
+
+        # --infra/--context mode: resolve modules via InfraOrchestrator
+        if infra_type:
+            self._run_infra_scan(infra_type, infra_context, infra_target)
+            printer_queue.join()
+            return
 
         # -T mode: scan all targets from file, then exit
         if targets_file:
@@ -414,6 +453,102 @@ class EmbedXPLInterpreter(BaseInterpreter):
         printer_queue.join()
 
         return
+
+    def _run_infra_wizard(self) -> None:
+        """Launch the interactive InfraOrchestrator wizard.
+
+        Presents a numbered menu for infra type and context selection,
+        then lists resolved modules without executing them.
+        """
+        try:
+            from embedxpl.core.orchestrator import InfraOrchestrator
+        except ImportError as exc:
+            print_error("InfraOrchestrator unavailable: {}".format(exc))
+            return
+
+        orch = InfraOrchestrator()
+        try:
+            plan = orch.interactive_wizard()
+            print_status(
+                "Scan plan ready: {} modules for {}/{}".format(
+                    len(plan.modules), plan.infra, plan.context
+                )
+            )
+        except (KeyboardInterrupt, EOFError):
+            print_warning("Wizard cancelled by user.")
+        except Exception as exc:
+            print_error("Wizard error: {}".format(exc))
+
+    def _run_infra_scan(
+        self, infra: str, context: str, target: str
+    ) -> None:
+        """Resolve and display modules for the given infra/context pair.
+
+        When a target is provided, prints the ordered module list that
+        would be executed by a full scan. Does not auto-run exploits —
+        the user selects modules interactively after reviewing the plan.
+
+        Args:
+            infra: Infrastructure type key (e.g. ``'ot'``).
+            context: Operational context key (e.g. ``'ics'``).
+            target: IP address or CIDR range for the scan plan.
+        """
+        try:
+            from embedxpl.core.orchestrator import InfraOrchestrator
+        except ImportError as exc:
+            print_error("InfraOrchestrator unavailable: {}".format(exc))
+            return
+
+        orch = InfraOrchestrator()
+
+        try:
+            infra_types = orch.list_infra_types()
+        except Exception as exc:
+            print_error("Failed to load infra profiles: {}".format(exc))
+            return
+
+        if infra not in infra_types:
+            print_error(
+                "Unknown infra type '{}'. Valid: {}".format(
+                    infra, ", ".join(infra_types)
+                )
+            )
+            return
+
+        if not context:
+            # Show available contexts
+            try:
+                contexts = orch.list_contexts(infra)
+            except Exception as exc:
+                print_error(str(exc))
+                return
+            print_info(
+                "Available contexts for --infra {}:\n  {}".format(
+                    infra, "\n  ".join(contexts)
+                )
+            )
+            return
+
+        try:
+            plan = orch.build_scan_plan(
+                target or "127.0.0.1", infra, context
+            )
+        except KeyError as exc:
+            print_error(str(exc))
+            return
+        except Exception as exc:
+            print_error("Plan build error: {}".format(exc))
+            return
+
+        print_status(plan.summary())
+        print_info(
+            "Use -m <module> -s \"target {}\" to run individual modules.".format(
+                plan.target
+            )
+        )
+        print_info(
+            "Or launch interactive shell and type 'use <module>' to explore.".format()
+        )
 
     def _scan_from_targets_file(self, targets_file: str) -> None:
         """Run multi-target network discovery from a targets file (-T flag).
