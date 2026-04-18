@@ -21,9 +21,6 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -292,6 +289,8 @@ def print_summary(results: Dict[str, Tuple[int, str]]) -> None:
 
 def main() -> None:
     """Entry point for the firmware analyzer CLI."""
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(
         prog="firmware_analyzer",
         description="EmbedXPL-Forge — Firmware Analyzer (binwalk/unblob/Firmwalker/EMBA)",

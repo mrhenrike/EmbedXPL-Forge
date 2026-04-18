@@ -91,10 +91,13 @@ class Exploit(BaseExploit):
             try:
                 if port == 47808:
                     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                    sock.settimeout(1)
-                    sock.sendto(_BACNET_WHO_IS, (self.target, port))
-                    sock.recvfrom(64)
-                    return True
+                    try:
+                        sock.settimeout(1)
+                        sock.sendto(_BACNET_WHO_IS, (self.target, port))
+                        sock.recvfrom(64)
+                        return True
+                    finally:
+                        sock.close()
                 else:
                     with socket.create_connection((self.target, port), timeout=1):
                         return True

@@ -24,8 +24,6 @@ import urllib.request
 
 import yaml
 
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -152,6 +150,8 @@ def main() -> None:
 
     Parses command-line arguments and dispatches to download or list actions.
     """
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(
         prog="firmware_downloader",
         description="EmbedXPL-Forge — Firmware Downloader CLI",
