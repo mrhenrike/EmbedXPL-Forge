@@ -1,0 +1,70 @@
+# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# EmbedXPL-Forge — Local Vulnerable IoT Lab
+# Simulates IoT attack surfaces exploited by Mirai/Condi/Mozi botnet operators.
+# Usage: docker compose up -d  (from the lab/ directory)
+
+version: "3.9"
+
+networks:
+  embedxpl-lab:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+
+  vulnerable-router:
+    build:
+      context: ./targets/vulnerable-router
+      dockerfile: Dockerfile
+    container_name: embedxpl-lab-router
+    ports:
+      - "18080:80"
+    networks:
+      embedxpl-lab:
+        ipv4_address: 172.20.0.10
+    environment:
+      - TARGET_MODEL=WR940N
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost/userRpm/LoginRpm.htm"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  telnet-iot:
+    build:
+      context: ./targets/telnet-iot
+      dockerfile: Dockerfile
+    container_name: embedxpl-lab-telnet
+    ports:
+      - "10023:23"
+      - "12323:2323"
+    networks:
+      embedxpl-lab:
+        ipv4_address: 172.20.0.20
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -tlnp 2>/dev/null | grep -q ':23' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  iot-upnp:
+    build:
+      context: ./targets/iot-upnp
+      dockerfile: Dockerfile
+    container_name: embedxpl-lab-upnp
+    ports:
+      - "14902:49152"
+      - "11900:1900/udp"
+    networks:
+      embedxpl-lab:
+        ipv4_address: 172.20.0.30
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:49152/rootDesc.xml"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
