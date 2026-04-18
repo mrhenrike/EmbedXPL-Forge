@@ -1495,7 +1495,7 @@ def _parse_targets_file(path: str) -> List[str]:
                         ipaddress.ip_address(line)
                         entry = line
                     except ValueError:
-                        logger.warning("scan_from_file: invalid entry '%s' — skipped", line)
+                        logger.warning("scan_from_file: invalid entry '%s' -- skipped", line)
                         continue
                 if entry not in seen:
                     seen.add(entry)

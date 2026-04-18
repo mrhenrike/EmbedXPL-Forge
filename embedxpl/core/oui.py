@@ -409,7 +409,7 @@ def _load_local_cache() -> None:
     global _local_cache, _local_cache_loaded, _local_cache_mtime
 
     if not os.path.exists(_OUI_FILE):
-        logger.warning("OUI file not found at %s — run update_oui_file()", _OUI_FILE)
+        logger.warning("OUI file not found at %s -- run update_oui_file()", _OUI_FILE)
         _local_cache_loaded = True
         return
 

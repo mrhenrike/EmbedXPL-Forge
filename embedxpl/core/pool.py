@@ -174,7 +174,7 @@ class SmartPool:
                 if on_error:
                     on_error(item, exc)
                 else:
-                    logger.debug("SmartPool item failed: %s — %s", item, exc)
+                    logger.debug("SmartPool item failed: %s -- %s", item, exc)
 
         return results
 

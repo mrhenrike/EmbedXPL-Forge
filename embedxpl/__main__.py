@@ -22,7 +22,7 @@ def main() -> None:
         raise SystemExit(1)
 
     log_handler = logging.handlers.RotatingFileHandler(
-        filename="embedxpl.log", maxBytes=500_000
+        filename="embedxpl.log", maxBytes=500_000, encoding="utf-8"
     )
     log_formatter = logging.Formatter(
         "%(asctime)s %(levelname)s %(name)s       %(message)s"
