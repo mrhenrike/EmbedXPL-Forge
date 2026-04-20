@@ -1,14 +1,15 @@
-# Author: André Henrique (LinkedIn/X: @mrhenrike)
+# Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """Samsung Tizen Smart TV Discovery Scanner.
 
 Probes ports 8001 and 8002 for the Samsung Tizen REST API device-info endpoint
 (/api/v2/) and extracts device model, firmware version, year class, and IP
 information from the JSON response. Also performs a lightweight AllShare/DLNA
-UDP probe on port 55000.
+UDP probe on port 55000, and SSDP multicast discovery.
 
-CVE: N/A
-CVSS: N/A
-Version: 1.0.0
+Research: TIZEN-2026-001 — Missing authentication on Smart Hub API (CVSSv3.1 9.8)
+CVE: N/A (pending Samsung PSIRT — report date 2026-04-21)
+CVSS: 9.8
+Version: 2.0.0
 """
 import json
 import socket
@@ -87,16 +88,19 @@ class Exploit(HTTPClient):
         "description": (
             "Queries the Samsung Tizen REST API at /api/v2/ on ports 8001/8002 "
             "to extract device model, firmware version, year class, and network "
-            "identifiers. Also probes AllShare/DLNA on UDP port 55000."
+            "identifiers. Unauthenticated access confirmed as TIZEN-2026-001 "
+            "(CVSSv3.1 9.8 CRITICAL). Also probes AllShare/DLNA on UDP 55000."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) - EmbedXPL-Forge port",
+            "Andre Henrique (@mrhenrike) | Uniao Geek",
         ),
         "references": (
             "https://developer.samsung.com/smarttv/develop/",
-            "https://github.com/SamsungResearch/SmartTV-Security",
+            "TIZEN-2026-001: https://github.com/Uniao-Geek/Embedded-Firmware-Research",
         ),
-        "devices": ("Samsung Smart TV (Tizen)",),
+        "devices": ("Samsung Smart TV (Tizen 4.x–6.x)",),
+        "vuln_ids": ("TIZEN-2026-001",),
+        "cvss":    "9.8",
     }
 
     target = OptIP("", "Target IPv4 address")
