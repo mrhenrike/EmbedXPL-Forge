@@ -6,6 +6,32 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [2.8.0] — 2026-04-21
+
+### Added — Dahua CCTV Security Research Suite
+
+**3 new scanners** (`scanners/cameras/dahua/`):
+- `cctv_discover` — Multi-model discovery via HTTP, ONVIF, Dahua binary protocol (37777)
+- `firmware_version_fingerprint` — Firmware version, platform (Hertz/Molec/Euler/Kant/Edison), SoC identification
+- `p2p_pppp_scan` — PPPP/iLnkP2P cloud relay detection (CVE-2019-11219/11220)
+
+**6 new exploit modules** (`exploits/cameras/dahua/`):
+- `cctv_pem_key_extraction` — DAHUA-2026-001: PEM key material in firmware bootloaders (CVSS 7.5)
+- `cctv_firmware_upload_no_verify` — DAHUA-2026-002: Firmware signature not enforced, 13/14 models (CVSS 8.1)
+- `cctv_auth_bypass_cve_2021_33044` — DAHUA-2026-005: Auth bypass via RPC2_Login (CVSS 9.8)
+- `cctv_rce_cve_2021_36260` — DAHUA-2026-006: RCE via configManager.cgi (CVSS 9.8)
+- `cctv_username_disclosure_cve_2020_25078` — DAHUA-2026-007: Username leak via /current_config/passwd (CVSS 7.5)
+- `cctv_37777_credential_extraction` — DAHUA-2026-008: TCP/37777 protocol credential extraction (CVSS 9.8)
+
+### Research Coverage
+- 14 Dahua firmware images analyzed (IP cameras, NVRs, PTZ — 2020 to 2025)
+- Platforms: Hertz, Molec, Euler, Kant, Edison (HiSilicon, SigmaStar, Ingenic SoCs)
+- 8 vulnerability findings documented with CVSSv3.1 scores and CWE classifications
+- 32 PEM key extractions confirmed across 8/14 firmwares
+- 13/14 firmwares lack signature verification in Install script
+
+---
+
 ## [2.7.0] — 2026-04-18
 
 ### Added — Intelbras CCTV Security Research Suite

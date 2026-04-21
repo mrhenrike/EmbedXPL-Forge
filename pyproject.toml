@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "2.7.0"
-description = "Embedded & Perimeter Security Assessment Framework — 3000+ modules, 600+ CVEs, 80+ vendors. Unified from FirewallXPL-Forge, ISF OT/ICS protocol clients, and deep ExploitDB/Metasploit coverage. v2.7.0 adds Intelbras CCTV security research suite (4 scanners + 8 exploits for VIP/MHDX/NVD lines), RSA key extraction, ONVIF auth bypass, Dahua OEM CVE verification, and firmware integrity audit."
+version = "2.8.0"
+description = "Embedded & Perimeter Security Assessment Framework — 3000+ modules, 600+ CVEs, 80+ vendors. Unified from FirewallXPL-Forge, ISF OT/ICS protocol clients, and deep ExploitDB/Metasploit coverage. v2.8.0 adds Dahua CCTV security research suite (3 scanners + 6 exploits for IPC/NVR/PTZ lines — PEM key extraction, firmware integrity bypass, auth bypass CVE-2021-33044, RCE CVE-2021-36260, username disclosure, TCP/37777 protocol) plus the prior Intelbras CCTV suite."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
