@@ -6,6 +6,34 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [2.7.0] — 2026-04-18
+
+### Added — Intelbras CCTV Security Research Suite
+
+**4 new scanners** (`scanners/cameras/`):
+- `intelbras_cctv_discover` — Multi-model discovery via HTTP, RTSP, Dahua protocol (37777)
+- `intelbras_boa_detect` — Boa HTTP server (EOL 2005) detection via banner fingerprinting
+- `intelbras_onvif_scan` — ONVIF endpoint discovery and SOAP GetDeviceInformation probe
+- `intelbras_p2p_uid_scan` — P2P/iSIC cloud UID enumeration and predictability analysis
+
+**8 new exploit modules** (`exploits/cameras/intelbras/`):
+- `cctv_rsa_key_extraction` — INTELBRAS-2026-001: RSA key reuse across product lines (CVSS 9.8)
+- `cctv_firmware_upload_no_verify` — INTELBRAS-2026-002: Firmware without integrity check (CVSS 8.1)
+- `cctv_config_disclosure` — INTELBRAS-2026-005: Unauthenticated config dump, multi-model (CVSS 7.5)
+- `cctv_onvif_auth_bypass` — INTELBRAS-2026-004: ONVIF auth bypass on NVR/DVR (CVSS 7.5)
+- `cctv_telnet_default_creds` — INTELBRAS-2026-007: HiSilicon default creds via telnet (CVSS 6.5)
+- `cctv_dahua_auth_bypass` — INTELBRAS-2026-008: Dahua CVE-2017-7921 on OEM models (CVSS 10.0)
+- `cctv_dahua_rce_cve_2021_36260` — INTELBRAS-2026-008: Dahua command injection on OEM (CVSS 9.8)
+- `cctv_dahua_username_disclosure_cve_2020_25078` — INTELBRAS-2026-008: Username leak (CVSS 7.5)
+
+### Research Coverage
+- 10 Intelbras firmware images analyzed (3 IP cameras, 4 DVRs, 3 NVRs)
+- Models spanning 2019–2026: VIP 1130 D, VIP 3230 B SD, VIP S3020 G2, MHDX 1004-C, MHDX 1108-C, MHDX 3108, MHDX 1108 G3, NVD 1208 P, NVD 3316-P, NVD 1432-P
+- 8 vulnerability findings documented with CVSSv3.1 scores and CWE classifications
+- Forensic cross-analysis confirmed Dahua OEM heritage across all product lines
+
+---
+
 ## [1.0.0] — 2026-04-17
 
 ### Changed (Breaking — Rebranding)

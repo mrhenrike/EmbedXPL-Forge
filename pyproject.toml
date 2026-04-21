@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "2.6.0"
-description = "Embedded & Perimeter Security Assessment Framework — 3000+ modules, 600+ CVEs, 80+ vendors. Unified from FirewallXPL-Forge, ISF OT/ICS protocol clients, and deep ExploitDB/Metasploit coverage. v2.6.0 adds Hikvision NVR/DVR V4.x & Video Intercom R0 exploit suites, GPON scanner, Mirai/Condi C2 detection lab, botnet default creds sweep and Docker IoT simulation."
+version = "2.7.0"
+description = "Embedded & Perimeter Security Assessment Framework — 3000+ modules, 600+ CVEs, 80+ vendors. Unified from FirewallXPL-Forge, ISF OT/ICS protocol clients, and deep ExploitDB/Metasploit coverage. v2.7.0 adds Intelbras CCTV security research suite (4 scanners + 8 exploits for VIP/MHDX/NVD lines), RSA key extraction, ONVIF auth bypass, Dahua OEM CVE verification, and firmware integrity audit."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
