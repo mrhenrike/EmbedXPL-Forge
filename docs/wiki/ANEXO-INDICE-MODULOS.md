@@ -1,12 +1,46 @@
 # EmbedXPL-Forge — Module Index
 
-> **Total modules:** 575 | **Version:** 0.5.0-beta
+> **Total modules:** 693+ | **Version:** 2.13.0
 >
 > Author: André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 
 ---
 
-## exploits (429 modules)
+## v2.13.0 New Modules (routerpwn.com gap analysis)
+
+| Module Path | Name |
+|---|---|
+| `exploits/routers/alcatel_lucent/omnipcx_masterCGI_rce.py` | Alcatel-Lucent OmniPCX Enterprise — masterCGI Command Injection RCE |
+| `exploits/routers/alcatel_lucent/omniswitch_add_admin_csrf.py` | Alcatel-Lucent OmniSwitch — Add Admin User via CSRF |
+| `exploits/routers/alpha_networks/web_shell_cmd_rce.py` | Alpha Networks / ZTE — web_shell_cmd.gch Backdoor RCE |
+| `exploits/routers/alpha_networks/config_download.py` | Alpha Networks / ZTE — Unauthenticated Config Backup Download |
+| `exploits/routers/astoria/astoria_password_reset.py` | Astoria Networks ADSL Router — Unauthenticated Admin Password Reset |
+| `exploits/routers/belkin/dns_hijack_csrf.py` | Belkin Router — DNS Hijack + Admin CSRF (N300/N900/F5D8236) |
+| `exploits/routers/binatone/dt850w_change_admin.py` | Binatone DT850W — Unauthenticated Admin CSRF Password Change |
+| `exploits/routers/ddwrt/ddwrt_info_disclosure.py` | DD-WRT — Unauthenticated Info Disclosure (BID 35742) |
+| `exploits/routers/ddwrt/ddwrt_command_exec.py` | DD-WRT — Remote Command Execution via Diagnostics |
+| `exploits/routers/easybox/easybox_wpa_keygen.py` | EasyBox (Arcadyan) — WPA2 Default Key Generator |
+| `exploits/routers/ee/brightbox_config_disclosure.py` | EE BrightBox — Unauthenticated Configuration Status Disclosure |
+| `exploits/routers/freebox/freebox_auth_bypass_reboot.py` | Freebox — Unauthenticated Reboot / Management Bypass |
+| `exploits/routers/mifi/mifi_config_backup.py` | MiFi (Novatel) — Unauthenticated Configuration Backup Download |
+| `exploits/routers/motorola/sbg6580_info_disclosure.py` | Motorola SBG — DNS CSRF / Password Reset / Config Disclosure |
+| `exploits/routers/netgear/dg632_bypass_dos.py` | Netgear DG632 — Auth Bypass + DoS |
+| `exploits/routers/netgear/wg602_superman_backdoor.py` | Netgear WG602 — Hardcoded Backdoor Credentials (super/superman) |
+| `exploits/routers/observa/observa_telecom_cred_disclosure.py` | Observa Telecom — Credential Disclosure + DNS/Admin CSRF |
+| `exploits/routers/ruggedcom/ruggedcom_factory_password.py` | RuggedCom — Factory Backdoor Account Password Generator |
+| `exploits/routers/seagate/seagate_nas_php_backdoor.py` | Seagate NAS — Unauthenticated PHP Backdoor RCE (Ghost PHP) |
+| `exploits/routers/sitecom/dc227_backdoor_password.py` | Sitecom DC-227 Backdoor + WLR-4000/4004 WPA Key Generator |
+| `exploits/routers/starbridge/lynx526_password_reset.py` | Starbridge Lynx 526 — Unauthenticated Admin Password Reset |
+| `exploits/routers/trendnet/tew827_backdoor_password.py` | TRENDnet TEW-827DRU — Hardcoded Backdoor Password |
+| `exploits/routers/trendnet/camera_mjpeg_unauth.py` | TRENDnet IP Camera — Unauthenticated MJPEG Live Stream |
+| `exploits/routers/ubee/ubee_cablemas_bypass.py` | Ubee Cable Modem — Operator Account Bypass (Cablemas ISP) |
+| `exploits/routers/unicorn/wb3300nr_factory_reset.py` | Unicorn WB-3300NR — Unauthenticated Factory Reset + DNS Change |
+| `exploits/routers/utstarcom/utstar_ppp_password_disclosure.py` | UTStarcom — Unauthenticated PPP Password Disclosure |
+| `exploits/routers/zoom/zoom_x4_x5_add_admin.py` | Zoom X4/X5 ADSL — Unauthenticated Admin Account Creation (EDB-26736) |
+
+---
+
+## exploits (543+ modules)
 
 | Module Path | Name |
 |---|---|

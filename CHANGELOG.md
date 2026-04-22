@@ -6,6 +6,57 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [2.13.0] — 2026-04-22
+
+### Added — routerpwn.com + routerPWN Gap Analysis: 27 New Exploit Modules
+
+**Gap analysis performed against:**
+- [`hkm/routerpwn.com`](https://github.com/hkm/routerpwn.com) — 44 vendor folders, 100+ HTML/JS exploits
+- [`lilloX/routerPWN`](https://github.com/lilloX/routerPWN) — Netgear CVE-2017-5521, CVE-2016-5649, BID-72640 (all previously covered)
+
+Both repositories cloned as `submodules/IoT/routerpwn.com` and `submodules/IoT/routerPWN`.
+
+**19 new vendor packages created (previously zero coverage):**
+
+| Vendor | Module | Technique |
+|--------|--------|-----------|
+| `alcatel_lucent` | `omnipcx_masterCGI_rce.py` | OmniPCX Enterprise — `/cgi-bin/masterCGI` command injection |
+| `alcatel_lucent` | `omniswitch_add_admin_csrf.py` | OmniSwitch — CSRF add admin account |
+| `alpha_networks` | `web_shell_cmd_rce.py` | `/web_shell_cmd.gch` backdoor RCE (Alpha Networks / ZTE OEM) |
+| `alpha_networks` | `config_download.py` | `/manager_dev_config_t.gch` config download (no auth) |
+| `astoria` | `astoria_password_reset.py` | `/cgi-bin/setup_pass.cgi` admin password reset (no auth) |
+| `binatone` | `dt850w_change_admin.py` | DT850W `/Forms/tools_admin_1` CSRF password change |
+| `ddwrt` | `ddwrt_info_disclosure.py` | `/Info.live.htm` (BID-35742) — WiFi PSK/PPPoE disclosure |
+| `ddwrt` | `ddwrt_command_exec.py` | Diagnostics ping field command injection |
+| `easybox` | `easybox_wpa_keygen.py` | WPA2 default key generator (MAC → MD5 algorithm, Arcadyan EasyBox 802/803/804) |
+| `ee` | `brightbox_config_disclosure.py` | `/cgi/cgi_status.js` EE BrightBox config disclosure |
+| `freebox` | `freebox_auth_bypass_reboot.py` | `/system.cgi` forced reboot (no auth) |
+| `mifi` | `mifi_config_backup.py` | Novatel MiFi `/config.xml.savefile` credential disclosure |
+| `motorola` | `sbg6580_info_disclosure.py` | SBG6580 DNS CSRF + admin password change + reboot |
+| `observa` | `observa_telecom_cred_disclosure.py` | JSON credential disclosure + DNS CSRF + FTP enable |
+| `ruggedcom` | `ruggedcom_factory_password.py` | Factory "backdoor" account password generator (FD 2012/Apr/277) |
+| `seagate` | `seagate_nas_php_backdoor.py` | "Ghost PHP" RCE backdoor — `d41d8cd98f...php` (CVE-2014-8684) |
+| `sitecom` | `dc227_backdoor_password.py` | DC-227 hardcoded backdoor + WLR-4004 WPA key generator (eMaze 2014) |
+| `starbridge` | `lynx526_password_reset.py` | Lynx 526 `/password.cgi?sysPassword=` (no auth) |
+| `ubee` | `ubee_cablemas_bypass.py` | Cable modem operator credential bypass (Cablemas ISP) |
+| `unicorn` | `wb3300nr_factory_reset.py` | WB-3300NR factory reset + DNS CSRF (no auth) |
+| `utstarcom` | `utstar_ppp_password_disclosure.py` | `/ppppassword.html` PPPoE credential disclosure |
+| `zoom` | `zoom_x4_x5_add_admin.py` | X4/X5 add admin via `PopOutUserAdd.htm` (EDB-26736) |
+
+**Existing vendor gaps filled (5 new modules):**
+
+| Vendor | Module | Technique |
+|--------|--------|-----------|
+| `belkin` | `dns_hijack_csrf.py` | DNS hijack + N300/N900 admin CSRF |
+| `netgear` | `dg632_bypass_dos.py` | DG632 auth bypass (`saveconfig.html`) + DoS |
+| `netgear` | `wg602_superman_backdoor.py` | WG602 hardcoded `super:5777364` / `superman:21241036` |
+| `trendnet` | `tew827_backdoor_password.py` | TEW-827DRU `/backdoor?password=j78G-DFdg_24Mhw3` |
+| `trendnet` | `camera_mjpeg_unauth.py` | `/anony/mjpg.cgi` MJPEG stream without auth (50,000+ cameras affected in 2012) |
+
+**Validation:** All 27 modules pass `py_compile` validation (0 syntax errors).
+
+---
+
 ## [2.8.0] — 2026-04-21
 
 ### Added — Dahua CCTV Security Research Suite

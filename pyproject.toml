@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "2.12.0"
-description = "Embedded & Perimeter Security Assessment Framework — 3200+ modules, 680+ CVEs, 95+ vendors. v2.12.0: RTSP-over-HTTP tunnel (pure Python, RFC 2326 App-C); 7 custom Nmap NSE scripts (rtsp-discover, camera-identify, hikvision-vuln, dahua-vuln, rtsp-creds, iot-cve-check, camera-snapshot); pip install embedxpl[nse] installer; full README/docs rewrite with syntax samples and I/O examples."
+version = "2.13.0"
+description = "Embedded & Perimeter Security Assessment Framework — 3200+ modules, 680+ CVEs, 114+ vendors. v2.13.0: 27 new exploit modules from routerpwn.com gap analysis (19 new vendors: EasyBox WPA keygen, RuggedCom factory backdoor, Seagate Ghost PHP RCE, Alpha Networks web_shell_cmd, Alcatel OmniPCX RCE, Motorola SBG6580, Observa Telecom, Freebox, DD-WRT, MiFi, EE BrightBox, Astoria, Binatone, Sitecom, Starbridge, Ubee, Unicorn, UTStarcom, Zoom); routerpwn.com + routerPWN submodules indexed."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
