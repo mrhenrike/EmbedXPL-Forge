@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "2.9.1"
-description = "Embedded & Perimeter Security Assessment Framework — 3000+ modules, 600+ CVEs, 80+ vendors. v2.9.1 upgrades 5 exploit modules to full post-exploitation: MikroTik REST API full enum/backdoor, QNAP share.cgi SSID harvest + overflow, Ivanti ICS reverse-shell staging + listener, FortiClient EMS endpoint dump + cmd output, FortiCloud SSO config/user/VPN dump + admin backdoor."
+version = "2.10.0"
+description = "Embedded & Perimeter Security Assessment Framework — 3000+ modules, 650+ CVEs, 85+ vendors. v2.10.0: PolyExploit multi-language orchestrator (C/C++/Ruby/Node/PHP/Bash); 18 new exploit modules (D-Link NAS RCE CVE-2024-10914, Edimax IC-7100 CISA-KEV CVE-2025-1316, Zyxel NAS RCE CVE-2024-29972/73, SonicWall SMA100 RCE CVE-2025-23006, Avocent ACS RCE CVE-2024-50603, Netgear XR1000 RCE CVE-2025-25246, QNAP SQLi→RCE CVE-2022-27596, MikroTik WebFig CVE-2025-61481, TP-Link x3, GL.iNet x2, Tenda G300-F, SonicOS CVE-2024-53700); Firmware exploitation suite (NETGEAR/TP-Link/D-Link/ASUS flash bypass + trojanized firmware delivery)."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
