@@ -137,18 +137,134 @@ def _detect_auth_type_from_header(www_auth: str) -> AuthType:
     return AuthType.UNKNOWN
 
 
-class RTSPClient:
-    """Low-level RTSP socket client.
+class RTSPOverHTTPTunnel:
+    """RTSP-over-HTTP tunnel — pure Python implementation.
 
-    Ported from cameradar's internal/attack/rtsp.go with Python extensions.
-    Supports plain RTSP, RTSPS (TLS), Basic auth, and Digest auth.
+    Implements RFC 2326 Appendix C (RTSP-over-HTTP tunneling).
+    Used when cameras sit behind HTTP proxies or NAT that only pass HTTP.
+
+    Cameradar uses gortsplib's TunnelHTTP mode. This is our pure-Python
+    equivalent, built from scratch.
+
+    The tunnel protocol:
+      1. Client sends HTTP GET to establish response channel (server → client).
+      2. Client sends HTTP POST to establish request channel (client → server).
+      3. RTSP messages are base64-encoded and sent via POST body.
+      4. RTSP responses arrive via GET response body (chunked/streaming).
 
     Author: André Henrique (@mrhenrike) | União Geek
     Version: 1.0.0
     """
 
-    def __init__(self, host: str, port: int = 554, timeout: float = 5.0,
+    def __init__(self, host: str, port: int, timeout: float = 5.0,
                  use_tls: bool = False) -> None:
+        self.host = host
+        self.port = port
+        self.timeout = timeout
+        self.use_tls = use_tls
+        self._session_cookie = base64.b64encode(
+            __import__("os").urandom(12)
+        ).decode("ascii").rstrip("=")
+
+    def _wrap(self, sock: socket.socket) -> socket.socket:
+        if self.use_tls:
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+            return ctx.wrap_socket(sock, server_hostname=self.host)
+        return sock
+
+    def send_rtsp_via_http(self, rtsp_request: str) -> Optional[bytes]:
+        """Send an RTSP request through HTTP POST tunnel.
+
+        Args:
+            rtsp_request: Raw RTSP/1.0 request string.
+
+        Returns:
+            Raw RTSP response bytes (decoded from base64), or None on error.
+        """
+        encoded = base64.b64encode(rtsp_request.encode("utf-8")).decode("ascii")
+        http_post = (
+            f"POST /rtsp-tunnel HTTP/1.0\r\n"
+            f"Host: {self.host}:{self.port}\r\n"
+            f"Content-Type: application/x-rtsp-tunnelled\r\n"
+            f"Pragma: no-cache\r\n"
+            f"Cache-Control: no-cache\r\n"
+            f"Content-Length: {len(encoded)}\r\n"
+            f"x-sessioncookie: {self._session_cookie}\r\n"
+            f"\r\n"
+            f"{encoded}"
+        )
+        try:
+            sock = self._wrap(
+                socket.create_connection((self.host, self.port), timeout=self.timeout)
+            )
+            sock.sendall(http_post.encode("utf-8"))
+            data = b""
+            sock.settimeout(self.timeout)
+            while True:
+                try:
+                    chunk = sock.recv(4096)
+                    if not chunk:
+                        break
+                    data += chunk
+                    if b"\r\n\r\n" in data:
+                        break
+                except socket.timeout:
+                    break
+            sock.close()
+            # Strip HTTP headers; remaining body is base64 RTSP response
+            if b"\r\n\r\n" in data:
+                body = data.split(b"\r\n\r\n", 1)[1]
+                try:
+                    return base64.b64decode(body)
+                except Exception:
+                    return body  # return raw if not base64
+        except Exception:
+            return None
+        return None
+
+    def establish_get_channel(self) -> Optional[socket.socket]:
+        """Establish the HTTP GET channel for server→client RTSP responses."""
+        http_get = (
+            f"GET /rtsp-tunnel HTTP/1.0\r\n"
+            f"Host: {self.host}:{self.port}\r\n"
+            f"x-sessioncookie: {self._session_cookie}\r\n"
+            f"Accept: application/x-rtsp-tunnelled\r\n"
+            f"Pragma: no-cache\r\n"
+            f"Cache-Control: no-cache\r\n"
+            f"\r\n"
+        )
+        try:
+            sock = self._wrap(
+                socket.create_connection((self.host, self.port), timeout=self.timeout)
+            )
+            sock.sendall(http_get.encode("utf-8"))
+            return sock
+        except Exception:
+            return None
+
+
+class RTSPClient:
+    """Low-level RTSP socket client.
+
+    Ported from cameradar's internal/attack/rtsp.go with Python extensions.
+    Supports plain RTSP, RTSPS (TLS), Basic auth, Digest auth,
+    and **RTSP-over-HTTP tunneling** (pure Python — replaces gortsplib TunnelHTTP).
+
+    Transport modes
+    ---------------
+    ``rtsp``    — Plain RTSP/1.0 over TCP (default, port 554)
+    ``rtsps``   — RTSP over TLS (port 443 or 8443)
+    ``http``    — RTSP-over-HTTP tunnel (port 80 or 8080)
+    ``https``   — RTSP-over-HTTPS tunnel (port 443 or 8443)
+
+    Author: André Henrique (@mrhenrike) | União Geek
+    Version: 1.1.0
+    """
+
+    def __init__(self, host: str, port: int = 554, timeout: float = 5.0,
+                 use_tls: bool = False, tunnel_http: bool = False) -> None:
         """Initialise the RTSP client.
 
         Args:
@@ -156,17 +272,53 @@ class RTSPClient:
             port: RTSP port number.
             timeout: Socket timeout in seconds.
             use_tls: If True, wrap socket with TLS (for RTSPS).
+            tunnel_http: If True, use RTSP-over-HTTP tunnel mode.
         """
         self.host = host
         self.port = port
         self.timeout = timeout
         self.use_tls = use_tls
+        self.tunnel_http = tunnel_http
         self._cseq = 0
+        self._http_tunnel: Optional[RTSPOverHTTPTunnel] = None
+        if tunnel_http:
+            self._http_tunnel = RTSPOverHTTPTunnel(
+                host, port, timeout=timeout, use_tls=use_tls
+            )
+
+    @classmethod
+    def from_scheme(cls, host: str, port: int, scheme: str,
+                    timeout: float = 5.0) -> "RTSPClient":
+        """Create an RTSPClient configured for a specific transport scheme.
+
+        Args:
+            host: Target IP or hostname.
+            port: RTSP port.
+            scheme: One of 'rtsp', 'rtsps', 'http', 'https'.
+            timeout: Socket timeout.
+
+        Returns:
+            Configured RTSPClient instance.
+
+        Example::
+
+            client = RTSPClient.from_scheme("192.168.1.100", 8080, "http")
+        """
+        scheme = (scheme or "rtsp").lower()
+        if scheme == "rtsp":
+            return cls(host, port, timeout=timeout)
+        if scheme == "rtsps":
+            return cls(host, port, timeout=timeout, use_tls=True)
+        if scheme == "http":
+            return cls(host, port, timeout=timeout, tunnel_http=True)
+        if scheme == "https":
+            return cls(host, port, timeout=timeout, use_tls=True, tunnel_http=True)
+        return cls(host, port, timeout=timeout)
 
     def _connect(self) -> socket.socket:
         """Open a TCP connection to the RTSP server."""
         sock = socket.create_connection((self.host, self.port), timeout=self.timeout)
-        if self.use_tls:
+        if self.use_tls and not self.tunnel_http:
             ctx = ssl.create_default_context()
             ctx.check_hostname = False
             ctx.verify_mode = ssl.CERT_NONE
@@ -174,7 +326,15 @@ class RTSPClient:
         return sock
 
     def _send_recv(self, request: str, sock: Optional[socket.socket] = None) -> bytes:
-        """Send an RTSP request and read the full response."""
+        """Send an RTSP request and read the full response.
+
+        Automatically routes through HTTP tunnel if ``tunnel_http=True``.
+        """
+        # HTTP tunnel path
+        if self.tunnel_http and self._http_tunnel:
+            result = self._http_tunnel.send_rtsp_via_http(request)
+            return result if result else b""
+
         close_after = sock is None
         if sock is None:
             sock = self._connect()

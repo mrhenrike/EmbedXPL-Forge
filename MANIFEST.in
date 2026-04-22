@@ -25,6 +25,12 @@ recursive-include embedxpl/resources/ml           *.json
 # IEEE OUI database (used at runtime for MAC vendor lookup)
 include embedxpl/data/oui.txt
 
+# RTSP resources (routes + credentials dictionaries)
+recursive-include embedxpl/resources/rtsp *.txt *.json
+
+# Nmap NSE scripts (installed via: python -m embedxpl.nse install)
+recursive-include nse *.nse
+
 # === Explicit exclusions from sdist ===
 
 # Dev tools — not part of runtime

@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "2.11.0"
-description = "Embedded & Perimeter Security Assessment Framework — 3200+ modules, 680+ CVEs, 95+ vendors. v2.11.0: Full RTSP camera engine (cameradar-port): route+credential brute-force, Basic/Digest auth, nmap/masscan/direct scanner, M3U output, ONVIF WS-Discovery; 7 new camera vendor exploits (Reolink CVE-2021-40655, Amcrest CVE-2019-3950, Uniview UNV CVE-2024-37630, Tapo C200/C210 CVE-2021-4045, Swann DVR/NVR, ANNKE CVE-2021-32941, Reolink NVR CVE-2022-30600); cameradar submodule added; RTSP dictionaries (195+ routes, 80+ credentials)."
+version = "2.12.0"
+description = "Embedded & Perimeter Security Assessment Framework — 3200+ modules, 680+ CVEs, 95+ vendors. v2.12.0: RTSP-over-HTTP tunnel (pure Python, RFC 2326 App-C); 7 custom Nmap NSE scripts (rtsp-discover, camera-identify, hikvision-vuln, dahua-vuln, rtsp-creds, iot-cve-check, camera-snapshot); pip install embedxpl[nse] installer; full README/docs rewrite with syntax samples and I/O examples."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
@@ -59,6 +59,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+nse = [
+    "python-nmap>=0.7.1",
+]
 ml = [
     "numpy>=1.24",
     "scikit-learn>=1.3",
@@ -89,6 +92,7 @@ embedxpl = "embedxpl.__main__:main"
 fxf = "embedxpl.__main__:main"
 firmware-dl = "embedxpl.tools.firmware_downloader:main"
 firmware-analyze = "embedxpl.tools.firmware_analyzer:main"
+embedxpl-nse = "embedxpl.nse.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -96,6 +100,8 @@ include = ["embedxpl*"]
 
 [tool.setuptools.package-data]
 "embedxpl.data"       = ["oui.txt"]
+"embedxpl.nse"        = ["*.py"]
+"nse"                 = ["*.nse"]
     "embedxpl.resources"  = [
     "catalogs/*.json",
     "wordlists/**/*.txt",

