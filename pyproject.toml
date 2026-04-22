@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "2.9.0"
-description = "Embedded & Perimeter Security Assessment Framework — 3000+ modules, 600+ CVEs, 80+ vendors. v2.9.0 adds 6 critical CVE modules (2024-2026): Ivanti Connect Secure unauth stack RCE (CVE-2025-22457), FortiClient EMS pre-auth RCE (CVE-2026-35616), FortiCloud SSO auth bypass (CVE-2026-24858), QNAP QTS share.cgi overflow RCE (CVE-2024-27130), D-Link Legacy DSL unauth RCE/DNS hijack (CVE-2026-0625), MikroTik RouterOS 7 REST API buffer overflow (CVE-2025-10948)."
+version = "2.9.1"
+description = "Embedded & Perimeter Security Assessment Framework — 3000+ modules, 600+ CVEs, 80+ vendors. v2.9.1 upgrades 5 exploit modules to full post-exploitation: MikroTik REST API full enum/backdoor, QNAP share.cgi SSID harvest + overflow, Ivanti ICS reverse-shell staging + listener, FortiClient EMS endpoint dump + cmd output, FortiCloud SSO config/user/VPN dump + admin backdoor."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
