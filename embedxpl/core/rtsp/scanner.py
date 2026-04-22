@@ -36,14 +36,75 @@ EXTENDED_RTSP_PORTS = [554, 5554, 8554, 10554, 8080, 9000, 3554, 4554,
                         7447, 1935, 1554, 2554, 37777, 34567, 34568]
 
 
+def _parse_octet_range(value: str):
+    """Parse a single octet or octet range (e.g. '1', '1-3').
+
+    Returns:
+        List of int values, or None if not a valid octet spec.
+    """
+    value = value.strip()
+    if not value:
+        return None
+    if "-" in value:
+        parts = value.split("-", 1)
+        try:
+            lo, hi = int(parts[0].strip()), int(parts[1].strip())
+            if 0 <= lo <= 255 and 0 <= hi <= 255 and lo <= hi:
+                return list(range(lo, hi + 1))
+        except ValueError:
+            pass
+        return None
+    try:
+        v = int(value)
+        if 0 <= v <= 255:
+            return [v]
+    except ValueError:
+        pass
+    return None
+
+
+def _expand_ipv4_multirange(target: str) -> List[str]:
+    """Expand multi-octet IPv4 range (e.g. ``192.168.1-2.0-255``).
+
+    Mirrors cameradar's parseIPv4Range logic from internal/scan/skip/skip.go.
+    Supports ranges in any octet position.
+
+    Args:
+        target: String like ``192.168.1-3.0-255`` or ``192.168.1.10-20``.
+
+    Returns:
+        List of IP address strings, or empty list if not a range format.
+    """
+    parts = target.split(".")
+    if len(parts) != 4:
+        return []
+
+    ranges = []
+    for part in parts:
+        parsed = _parse_octet_range(part)
+        if parsed is None:
+            return []
+        ranges.append(parsed)
+
+    ips = []
+    for a in ranges[0]:
+        for b in ranges[1]:
+            for c in ranges[2]:
+                for d in ranges[3]:
+                    ips.append(f"{a}.{b}.{c}.{d}")
+    return ips
+
+
 def _expand_target(target: str) -> List[str]:
     """Expand a target spec into individual IP addresses.
 
-    Supports:
+    Supports all formats from cameradar:
       - Single IP: ``192.168.1.1``
       - CIDR: ``192.168.1.0/24``
-      - Range: ``192.168.1.10-20``
-      - Hostname: ``camera.local``
+      - Last-octet range: ``192.168.1.10-20``
+      - Multi-octet range: ``192.168.1-2.0-255`` (full cameradar compat)
+      - Full-IP range (masscan): ``192.168.1.1-192.168.1.254``
+      - Hostname: ``camera.local`` (resolved via DNS)
 
     Args:
         target: Target specification string.
@@ -52,23 +113,47 @@ def _expand_target(target: str) -> List[str]:
         List of IP address strings.
     """
     target = target.strip()
-    ips = []
 
-    # CIDR
+    # CIDR — try first
     try:
         net = ipaddress.ip_network(target, strict=False)
         return [str(ip) for ip in net.hosts()]
     except ValueError:
         pass
 
-    # IP range: 192.168.1.10-20 or 192.168.1-2.0-255
-    range_m = re.match(r'^(\d+)\.(\d+)\.(\d+)\.(\d+)-(\d+)$', target)
-    if range_m:
-        a, b, c = int(range_m.group(1)), int(range_m.group(2)), int(range_m.group(3))
-        start, end = int(range_m.group(4)), int(range_m.group(5))
-        return [f"{a}.{b}.{c}.{d}" for d in range(start, end + 1)]
+    # Full-IP range: 192.168.1.1-192.168.1.254
+    full_range_m = re.match(
+        r'^(\d+\.\d+\.\d+\.\d+)-(\d+\.\d+\.\d+\.\d+)$', target
+    )
+    if full_range_m:
+        try:
+            start_int = int(ipaddress.IPv4Address(full_range_m.group(1)))
+            end_int = int(ipaddress.IPv4Address(full_range_m.group(2)))
+            return [str(ipaddress.IPv4Address(i))
+                    for i in range(start_int, min(end_int + 1, start_int + 65536))]
+        except Exception:
+            pass
 
-    # Single IP or hostname
+    # Multi-octet range: 192.168.1-2.0-255
+    if re.search(r'\d-\d', target):
+        expanded = _expand_ipv4_multirange(target)
+        if expanded:
+            return expanded
+
+    # Single valid IP
+    try:
+        ipaddress.IPv4Address(target)
+        return [target]
+    except ValueError:
+        pass
+
+    # Hostname — DNS resolution
+    try:
+        infos = socket.getaddrinfo(target, None, socket.AF_INET)
+        return list({info[4][0] for info in infos})
+    except socket.gaierror:
+        pass
+
     return [target]
 
 
@@ -94,9 +179,60 @@ class RTSPScanner:
     Version: 1.0.0
     """
 
+    @staticmethod
+    def parse_ports(ports_spec) -> List[int]:
+        """Parse port specification string or list.
+
+        Mirrors cameradar's parsePorts (internal/scan/skip/skip.go).
+        Supports: single ports, ranges, comma-separated, service names.
+
+        Args:
+            ports_spec: ``int | List[int] | str`` like ``"554,19000-19010"``.
+
+        Returns:
+            Deduplicated sorted list of port numbers.
+        """
+        if ports_spec is None:
+            return list(DEFAULT_RTSP_PORTS)
+        if isinstance(ports_spec, (list, tuple)):
+            return sorted(set(int(p) for p in ports_spec if 1 <= int(p) <= 65535))
+
+        seen: set = set()
+        result = []
+        for token in str(ports_spec).split(","):
+            token = token.strip()
+            if not token:
+                continue
+            if "-" in token:
+                parts = token.split("-", 1)
+                try:
+                    lo, hi = int(parts[0].strip()), int(parts[1].strip())
+                    for p in range(lo, hi + 1):
+                        if 1 <= p <= 65535 and p not in seen:
+                            seen.add(p)
+                            result.append(p)
+                    continue
+                except ValueError:
+                    pass
+            try:
+                p = int(token)
+                if 1 <= p <= 65535 and p not in seen:
+                    seen.add(p)
+                    result.append(p)
+            except ValueError:
+                # Try service name lookup
+                try:
+                    p = socket.getservbyname(token, "tcp")
+                    if p not in seen:
+                        seen.add(p)
+                        result.append(p)
+                except OSError:
+                    pass
+        return result
+
     def __init__(
         self,
-        ports: Optional[List[int]] = None,
+        ports=None,
         timeout: float = 3.0,
         max_workers: int = 100,
         scan_speed: int = 4,
@@ -106,12 +242,14 @@ class RTSPScanner:
 
         Args:
             ports: List of RTSP ports to scan (defaults to 554, 5554, 8554).
+                   Accepts ``List[int]``, or a comma-separated string like
+                   ``"554,5554,19000-19010"`` (matches cameradar --ports flag).
             timeout: Socket timeout for direct probes.
             max_workers: Parallel workers for direct probe mode.
             scan_speed: nmap timing template (1-5).
             scanner: 'nmap', 'masscan', 'direct', or 'auto' (auto-detect).
         """
-        self.ports = ports or DEFAULT_RTSP_PORTS
+        self.ports = self.parse_ports(ports) if ports is not None else list(DEFAULT_RTSP_PORTS)
         self.timeout = timeout
         self.max_workers = max_workers
         self.scan_speed = scan_speed
@@ -144,20 +282,38 @@ class RTSPScanner:
     def skip_scan(self, targets: List[str]) -> List[RTSPStream]:
         """Skip discovery — treat every target:port as an RTSP stream candidate.
 
-        Mirrors cameradar's --skip-scan mode.
+        Mirrors cameradar's --skip-scan mode (internal/scan/skip/skip.go).
+        Resolves hostnames via DNS, expands CIDRs and multi-octet ranges,
+        and builds one stream per (ip, port) pair.
 
         Args:
-            targets: List of 'ip:port' or 'ip' strings.
+            targets: List of IP/CIDR/range/hostname strings.
+                     If a target contains ':', the port is parsed from it.
 
         Returns:
             List of RTSPStream objects for all expanded targets.
         """
         streams = []
+        seen: set = set()
         for target in targets:
+            # Support "host:port" notation in skip-scan
+            port_override: Optional[int] = None
+            if target.count(":") == 1 and not target.startswith("["):
+                host_part, port_part = target.rsplit(":", 1)
+                try:
+                    port_override = int(port_part)
+                    target = host_part
+                except ValueError:
+                    pass
+
             ips = _expand_target(target)
+            ports = [port_override] if port_override else self.ports
             for ip in ips:
-                for port in self.ports:
-                    streams.append(RTSPStream(address=ip, port=port))
+                for port in ports:
+                    key = (ip, port)
+                    if key not in seen:
+                        seen.add(key)
+                        streams.append(RTSPStream(address=ip, port=port))
         return streams
 
     # ── Scanner Backends ──────────────────────────────────────────────────────
