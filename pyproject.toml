@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "2.10.0"
-description = "Embedded & Perimeter Security Assessment Framework — 3000+ modules, 650+ CVEs, 85+ vendors. v2.10.0: PolyExploit multi-language orchestrator (C/C++/Ruby/Node/PHP/Bash); 18 new exploit modules (D-Link NAS RCE CVE-2024-10914, Edimax IC-7100 CISA-KEV CVE-2025-1316, Zyxel NAS RCE CVE-2024-29972/73, SonicWall SMA100 RCE CVE-2025-23006, Avocent ACS RCE CVE-2024-50603, Netgear XR1000 RCE CVE-2025-25246, QNAP SQLi→RCE CVE-2022-27596, MikroTik WebFig CVE-2025-61481, TP-Link x3, GL.iNet x2, Tenda G300-F, SonicOS CVE-2024-53700); Firmware exploitation suite (NETGEAR/TP-Link/D-Link/ASUS flash bypass + trojanized firmware delivery)."
+version = "2.11.0"
+description = "Embedded & Perimeter Security Assessment Framework — 3200+ modules, 680+ CVEs, 95+ vendors. v2.11.0: Full RTSP camera engine (cameradar-port): route+credential brute-force, Basic/Digest auth, nmap/masscan/direct scanner, M3U output, ONVIF WS-Discovery; 7 new camera vendor exploits (Reolink CVE-2021-40655, Amcrest CVE-2019-3950, Uniview UNV CVE-2024-37630, Tapo C200/C210 CVE-2021-4045, Swann DVR/NVR, ANNKE CVE-2021-32941, Reolink NVR CVE-2022-30600); cameradar submodule added; RTSP dictionaries (195+ routes, 80+ credentials)."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
