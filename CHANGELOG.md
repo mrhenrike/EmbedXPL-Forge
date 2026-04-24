@@ -6,6 +6,34 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [2.14.0] — 2026-04-24
+
+### Added — CVE Integration + Vendor Cleanup
+
+**2 new CVE exploit modules:**
+
+| Module | CVE | CVSS | Technique |
+|--------|-----|------|-----------|
+| `vpn/ivanti/connect_secure_ssrf_rce_cve_2024_21893.py` | CVE-2024-21893 + CVE-2024-21887 | 9.1 CRITICAL | Ivanti Connect Secure — unauthenticated SSRF via SAML SOAP envelope at `/dana-ws/saml20.ws`, chained with command injection in internal license API for pre-auth RCE (CISA KEV 2024-01-31). Actions: check \| ssrf \| rce \| shell |
+| `routers/netgear/r6100_cgimain_bof_cve_2025_29044.py` | CVE-2025-29044 | 9.8 CRITICAL | Netgear R6100 cgiMain — QUERY_STRING `sprintf` stack overflow (offset 0x274), unauthenticated RCE via MIPS payload. Actions: check \| dos \| rce |
+
+**4 new vendor modules (previously placeholder-only):**
+
+| Module | Vendor | Technique |
+|--------|--------|-----------|
+| `routers/pirelli/pirelli_wpa_keygen.py` | Pirelli Broadband (A-226G, Dragonite) | Default WPA key derivation from serial suffix or BSSID MAC |
+| `routers/sitel/sitel_default_credentials.py` | Sitel ADSL Modem/Router | HTTP Basic Auth brute-force (default creds) + info disclosure probe |
+| `routers/smc/smc_config_disclosure.py` | SMC Networks (7904WBRA, 8014WG, D3GN) | Unauthenticated config export / ViewLog.asp / status.asp disclosure |
+| `routers/xavi/xavi_csrf_dns_change.py` | Xavi Technologies (7868r, X7968) | CSRF DNS hijack via unauthenticated POST to DNS config endpoint + CSRF HTML PoC generator |
+
+### Removed
+- `routers/belkin_ext/` — empty duplicate of `routers/belkin/`; removed
+
+### Fixed
+- CVE-2025-30401 was an invalid/non-existent CVE ID in the pending list; replaced with CVE-2025-29044 (Netgear R6100, same device scope, CVSS 9.8, public PoC)
+
+---
+
 ## [2.13.0] — 2026-04-22
 
 ### Added — routerpwn.com + routerPWN Gap Analysis: 27 New Exploit Modules
