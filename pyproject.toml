@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "2.14.0"
-description = "Embedded & Perimeter Security Assessment Framework — 3200+ modules, 682+ CVEs, 118+ vendors. v2.14.0: CVE-2024-21893 Ivanti SSRF→RCE chain (CISA KEV); CVE-2025-29044 Netgear R6100 cgiMain stack overflow (CVSS 9.8); Pirelli WPA keygen; Sitel default creds; SMC config disclosure; Xavi CSRF DNS hijack; cleanup of 5 empty vendor dirs."
+version = "2.15.0"
+description = "Embedded & Perimeter Security Assessment Framework — 1011+ modules, 700+ CVEs, 135+ vendors. v2.15.0: Full audit of submodules/dev; ported 83 FirewallXPL-Forge perimeter modules (SonicWall/Sophos/Juniper/Zyxel/WatchGuard/pfSense/Siemens/Moxa/PaloAlto); 27 PrinterXPL-Forge modules (CUPS CVE-2024-47176 CVSS 9.9, HP, Lexmark, Kyocera, Brother); 5 Wireless/BT (BlueBorne, FragAttacks, KRACK, KR00K, SweynTooth); Daryus OT attack scenarios (oil plant, plant shutdown, fill attack)."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [

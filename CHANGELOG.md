@@ -6,6 +6,62 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [2.15.0] — 2026-04-25
+
+### Added — Full Submodule Audit + Mass Integration
+
+#### Audit scope
+Complete audit of all submodules (`submodules/IoT`, `submodules/OT`, `submodules/Daryus`) and sibling frameworks (`FirewallXPL-Forge`, `PrinterXPL-Forge`, `WirelessXPL-Forge`) to identify and incorporate everything within EmbedXPL's device scope.
+
+**83 new Firewall/Perimeter modules** (`embedxpl/modules/exploits/firewalls/`):
+
+New vendors: `juniper/`, `moxa/`, `paloalto/`, `pfsense/`, `phoenix_contact/`, `schneider/`, `siemens/` (network appliances), `sonicwall/`, `sophos/`, `watchguard/`, `zyxel/`, `hirschmann/`
+
+| Vendor | Notable modules |
+|--------|----------------|
+| SonicWall | sonicos_sslvpn_access CVE-2024-40766 (CVSS 9.3), sonicos_auth_bypass CVE-2024-53704, sma100_sqli CVE-2021-20016, sonicos_bof CVE-2020-5135, sslvpn_shellshock VisualDoor |
+| Sophos | xg_auth_bypass CVE-2022-1040, xg_sqli_asnarok CVE-2020-12271, firewall_code_injection CVE-2022-3236 |
+| Juniper | jweb_oob_write CVE-2024-21591 (CVSS 9.8), jweb_php_rce CVE-2023-36845 |
+| Zyxel | buffer_overflow CVE-2023-33009, ike_cmd_injection CVE-2023-28771, usg_flex CVE-2022-30525 |
+| WatchGuard | firebox_cyclops_blink CVE-2022-23176, xcs_9_rce |
+| pfSense | pfblockerng_rce CVE-2022-31814, interfaces_cmd_injection CVE-2023-42326 |
+| Palo Alto | panos_auth_bypass CVE-2025-0108, mgmt_auth_bypass CVE-2024-0012, privesc CVE-2024-9474, saml_bypass CVE-2020-2021 |
+| Siemens | ruggedcom_web_rce CVE-2023-24845, scalance_cmd_injection CVE-2023-44373, sinema_rc CVE-2022-32257 |
+| Moxa | edr_cmd_injection CVE-2024-9138, edr_jwt_hardcoded CVE-2024-9137 |
+
+**27 new Printer exploitation modules** (`embedxpl/modules/exploits/printers/`):
+
+New vendors: `linux/` (CUPS), `hp/`, `lexmark/`, `kyocera/`, `brother/`, `ricoh/`, `samsung/`, `xerox/`, `canon/`
+
+| Module | CVE | CVSS |
+|--------|-----|------|
+| cups_browsed_rce | CVE-2024-47176 + CVE-2024-47076/47175/47177 | 9.9 CRITICAL |
+| hp_laserjet_postscript_rce | CVE-2025-26506 | 9.8 CRITICAL |
+| hp_laserjet_bof | CVE-2025-26508 | 9.8 CRITICAL |
+| hp_jetdirect_rce | CVE-2017-2741 | 9.8 CRITICAL |
+| brother_default_auth_bypass | CVE-2024-51977/51978 | 9.8 CRITICAL |
+| lexmark_cmd_injection | CVE-2023-26067 | 9.0 HIGH |
+| kyocera_soap_cred_dump | CVE-2022-1026 | HIGH |
+| lexmark_rce | CVE-2024-6333 | HIGH |
+
+**5 new Wireless/Bluetooth protocol attack modules** (`embedxpl/modules/exploits/ics/bluetooth_ble/`):
+
+| Module | CVE | Description |
+|--------|-----|-------------|
+| blueborne_attack | CVE-2017-0781, CVE-2017-0785, CVE-2017-1000251 | BlueBorne BT/BLE RCE (Android/Linux IoT) |
+| wifi_fragattacks | CVE-2020-24586/24587/24588/26140/26143/26144/26145/26146 | WiFi 802.11 fragmentation attacks |
+| wifi_krack_attack | CVE-2017-13077..13088 | KRACK — WPA2 key reinstallation (IoT APs/clients) |
+| wifi_kr00k_attack | CVE-2019-15126 | KR00K — Broadcom/Cypress WiFi chip decryption |
+| ble_sweyntooth_bridge | SweynTooth CVEs (multiple) | BLE SweynTooth deadlock/overflow attacks |
+
+**1 new OT/ICS scenario module** (`embedxpl/modules/exploits/ics/modbus/`):
+
+| Module | Description |
+|--------|-------------|
+| modbus_ot_attack_scenarios | 6 OT attack scenarios (oil plant disruption, plant shutdown, fill line flood) via unauthenticated Modbus TCP register writes — ported from Daryus IoT Security Research lab |
+
+---
+
 ## [2.14.0] — 2026-04-24
 
 ### Added — CVE Integration + Vendor Cleanup
