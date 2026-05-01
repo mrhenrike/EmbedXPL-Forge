@@ -703,11 +703,15 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
         try:
             signal.signal(signal.SIGINT, self.__command_sigint_handler)
+            if hasattr(self.current_module, "_enforce_hardware_gate"):
+                self.current_module._enforce_hardware_gate()
             self.current_module.run()
         except KeyboardInterrupt:
             print_info()
             print_error("Operation cancelled by user")
             error_msg = "cancelled"
+        except SystemExit:
+            pass
         except Exception:
             print_error(traceback.format_exc())
             error_msg = traceback.format_exc().splitlines()[-1] if traceback.format_exc() else "unknown"
@@ -955,7 +959,11 @@ class EmbedXPLInterpreter(BaseInterpreter):
         error_msg = None
 
         try:
+            if hasattr(self.current_module, "_enforce_hardware_gate"):
+                self.current_module._enforce_hardware_gate()
             result = self.current_module.check()
+        except SystemExit:
+            return
         except Exception as error:
             print_error(error)
             error_msg = str(error)

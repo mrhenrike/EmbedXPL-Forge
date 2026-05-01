@@ -197,19 +197,78 @@ Both repositories cloned as `submodules/IoT/routerpwn.com` and `submodules/IoT/r
 
 ## [1.0.0] — 2026-04-17
 
-### Changed (Breaking — Rebranding)
-- **Project renamed**: RouterXPL-Forge → **EmbedXPL-Forge**
-- **PyPI package**: `routerxpl` → **`embedxpl`** (`pip install embedxpl`)
-- **CLI commands**: `routerxpl` → **`embedxpl`**; `exf` alias preserved
-- **Python package**: `routerxpl/` → `embedxpl/` (all imports updated)
-- **Classes**: `RouterXPLInterpreter` → `EmbedXPLInterpreter`, `RouterXPLException` → `EmbedXPLException`
-- **Log file**: `routerxpl.log` → `embedxpl.log`
-- **GitHub repo**: `mrhenrike/RouterXPL-Forge` → `mrhenrike/EmbedXPL-Forge`
+### Changed (Breaking - Rebranding)
+- **Project renamed**: RouterXPL-Forge -> **EmbedXPL-Forge**
+- **PyPI package**: `routerxpl` -> **`embedxpl`** (`pip install embedxpl`)
+- **CLI commands**: `routerxpl` -> **`embedxpl`**; `exf` alias preserved
+- **Python package**: `routerxpl/` -> `embedxpl/` (all imports updated)
+- **Classes**: `RouterXPLInterpreter` -> `EmbedXPLInterpreter`, `RouterXPLException` -> `EmbedXPLException`
+- **Log file**: `routerxpl.log` -> `embedxpl.log`
+- **GitHub repo**: `mrhenrike/RouterXPL-Forge` -> `mrhenrike/EmbedXPL-Forge`
 
 ### Changed (Scope)
 - **Target scope expanded**: framework now explicitly covers Routers, Switches L2/L3, IP Cameras, GPON ONTs, ISP CPEs, and IoT/Embedded Edge devices
 - Banner updated to reflect expanded scope
 - `pyproject.toml`: added `embedded`, `firmware` keywords; description updated
+
+### Coverage Summary
+
+| Metric | Count |
+|--------|-------|
+| Total modules | 690+ |
+| Exploit modules | 540+ |
+| Scanner modules | 90+ |
+| Credential modules | 88 |
+| Payload modules | 32 |
+| Encoder modules | 13 |
+| Generic modules | 12 |
+| CVEs covered | 343+ |
+| Vendors | 53+ |
+
+### Protocols Supported
+
+| Protocol | Usage |
+|----------|-------|
+| HTTP/HTTPS | Web interface exploitation, API abuse, config download |
+| SSH | Brute-force, weak algorithm detection, key extraction |
+| Telnet | Default credential testing, command injection |
+| SNMP v1/v2c/v3 | Community brute-force, MIB walk, config extraction |
+| FTP/SFTP | Credential testing, firmware download |
+| RTSP | Camera stream access, authentication bypass |
+| ONVIF/SOAP | Device discovery, auth bypass, service enumeration |
+| Modbus TCP | ICS/SCADA register read/write, coil manipulation |
+| S7comm | Siemens PLC communication, CPU control |
+| BACnet | BMS device discovery, property read/write |
+| DNP3 | Outstation enumeration, unsolicited response injection |
+| EtherNet/IP | CIP service enumeration, identity query |
+| MQTT | Broker auth bypass, topic enumeration, message inject |
+| CoAP | Resource discovery, observe attack |
+| CAN bus | Frame injection, UDS diagnostics, ECU fuzzing |
+| BLE | GATT enumeration, pairing hijack, advertisement spoof |
+| Zigbee/Thread | Network key sniffing, 802.15.4 frame injection |
+| UPnP/SSDP | IGD port mapping abuse, service discovery |
+
+### Install by Category
+
+```bash
+# Core (network-only modules, no special hardware needed)
+pip install embedxpl
+
+# Category-specific extras
+pip install embedxpl[routers]          # Routers, CPEs, APs, SOHO edge
+pip install embedxpl[firewalls]        # Firewalls and NGFW appliances
+pip install embedxpl[printers]         # Network printers
+pip install embedxpl[iot]              # Cameras, smart TVs, VoIP, NAS, UPS
+pip install embedxpl[ot]               # ICS/SCADA, BMS, smart meters
+pip install embedxpl[iiot]             # Industrial IoT, BMC/IPMI
+pip install embedxpl[smart-home]       # Smart assistants, appliances, HVAC
+pip install embedxpl[wearables]        # Fitness bands, smartwatches
+pip install embedxpl[vehicles]         # Automotive CAN bus
+pip install embedxpl[medical]          # Medical embedded devices
+pip install embedxpl[access-control]   # RFID, gates, elevators
+pip install embedxpl[network-perimeter] # Full perimeter stack
+pip install embedxpl[all]              # Everything
+```
 
 ### Infrastructure
 - CI/CD guard conditions updated to `mrhenrike/EmbedXPL-Forge`
@@ -217,6 +276,9 @@ Both repositories cloned as `submodules/IoT/routerpwn.com` and `submodules/IoT/r
 - All 6 architecture PNG diagrams regenerated with EmbedXPL-Forge branding (v1.0.0)
 - All 5 Mermaid source files updated
 - All 26 wiki pages updated (en-US + pt-BR)
+- GitHub Actions release workflow (`release.yml`) with quality gates (pytest, docgen, theoretical audit)
+- Category registry (`embedxpl/registry/categories.py`) with 17 install categories
+- Hardware install notice CLI (`embedxpl/tools/hw_install_notice.py`)
 
 ---
 
