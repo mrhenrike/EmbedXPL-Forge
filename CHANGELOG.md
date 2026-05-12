@@ -6,7 +6,7 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 ---
 
-## [Unreleased] — 2026-05-12
+## [3.1.0] — 2026-05-12
 
 ### Added — CVE 2026/2025/2024 Integration + PrinterXPL Port + Domain Enable
 
@@ -95,6 +95,38 @@ New `tools/phase_gate.py` with 7 gates (A1A2, B, C, A3, D, E, final).
 Each gate verifies: imports, class Exploit, `__info__` completeness, references URLs,
 `check()` and `run()` with real bodies, anti-false-positive on closed port,
 no prohibited strings, flake8/bandit clean, module indexing.
+
+---
+
+## [3.0.0] — 2026-05-01
+
+### Added - Embedded OS/OT/IoT/AT Arsenal Expansion (170+ new modules)
+
+#### Exploit modules (130 new)
+
+- **Embedded OS:** OpenWrt (6), Linux kernel LPE (5), Zephyr RTOS (4), RIOT OS (4), Contiki-NG (2), FreeRTOS (2), QNX Neutrino (3), VxWorks URGENT/11 (3)
+- **OT/IIoT:** CODESYS (3), Siemens WinCC (3)
+- **IoT protocols:** MQTT (4), CoAP (3), UPnP/SSDP (3), Zigbee (3), BLE (3), Wi-Fi (4), DDS/RTPS (2), LoRaWAN (2), TFTP (2), Z-Wave (2), mDNS (2)
+- **OT protocols:** Modbus (3), OPC-UA (4), BACnet (3), EtherNet/IP (2), DNP3 (3), S7comm (2), PROFINET (3), IEC 60870-5-104 (2), IEC 61850 GOOSE/MMS (2), HART-IP (1), CAN/OBD-II (3), OPC DA (1)
+- **Smart Home:** Amazon Echo (2), Google Home/Nest (2), Samsung SmartThings (1)
+- **Wearables:** Xiaomi Mi Band (1), Garmin Connect IQ (1), Samsung Tizen Gear (1), Fitbit (1)
+- **Specialized:** thermostats (3), medical devices (5), elevators (1), HVAC (4), access control (3), vehicles (3), electronic gates (2)
+- **Lateral movement:** MQTT pivot, UART shell, ARP spoof, Zigbee passive, QNX CAN (5)
+
+#### Scanner modules (24 new)
+
+- Embedded OS fingerprint, mDNS discovery, MQTT broker scan
+- OT/IIoT: Modbus, BACnet, DNP3, PROFINET, OPC-UA, ICS multi-protocol fingerprint
+- Protocol scanners: MQTT, CoAP, UPnP, BLE, Zigbee, Wi-Fi, Z-Wave, LoRaWAN, DDS/RTPS, S7comm, EtherNet/IP, HART-IP, CAN bus
+- Smart Home assistant scan, Wearable BLE scan
+
+#### Core framework (19 new files)
+
+- `ExploitOrchestrator`: CrossCompiler, ExploitRunner, TunnelManager, CompiledArtifact
+- 8 shell engines: RawTCP, RawUDP, ICMP covert, DNS tunnel, MQTT C2, HTTP poll, Meterpreter bridge, InternalShell (ChaCha20-Poly1305 + X25519 ECDH)
+- Hardware gate: `HWReq` class, `check_hardware_requirements()`, audit tool
+- Registry: category-to-module mapping for selective PyPI installation
+- PyPI optional-dependencies with 17 install categories
 
 ---
 
