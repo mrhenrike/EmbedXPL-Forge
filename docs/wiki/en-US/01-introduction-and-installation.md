@@ -4,18 +4,24 @@
 
 ## What EmbedXPL-Forge is
 
-**EmbedXPL-Forge** is a modular **Python** framework for **authorized** security testing of routers, GPON ONTs, CPE devices, and SOHO edge equipment. It bundles credential checks, vulnerability-oriented modules, scanners, payloads, and supporting utilities.
+**EmbedXPL-Forge** is a modular **Python** framework for **authorized** security testing of routers, GPON ONTs, CPE devices, printers, IoT, OT/ICS, smart home, maritime IoT, and SOHO edge equipment. It bundles credential checks, vulnerability-oriented modules, scanners, payloads, exploit chains, and supporting utilities.
 
-- **647** modules organized by role and vendor (500 exploits, 88 creds, 9 generic, 5 scanners, 32 payloads, 13 encoders).
-- **49** vendor families covered, **338 CVEs** mapped.
-- **Network discovery** with T0–T5 timing profiles, OUI lookup, and session management.
-- **Chained autopwn modules** — multi-phase exploitation chains for validated vendors (e.g. Huawei GPON ONT series).
+- **2800+** active modules organized by role and vendor (625+ exploits, 185+ printer exploits, 88 creds, 14 generic, 5+ scanners, 32 payloads, 13 encoders).
+- **114+** vendor families covered, **700+ CVEs** mapped (2001-2026).
+- **Network discovery** with T0–T5 timing profiles, OUI lookup (IEEE 39k+ entries), and session management.
+- **Chained autopwn modules** — multi-phase exploitation chains (Huawei EG8145X6, CUPS Pwn2Own 2026, Lexmark Pwn2Own 2026, etc.).
+- **7 automated quality gates** — `tools/phase_gate.py` validates all modules before release.
 
 ## Supported Device Classes
 
 | Class | Coverage |
 |-------|----------|
-| **Routers / GPON ONT / CPE** | Primary focus — 580+ modules, 49 vendors |
+| **Routers / GPON ONT / CPE** | Primary focus — 580+ modules, 85+ vendor folders |
+| **Printers / MFP** | 185+ modules — HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung, CUPS |
+| **Firewalls / VPN / Perimeter** | 80+ modules — Fortinet, Palo Alto, Cisco, SonicWall, CheckPoint, Sophos, WatchGuard |
+| **ICS / OT / Industrial** | 35+ modules — PLCs, SCADA, Modbus, S7comm, EtherNet/IP, Universal Robots |
+| **Smart Home / Maritime** | 10+ modules — eNet SMART HOME, OpenRemote, Metis maritime IoT |
+| **Embedded OS** | 25+ modules — RIOT OS, OpenWrt, VxWorks, QNX, wolfSSL, Tuya |
 | **Managed Switches L2/L3** | Limited — 3 exploit modules (Cisco, D-Link, NETGEAR) |
 | **SOHO Edge** (NAS, APs, travel routers) | 9 exploit modules |
 

@@ -4,18 +4,24 @@
 
 ## O que é o EmbedXPL-Forge
 
-O **EmbedXPL-Forge** é um framework modular em **Python** para testes de segurança **autorizados** em roteadores, ONTs GPON, CPEs e dispositivos de borda SOHO. Reúne verificação de credenciais, módulos orientados a vulnerabilidades, scanners, payloads e utilitários de apoio.
+O **EmbedXPL-Forge** é um framework modular em **Python** para testes de segurança **autorizados** em roteadores, ONTs GPON, CPEs, impressoras, IoT, OT/ICS, smart home, IoT maritimo e dispositivos de borda SOHO. Reúne verificação de credenciais, módulos orientados a vulnerabilidades, scanners, payloads, cadeias de exploit e utilitários de apoio.
 
-- **647** módulos organizados por função e vendor (500 exploits, 88 creds, 9 genéricos, 5 scanners, 32 payloads, 13 encoders).
-- **49** famílias de vendor cobertas, **338 CVEs** mapeados.
-- **Discovery de rede** com perfis de timing T0–T5, lookup OUI e gerenciamento de sessões.
-- **Módulos autopwn encadeados** — cadeias de exploração multi-fase para vendors validados (ex: série GPON ONT Huawei).
+- **2800+** módulos ativos organizados por função e vendor (625+ exploits, 185+ exploits de impressoras, 88 creds, 14 genéricos, 5+ scanners, 32 payloads, 13 encoders).
+- **114+** famílias de vendor cobertas, **700+ CVEs** mapeados (2001-2026).
+- **Discovery de rede** com perfis de timing T0–T5, lookup OUI (IEEE 39k+ entradas) e gerenciamento de sessões.
+- **Módulos autopwn encadeados** — cadeias de exploração multi-fase (Huawei EG8145X6, CUPS Pwn2Own 2026, Lexmark Pwn2Own 2026, etc.).
+- **7 gates de qualidade automatizados** — `tools/phase_gate.py` valida todos os módulos antes do release.
 
 ## Classes de dispositivo suportadas
 
 | Classe | Cobertura |
 |--------|-----------|
-| **Roteadores / GPON ONT / CPE** | Foco principal — 580+ módulos, 49 vendors |
+| **Roteadores / GPON ONT / CPE** | Foco principal — 580+ módulos, 85+ pastas de vendor |
+| **Impressoras / MFP** | 185+ módulos — HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung |
+| **Firewalls / VPN / Perímetro** | 80+ módulos — Fortinet, Palo Alto, Cisco, SonicWall, CheckPoint, Sophos, WatchGuard |
+| **ICS / OT / Industrial** | 35+ módulos — PLCs, SCADA, Modbus, S7comm, EtherNet/IP, Universal Robots |
+| **Smart Home / Marítimo** | 10+ módulos — eNet SMART HOME, OpenRemote, Metis maritime IoT |
+| **SO Embarcado** | 25+ módulos — RIOT OS, OpenWrt, VxWorks, QNX, wolfSSL, Tuya |
 | **Switches gerenciados L2/L3** | Limitada — 3 módulos de exploit (Cisco, D-Link, NETGEAR) |
 | **SOHO Edge** (NAS, APs, travel routers) | 9 módulos de exploit |
 

@@ -8,7 +8,7 @@
 
 - **In scope:** flaws in **EmbedXPL-Forge itself** (Python code, declared dependencies, `tools/` scripts) affecting the **operator** (RCE on the analyst machine, unsafe input handling, etc.).
 - **Out of scope:** “0-day” on third-party **devices** found while using the framework; report through vendor or their bug bounty.
-- **Functional scope:** routers, switches, TAPs, firewalls, NGFW. Camera/printer/DVR-primary modules are outside the project scope.
+- **Functional scope:** routers, switches, TAPs, firewalls, NGFW, printers/MFP (fully in scope since v3.1.0), cameras, embedded OS, ICS/OT, smart home, maritime IoT. All module categories are now in scope.
 
 ## Reporting a vulnerability
 

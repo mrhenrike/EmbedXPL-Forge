@@ -15,6 +15,7 @@
 
 | Script | Role |
 |--------|------|
+| `phase_gate.py` | **Automated quality gate system** — validates modules before release (new in v3.1.0) |
 | `env_doctor.py` | Environment diagnostics |
 | `compat_smoke.py` | Compatibility smoke checks |
 | `gen_wiki_module_index.py` | Regenerate wiki annex |
@@ -24,8 +25,28 @@
 | `validate_market_priority_minimums.py` | Validate market-priority minimums |
 | `build_arsenal_index.py` | Build arsenal index |
 | `sync_scope_wordlists.py` | Sync scope-related wordlists |
+| `audit_modules.py` | Audit module metadata completeness |
+| `run_scoped_tests.py` | Run scoped test suite |
 
 Run scripts from the repository root unless a tool documents otherwise.
+
+## Quality Gate Usage (phase_gate.py)
+
+```bash
+# Run all 7 gates in sequence
+python tools/phase_gate.py --all
+
+# Run a specific gate
+python tools/phase_gate.py --phase A1A2
+python tools/phase_gate.py --phase B
+python tools/phase_gate.py --phase C
+python tools/phase_gate.py --phase A3
+python tools/phase_gate.py --phase D
+python tools/phase_gate.py --phase E
+python tools/phase_gate.py --phase final
+```
+
+Each gate validates: module importability, `__info__` completeness (name, description, authors, references with URL, devices, cvss), `check()` and `run()` with non-stub bodies, anti-false-positive on closed port 63994, no prohibited strings (em-dash, TODO, PLACEHOLDER, hardcoded IPs), flake8/bandit clean, full indexing by `index_modules()`.
 
 ---
 

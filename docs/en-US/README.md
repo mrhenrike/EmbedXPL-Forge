@@ -1,10 +1,18 @@
 # EmbedXPL-Forge Documentation Hub (en-US)
 
-Default documentation language for the repository is `en-US`.
+**Version:** 3.1.0 | Default documentation language: `en-US`
 
-Portuguese version is available at `../pt-BR/README.md`.
+Portuguese version available at `../pt-BR/README.md`.
 
 Author: André Henrique (@mrhenrike) | União Geek - https://github.com/Uniao-Geek
+
+## What is new in v3.1.0
+
+- **54 new modules** across printers, embedded OS, ICS/OT, smart home, maritime IoT, and 2026 Pwn2Own chains
+- **Printer domain enabled** (185+ printer modules now active)
+- **7 automated quality gates** via `tools/phase_gate.py`
+- New CVEs: wolfSSL CVE-2026-5194 (CVSS 9.3), PAN-OS CVE-2026-0300 (CVSS 9.8), CUPS CVE-2026-34477/78/79/80 (CVSS 9.9), UR PolyScope5 CVE-2026-8153 (CVSS 9.8), Cisco IOS XE CVE-2025-20188 (CVSS 10.0), and 30+ more
+- New vendors: EnGenius, Universal Robots, Metis Maritime, eNet SMART HOME, OpenRemote
 
 ## Scope
 

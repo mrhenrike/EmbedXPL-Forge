@@ -2,28 +2,32 @@
 
 **Framework de Avaliação de Segurança em Dispositivos Embarcados e de Perímetro**
 
-EmbedXPL-Forge é um framework de exploração open-source para profissionais de segurança auditarem roteadores, switches, câmeras IP, NVR/DVR, GPON ONTs, CPEs de ISP e dispositivos IoT/embarcados. Oferece **3200+ módulos** cobrindo testes de credenciais, exploração de vulnerabilidades, varredura de rede, geração de payloads, ataques a câmeras RTSP, manipulação de firmware e orquestração PolyExploit multilinguagem — com **680+ CVEs** mapeados em **114+ fabricantes** e um **APT Group Attack Engine** que reproduz cadeias de ataque reais de grupos nação-estado.
+EmbedXPL-Forge é um framework open-source de exploração e scanning para profissionais de segurança auditarem roteadores, switches, câmeras IP, NVR/DVR, GPON ONTs, CPEs de ISP, impressoras, dispositivos IoT, OT/ICS e dispositivos embarcados. Oferece **2800+ módulos ativos** cobrindo testes de credenciais, exploração de vulnerabilidades, varredura de rede, geração de payloads, ataques a câmeras RTSP, manipulação de firmware, arsenal completo de impressoras e orquestração PolyExploit multilinguagem — com **700+ CVEs** mapeados em **114+ fabricantes** e um **APT Group Attack Engine** que reproduz cadeias de ataque reais de grupos nação-estado.
 
 > **Autor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
-> **Versão:** 2.13.0
+> **Versão:** 3.1.0
 
 ---
 
 ## Funcionalidades
 
-- **570+ módulos de exploit** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt, gerador WPA/WPS, gerador de senha de fábrica
+- **625+ módulos de exploit** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt, gerador WPA/WPS, gerador de senha de fábrica, chains de heap/stack BOF
 - **88 módulos de credenciais** — ataques de dicionário contra FTP, SSH, Telnet, HTTP, SNMP, SFTP
+- **185+ módulos para impressoras** — HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; PJL/IPP/LPD/WSD/CUPS; chains Pwn2Own 2026; PrintingShellz; MS-RPRN NTLM coercion
 - **Motor RTSP completo** — portado do [cameradar](https://github.com/ullaakut/cameradar): brute-force de rotas (195+ rotas), brute-force de credenciais (80+ pares), auth Basic/Digest, RTSPS/TLS, **tunelamento RTSP-over-HTTP (Python puro, RFC 2326 App-C)**, scanner nmap/masscan/direto, ONVIF WS-Discovery
 - **7 scripts NSE Nmap personalizados** — descoberta RTSP, fingerprint de câmera, validação CVE Hikvision/Dahua, teste de credenciais padrão, verificação multi-vendor CVE, captura de snapshot (`pip install embedxpl[nse]`)
 - **Suite de exploração de firmware** — detecção de formato, injeção de backdoor, patch de checksum, bypass de flash por fabricante (NETGEAR, TP-Link, D-Link, ASUS)
 - **Orquestrador PolyExploit** — compilação C/C++ em tempo de execução (gcc/clang/mingw/cross), execução de exploits Ruby/Node.js/PHP/Bash/Perl, integração msfconsole, integração ExploitDB/searchsploit
-- **5 módulos de scanner** — AutoPwn, scanners específicos por dispositivo
+- **Módulos ICS/OT** — Universal Robots PolyScope 5, RIOT OS, Modbus, S7comm, EtherNet/IP, BACnet, DNP3
+- **Smart home / marítimo / especializado** — eNet SMART HOME, OpenRemote, Metis maritime IoT (WIC/DFS)
+- **5+ módulos de scanner** — AutoPwn, scanners específicos por dispositivo, descoberta WSD/mDNS de impressoras
 - **32 módulos de payload** — reverse/bind TCP shells para x86, x64, ARM, MIPS, Python, Perl, PHP
 - **13 módulos de encoder** — Base64 e hex encoding para Python, PHP, Perl
 - **14 módulos genéricos** — Heartbleed, ShellShock, UPnP IGD, SNMP bruteforce, TCP Xmas, amplificação UDP, consulta CVE, detector DNS hijack, interceptor AITM
-- **680+ CVEs mapeados** — de 2001 a 2026, cobrindo todas as classes de vulnerabilidade
+- **700+ CVEs mapeados** — de 2001 a 2026, incluindo chains Pwn2Own 2026 e CVEs críticos de IoT/OT/marítimo
 - **APT Group Attack Engine** — reproduz cadeias de ataque do APT28, Volt Typhoon, Sandworm, Quad7, Turla, APT40 com mapeamento MITRE ATT&CK
-- **23 wordlists por fabricante** — credenciais padrão externalizadas por vendor (incluindo ISPs brasileiros específicos)
+- **23+ wordlists por fabricante** — credenciais padrão externalizadas por vendor (incluindo ISPs brasileiros específicos)
+- **7 gates de qualidade automatizados** — `tools/phase_gate.py` garante que cada módulo passa verificações de importação, anti-falso-positivo, referências e qualidade de código
 
 ## Tipos de Dispositivos Suportados
 
@@ -31,10 +35,14 @@ EmbedXPL-Forge é um framework de exploração open-source para profissionais de
 |------|-----------|-----------|
 | **Roteadores / GPON ONT / CPE** | 580+ módulos | Roteadores SOHO, gateways enterprise, CPE/ONT GPON |
 | **Câmeras IP / NVR / DVR** | 60+ módulos | Hikvision, Dahua, Axis, Reolink, Amcrest, Uniview, Tapo, Swann, ANNKE, Edimax, Intelbras e mais |
+| **Impressoras / MFP** | 185+ módulos | HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; IPP/PJL/LPD/WSD/CUPS |
 | **NAS (Armazenamento em Rede)** | 20+ módulos | QNAP, Synology, D-Link NAS, Zyxel |
-| **VPN / Firewall Appliances** | 20+ módulos | Ivanti, Fortinet, SonicWall, Zyxel |
+| **VPN / Firewall / Segurança** | 80+ módulos | Ivanti, Fortinet, SonicWall, Palo Alto, Cisco ASA, CheckPoint, Sophos, WatchGuard, Zyxel |
 | **Switches L2/L3** | 3 módulos | Switches gerenciados (Cisco, D-Link, NETGEAR) |
 | **SOHO Edge** | 9 módulos | Roteadores de viagem, NAS, APs wireless |
+| **ICS / OT / Industrial** | 35+ módulos | PLCs, SCADA, Modbus, S7comm, EtherNet/IP, Universal Robots PolyScope 5 |
+| **Smart Home / Marítimo** | 10+ módulos | eNet SMART HOME, OpenRemote IoT, Metis maritime WIC/DFS |
+| **SO Embarcado** | 25+ módulos | RIOT OS, OpenWrt, VxWorks, QNX, wolfSSL, Tuya Arduino SDK |
 
 ## Fabricantes Suportados
 
