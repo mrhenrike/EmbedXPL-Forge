@@ -18,10 +18,5 @@ EmbedXPL-Forge (bind_tcp) > run
 
 **13** módulos encoder oferecem transformações **Python**, **PHP** e **Perl** (incluindo variantes **base64** e **hex**) para ofuscar ou transportar bytes de payload.
 
----
 
 [Hub wiki](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

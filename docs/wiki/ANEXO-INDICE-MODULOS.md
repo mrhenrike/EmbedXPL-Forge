@@ -2,9 +2,7 @@
 
 > **Total modules:** 693+ | **Version:** 2.13.0
 >
-> Author: André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 
----
 
 ## v2.13.0 New Modules (routerpwn.com gap analysis)
 
@@ -38,7 +36,6 @@
 | `exploits/routers/utstarcom/utstar_ppp_password_disclosure.py` | UTStarcom — Unauthenticated PPP Password Disclosure |
 | `exploits/routers/zoom/zoom_x4_x5_add_admin.py` | Zoom X4/X5 ADSL — Unauthenticated Admin Account Creation (EDB-26736) |
 
----
 
 ## exploits (543+ modules)
 

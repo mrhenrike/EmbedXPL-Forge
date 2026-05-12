@@ -1,6 +1,5 @@
 # EmbedXPL-Forge — Wiki (bilingual)
 
-**Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 
 ## Languages / Idiomas
 
@@ -42,7 +41,3 @@ PNG gallery. Mermaid sources: [../diagrams/architecture/README.md](../diagrams/a
 
 - [README.md](../../README.md) (en-US) · [README.pt-BR.md](../../README.pt-BR.md)
 - [docs/README.md](../README.md) — docs folder hub
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

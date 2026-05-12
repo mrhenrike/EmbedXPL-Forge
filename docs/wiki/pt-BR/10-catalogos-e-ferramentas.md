@@ -48,10 +48,5 @@ python tools/phase_gate.py --phase final  # gate final + working tree
 
 Cada gate verifica: importabilidade, `__info__` completo (name, description, authors, references com URL, devices, cvss), `check()` e `run()` com corpo real, anti-falso-positivo em porta 63994 fechada, sem strings proibidas, flake8/bandit limpos, indexacao completa.
 
----
 
 [Hub wiki](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

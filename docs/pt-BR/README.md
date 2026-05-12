@@ -4,8 +4,6 @@
 
 Versao em ingles disponivel em `../en-US/README.md`.
 
-Autor: André Henrique (@mrhenrike) | União Geek - https://github.com/Uniao-Geek
-
 ## Arquitetura do Framework (v3.1.0)
 
 ### Arquitetura de Componentes
@@ -20,7 +18,6 @@ Autor: André Henrique (@mrhenrike) | União Geek - https://github.com/Uniao-Gee
   <img src="../assets/embedxpl_flow.png" width="920" alt="EmbedXPL-Forge Fluxo de Exploracao v3.1.0"/>
 </p>
 
----
 
 ## Novidades na v3.1.0
 

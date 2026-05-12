@@ -17,10 +17,5 @@ python exf.py -m exploits/routers/dlink/dir_300_600_rce -s target 192.168.0.1 -s
 
 Repeat `-s` for each option. This mode suits **automation**, CI-style smoke checks, and scripted assessments on systems you are allowed to test.
 
----
 
 [Wiki hub](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

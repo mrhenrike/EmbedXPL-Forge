@@ -2,7 +2,6 @@
 
 **Idioma:** pt-BR. **English (en-US):** [README.md](README.md)
 
-**Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
 
 O estilo replica o hub-and-spoke do **MikrotikAPI-BF** (`mikrotik_full_attack_surface.png`, `mikrotik_access_vectors.png`): núcleo do dispositivo, vetores de acesso em volta, legenda de cobertura.
 
@@ -37,7 +36,3 @@ Caminhos em `docs/img/architecture/`. Galeria:
 **Diagrama GPON ONT:** ver [07-gpon-ont-attack.mmd](07-gpon-ont-attack.mmd) — validado contra Huawei EG8145X6-10 (OptiXstar, Loga Internet) e EG8145V5-V2 (EchoLife, Sumicity/Giga+). Mapeia todos os 11 módulos específicos com seus vetores de ataque.
 
 Ver também [README.md](README.md) (en-US).
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

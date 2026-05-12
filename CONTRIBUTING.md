@@ -1,7 +1,5 @@
 # Contributing to EmbedXPL-Forge
 
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
-
 Thank you for your interest in contributing to EmbedXPL-Forge!
 
 ## Important: Legal Notice
@@ -148,6 +146,5 @@ python -m flake8 tools exf.py --count --select=E9,F63,F7,F82
 
 By contributing, you agree that your contribution will be licensed under the [BSD License](LICENSE).
 
----
 
 *[← Back to README](README.md)*

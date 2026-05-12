@@ -2,7 +2,6 @@
 
 **Idioma: Português (pt-BR)**. **English (en-US):** [../en-US/README.md](../en-US/README.md)
 
-**Mantenedor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| União Geek
 
 Documentação de uso do framework. Leia no GitHub ou copie para o repositório **GitHub Wiki** (clone Git separado).
 
@@ -122,7 +121,3 @@ Saida esperada:
 - [README.md](../../../README.md)
 - [CONTRIBUTING.md](../../../CONTRIBUTING.md)
 - [docs/COVERAGE_MATRIX.md](../../COVERAGE_MATRIX.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

@@ -1,6 +1,5 @@
 # Code of Conduct — EmbedXPL-Forge
 
-**Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
 
 **Language:** **English (en-US)** — default. **Português (pt-BR):** [CODE_OF_CONDUCT.pt-BR.md](CODE_OF_CONDUCT.pt-BR.md)
 
@@ -52,7 +51,3 @@ Depending on severity: private warning, content removal, thread closure, or loss
 ## Attribution
 
 Inspired by common open-source Code of Conduct practice; adapted to EmbedXPL-Forge scope and governance.
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

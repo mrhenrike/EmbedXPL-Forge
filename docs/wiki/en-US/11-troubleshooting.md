@@ -26,10 +26,5 @@ Run from the repository root and ensure `PYTHONPATH` is not overriding package d
 
 Raw sockets and some capture paths require elevated capability or `sudo` where the OS mandates it—use the least privilege consistent with your engagement rules.
 
----
 
 [Wiki hub](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

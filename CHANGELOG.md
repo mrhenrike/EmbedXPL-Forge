@@ -4,7 +4,6 @@ All notable changes to EmbedXPL-Forge are documented here.
 
 Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
----
 
 ## [3.1.0] — 2026-05-12
 
@@ -96,7 +95,6 @@ Each gate verifies: imports, class Exploit, `__info__` completeness, references 
 `check()` and `run()` with real bodies, anti-false-positive on closed port,
 no prohibited strings, flake8/bandit clean, module indexing.
 
----
 
 ## [3.0.0] — 2026-05-01
 
@@ -128,7 +126,6 @@ no prohibited strings, flake8/bandit clean, module indexing.
 - Registry: category-to-module mapping for selective PyPI installation
 - PyPI optional-dependencies with 17 install categories
 
----
 
 ## [2.15.0] — 2026-04-25
 
@@ -184,7 +181,6 @@ New vendors: `linux/` (CUPS), `hp/`, `lexmark/`, `kyocera/`, `brother/`, `ricoh/
 |--------|-------------|
 | modbus_ot_attack_scenarios | 6 OT attack scenarios (oil plant disruption, plant shutdown, fill line flood) via unauthenticated Modbus TCP register writes — ported from Daryus IoT Security Research lab |
 
----
 
 ## [2.14.0] — 2026-04-24
 
@@ -212,7 +208,6 @@ New vendors: `linux/` (CUPS), `hp/`, `lexmark/`, `kyocera/`, `brother/`, `ricoh/
 ### Fixed
 - CVE-2025-30401 was an invalid/non-existent CVE ID in the pending list; replaced with CVE-2025-29044 (Netgear R6100, same device scope, CVSS 9.8, public PoC)
 
----
 
 ## [2.13.0] — 2026-04-22
 
@@ -263,7 +258,6 @@ Both repositories cloned as `submodules/IoT/routerpwn.com` and `submodules/IoT/r
 
 **Validation:** All 27 modules pass `py_compile` validation (0 syntax errors).
 
----
 
 ## [2.8.0] — 2026-04-21
 
@@ -289,7 +283,6 @@ Both repositories cloned as `submodules/IoT/routerpwn.com` and `submodules/IoT/r
 - 32 PEM key extractions confirmed across 8/14 firmwares
 - 13/14 firmwares lack signature verification in Install script
 
----
 
 ## [2.7.0] — 2026-04-18
 
@@ -317,7 +310,6 @@ Both repositories cloned as `submodules/IoT/routerpwn.com` and `submodules/IoT/r
 - 8 vulnerability findings documented with CVSSv3.1 scores and CWE classifications
 - Forensic cross-analysis confirmed Dahua OEM heritage across all product lines
 
----
 
 ## [1.0.0] — 2026-04-17
 
@@ -404,7 +396,6 @@ pip install embedxpl[all]              # Everything
 - Category registry (`embedxpl/registry/categories.py`) with 17 install categories
 - Hardware install notice CLI (`embedxpl/tools/hw_install_notice.py`)
 
----
 
 ## [0.7.0] — 2026-04-08
 
@@ -485,7 +476,6 @@ pip install embedxpl[all]              # Everything
 | **Total** | **657** | **666** |
 | Vendors | 49 | **51** |
 
----
 
 ## [0.6.1] — 2026-04-08
 
@@ -523,7 +513,6 @@ pip install embedxpl[all]              # Everything
 | Creds | 88 | 88 |
 | **Total** | **647** | **657** |
 
----
 
 ## [0.6.0] — 2026-04-08
 
@@ -566,7 +555,6 @@ pip install embedxpl[all]              # Everything
 | **Total** | **575** | **647** |
 | CVEs | 330 | **338** |
 
----
 
 ## [0.5.0] — 2026-04-04
 
@@ -585,7 +573,6 @@ pip install embedxpl[all]              # Everything
 - 60 new exploit modules imported from third-party-router-poc
 - Module audit and enrichment across all 575 modules
 
----
 
 ## [0.4.0-beta] — 2026-04-03
 
@@ -594,7 +581,3 @@ pip install embedxpl[all]              # Everything
 - Architecture diagrams (Mermaid + PNG)
 - Coverage matrix
 - Bilingual documentation (en-US + pt-BR)
-
----
-
-*Author: André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)*

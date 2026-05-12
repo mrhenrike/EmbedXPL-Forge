@@ -48,10 +48,5 @@ python tools/phase_gate.py --phase final
 
 Each gate validates: module importability, `__info__` completeness (name, description, authors, references with URL, devices, cvss), `check()` and `run()` with non-stub bodies, anti-false-positive on closed port 63994, no prohibited strings (em-dash, TODO, PLACEHOLDER, hardcoded IPs), flake8/bandit clean, full indexing by `index_modules()`.
 
----
 
 [Wiki hub](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
