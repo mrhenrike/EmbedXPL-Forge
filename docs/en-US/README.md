@@ -6,6 +6,22 @@ Portuguese version available at `../pt-BR/README.md`.
 
 Author: André Henrique (@mrhenrike) | União Geek - https://github.com/Uniao-Geek
 
+## Framework Architecture (v3.1.0)
+
+### Component Architecture
+
+<p align="center">
+  <img src="../assets/embedxpl_architecture.png" width="920" alt="EmbedXPL-Forge Component Architecture v3.1.0"/>
+</p>
+
+### Audit and Exploitation Flow
+
+<p align="center">
+  <img src="../assets/embedxpl_flow.png" width="920" alt="EmbedXPL-Forge Exploitation Flow v3.1.0"/>
+</p>
+
+---
+
 ## What is new in v3.1.0
 
 - **54 new modules** across printers, embedded OS, ICS/OT, smart home, maritime IoT, and 2026 Pwn2Own chains

@@ -217,6 +217,26 @@ Análise de gap contra [routerpwn.com](https://github.com/hkm/routerpwn.com) e [
 | UTStarcom | Disclosure de credenciais PPPoE via `ppppassword.html` |
 | Zoom | X4/X5 criação de admin via `PopOutUserAdd.htm` (EDB-26736) |
 
+## Arquitetura do Framework (v3.1.0)
+
+### Arquitetura de Componentes
+
+Visao em camadas do framework: camada CLI, Core Engine (orquestrador, clientes de protocolo, shell engines), Camada de Inteligencia (ML, OUI, banco CVE), Quality Gates e o arsenal de 2800+ modulos organizados por categoria.
+
+<p align="center">
+  <img src="docs/assets/embedxpl_architecture.png" width="960" alt="EmbedXPL-Forge Arquitetura de Componentes v3.1.0"/>
+</p>
+
+### Fluxo de Auditoria e Exploracao
+
+Fluxo de ponta a ponta: entrada do alvo, descoberta, identificacao, selecao de modulo, exploracao e relatorio.
+
+<p align="center">
+  <img src="docs/assets/embedxpl_flow.png" width="960" alt="EmbedXPL-Forge Fluxo de Exploracao v3.1.0"/>
+</p>
+
+---
+
 ## Requisitos
 
 - Python 3.8+

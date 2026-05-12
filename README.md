@@ -908,6 +908,26 @@ nse/                        # Nmap NSE Lua scripts (pip install embedxpl[nse])
 └── embedxpl-camera-snapshot.nse
 ```
 
+## Framework Architecture (v3.1.0)
+
+### Component Architecture
+
+Full layered view of the framework: CLI layer, Core Engine (orchestrator, protocol clients, shell engines), Intelligence Layer (ML, OUI, CVE DB), Quality Gates, and the 2800+ module arsenal organized by category.
+
+<p align="center">
+  <img src="docs/assets/embedxpl_architecture.png" width="960" alt="EmbedXPL-Forge Component Architecture v3.1.0"/>
+</p>
+
+### Audit & Exploitation Flow
+
+End-to-end data flow from target input through discovery, fingerprinting, module selection, exploitation, and reporting.
+
+<p align="center">
+  <img src="docs/assets/embedxpl_flow.png" width="960" alt="EmbedXPL-Forge Exploitation Flow v3.1.0"/>
+</p>
+
+---
+
 ## Architecture & Attack Surface Maps
 
 Attack surface maps showing module coverage per access vector, in the style of operational security diagrams.

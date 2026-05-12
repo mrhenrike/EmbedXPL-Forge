@@ -25,6 +25,24 @@ O **EmbedXPL-Forge** é um framework modular em **Python** para testes de segura
 | **Switches gerenciados L2/L3** | Limitada — 3 módulos de exploit (Cisco, D-Link, NETGEAR) |
 | **SOHO Edge** (NAS, APs, travel routers) | 9 módulos de exploit |
 
+## Arquitetura do Framework
+
+### Arquitetura de Componentes
+
+Visao em camadas: CLI, Core Engine (orquestrador, clientes de protocolo, shell engines), Camada de Inteligencia (ML, OUI lookup, banco CVE), Quality Gates e o arsenal de 2800+ modulos.
+
+<p align="center">
+  <img src="../../assets/embedxpl_architecture.png" width="920" alt="EmbedXPL-Forge Arquitetura de Componentes v3.1.0"/>
+</p>
+
+### Fluxo de Auditoria e Exploracao
+
+Fluxo de ponta a ponta: entrada do alvo, discovery, identificacao de dispositivo, selecao de modulo, exploracao e relatorio.
+
+<p align="center">
+  <img src="../../assets/embedxpl_flow.png" width="920" alt="EmbedXPL-Forge Fluxo de Exploracao v3.1.0"/>
+</p>
+
 ## Requisitos
 
 - **Python 3.8–3.13**

@@ -6,6 +6,22 @@ Versao em ingles disponivel em `../en-US/README.md`.
 
 Autor: André Henrique (@mrhenrike) | União Geek - https://github.com/Uniao-Geek
 
+## Arquitetura do Framework (v3.1.0)
+
+### Arquitetura de Componentes
+
+<p align="center">
+  <img src="../assets/embedxpl_architecture.png" width="920" alt="EmbedXPL-Forge Arquitetura de Componentes v3.1.0"/>
+</p>
+
+### Fluxo de Auditoria e Exploracao
+
+<p align="center">
+  <img src="../assets/embedxpl_flow.png" width="920" alt="EmbedXPL-Forge Fluxo de Exploracao v3.1.0"/>
+</p>
+
+---
+
 ## Novidades na v3.1.0
 
 - **54 novos modulos** em impressoras, SO embarcado, ICS/OT, smart home, IoT maritimo e chains Pwn2Own 2026

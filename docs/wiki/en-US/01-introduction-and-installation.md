@@ -25,6 +25,24 @@
 | **Managed Switches L2/L3** | Limited — 3 exploit modules (Cisco, D-Link, NETGEAR) |
 | **SOHO Edge** (NAS, APs, travel routers) | 9 exploit modules |
 
+## Framework Architecture
+
+### Component Architecture
+
+Full layered view: CLI, Core Engine (orchestrator, protocol clients, shell engines), Intelligence Layer (ML, OUI lookup, CVE DB), Quality Gates, and the 2800+ module arsenal.
+
+<p align="center">
+  <img src="../../assets/embedxpl_architecture.png" width="920" alt="EmbedXPL-Forge Component Architecture v3.1.0"/>
+</p>
+
+### Audit and Exploitation Flow
+
+End-to-end flow from target input through discovery, fingerprinting, module selection, exploitation, and reporting.
+
+<p align="center">
+  <img src="../../assets/embedxpl_flow.png" width="920" alt="EmbedXPL-Forge Exploitation Flow v3.1.0"/>
+</p>
+
 ## Requirements
 
 - **Python 3.8–3.13**

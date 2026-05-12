@@ -6,8 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "2.15.0"
-description = "Embedded & Perimeter Security Assessment Framework — 1011+ modules, 700+ CVEs, 135+ vendors. v2.15.0: Full audit of submodules/dev; ported 83 FirewallXPL-Forge perimeter modules (SonicWall/Sophos/Juniper/Zyxel/WatchGuard/pfSense/Siemens/Moxa/PaloAlto); 27 PrinterXPL-Forge modules (CUPS CVE-2024-47176 CVSS 9.9, HP, Lexmark, Kyocera, Brother); 5 Wireless/BT (BlueBorne, FragAttacks, KRACK, KR00K, SweynTooth); Daryus OT attack scenarios (oil plant, plant shutdown, fill attack)."
+version = "3.1.0"
+description = "Embedded & Perimeter Security Assessment Framework — 2800+ modules, 700+ CVEs, 114+ vendors. v3.1.0: 54 new CVE modules (2024/2025/2026), printer domain enabled (185+ modules), 7 automated quality gates via phase_gate.py, CUPS Pwn2Own 2026 chain, wolfSSL CVE-2026-5194, PAN-OS CVE-2026-0300, Cisco IOS XE CVE-2025-20188 (CVSS 10.0)."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
