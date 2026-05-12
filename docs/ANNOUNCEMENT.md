@@ -1,123 +1,455 @@
-# EmbedXPL-Forge Announcement
+# EmbedXPL-Forge, Public Launch Announcement
 
+> **Languages / Idiomas:** [English (en-US)](#english-en-us) · [Português (pt-BR)](#português-pt-br)
+>
+> **Repo:** https://github.com/mrhenrike/EmbedXPL-Forge · **Install:** `pip install embedxpl`
 
-## BLOCK 1 - WhatsApp / Telegram
-*(plain text + emojis, copy-paste ready)*
+This file is copy-paste ready: pick the language, pick the platform, paste it. No edits required.
 
+---
 
-🛡️ *EmbedXPL-Forge* - The largest embedded & IoT security arsenal on the planet just went public.
+## English (en-US)
 
-🔥 *What is it?*
-A production-grade exploitation and scanning framework for security professionals auditing real-world embedded devices, IoT, OT, IT and AT infrastructure.
+### X / Twitter (280 chars max)
 
-📊 *The numbers speak:*
-- 2800+ modules (exploits, scanners, credential checkers, payloads, encoders)
-- 680+ CVEs mapped (2001-2026) including 2026 Pwn2Own chains
-- 114+ vendors covered
-- 35+ device categories
-- APT Group Attack Engine (APT28, Volt Typhoon, Sandworm, Quad7, Turla...)
+```
+🛡️ EmbedXPL-Forge just went PUBLIC.
 
-🎯 *What can you audit?*
-- IoT: routers, GPON ONTs, IP cameras, NVR/DVR, smart home
-- OT/ICS: PLCs, SCADA gateways, industrial controllers
-- IT/AT: firewalls, VPN appliances, switches, NAS
-- Printers: HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera
-- Embedded OS: RIOT OS, OpenWrt, VxWorks, QNX, Zephyr
-- Special: maritime IoT, medical devices, wearables, smart meters
+The most complete open-source exploitation framework for embedded, IoT, OT/ICS, IT and AT infrastructure on the planet.
 
-⚡ *New in this release:*
-- 54 new modules including 2026 CVE chains (wolfSSL, PAN-OS BOF, CUPS Pwn2Own, UR PolyScope5, Metis maritime...)
-- Full printer domain enabled: 185+ printer exploit modules now active
-- 7-gate automated quality system (zero manual review items)
+Routers, printers, cameras, firewalls, PLCs, smart-home, maritime, medical: one CLI.
 
-🚀 *Install & Run:*
 pip install embedxpl
-embedxpl
 
-Or clone:
-git clone https://github.com/mrhenrike/EmbedXPL-Forge
-cd EmbedXPL-Forge && pip install -r requirements.txt && python exf.py
+github.com/mrhenrike/EmbedXPL-Forge
 
-🐛 *Contribute / Issues:*
-https://github.com/mrhenrike/EmbedXPL-Forge/issues
+#cybersecurity #pentest #iot #redteam #ot
+```
+
+---
+
+### LinkedIn (long-form post)
+
+```
+🛡️ EmbedXPL-Forge is now PUBLIC.
+
+After years of red-team engagements, IoT/OT audits, ISP penetration tests and embedded device research, the framework that powered them is finally open-source.
+
+This is not another script collection. This is the most complete embedded and perimeter security arsenal ever shipped as a single tool, built for security engineers who actually need to break, prove and fix things in production environments.
+
+What it covers, end to end, in one CLI:
+
+🌐 Network perimeter
+SOHO routers, ISP CPEs, GPON ONTs, enterprise gateways, firewalls and NGFW (Fortinet, Palo Alto, Cisco ASA, SonicWall, Checkpoint, Sophos, WatchGuard), VPN appliances, managed switches, TAPs.
+
+🖨️ Print infrastructure
+HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung, CUPS. PJL, IPP, LPD, RAW, WSD. From banner grab to full RCE chains, no external tooling required.
+
+📷 Surveillance
+IP cameras, NVR, DVR, RTSP brute-force, ONVIF discovery, snapshot capture, multi-vendor CVE validation. Pure Python, no Go bridge, no third-party binaries.
+
+🏭 OT, ICS, industrial
+PLCs, SCADA gateways, Modbus, S7comm, EtherNet/IP, BACnet, DNP3, Universal Robots PolyScope, building management systems, smart meters.
+
+🏠 Embedded and specialized
+Smart home, smart appliances, HVAC, wearables, automotive CAN bus, medical embedded devices, access control, RFID, maritime IoT, BMC and IPMI.
+
+🧠 Intelligence on top
+Vendor fingerprinting, OUI lookup against IEEE database, persistent scan sessions per host, T0 to T5 timing profiles, NSE script integration, APT group attack chain reproduction with MITRE ATT&CK mapping.
+
+🛡️ Quality you can audit
+Every module passes 7 automated quality gates before merge. No silent placeholders, no half-finished checks, no AI fingerprints in the code. Every exploit is traceable to a CVE, an advisory or a vendor publication.
+
+🤝 Open to contributions
+Pull requests are welcome. New modules, new vendors, new CVE coverage, hardening of existing checks: if it makes the framework stronger and operates within authorized testing scope, it gets in. Maintainer reviews are direct and unbureaucratic.
+
+⚙️ Install it now
+pip install embedxpl
+
+🔗 Repository
+https://github.com/mrhenrike/EmbedXPL-Forge
+
+⚠️ For authorized security testing only. Always operate with written authorization from the asset owner.
+
+If you build, defend, audit or research embedded systems, take it for a spin and tell me what is missing. The roadmap is driven by the community, not by hype.
+
+#cybersecurity #pentest #redteam #blueteam #iotsecurity #otsecurity #icssecurity #embeddedsecurity #vulnerabilityresearch #infosec #networksecurity #pentesting #securityresearch #soc #ciso #appsec #devsecops #opensource #python
+```
+
+---
+
+### Telegram (rich formatting, no link previews issue)
+
+```
+🛡️ *EmbedXPL-Forge is now PUBLIC*
+
+The most complete open-source exploitation and scanning framework for embedded, IoT, OT, IT and AT infrastructure on the planet, in a single CLI.
+
+🎯 *Coverage in one tool*
+- Routers, GPON ONTs, ISP CPEs, switches, TAPs
+- Firewalls and NGFW: Fortinet, Palo Alto, Cisco, SonicWall, Checkpoint, Sophos, WatchGuard
+- Network printers and MFP: HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung, CUPS
+- IP cameras, NVR, DVR, RTSP, ONVIF
+- OT and ICS: PLCs, SCADA, Modbus, S7comm, EtherNet/IP, BACnet, DNP3, industrial robots
+- Smart home, smart meters, HVAC, wearables, automotive CAN, medical, access control, maritime IoT, BMC/IPMI
+
+🧠 *Built for real engagements*
+- Vendor fingerprinting and OUI lookup
+- Persistent scan sessions per host (resume, restart, evidence trail)
+- T0 to T5 timing profiles
+- Nmap NSE script integration
+- APT group attack chain reproduction with MITRE ATT&CK mapping
+
+🛡️ *Quality you can audit*
+Every module passes 7 automated quality gates before merge. No fake placeholders, no AI fingerprints in the code, every exploit is traceable to a CVE or advisory.
+
+🚀 *Install*
+`pip install embedxpl`
+`embedxpl`
+
+Or from source:
+`git clone https://github.com/mrhenrike/EmbedXPL-Forge`
+`cd EmbedXPL-Forge && pip install -r requirements.txt && embedxpl`
+
+🤝 *Open to contributions*
+Pull requests, new modules, new vendors, new CVEs, hardening of existing checks: all welcome. Direct, unbureaucratic reviews. The framework grows with the community.
+
+🔗 *Repository*
+github.com/mrhenrike/EmbedXPL-Forge
 
 ⚠️ *For authorized security testing only.*
+```
 
-#cybersecurity #iot #pentest #redteam #embeddedsecurity #embedxpl #vulnresearch #soc #cve2026
+---
 
+### WhatsApp (plain + emojis, asterisks for bold)
 
-## BLOCK 2 - Discord
-*(full markdown, native Discord formatting)*
+```
+🛡️ *EmbedXPL-Forge is now PUBLIC*
 
+The most complete open-source exploitation and scanning framework for embedded, IoT, OT, IT and AT infrastructure on the planet. One CLI, full arsenal.
 
-## 🛡️ EmbedXPL-Forge - The Largest Embedded & IoT Security Arsenal
+🎯 *Coverage*
+- Routers, GPON ONTs, ISP CPEs, switches, TAPs
+- Firewalls and NGFW: Fortinet, Palo Alto, Cisco, SonicWall, Checkpoint, Sophos, WatchGuard
+- Network printers: HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, CUPS
+- IP cameras, NVR, DVR, RTSP, ONVIF
+- OT/ICS: PLCs, SCADA, Modbus, S7comm, EtherNet/IP, BACnet, DNP3
+- Smart home, smart meters, HVAC, wearables, automotive CAN, medical, access control, maritime IoT, BMC/IPMI
 
-Just went **public**. Open-source. Production-grade.
+🧠 *What you get*
+- Vendor fingerprinting and OUI lookup
+- Persistent scan sessions per host
+- Nmap NSE script integration
+- APT attack chain reproduction with MITRE ATT&CK mapping
+- 7 automated quality gates per module
 
-**EmbedXPL-Forge** is a modular exploitation and scanning framework for security professionals conducting authorized audits of embedded devices, IoT, OT/ICS, IT and AT infrastructure.
-
-
-### 🔥 Key Numbers
-
-- **2800+ modules** - exploits, scanners, credential testers, payloads, encoders
-- **680+ CVEs mapped** from 2001 to 2026 (including 2026 Pwn2Own chains)
-- **114+ vendors** covered end-to-end
-- **35+ device categories** from routers to maritime IoT
-- **APT Group Attack Engine** - reproduce APT28, Volt Typhoon, Sandworm, Quad7 attack chains
-
-
-### 🎯 What Can You Audit?
-
-- **IoT** - routers, GPON ONTs, IP cameras, NVR/DVR, smart home, wearables
-- **OT/ICS** - PLCs, SCADA gateways, industrial edge controllers, maritime IoT
-- **IT/AT** - firewalls (Fortinet, Palo Alto, Cisco, SonicWall, Checkpoint...), VPN appliances, NAS
-- **Printers** - HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera + CUPS chains
-- **Embedded OS** - RIOT OS, OpenWrt, VxWorks, QNX, Zephyr, wolfSSL devices
-- **Specialized** - maritime (Metis WIC/DFS), medical, smart meters, industrial robots (Universal Robots)
-
-
-### ⚡ New in This Release
-
-**54 new modules** including:
-
-| CVE | CVSS | Module |
-|-----|------|--------|
-| CVE-2026-34477/78/79/80 | 9.9 | CUPS Pwn2Own 2026 full chain (4-stage) |
-| CVE-2026-5194 | 9.3 | wolfSSL identity forgery (~5 billion devices) |
-| CVE-2026-0300 | 9.8 | PAN-OS User-ID Authentication Portal BOF |
-| CVE-2026-8153 | 9.8 | Universal Robots PolyScope 5 OS command injection |
-| CVE-2026-24061 | 9.8 | GNU InetUtils telnetd authentication bypass |
-| CVE-2026-2248/2249 | 9.8 | Metis maritime IoT unauth remote shell |
-| CVE-2026-39842 | 9.8 | OpenRemote expression injection RCE as root |
-| CVE-2025-20188 | 10.0 | Cisco IOS XE WLC hardcoded JWT file upload RCE |
-| CVE-2024-36061/31976 | 9.8 | EnGenius access point command injection |
-
-Plus 20 printer research modules (HP PrintingShellz, Lexmark Pwn2Own 2026, CUPS chains, Xerox/Ricoh BOFs, Brother WSD SSRF...)
-
-
-### 🚀 Installation
-
-```bash
-# Via PyPI
+🚀 *Install*
 pip install embedxpl
 embedxpl
 
-# From source
+🤝 *Contributions are open and welcome.* New modules, new vendors, new CVEs, fixes, hardening: all in. Direct reviews, no bureaucracy.
+
+🔗 github.com/mrhenrike/EmbedXPL-Forge
+
+⚠️ *For authorized security testing only.*
+```
+
+---
+
+### Discord (full markdown)
+
+```
+# 🛡️ EmbedXPL-Forge is now PUBLIC
+
+The most complete open-source exploitation and scanning framework for embedded, IoT, OT, IT and AT infrastructure on the planet. One CLI, full arsenal, production-grade.
+
+This is not another script collection. This is what real engagements look like, weaponized for authorized red-team, blue-team and research work.
+
+## 🎯 Full Coverage in a Single Tool
+
+**Network perimeter**
+> Routers, GPON ONTs, ISP CPEs, enterprise gateways, switches, TAPs, firewalls and NGFW (Fortinet, Palo Alto, Cisco ASA, SonicWall, Checkpoint, Sophos, WatchGuard), VPN appliances.
+
+**Print infrastructure**
+> HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung, CUPS. PJL, IPP, LPD, RAW, WSD. From banner grab to full RCE chains. Pure Python, no external tooling.
+
+**Surveillance**
+> IP cameras, NVR, DVR, RTSP brute-force, ONVIF discovery, snapshot capture, multi-vendor CVE validation.
+
+**OT and ICS**
+> PLCs, SCADA, Modbus, S7comm, EtherNet/IP, BACnet, DNP3, Universal Robots PolyScope, building management, smart meters.
+
+**Specialized and embedded**
+> Smart home, HVAC, wearables, automotive CAN bus, medical embedded devices, access control, RFID, maritime IoT, BMC, IPMI, embedded OS (RIOT OS, OpenWrt, VxWorks, QNX, Zephyr).
+
+## 🧠 Built for Real Engagements
+
+- Vendor fingerprinting, OUI lookup against IEEE database
+- Persistent scan sessions per host (IP and MAC), full evidence trail
+- T0 to T5 timing profiles
+- Nmap NSE script integration
+- APT group attack chain reproduction with MITRE ATT&CK mapping
+- Multi-language PolyExploit orchestrator (C, C++, Ruby, Node.js, PHP, Bash, Perl)
+
+## 🛡️ Quality You Can Audit
+
+Every single module passes **7 automated quality gates** before it lands. No silent placeholders. No half-finished checks. No AI fingerprints in the code. Every exploit is traceable to a CVE, an advisory or a vendor publication.
+
+## 🚀 Install
+
+```bash
+pip install embedxpl
+embedxpl
+```
+
+From source:
+
+```bash
 git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
 cd EmbedXPL-Forge
 pip install -r requirements.txt
-python exf.py
+embedxpl
 ```
 
+## 🤝 Contributions Are Open
 
-### 🤝 Contribute
+Pull requests, new modules, new vendors, new CVE coverage, fixes, hardening of existing checks: all welcome. Direct reviews, no bureaucracy. The framework grows with the community, not with hype.
 
-- **Issues & bug reports:** [github.com/mrhenrike/EmbedXPL-Forge/issues](https://github.com/mrhenrike/EmbedXPL-Forge/issues)
-- **Repository:** [github.com/mrhenrike/EmbedXPL-Forge](https://github.com/mrhenrike/EmbedXPL-Forge)
-- **PRs welcome** - see `CONTRIBUTING.md`
-- Module requests, CVE additions, vendor coverage gaps - open an issue
+If you defend, audit, break or research embedded systems, plug in and tell us what is missing.
 
+## 🔗 Links
 
-*For authorized security assessments only. Users are responsible for compliance with applicable laws and regulations.*
+- **Repository:** https://github.com/mrhenrike/EmbedXPL-Forge
+- **PyPI:** https://pypi.org/project/embedxpl/
 
-#cybersecurity #iot #pentest #redteam #embeddedsecurity #embedxpl #vulnresearch #cve2026 #soc #ics
+## ⚠️ Legal
+
+For authorized security testing only. Users are responsible for compliance with applicable laws, regulations and contractual scope. Always operate with written authorization from the asset owner.
+```
+
+---
+
+## Português (pt-BR)
+
+### X / Twitter (280 caracteres)
+
+```
+🛡️ EmbedXPL-Forge agora é PÚBLICO.
+
+O framework open-source mais completo do planeta para auditoria de embarcados, IoT, OT/ICS, IT e AT. Uma CLI, arsenal inteiro.
+
+Routers, impressoras, câmeras, firewalls, PLCs, smart-home, marítimo, médico.
+
+pip install embedxpl
+
+github.com/mrhenrike/EmbedXPL-Forge
+
+#cybersecurity #pentest #iot
+```
+
+---
+
+### LinkedIn (post longo)
+
+```
+🛡️ EmbedXPL-Forge agora é PÚBLICO.
+
+Depois de anos de engajamentos red-team, auditorias de IoT/OT, pentests em ISP e pesquisa em dispositivos embarcados, o framework que rodou em todas essas operações está finalmente open-source.
+
+Isso não é mais uma coleção de scripts. É o arsenal mais completo de segurança ofensiva para infraestrutura embarcada e perimetral já entregue como uma ferramenta única, construído para engenheiros de segurança que realmente precisam quebrar, provar e corrigir coisas em ambientes de produção.
+
+O que ele cobre, ponta a ponta, em uma única CLI:
+
+🌐 Perímetro de rede
+Roteadores SOHO, CPEs de ISP, ONTs GPON, gateways corporativos, firewalls e NGFW (Fortinet, Palo Alto, Cisco ASA, SonicWall, Checkpoint, Sophos, WatchGuard), appliances VPN, switches gerenciados, TAPs.
+
+🖨️ Infraestrutura de impressão
+HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung, CUPS. PJL, IPP, LPD, RAW, WSD. Do banner grab até cadeia completa de RCE, sem ferramenta externa.
+
+📷 Vigilância
+Câmeras IP, NVR, DVR, brute-force RTSP, descoberta ONVIF, captura de snapshot, validação de CVE multi-vendor. Python puro, sem bridge em Go, sem binário de terceiros.
+
+🏭 OT, ICS, industrial
+PLCs, gateways SCADA, Modbus, S7comm, EtherNet/IP, BACnet, DNP3, Universal Robots PolyScope, building management, medidores inteligentes.
+
+🏠 Embarcado e especializado
+Smart home, eletrodomésticos conectados, HVAC, wearables, barramento CAN automotivo, dispositivos médicos embarcados, controle de acesso, RFID, IoT marítimo, BMC e IPMI.
+
+🧠 Inteligência embutida
+Fingerprint de vendor, OUI lookup contra base IEEE, sessões de scan persistentes por host, perfis de timing T0 a T5, integração com Nmap NSE, reprodução de cadeias de ataque de grupos APT com mapeamento MITRE ATT&CK.
+
+🛡️ Qualidade auditável
+Todo módulo passa por 7 gates automatizados de qualidade antes do merge. Sem placeholders silenciosos, sem checagens pela metade, sem marcadores de IA no código. Todo exploit é rastreável a um CVE, advisory ou publicação do fabricante.
+
+🤝 Aberto a contribuições
+Pull requests são bem-vindas. Novos módulos, novos fabricantes, nova cobertura de CVE, hardening de checagens existentes: se torna o framework mais forte e opera dentro de escopo autorizado, entra. Reviews diretos do mantenedor, sem burocracia.
+
+⚙️ Instale agora
+pip install embedxpl
+
+🔗 Repositório
+https://github.com/mrhenrike/EmbedXPL-Forge
+
+⚠️ Apenas para testes de segurança autorizados. Sempre opere com autorização escrita do dono do ativo.
+
+Se você constrói, defende, audita ou pesquisa sistemas embarcados, dê uma rodada e me diga o que está faltando. O roadmap é guiado pela comunidade, não por hype.
+
+#cybersecurity #pentest #redteam #blueteam #iotsecurity #otsecurity #icssecurity #embeddedsecurity #infosec #segurancadainformacao #pentesting #cybersec #soc #ciso #appsec #devsecops #opensource #python #seguranca
+```
+
+---
+
+### Telegram (formatação rica)
+
+```
+🛡️ *EmbedXPL-Forge agora é PÚBLICO*
+
+O framework open-source mais completo do planeta para auditoria de embarcados, IoT, OT, IT e AT, em uma única CLI.
+
+🎯 *Cobertura em uma ferramenta*
+- Roteadores, ONTs GPON, CPEs de ISP, switches, TAPs
+- Firewalls e NGFW: Fortinet, Palo Alto, Cisco, SonicWall, Checkpoint, Sophos, WatchGuard
+- Impressoras de rede e MFP: HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung, CUPS
+- Câmeras IP, NVR, DVR, RTSP, ONVIF
+- OT e ICS: PLCs, SCADA, Modbus, S7comm, EtherNet/IP, BACnet, DNP3, robôs industriais
+- Smart home, medidores inteligentes, HVAC, wearables, CAN automotivo, médico, controle de acesso, IoT marítimo, BMC/IPMI
+
+🧠 *Pensado para engajamentos reais*
+- Fingerprint de vendor e OUI lookup
+- Sessões de scan persistentes por host (resume, restart, trilha de evidência)
+- Perfis de timing T0 a T5
+- Integração com scripts Nmap NSE
+- Reprodução de cadeias de ataque APT com mapeamento MITRE ATT&CK
+
+🛡️ *Qualidade auditável*
+Todo módulo passa por 7 gates automatizados antes do merge. Sem placeholders falsos, sem marcadores de IA no código, todo exploit rastreável a CVE ou advisory.
+
+🚀 *Instalação*
+`pip install embedxpl`
+`embedxpl`
+
+Ou do código-fonte:
+`git clone https://github.com/mrhenrike/EmbedXPL-Forge`
+`cd EmbedXPL-Forge && pip install -r requirements.txt && embedxpl`
+
+🤝 *Aberto a contribuições*
+Pull requests, novos módulos, novos fabricantes, novos CVEs, hardening de checagens existentes: todos bem-vindos. Reviews diretos, sem burocracia. O framework cresce com a comunidade.
+
+🔗 *Repositório*
+github.com/mrhenrike/EmbedXPL-Forge
+
+⚠️ *Apenas para testes de segurança autorizados.*
+```
+
+---
+
+### WhatsApp (texto plano + emojis)
+
+```
+🛡️ *EmbedXPL-Forge agora é PÚBLICO*
+
+O framework open-source mais completo do planeta para auditoria de embarcados, IoT, OT, IT e AT. Uma CLI, arsenal inteiro.
+
+🎯 *Cobertura*
+- Roteadores, ONTs GPON, CPEs de ISP, switches, TAPs
+- Firewalls e NGFW: Fortinet, Palo Alto, Cisco, SonicWall, Checkpoint, Sophos, WatchGuard
+- Impressoras de rede: HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, CUPS
+- Câmeras IP, NVR, DVR, RTSP, ONVIF
+- OT/ICS: PLCs, SCADA, Modbus, S7comm, EtherNet/IP, BACnet, DNP3
+- Smart home, medidores, HVAC, wearables, CAN automotivo, médico, controle de acesso, IoT marítimo, BMC/IPMI
+
+🧠 *O que você ganha*
+- Fingerprint de vendor e OUI lookup
+- Sessões de scan persistentes por host
+- Integração com Nmap NSE
+- Reprodução de cadeias APT com MITRE ATT&CK
+- 7 gates automatizados de qualidade por módulo
+
+🚀 *Instalação*
+pip install embedxpl
+embedxpl
+
+🤝 *Contribuições estão abertas e bem-vindas.* Novos módulos, novos fabricantes, novos CVEs, fixes, hardening: tudo entra. Reviews diretos, sem burocracia.
+
+🔗 github.com/mrhenrike/EmbedXPL-Forge
+
+⚠️ *Apenas para testes de segurança autorizados.*
+```
+
+---
+
+### Discord (markdown completo)
+
+```
+# 🛡️ EmbedXPL-Forge agora é PÚBLICO
+
+O framework open-source mais completo do planeta para auditoria ofensiva de embarcados, IoT, OT, IT e AT. Uma CLI, arsenal inteiro, pronto para produção.
+
+Isso não é mais uma coleção de scripts. É como engajamentos reais se parecem, forjado para red-team, blue-team e pesquisa autorizada.
+
+## 🎯 Cobertura completa em uma ferramenta
+
+**Perímetro de rede**
+> Roteadores, ONTs GPON, CPEs de ISP, gateways corporativos, switches, TAPs, firewalls e NGFW (Fortinet, Palo Alto, Cisco ASA, SonicWall, Checkpoint, Sophos, WatchGuard), appliances VPN.
+
+**Infraestrutura de impressão**
+> HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung, CUPS. PJL, IPP, LPD, RAW, WSD. Do banner grab a cadeias completas de RCE. Python puro, sem ferramenta externa.
+
+**Vigilância**
+> Câmeras IP, NVR, DVR, brute-force RTSP, descoberta ONVIF, captura de snapshot, validação de CVE multi-vendor.
+
+**OT e ICS**
+> PLCs, SCADA, Modbus, S7comm, EtherNet/IP, BACnet, DNP3, Universal Robots PolyScope, building management, medidores inteligentes.
+
+**Especializado e embarcado**
+> Smart home, HVAC, wearables, CAN automotivo, dispositivos médicos embarcados, controle de acesso, RFID, IoT marítimo, BMC, IPMI, SO embarcado (RIOT OS, OpenWrt, VxWorks, QNX, Zephyr).
+
+## 🧠 Construído para engajamentos reais
+
+- Fingerprint de vendor, OUI lookup contra base IEEE
+- Sessões de scan persistentes por host (IP e MAC), trilha de evidência completa
+- Perfis de timing T0 a T5
+- Integração com scripts Nmap NSE
+- Reprodução de cadeias de ataque APT com mapeamento MITRE ATT&CK
+- Orquestrador PolyExploit multi-linguagem (C, C++, Ruby, Node.js, PHP, Bash, Perl)
+
+## 🛡️ Qualidade auditável
+
+Todo módulo passa por **7 gates automatizados** antes do merge. Sem placeholders silenciosos. Sem checagens pela metade. Sem marcadores de IA no código. Todo exploit é rastreável a um CVE, advisory ou publicação do fabricante.
+
+## 🚀 Instalação
+
+```bash
+pip install embedxpl
+embedxpl
+```
+
+A partir do código-fonte:
+
+```bash
+git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
+cd EmbedXPL-Forge
+pip install -r requirements.txt
+embedxpl
+```
+
+## 🤝 Contribuições estão abertas
+
+Pull requests, novos módulos, novos fabricantes, nova cobertura de CVE, fixes, hardening de checagens existentes: todos bem-vindos. Reviews diretos, sem burocracia. O framework cresce com a comunidade, não com hype.
+
+Se você defende, audita, quebra ou pesquisa sistemas embarcados, plugue-se e diga o que está faltando.
+
+## 🔗 Links
+
+- **Repositório:** https://github.com/mrhenrike/EmbedXPL-Forge
+- **PyPI:** https://pypi.org/project/embedxpl/
+
+## ⚠️ Aviso legal
+
+Apenas para testes de segurança autorizados. O usuário é responsável pelo cumprimento de leis, regulamentos e escopo contratual aplicáveis. Sempre opere com autorização escrita do dono do ativo.
+```
+
+---
+
+> **Tip / Dica:** copy the block between the triple backticks of the platform you need and paste straight into the target channel. No reformatting required. / Copie o bloco entre as crases triplas da plataforma desejada e cole direto no canal. Sem reformatação.
