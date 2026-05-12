@@ -6,6 +6,98 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [Unreleased] — 2026-05-12
+
+### Added — CVE 2026/2025/2024 Integration + PrinterXPL Port + Domain Enable
+
+#### Core: Printer domain enabled
+
+- Removed `DISABLED_MODULE_DOMAINS = ("printers",)` restriction in `embedxpl/core/exploit/utils.py`
+- All 185+ existing printer modules now indexed and loadable
+- New baseline: 2738+ modules
+
+#### Track A1: PrinterXPL EDB/Research ports (8 new modules)
+
+| Module | EDB Ref | Technique |
+|--------|---------|-----------|
+| `edb_15631_pjl_unrestricted_access` | EDB-15631 | PJL FSDIRLIST/FSDOWNLOAD unrestricted access |
+| `edb_22319_hp_snmp_info_disclosure` | EDB-22319 | HP SNMP community string enumeration |
+| `edb_45205_generic_printer_rce` | EDB-45205 | Generic firmware upload RCE |
+| `edb_50498_lexmark_stored_xss` | EDB-50498 | Lexmark stored XSS via printer-name |
+| `edb_51606_hp_ssrf_cve_2021_3441` | CVE-2021-3441 | HP FutureSmart SSRF via scan URL |
+| `edb_51928_ricoh_auth_bypass` | EDB-51928 | Ricoh cookie-based auth bypass |
+| `samsung_cve_2016_11061_xxe` | CVE-2016-11061 | Samsung SyncThru XXE injection |
+| `xerox_cve_2023_3710_workcentre_rce` | CVE-2023-3710 | Xerox WorkCentre command injection |
+
+#### Track A2: Native MSF implementations (3 new modules, no subprocess)
+
+| Module | Technique |
+|--------|-----------|
+| `hp_laserjet_pjl_scan_native` | Full PJL scanner via raw socket port 9100 |
+| `hp_laserjet_snmp_community_enum` | SNMP v1/v2c community brute via UDP |
+| `canon_driver_privesc_cve_2021_38085` | Canon driver LPE via HTTP upload |
+
+#### Track B: CVEs 2026 (user-requested, 11 new modules)
+
+| Module | CVE | CVSS | Technique |
+|--------|-----|------|-----------|
+| `gnu_inetutils_telnetd_auth_bypass_cve_2026_24061` | CVE-2026-24061 | 9.8 | telnetd IAC bypass, unauth root |
+| `cups_pwn2own_stage1_cve_2026_34477` | CVE-2026-34477 | 9.9 | CUPS cups-browsed UAF |
+| `cups_pwn2own_stage2_cve_2026_34478` | CVE-2026-34478 | 9.9 | CUPS heap spray via IPP |
+| `cups_pwn2own_stage3_cve_2026_34479` | CVE-2026-34479 | 9.9 | CUPS ROP chain LPE |
+| `cups_pwn2own_chain_cve_2026_34480` | CVE-2026-34480 | 9.9 | CUPS chain orchestrator (stages 1-3) |
+| `cve_2026_31602_unauth_rce` | CVE-2026-31602 | 9.8 | Embedded router unauth RCE |
+| `cve_2026_40683_embedded_rce` | CVE-2026-40683 | 9.8 | Embedded OS RCE |
+| `cve_2026_22812_cmd_injection` | CVE-2026-22812 | 9.8 | Router command injection |
+| `cve_2026_0234_auth_bypass` | CVE-2026-0234 | 9.1 | Embedded device auth bypass |
+| `cve_2026_21513_privesc` | CVE-2026-21513 | 8.8 | Embedded device privilege escalation |
+| `cve_2026_21519_rce` | CVE-2026-21519 | 9.8 | Embedded device unauth RCE |
+
+#### Track C: CVEs 2026 threat intel (12 new modules)
+
+| Module | CVE | CVSS | Technique |
+|--------|-----|------|-----------|
+| `wolfssl_identity_forgery_cve_2026_5194` | CVE-2026-5194 | 9.3 | wolfSSL TLS identity forgery (~5B devices) |
+| `panos_userid_bof_rce_cve_2026_0300` | CVE-2026-0300 | 9.8 | PAN-OS User-ID BOF unauth RCE |
+| `ur_polyscope5_dashboard_cmd_injection_cve_2026_8153` | CVE-2026-8153 | 9.8 | UR PolyScope 5 OS command injection |
+| `riot_sixlowpan_oob_read_cve_2026_25139` | CVE-2026-25139 | 9.1 | RIOT OS 6LoWPAN OOB read |
+| `enet_smarthome_default_creds_cve_2026_26366` | CVE-2026-26366 | 9.8 | eNet SMART HOME default credentials |
+| `metis_wic_unauth_rce_cve_2026_2248` | CVE-2026-2248 | 9.8 | Metis maritime WIC unauth shell |
+| `metis_dfs_unauth_rce_cve_2026_2249` | CVE-2026-2249 | 9.8 | Metis maritime DFS unauth shell |
+| `openremote_expr_injection_rce_cve_2026_39842` | CVE-2026-39842 | 9.8 | OpenRemote expression injection RCE |
+| `a7000r_cmd_injection_cve_2026_1623` | CVE-2026-1623 | 9.8 | Totolink A7000R CGI command injection |
+| `rauc_integer_overflow_cve_2026_34155` | CVE-2026-34155 | 8.1 | RAUC update integer overflow firmware bypass |
+| `openwrt_hotplug_privesc_cve_2026_30874` | CVE-2026-30874 | 7.8 | OpenWrt hotplug_call env var LPE |
+| `tuya_arduino_dns_bof_cve_2026_28519` | CVE-2026-28519 | 8.8 | Tuya arduino-tuyaopen DNS heap BOF |
+
+#### Track A3: PrinterXPL research modules (20 new modules)
+
+BOF modules: `lexmark_heap_bof_cve_2023_50734`, `lexmark_ps_bof_cve_2023_50736`,
+`lexmark_pwn2own_2026_chain`, `ricoh_http_bof_cve_2024_34161`,
+`xerox_http_bof_rce`, `xerox_ipp_bof_rce`, `hp_printing_shellz_rce`
+
+Protocol modules: `brother_ldap_smb_passback`, `brother_wsd_dos`, `brother_wsd_ssrf`,
+`canon_xps_bof_cve_2025_14237`, `ipp_anon_print_inject`, `ipp_purge_jobs_dos`,
+`ms_rprn_ntlm_coerce`, `pjl_pwd_disclosure_cve_2011_4786`, `ps_infinite_loop_dos`,
+`tftp_loop_dos`, `wsd_printer_enum`, `ssport_lpe`, `hp_fw_sig_bypass`
+
+#### Track D: CVEs 2025/2024 (3 new modules)
+
+| Module | CVE | CVSS | Technique |
+|--------|-----|------|-----------|
+| `ios_xe_wlc_jwt_rce_cve_2025_20188` | CVE-2025-20188 | 10.0 | Cisco WLC hardcoded JWT file upload RCE |
+| `ews356_blind_cmd_injection_cve_2024_36061` | CVE-2024-36061 | 9.8 | EnGenius EWS356-FIT blind command injection |
+| `enstation5_cmd_injection_cve_2024_31976` | CVE-2024-31976 | 9.8 | EnGenius EnStation5-AC command injection |
+
+#### Quality Gates (automated, 100% automated, no manual review)
+
+New `tools/phase_gate.py` with 7 gates (A1A2, B, C, A3, D, E, final).
+Each gate verifies: imports, class Exploit, `__info__` completeness, references URLs,
+`check()` and `run()` with real bodies, anti-false-positive on closed port,
+no prohibited strings, flake8/bandit clean, module indexing.
+
+---
+
 ## [2.15.0] — 2026-04-25
 
 ### Added — Full Submodule Audit + Mass Integration
