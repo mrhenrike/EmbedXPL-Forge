@@ -4,7 +4,7 @@ Module encodes Python payload to hex format.
 
 ## Verification Steps
 
-  1. Start `./exf.py`
+  1. Start the framework: `embedxpl` (or `python -m embedxpl` / `./exf.py`)
   2. Do: `use encoders/python/hex`
   3. Do: `show info`
 

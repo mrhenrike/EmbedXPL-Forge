@@ -4,7 +4,7 @@ Module generates payload that creates interactive tcp bind shell for MIPSLE arch
 
 ## Verification Steps
 
-  1. Start `./exf.py`
+  1. Start the framework: `embedxpl` (or `python -m embedxpl` / `./exf.py`)
   2. Do: `use payloads/mipsle/bind_tcp`
   3. Do: `set rport 4321`
   4. Do: `run`

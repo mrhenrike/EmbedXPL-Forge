@@ -51,6 +51,18 @@ Fluxo de ponta a ponta: entrada do alvo, discovery, identificacao de dispositivo
 
 ## Instalação
 
+Forma recomendada (PyPI):
+
+```bash
+python3 -m pip install embedxpl
+# extras opcionais por dominio
+python3 -m pip install "embedxpl[nse]"        # scripts Nmap NSE
+python3 -m pip install "embedxpl[printers]"   # stack de impressoras
+python3 -m pip install "embedxpl[all]"        # tudo
+```
+
+Forma alternativa (clone do repositorio para desenvolvimento):
+
 ```bash
 git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
 cd EmbedXPL-Forge
@@ -58,6 +70,7 @@ python3 -m venv .venv
 source .venv/bin/activate   # Linux/macOS
 # .venv\Scripts\activate    # Windows
 python3 -m pip install -r requirements.txt
+python3 -m pip install -e .                   # editable install (opcional)
 ```
 
 ## Diagnóstico
@@ -68,8 +81,17 @@ python tools/env_doctor.py
 
 ## Iniciar o shell interativo
 
+Apos `pip install embedxpl`, basta:
+
 ```bash
-python exf.py
+embedxpl
+```
+
+Equivalentes ao rodar do clone:
+
+```bash
+python -m embedxpl
+python exf.py            # bootstrap legacy
 ```
 
 ## Log e histórico
