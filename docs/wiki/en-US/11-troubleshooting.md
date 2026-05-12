@@ -4,7 +4,7 @@
 
 ## ImportError on startup
 
-Re-run `python -m pip install -r requirements.txt` inside the active virtual environment. If a single optional stack fails, install its extra dependency (for example **Scapy** for PCAP-oriented generic modules).
+Re-run `python -m pip install -r requirements.txt` inside the active virtual environment. If a single optional stack fails, install the matching extra dependency (for example **Scapy** for raw-capture network discovery, or **telnetlib3** for Telnet-oriented modules on Python 3.13+).
 
 ## Telnet on Python 3.13+
 
@@ -20,11 +20,11 @@ Install **`colorama`** (pulled via `requirements.txt`) so ANSI colors render in 
 
 ## Module not found after moving files
 
-Run from the repository root and ensure `PYTHONPATH` is not overriding package discovery. Prefer `python exf.py` without relocating `embedxpl/`.
+Run from the repository root and ensure `PYTHONPATH` is not overriding package discovery. Prefer the official entry point `embedxpl` (installed via `pip install embedxpl`) or `python -m embedxpl`. The legacy bootstrap `./exf.py` is still available when running directly from a clone.
 
 ## Permission denied on Linux
 
-Raw sockets and some capture paths require elevated capability or `sudo` where the OS mandates it—use the least privilege consistent with your engagement rules.
+Raw sockets and some capture paths require elevated capability or `sudo` where the OS mandates it; use the least privilege consistent with your engagement rules.
 
 
 [Wiki hub](../README.md)

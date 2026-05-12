@@ -10,8 +10,8 @@
 
 ### Scope check
 
-- [ ] In-scope asset (router/switch/TAP/fw/NGFW)
-- [ ] Not camera/printer/DVR focused
+- [ ] In-scope asset (router, switch, TAP, firewall, NGFW, printer, IoT/OT, camera, smart home, etc.)
+- [ ] Not lab-only / not out-of-scope (please describe target context)
 
 ## Steps to reproduce
 
@@ -20,10 +20,11 @@
 3.
 
 ## Environment
-- RouterXPL-Forge commit/tag:
+- EmbedXPL-Forge version (e.g. `v3.1.0`) or commit hash:
 - OS:
 - Python (`python --version`):
-- Virtualenv:
+- Virtualenv (yes/no):
+- Install method (`pip install embedxpl`, source clone, editable):
 
 ## Current behavior
 

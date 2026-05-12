@@ -189,9 +189,9 @@ embedxpl/
 └── resources/rtsp/        # Rotas e credenciais RTSP
 ```
 
-## Novidades v2.13.0
+## Cobertura Routerpwn / Backdoor / Senha de Fabrica
 
-Análise de gap contra [routerpwn.com](https://github.com/hkm/routerpwn.com) e [routerPWN](https://github.com/lilloX/routerPWN) — **27 novos módulos**, **19 novos fabricantes**:
+27+ modulos de exploit portados de uma auditoria completa do [routerpwn.com](https://github.com/hkm/routerpwn.com) e do [routerPWN](https://github.com/lilloX/routerPWN), com foco em senhas de fabrica, backdoors hardcoded, geradores WPA padrao e CSRF de DNS hijack. **27+ modulos** cobrindo **19+ fabricantes**:
 
 | Fabricante | Técnica explorada |
 |------------|-------------------|

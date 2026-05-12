@@ -767,9 +767,9 @@ exf (Brother LDAP Passback) > run
 [+] LDAP server redirected — wait for printer authentication
 ```
 
-### v2.13.0 routerpwn.com Gap Coverage
+### Routerpwn / Backdoor / Factory Password Coverage
 
-27 exploit modules from a complete audit of [routerpwn.com](https://github.com/hkm/routerpwn.com) and [routerPWN](https://github.com/lilloX/routerPWN). Key examples:
+27+ exploit modules ported from a complete audit of [routerpwn.com](https://github.com/hkm/routerpwn.com) and [routerPWN](https://github.com/lilloX/routerPWN), focused on factory passwords, hardcoded backdoors, default WPA keygens and DNS hijack CSRF. Key examples:
 
 ```
 # EasyBox (Arcadyan) — WPA2 default key from MAC (factory algorithm)

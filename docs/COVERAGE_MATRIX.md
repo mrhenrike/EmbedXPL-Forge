@@ -1,9 +1,12 @@
 # EmbedXPL-Forge Coverage Matrix
 
-## Product Scope
+## Product Scope (v3.1.0)
 
-- In scope: routers, switches, taps, fw and ngfw (residential, ISP, enterprise/corporate, industrial; IT/OT/AT/IoT/IIoT).
-- Out of scope: camera/printer/dvr modules (disabled in this product line).
+- In scope: routers, switches, TAPs, firewalls/NGFW, network printers/MFP, IP cameras, DVR/NVR,
+  embedded/IoT (cameras, smart TVs, VoIP, NAS, UPS), OT/ICS/SCADA, BMS, smart meters, IIoT/BMC/IPMI,
+  smart-home (assistants, appliances, HVAC), wearables, automotive (CAN bus), medical embedded, access
+  control (RFID/gates/elevators), maritime IoT.
+- All module categories are active in v3.1.0; no domains are disabled by default.
 
 ## Platform Compatibility Status
 
@@ -18,23 +21,19 @@
 
 ## Global Capability Summary
 
-- Module tree (embedxpl/modules): 5f4b445e (v2.13.0)
-- Total modules indexed: 693+
-- Distinct vendor/product entries: 692+
-- Distinct CVEs mapped in modules: 394+
-- Attack classes identified: auth_bypass, backdoor, creds_disclosure, dns_change, dos_or_crash, info_disclosure, keygen, password_reset_or_change, path_traversal, rce
-- Router vendor directories: 85
+- Module tree (embedxpl/modules): 72c51b433c137c11ec09d4d9565a804b29e21172
+- Total modules indexed: 2792
+- Distinct vendor/product entries: 2731
+- Distinct CVEs mapped in modules: 886
+- Attack classes identified: auth_bypass, backdoor, creds_disclosure, dns_change, dos_or_crash, info_disclosure, password_reset_or_change, path_traversal, rce
 
 ### Module Type Counts
-- creds: 88
+- creds: 1317
 - encoders: 13
-- exploits: 543+  (+27 from routerpwn.com gap analysis in v2.13.0)
-- generic: 12
+- exploits: 1325
+- generic: 15
 - payloads: 32
-- scanners: 5
-
-### v2.13.0 New Vendor Coverage (routerpwn.com gap analysis)
-- alcatel_lucent, alpha_networks, astoria, binatone, ddwrt, easybox, ee, freebox, mifi, motorola, observa, ruggedcom, seagate, sitecom, starbridge, ubee, unicorn, utstarcom, zoom
+- scanners: 90
 
 ## Protocol Coverage (Inferred)
 
@@ -81,47 +80,47 @@
 
 | OSI | TCP/IP | Layer | Protocol | Module Hits | Covered | Attack Vectors | Test Types | ISP | Corporate | OT_IIoT |
 |---|---|---|---|---:|---|---|---|---|---|---|
-| L1 | Link | Physical | ethernet | 4 | yes | link_disruption_or_flap_induction, tap_or_span_blind_spot_abuse, physical_plane_availability_degradation | link_state_validation, duplex_speed_mismatch_detection, capture_integrity_verification | P2 | P2 | P2 |
-| L2 | Link | Data Link | arp | 2 | yes | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P1 | P1 | P1 |
-| L2 | Link | Data Link | vlan_8021q_qinq | 0 | no | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P1 | P1 | P1 |
-| L2 | Link | Data Link | 802.11_wifi | 37 | yes | offline_wpa_crack, handshake_capture_replay, credential_harvest | ap_enumeration, station_mapping, handshake_extraction, cleartext_sniffing | P2 | P1 | P2 |
+| L1 | Link | Physical | ethernet | 33 | yes | link_disruption_or_flap_induction, tap_or_span_blind_spot_abuse, physical_plane_availability_degradation | link_state_validation, duplex_speed_mismatch_detection, capture_integrity_verification | P2 | P2 | P2 |
+| L2 | Link | Data Link | arp | 16 | yes | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P1 | P1 | P1 |
+| L2 | Link | Data Link | vlan_8021q_qinq | 3 | yes | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P1 | P1 | P1 |
+| L2 | Link | Data Link | 802.11_wifi | 116 | yes | offline_wpa_crack, handshake_capture_replay, credential_harvest | ap_enumeration, station_mapping, handshake_extraction, cleartext_sniffing | P2 | P1 | P2 |
 | L2 | Link | Data Link | stp_rstp_mstp | 0 | no | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P2 | P1 | P2 |
 | L2 | Link | Data Link | lacp | 0 | no | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P2 | P1 | P2 |
 | L2 | Link | Data Link | lldp | 0 | no | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P2 | P2 | P2 |
-| L2 | Link | Data Link | pppoe | 3 | yes | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P1 | P3 | P3 |
-| L3 | Internet | Network | ipv4_ipv6 | 0 | no | route_injection_or_hijack_paths, icmp_or_control_plane_abuse, ipv6_transition_misconfig_exposure | routing_surface_enumeration, dual_stack_consistency_checks, control_plane_exposure_validation | P1 | P1 | P1 |
-| L3 | Internet | Network | icmp_icmpv6 | 1 | yes | route_injection_or_hijack_paths, icmp_or_control_plane_abuse, ipv6_transition_misconfig_exposure | routing_surface_enumeration, dual_stack_consistency_checks, control_plane_exposure_validation | P1 | P1 | P2 |
+| L2 | Link | Data Link | pppoe | 9 | yes | vlan_hopping_and_tagging_abuse, arp_spoofing_or_poisoning, stp_manipulation_or_loop_induction, mac_table_exhaustion_scenarios, wpa_wpa2_offline_handshake_crack, wireless_credential_harvest_from_pcap, rogue_ap_detection_via_pcap | vlan_segmentation_validation, arp_integrity_checks, stp_lacp_hardening_review, l2_discovery_surface_assessment, pcap_ap_station_enumeration, pcap_handshake_completeness_check, pcap_cleartext_credential_extraction | P1 | P3 | P3 |
+| L3 | Internet | Network | ipv4_ipv6 | 5 | yes | route_injection_or_hijack_paths, icmp_or_control_plane_abuse, ipv6_transition_misconfig_exposure | routing_surface_enumeration, dual_stack_consistency_checks, control_plane_exposure_validation | P1 | P1 | P1 |
+| L3 | Internet | Network | icmp_icmpv6 | 2 | yes | route_injection_or_hijack_paths, icmp_or_control_plane_abuse, ipv6_transition_misconfig_exposure | routing_surface_enumeration, dual_stack_consistency_checks, control_plane_exposure_validation | P1 | P1 | P2 |
 | L3 | Internet | Network | ospf | 0 | no | route_injection_or_hijack_paths, icmp_or_control_plane_abuse, ipv6_transition_misconfig_exposure | routing_surface_enumeration, dual_stack_consistency_checks, control_plane_exposure_validation | P2 | P2 | P3 |
 | L3 | Internet | Network | bgp | 0 | no | route_injection_or_hijack_paths, icmp_or_control_plane_abuse, ipv6_transition_misconfig_exposure | routing_surface_enumeration, dual_stack_consistency_checks, control_plane_exposure_validation | P2 | P3 | P3 |
-| L4 | Transport | Transport | tcp | 32 | yes | service_enumeration_and_port_abuse, session_exhaustion_or_flood_paths, transport_timeout_and_retry_abuse | tcp_udp_surface_mapping, session_stability_validation, timeout_retry_behavior_checks | P1 | P1 | P1 |
-| L4 | Transport | Transport | udp | 10 | yes | service_enumeration_and_port_abuse, session_exhaustion_or_flood_paths, transport_timeout_and_retry_abuse | tcp_udp_surface_mapping, session_stability_validation, timeout_retry_behavior_checks | P1 | P1 | P1 |
-| L5-L7 | Application | Session/Presentation/Application | dns | 16 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | dhcp | 2 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | ntp_ptp | 2 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P2 | P1 |
-| L5-L7 | Application | Session/Presentation/Application | snmp_snmpv3 | 7 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
-| L5-L7 | Application | Session/Presentation/Application | ssh | 31 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
-| L5-L7 | Application | Session/Presentation/Application | telnet | 33 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P3 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | ftp_ftps_sftp | 30 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P2 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | http_https_api | 23 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
+| L4 | Transport | Transport | tcp | 104 | yes | service_enumeration_and_port_abuse, session_exhaustion_or_flood_paths, transport_timeout_and_retry_abuse | tcp_udp_surface_mapping, session_stability_validation, timeout_retry_behavior_checks | P1 | P1 | P1 |
+| L4 | Transport | Transport | udp | 46 | yes | service_enumeration_and_port_abuse, session_exhaustion_or_flood_paths, transport_timeout_and_retry_abuse | tcp_udp_surface_mapping, session_stability_validation, timeout_retry_behavior_checks | P1 | P1 | P1 |
+| L5-L7 | Application | Session/Presentation/Application | dns | 53 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | dhcp | 7 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | ntp_ptp | 3 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P2 | P1 |
+| L5-L7 | Application | Session/Presentation/Application | snmp_snmpv3 | 41 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
+| L5-L7 | Application | Session/Presentation/Application | ssh | 365 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
+| L5-L7 | Application | Session/Presentation/Application | telnet | 340 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P3 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | ftp_ftps_sftp | 332 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P2 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | http_https_api | 521 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P1 | P1 | P1 |
 | L5-L7 | Application | Session/Presentation/Application | radius_tacacs | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P2 | P3 |
-| L5-L7 | Application | Session/Presentation/Application | tr069_cwmp | 1 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P3 | P3 |
-| L5-L7 | Application | Session/Presentation/Application | syslog | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P1 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | modbus_tcp | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | dnp3 | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | opc_ua | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | mqtt | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | bacnet_ip | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
-| L5-L7 | Application | Session/Presentation/Application | profinet_ethernet | 0 | no | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | tr069_cwmp | 6 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P3 | P3 |
+| L5-L7 | Application | Session/Presentation/Application | syslog | 2 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P2 | P1 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | modbus_tcp | 20 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | dnp3 | 7 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | opc_ua | 7 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | mqtt | 8 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | bacnet_ip | 9 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
+| L5-L7 | Application | Session/Presentation/Application | profinet_ethernet | 7 | yes | default_credential_and_bruteforce_paths, auth_bypass_and_session_abuse, protocol_parser_and_input_injection_paths, management_api_and_header_abuse, snmp_read_write_and_trap_plane_misuse | credential_validation_matrix, auth_method_coverage_checks, protocol_specific_exploitability_checks, snmpv2_snmpv3_trap_operational_validation, api_and_web_management_flow_validation | P3 | P3 | P2 |
 
 ### Layer Hit Totals
 
 | Layer | Total Protocol Hits |
 |---|---:|
-| L1 Physical | 4 |
-| L2 Data Link | 42 |
-| L3 Network | 1 |
-| L4 Transport | 42 |
-| L5-L7 Session/Presentation/Application | 145 |
+| L1 Physical | 33 |
+| L2 Data Link | 144 |
+| L3 Network | 7 |
+| L4 Transport | 150 |
+| L5-L7 Session/Presentation/Application | 1728 |
 
 ## Market Priority Coverage (2010-2026)
 
@@ -136,21 +135,21 @@
 | Year | Required | Cataloged | Status | Vendor Covered Count | Keyword Hits |
 |---:|---:|---:|---|---:|---:|
 | 2010 | 11 | 11 | ok | 9 | 6 |
-| 2011 | 11 | 11 | ok | 9 | 5 |
-| 2012 | 11 | 11 | ok | 9 | 11 |
-| 2013 | 11 | 11 | ok | 8 | 6 |
-| 2014 | 11 | 11 | ok | 8 | 8 |
-| 2015 | 11 | 11 | ok | 9 | 12 |
-| 2016 | 12 | 12 | ok | 10 | 3 |
-| 2017 | 13 | 13 | ok | 10 | 3 |
-| 2018 | 13 | 13 | ok | 10 | 3 |
-| 2019 | 13 | 13 | ok | 10 | 3 |
-| 2020 | 13 | 13 | ok | 13 | 8 |
-| 2021 | 14 | 14 | ok | 11 | 3 |
+| 2011 | 11 | 11 | ok | 9 | 6 |
+| 2012 | 11 | 11 | ok | 9 | 16 |
+| 2013 | 11 | 11 | ok | 8 | 9 |
+| 2014 | 11 | 11 | ok | 8 | 11 |
+| 2015 | 11 | 11 | ok | 9 | 17 |
+| 2016 | 12 | 12 | ok | 10 | 4 |
+| 2017 | 13 | 13 | ok | 10 | 4 |
+| 2018 | 13 | 13 | ok | 10 | 4 |
+| 2019 | 13 | 13 | ok | 10 | 5 |
+| 2020 | 13 | 13 | ok | 13 | 12 |
+| 2021 | 14 | 14 | ok | 12 | 12 |
 | 2022 | 14 | 14 | ok | 12 | 0 |
-| 2023 | 15 | 15 | ok | 12 | 0 |
+| 2023 | 15 | 15 | ok | 13 | 8 |
 | 2024 | 14 | 14 | ok | 12 | 0 |
-| 2025 | 16 | 16 | ok | 13 | 0 |
+| 2025 | 16 | 16 | ok | 14 | 9 |
 | 2026 | 15 | 15 | ok | 12 | 0 |
 
 #### Brazil Corporate Coverage By Year
@@ -159,21 +158,21 @@
 |---:|---:|---:|---|---:|---:|
 | 2010 | 13 | 13 | ok | 11 | 4 |
 | 2011 | 13 | 13 | ok | 11 | 4 |
-| 2012 | 15 | 15 | ok | 13 | 5 |
-| 2013 | 15 | 15 | ok | 13 | 2 |
-| 2014 | 15 | 15 | ok | 13 | 2 |
-| 2015 | 15 | 15 | ok | 13 | 2 |
-| 2016 | 15 | 15 | ok | 13 | 2 |
-| 2017 | 15 | 15 | ok | 13 | 2 |
-| 2018 | 17 | 17 | ok | 15 | 2 |
-| 2019 | 20 | 20 | ok | 15 | 2 |
-| 2020 | 20 | 20 | ok | 15 | 2 |
-| 2021 | 22 | 22 | ok | 14 | 2 |
-| 2022 | 23 | 23 | ok | 15 | 2 |
-| 2023 | 22 | 22 | ok | 17 | 2 |
-| 2024 | 24 | 24 | ok | 17 | 2 |
-| 2025 | 24 | 24 | ok | 17 | 2 |
-| 2026 | 24 | 24 | ok | 17 | 2 |
+| 2012 | 15 | 15 | ok | 13 | 9 |
+| 2013 | 15 | 15 | ok | 13 | 7 |
+| 2014 | 15 | 15 | ok | 13 | 7 |
+| 2015 | 15 | 15 | ok | 13 | 7 |
+| 2016 | 15 | 15 | ok | 14 | 8 |
+| 2017 | 15 | 15 | ok | 14 | 8 |
+| 2018 | 17 | 17 | ok | 15 | 6 |
+| 2019 | 20 | 20 | ok | 17 | 18 |
+| 2020 | 20 | 20 | ok | 16 | 10 |
+| 2021 | 22 | 22 | ok | 17 | 20 |
+| 2022 | 23 | 23 | ok | 18 | 20 |
+| 2023 | 22 | 22 | ok | 18 | 8 |
+| 2024 | 24 | 24 | ok | 19 | 16 |
+| 2025 | 24 | 24 | ok | 19 | 16 |
+| 2026 | 24 | 24 | ok | 19 | 16 |
 
 #### Global Coverage By Year
 
@@ -181,21 +180,21 @@
 |---:|---:|---:|---|---:|---:|
 | 2010 | 5 | 6 | ok | 5 | 7 |
 | 2011 | 5 | 6 | ok | 5 | 5 |
-| 2012 | 5 | 7 | ok | 7 | 7 |
-| 2013 | 5 | 8 | ok | 6 | 3 |
-| 2014 | 5 | 8 | ok | 5 | 2 |
-| 2015 | 5 | 7 | ok | 5 | 1 |
-| 2016 | 5 | 9 | ok | 6 | 3 |
-| 2017 | 5 | 9 | ok | 6 | 2 |
-| 2018 | 5 | 12 | ok | 7 | 2 |
-| 2019 | 5 | 12 | ok | 6 | 2 |
-| 2020 | 5 | 11 | ok | 7 | 0 |
-| 2021 | 5 | 12 | ok | 6 | 0 |
-| 2022 | 5 | 12 | ok | 7 | 0 |
-| 2023 | 5 | 13 | ok | 7 | 0 |
-| 2024 | 5 | 13 | ok | 7 | 0 |
-| 2025 | 5 | 13 | ok | 7 | 0 |
-| 2026 | 5 | 13 | ok | 5 | 0 |
+| 2012 | 5 | 7 | ok | 7 | 9 |
+| 2013 | 5 | 8 | ok | 6 | 6 |
+| 2014 | 5 | 8 | ok | 5 | 5 |
+| 2015 | 5 | 7 | ok | 5 | 3 |
+| 2016 | 5 | 9 | ok | 6 | 4 |
+| 2017 | 5 | 9 | ok | 6 | 4 |
+| 2018 | 5 | 12 | ok | 8 | 4 |
+| 2019 | 5 | 12 | ok | 7 | 4 |
+| 2020 | 5 | 11 | ok | 8 | 0 |
+| 2021 | 5 | 12 | ok | 7 | 0 |
+| 2022 | 5 | 12 | ok | 8 | 0 |
+| 2023 | 5 | 13 | ok | 8 | 0 |
+| 2024 | 5 | 13 | ok | 8 | 0 |
+| 2025 | 5 | 13 | ok | 8 | 1 |
+| 2026 | 5 | 13 | ok | 6 | 0 |
 
 ### Brazil Domestic Device List (2010-2026)
 
@@ -217,38 +216,38 @@
 | 2011 | Netgear | WNDR4000 | router-home | yes | 0 |
 | 2011 | Trendnet | TEW-692GR | router-home | yes | 0 |
 | 2011 | Belkin | N750 DB | router-home | yes | 1 |
-| 2011 | ASUS | RT-N66U | router-home | yes | 0 |
+| 2011 | ASUS | RT-N66U | router-home | yes | 1 |
 | 2011 | D-Link | DIR-819 | router-home | yes | 1 |
 | 2011 | Linksys | E3200 | router-home | yes | 0 |
 | 2011 | Netgear | WNDR3700 | router-home | yes | 1 |
 | 2011 | Apple | AirPort Extreme 5th Gen | router-home | no | 0 |
 | 2011 | BrazilFW | BrazilFW Firewall Router | fw-opensource | no | 0 |
-| 2012 | TP-Link | Archer C20 | router-home | yes | 2 |
+| 2012 | TP-Link | Archer C20 | router-home | yes | 3 |
 | 2012 | TP-Link | Archer C6 | router-home | yes | 0 |
-| 2012 | TP-Link | Archer C7 | router-home | yes | 2 |
+| 2012 | TP-Link | Archer C7 | router-home | yes | 3 |
 | 2012 | D-Link | DIR-819 | router-home | yes | 1 |
 | 2012 | D-Link | DIR-822 | router-home | yes | 0 |
 | 2012 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2012 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2012 | Intelbras | Action RG 1200 | router-home | yes | 0 |
-| 2012 | TP-Link | TL-WR940N | router-home | yes | 3 |
-| 2012 | TP-Link | TL-WR840N | router-home | yes | 3 |
+| 2012 | TP-Link | TL-WR940N | router-home | yes | 4 |
+| 2012 | TP-Link | TL-WR840N | router-home | yes | 5 |
 | 2012 | BrazilFW | BrazilFW Firewall Router | fw-opensource | no | 0 |
-| 2013 | TP-Link | Archer C7 | router-home | yes | 2 |
+| 2013 | TP-Link | Archer C7 | router-home | yes | 3 |
 | 2013 | TP-Link | Archer C9 | router-home | yes | 1 |
-| 2013 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 0 |
+| 2013 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 1 |
 | 2013 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2013 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2013 | TP-Link | Archer C6 | router-home | yes | 0 |
-| 2013 | TP-Link | TL-WR940N | router-home | yes | 3 |
+| 2013 | TP-Link | TL-WR940N | router-home | yes | 4 |
 | 2013 | Intelbras | Action RG 1200 | router-home | yes | 0 |
 | 2013 | Huawei | AX3 Dual Core | router-home | yes | 0 |
 | 2013 | Mercusys | MR60X | router-home | no | 0 |
 | 2013 | BrazilFW | BrazilFW Firewall Router | fw-opensource | no | 0 |
-| 2014 | TP-Link | Archer C20 | router-home | yes | 2 |
+| 2014 | TP-Link | Archer C20 | router-home | yes | 3 |
 | 2014 | TP-Link | Archer C6 | router-home | yes | 0 |
-| 2014 | TP-Link | Archer C7 | router-home | yes | 2 |
-| 2014 | TP-Link | TL-WR940N | router-home | yes | 3 |
+| 2014 | TP-Link | Archer C7 | router-home | yes | 3 |
+| 2014 | TP-Link | TL-WR940N | router-home | yes | 4 |
 | 2014 | Intelbras | Action RG 1200 | router-home | yes | 0 |
 | 2014 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2014 | Google | Nest Wi-Fi | router-mesh | no | 0 |
@@ -256,19 +255,19 @@
 | 2014 | D-Link | DIR-822 | router-home | yes | 0 |
 | 2014 | Mercusys | MR60X | router-home | no | 0 |
 | 2014 | BrazilFW | BrazilFW Firewall Router | fw-opensource | no | 0 |
-| 2015 | TP-Link | Archer C20 | router-home | yes | 2 |
+| 2015 | TP-Link | Archer C20 | router-home | yes | 3 |
 | 2015 | TP-Link | Archer C6 | router-home | yes | 0 |
-| 2015 | TP-Link | Archer C7 | router-home | yes | 2 |
+| 2015 | TP-Link | Archer C7 | router-home | yes | 3 |
 | 2015 | TP-Link | Archer C9 | router-home | yes | 1 |
 | 2015 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2015 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2015 | D-Link | DIR-819 | router-home | yes | 1 |
 | 2015 | Intelbras | Action RG 1200 | router-home | yes | 0 |
-| 2015 | TP-Link | TL-WR840N | router-home | yes | 3 |
-| 2015 | TP-Link | TL-WR940N | router-home | yes | 3 |
+| 2015 | TP-Link | TL-WR840N | router-home | yes | 5 |
+| 2015 | TP-Link | TL-WR940N | router-home | yes | 4 |
 | 2015 | BrazilFW | BrazilFW Firewall Router | fw-opensource | no | 0 |
 | 2016 | TP-Link | Archer C6 | router-home | yes | 0 |
-| 2016 | TP-Link | Archer C7 | router-home | yes | 2 |
+| 2016 | TP-Link | Archer C7 | router-home | yes | 3 |
 | 2016 | TP-Link | Archer C9 | router-home | yes | 1 |
 | 2016 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2016 | Huawei | AX3 Dual Core | router-home | yes | 0 |
@@ -281,7 +280,7 @@
 | 2016 | Intelbras | SG 800 Q+ | switch-soho | yes | 0 |
 | 2017 | TP-Link | Deco M4 | router-mesh | yes | 0 |
 | 2017 | TP-Link | Archer C6 | router-home | yes | 0 |
-| 2017 | TP-Link | Archer C7 | router-home | yes | 2 |
+| 2017 | TP-Link | Archer C7 | router-home | yes | 3 |
 | 2017 | TP-Link | Archer C9 | router-home | yes | 1 |
 | 2017 | Intelbras | Action RG 1200 | router-home | yes | 0 |
 | 2017 | Huawei | AX3 Dual Core | router-home | yes | 0 |
@@ -294,7 +293,7 @@
 | 2017 | Mercusys | MS105G | switch-soho | no | 0 |
 | 2018 | TP-Link | Deco M4 | router-mesh | yes | 0 |
 | 2018 | TP-Link | Archer C6 | router-home | yes | 0 |
-| 2018 | TP-Link | Archer C7 | router-home | yes | 2 |
+| 2018 | TP-Link | Archer C7 | router-home | yes | 3 |
 | 2018 | TP-Link | Archer C9 | router-home | yes | 1 |
 | 2018 | Intelbras | Action RG 1200 | router-home | yes | 0 |
 | 2018 | Huawei | AX3 Dual Core | router-home | yes | 0 |
@@ -306,8 +305,8 @@
 | 2018 | Intelbras | SG 800 Q+ | switch-soho | yes | 0 |
 | 2018 | Mercusys | MS105G | switch-soho | no | 0 |
 | 2019 | ASUS | RT-AC86U | router-home | yes | 0 |
-| 2019 | TP-Link | Archer C7 | router-home | yes | 2 |
-| 2019 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 0 |
+| 2019 | TP-Link | Archer C7 | router-home | yes | 3 |
+| 2019 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 1 |
 | 2019 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2019 | TP-Link | Deco M4 | router-mesh | yes | 0 |
 | 2019 | D-Link | DIR-822 | router-home | yes | 0 |
@@ -320,14 +319,14 @@
 | 2019 | Mercusys | MS105G | switch-soho | no | 0 |
 | 2020 | TP-Link | Archer C6 | router-home | yes | 0 |
 | 2020 | Intelbras | Action RG 1200 | router-home | yes | 0 |
-| 2020 | TP-Link | Archer C7 | router-home | yes | 2 |
+| 2020 | TP-Link | Archer C7 | router-home | yes | 3 |
 | 2020 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2020 | D-Link | DIR-819 | router-home | yes | 1 |
-| 2020 | TP-Link | Archer C20 | router-home | yes | 2 |
+| 2020 | TP-Link | Archer C20 | router-home | yes | 3 |
 | 2020 | TP-Link | Deco M4 | router-mesh | yes | 0 |
 | 2020 | TP-Link | Archer AX10 | router-home | yes | 0 |
 | 2020 | D-Link | DIR-822 | router-home | yes | 0 |
-| 2020 | TP-Link | TL-WR840N | router-home | yes | 3 |
+| 2020 | TP-Link | TL-WR840N | router-home | yes | 5 |
 | 2020 | TP-Link | TL-SG108 | switch-soho | yes | 0 |
 | 2020 | Intelbras | SG 800 Q+ | switch-soho | yes | 0 |
 | 2020 | TP-Link | LS1005G | switch-soho | yes | 0 |
@@ -338,10 +337,10 @@
 | 2021 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2021 | TP-Link | Archer C6 | router-home | yes | 0 |
 | 2021 | Intelbras | Action RG 1200 | router-home | yes | 0 |
-| 2021 | TP-Link | TL-WR940N | router-home | yes | 3 |
+| 2021 | TP-Link | TL-WR940N | router-home | yes | 4 |
 | 2021 | Mercusys | MR60X | router-home | no | 0 |
 | 2021 | Huawei | AX3 Dual Core | router-home | yes | 0 |
-| 2021 | OpenWrt | OpenWrt 21.02 Generic Targets | router-firmware | no | 0 |
+| 2021 | OpenWrt | OpenWrt 21.02 Generic Targets | router-firmware | yes | 8 |
 | 2021 | TP-Link | TL-SG108 | switch-soho | yes | 0 |
 | 2021 | Intelbras | SG 800 Q+ | switch-soho | yes | 0 |
 | 2021 | TP-Link | LS1005G | switch-soho | yes | 0 |
@@ -369,7 +368,7 @@
 | 2023 | TP-Link | Archer AX12 | router-home | yes | 0 |
 | 2023 | Intelbras | AX 1500 | router-home | yes | 0 |
 | 2023 | TP-Link | Archer C6 | router-home | yes | 0 |
-| 2023 | OpenWrt | OpenWrt 22.03 Generic Targets | router-firmware | no | 0 |
+| 2023 | OpenWrt | OpenWrt 22.03 Generic Targets | router-firmware | yes | 8 |
 | 2023 | TP-Link | TL-SG108 | switch-soho | yes | 0 |
 | 2023 | Intelbras | SG 800 Q+ | switch-soho | yes | 0 |
 | 2023 | TP-Link | LS1005G | switch-soho | yes | 0 |
@@ -389,7 +388,7 @@
 | 2024 | TP-Link | LS1005G | switch-soho | yes | 0 |
 | 2024 | Netgear | GS305 | switch-soho | yes | 0 |
 | 2025 | Mercusys | MR60X | router-home | no | 0 |
-| 2025 | TP-Link | Archer AXE75 | router-home | yes | 0 |
+| 2025 | TP-Link | Archer AXE75 | router-home | yes | 1 |
 | 2025 | ASUS | ROG Rapture GT-BE98 Pro | router-home | yes | 0 |
 | 2025 | TP-Link | Deco BE85 | router-mesh | yes | 0 |
 | 2025 | Huawei | AX3 Dual Core | router-home | yes | 0 |
@@ -398,7 +397,7 @@
 | 2025 | TP-Link | Archer AX12 | router-home | yes | 0 |
 | 2025 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2025 | TP-Link | Archer BE550 | router-home | yes | 0 |
-| 2025 | OpenWrt | OpenWrt 23.05 Generic Targets | router-firmware | no | 0 |
+| 2025 | OpenWrt | OpenWrt 23.05 Generic Targets | router-firmware | yes | 8 |
 | 2025 | TP-Link | TL-SG108 | switch-soho | yes | 0 |
 | 2025 | Intelbras | SG 800 Q+ | switch-soho | yes | 0 |
 | 2025 | TP-Link | LS1005G | switch-soho | yes | 0 |
@@ -464,7 +463,7 @@
 | 2012 | Intelbras | SG 800 Q+ | switch-soho | yes | 0 |
 | 2012 | Intelbras | SG 1024 MR | switch-corporate | yes | 0 |
 | 2012 | BrazilFW | BrazilFW Firewall Router | fw-opensource | no | 0 |
-| 2012 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2012 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2013 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
 | 2013 | MikroTik | RB4011iGS+RM | router-corporate | yes | 0 |
 | 2013 | MikroTik | CRS326 | switch-corporate | yes | 0 |
@@ -475,11 +474,11 @@
 | 2013 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2013 | Aruba | 2930F | switch-corporate | yes | 0 |
 | 2013 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 1 |
-| 2013 | Cisco | Catalyst 3850 | switch-enterprise | yes | 0 |
+| 2013 | Cisco | Catalyst 3850 | switch-enterprise | yes | 1 |
 | 2013 | Intelbras | SG 800 Q+ | switch-soho | yes | 0 |
 | 2013 | Intelbras | SG 1024 MR | switch-corporate | yes | 0 |
 | 2013 | BrazilFW | BrazilFW Firewall Router | fw-opensource | no | 0 |
-| 2013 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2013 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2014 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
 | 2014 | MikroTik | RB4011iGS+RM | router-corporate | yes | 0 |
 | 2014 | MikroTik | CRS326 | switch-corporate | yes | 0 |
@@ -490,11 +489,11 @@
 | 2014 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2014 | Aruba | 2930F | switch-corporate | yes | 0 |
 | 2014 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 1 |
-| 2014 | Cisco | Catalyst 3850 | switch-enterprise | yes | 0 |
+| 2014 | Cisco | Catalyst 3850 | switch-enterprise | yes | 1 |
 | 2014 | Intelbras | SG 1024 MR | switch-corporate | yes | 0 |
 | 2014 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
 | 2014 | BrazilFW | BrazilFW Firewall Router | fw-opensource | no | 0 |
-| 2014 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2014 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2015 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
 | 2015 | MikroTik | RB4011iGS+RM | router-corporate | yes | 0 |
 | 2015 | MikroTik | CRS326 | switch-corporate | yes | 0 |
@@ -505,11 +504,11 @@
 | 2015 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2015 | Aruba | 2930F | switch-corporate | yes | 0 |
 | 2015 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 1 |
-| 2015 | Cisco | Catalyst 3850 | switch-enterprise | yes | 0 |
+| 2015 | Cisco | Catalyst 3850 | switch-enterprise | yes | 1 |
 | 2015 | Intelbras | SG 1024 MR | switch-corporate | yes | 0 |
 | 2015 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
 | 2015 | BrazilFW | BrazilFW Firewall Router | fw-opensource | no | 0 |
-| 2015 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2015 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2016 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
 | 2016 | MikroTik | RB4011iGS+RM | router-corporate | yes | 0 |
 | 2016 | MikroTik | CRS326 | switch-corporate | yes | 0 |
@@ -523,8 +522,8 @@
 | 2016 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2016 | Intelbras | SG 1024 MR | switch-corporate | yes | 0 |
 | 2016 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
-| 2016 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
-| 2016 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2016 | Sophos | XGS Firewall | ngfw-smb | yes | 2 |
+| 2016 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2017 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
 | 2017 | MikroTik | RB4011iGS+RM | router-corporate | yes | 0 |
 | 2017 | MikroTik | CRS326 | switch-corporate | yes | 0 |
@@ -538,8 +537,8 @@
 | 2017 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2017 | Intelbras | SG 1024 MR | switch-corporate | yes | 0 |
 | 2017 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
-| 2017 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
-| 2017 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2017 | Sophos | XGS Firewall | ngfw-smb | yes | 2 |
+| 2017 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2018 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
 | 2018 | MikroTik | RB4011iGS+RM | router-corporate | yes | 0 |
 | 2018 | MikroTik | CRS326 | switch-corporate | yes | 0 |
@@ -556,7 +555,7 @@
 | 2018 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
 | 2018 | SonicWall | TZ Series | fw-smb | yes | 0 |
 | 2018 | Blockbit | Blockbit NGFW/UTM | ngfw-corporate | no | 0 |
-| 2018 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2018 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2019 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
 | 2019 | MikroTik | RB4011iGS+RM | router-corporate | yes | 0 |
 | 2019 | MikroTik | CRS326 | switch-corporate | yes | 0 |
@@ -567,16 +566,16 @@
 | 2019 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2019 | Aruba | 2930F | switch-corporate | yes | 0 |
 | 2019 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 1 |
-| 2019 | OpenWrt | OpenWrt 19.07 Generic Targets | router-firmware | no | 0 |
+| 2019 | OpenWrt | OpenWrt 19.07 Generic Targets | router-firmware | yes | 8 |
 | 2019 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2019 | Aruba | Instant On 1930 | switch-corporate | yes | 0 |
 | 2019 | Intelbras | SG 2404 PoE | switch-poe | yes | 0 |
 | 2019 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
 | 2019 | SonicWall | TZ Series | fw-smb | yes | 0 |
-| 2019 | Netgate | pfSense | fw-opensource | no | 0 |
+| 2019 | Netgate | pfSense | fw-opensource | yes | 4 |
 | 2019 | Starti | Edge Protect NGFW | ngfw-smb | no | 0 |
 | 2019 | Blockbit | Blockbit NGFW/UTM | ngfw-corporate | no | 0 |
-| 2019 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2019 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2020 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
 | 2020 | MikroTik | RB4011iGS+RM | router-corporate | yes | 0 |
 | 2020 | MikroTik | CRS326 | switch-corporate | yes | 0 |
@@ -592,11 +591,11 @@
 | 2020 | Intelbras | SG 2404 PoE | switch-poe | yes | 0 |
 | 2020 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
 | 2020 | SonicWall | TZ Series | fw-smb | yes | 0 |
-| 2020 | Netgate | pfSense | fw-opensource | no | 0 |
+| 2020 | Netgate | pfSense | fw-opensource | yes | 4 |
 | 2020 | Starti | Edge Protect NGFW | ngfw-smb | no | 0 |
 | 2020 | Blockbit | Blockbit NGFW/UTM | ngfw-corporate | no | 0 |
 | 2020 | Algar Telecom | Algar NGFW | ngfw-isp | no | 0 |
-| 2020 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2020 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2021 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
 | 2021 | MikroTik | RB4011iGS+RM | router-corporate | yes | 0 |
 | 2021 | MikroTik | CRS326 | switch-corporate | yes | 0 |
@@ -607,18 +606,18 @@
 | 2021 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2021 | Aruba | 2930F | switch-corporate | yes | 0 |
 | 2021 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 1 |
-| 2021 | OpenWrt | OpenWrt 21.02 Generic Targets | router-firmware | no | 0 |
+| 2021 | OpenWrt | OpenWrt 21.02 Generic Targets | router-firmware | yes | 8 |
 | 2021 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2021 | Aruba | Instant On 1930 | switch-corporate | yes | 0 |
 | 2021 | Intelbras | SG 2404 PoE | switch-poe | yes | 0 |
 | 2021 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
-| 2021 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
-| 2021 | Netgate | pfSense | fw-opensource | no | 0 |
+| 2021 | Sophos | XGS Firewall | ngfw-smb | yes | 2 |
+| 2021 | Netgate | pfSense | fw-opensource | yes | 4 |
 | 2021 | Starti | Edge Protect NGFW | ngfw-smb | no | 0 |
 | 2021 | Blockbit | Blockbit NGFW/UTM | ngfw-corporate | no | 0 |
 | 2021 | Algar Telecom | Algar NGFW | ngfw-isp | no | 0 |
 | 2021 | Azion | Azion Edge Firewall/WAF | fw-cloud-edge | no | 0 |
-| 2021 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2021 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2022 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
 | 2022 | MikroTik | RB4011iGS+RM | router-corporate | yes | 0 |
 | 2022 | MikroTik | CRS326 | switch-corporate | yes | 0 |
@@ -629,19 +628,19 @@
 | 2022 | Palo Alto Networks | PA-220 | ngfw-corporate | no | 0 |
 | 2022 | Aruba | 2930F | switch-corporate | yes | 0 |
 | 2022 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 1 |
-| 2022 | OpenWrt | OpenWrt 22.03 Generic Targets | router-firmware | no | 0 |
+| 2022 | OpenWrt | OpenWrt 22.03 Generic Targets | router-firmware | yes | 8 |
 | 2022 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2022 | Aruba | Instant On 1930 | switch-corporate | yes | 0 |
 | 2022 | Intelbras | SG 2404 PoE | switch-poe | yes | 0 |
 | 2022 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
-| 2022 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
-| 2022 | Netgate | pfSense | fw-opensource | no | 0 |
+| 2022 | Sophos | XGS Firewall | ngfw-smb | yes | 2 |
+| 2022 | Netgate | pfSense | fw-opensource | yes | 4 |
 | 2022 | Cisco | Business CBS250 | switch-corporate | yes | 0 |
 | 2022 | Starti | Edge Protect NGFW | ngfw-smb | no | 0 |
 | 2022 | Blockbit | Blockbit NGFW/UTM | ngfw-corporate | no | 0 |
 | 2022 | Algar Telecom | Algar NGFW | ngfw-isp | no | 0 |
 | 2022 | Azion | Azion Edge Firewall/WAF | fw-cloud-edge | no | 0 |
-| 2022 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2022 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2023 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 1 |
 | 2023 | Ubiquiti | Cloud Gateway Ultra | router-corporate | yes | 0 |
 | 2023 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
@@ -656,14 +655,14 @@
 | 2023 | Aruba | Instant On 1930 | switch-corporate | yes | 0 |
 | 2023 | Intelbras | SG 2404 PoE | switch-poe | yes | 0 |
 | 2023 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
-| 2023 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
+| 2023 | Sophos | XGS Firewall | ngfw-smb | yes | 2 |
 | 2023 | Cisco | Business CBS350 | switch-corporate | yes | 0 |
 | 2023 | Ubiquiti | UniFi Switch 8/16/24/48 PoE | switch-corporate | yes | 0 |
 | 2023 | Starti | Edge Protect NGFW | ngfw-smb | no | 0 |
 | 2023 | Blockbit | Blockbit NGFW/UTM | ngfw-corporate | no | 0 |
 | 2023 | Algar Telecom | Algar NGFW | ngfw-isp | no | 0 |
 | 2023 | Azion | Azion Edge Firewall/WAF | fw-cloud-edge | no | 0 |
-| 2023 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2023 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2024 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 1 |
 | 2024 | Ubiquiti | Cloud Gateway Ultra | router-corporate | yes | 0 |
 | 2024 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
@@ -674,12 +673,12 @@
 | 2024 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
 | 2024 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
 | 2024 | Aruba | 2930F | switch-corporate | yes | 0 |
-| 2024 | OpenWrt | OpenWrt 23.05 Generic Targets | router-firmware | no | 0 |
+| 2024 | OpenWrt | OpenWrt 23.05 Generic Targets | router-firmware | yes | 8 |
 | 2024 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2024 | Aruba | Instant On 1930 | switch-corporate | yes | 0 |
 | 2024 | Intelbras | SG 2404 PoE | switch-poe | yes | 0 |
 | 2024 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
-| 2024 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
+| 2024 | Sophos | XGS Firewall | ngfw-smb | yes | 2 |
 | 2024 | Cisco | Business CBS350 | switch-corporate | yes | 0 |
 | 2024 | Ubiquiti | UniFi Switch 8/16/24/48 PoE | switch-corporate | yes | 0 |
 | 2024 | Palo Alto Networks | PA-450 | ngfw-corporate | no | 0 |
@@ -687,7 +686,7 @@
 | 2024 | Blockbit | Blockbit NGFW/UTM | ngfw-corporate | no | 0 |
 | 2024 | Algar Telecom | Algar NGFW | ngfw-isp | no | 0 |
 | 2024 | Azion | Azion Edge Firewall/WAF | fw-cloud-edge | no | 0 |
-| 2024 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2024 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2025 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 1 |
 | 2025 | Ubiquiti | Cloud Gateway Ultra | router-corporate | yes | 0 |
 | 2025 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
@@ -698,12 +697,12 @@
 | 2025 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
 | 2025 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
 | 2025 | Aruba | 2930F | switch-corporate | yes | 0 |
-| 2025 | OpenWrt | OpenWrt 23.05 Generic Targets | router-firmware | no | 0 |
+| 2025 | OpenWrt | OpenWrt 23.05 Generic Targets | router-firmware | yes | 8 |
 | 2025 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2025 | Aruba | Instant On 1930 | switch-corporate | yes | 0 |
 | 2025 | Intelbras | SG 2404 PoE | switch-poe | yes | 0 |
 | 2025 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
-| 2025 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
+| 2025 | Sophos | XGS Firewall | ngfw-smb | yes | 2 |
 | 2025 | Cisco | Business CBS350 | switch-corporate | yes | 0 |
 | 2025 | Ubiquiti | UniFi Switch 8/16/24/48 PoE | switch-corporate | yes | 0 |
 | 2025 | Palo Alto Networks | PA-450 | ngfw-corporate | no | 0 |
@@ -711,7 +710,7 @@
 | 2025 | Blockbit | Blockbit NGFW/UTM | ngfw-corporate | no | 0 |
 | 2025 | Algar Telecom | Algar NGFW | ngfw-isp | no | 0 |
 | 2025 | Azion | Azion Edge Firewall/WAF | fw-cloud-edge | no | 0 |
-| 2025 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2025 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 | 2026 | Ubiquiti | UniFi Dream Router | router-corporate | yes | 1 |
 | 2026 | Ubiquiti | Cloud Gateway Ultra | router-corporate | yes | 0 |
 | 2026 | MikroTik | RB3011UiAS-RM | router-corporate | yes | 0 |
@@ -722,12 +721,12 @@
 | 2026 | Fortinet | FortiGate 60F | ngfw-corporate | yes | 0 |
 | 2026 | Juniper | SRX300 | ngfw-corporate | yes | 0 |
 | 2026 | Aruba | 2930F | switch-corporate | yes | 0 |
-| 2026 | OpenWrt | OpenWrt 23.05 Generic Targets | router-firmware | no | 0 |
+| 2026 | OpenWrt | OpenWrt 23.05 Generic Targets | router-firmware | yes | 8 |
 | 2026 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2026 | Aruba | Instant On 1930 | switch-corporate | yes | 0 |
 | 2026 | Intelbras | SG 2404 PoE | switch-poe | yes | 0 |
 | 2026 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
-| 2026 | Sophos | XGS Firewall | ngfw-smb | no | 0 |
+| 2026 | Sophos | XGS Firewall | ngfw-smb | yes | 2 |
 | 2026 | Cisco | Business CBS350 | switch-corporate | yes | 0 |
 | 2026 | Ubiquiti | UniFi Switch 8/16/24/48 PoE | switch-corporate | yes | 0 |
 | 2026 | Palo Alto Networks | PA-450 | ngfw-corporate | no | 0 |
@@ -735,7 +734,7 @@
 | 2026 | Blockbit | Blockbit NGFW/UTM | ngfw-corporate | no | 0 |
 | 2026 | Algar Telecom | Algar NGFW | ngfw-isp | no | 0 |
 | 2026 | Azion | Azion Edge Firewall/WAF | fw-cloud-edge | no | 0 |
-| 2026 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 1 |
+| 2026 | DrayTek | Vigor2960 Firewall VPN | fw-smb | yes | 5 |
 
 ### Global Device List (2010-2026)
 
@@ -753,40 +752,40 @@
 | 2011 | Trendnet | TEW-692GR | router-home | yes | 0 |
 | 2011 | Apple | AirPort Extreme 5th Gen | router-home | no | 0 |
 | 2011 | Cisco | Catalyst 2960-X | switch-enterprise | yes | 3 |
-| 2012 | TP-Link | Archer C20 | router-home | yes | 2 |
+| 2012 | TP-Link | Archer C20 | router-home | yes | 3 |
 | 2012 | Linksys | E3200 | router-home | yes | 0 |
 | 2012 | Netgear | WNDR3700 | router-home | yes | 1 |
 | 2012 | D-Link | DIR-819 | router-home | yes | 1 |
-| 2012 | ASUS | RT-N66U | router-home | yes | 0 |
+| 2012 | ASUS | RT-N66U | router-home | yes | 1 |
 | 2012 | Cisco | Catalyst 2960-X | switch-enterprise | yes | 3 |
 | 2012 | Juniper | EX2300 | switch-enterprise | yes | 0 |
-| 2013 | TP-Link | Archer C7 | router-home | yes | 2 |
-| 2013 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 0 |
+| 2013 | TP-Link | Archer C7 | router-home | yes | 3 |
+| 2013 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 1 |
 | 2013 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2013 | Linksys | E4200 | router-home | yes | 1 |
 | 2013 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2013 | AT&T / Arris | NVG589 VDSL Gateway | isp-cpe/modem-router | no | 0 |
-| 2013 | Cisco | Catalyst 3850 | switch-enterprise | yes | 0 |
+| 2013 | Cisco | Catalyst 3850 | switch-enterprise | yes | 1 |
 | 2013 | Juniper | EX2300 | switch-enterprise | yes | 0 |
-| 2014 | TP-Link | Archer C7 | router-home | yes | 2 |
+| 2014 | TP-Link | Archer C7 | router-home | yes | 3 |
 | 2014 | D-Link | DIR-822 | router-home | yes | 0 |
 | 2014 | ASUS | RT-AC86U | router-home | yes | 0 |
-| 2014 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 0 |
+| 2014 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 1 |
 | 2014 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2014 | AT&T / Arris | NVG599 VDSL Gateway | isp-cpe/modem-router | no | 0 |
-| 2014 | Cisco | Catalyst 3850 | switch-enterprise | yes | 0 |
+| 2014 | Cisco | Catalyst 3850 | switch-enterprise | yes | 1 |
 | 2014 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2015 | TP-Link | Archer C9 | router-home | yes | 1 |
 | 2015 | ASUS | RT-AC86U | router-home | yes | 0 |
-| 2015 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 0 |
+| 2015 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 1 |
 | 2015 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2015 | TP-Link | Archer C6 | router-home | yes | 0 |
-| 2015 | Cisco | Catalyst 3850 | switch-enterprise | yes | 0 |
+| 2015 | Cisco | Catalyst 3850 | switch-enterprise | yes | 1 |
 | 2015 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2016 | TP-Link | Archer C9 | router-home | yes | 1 |
 | 2016 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2016 | Google | Nest Wi-Fi | router-mesh | no | 0 |
-| 2016 | TP-Link | Archer C7 | router-home | yes | 2 |
+| 2016 | TP-Link | Archer C7 | router-home | yes | 3 |
 | 2016 | D-Link | DIR-822 | router-home | yes | 0 |
 | 2016 | AT&T / Pace | 5268AC U-Verse Gateway | isp-cpe/gateway | no | 0 |
 | 2016 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
@@ -795,8 +794,8 @@
 | 2017 | TP-Link | Deco M4 | router-mesh | yes | 0 |
 | 2017 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2017 | Google | Nest Wi-Fi | router-mesh | no | 0 |
-| 2017 | TP-Link | Archer C7 | router-home | yes | 2 |
-| 2017 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 0 |
+| 2017 | TP-Link | Archer C7 | router-home | yes | 3 |
+| 2017 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 1 |
 | 2017 | AT&T / Pace | 5268AC U-Verse Gateway | isp-cpe/gateway | no | 0 |
 | 2017 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2017 | Arista | 7000 Series | switch-datacenter | no | 0 |
@@ -804,9 +803,9 @@
 | 2018 | TP-Link | Deco M4 | router-mesh | yes | 0 |
 | 2018 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2018 | Google | Nest Wi-Fi | router-mesh | no | 0 |
-| 2018 | TP-Link | Archer C7 | router-home | yes | 2 |
-| 2018 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 0 |
-| 2018 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2018 | TP-Link | Archer C7 | router-home | yes | 3 |
+| 2018 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 1 |
+| 2018 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | yes | 0 |
 | 2018 | AT&T / Pace | 5268AC U-Verse Gateway | isp-cpe/gateway | no | 0 |
 | 2018 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
 | 2018 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
@@ -814,11 +813,11 @@
 | 2018 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
 | 2018 | Fortinet | FortiGate 100F | ngfw-corporate | yes | 0 |
 | 2019 | ASUS | RT-AC86U | router-home | yes | 0 |
-| 2019 | TP-Link | Archer C7 | router-home | yes | 2 |
-| 2019 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 0 |
+| 2019 | TP-Link | Archer C7 | router-home | yes | 3 |
+| 2019 | Netgear | Nighthawk Pro Gaming XR500 | router-home | yes | 1 |
 | 2019 | Google | Nest Wi-Fi | router-mesh | no | 0 |
 | 2019 | TP-Link | Deco M4 | router-mesh | yes | 0 |
-| 2019 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2019 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | yes | 0 |
 | 2019 | AT&T / Pace | 5268AC U-Verse Gateway | isp-cpe/gateway | no | 0 |
 | 2019 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
 | 2019 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
@@ -830,7 +829,7 @@
 | 2020 | TP-Link | Archer AX10 | router-home | yes | 0 |
 | 2020 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2020 | D-Link | DIR-822 | router-home | yes | 0 |
-| 2020 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2020 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | yes | 0 |
 | 2020 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2020 | Arista | 7000 Series | switch-datacenter | no | 0 |
 | 2020 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
@@ -841,7 +840,7 @@
 | 2021 | TP-Link | Archer AX10 | router-home | yes | 0 |
 | 2021 | TP-Link | Deco M4 | router-mesh | yes | 0 |
 | 2021 | Google | Nest Wi-Fi | router-mesh | no | 0 |
-| 2021 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2021 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | yes | 0 |
 | 2021 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
 | 2021 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2021 | Arista | 7000 Series | switch-datacenter | no | 0 |
@@ -853,7 +852,7 @@
 | 2022 | ASUS | RT-AX88U | router-corporate | yes | 0 |
 | 2022 | TP-Link | Deco M4 | router-mesh | yes | 0 |
 | 2022 | Mercusys | MR60X | router-home | no | 0 |
-| 2022 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2022 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | yes | 0 |
 | 2022 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
 | 2022 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
 | 2022 | Arista | 7000 Series | switch-datacenter | no | 0 |
@@ -865,7 +864,7 @@
 | 2023 | ASUS | RT-AC86U | router-home | yes | 0 |
 | 2023 | Huawei | AX3 Dual Core | router-home | yes | 0 |
 | 2023 | Mercusys | MR60X | router-home | no | 0 |
-| 2023 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2023 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | yes | 0 |
 | 2023 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
 | 2023 | AT&T / Nokia | BGW320-505 XGS-PON Gateway | isp-cpe/gateway | no | 0 |
 | 2023 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
@@ -878,7 +877,7 @@
 | 2024 | TP-Link | Deco BE85 | router-mesh | yes | 0 |
 | 2024 | Mercusys | MR60X | router-home | no | 0 |
 | 2024 | Huawei | AX2S | router-home | yes | 0 |
-| 2024 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2024 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | yes | 0 |
 | 2024 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
 | 2024 | AT&T / Nokia | BGW320-505 XGS-PON Gateway | isp-cpe/gateway | no | 0 |
 | 2024 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
@@ -886,12 +885,12 @@
 | 2024 | Cisco | Nexus 9000 | switch-datacenter | yes | 0 |
 | 2024 | Fortinet | FortiGate 200F | ngfw-corporate | yes | 0 |
 | 2024 | Palo Alto Networks | PA-450 | ngfw-corporate | no | 0 |
-| 2025 | TP-Link | Archer AXE75 | router-home | yes | 0 |
+| 2025 | TP-Link | Archer AXE75 | router-home | yes | 1 |
 | 2025 | ASUS | ROG Rapture GT-BE98 Pro | router-home | yes | 0 |
 | 2025 | TP-Link | Deco BE85 | router-mesh | yes | 0 |
 | 2025 | eero | Max 7 | router-mesh | no | 0 |
 | 2025 | TP-Link | Archer BE550 | router-home | yes | 0 |
-| 2025 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2025 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | yes | 0 |
 | 2025 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
 | 2025 | AT&T / Nokia | BGW320-505 XGS-PON Gateway | isp-cpe/gateway | no | 0 |
 | 2025 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
@@ -904,7 +903,7 @@
 | 2026 | eero | Max 7 | router-mesh | no | 0 |
 | 2026 | GL.iNet | Flint 3 (GL-BE9300) | router-home | no | 0 |
 | 2026 | Mercusys | MR80X | router-home | no | 0 |
-| 2026 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | no | 0 |
+| 2026 | OpenWrt | OpenWrt x86_64 Virtual Router | router-virtual | yes | 0 |
 | 2026 | AT&T / Arris | BGW210-700 Fiber Gateway | isp-cpe/gateway | no | 0 |
 | 2026 | AT&T / Nokia | BGW320-505 XGS-PON Gateway | isp-cpe/gateway | no | 0 |
 | 2026 | Cisco | Catalyst 9300 | switch-enterprise | yes | 0 |
@@ -984,11 +983,23 @@
 
 | Vendor | Product | Modules | Exploits | Creds | Scanners | Generic | Payloads | Encoders | CVEs | Attack Classes |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|
+| 100fio_networks | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| 100fio_networks | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| 100fio_networks | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| 100fio_networks | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| 1net1 | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| 1net1 | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| 1net1 | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| 1net1 | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | 2wire | 4011g_5012nv_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
 | 2wire | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | 2wire | gateway_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
 | 2wire | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | 2wire | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| 3bb | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| 3bb | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| 3bb | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| 3bb | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | 3com | ap8760_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
 | 3com | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | 3com | imc_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
@@ -997,38 +1008,271 @@
 | 3com | officeconnect_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | 3com | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | 3com | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| a_link | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| a_link | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| a_link | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| a_link | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| abb | cylon_aspect_default_creds | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
+| abb | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| abb | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| access_control | anviz_m3_rfid_user_dump | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| access_control | hid_mercury_auth_bypass_cve_2022_31479 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-31479, CVE-2022-31480, CVE-2022-31481, CVE-2022-31482, CVE-2022-31483 | auth_bypass |
+| access_control | nortek_emerge_e3_rce_cve_2019_7256 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-7256, CVE-2019-7257, CVE-2019-7258, CVE-2019-7259, CVE-2019-7260, CVE-2019-7261 | rce |
+| accton | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| accton | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| accton | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| acorp | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| acorp | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| acorp | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| acorp | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| acti | acm_5611_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| acti | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| acti | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| acti | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| acti | webinterface_http_form_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| actiontec | ftp_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
 | actiontec | mi424wr_rce_cve_2014_9583 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-9583 | rce |
+| actiontec | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| actiontec | telnet_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| actiontec | webinterface_http_auth_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| adb | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| adb | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| adb | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| adb | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| addon | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| addon | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| addon | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| addon | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| adtran | snmp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| adtran | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| adtran | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| adtran | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| advantech | switch_shellshock_cve_2015_6023 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-6271, CVE-2015-6023 | rce |
+| airlink_101 | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airlink_101 | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airlink_101 | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airlink_101 | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airlive | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airlive | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airlive | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airlive | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airnet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airnet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airnet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airnet | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airrouter | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airrouter | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airrouter | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airrouter | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airties | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airties | login_bof_cve_2015_7279 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-1635, CVE-2015-7279 | - |
+| airties | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airties | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| airties | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| aitemi | default_creds_config_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| aitm_credential_interceptor.py | aitm_credential_interceptor | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
+| alcatel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| alcatel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| alcatel | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| alcatel_lucent | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| alcatel_lucent | omnipcx_masterCGI_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2007-3010 | rce |
+| alcatel_lucent | omniswitch_add_admin_csrf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| alcatel_lucent | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| alcatel_lucent | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| alcatel_lucent | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| allied_data | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| allied_data | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| allied_data | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| allied_data | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| allied_telesyn | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| allied_telesyn | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| allied_telesyn | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| allnet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| allnet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| allnet | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| alpha_networks | config_download | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| alpha_networks | web_shell_cmd_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| alteon | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| alteon | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| alteon | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| alvarion | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| alvarion | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| alvarion | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| alvarion | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| amazon_echo | amazon_echo_ava_cve_2020_5909 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-5909 | - |
+| amazon_echo | amazon_echo_uart_root | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| amazon_firetv | adb_tcp_shell | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| amazon_firetv | jpake_pin_bruteforce_cve_2023_1385 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-1385 | - |
+| amazon_firetv | xss_media_source_cve_2023_1384 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-1384 | - |
+| ambit | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ambit | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ambit | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ambit | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| amcrest | amcrest_camera_unauth_info_disclosure_cve_2019_3950 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-7927, CVE-2019-3950 | auth_bypass, info_disclosure |
+| american_dynamics | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| american_dynamics | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| american_dynamics | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| amped_wireless | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| amped_wireless | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| amped_wireless | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| amped_wireless | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| android_tv | adb_default_access | 1 | 0 | 1 | 0 | 0 | 0 | 0 | CVE-2020-0034 | - |
+| android_tv | adb_shell_access | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| android_tv | apk_sideload | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| android_tv | kernel_privesc_cve_2019_2215 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-2215 | - |
+| android_tv | pairing_pin_bruteforce_cve_2021_0889 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-0889 | - |
+| android_tv | tcl_file_disclosure_cve_2020_27403 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-27403 | - |
+| android_tv | tcl_firmware_write_cve_2020_28055 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-28055 | - |
+| android_tv | tcl_upnp_dos_cve_2025_4285 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-4285 | dos_or_crash |
+| android_tv | tcl_upnp_ssrf_cve_2025_4284 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-4284 | - |
+| annke | annke_dvr_nvr_unauth_rce_cve_2021_32941 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-32941 | rce |
+| aolynk | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| aolynk | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| aolynk | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| aolynk | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| apc | easy_ups_rmi_rce_cve_2023_29411 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-29411 | rce |
+| apc | nmc4_path_traversal_cve_2023_29412 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-29412 | path_traversal |
+| arcadyan | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | arcadyan | o2_box_6431_password_disclosure_cve_2015_7288 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-7288 | - |
+| arcadyan | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| arcadyan | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| arcadyan | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| arecont | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| arecont | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| arecont | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| arecont | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | armle | bind_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | armle | reverse_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
+| arp_spoof_iot_pivot.py | arp_spoof_iot_pivot | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| arris | ftp_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
 | arris | router_firmware_9_1_103_remote_code_execution_rce_authentica_cve_2022_45701 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-45701 | rce |
+| arris | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| arris | telnet_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
 | arris | tm602a_password_of_the_day | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| arris | webinterface_http_auth_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| artnet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| artnet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| artnet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| artnet | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | aruba | airwave_8_2_3_xml_external_entity_injection_cross_site_scrip_cve_2016_8526 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-8526, CVE-2016-8527 | - |
+| aruba | aos10_instant_papi_cmd_injection_cve_2024_47460 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-42509, CVE-2024-47460 | rce |
+| aruba | aos10_instant_papi_rce_cve_2024_42509 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-42509, CVE-2024-47460 | rce |
+| aruba | arubaos_instant_papi_overflow_cluster_cve_2022_37897 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-37885, CVE-2022-37886, CVE-2022-37888, CVE-2022-37890, CVE-2022-37897 | rce |
+| aruba | arubaos_papi_heap_overflow_cve_2023_35980 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-35980, CVE-2023-35981, CVE-2023-35982 | - |
 | aruba | clearpass_policy_manager_6_7_0_unauthenticated_remote_comman_cve_2020_7115 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-7115 | - |
+| aruba | clearpass_policy_manager_preauth_rce_cve_2023_43497 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-43497, CVE-2023-43498 | rce |
 | aruba | instant_8_7_1_0_arbitrary_file_modification_cve_2021_25155 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-25155 | - |
+| aruba | instant_arb_file_mod | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-25155 | backdoor |
+| aruba | instant_arubaos_papi_cmd_inject_cve_2021_25144 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-25144, CVE-2021-25145, CVE-2021-25146, CVE-2021-25149 | rce |
 | aruba | instant_iap_remote_code_execution_cve_2021_25155 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-25155, CVE-2021-25156, CVE-2021-25157, CVE-2021-25158, CVE-2021-25159, CVE-2021-25160, CVE-2021-25161, CVE-2021-25162 | - |
+| aruba | instant_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-25162 | rce |
+| aruba | papi_service_scanner | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2021-25144, CVE-2022-37885, CVE-2022-37897, CVE-2023-35980, CVE-2023-35981, CVE-2024-42509, CVE-2024-47460 | - |
+| aruba | webinterface_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | CVE-2021-25155 | - |
+| askey | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| askey | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| askey | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| askey | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | asmax | ar_1004g_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
 | asmax | ar_804_gu_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | asmax | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | asmax | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | asmax | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | asmax | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| astoria | astoria_password_reset | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | password_reset_or_change |
+| asus | asmb8_default_creds_ipmi | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | asus | asmb8_ikvm_1_14_51_remote_code_execution_rce_cve_2023_26602 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-26602 | rce |
 | asus | asus_rt_n56u_remote_root_shell_exploit_apps_name_cve_2013_6343 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-6343 | - |
 | asus | asustor_adm_3_1_2rhg1_remote_code_execution_cve_2018_11510 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-11510 | rce |
 | asus | asuswrt_lan_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-5999, CVE-2018-6000 | rce |
+| asus | b1m_projector_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| asus | dsl_n16_auth_bypass_cve_2025_59367 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-59367 | auth_bypass |
 | asus | exploitdb_49036_rb_cve_2018_9285 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-9285 | - |
 | asus | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | asus | gamesdk_v1_0_0_4_gamesdk_exe_unquoted_service_path_cve_2022_35899 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-35899 | - |
+| asus | gt_ac2900_auth_bypass_cve_2021_32030 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-32030 | auth_bypass |
 | asus | hg100_denial_of_service_cve_2018_11492 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-11492 | dos_or_crash |
 | asus | infosvr_authentication_bypass_command_execution_metasploit_cve_2014_9583 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-9583 | - |
 | asus | infosvr_backdoor_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor, rce |
 | asus | precision_touchpad_11_0_0_25_denial_of_service_cve_2019_10709 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-10709 | dos_or_crash |
+| asus | router_csrf_rce_cve_2025_15101 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-15101 | rce |
+| asus | rt_n16_admin_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
 | asus | rt_n16_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
+| asus | rt_n66u_remote_command_execution | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | asus | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | asus | stack_overflow_cve_2017_11345 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-11345 | - |
 | asus | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| asus_firmware_restore_bypass.py | asus_firmware_restore_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-20334, CVE-2023-41345 | backdoor |
+| atlantis_land | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| atlantis_land | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| atlantis_land | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| atlantis_land | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| att | pace_5268ac_admin_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| att | pace_5268ac_config_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| att | webinterface_http_form_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| audiocodes | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| audiocodes | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| automotive_qnx_pcx_rce.py | automotive_qnx_pcx_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-22212 | rce |
+| avaya | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| avaya | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| avaya | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| avigilon | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| avigilon | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| avigilon | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| avigilon | videoiq_camera_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
+| avocent | acs_unauth_cmd_injection_cve_2024_50603 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-50603 | rce |
+| avtech | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| avtech | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| avtech | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| awb_networks | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| awb_networks | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| awb_networks | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| awb_networks | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| axesstel | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| axesstel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| axesstel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| axesstel | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| axis | app_install_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| axis | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| axis | srv_parhand_rce_cve_2018_10660 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-10660, CVE-2018-10661, CVE-2018-10662 | rce |
+| axis | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| axis | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| axis | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| aztech | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| aztech | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| aztech | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| aztech | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bandluxe | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bandluxe | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bandluxe | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bandluxe | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| barracuda | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| barracuda | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| basler | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| basler | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| basler | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| basler | webinterface_http_form_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| baudtec | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| baudtec | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| baudtec | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| baudtec | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| baytec | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| baytec | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| baytec | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| baytec | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bec_technologies | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bec_technologies | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bec_technologies | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bec_technologies | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| beetel | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| beetel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| beetel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| beetel | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| belgacom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| belgacom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| belgacom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| belgacom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | belkin | auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass, creds_disclosure |
+| belkin | dns_hijack_csrf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | belkin | f9k1009_f9k1010_2_00_04_2_00_09_hard_coded_credentials_cve_2025_8730 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-8730 | - |
 | belkin | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | belkin | g_n150_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2012-2765 | - |
@@ -1036,18 +1280,149 @@
 | belkin | n150_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
 | belkin | n750_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-1635 | rce |
 | belkin | play_max_prce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| belkin | play_n750_login_bof_cve_2014_1635 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-1635 | - |
 | belkin | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | belkin | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bell | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bell | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bell | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bell | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| benq | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| benq | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| benq | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| benq | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| beward | n100_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | bhu | bhu_urouter_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | bhu | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | bhu | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | bhu | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bhu | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | billion | billion_5200w_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | billion | billion_7700nr4_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
 | billion | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | billion | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | billion | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| binatone | dt850w_change_admin | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| binatone | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| binatone | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| binatone | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| binatone | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| blitzz | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| blitzz | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| blitzz | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| blitzz | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| blue_coat | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| blue_coat | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bluetooth_ble | ble_sweyntooth_bridge | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-16336, CVE-2019-17071, CVE-2019-17516, CVE-2019-17517, CVE-2019-17518, CVE-2019-17519, CVE-2019-17520, CVE-2019-17521, CVE-2019-9506 | dos_or_crash |
+| bluetooth_ble | blueborne_attack_cve_2017_0781 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-0781, CVE-2017-0785, CVE-2017-1000251 | info_disclosure |
+| bluetooth_ble | wifi_fragattacks_cve_2020_24586 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-24586, CVE-2020-24587, CVE-2020-24588, CVE-2020-26144, CVE-2020-26146 | - |
+| bluetooth_ble | wifi_kr00k_attack_cve_2019_15126 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-15126 | - |
+| bluetooth_ble | wifi_krack_attack_cve_2017_13077 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-13077 | - |
+| bmc | bmc_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| bms | bms_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| bosch | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bosch | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bosch | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bosch | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| brickcom | corp_network_cameras_conf_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| brickcom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| brickcom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| brickcom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| brickcom | users_cgi_creds_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
+| brickcom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| broadcom | cable_haunt_spectrum_analyzer_rce_cve_2019_19494 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-19494 | rce |
+| brocade | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| brocade | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| brocade | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| brocade | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| brother | brother_dcp1510_auth_bypass_rce_edb_51191 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass, rce |
+| brother | brother_default_auth_bypass_cve_2024_51978 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-51977, CVE-2024-51978 | auth_bypass |
+| brother | brother_fw_upload_unauth | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-51978 | - |
+| brother | brother_hl_mfc_default_creds_edb_37956 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| brother | brother_ldap_smb_passback | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-51977 | - |
+| brother | brother_nvram_dos | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
+| brother | brother_serial_disclosure_cve_2024_51977 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-51977, CVE-2024-51978 | info_disclosure |
+| brother | brother_serial_pwd_derivation | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-51977, CVE-2024-51978 | - |
+| brother | brother_vuln_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-51977, CVE-2024-51978 | - |
+| brother | brother_wsd_dos | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-51978 | dos_or_crash |
+| brother | brother_wsd_ssrf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-51977 | - |
+| brother | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| brother | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bt | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bt | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bt | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| bt | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| buffalo | ftp_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| buffalo | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| buffalo | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| buffalo | webinterface_http_auth_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| buffalo_router | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| buffalo_router | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| buffalo_router | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| buffalo_router | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cabletron | snmp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cabletron | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cabletron | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| calix | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| calix | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| calix | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| calix | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cambium | epmp1000_get_chart_cmd_shell_cve_2017_5254 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-5254 | rce |
+| cambium | epmp1000_ping_cmd_shell_cve_2017_5255 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-5255 | rce |
+| cameras | boot_permission_audit | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| cameras | camera_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| cameras | cctv_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| cameras | dahua_dvr_37777 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| cameras | dahua_dvr_scanner | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2013-6117 | - |
+| cameras | eglibc_version_check | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2013-7423, CVE-2014-0475, CVE-2014-5119, CVE-2014-9761, CVE-2015-0235, CVE-2015-1781, CVE-2015-7547, CVE-2017-1000366 | - |
+| cameras | firmware_version_fingerprint | 2 | 0 | 0 | 2 | 0 | 0 | 0 | CVE-2021-36260, CVE-2023-28811, CVE-2025-66173, CVE-2025-66174 | - |
+| cameras | intelbras_boa_detect | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2005-2970, CVE-2009-4496 | dos_or_crash, path_traversal |
+| cameras | intelbras_cctv_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| cameras | intelbras_onvif_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| cameras | intelbras_p2p_uid_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| cameras | intelbras_pvip_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| cameras | nvr_binary_hardening_audit | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| cameras | p2p_pppp_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2019-11219, CVE-2019-11220 | - |
+| cameras | r0_intercom_firmware_audit | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2022-29503, CVE-2022-30295 | - |
+| cameras | r0_intercom_network_detect | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| cameras | rtsp_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| cameras | rtsp_scanner | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| cameras | tvip_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| canon | canon_driver_privesc_cve_2021_38085 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-38085 | - |
+| canon | canon_imageclass_slp_bof_cve_2022_24673 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-24673 | - |
+| canon | canon_imagerunner_fax_bof_rce_edb_49140 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| canon | canon_ldif_extract | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| canon | canon_pcl_bof_cve_2025_14235 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-14235 | dos_or_crash |
+| canon | canon_pixma_fw_analysis | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| canon | canon_ps_bof_cve_2025_14232 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-14232 | - |
+| canon | canon_tr150_driver_privesc_cve_2021_38085 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-38085 | - |
+| canon | canon_wireless_dos_cve_2013_4615 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-4615 | dos_or_crash |
+| canon | canon_xps_bof_cve_2025_14237 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-14237 | - |
+| canon | ftp_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| canon | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| canon | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| canon | webinterface_http_auth_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| canyon | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| canyon | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| canyon | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| canyon | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cbc_ganz | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cbc_ganz | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cbc_ganz | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cbc_ganz | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cbn | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cbn | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cbn | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cbn | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cd_r_king | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cd_r_king | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cd_r_king | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cd_r_king | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | cerio | multi_rce_cve_2018_18852 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-18852 | rce |
+| checkpoint | endpoint_security_privesc_cve_2019_8461 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-8461 | - |
+| checkpoint | security_gateway_info_disclosure_cve_2024_24919 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-24919 | info_disclosure |
+| checkpoint | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| checkpoint | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | cisco | adaptive_security_appliance_path_traversal_cve_2018_0296 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-0296 | path_traversal |
 | cisco | adaptive_security_appliance_path_traversal_metasploit_cve_2018_0296 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-0296 | path_traversal |
 | cisco | adaptive_security_appliance_software_9_11_local_file_inclusi_cve_2020_3452 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-3452 | - |
@@ -1057,12 +1432,15 @@
 | cisco | asa_9_14_1_10_and_ftd_6_6_0_1_path_traversal_2_cve_2020_3452 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-3452 | path_traversal |
 | cisco | asa_and_ftd_9_6_4_42_path_traversal_cve_2020_3452 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-3452 | path_traversal |
 | cisco | asa_crash_poc_cve_2018_0101 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-0101 | - |
+| cisco | asa_ftd_path_traversal_cve_2020_3452 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-3452 | path_traversal |
 | cisco | asa_pix_epicbanana_local_privilege_escalation_cve_2016_6367 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6367 | - |
 | cisco | asa_software_8_x_9_x_ikev1_ikev2_buffer_overflow_cve_2016_1287 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-1287 | - |
+| cisco | asa_vpn_bruteforce_cve_2023_20269 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-20269 | - |
 | cisco | asa_webvpn_cifs_handling_buffer_overflow_cve_2017_3807 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-3807 | - |
 | cisco | catalyst_2960_ios_12_2_55_se11_rocem_remote_code_execution_cve_2017_3881 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-3881 | - |
 | cisco | catalyst_2960_ios_12_2_55_se1_rocem_remote_code_execution_cve_2017_3881 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-3881 | - |
 | cisco | catalyst_2960_rocem | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-3881 | - |
+| cisco | catalyst_3850_csrf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1903 | - |
 | cisco | cisco_firepower_management_center_cve_2023_20048 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-20048 | - |
 | cisco | data_center_network_manager_11_2_1_getvmhostdata_sql_injecti_cve_2019_15976 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-15976, CVE-2019-15984 | - |
 | cisco | data_center_network_manager_11_2_1_lanfabricimpl_command_inj_cve_2019_15977 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-15977, CVE-2019-15978 | - |
@@ -1073,21 +1451,29 @@
 | cisco | digital_network_architecture_center_1_3_1_4_persistent_cross_cve_2019_15253 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-15253 | - |
 | cisco | dpc2420_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
 | cisco | dpc3928_router_arbitrary_file_disclosure_cve_2017_11502 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-11502 | - |
+| cisco | epc3925_csrf_password_change | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | password_reset_or_change |
 | cisco | epc_3928_multiple_vulnerabilities_cve_2015_6401 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-6401, CVE-2015-6402, CVE-2016-1328, CVE-2016-1336, CVE-2016-1337 | - |
+| cisco | firepower_management60_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6435 | path_traversal |
+| cisco | firepower_management60_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6433 | backdoor, rce |
 | cisco | firepower_management_center_6_2_2_2_6_2_3_cross_site_scripti_cve_2019_1642 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1642 | - |
-| cisco | firepower_management_console_6_0_post_authentication_useradd_cve_2016_6433 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6433 | - |
+| cisco | firepower_management_console_6_0_post_authentication_useradd_cve_2016_6433 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6433 | backdoor |
 | cisco | firepower_threat_management_console_6_0_1_hard_coded_mysql_c_cve_2016_6434 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6434 | - |
 | cisco | firepower_threat_management_console_6_0_1_local_file_inclusi_cve_2016_6435 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6435 | - |
 | cisco | firepower_threat_management_console_6_0_1_remote_command_exe_cve_2016_6433 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6433 | - |
-| cisco | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco | ftp_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
 | cisco | immunet_6_2_0_amp_for_endpoints_6_2_0_denial_of_service_cve_2018_15437 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-15437 | dos_or_crash |
 | cisco | ios_12_2_12_4_15_0_15_6_security_association_negotiation_req_cve_2016_6415 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6415 | - |
 | cisco | ios_http_authorization_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2001-0537 | - |
 | cisco | ios_remote_code_execution_cve_2017_6736 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6736 | - |
+| cisco | ios_xe_webui_privesc_cve_2023_20198 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-20198 | - |
+| cisco | ios_xe_wlc_jwt_rce_cve_2025_20188 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-20188 | rce |
+| cisco | iosxe_webui_rce_cve_2023_20198 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-20198, CVE-2023-20273 | rce |
 | cisco | ip_phone_11_7_denial_of_service_poc_cve_2020_3161 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-3161 | dos_or_crash |
+| cisco | isa3000_asa_rce_cve_2018_0101 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-0101 | rce |
 | cisco | ise_3_0_authorization_bypass_cve_2025_20125 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-20125 | auth_bypass |
 | cisco | ise_3_0_remote_code_execution_rce_cve_2025_20124 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-20124 | rce |
 | cisco | node_jos_0_11_0_re_sign_tokens_cve_2018_0114 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-0114 | - |
+| cisco | nxos_cli_cmd_injection_cve_2024_20399 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-20399 | backdoor, rce |
 | cisco | prime_collaboration_provisioning_12_1_authentication_bypass_cve_2017_6622 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6622 | - |
 | cisco | prime_infrastructure_health_monitor_ha_tararchive_directory_cve_2019_1821 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1821 | path_traversal |
 | cisco | prime_infrastructure_health_monitor_tararchive_directory_tra_cve_2019_1821 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1821 | path_traversal |
@@ -1101,23 +1487,52 @@
 | cisco | rv320_and_rv325_unauthenticated_remote_code_execution_metasp_cve_2019_1652 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1652, CVE-2019-1653 | - |
 | cisco | rv320_command_injection | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1652 | rce |
 | cisco | rv320_dual_gigabit_wan_vpn_router_1_4_2_15_command_injection_cve_2019_1652 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1652 | - |
+| cisco | rv_series_auth_cmd_exec_cve_2023_20118 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-20118 | rce |
+| cisco | secure_acs_5_x_unauthorized_password_change | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass, password_reset_or_change |
+| cisco | small_biz_200_300_500_multi_cve_2019_1943 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1943 | info_disclosure |
 | cisco | small_business_200_300_500_switches_multiple_vulnerabilities_cve_2019_1943 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1943 | - |
 | cisco | small_business_220_series_multiple_vulnerabilities_cve_2019_1912 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1912, CVE-2019-1913, CVE-2019-1914 | - |
 | cisco | smart_install_crash_poc_cve_2018_0171 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-0171 | - |
 | cisco | smart_software_manager_on_prem_8_202206_account_takeover_cve_2024_20419 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-20419 | - |
-| cisco | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
-| cisco | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| cisco | telnet_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| cisco | ucm_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-7030 | info_disclosure |
+| cisco | ucm_tftp_info_disclosure_cve_2013_7030 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-7030 | info_disclosure |
 | cisco | ucs_director_default_scpuser_password_metasploit_cve_2019_1935 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1935 | - |
 | cisco | ucs_imc_supervisor_2_2_0_0_authentication_bypass_cve_2019_1937 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1937 | - |
 | cisco | ucs_manager_2_1_1b_remote_command_injection_shellshock_cve_2014_6278 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-6278 | rce |
+| cisco | ucs_manager_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | cisco | ucs_platform_emulator_3_1_2epe1_remote_code_execution_cve_2017_12243 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-12243 | - |
 | cisco | umbrella_roaming_client_2_0_168_local_privilege_escalation_cve_2018_0437 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-0437, CVE-2018-0438 | - |
 | cisco | unified_communications_manager_7_8_9_directory_traversal_cve_2013_5528 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-5528 | path_traversal |
+| cisco | unified_multi_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2011-3315 | path_traversal |
+| cisco | unified_multi_path_traversal_cve_2011_3315 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2011-3315 | path_traversal |
+| cisco | video_surv_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
 | cisco | webex_meetings_33_6_6_33_9_1_privilege_escalation_cve_2019_1674 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1674 | - |
 | cisco | webex_player_t29_10_arf_out_of_bounds_memory_corruption_cve_2016_1415 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-1415 | - |
 | cisco | webex_player_t29_10_wrf_use_after_free_memory_corruption_cve_2016_1464 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-1464 | - |
 | cisco | wireless_controller_3_6_10e_cross_site_request_forgery_cve_2019_12624 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-12624 | - |
 | cisco | wlc_2504_8_9_denial_of_service_poc_cve_2019_15276 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-15276 | dos_or_crash |
+| cisco_asa | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_asa | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_asa | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_asa | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_catalyst | snmp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_catalyst | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_catalyst | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_catalyst | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_ios_smart_install_rce_cve_2018_0171.py | cisco_ios_smart_install_rce_cve_2018_0171 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-0171 | rce |
+| cisco_linksys | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_linksys | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_linksys | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_linksys | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_voip | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_voip | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cisco_voip | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| citrix | adc_gateway_rce_cve_2023_3519 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-3519 | rce |
+| citrix | netscaler_citrixbleed_cve_2023_4966 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-4966 | info_disclosure |
+| citrix | netscaler_path_traversal_cve_2019_19781 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-19781 | path_traversal |
+| citrix | netscaler_rce_cve_2023_3519 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-3519 | rce |
 | cmd | awk_bind_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | cmd | awk_bind_udp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | cmd | awk_reverse_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
@@ -1132,18 +1547,100 @@
 | cmd | python_bind_udp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | cmd | python_reverse_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | cmd | python_reverse_udp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
+| cnet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cnet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cnet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| cnet | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| codesys | codesys_opcua_dos_cve_2021_29242 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-29242 | dos_or_crash |
+| codesys | codesys_os_cmd_inject_cve_2022_22517 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-22517 | path_traversal, rce |
+| codesys | codesys_webserver_tls_cve_2021_29245 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-29245 | rce |
 | comtrend | ct_5361t_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
 | comtrend | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | comtrend | persistent_xss_on_comtrend_ar_5387un_router_cve_2018_8062 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-8062 | - |
 | comtrend | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | comtrend | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | comtrend | vr_3033_command_injection_cve_2020_10173 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-10173 | - |
+| conceptronic | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| conceptronic | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| conceptronic | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| conceptronic | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| conexant | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| conexant | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| conexant | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| conexant | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| contiki_ng | contiki_ng_ipv6_oob_rce_cve_2022_41873 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-41873 | rce |
+| contiki_ng | contiki_ng_sixlowpan_heap_oob_cve_2021_21281 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-21281 | - |
+| creative | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| creative | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| creative | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| creative | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| crypto | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| crypto | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| crypto | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| crypto | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | cve | cve_lookup | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
+| cve_2026_0234_auth_bypass.py | cve_2026_0234_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-0234 | auth_bypass |
+| cve_2026_21513_privesc.py | cve_2026_21513_privesc | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-21513 | - |
+| cve_2026_21519_rce.py | cve_2026_21519_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-21519 | rce |
+| cve_2026_40683_embedded_rce.py | cve_2026_40683_embedded_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-40683 | rce |
+| d_link | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| d_link | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| d_link | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| d_link | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dahua | auth_bypass_cve_2021_33044 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-33044, CVE-2021-33045 | auth_bypass |
+| dahua | cctv_37777_credential_extraction | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-6117 | - |
+| dahua | cctv_auth_bypass_cve_2021_33044 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-33044, CVE-2021-33045 | auth_bypass |
+| dahua | cctv_firmware_upload_no_verify | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| dahua | cctv_pem_key_extraction | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| dahua | cctv_rce_cve_2021_36260 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-33044, CVE-2021-36260 | rce |
+| dahua | cctv_username_disclosure_cve_2020_25078 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-25078 | - |
+| dahua | dvr_auth_bypass_cve_2013_6117 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-6117 | auth_bypass |
+| dahua | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dahua | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dahua | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dahua | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dasan | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dasan | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dasan | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dasan | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| davolink | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| davolink | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| davolink | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| davolink | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ddwrt | ddwrt_command_exec | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ddwrt | ddwrt_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
+| dell | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dell | idrac9_info_disclosure_cve_2021_36300 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-36300 | info_disclosure |
+| dell | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dell | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dell | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dial | dial_cors_bypass_dialstranger | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| dial | dial_oob_read_cve_2019_10028 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-10028 | dos_or_crash |
+| dick_smith_elec | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dick_smith_elec | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dick_smith_elec | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dick_smith_elec | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| digicom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| digicom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| digicom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| digicom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| digisol | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| digisol | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| digisol | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| digisol | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| digitus | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| digitus | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| digitus | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| digitus | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dizquetv | rce_edb_52079 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | dlink | central_wifimanager_software_controller_1_03_multiple_vulner_cve_2018_17440 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-17440, CVE-2018-17441, CVE-2018-17442, CVE-2018-17443 | - |
+| dlink | dap1325_broken_access_edb_51556 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | dlink | dap_1620_a1_v1_01_directory_traversal_cve_2021_46381 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-46381 | path_traversal |
 | dlink | dcs_5020l_remote_code_execution_poc_cve_2017_17020 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-17020 | - |
+| dlink | dcs_930l_932l_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
 | dlink | dcs_930l_auth_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | dlink | dcs_931l_arbitrary_file_upload_metasploit_cve_2015_2049 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-2049 | - |
+| dlink | dcs_931l_file_upload_rce_cve_2015_2049 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-2049 | rce |
 | dlink | dcs_936l_network_camera_cross_site_request_forgery_cve_2017_7851 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-7851 | - |
 | dlink | dcs_cred_disclosure_cve_2020_25078 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-25078 | - |
 | dlink | dcs_series_cameras_insecure_crossdomain_cve_2017_7852 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-7852 | - |
@@ -1152,14 +1649,23 @@
 | dlink | dgs_1510_multiple_vulnerabilities_cve_2017_6206 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6206 | - |
 | dlink | di_524_cross_site_request_forgery_cve_2017_5633 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-5633 | - |
 | dlink | di_524_v2_06ru_multiple_cross_site_scripting_cve_2019_11017 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-11017 | - |
+| dlink | dir600l_formlogin_bof_cve_2025_4344 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-4344 | - |
 | dlink | dir601_cred_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
+| dlink | dir650in_cmd_injection_edb_52508 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| dlink | dir825_stack_overflow_edb_52469 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
 | dlink | dir845l_cred_disclosure_cve_2024_33113 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-33113 | - |
+| dlink | dir846_rce_edb_51243 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | dlink | dir850_insecure_access_control_cve_2021_46378 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-46378 | - |
 | dlink | dir850_open_redirect_cve_2021_46379 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-46379 | - |
+| dlink | dir878_unauth_cmd_injection_cve_2025_60672 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-60672 | rce |
+| dlink | dir882_dmz_cmd_injection_cve_2025_60700 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-60700 | rce |
+| dlink | dir882_syslog_cmd_injection_cve_2025_60698 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-60698 | rce |
+| dlink | dir890l_bof_cve_2022_30521 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-30521 | dos_or_crash |
 | dlink | dir890l_soapaction_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | dlink | dir_300_320_600_615_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
 | dlink | dir_300_320_615_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
 | dlink | dir_300_600_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| dlink | dir_300_615_remote_command_execution | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | dlink | dir_300_645_815_upnp_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | dlink | dir_600_authentication_bypass_cve_2017_12943 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-12943 | - |
 | dlink | dir_600m_authentication_bypass_metasploit_cve_2019_13101 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-13101 | - |
@@ -1177,6 +1683,7 @@
 | dlink | dir_645_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
 | dlink | dir_655_866_652_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-16920 | rce |
 | dlink | dir_815_850l_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| dlink | dir_816l_multi_vuln | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-8755, CVE-2020-15893, CVE-2020-15894, CVE-2022-28956, CVE-2026-4180 | - |
 | dlink | dir_819_a1_denial_of_service_cve_2022_40946 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-40946 | dos_or_crash |
 | dlink | dir_825_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
 | dlink | dir_825_rev_b_2_10_stack_buffer_overflow_dos_cve_2025_10666 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-10666 | dos_or_crash |
@@ -1186,6 +1693,7 @@
 | dlink | dir_8xx_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
 | dlink | dir_series_routers_hnap_login_stack_buffer_overflow_metasplo_cve_2016_6563 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6563 | - |
 | dlink | dns_320l_327l_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| dlink | dsl224_rce_cve_2022_36786 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-36786 | rce |
 | dlink | dsl_2640b_dns_change | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dns_change |
 | dlink | dsl_2730_2750_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
 | dlink | dsl_2730b_2780b_526b_dns_change | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dns_change |
@@ -1193,7 +1701,10 @@
 | dlink | dsl_2740r_dns_change | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dns_change |
 | dlink | dsl_2750b_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
 | dlink | dsl_2750b_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| dlink | dsl_2750u_auth_bypass_config_download | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
+| dlink | dsl_320b_config_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | dlink | dsl_3782_authentication_bypass_cve_2018_8898 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-8898 | - |
+| dlink | dsl_legacy_unauth_rce_cve_2026_0625 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-0625 | rce |
 | dlink | dsp_w110_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | dlink | dsr_250n_3_12_denial_of_service_poc_cve_2020_26567 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-26567 | dos_or_crash |
 | dlink | dvg_n5402sp_multiple_vulnerabilities_cve_2015_7245 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-7245, CVE-2015-7246, CVE-2015-7247 | - |
@@ -1205,48 +1716,442 @@
 | dlink | dwr_932_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
 | dlink | dwr_932b_backdoor | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
 | dlink | exploitdb_30062_py_cve_2013_5946 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-5945, CVE-2013-5946 | - |
-| dlink | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dlink | ftp_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
 | dlink | hedwig_rce_cve_2013_7389 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-7389 | rce |
 | dlink | multi_hedwig_cgi_exec | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | dlink | multi_hnap_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| dlink | nas_account_mgr_cgi_rce_cve_2024_10914 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-10914 | rce |
 | dlink | routers_command_injection_cve_2018_10823 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-10823 | - |
 | dlink | routers_directory_traversal_cve_2018_10822 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-10822 | path_traversal |
 | dlink | routers_plaintext_password_cve_2018_10824 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-10824 | - |
-| dlink | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
-| dlink | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dlink | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| dlink | telnet_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| dlink_adsl | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dlink_adsl | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dlink_adsl | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dlink_adsl | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | dlink_dsl | dsl_2640b_wps_rce_cve_2013_5223 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-5223 | rce |
 | dlink_dsl | dsl_2750b_remote_code_execution_cve_2016_20017 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-20017 | - |
+| dlink_firmware_upload_bypass.py | dlink_firmware_upload_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-16920, CVE-2020-25506, CVE-2021-27860 | auth_bypass |
+| dns_hijack_detector.py | dns_hijack_detector | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
+| dovado | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dovado | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dovado | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dovado | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| draytek | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | draytek | multiple_products_pre_authentication_remote_root_code_execut_cve_2020_8515 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-8515 | - |
+| draytek | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| draytek | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | draytek | vigor_master_key | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| draytek | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dslink | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dslink | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dslink | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dslink | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dvtel | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dvtel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dvtel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dvtel | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynacolor | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynacolor | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynacolor | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynacolor | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynalink | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynalink | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynalink | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynalink | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynamode | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynamode | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynamode | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynamode | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynex | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynex | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynex | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| dynex | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| e_tech | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| e_tech | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| e_tech | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| e_tech | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| easybox | easybox_wpa_keygen | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| eci | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| eci | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| eci | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| eci | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| edimax | br6476ac_cmd_injection_cve_2024_48418 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-48418 | rce |
+| edimax | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| edimax | ic7100_unauth_rce_cve_2025_1316 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-1316 | rce |
+| edimax | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| edimax | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| edimax | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ee | brightbox_config_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| efficient_siemens | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| efficient_siemens | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| efficient_siemens | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| efficient_siemens | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| elevator | kone_kgc_unauth_config_cve_2021_27439 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-27439 | - |
+| eltex | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| eltex | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| eltex | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| eltex | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| embedded_os | embedded_os_fingerprint | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| embedded_os | mdns_iot_discovery | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| embedded_os | mqtt_broker_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| eminent | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| eminent | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| eminent | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| eminent | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| encore | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| encore | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| encore | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| encore | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| enet_smarthome_default_creds_cve_2026_26366.py | enet_smarthome_default_creds_cve_2026_26366 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-26366 | - |
+| engenius | enstation5_cmd_injection_cve_2024_31976 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-31976 | rce |
+| engenius | ews356_blind_cmd_injection_cve_2024_36061 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-36061 | rce |
+| engenius | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| engenius | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| engenius | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| engenius | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| enterasys | snmp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| enterasys | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| enterasys | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| enterasys | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ericsson | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ericsson | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ericsson | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ericsson | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| etec | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| etec | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| etec | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| etec | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| eusso | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| eusso | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| eusso | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| eusso | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| everfocus | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| everfocus | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| everfocus | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| everfocus | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ewon | cosy_unauth_rce_cve_2026_25823 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-25823 | rce |
 | external | exploitdb_embedded_lookup | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | external | metasploit_console_bridge | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | external | metasploit_rb_inspect | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | external | mikrotikapi_bf_bridge | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
+| external | wafw00f_bridge | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
+| extreme_networks | snmp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| extreme_networks | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| extreme_networks | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| extreme_networks | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| f5 | bigip_bigiq_icontrol_rce_cve_2021_22986 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-22986 | rce |
+| f5 | bigip_icontrol_rest_rce_cve_2022_1388 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-1388 | auth_bypass, rce |
+| f5 | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| fiber_home | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| fiber_home | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| fiber_home | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| fiber_home | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | fiberhome | adsl_an1020_25_improper_access_restrictions_cve_2017_14147 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-14147 | - |
 | fiberhome | an5506_04_f_rp2669_persistent_cross_site_scripting_cve_2019_9556 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-9556 | - |
 | fiberhome | directory_traversal_cve_2017_15647 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-15647 | path_traversal |
 | fiberhome | lm53q1_multiple_vulnerabilities_cve_2017_16885 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-16885, CVE-2017-16886, CVE-2017-16887 | - |
+| fiberhome | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| fiberhome | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | fiberhome | vdsl2_modem_hg_150_ub_authentication_bypass_cve_2018_9248 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-9248 | - |
+| fiberhome | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| firewalls | fortigate_sslvpn_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2018-13379, CVE-2022-40684, CVE-2023-27997, CVE-2024-21762, CVE-2025-59718 | - |
+| firewalls | misc_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| firmware_flash_exploit_base.py | firmware_flash_exploit_base | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| fitbit | fitbit_ble_exfil | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| flir | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| flir | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| flir | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| flir | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | fortinet | forticlient_5_2_3_windows_10_x64_creators_local_privilege_es_cve_2015_4077 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-4077, CVE-2015-5736 | - |
 | fortinet | forticlient_5_2_3_windows_10_x64_post_anniversary_local_priv_cve_2015_5736 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-5736 | - |
 | fortinet | forticlient_5_2_3_windows_10_x64_pre_anniversary_local_privi_cve_2015_5736 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-5736 | - |
+| fortinet | forticlient_ems_preauth_rce_cve_2026_35616 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-35616 | auth_bypass, rce |
+| fortinet | forticlientems_sqli_rce_cve_2023_48788 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-48788 | rce |
+| fortinet | forticloud_sso_auth_bypass_cve_2026_24858 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-24858 | auth_bypass, backdoor |
 | fortinet | fortigate_4_x_5_0_7_ssh_backdoor_access_cve_2016_1909 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-1909 | backdoor |
 | fortinet | fortigate_fortios_6_0_3_ldap_credential_disclosure_cve_2018_13374 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-13374 | creds_disclosure |
+| fortinet | fortigate_os_backdoor | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-3413 | backdoor |
+| fortinet | fortigate_ssl_vpn_heap_overflow_cve_2023_27997 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-27997 | - |
 | fortinet | fortimail_7_0_1_reflected_cross_site_scripting_xss_cve_2021_43062 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-43062 | - |
+| fortinet | fortimanager_fortijump_cve_2024_47575 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | CVE-2024-47575 | - |
 | fortinet | fortios_5_6_0_cross_site_scripting_cve_2017_3131 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-3131, CVE-2017-3132, CVE-2017-3133 | - |
 | fortinet | fortios_5_6_3_5_6_7_fortios_6_0_0_6_0_4_credentials_disclosu_cve_2018_13379 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-13379 | - |
 | fortinet | fortios_6_0_4_unauthenticated_ssl_vpn_user_password_modifica_cve_2018_13382 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-13382 | - |
+| fortinet | fortios_auth_bypass_cve_2022_40684 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-40684 | auth_bypass |
 | fortinet | fortios_fortiproxy_and_fortiswitchmanager_7_2_0_authenticati_cve_2022_40684 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-40684 | auth_bypass |
+| fortinet | fortios_fortiproxy_ssh_inject_cve_2022_40684_v2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-40684 | - |
+| fortinet | fortios_sslvpn_heap_rce_cve_2022_42475 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-42475 | rce |
+| fortinet | fortios_sslvpn_path_traversal_cve_2018_13379 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-13379 | info_disclosure, path_traversal |
+| fortinet | fortios_sslvpn_rce_cve_2024_21762 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-21762 | rce |
+| fortinet | fortios_sslvpn_session_reuse_cve_2024_50562 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-50562 | - |
+| fortinet | fortios_websocket_auth_bypass_cve_2024_55591 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-55591 | auth_bypass |
+| fortinet | fortiweb_auth_bypass_cve_2025_64446 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-64446 | auth_bypass |
+| fortinet | fortiweb_sqli_rce_cve_2025_25257 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-25257 | rce |
+| fortinet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| fortinet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| fortinet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| fortinet | webinterface_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| foscam | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| foscam | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| foscam | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| foscam | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| foundry | snmp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| foundry | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| foundry | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| franklin_wireless | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| franklin_wireless | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| franklin_wireless | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| franklin_wireless | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| freebox | freebox_auth_bypass_reboot | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
+| freepbx | recordings_sqli_rce_cve_2019_19006 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-19006 | rce |
+| freertos | freertos_mpu_rop_lpe_cve_2021_31572 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-31572 | - |
+| freertos | freertos_plus_tcp_oob_write_cve_2025_5688 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-5688 | - |
+| freertos | freertos_tcpip_heap_oob_cve_2021_31573 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-31573 | - |
+| fritz_box | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| fritz_box | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| fritz_box | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| fritz_box | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | ftp_bruteforce.py | ftp_bruteforce | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | ftp_default.py | ftp_default | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| garmin | garmin_ciq_bof_cve_2023_23300 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-23300 | - |
+| gates | genie_aladdin_unauth_open_cve_2020_8530 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-8530 | - |
+| gates | rf_rolling_code_replay | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| gateway | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| gateway | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| gateway | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| gateway | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| geek_adsl | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| geek_adsl | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| geek_adsl | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| geek_adsl | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| generic | cve_2026_22812_cmd_injection | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-22812 | rce |
+| generic | cve_2026_31602_unauth_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-31602 | rce |
+| generic | dell_b5460_lexmark_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
+| generic | dell_mfp_job_log_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | dnp3_firewall_evasion | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | edb_15631_pjl_unrestricted_access | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2002-1048 | - |
+| generic | edb_22319_hp_snmp_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2002-1048 | info_disclosure |
+| generic | edb_45205_generic_printer_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-14308 | rce |
+| generic | edb_50498_lexmark_stored_xss | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-44736 | - |
+| generic | edb_51606_hp_ssrf_cve_2021_3441 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-3441 | info_disclosure |
+| generic | edb_51928_ricoh_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-33888 | auth_bypass |
+| generic | epson_connect_cloud_email_snmp | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | epson_fw_unsigned_upload | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | epson_lpd_unauth_cve_2023_27516 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-27516 | dos_or_crash |
+| generic | epson_noauth_disclosure_cve_2022_3426 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-3426 | - |
+| generic | epson_workforce_ews_rce_edb_47812 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| generic | ethernetip_cip_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | fake_dhcp_server | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | fax_config_exfil | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | fax_dll_inject | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | ftp_printer_filesystem_grab | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | fuser_thermal_attack | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | generic_pjl_nvram | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | heartbleed | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
+| generic | http_form_char_by_char_oracle | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
+| generic | http_smuggling_checker | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | iec104_manipulation | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | ipp_anon_print_inject | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-1158 | - |
+| generic | ipp_evil_twin_rogue | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | ipp_fuzz_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | ipp_print_uri_ssrf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | ipp_printer_check | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-18190 | - |
+| generic | ipp_purge_jobs_dos | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-8675 | dos_or_crash |
+| generic | konica_bizhub_user_extract | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | konica_fw_upload | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | konica_minolta_session_fixation_edb_43178 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6321 | - |
+| generic | konica_soap_cred_extract | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | laser_scanner_physical_attack | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | ldap_hash_capture_passback | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | mirage_rogue_ldap | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | mirai_printer_scan | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | modbus_dpi_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | motor_jam_physical_attack | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | ms_rprn_ntlm_coerce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-1678 | - |
+| generic | nmap_printer_nse | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | nse_compat_wrapper | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | oki_b432_config_dump | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | opcua_firewall_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | openwrt_hotplug_privesc_cve_2026_30874 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-30874 | - |
+| generic | papercut_pjl_scanner | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | pjl_formlines_dos_cve_2024_51982 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-51982 | dos_or_crash |
+| generic | pjl_nvram_damage | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | pjl_password_disclosure_cve_2011_4786 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2011-4786 | - |
+| generic | pjl_printer_dir_list | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2010-4107 | path_traversal |
+| generic | pjl_printer_env_vars | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2010-4107 | - |
+| generic | pjl_printer_file_download | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2010-4107 | - |
+| generic | pjl_printer_file_upload | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2010-4107 | - |
+| generic | pjl_printer_info | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | pjl_pwd_disclosure_cve_2011_4786 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2011-4786 | - |
+| generic | praeda_mfp_ews_harvest | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | pret2_wrapper | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | pret_wrapper | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | print_track_steg | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | printer_c2_dnstunnel | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | printer_c2_httppoll | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | printer_c2_smb | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | printer_firmware_tamp | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | printer_grpc_shell | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | printer_iot_lateral | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | printer_net_reconn | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | printer_to_pdf_pjl | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | printer_wifi_attack | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | printjob_capture_msf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | ps_dos_infinite_loop | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
+| generic | ps_filesystem_access | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | ps_infinite_loop_dos | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2002-1048 | dos_or_crash |
+| generic | ps_job_capture | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | ps_overlay_watermark | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | ps_printer_lang_abuse | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | pyrrha_fw_analysis | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | rfid_badge_exfil | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | samsung_cve_2016_11061_xxe | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-11061 | - |
+| generic | sharp_rce_cve_2022_45796 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-45796 | rce |
+| generic | sharp_smtp_passback | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | shellshock | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-6271, CVE-2014-6278, CVE-2014-7169 | rce |
+| generic | shodan_printer_vuln_map | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | smartcard_printer_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | smb_auth_relay_print | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | snmp_factory_reset | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | snmp_printer_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | ssh_auth_keys | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | ssport_lpe | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-1675, CVE-2022-21999 | - |
+| generic | tftp_loop_dos | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2002-1048 | dos_or_crash |
+| generic | thermal_printer_remote_print | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | toshiba_auth_bypass_cve_2024_21911 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-21911 | auth_bypass |
+| generic | universal_printer_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | wsd_printer_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-26855 | - |
+| generic | xsp_beef_payload | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| generic | zerologon_printserver_cve_2020_1472 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-1472 | - |
+| genexis | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| genexis | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| genexis | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| genexis | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| geovision | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| geovision | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| geovision | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| geuterbruck | efd_2250 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-7520 | - |
+| gigabyte | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| gigabyte | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| gigabyte | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| gigabyte | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| glinet | cve_2023_46454_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-46454 | rce |
+| glinet | glinet_auth_cmd_injection_cve_2024_57391 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-57391 | rce |
+| glinet | glinet_file_download_cve_2025_2850 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-2850 | - |
+| gnu_inetutils_telnetd_auth_bypass_cve_2026_24061.py | gnu_inetutils_telnetd_auth_bypass_cve_2026_24061 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-24061 | auth_bypass |
+| google_home | google_home_api_backdoor_cve_2023_6702 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-6702 | backdoor |
+| google_home | google_nest_secure_boot_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | gpon | alcatel_lucent_nokia_i_240w_q_buffer_overflow_cve_2019_3921 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-3921 | - |
 | gpon | home_gateway_rce_cve_2018_10562 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-10561, CVE-2018-10562 | auth_bypass, rce |
 | gpon | routers_authentication_bypass_command_injection_cve_2018_10561 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-10561, CVE-2018-10562 | - |
 | gpon | skyworth_homegateways_and_optical_network_terminals_stack_ov_cve_2018_19524 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-19524 | - |
+| grandstream | ftp_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| grandstream | gxv3611hd_ip_camera_backdoor | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
+| grandstream | gxv3611hd_ip_camera_sqli | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
+| grandstream | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| grandstream | telnet_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| grandstream | ucm6200_sqli_rce_cve_2020_5722 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-5722 | rce |
+| grandstream | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| great_speed | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| great_speed | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| great_speed | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| great_speed | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| green_packet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| green_packet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| green_packet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| green_packet | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hama | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hama | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hama | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hama | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hamlet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hamlet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hamlet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hamlet | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hawking | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hawking | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hawking | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hawking | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | heartbleed.py | heartbleed | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
+| hikvision | firmware_crypto_key_extract | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-66173, CVE-2025-66174 | auth_bypass |
+| hikvision | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hikvision | info_disclosure_cve_2017_7921 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-7921 | backdoor, info_disclosure |
+| hikvision | ip_camera_command_injection_cve_2021_36260 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-36260 | backdoor, rce |
+| hikvision | nas_auth_bypass_cve_2023_28808 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-28808 | auth_bypass |
+| hikvision | nvr_dvr_serial_privesc | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-66173, CVE-2025-66174 | - |
+| hikvision | psh_challenge_predictor | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-66173, CVE-2025-66174 | - |
+| hikvision | psh_command_injection | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-66173 | - |
+| hikvision | psh_debug_rsa1024_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-66173, CVE-2025-66174 | - |
+| hikvision | r0_intercom_3des_decrypt | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hikvision | r0_intercom_developer_nfs | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hikvision | r0_intercom_gpio_door_unlock | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hikvision | r0_intercom_ssh_default_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hikvision | r0_intercom_ssh_mitm | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hikvision | r0_intercom_suid_privesc | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hikvision | rtsp_rce_cve_2021_36260 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-36260 | rce |
+| hikvision | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hikvision | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hirschmann | eagle_auth_bypass_cve_2020_6994 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-6994 | auth_bypass |
+| hisense_vidaa | js_api_app_install | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hisense_vidaa | js_api_file_read | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hisense_vidaa | js_api_network_info | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hitron_technologies | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hitron_technologies | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hitron_technologies | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hitron_technologies | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| honeywell | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| honeywell | hicc_1100pt_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
+| honeywell | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| honeywell | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| honeywell_ot | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| honeywell_ot | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | hootoo | tripmate_arbitrary_file_upload | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hootoo | tripmate_cmd_injection | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| hootoo | tripmate_file_upload | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | hootoo | tripmate_open_forwarding_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| hootoo | tripmate_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | hootoo | tripmate_sysfirm_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| hot | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hot | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hot | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hot | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hp | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hp | hp_command_inject_cve_2022_3942 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-3942 | - |
+| hp | hp_efi_rootkit_research | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hp | hp_futuresmart_scan_disclosure_cve_2023_1707 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-1707 | - |
+| hp | hp_fw_extract | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hp | hp_fw_sig_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-28786 | - |
+| hp | hp_jetdirect_lcd_modification_edb_20565 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hp | hp_jetdirect_path_traversal_msf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-2741 | path_traversal |
+| hp | hp_jetdirect_pjl_dir_traversal_cve_2010_4107 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2010-4107 | - |
+| hp | hp_jetdirect_pjl_rce_edb_45273 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-2741 | rce |
+| hp | hp_jetdirect_pjl_shell_edb_17636 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2010-4107 | - |
+| hp | hp_jetdirect_rce_cve_2017_2741 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-2741 | rce |
+| hp | hp_jetdirect_snmp_pwd_cve_2002_1048 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2002-1048 | - |
+| hp | hp_laserjet_bof_cve_2025_26508 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-26508 | - |
+| hp | hp_laserjet_cve_2018_5924 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-5924, CVE-2018-5925 | - |
+| hp | hp_laserjet_disk_access | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hp | hp_laserjet_fw_auth_bypass_cve_2023_6018 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-6018 | auth_bypass |
+| hp | hp_laserjet_hardcoded_creds_edb_41920 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-2740 | - |
+| hp | hp_laserjet_m401_cmd_injection_edb_50078 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| hp | hp_laserjet_mfp_bof_cve_2021_39237 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-39237 | - |
+| hp | hp_laserjet_pjl_scan_msf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| hp | hp_laserjet_pjl_scan_native | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2002-1048 | - |
+| hp | hp_laserjet_postscript_rce_cve_2025_26506 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-26506 | rce |
+| hp | hp_laserjet_snmp_community_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2002-1048 | - |
+| hp | hp_laserjet_snmp_enum_msf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2002-1048 | - |
+| hp | hp_laserjet_ssrf_cve_2024_4479 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-4479 | - |
+| hp | hp_pagewide_ssrf_cve_2017_2750 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-2750 | - |
+| hp | hp_printing_shellz_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-28786 | rce |
+| hp | hp_web_jetadmin_rce_cve_2011_4065 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2011-4065 | rce |
+| hp | hp_xps_bof_cve_2025_26506 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-26506 | - |
+| hp | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hp_procurve | snmp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hp_procurve | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hp_procurve | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hp_procurve | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | http_basic_digest_bruteforce.py | http_basic_digest_bruteforce | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | http_basic_digest_default.py | http_basic_digest_default | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | http_form_char_by_char_oracle.py | http_form_char_by_char_oracle | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
@@ -1275,6 +2180,7 @@
 | huawei | hg520_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
 | huawei | hg530_hg520b_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
 | huawei | hg532_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-17215 | rce |
+| huawei | hg532x_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-17215 | info_disclosure |
 | huawei | hg532x_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
 | huawei | hg630_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
 | huawei | hg8240_auth_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
@@ -1283,28 +2189,254 @@
 | huawei | mate_7_dev_hifi_misc_privilege_escalation_cve_2015_8088 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-8088 | - |
 | huawei | router_hg532_arbitrary_command_execution_cve_2017_17215 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-17215 | - |
 | huawei | router_hg532e_command_execution_cve_2015_7254 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-7254 | - |
+| huawei | smartax_mt880_add_admin | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | huawei | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | huawei | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | huawei | utps_unquoted_service_path_privilege_escalation_cve_2016_8769 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-8769 | - |
+| humax | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| humax | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| humax | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| humax | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| hvac | johnson_metasys_auth_bypass_cve_2021_27660 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-27660 | auth_bypass |
+| hvac | siemens_desigo_cc_rce_cve_2022_43721 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-43721, CVE-2022-43722, CVE-2022-43723 | rce |
+| hvac | trane_tracer_sc_rce_cve_2021_38456 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-38452, CVE-2021-38454, CVE-2021-38456 | rce |
+| hvac | webctrl_rce_cve_2023_28895 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-28895 | rce |
+| hypervisors | proxmox_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| iball | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| iball | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| iball | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| iball | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ice_net | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ice_net | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ice_net | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ice_net | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| icotera | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| icotera | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| icotera | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| icotera | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ics | bacnet_scanner | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ics | cip_scanner | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ics | dnp3_scanner | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ics | enip_scanner | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ics | modbus_id_fuzzer | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ics | modbus_scanner | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ics | profinet_dcp_scanner | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ics | rockwell_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ics | s7_comm_scanner | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ics | s7comm_plus_scanner | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ics | vxworks_scanner | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2010-2967 | - |
+| inca | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inca | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inca | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inca | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inexq | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inexq | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inexq | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inexq | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| intelbras | cctv_config_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-7927 | - |
+| intelbras | cctv_dahua_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-7921 | auth_bypass |
+| intelbras | cctv_dahua_rce_cve_2021_36260 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-36260 | rce |
+| intelbras | cctv_dahua_username_disclosure_cve_2020_25078 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-25078 | info_disclosure |
+| intelbras | cctv_firmware_upload_no_verify | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| intelbras | cctv_onvif_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
+| intelbras | cctv_rsa_key_extraction | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| intelbras | cctv_telnet_default_creds | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| intelbras | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | intelbras | iwr_3000n_1_5_0_cross_site_request_forgery_cve_2019_11416 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-11416 | - |
 | intelbras | iwr_3000n_denial_of_service_remote_reboot_cve_2019_11415 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-11415 | dos_or_crash |
 | intelbras | ncloud_300_1_0_authentication_bypass_cve_2018_11094 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-11094 | auth_bypass |
+| intelbras | nvd_9032_mfa_bypass_cve_2025_67070 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-67070 | - |
+| intelbras | pvip1000_config_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | intelbras | roteador_wireless_wrn150_cross_site_scripting_cve_2017_14219 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-14219 | - |
 | intelbras | router_rf1200_1_1_3_cross_site_request_forgery_cve_2019_19516 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-19516 | - |
 | intelbras | router_rf_301k_dns_hijacking_cross_site_request_forgery_csrf_cve_2021_32403 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-32403 | - |
+| intelbras | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | intelbras | telefone_ip_tip200_lite_local_file_disclosure_cve_2018_9010 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-9010 | - |
+| intelbras | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| intelbras | webinterface_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| intelbras | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | intelbras | wireless_n_150mbps_wrn240_authentication_bypass_config_uploa_cve_2019_19142 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-19142 | - |
+| intellinet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| intellinet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| intellinet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| intellinet | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inteno | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inteno | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inteno | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inteno | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| intracom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| intracom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| intracom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| intracom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inventel | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inventel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inventel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| inventel | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| iomega | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| iomega | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| iomega | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ios_xe_guest_shell_rce_cve_2023_20273.py | ios_xe_guest_shell_rce_cve_2023_20273 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-20198, CVE-2023-20273 | rce |
+| ios_xe_web_ui_priv_esc_cve_2023_20198.py | ios_xe_web_ui_priv_esc_cve_2023_20198 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-20198, CVE-2023-20273 | - |
+| iot | ble_gatt_enum_unauth | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | ble_knob_downgrade_cve_2019_9506 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-9506 | - |
+| iot | ble_spoofing_impersonation | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | coap_amplification_dos | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
+| iot | coap_block_overflow | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-9750 | - |
+| iot | coap_unauth_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | dds_participant_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | dds_rtps_unauthenticated_rw | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-38447 | - |
+| iot | lorawan_bit_flip_adr_cve_2022_39274 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-39274 | - |
+| iot | lorawan_replay_join_accept | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | mdns_amplification | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
+| iot | mdns_poisoning | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-8617 | - |
+| iot | mqtt_auth_bypass_cve_2020_13849 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-13849 | auth_bypass |
+| iot | mqtt_broker_dos | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-7651 | dos_or_crash |
+| iot | mqtt_broker_unauth_rw | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | mqtt_payload_inject | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | tftp_firmware_upload_overwrite | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
+| iot | tftp_unauth_firmware_download | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | upnp_callstranger_ssrf_cve_2020_12695 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-12695 | dos_or_crash |
+| iot | upnp_ssdp_amplification | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
+| iot | upnp_ssdp_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-0229 | rce |
+| iot | wifi_dragonblood_cve_2019_9494 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-9494 | - |
+| iot | wifi_krack_ptk_reinstall_cve_2017_13077 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-13077 | - |
+| iot | wifi_pmkid_capture | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | wlan_packet_inject | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | zigbee_network_key_extract | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | zigbee_rejoin_hijack | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | zigbee_touchlink_factory_reset | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | zwave_replay_attack | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| iot | zwave_s0_key_extract | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | ipfire | 2_25_remote_code_execution_authenticated_cve_2021_33393 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-33393 | - |
+| ipfire | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | ipfire | ipfire_oinkcode_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | ipfire | ipfire_proxy_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | ipfire | ipfire_shellshock | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | ipfire | shellshock_bash_environment_variable_command_injection_metas_cve_2014_6271 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-6271 | rce |
-| juniper | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ipfire | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ipfire | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| iqinvision | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| iqinvision | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| iqinvision | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| iskratel | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| iskratel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| iskratel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| iskratel | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ivanti | connect_secure_auth_bypass_cve_2023_46805 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-46805, CVE-2024-21887 | auth_bypass |
+| ivanti | connect_secure_cmd_injection_cve_2024_21887 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-46805, CVE-2024-21887 | rce |
+| ivanti | connect_secure_ssrf_rce_cve_2024_21893 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-21887, CVE-2024-21888, CVE-2024-21893 | rce |
+| ivanti | connect_secure_stack_overflow_cve_2025_0282 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-0282 | - |
+| ivanti | connect_secure_stack_rce_cve_2025_22457 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-22457 | rce |
+| ivanti | ics_auth_bypass_rce_cve_2023_46805 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-46805, CVE-2024-21887 | auth_bypass, rce |
+| jaht | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| jaht | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| jaht | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| jaht | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| jensen_scandinavia | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| jensen_scandinavia | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| jensen_scandinavia | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| jensen_scandinavia | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| jovision | jovision_credentials_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
+| juniper | ftp_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
 | juniper | junos_backdoor_cve_2015_7755 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-7755 | backdoor |
 | juniper | junos_web_auth_bypass_cve_2023_36845 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-36845 | auth_bypass |
-| juniper | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
-| juniper | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| juniper | jweb_oob_write_rce_cve_2024_21591 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-21591 | rce |
+| juniper | jweb_php_rce_cve_2023_36845 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-36845 | rce |
+| juniper | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| juniper | telnet_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| justec | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| justec | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| justec | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| justec | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| jvc | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| jvc | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| jvc | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kaiomy | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kaiomy | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kaiomy | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kaiomy | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kaon_media | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kaon_media | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kaon_media | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kaon_media | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kasda | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kasda | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kasda | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kasda | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kingtype | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kingtype | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kingtype | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kingtype | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| konica_minolta | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| konica_minolta | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kozumi | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kozumi | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kozumi | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kozumi | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kraun | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kraun | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kraun | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kraun | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kuwfi | 4g_lte_ac900_bof_cve_2025_68706 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-68706 | dos_or_crash |
+| kyocera | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| kyocera | kyocera_ecosys_info_disclosure_edb_23147 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
+| kyocera | kyocera_js_rce_cve_2022_1026 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-1026 | rce |
+| kyocera | kyocera_pjl_cred_extract | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| kyocera | kyocera_soap_cred_dump_cve_2022_1026 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-1026 | - |
+| kyocera | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| lancom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| lancom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| lancom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| lb | bigip_apm_buffer_overflow_cve_2025_53521 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-53521 | - |
+| lb | bigip_config_rce_cve_2023_46747 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-46747 | rce |
+| lb | bigip_tmui_lfi_cve_2020_5902 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-5902 | - |
+| lb | softax_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
+| lectron | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| lectron | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| lectron | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| lectron | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| legrand | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| legrand | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| legrand | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| legrand | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| level_one | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| level_one | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| level_one | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| level_one | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| lexmark | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| lexmark | lexmark_arbitrary_file_read_edb_36913 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-8738 | - |
+| lexmark | lexmark_auth_bypass_cve_2023_50733 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-50733 | auth_bypass |
+| lexmark | lexmark_cmd_injection_cve_2023_26067 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-26067 | - |
+| lexmark | lexmark_cred_dump_msf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-26067, CVE-2023-26068 | rce |
+| lexmark | lexmark_fw_decrypt_analysis | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| lexmark | lexmark_heap_bof_cve_2023_50734 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-50734 | - |
+| lexmark | lexmark_ps_bof_cve_2023_50736 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-50736 | - |
+| lexmark | lexmark_pwn2own_2026_chain | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-50734, CVE-2023-50736 | - |
+| lexmark | lexmark_rce_cve_2024_6333 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-12510, CVE-2024-6333 | rce |
+| lexmark | lexmark_ssrf_rce_cve_2023_23560 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-23560 | rce |
+| lexmark | lexmark_ssrf_rce_research_cve_2023_26067 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-26067 | rce |
+| lexmark | lexmark_webserver_rce_cve_2023_50739 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-50739 | rce |
+| lexmark | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| lg | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | lg | nas_3718 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| lg | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| lg | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| lg | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| lg_signage | webos_signage_rce_cve_2024_1885 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-1885 | rce |
+| lg_signage | webos_signage_traversal_cve_2024_1886 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-1886 | path_traversal |
+| lg_supersign | supersign_lfi_cve_2018_16288 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-16288 | - |
+| lg_supersign | supersign_rce_cve_2018_17173 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-17173 | rce |
+| lg_webos | browser_path_traversal_typhoonpwn_2025 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
+| lg_webos | chariot_endpoint_autoroot_webos1x | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| lg_webos | faultmanager_privesc_webos4plus | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| lg_webos | luna_rce_analytics_cve_2023_6318 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-6318 | rce |
+| lg_webos | luna_rce_lyrics_cve_2023_6319 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-6319 | rce |
+| lg_webos | luna_send_priv_esc_cve_2020_9759 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-9759, CVE-2023-6317 | - |
+| lg_webos | mvpd_service_rce_webos1_3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| lg_webos | ssap_pin_bypass_cve_2023_6317 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-6317 | - |
+| lg_webos | ssap_social_login_escape_cve_2022_23727 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-23727 | - |
+| lg_webos | v8_lpe_wampage_cve_2022_23731 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-23731 | - |
+| lg_webos | vlan_cmd_injection_cve_2023_6320 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-6317, CVE-2023-6320 | - |
 | linksys | 1500_2500_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | linksys | ax3200_v1_1_00_command_injection_cve_2022_38841 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-38841 | - |
 | linksys | ea6100_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass, info_disclosure |
@@ -1312,6 +2444,7 @@
 | linksys | eseries_themoon_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | linksys | eseries_tmunblock_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | linksys | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| linksys | jnap_unauth_cve_2014_8244 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-8244 | - |
 | linksys | re6500_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | linksys | smartwifi_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-8243 | creds_disclosure |
 | linksys | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
@@ -1319,9 +2452,75 @@
 | linksys | wap54gv3_debug_rce_cve_2010_1573 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2010-1573 | rce |
 | linksys | wap54gv3_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | linksys | wrt100_110_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-3568 | rce |
+| linksys | wrt54gl_remote_command_execution | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | linksys | wvbr0_25_user_agent_command_execution_metasploit_cve_2017_17411 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-17411 | - |
 | linksys | wvbr0_user_agent_remote_command_injection_cve_2017_17411 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-17411 | - |
+| linksys | x2000_remote_command_execution | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| linux | cups_browsed_rce_cve_2024_47176 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-47076, CVE-2024-47175, CVE-2024-47176, CVE-2024-47177 | rce |
+| linux | cups_chain_rce_cve_2026_34980 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-34980 | rce |
+| linux | cups_ipp_rce_msf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-47076, CVE-2024-47175, CVE-2024-47176, CVE-2024-47177 | rce |
+| linux | cups_nofaxgiven_ssrf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-47076, CVE-2024-47176 | - |
+| linux | cups_pwn2own_chain_cve_2026_34480 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-34477, CVE-2026-34478, CVE-2026-34479, CVE-2026-34480 | rce |
+| linux | cups_pwn2own_stage1_cve_2026_34477 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-34477, CVE-2026-34478 | - |
+| linux | cups_pwn2own_stage2_cve_2026_34478 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-34478, CVE-2026-34479 | - |
+| linux | cups_pwn2own_stage3_cve_2026_34479 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-34479 | - |
+| linux | cups_root_lpe_cve_2026_34990 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-34990 | - |
+| linux | gooseegg_spooler_cve_2022_38028 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-38028 | - |
+| linux | ms_rprn_ntlm_coerce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| linux | printdemon_cve_2020_1048 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-1048 | backdoor |
+| linux | printdemon_hardlink_bypass_cve_2020_1337 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-1048, CVE-2020-1337 | - |
+| linux | printnightmare_rce_cve_2021_1675 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-1675, CVE-2021-34527 | rce |
+| linux | printnightmare_rce_research | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-1675, CVE-2021-34527 | rce |
+| linux | spoolfool_lpe_cve_2022_21999 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-21999 | - |
+| linux | spoolfool_privesc_msf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-21999 | - |
+| linux_kernel | copy_fail_lpe_cve_2026_31431 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-31431 | - |
+| linux_kernel | linux_dirty_pipe_cve_2022_0847 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-0847 | - |
+| linux_kernel | linux_gameoverlay_lpe_cve_2023_2640 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-2640, CVE-2023-32629 | - |
+| linux_kernel | linux_nftables_uaf_cve_2022_32250 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-32250 | - |
+| linux_kernel | linux_overlayfs_privesc_cve_2023_0386 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-0386 | - |
+| loopcomm | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| loopcomm | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| loopcomm | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| loopcomm | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| luxul | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| luxul | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| luxul | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| luxul | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| march_networks | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| march_networks | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| march_networks | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| march_networks | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| marconi | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| marconi | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| marconi | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| marconi | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| medialink | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| medialink | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| medialink | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| medialink | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mediatek | mt7622_heap_overflow_postauth | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-20017 | - |
+| mediatek | mt7622_heap_overflow_preauth | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-20017 | - |
+| mediatek | mt7622_stack_overflow_postauth | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-20017 | - |
+| mediatek | mt7622_stack_overflow_preauth | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-20017 | - |
+| medical | baxter_sigma_spectrum_cve_2022_26067 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-26066, CVE-2022-26067, CVE-2022-26069 | - |
+| medical | bd_alaris_gateway_unauth_cve_2019_10959 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-10959 | - |
+| medical | bd_alaris_pump_modify_cve_2019_10962 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-10962 | - |
+| medical | contec_cms8000_backdoor_cve_2022_38072 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-36621, CVE-2022-38072 | backdoor |
+| medical | philips_vue_pacs_unauth_cve_2020_14477 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-14477, CVE-2021-27493, CVE-2021-27497 | - |
 | mercury | hp_loadrunner_agent_magentproc_exe_remote_command_execution_cve_2010_1549 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2010-1549 | - |
+| metis_dfs_unauth_rce_cve_2026_2249.py | metis_dfs_unauth_rce_cve_2026_2249 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-2248, CVE-2026-2249 | rce |
+| metis_wic_unauth_rce_cve_2026_2248.py | metis_wic_unauth_rce_cve_2026_2248 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-2248 | rce |
+| microcom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| microcom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| microcom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| microcom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| micronet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| micronet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| micronet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| micronet | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| midi | serial_backup_extraction | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| miele | pg8528_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-7240 | path_traversal |
+| mifi | mifi_config_backup | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | mikrotik | 6_40_5_icmp_denial_of_service_cve_2017_17538 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-17538 | dos_or_crash |
 | mikrotik | 6_41_4_ftp_daemon_denial_of_service_poc_cve_2018_10070 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-10070 | dos_or_crash |
 | mikrotik | api_ros_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
@@ -1330,13 +2529,16 @@
 | mikrotik | router_arp_table_overflow_denial_of_service_cve_2017_6444 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6444 | dos_or_crash |
 | mikrotik | router_monitoring_system_1_2_3_community_sql_injection_cve_2020_13118 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-13118 | - |
 | mikrotik | routerboard_6_38_5_denial_of_service_cve_2017_7285 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-7285 | dos_or_crash |
+| mikrotik | routeros7_rest_api_bof_rce_cve_2025_10948 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-10948 | backdoor, rce |
 | mikrotik | routeros_6_41_3_6_42rc27_smb_buffer_overflow_cve_2018_7445 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-7445 | - |
 | mikrotik | routeros_6_43_12_stable_6_42_12_long_term_firewall_and_nat_b_cve_2019_3924 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-3924 | - |
 | mikrotik | routeros_6_45_6_dns_cache_poisoning_cve_2019_3978 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-3978 | - |
 | mikrotik | routeros_7_19_1_reflected_xss_cve_2025_6563 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-6563 | - |
+| mikrotik | routeros_dns_hijack_apt28 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | mikrotik | routeros_jailbreak | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | mikrotik | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | mikrotik | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mikrotik | webfig_cred_exposure_cve_2025_61481 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-61481 | - |
 | mikrotik | winbox_auth_bypass_creds_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass, creds_disclosure |
 | mikrotik | winbox_cred_disclosure_cve_2018_14847 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-14847 | - |
 | mipsbe | bind_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
@@ -1345,19 +2547,63 @@
 | mipsle | reverse_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | misc | misc_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
 | misc | soho_exploit_catalog_server | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| mitel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mitel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mitel | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mitrastar | dsl100hn_t1_rce_mips | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| mitrastar | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | mitrastar | gpt2541gnac_stack_overflow | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| mitrastar | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mitrastar | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mitrastar | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mobily | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mobily | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mobily | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mobily | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mobotix | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mobotix | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mobotix | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mobotix | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| modbus | buspwn_modbus_scanner_dos | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
+| modbus | dos_write_coils | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
+| modbus | dos_write_registers | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
+| modbus | modbus_ot_attack_scenarios | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| modbus | read_coil_status | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| modbus | read_discrete_inputs | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| modbus | read_holding_registers | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| modbus | read_input_registers | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| modbus | write_single_coil | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| modbus | write_single_register | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| motioneye | motioneye_rce_cve_2025_60787 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-60787 | rce |
+| motorola | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| motorola | sbg6580_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
+| motorola | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| motorola | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| motorola | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | movistar | adsl_router_bhs_rta_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
 | movistar | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | movistar | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | movistar | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| moxa | edr_cmd_injection_cve_2024_9138 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-9138 | rce |
+| moxa | edr_g_jwt_hardcoded_cve_2024_9137 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-9137 | - |
+| moxa | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| moxa | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| moxa | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mqtt_pivot.py | mqtt_pivot | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| msi | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| msi | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| msi | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| msi | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | multi | 3com_ap8670_cred_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | multi | accton_switch_backdoor_password | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
 | multi | airlive_wt2000arm_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
 | multi | airties_air5341_modem_1_0_0_12_cross_site_request_forgery_cve_2019_6967 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-6967 | - |
 | multi | allegrosoft_rompager_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-9222 | auth_bypass |
+| multi | arcadyan_buffalo_path_traversal_cve_2021_20090 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-20090 | path_traversal |
 | multi | astaro_security_gateway_7_remote_code_execution_cve_2017_6315 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6315 | - |
 | multi | aveva_intouch_access_anywhere_secure_gateway_2020_r2_path_tr_cve_2022_23854 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-23854 | - |
 | multi | barracuda_load_balancer_firmware_v6_0_1_006_2016_08_19_posta_cve_2017_6320 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6320 | - |
+| multi | cctv_dvr_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | multi | check_point_security_gateway_information_disclosure_unauthen_cve_2024_24919 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-24919 | info_disclosure |
 | multi | cobham_admin_reset_cve_2014_2943 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-2943 | - |
 | multi | coship_rt3052_wireless_router_persistent_cross_site_scriptin_cve_2018_8772 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-8772 | - |
@@ -1366,6 +2612,7 @@
 | multi | cve_2017_6552_local_dos_buffer_overflow_livebox_3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6552 | dos_or_crash |
 | multi | davolink_dvw_3200_router_password_disclosure_cve_2018_10618 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-10618 | - |
 | multi | digisol_dg_hr1400_1_00_02_wireless_router_privilege_escalati_cve_2017_6896 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6896 | - |
+| multi | dvr_creds_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-9995 | auth_bypass, creds_disclosure |
 | multi | exploitdb_45942_py_cve_2018_11741 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-11741, CVE-2018-11742 | - |
 | multi | exploitdb_49038_rb_cve_2020_8196 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-8193, CVE-2020-8195, CVE-2020-8196 | - |
 | multi | exploitdb_51865_py_cve_2023_46453 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-46453 | - |
@@ -1387,17 +2634,22 @@
 | multi | iopsys_router_dhcp_remote_code_execution_cve_2017_17867 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-17867 | - |
 | multi | iqrouter_3_3_1_firmware_remote_code_execution_cve_2020_11963 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-11963, CVE-2020-11964, CVE-2020-11966, CVE-2020-11967, CVE-2020-11968 | rce |
 | multi | irz_mobile_router_csrf_to_rce_cve_2022_27226 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-27226 | rce |
+| multi | jvc_vanderbilt_honeywell_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
 | multi | laser_router_re018_ac1200_cross_site_request_forgery_enable_cve_2021_31152 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-31152 | - |
+| multi | log4shell_rce_cve_2021_44228 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-44228 | rce |
 | multi | misfortune_cookie | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-9222 | auth_bypass |
 | multi | msnswitch_firmware_mnt_2408_remote_code_exectuion_rce_cve_2022_32429 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-32429 | rce |
 | multi | nat_slipstream | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | multi | netcommwireless_hspa_3g10wve_wireless_router_ple_vulnerabili_cve_2015_6023 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-6023, CVE-2015-6024 | - |
 | multi | netis_wf2419_2_2_36123_remote_code_execution_cve_2019_1337 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-1337, CVE-2019-19356 | rce |
 | multi | netusb_kernel_stack_overflow_cve_2021_45388 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-45388, CVE-2021-45608 | - |
+| multi | netwave_ip_camera_information_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | multi | nexxt_router_firmware_42_103_1_5095_remote_code_execution_rc_cve_2022_44149 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-44149 | - |
 | multi | nintendo_switch_webkit_code_execution_poc_cve_2016_4657 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-4657 | - |
 | multi | norton_core_secure_wifi_router_ble_command_injection_poc_cve_2018_5234 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-5234 | - |
 | multi | openwrt_luci_rce_cve_2021_22161 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-8597, CVE-2021-22161 | rce |
+| multi | P2P_wificam_credential_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-8225 | - |
+| multi | P2P_wificam_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-8225 | rce |
 | multi | pfsensece_v2_6_0_anti_brute_force_protection_bypass_cve_2023_27100 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-27100 | - |
 | multi | plc_wireless_router_gpn2_4p21_c_cn_cross_site_request_forger_cve_2019_6282 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-6282 | - |
 | multi | plc_wireless_router_gpn2_4p21_c_cn_cross_site_scripting_cve_2018_20326 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-20326 | - |
@@ -1407,6 +2659,7 @@
 | multi | rom0_password_extraction | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | multi | rompager_4_34_ple_router_vendors_misfortune_cookie_authentic_cve_2015_9222 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-9222 | - |
 | multi | rompager_password_disclosure_cve_2014_4019 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-4019 | - |
+| multi | rtsp_cameradar_attack | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-7921, CVE-2021-36260 | - |
 | multi | ruckus_iot_controller_ruckus_vriot_1_5_1_0_21_remote_code_ex_cve_2020_26878 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-26878 | rce |
 | multi | sagem_fast_telnet_password | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | multi | seowon_slr_120_router_remote_code_execution_unauthenticated_cve_2020_17456 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-17456 | - |
@@ -1423,66 +2676,316 @@
 | multi | utstar_wa3002g4_adsl_broadband_modem_authentication_bypass_cve_2017_14243 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-14243 | - |
 | multi | viprinet_channel_vpn_router_300_persistent_cross_site_script_cve_2014_2045 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-2045 | - |
 | multi | wrt_router_3_0_0_4_380_7743_lan_remote_code_execution_cve_2018_5999 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-5999, CVE-2018-6000 | - |
+| mvpower | dvr_jaws_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| mymax | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mymax | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mymax | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| mymax | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| nac | clearpass_xss_stored | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| nac | secure_acs_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
+| nac | vlan_hopping_checker | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| nas | nas_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| nas | nas_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| net_lynx | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| net_lynx | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| net_lynx | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| net_lynx | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netcomm | ftp_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| netcomm | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| netcomm | telnet_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| netcomm | webinterface_http_auth_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| netcomm_router | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netcomm_router | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netcomm_router | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netcomm_router | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | netcore | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | netcore | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | netcore | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | netcore | udp_53413_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor, rce |
 | netcore | wf2419_router_cross_site_scripting_cve_2018_6190 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-6190 | - |
+| netcoretek | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netcoretek | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netcoretek | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netcoretek | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netgate | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netgate | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netgate | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netgate | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | netgear | devices_unauthenticated_remote_command_execution_metasploit_cve_2016_1555 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-1555 | - |
+| netgear | dg632_bypass_dos | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
 | netgear | dgn1000_setup_cgi_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | netgear | dgn1000_unauthenticated_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| netgear | dgn1000b_remote_command_execution | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | netgear | dgn2200_dnslookup_cgi_command_injection_metasploit_cve_2017_6334 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6334 | - |
 | netgear | dgn2200_dnslookup_cgi_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6334 | rce |
 | netgear | dgn2200_ping_cgi_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6077 | rce |
 | netgear | dgn2200_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6334 | rce |
+| netgear | dgn2200v1_cmd_injection_cve_2017_6077 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6077 | rce |
 | netgear | dgn2200v1_v2_v3_v4_cross_site_request_forgery_cve_2017_6334 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6334, CVE-2017-6366 | - |
 | netgear | dgn2200v1_v2_v3_v4_dnslookup_cgi_remote_command_execution_cve_2017_6334 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6334 | - |
 | netgear | dgn2200v1_v2_v3_v4_ping_cgi_remote_command_execution_cve_2017_6077 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6077 | - |
 | netgear | exploitdb_27774_py_cve_2013_4775 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-4775 | - |
 | netgear | exploitdb_27775_py_cve_2013_4776 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-4776 | - |
-| netgear | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netgear | ftp_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
 | netgear | jnr1010_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
 | netgear | jwnr2010v5_password_leak | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
 | netgear | multi_password_disclosure-2017-5521 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-5521 | creds_disclosure |
 | netgear | multi_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | netgear | n300_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
 | netgear | netusb_kernel_stack_buffer_overflow_cve_2015_3036 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-3036 | - |
+| netgear | nighthawk_speedtest_rce_cve_2025_12946 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-12946 | rce |
 | netgear | nms300_prosafe_network_management_system_arbitrary_file_uplo_cve_2016_1525 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-1525 | - |
 | netgear | nms300_prosafe_network_management_system_multiple_vulnerabil_cve_2016_1524 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-1524, CVE-2016-1525 | - |
 | netgear | nuuo_nvrmini2_nvrsolo_crystal_devices_readynas_surveillance_cve_2016_5674 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-5674, CVE-2016-5675, CVE-2016-5676, CVE-2016-5677, CVE-2016-5678, CVE-2016-5679, CVE-2016-5680 | - |
 | netgear | prosafe_rce | 2 | 2 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| netgear | r6100_bof_rce_cve_2025_29044 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-29044 | rce |
+| netgear | r6100_cgimain_bof_cve_2025_29044 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-29044 | rce |
+| netgear | r6900p_host_header_bof_cve_2024_12988 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-12988 | dos_or_crash |
 | netgear | r7000_command_injection_cve_2016_6277 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6277 | - |
 | netgear | r7000_r6400_cgi_bin_command_injection_metasploit_cve_2016_6277 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6277 | - |
 | netgear | r7000_r6400_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| netgear | rax30_cert_validation_rce_cve_2025_12943 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-12943 | rce |
 | netgear | rax30_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | netgear | routers_password_disclosure_cve_2017_5521 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-5521 | - |
 | netgear | rp614_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
-| netgear | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netgear | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
 | netgear | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netgear | telnetenable_magic_packet | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| netgear | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | netgear | wg102_wn604_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| netgear | wg602_superman_backdoor | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
 | netgear | wnap320_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| netgear | wndr3400_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | netgear | wndr_soap_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass, info_disclosure |
 | netgear | wnr2000v5_hidden_lang_avi_remote_stack_overflow_metasploit_cve_2016_10174 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-10174 | - |
 | netgear | wnr2000v5_remote_code_execution_cve_2016_10174 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-10174, CVE-2016-10175, CVE-2016-10176 | - |
 | netgear | wnr500_612v3_jnr1010_2010_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
+| netgear | xr1000_unauth_rce_cve_2025_25246 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-25246 | rce |
+| netgear_firmware_flash.py | netgear_firmware_flash | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-5521, CVE-2021-34991, CVE-2022-27648, CVE-2023-49451 | backdoor, creds_disclosure |
+| netis | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | netis | mw5360_mw5370_rce_cve_2014_8572 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-8572 | backdoor, rce |
+| netis | ping_cgi_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| netis | router_backdoor_udp_53413 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
+| netis | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netis | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netis | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netopia | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netopia | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netopia | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netopia | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| netscreen | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | netsys | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | netsys | multi_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | netsys | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | netsys | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| noganet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| noganet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| noganet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| noganet | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| nokia | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| nokia | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| nokia | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| nokia | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| nortel | snmp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| nortel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| nortel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| nortel | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| nucom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| nucom | nc_wr644gacv_config_download_cve_2018_8755 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-8755 | - |
+| nucom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| nucom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| nucom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| observa | observa_telecom_cred_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
+| oki | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| oki | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| olitec | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| olitec | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| olitec | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| olitec | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| omron | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| omron | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| open_networks | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| open_networks | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| open_networks | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| open_networks | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| openremote_expr_injection_rce_cve_2026_39842.py | openremote_expr_injection_rce_cve_2026_39842 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-39842 | rce |
+| openwrt | glinet_ar300m_rce_cve_2023_46454 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-46454 | rce |
+| openwrt | glinet_mt6000_file_download_cve_2024_27356 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-27356 | creds_disclosure |
+| openwrt | glinet_sid_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| openwrt | mdns_bof_rce_cve_2026_30871 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-30871 | rce |
+| openwrt | mdns_bof_rce_cve_2026_30872 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-30871, CVE-2026-30872 | rce |
+| openwrt | openwrt_asu_firmware_poison | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| openwrt | openwrt_luci_rpc_privesc | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| openwrt | openwrt_wlan_privesc | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| osprey | pump_controller_auth_bypass_cve_2023_28648 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-28648 | auth_bypass |
+| ot | bacnet_foreign_device_register | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | bacnet_rce_cve_2022_21952 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-21952 | rce |
+| ot | bacnet_unauth_rw | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | can_fuzzer | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | can_replay_attack | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | can_uds_ecu_reset | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | dnp3_malformed_app_dos | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
+| ot | dnp3_replay_attack | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | dnp3_unauth_control | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | ethernetip_cip_unauth_control | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | ethernetip_rce_cve_2020_27886 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-27886 | rce |
+| ot | hartip_unauth_enum_cve_2021_43553 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-43553 | - |
+| ot | iec104_replay_asdu | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | iec104_unauth_control_cve_2022_29789 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-29789 | - |
+| ot | iec61850_goose_spoof | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | iec61850_mms_read | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | modbus_bof_schneider_cve_2018_7789 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-7789 | - |
+| ot | modbus_tcp_function_abuse | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | modbus_unauth_write | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | opcda_dcom_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | opcua_cert_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | opcua_dos_cve_2022_2586 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-2586 | dos_or_crash |
+| ot | opcua_unauth_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | opcua_user_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
+| ot | profinet_dcp_dos | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
+| ot | profinet_dcp_enum_reset | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | profinet_ptcp_sync_spoof | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot | s7comm_cpu_stop_cve_2019_13945 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-13945 | - |
+| ot | s7comm_data_read_write | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ot_iiot | bacnet_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ot_iiot | dnp3_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ot_iiot | ics_device_fingerprint | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ot_iiot | modbus_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ot_iiot | opcua_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ot_iiot | profinet_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| ovislink | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ovislink | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ovislink | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ovislink | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pace_plc | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pace_plc | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pace_plc | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pace_plc | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| paloalto | globalprotect_cmd_injection_cve_2024_3400 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-3400 | rce |
+| paloalto | pan_os_globalprotect_rce_cve_2024_3400 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-3400 | rce |
+| paloalto | panos_auth_bypass_cve_2025_0108 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-0108 | auth_bypass |
+| paloalto | panos_mgmt_auth_bypass_cve_2024_0012 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-0012, CVE-2024-9474 | auth_bypass |
+| paloalto | panos_privesc_cve_2024_9474 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-0012, CVE-2024-9474 | rce |
+| paloalto | panos_saml_auth_bypass_cve_2020_2021 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-2021 | auth_bypass |
+| paloalto | panos_userid_bof_rce_cve_2026_0300 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-0300 | rce |
+| panasonic | ftp_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| panasonic | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| panasonic | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| panasonic | webinterface_http_auth_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| paradigm | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| paradigm | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| paradigm | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| paradigm | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| paradyne | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| paradyne | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| paradyne | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| paradyne | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pci | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pci | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pci | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pci | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pelco | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pelco | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pelco | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pelco | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pentagram | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pentagram | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pentagram | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pentagram | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | perl | base64 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
 | perl | bind_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | perl | hex | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
 | perl | reverse_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | perl | rot13 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
 | perl | url | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
+| pfsense | antibruteforce_bypass_cve_2023_27100 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-27100 | - |
+| pfsense | interfaces_cmd_injection_cve_2023_42326 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-42326 | rce |
+| pfsense | pfblockerng_rce_cve_2022_31814 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | CVE-2022-31814 | rce |
 | pfsense | pfsense_2_2_6_command_injection_cve_2016_10709 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-10709 | rce |
+| pfsense | pfsense_csrf_rce_cve_2019_16667 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-16667 | rce |
+| pfsense | pfsense_diag_routes_webshell | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| pfsense | pfsense_rrd_cmd_injection_cve_2023_27253 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-27253 | rce |
+| pfsense | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pfsense | webinterface_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| phoenix | mguard_cmd_injection_cve_2024_43386 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-43386 | rce |
+| phoenix_contact | mguard_cmd_injection_cve_2024_43386 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-43386 | rce |
+| phoenix_contact | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| phoenix_contact | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| phoenix_contact | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | php | base64 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
 | php | bind_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | php | hex | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
 | php | reverse_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | php | rot13 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
 | php | url | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
+| pihole | blocklist_rce_cve_2020_11108 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-11108 | rce |
+| pikatel | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pikatel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pikatel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pikatel | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ping_communication | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ping_communication | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ping_communication | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ping_communication | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pirelli | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pirelli | pirelli_wpa_keygen | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| pirelli | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pirelli | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pirelli | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| planet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| planet | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| planet | telnet_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| planet | webinterface_http_auth_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| planet_router | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| planet_router | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| planet_router | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| planet_router | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| planex | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| planex | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| planex | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| planex | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pluscom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pluscom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pluscom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pluscom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| polycom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| polycom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| polycom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| polycom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| printers | hp_rawprint_9100 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| prolink | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| prolink | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| prolink | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| prolink | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pronets | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pronets | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pronets | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pronets | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| protocols | ble_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| protocols | can_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| protocols | coap_protocol_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| protocols | dds_rtps_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| protocols | ethernetip_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| protocols | hartip_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| protocols | lorawan_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| protocols | mqtt_protocol_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| protocols | s7comm_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| protocols | upnp_ssdp_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| protocols | wifi_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| protocols | zigbee_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| protocols | zwave_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| proxim | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| proxim | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| proxim | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| proxmox | file_read_cve_2024_21545 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-21545 | - |
+| proxmox | reflected_xss_cve_2022_31358 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-31358 | - |
+| proxmox | tfa_bypass_cve_2023_43320 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-43320 | - |
+| proxmox | webinterface_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pti | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pti | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pti | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pti | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| pulse | pulse_connect_secure_path_traversal_cve_2019_11510 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-11510, CVE-2019-11539, CVE-2021-22893 | path_traversal |
 | python | base32 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
 | python | base64 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
 | python | bind_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
@@ -1492,30 +2995,317 @@
 | python | reverse_udp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | python | rot13 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
 | python | url | 1 | 0 | 0 | 0 | 0 | 0 | 1 | - | - |
+| q_tec | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| q_tec | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| q_tec | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| q_tec | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| qnap | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| qnap | photo_station_rce_cve_2022_27593 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-27593 | rce |
+| qnap | qts_cgi_auth_bypass_rce_cve_2019_7192 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-7192, CVE-2019-7193, CVE-2019-7194, CVE-2019-7195 | auth_bypass, rce |
+| qnap | qts_quick_cgi_rce_cve_2023_47218 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-47218 | rce |
+| qnap | qts_share_cgi_rce_cve_2024_27130 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-27127, CVE-2024-27130, CVE-2024-27140 | rce |
+| qnap | qts_sql_injection_rce_cve_2022_27596 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-27596 | rce |
+| qnap | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| qnap | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| qnx | crash_qnx_inetd | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| qnx | qconn_remote_exec | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| qnx | qnx_networking_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
+| qnx | qnx_pcx_oob_rce_cve_2021_22212 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-22212 | rce |
+| qnx | qnx_pcx_oob_rce_cve_2021_22213 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-22212, CVE-2021-22213 | rce |
+| quicktel | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| quicktel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| quicktel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| quicktel | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| raspap | raspap_rce_cve_2022_28055 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-28055 | rce |
+| raspberrypi | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| rauc_integer_overflow_cve_2026_34155.py | rauc_integer_overflow_cve_2026_34155 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-34155 | - |
+| readynet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| readynet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| readynet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| readynet | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| reolink | reolink_baicells_auth_bypass_rce_cve_2021_40655 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-40655 | auth_bypass, rce |
+| reolink_nvr | reolink_nvr_p2p_uid_extract_cve_2022_30600 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-30600 | - |
+| repotec | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| repotec | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| repotec | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| repotec | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ricoh | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ricoh | ricoh_driver_privesc_cve_2019_19363 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-19363 | - |
+| ricoh | ricoh_ews_rce_cve_2024_34161 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-34161 | rce |
+| ricoh | ricoh_ftp_guest_exposure_edb_51755 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ricoh | ricoh_fw_unsigned_upload | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
+| ricoh | ricoh_http_bof_cve_2024_34161 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-34161 | rce |
+| ricoh | ricoh_infoprint_xss_edb_47850 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ricoh | ricoh_ldap_passback | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ricoh | ricoh_loginout_dos_snmp | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
+| ricoh | ricoh_mp_auth_bypass_edb_36608 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-9321 | auth_bypass |
+| ricoh | ricoh_web_cmd_inject_cve_2022_29943 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-29943 | rce |
+| ricoh | ricoh_wpa_bof_cve_2021_33945 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-33945 | dos_or_crash |
+| ricoh | web_monitor_overflow_cve_2019_14308 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-14308 | dos_or_crash |
+| ricoh | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| riger | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| riger | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| riger | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| riger | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| riot_os | riot_cord_lc_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| riot_os | riot_ipv6_frag_bof_cve_2021_27357 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-27357 | - |
+| riot_os | riot_ipv6_frag_bof_cve_2021_31966 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-31966 | - |
+| riot_os | riot_sixlowpan_heap_oob_cve_2021_31966 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-31966 | - |
+| riot_sixlowpan_oob_read_cve_2026_25139.py | riot_sixlowpan_oob_read_cve_2026_25139 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-25139 | info_disclosure |
+| rockwell | compactlogix_auth_bypass_cve_2021_22681 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-22681 | auth_bypass |
+| rockwell | compactlogix_cip_dos_cve_2024_6077 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-6077 | dos_or_crash |
+| rockwell | compactlogix_code_injection_cve_2022_1161 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-1161 | - |
+| rockwell | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| rockwell | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| roku | debug_brightscript_console | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| roku | dns_rebind_ecp_bypass_cve_2018_11314 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-11314 | - |
+| roku | ecp_app_launcher | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| roku | ecp_channel_install | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| roku | ecp_device_info | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| roku | ecp_keypress_inject | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| rosewill | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| rosewill | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| rosewill | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| rosewill | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | routers | router_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| routers | soho_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| rtsp_brute.py | rtsp_brute | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ruggedcom | ruggedcom_factory_password | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
+| ruijie | eweb_dir_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
+| ruijie | psg5124_cmd_injection_cve_2020_10882 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-10882 | rce |
+| ruijie | psg5124_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-10882 | rce |
+| ruijie | reyee_mesh_mitm_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | ruijie | reyee_mesh_router_remote_code_execution_rce_authenticated_cve_2021_43164 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-43164 | rce |
+| safecom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| safecom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| safecom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| safecom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sagem | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sagem | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sagem | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sagem | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sagemcom | ftp_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| sagemcom | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| sagemcom | telnet_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| sagemcom | webinterface_http_auth_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| samsung | ftp_default_creds | 3 | 0 | 3 | 0 | 0 | 0 | 0 | - | - |
+| samsung | samsung_scx_cmd_injection_edb_40909 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6556 | rce |
+| samsung | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| samsung | telnet_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| samsung | webinterface_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| samsung | webinterface_http_auth_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| samsung_gear | samsung_tizen_gear_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| samsung_magicinfo | auth_bypass_cve_2025_54452 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-54452 | auth_bypass |
+| samsung_magicinfo | db_hardcoded_cve_2026_25202 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | CVE-2026-25202 | - |
+| samsung_magicinfo | default_perms_lpe_cve_2026_25203 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-25203 | - |
+| samsung_magicinfo | file_upload_rce_cve_2026_25201 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-25201 | rce |
+| samsung_magicinfo | file_write_cve_2025_4632 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-4632 | - |
+| samsung_magicinfo | hardcoded_creds_cve_2025_54454 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | CVE-2025-54454 | - |
+| samsung_magicinfo | xss_takeover_cve_2026_25200 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-25200 | - |
+| samsung_magicinfo | xxe_ssrf_cve_2025_54445 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-54445 | - |
+| samsung_smartthings | samsung_smartthings_rce_cve_2018_3911 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-3911 | rce |
+| samsung_tizen | dos_allshare_cve_2012_4329 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2012-4329 | dos_or_crash |
+| samsung_tizen | dos_webserver_cve_2013_4890 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-4890 | dos_or_crash |
+| samsung_tizen | fota_rce_cve_2021_25436 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-25436 | rce |
+| samsung_tizen | fota_rce_cve_2021_25437 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-25437 | rce |
+| samsung_tizen | smarthub_token_replay_tizen_2026_005 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| samsung_tizen | smarthub_unauth_ctrl_tizen_2026_001 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| samsung_tizen | v8_vuln_checker_cve_2020_6383 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-6383 | - |
+| sangoma | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sangoma | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| scada | fuxa_scheduler_rce_cve_2026_25939 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-25939 | auth_bypass, rce |
+| scada | laquis_arb_file_write_cve_2021_41579 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-41579 | - |
+| scadaflex | sc168_file_write_cve_2022_25359 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-25359 | - |
 | scanners | autopwn | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| schneider | connexium_ssh_hardcoded_cve_2017_6026 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-6026 | - |
+| schneider | modicon_modbus_control_cve_2018_7841 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-7841 | - |
+| schneider | net55xx_encoder_rce_cve_2018_7784 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-7784 | rce |
+| schneider | quantum_plc_control | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2012-6435 | - |
+| schneider | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| schneider | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| schneider | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| scientific_atlanta | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| scientific_atlanta | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| scientific_atlanta | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| scientific_atlanta | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| seagate | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| seagate | nas_php_exec_cve_2014_8684 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-8684, CVE-2014-8686, CVE-2014-8687 | rce |
+| seagate | seagate_nas_php_backdoor | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-4169, CVE-2014-8684 | backdoor, rce |
+| seagate | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| seagate | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| secomea | gatemanager_rce_cve_2020_14500 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-14500 | rce |
+| senao | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| senao | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| senao | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| senao | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sentry360 | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sentry360 | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sentry360 | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sercomm | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sercomm | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sercomm | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sercomm | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | sftp_bruteforce.py | sftp_bruteforce | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | sftp_default.py | sftp_default | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sharp | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sharp | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | shellshock.py | shellshock | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-6271, CVE-2014-6278, CVE-2014-7169 | rce |
 | shuttle | 915wm_dns_change | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dns_change |
 | siemens | ccms2025_cred_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | siemens | ccms2025_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
+| siemens | cvms2025_credentials_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
+| siemens | ftp_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| siemens | profinet_set_ip | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| siemens | ruggedcom_web_rce_cve_2023_24845 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-24845 | rce |
+| siemens | s7_1200_plc_control | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| siemens | s7_300_400_plc_control | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| siemens | scalance_cmd_injection_cve_2023_44373 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-44373 | rce |
+| siemens | siemens_wincc_dcom_privesc | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-10929 | - |
+| siemens | siemens_wincc_sqli_cve_2012_3015 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2012-3015 | - |
+| siemens | siemens_wincc_unauth_rce_cve_2019_10929 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-10929 | rce |
+| siemens | sinema_rc_path_traversal_cve_2022_32257 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-32257 | path_traversal |
+| siemens | siprotec_relay_dos_cve_2015_5374 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-5374 | dos_or_crash |
+| siemens | ssh_default_creds | 3 | 0 | 3 | 0 | 0 | 0 | 0 | - | - |
+| siemens | telnet_default_creds | 3 | 0 | 3 | 0 | 0 | 0 | 0 | - | - |
+| siemens | webinterface_http_auth_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| sierra_wireless | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sierra_wireless | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sierra_wireless | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sierra_wireless | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| siklu | etherhaul_rce_cve_2025_57174 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-57174 | rce |
+| sitecom | dc227_backdoor_password | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
+| sitecom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sitecom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sitecom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sitecom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sitel | sitel_default_credentials | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
+| sky | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sky | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sky | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sky | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sma | sunny_webbox_sqli_cve_2019_13529 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-13529 | - |
+| smart_home | smart_home_assistant_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| smart_meters | wattrout_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| smart_tv | adb_mass_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| smart_tv | adb_tcpip_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| smart_tv | bravia_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2018-16593 | - |
+| smart_tv | bravia_upnp_audit | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2019-11889 | - |
+| smart_tv | dial_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| smart_tv | firetv_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| smart_tv | hbbtv_detect | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| smart_tv | magicinfo_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2025-4632 | - |
+| smart_tv | roku_ecp_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| smart_tv | smart_tv_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| smart_tv | tizen_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| smart_tv | vidaa_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| smart_tv | webos_discover | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| smartrg | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| smartrg | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| smartrg | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| smartrg | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| smb | smb_share_enum | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| smc | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| smc | smc_config_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| smc | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| smc | telnet_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| smc | webinterface_http_auth_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
 | snmp | snmp_bruteforce | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | snmp | snmp_trap_listener | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | snmp_bruteforce.py | snmp_bruteforce | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | snmpv3_default.py | snmpv3_default | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| soho | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| soho | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| soho | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| soho | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | soho_edge | hootoo_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| solwise | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| solwise | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| solwise | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| solwise | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | sonicwall | 8_1_0_2_14sv_extensionsettings_cgi_remote_command_injection_cve_2016_9683 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-9683 | - |
 | sonicwall | 8_1_0_2_14sv_viewcert_cgi_remote_command_injection_metasploi_cve_2016_9684 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-9684 | - |
 | sonicwall | dell_scrutinizer_11_01_methoddetail_sql_injection_metasploit_cve_2014_4977 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-4977 | - |
+| sonicwall | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | sonicwall | netextender_10_2_0_300_unquoted_service_path_cve_2020_5147 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-5147 | - |
 | sonicwall | secure_remote_access_8_1_0_2_14sv_command_injection_cve_2016_9682 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-9682 | - |
+| sonicwall | sma100_preauth_rce_cve_2025_23006 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-23006 | auth_bypass, rce |
+| sonicwall | sma100_sqli_cve_2021_20016 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-20016 | - |
+| sonicwall | sma100_stack_overflow_cve_2021_20038 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-20038 | - |
 | sonicwall | sma_10_2_1_0_17sv_password_reset_cve_2021_20034 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-20034 | password_reset_or_change |
+| sonicwall | sma_password_reset_cve_2021_20034 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-20034 | password_reset_or_change |
 | sonicwall | sonicos_7_0_host_header_injection_cve_2021_20031 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-20031 | - |
+| sonicwall | sonicos_sslvpn_access_cve_2024_40766 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-40766 | - |
+| sonicwall | sonicos_sslvpn_auth_bypass_cve_2024_53700 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-53700, CVE-2025-23006 | auth_bypass |
+| sonicwall | sonicos_sslvpn_auth_bypass_cve_2024_53704 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-53704 | auth_bypass |
+| sonicwall | sonicos_vpn_buffer_overflow_cve_2020_5135 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-5135 | - |
+| sonicwall | ssh_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| sonicwall | sslvpn_shellshock_rce_visualdoor | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-6271 | rce |
+| sonicwall | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sonicwall | webinterface_http_auth_default_creds | 2 | 0 | 2 | 0 | 0 | 0 | 0 | - | - |
+| sony | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sony | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sony | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sony | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sony_bravia | photo_sharing_rce_cve_2018_16593 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-16593 | rce |
+| sony_bravia | photo_sharing_traversal_cve_2018_16594 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-16594 | - |
+| sony_bravia | upnp_av_transport_ssrf | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| sony_bravia | upnp_unauth_volume_control | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| sony_bravia | wifi_password_disclosure_cve_2019_11336 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-11336 | - |
+| sophos | firewall_code_injection_cve_2022_3236 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-3236 | - |
+| sophos | xg_auth_bypass_cve_2022_1040 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-1040 | auth_bypass |
+| sophos | xg_sqli_asnarok_cve_2020_12271 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-12271 | - |
+| sparkcom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sparkcom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sparkcom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sparkcom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| speco | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| speco | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| speco | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| spectrum | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| spectrum | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| spectrum | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| spectrum | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| speedcom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| speedcom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| speedcom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| speedcom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | ssh_auth_keys.py | ssh_auth_keys | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | ssh_bruteforce.py | ssh_bruteforce | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | ssh_default.py | ssh_default | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| starbridge | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| starbridge | lynx526_password_reset | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | password_reset_or_change |
+| starbridge | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| starbridge | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| starbridge | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| stardot | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| stardot | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| stardot | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| supermicro | ipmi_auth_bypass_cve_2013_4786 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2013-4786 | auth_bypass, info_disclosure |
+| supra | smart_cloud_tv_rfi_cve_2019_12477 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-12477 | - |
+| surecom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| surecom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| surecom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| surecom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| swann | swann_dvr_nvr_default_creds_rtsp | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| sweex | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sweex | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sweex | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| sweex | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| synology | dsm_smart_cgi_rce_cve_2017_15889 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-15889 | rce |
+| synology | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| synology | netatalk_rce_cve_2021_31439 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-31439 | rce |
+| synology | srm_ddns_cmd_injection_cve_2024_53286 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-53286 | rce |
+| synology | srm_otp_traversal_cve_2024_11398 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-11398 | - |
+| synology | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| synology | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tactio | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tactio | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tactio | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tactio | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tandberg | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tandberg | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tandberg | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tapo | tapo_c200_c210_unauth_rce_cve_2021_4045 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-4045 | auth_bypass, rce |
 | tcp_xmas.py | tcp_xmas | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | technicolor | dpc3928sl_snmp_authentication_bypass_cve_2017_5135 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-5135 | - |
 | technicolor | dwg855_authbypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
@@ -1529,42 +3319,141 @@
 | technicolor | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | technicolor | tg784_authbypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
 | technicolor | xfinity_gateway_dpc3941t_cross_site_request_forgery_cve_2016_7454 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-7454 | - |
+| tecom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tecom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tecom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tecom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telewell | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telewell | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telewell | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telewell | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telindus | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telindus | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telindus | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telindus | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telkom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telkom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telkom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telkom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | telnet_bruteforce.py | telnet_bruteforce | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | telnet_default.py | telnet_default | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telsey | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telsey | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telsey | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telsey | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telstra | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telstra | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telstra | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telstra | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| teltonika | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| teltonika | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| teltonika | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| teltonika | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telus | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telus | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telus | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| telus | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | tenda | ac15_router_remote_code_execution_cve_2018_5767 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-5767 | - |
 | tenda | ac20_16_03_08_12_command_injection_cve_2025_9090 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-9090 | - |
 | tenda | ac5_ac1200_wireless_wifi_name_password_stored_cross_site_scr_cve_2021_3186 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-3186 | - |
+| tenda | ac_stack_overflow_cve_2024_2856 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-2856 | dos_or_crash |
 | tenda | adsl_router_d152_cross_site_scripting_cve_2018_14497 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-14497 | - |
 | tenda | d301_v2_modem_router_persistent_cross_site_scripting_cve_2019_13491 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-13491 | - |
 | tenda | fh451_1_0_0_9_router_stack_based_buffer_overflow_cve_2025_7795 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-7795 | - |
+| tenda | fh451_stack_bof_cve_2025_7795 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-7795 | - |
+| tenda | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tenda | g300f_rce_cve_2026_25857 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-25857 | rce |
 | tenda | n300_f3_12_01_01_48_malformed_http_request_header_processing_cve_2020_35391 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-35391 | - |
+| tenda | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tenda | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tenda | w15e_config_download_cve_2026_30140 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-30140 | - |
+| tenda | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | tenda | wireless_n150_router_5_07_50_cross_site_request_forgery_rebo_cve_2015_5996 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-5996 | - |
+| teracom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| teracom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| teracom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| teracom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| thermostat | bosch_bcc100_rce_cve_2023_49722 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-49722 | backdoor, rce |
+| thermostat | ecobee3_unauth_api_cve_2020_10623 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-10623 | - |
+| thermostat | radio_thermostat_unauth_setpoint | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | thomson | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | thomson | reuters_concourse_firm_central_2_13_0097_directory_traversal_cve_2019_8385 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-8385 | path_traversal |
 | thomson | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | thomson | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | thomson | twg849_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
 | thomson | twg850_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
+| thomson_alcatel | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| thomson_alcatel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| thomson_alcatel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| thomson_alcatel | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| threat_detection | botnet_c2_port_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2013-0230, CVE-2016-10372, CVE-2017-17215 | - |
+| threat_detection | gpon_exploitation_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | CVE-2018-10561, CVE-2018-10562 | rce |
+| threat_detection | mirai_c2_beacon_detect | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| threat_detection | mirai_default_creds_sweep | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| threat_detection | mirai_infection_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| threat_detection | mozi_dht_presence_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| tilgin | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tilgin | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tilgin | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tilgin | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| topcom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| topcom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| topcom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| topcom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tornado | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tornado | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tornado | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tornado | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| toshiba | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| toshiba | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tot | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tot | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tot | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tot | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| totolink | a7000r_cmd_injection_cve_2026_1623 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-1623 | rce |
+| totolink | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | totolink | n300rb_8_54_command_execution_cve_2025_52089 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-52089 | - |
+| totolink | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| totolink | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| totolink | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tp_link | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tp_link | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tp_link | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tp_link | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tplink | apt28_full_chain_autopwn | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-50224, CVE-2025-9377 | - |
 | tplink | archer_a7_c7_unauthenticated_lan_remote_code_execution_metas_cve_2020_10882 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-10882, CVE-2020-10883, CVE-2020-10884 | - |
+| tplink | archer_ax21_cmd_injection_cve_2023_1389 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-1389 | dos_or_crash, rce |
 | tplink | archer_ax21_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-1389 | rce |
 | tplink | archer_ax21_unauthenticated_command_injection_cve_2023_1389 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-1389 | - |
+| tplink | archer_ax50_backup_rce_cve_2022_30075 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-30075 | rce |
+| tplink | archer_ax50_bof_cve_2025_40634 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-40634 | dos_or_crash |
+| tplink | archer_be230_auth_cmd_injection_cve_2026_0630 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-0630 | rce |
+| tplink | archer_c20_auth_bypass_cve_2024_57049 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-57049 | auth_bypass |
 | tplink | archer_c2_c20i_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | tplink | archer_c50_3_denial_of_service_poc_cve_2020_9375 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-9375 | dos_or_crash |
 | tplink | archer_c5_rce_cve_2018_19537 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-19537 | rce |
 | tplink | archer_c7_netusb_rce_cve_2022_24354 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-24354 | rce |
+| tplink | archer_c7_rce_cve_2025_9377 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-9377 | rce |
 | tplink | archer_c9_admin_password_reset | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-11519 | password_reset_or_change |
+| tplink | archer_mr600_cmd_injection_cve_2025_14756 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-14756 | rce |
+| tplink | archer_nx_missing_auth_cve_2025_15517 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-15517 | - |
 | tplink | ax50_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-30075 | rce |
+| tplink | er605_cmd_injection_cve_2025_7850 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-7850 | rce |
 | tplink | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tplink | multi_dns_hijack_apt28 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | tplink | router_ax50_firmware_210730_remote_code_execution_rce_authen_cve_2022_30075 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-30075 | rce |
 | tplink | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | tplink | tapo_c200_1_1_15_remote_code_execution_rce_cve_2021_4045 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-4045 | rce |
+| tplink | td_8840t_password_reset | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | password_reset_or_change |
 | tplink | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | tplink | tl_mr3220_cross_site_scripting_cve_2017_15291 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-15291 | - |
 | tplink | tl_sc3130_1_6_18_rtsp_stream_disclosure_cve_2018_18428 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-18428 | - |
 | tplink | tl_wa855re_v5_200415_device_reset_auth_bypass_cve_2020_24363 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-24363 | auth_bypass |
 | tplink | tl_wr1043nd_2_authentication_bypass_cve_2019_6971 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-6971 | - |
+| tplink | tl_wr820n_ssh_weak_crypto_cve_2025_14175 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-14175 | - |
+| tplink | tl_wr840n_841n_cmd_injection_cve_2022_26186 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-26186, CVE-2022-26258, CVE-2023-50224 | rce |
 | tplink | tl_wr840n_denial_of_service_cve_2018_14336 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-14336 | dos_or_crash |
+| tplink | tl_wr840n_ipv6_cmd_injection_cve_2022_25061 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-25061 | rce |
 | tplink | tl_wr840n_v5_00000005_cross_site_scripting_cve_2019_12195 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-12195 | - |
 | tplink | tl_wr841n_command_injection_cve_2020_35576 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-35576 | - |
 | tplink | tl_wr841nd_password_disclosure_cve_2020_35575 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-35575 | - |
@@ -1572,23 +3461,40 @@
 | tplink | tl_wr940n_tl_wr941nd_buffer_overflow_cve_2019_6989 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-6989 | - |
 | tplink | tl_wr940n_v4_buffer_overflow_cve_2023_36355 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-36355 | - |
 | tplink | tp_sg105e_1_0_0_unauthenticated_remote_reboot_cve_2019_16893 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-16893 | - |
+| tplink | vn020_dhcp_overflow_cve_2024_11237 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-11237 | - |
 | tplink | vn020_f3v_t_tt_v6_2_1021_buffer_overflow_memory_corruption_cve_2024_12344 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-12344 | - |
 | tplink | vn020_f3v_t_tt_v6_2_1021_denial_of_service_dos_cve_2024_12342 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-12342 | dos_or_crash |
 | tplink | vn020_f3v_t_tt_v6_2_1021_dhcp_stack_buffer_overflow_cve_2024_11237 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-11237 | - |
+| tplink | vn020_ftp_overflow_cve_2024_12344 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-12344 | dos_or_crash |
+| tplink | vn020_upnp_dos_edb_52250 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dos_or_crash |
 | tplink | wdr4300_remote_code_execution_authenticated_cve_2017_13772 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-13772 | - |
 | tplink | wdr5620_cmd_injection | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| tplink | wdr5620_command_injection | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | tplink | wdr740nd_wdr740n_backdoor | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
 | tplink | wdr740nd_wdr740n_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | path_traversal |
 | tplink | wdr842nd_wdr842n_configure_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | tplink | wireless_router_archer_c1200_cross_site_scripting_cve_2018_13134 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-13134 | - |
 | tplink | wr1043nd_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-6971 | auth_bypass |
 | tplink | wr840n_0_9_1_3_16_denial_of_service_poc_cve_2018_15172 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-15172 | dos_or_crash |
+| tplink | wr841n_credential_disclosure_cve_2023_50224 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-50224 | creds_disclosure |
+| tplink | wr841n_parental_control_rce_cve_2025_9377 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-50224, CVE-2025-9377 | rce |
 | tplink | wr841nd_password_disclosure_cve_2020_35575 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-35575 | creds_disclosure |
 | tplink | wr849n_config_bypass_cve_2019_19143 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-19143 | - |
 | tplink | wr849n_rce_cve_2020_9374 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-9374 | rce |
 | tplink | wr849n_traceroute_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| tplink | wr940n_740n_841n_ssid_cmd_injection_cve_2023_33538 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-33538 | rce |
 | tplink | wr940n_authenticated_remote_code_cve_2017_13772 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-13772 | - |
 | tplink | wvr_war_diagnostic_rce_cve_2017_16957 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-16957 | rce |
+| tplink_firmware_flash.py | tplink_firmware_flash | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-41450 | - |
+| trendchip | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| trendchip | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| trendchip | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| trendchip | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| trendnet | camera_mjpeg_unauth | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| trendnet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| trendnet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| trendnet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| trendnet | tew827_backdoor_password | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
 | trendnet | tew827dru_cmd_injection_cve_2019_13276 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-13276 | rce |
 | trendnet | tew827dru_cmd_injection_cve_2019_13277 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-13277 | dos_or_crash |
 | trendnet | tew827dru_cmd_injection_cve_2019_13278 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-13278 | rce |
@@ -1597,28 +3503,173 @@
 | trendnet | tew827dru_stack_overflow_cve_2019_13280 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-13280 | - |
 | trendnet | tew_651br_tew_652brp_rce_cve_2019_13276 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-13276, CVE-2019-13278 | rce |
 | trendnet | tew_827dru_ping_command_injection_cve_2019_13150 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-13150 | rce |
+| trendnet | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| trust | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| trust | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| trust | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| trust | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| tuya_arduino_dns_bof_cve_2026_28519.py | tuya_arduino_dns_bof_cve_2026_28519 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-28519 | rce |
+| uart_shell_detect.py | uart_shell_detect | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ubee | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ubee | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ubee | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| ubee | ubee_cablemas_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ubee | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | ubiquiti | airos_6_x | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| ubiquiti | airos_pre_auth_command_execution | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | ubiquiti | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | ubiquiti | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | ubiquiti | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | ubiquiti | unifi_video_3_7_3_local_privilege_escalation_cve_2016_6914 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2016-6914 | - |
 | udp_amplification.py | udp_amplification | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | dos_or_crash |
+| unicorn | wb3300nr_factory_reset | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| uniview | uniview_nvr_unauth_rce_cve_2024_37630 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-37630 | rce |
 | upnp | igd_exploit | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | dos_or_crash |
 | upnp | ssdp_msearch | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
+| ur_polyscope5_dashboard_cmd_injection_cve_2026_8153.py | ur_polyscope5_dashboard_cmd_injection_cve_2026_8153 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-8153 | rce |
+| utstarcom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| utstarcom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| utstarcom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| utstarcom | utstar_ppp_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| utstarcom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| v_link | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| v_link | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| v_link | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| v_link | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vacron | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vacron | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vacron | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vehicles | jeep_uconnect_can_inject_cve_2015_5611 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2015-5600, CVE-2015-5611 | - |
+| vehicles | mercedes_mbux_bt_rce_cve_2023_37462 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-37462 | rce |
+| vehicles | obd2_can_generic_inject | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| verizon | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| verizon | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| verizon | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| verizon | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| versa | versa_director_file_upload_cve_2024_39717 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-39717 | - |
+| videoiq | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| videoiq | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| videoiq | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| visionnet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| visionnet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| visionnet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| visionnet | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vivotek | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vivotek | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vivotek | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vivotek | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vizio | smartcast_pin_bruteforce_cve_2021_27943 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-27943 | - |
+| vizio | smartcast_rce_cve_2021_27944 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-27944 | rce |
+| vodafone | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vodafone | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vodafone | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vodafone | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vonage | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vonage | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vonage | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vonage | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vtech | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vtech | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vtech | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vtech | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| vxworks | vxworks_dhcp_oob_rce_cve_2019_12261 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-12261 | rce |
+| vxworks | vxworks_rpc_dos | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2010-2967, CVE-2015-7599 | dos_or_crash |
+| vxworks | vxworks_tcp_opts_oob_cve_2019_12259 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-12259 | - |
+| vxworks | vxworks_urgent11_rce_cve_2019_12255 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-12255 | rce |
+| waf | esg_cmd_injection_cve_2023_2868 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-2868 | rce |
+| waf | esg_spreadsheet_rce_cve_2023_7102 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-7102 | rce |
+| waf | securesphere_sqli_cve_2013_xxxx | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| watchguard | firebox_auth_bypass_cve_2022_26776 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-26776 | auth_bypass |
+| watchguard | firebox_cyclops_blink_cve_2022_23176 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-23176 | - |
+| watchguard | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| watchguard | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| watchguard | xcs_9_rce | 2 | 2 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| wattrout | webinterface_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| wattrout | webinterface_info_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
 | wavlink | wn530hg4_password_disclosure_cve_2022_34047 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-34047 | - |
 | wavlink | wn533a8_cross_site_scripting_xss_cve_2022_34048 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-34048 | - |
 | wavlink | wn533a8_password_disclosure_cve_2022_34046 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-34046 | - |
+| wd | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| wd | mycloud_auth_bypass_cve_2018_18472 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-18472 | auth_bypass |
+| wd | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| wd | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| wearables | wearable_ble_scan | 1 | 0 | 0 | 1 | 0 | 0 | 0 | - | - |
+| web_excel | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| web_excel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| web_excel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| web_excel | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| wepresent | wipg1000_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| westell | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| westell | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| westell | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| westell | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| western_digital | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| western_digital | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| western_digital | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| western_digital | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| wodsee | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| wodsee | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| wodsee | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| wodsee | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| wolfssl_identity_forgery_cve_2026_5194.py | wolfssl_identity_forgery_cve_2026_5194 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-5194 | - |
 | wordlist | wordlist_generator | 1 | 0 | 0 | 0 | 1 | 0 | 0 | - | - |
 | x64 | bind_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | x64 | reverse_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | x86 | bind_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
 | x86 | reverse_tcp | 1 | 0 | 0 | 0 | 0 | 1 | 0 | - | - |
+| x_micro | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| x_micro | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| x_micro | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| x_micro | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| xavi | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| xavi | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| xavi | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| xavi | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| xavi | xavi_csrf_dns_change | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | dns_change |
+| xerox | altalink_unauth_api_cve_2022_23968 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-23968 | - |
+| xerox | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| xerox | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| xerox | xerox_cve_2023_3710_workcentre_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-3710 | rce |
+| xerox | xerox_firmware_root | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| xerox | xerox_http_bof_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-23968 | rce |
+| xerox | xerox_ipp_bof_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-27508 | rce |
+| xerox | xerox_mfp_dlm_rce_edb_35151 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| xerox | xerox_passback_ldap_smb | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| xerox | xerox_pjl_dlm_pwd | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| xerox | xerox_workcentre_cmd_inject_cve_2021_27508 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-27508 | - |
 | xiaomi | browser_10_2_4_g_browser_search_history_disclosure_cve_2018_20523 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-20523 | - |
+| xiaomi | mi_router_command_injection_cve_2023_26319 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-26319 | rce |
 | xiaomi | stock_firmware_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| xiaomi | xiaomi_miband_breakmi_ble | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| xiongmai | uc_httpd_path_traversal | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-7577 | path_traversal |
+| zephyr | zephyr_bt_bof_cve_2021_3432 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-3432 | - |
+| zephyr | zephyr_cortexm_syscall_race_lpe | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| zephyr | zephyr_dns_oob_rce_cve_2020_10024 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-10024 | rce |
+| zephyr | zephyr_usb_oob_cve_2021_3435 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-3435 | - |
 | zhone | dasan_znid_2426a_eu_multiple_cross_site_scripting_cve_2019_10677 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-10677 | - |
+| zhone | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zhone | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zhone | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zhone | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zigbee_passive_scan.py | zigbee_passive_scan | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
+| zioncom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zioncom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zioncom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zioncom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zivif | ipcheck_rce_cve_2017_17105 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-17105 | rce |
+| zonet | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zonet | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zonet | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zonet | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zoom | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zoom | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zoom | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zoom | webinterface_http_auth_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zoom | zoom_x4_x5_add_admin | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | - |
 | zte | f460_f660_backdoor | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | backdoor |
 | zte | f460_f660_rce_cve_2014_2321 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-2321 | rce |
 | zte | f660_config_download_decrypt | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2014-0329 | - |
+| zte | f670l_cmd_injection_cve_2024_22059 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-22059 | rce |
 | zte | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | zte | mf65_bd_hdv6mf65v1_0_0b05_cross_site_scripting_cve_2018_7355 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-7355 | - |
 | zte | router_f602w_captcha_bypass_cve_2020_6862 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-6862 | - |
@@ -1627,13 +3678,23 @@
 | zte | zxdsl_831cii_improper_access_restrictions_cve_2017_16953 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2017-16953 | - |
 | zte | zxhn_h108n_wifi_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
 | zte | zxhn_h168n_improper_access_restrictions_cve_2018_7357 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-7357, CVE-2018-7358 | - |
+| zte | zxhn_h168n_rce_auth_bypass | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass, rce |
+| zte | zxhn_h168n_upnp_igd_port_mapping | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2018-7357, CVE-2018-7358 | - |
+| zte | zxhn_h188a_cred_disclosure_cve_2026_34472 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2026-34472 | - |
+| zte | zxr10_privesc_cve_2024_22066 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-22066 | - |
 | zte | zxv10_h108l_cmd_injection | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
+| zte | zxv10_h108l_rce_cve_2013_custom | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | zte | zxv10_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | zte | zxv10_w812n | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | info_disclosure |
 | zyxel | armor_x1_wap6806_directory_traversal_cve_2020_14461 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2020-14461 | path_traversal |
+| zyxel | buffer_overflow_cve_2023_33009 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-33009 | - |
 | zyxel | d1000_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
 | zyxel | d1000_wifi_password_disclosure | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | creds_disclosure |
 | zyxel | ftp_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
+| zyxel | ike_cmd_injection_cve_2023_28771 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-28771 | rce |
+| zyxel | ike_heap_overflow_cve_2023_28771 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-28771 | - |
+| zyxel | lfi_cgi_cve_2022_26531 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-0342, CVE-2022-26531 | - |
+| zyxel | nas326_nas542_unauth_rce_cve_2024_29972 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-29972, CVE-2024-29973 | rce |
 | zyxel | nbg_418n_v2_modem_1_00_aaxm_6_c0_cross_site_request_forgery_cve_2019_6710 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-6710 | - |
 | zyxel | nwa_1100_nh_command_injection_cve_2021_4039 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-4039 | - |
 | zyxel | p660hn_t_v1_rce | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
@@ -1642,6 +3703,7 @@
 | zyxel | ssh_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | zyxel | telnet_default_creds | 1 | 0 | 1 | 0 | 0 | 0 | 0 | - | - |
 | zyxel | usg_flex_5_21_os_command_injection_cve_2022_30525 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-30525 | - |
+| zyxel | usg_flex_cmd_injection_cve_2022_30525 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2022-30525 | rce |
 | zyxel | usg_flex_h_series_uos_1_31_privilege_escalation_cve_2025_1731 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2025-1731 | - |
 | zyxel | vmg3312_b10b_dsl_491hnu_b1b_v2_modem_cross_site_request_forg_cve_2019_7391 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-7391 | - |
 | zyxel | vmg8825_cmd_injection | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | rce |
@@ -1649,8 +3711,75 @@
 | zyxel | vmg8825_ping_command_injection_cve_2019_9955 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-9955 | rce |
 | zyxel | zywall_2_plus_internet_security_appliance_cross_site_scripti_cve_2021_46387 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2021-46387 | - |
 | zyxel | zywall_310_zywall_110_usg1900_atp500_usg40_login_page_cross_cve_2019_9955 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2019-9955 | - |
+| zyxel | zywall_usg_cmd_injection_cve_2023_28771 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2023-28771 | rce |
+| zyxel | zywall_usg_config_hash_extraction | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - | auth_bypass |
+| zyxel | zyxel_dsl_cpe_cmd_injection_cve_2024_40890 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | CVE-2024-40890, CVE-2024-40891 | rce |
 
 ## Modules By Vendor/Product
+
+### 100fio_networks / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/100fio_networks/ftp_default_creds.py`
+
+### 100fio_networks / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/100fio_networks/ssh_default_creds.py`
+
+### 100fio_networks / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/100fio_networks/telnet_default_creds.py`
+
+### 100fio_networks / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/100fio_networks/webinterface_http_auth_default_creds.py`
+
+### 1net1 / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/1net1/ftp_default_creds.py`
+
+### 1net1 / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/1net1/ssh_default_creds.py`
+
+### 1net1 / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/1net1/telnet_default_creds.py`
+
+### 1net1 / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/1net1/webinterface_http_auth_default_creds.py`
 
 ### 2wire / 4011g_5012nv_path_traversal
 
@@ -1691,6 +3820,38 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/routers/2wire/telnet_default_creds.py`
+
+### 3bb / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/3bb/ftp_default_creds.py`
+
+### 3bb / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/3bb/ssh_default_creds.py`
+
+### 3bb / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/3bb/telnet_default_creds.py`
+
+### 3bb / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/3bb/webinterface_http_auth_default_creds.py`
 
 ### 3com / ap8760_password_disclosure
 
@@ -1756,6 +3917,191 @@
 - Module paths:
   - `modules/creds/routers/3com/telnet_default_creds.py`
 
+### a_link / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/a_link/ftp_default_creds.py`
+
+### a_link / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/a_link/ssh_default_creds.py`
+
+### a_link / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/a_link/telnet_default_creds.py`
+
+### a_link / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/a_link/webinterface_http_auth_default_creds.py`
+
+### abb / cylon_aspect_default_creds
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/bms/abb/cylon_aspect_default_creds.py`
+
+### abb / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/abb/ssh_default_creds.py`
+
+### abb / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/abb/webinterface_http_auth_default_creds.py`
+
+### access_control / anviz_m3_rfid_user_dump
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/specialized/access_control/anviz_m3_rfid_user_dump.py`
+
+### access_control / hid_mercury_auth_bypass_cve_2022_31479
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-31479, CVE-2022-31480, CVE-2022-31481, CVE-2022-31482, CVE-2022-31483
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/specialized/access_control/hid_mercury_auth_bypass_cve_2022_31479.py`
+
+### access_control / nortek_emerge_e3_rce_cve_2019_7256
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-7256, CVE-2019-7257, CVE-2019-7258, CVE-2019-7259, CVE-2019-7260, CVE-2019-7261
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/specialized/access_control/nortek_emerge_e3_rce_cve_2019_7256.py`
+
+### accton / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/accton/ssh_default_creds.py`
+
+### accton / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/accton/telnet_default_creds.py`
+
+### accton / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/accton/webinterface_http_auth_default_creds.py`
+
+### acorp / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/acorp/ftp_default_creds.py`
+
+### acorp / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/acorp/ssh_default_creds.py`
+
+### acorp / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/acorp/telnet_default_creds.py`
+
+### acorp / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/acorp/webinterface_http_auth_default_creds.py`
+
+### acti / acm_5611_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/acti/acm_5611_rce.py`
+
+### acti / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/acti/ftp_default_creds.py`
+
+### acti / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/acti/ssh_default_creds.py`
+
+### acti / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/acti/telnet_default_creds.py`
+
+### acti / webinterface_http_form_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/acti/webinterface_http_form_default_creds.py`
+
+### actiontec / ftp_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/actiontec/ftp_default_creds.py`
+  - `modules/creds/routers/actiontec/ftp_default_creds.py`
+
 ### actiontec / mi424wr_rce_cve_2014_9583
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -1764,6 +4110,817 @@
 - Module paths:
   - `modules/exploits/routers/actiontec/mi424wr_rce_cve_2014_9583.py`
 
+### actiontec / ssh_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/actiontec/ssh_default_creds.py`
+  - `modules/creds/routers/actiontec/ssh_default_creds.py`
+
+### actiontec / telnet_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/actiontec/telnet_default_creds.py`
+  - `modules/creds/routers/actiontec/telnet_default_creds.py`
+
+### actiontec / webinterface_http_auth_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/actiontec/webinterface_http_auth_default_creds.py`
+  - `modules/creds/routers/actiontec/webinterface_http_auth_default_creds.py`
+
+### adb / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/adb/ftp_default_creds.py`
+
+### adb / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/adb/ssh_default_creds.py`
+
+### adb / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/adb/telnet_default_creds.py`
+
+### adb / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/adb/webinterface_http_auth_default_creds.py`
+
+### addon / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/addon/ftp_default_creds.py`
+
+### addon / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/addon/ssh_default_creds.py`
+
+### addon / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/addon/telnet_default_creds.py`
+
+### addon / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/addon/webinterface_http_auth_default_creds.py`
+
+### adtran / snmp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/adtran/snmp_default_creds.py`
+
+### adtran / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/adtran/ssh_default_creds.py`
+
+### adtran / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/adtran/telnet_default_creds.py`
+
+### adtran / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/adtran/webinterface_http_auth_default_creds.py`
+
+### advantech / switch_shellshock_cve_2015_6023
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2014-6271, CVE-2015-6023
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/ics/advantech/switch_shellshock_cve_2015_6023.py`
+
+### airlink_101 / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airlink_101/ftp_default_creds.py`
+
+### airlink_101 / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airlink_101/ssh_default_creds.py`
+
+### airlink_101 / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airlink_101/telnet_default_creds.py`
+
+### airlink_101 / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airlink_101/webinterface_http_auth_default_creds.py`
+
+### airlive / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airlive/ftp_default_creds.py`
+
+### airlive / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airlive/ssh_default_creds.py`
+
+### airlive / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airlive/telnet_default_creds.py`
+
+### airlive / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airlive/webinterface_http_auth_default_creds.py`
+
+### airnet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airnet/ftp_default_creds.py`
+
+### airnet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airnet/ssh_default_creds.py`
+
+### airnet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airnet/telnet_default_creds.py`
+
+### airnet / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airnet/webinterface_http_auth_default_creds.py`
+
+### airrouter / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airrouter/ftp_default_creds.py`
+
+### airrouter / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airrouter/ssh_default_creds.py`
+
+### airrouter / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airrouter/telnet_default_creds.py`
+
+### airrouter / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airrouter/webinterface_http_auth_default_creds.py`
+
+### airties / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airties/ftp_default_creds.py`
+
+### airties / login_bof_cve_2015_7279
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2014-1635, CVE-2015-7279
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/airties/login_bof_cve_2015_7279.py`
+
+### airties / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airties/ssh_default_creds.py`
+
+### airties / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airties/telnet_default_creds.py`
+
+### airties / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/airties/webinterface_http_auth_default_creds.py`
+
+### aitemi / default_creds_config_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/aitemi/default_creds_config_disclosure.py`
+
+### aitm_credential_interceptor.py / aitm_credential_interceptor
+
+- Totals: modules=1, exploits=0, creds=0, scanners=0, generic=1, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/generic/aitm_credential_interceptor.py`
+
+### alcatel / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/alcatel/ssh_default_creds.py`
+
+### alcatel / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/alcatel/telnet_default_creds.py`
+
+### alcatel / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/alcatel/webinterface_http_auth_default_creds.py`
+
+### alcatel_lucent / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/alcatel_lucent/ftp_default_creds.py`
+
+### alcatel_lucent / omnipcx_masterCGI_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2007-3010
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/alcatel_lucent/omnipcx_masterCGI_rce.py`
+
+### alcatel_lucent / omniswitch_add_admin_csrf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/alcatel_lucent/omniswitch_add_admin_csrf.py`
+
+### alcatel_lucent / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/alcatel_lucent/ssh_default_creds.py`
+
+### alcatel_lucent / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/alcatel_lucent/telnet_default_creds.py`
+
+### alcatel_lucent / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/alcatel_lucent/webinterface_http_auth_default_creds.py`
+
+### allied_data / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/allied_data/ftp_default_creds.py`
+
+### allied_data / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/allied_data/ssh_default_creds.py`
+
+### allied_data / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/allied_data/telnet_default_creds.py`
+
+### allied_data / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/allied_data/webinterface_http_auth_default_creds.py`
+
+### allied_telesyn / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/allied_telesyn/ssh_default_creds.py`
+
+### allied_telesyn / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/allied_telesyn/telnet_default_creds.py`
+
+### allied_telesyn / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/allied_telesyn/webinterface_http_auth_default_creds.py`
+
+### allnet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/allnet/ssh_default_creds.py`
+
+### allnet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/allnet/telnet_default_creds.py`
+
+### allnet / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/allnet/webinterface_http_auth_default_creds.py`
+
+### alpha_networks / config_download
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/alpha_networks/config_download.py`
+
+### alpha_networks / web_shell_cmd_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/alpha_networks/web_shell_cmd_rce.py`
+
+### alteon / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/alteon/ssh_default_creds.py`
+
+### alteon / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/alteon/telnet_default_creds.py`
+
+### alteon / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/alteon/webinterface_http_auth_default_creds.py`
+
+### alvarion / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/alvarion/ftp_default_creds.py`
+
+### alvarion / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/alvarion/ssh_default_creds.py`
+
+### alvarion / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/alvarion/telnet_default_creds.py`
+
+### alvarion / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/alvarion/webinterface_http_auth_default_creds.py`
+
+### amazon_echo / amazon_echo_ava_cve_2020_5909
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-5909
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_home/amazon_echo/amazon_echo_ava_cve_2020_5909.py`
+
+### amazon_echo / amazon_echo_uart_root
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_home/amazon_echo/amazon_echo_uart_root.py`
+
+### amazon_firetv / adb_tcp_shell
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/amazon_firetv/adb_tcp_shell.py`
+
+### amazon_firetv / jpake_pin_bruteforce_cve_2023_1385
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-1385
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/amazon_firetv/jpake_pin_bruteforce_cve_2023_1385.py`
+
+### amazon_firetv / xss_media_source_cve_2023_1384
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-1384
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/amazon_firetv/xss_media_source_cve_2023_1384.py`
+
+### ambit / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ambit/ftp_default_creds.py`
+
+### ambit / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ambit/ssh_default_creds.py`
+
+### ambit / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ambit/telnet_default_creds.py`
+
+### ambit / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ambit/webinterface_http_auth_default_creds.py`
+
+### amcrest / amcrest_camera_unauth_info_disclosure_cve_2019_3950
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-7927, CVE-2019-3950
+- Attack classes: auth_bypass, info_disclosure
+- Module paths:
+  - `modules/exploits/cameras/amcrest/amcrest_camera_unauth_info_disclosure_cve_2019_3950.py`
+
+### american_dynamics / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/american_dynamics/ftp_default_creds.py`
+
+### american_dynamics / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/american_dynamics/ssh_default_creds.py`
+
+### american_dynamics / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/american_dynamics/telnet_default_creds.py`
+
+### amped_wireless / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/amped_wireless/ftp_default_creds.py`
+
+### amped_wireless / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/amped_wireless/ssh_default_creds.py`
+
+### amped_wireless / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/amped_wireless/telnet_default_creds.py`
+
+### amped_wireless / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/amped_wireless/webinterface_http_auth_default_creds.py`
+
+### android_tv / adb_default_access
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-0034
+- Attack classes: none
+- Module paths:
+  - `modules/creds/smart_tv/android_tv/adb_default_access.py`
+
+### android_tv / adb_shell_access
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/android_tv/adb_shell_access.py`
+
+### android_tv / apk_sideload
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/android_tv/apk_sideload.py`
+
+### android_tv / kernel_privesc_cve_2019_2215
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-2215
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/android_tv/kernel_privesc_cve_2019_2215.py`
+
+### android_tv / pairing_pin_bruteforce_cve_2021_0889
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-0889
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/android_tv/pairing_pin_bruteforce_cve_2021_0889.py`
+
+### android_tv / tcl_file_disclosure_cve_2020_27403
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-27403
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/android_tv/tcl_file_disclosure_cve_2020_27403.py`
+
+### android_tv / tcl_firmware_write_cve_2020_28055
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-28055
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/android_tv/tcl_firmware_write_cve_2020_28055.py`
+
+### android_tv / tcl_upnp_dos_cve_2025_4285
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-4285
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/smart_tv/android_tv/tcl_upnp_dos_cve_2025_4285.py`
+
+### android_tv / tcl_upnp_ssrf_cve_2025_4284
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-4284
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/android_tv/tcl_upnp_ssrf_cve_2025_4284.py`
+
+### annke / annke_dvr_nvr_unauth_rce_cve_2021_32941
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-32941
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/annke/annke_dvr_nvr_unauth_rce_cve_2021_32941.py`
+
+### aolynk / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/aolynk/ftp_default_creds.py`
+
+### aolynk / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/aolynk/ssh_default_creds.py`
+
+### aolynk / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/aolynk/telnet_default_creds.py`
+
+### aolynk / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/aolynk/webinterface_http_auth_default_creds.py`
+
+### apc / easy_ups_rmi_rce_cve_2023_29411
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-29411
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/ups/apc/easy_ups_rmi_rce_cve_2023_29411.py`
+
+### apc / nmc4_path_traversal_cve_2023_29412
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-29412
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/ups/apc/nmc4_path_traversal_cve_2023_29412.py`
+
+### arcadyan / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/arcadyan/ftp_default_creds.py`
+
 ### arcadyan / o2_box_6431_password_disclosure_cve_2015_7288
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -1771,6 +4928,62 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/arcadyan/o2_box_6431_password_disclosure_cve_2015_7288.py`
+
+### arcadyan / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/arcadyan/ssh_default_creds.py`
+
+### arcadyan / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/arcadyan/telnet_default_creds.py`
+
+### arcadyan / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/arcadyan/webinterface_http_auth_default_creds.py`
+
+### arecont / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/arecont/ftp_default_creds.py`
+
+### arecont / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/arecont/ssh_default_creds.py`
+
+### arecont / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/arecont/telnet_default_creds.py`
+
+### arecont / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/arecont/webinterface_http_auth_default_creds.py`
 
 ### armle / bind_tcp
 
@@ -1788,6 +5001,23 @@
 - Module paths:
   - `modules/payloads/armle/reverse_tcp.py`
 
+### arp_spoof_iot_pivot.py / arp_spoof_iot_pivot
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/lateral/arp_spoof_iot_pivot.py`
+
+### arris / ftp_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/arris/ftp_default_creds.py`
+  - `modules/creds/routers/arris/ftp_default_creds.py`
+
 ### arris / router_firmware_9_1_103_remote_code_execution_rce_authentica_cve_2022_45701
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -1795,6 +5025,24 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/arris/router_firmware_9_1_103_remote_code_execution_rce_authentica_cve_2022_45701.py`
+
+### arris / ssh_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/arris/ssh_default_creds.py`
+  - `modules/creds/routers/arris/ssh_default_creds.py`
+
+### arris / telnet_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/arris/telnet_default_creds.py`
+  - `modules/creds/routers/arris/telnet_default_creds.py`
 
 ### arris / tm602a_password_of_the_day
 
@@ -1804,6 +5052,47 @@
 - Module paths:
   - `modules/exploits/routers/arris/tm602a_password_of_the_day.py`
 
+### arris / webinterface_http_auth_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/arris/webinterface_http_auth_default_creds.py`
+  - `modules/creds/routers/arris/webinterface_http_auth_default_creds.py`
+
+### artnet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/artnet/ftp_default_creds.py`
+
+### artnet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/artnet/ssh_default_creds.py`
+
+### artnet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/artnet/telnet_default_creds.py`
+
+### artnet / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/artnet/webinterface_http_auth_default_creds.py`
+
 ### aruba / airwave_8_2_3_xml_external_entity_injection_cross_site_scrip_cve_2016_8526
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -1811,6 +5100,38 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/aruba/airwave_8_2_3_xml_external_entity_injection_cross_site_scrip_cve_2016_8526.py`
+
+### aruba / aos10_instant_papi_cmd_injection_cve_2024_47460
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-42509, CVE-2024-47460
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/aruba/aos10_instant_papi_cmd_injection_cve_2024_47460.py`
+
+### aruba / aos10_instant_papi_rce_cve_2024_42509
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-42509, CVE-2024-47460
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/aruba/aos10_instant_papi_rce_cve_2024_42509.py`
+
+### aruba / arubaos_instant_papi_overflow_cluster_cve_2022_37897
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-37885, CVE-2022-37886, CVE-2022-37888, CVE-2022-37890, CVE-2022-37897
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/aruba/arubaos_instant_papi_overflow_cluster_cve_2022_37897.py`
+
+### aruba / arubaos_papi_heap_overflow_cve_2023_35980
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-35980, CVE-2023-35981, CVE-2023-35982
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/aruba/arubaos_papi_heap_overflow_cve_2023_35980.py`
 
 ### aruba / clearpass_policy_manager_6_7_0_unauthenticated_remote_comman_cve_2020_7115
 
@@ -1820,6 +5141,14 @@
 - Module paths:
   - `modules/exploits/routers/aruba/clearpass_policy_manager_6_7_0_unauthenticated_remote_comman_cve_2020_7115.py`
 
+### aruba / clearpass_policy_manager_preauth_rce_cve_2023_43497
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-43497, CVE-2023-43498
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/aruba/clearpass_policy_manager_preauth_rce_cve_2023_43497.py`
+
 ### aruba / instant_8_7_1_0_arbitrary_file_modification_cve_2021_25155
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -1828,6 +5157,22 @@
 - Module paths:
   - `modules/exploits/routers/aruba/instant_8_7_1_0_arbitrary_file_modification_cve_2021_25155.py`
 
+### aruba / instant_arb_file_mod
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-25155
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/switches/aruba/instant_arb_file_mod.py`
+
+### aruba / instant_arubaos_papi_cmd_inject_cve_2021_25144
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-25144, CVE-2021-25145, CVE-2021-25146, CVE-2021-25149
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/aruba/instant_arubaos_papi_cmd_inject_cve_2021_25144.py`
+
 ### aruba / instant_iap_remote_code_execution_cve_2021_25155
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -1835,6 +5180,62 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/aruba/instant_iap_remote_code_execution_cve_2021_25155.py`
+
+### aruba / instant_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-25162
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/switches/aruba/instant_rce.py`
+
+### aruba / papi_service_scanner
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-25144, CVE-2022-37885, CVE-2022-37897, CVE-2023-35980, CVE-2023-35981, CVE-2024-42509, CVE-2024-47460
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/aruba/papi_service_scanner.py`
+
+### aruba / webinterface_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-25155
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/aruba/webinterface_default_creds.py`
+
+### askey / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/askey/ftp_default_creds.py`
+
+### askey / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/askey/ssh_default_creds.py`
+
+### askey / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/askey/telnet_default_creds.py`
+
+### askey / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/askey/webinterface_http_auth_default_creds.py`
 
 ### asmax / ar_1004g_password_disclosure
 
@@ -1884,6 +5285,22 @@
 - Module paths:
   - `modules/creds/routers/asmax/webinterface_http_auth_default_creds.py`
 
+### astoria / astoria_password_reset
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: password_reset_or_change
+- Module paths:
+  - `modules/exploits/routers/astoria/astoria_password_reset.py`
+
+### asus / asmb8_default_creds_ipmi
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/bmc/asus/asmb8_default_creds_ipmi.py`
+
 ### asus / asmb8_ikvm_1_14_51_remote_code_execution_rce_cve_2023_26602
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -1916,6 +5333,22 @@
 - Module paths:
   - `modules/exploits/routers/asus/asuswrt_lan_rce.py`
 
+### asus / b1m_projector_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/misc/asus/b1m_projector_rce.py`
+
+### asus / dsl_n16_auth_bypass_cve_2025_59367
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-59367
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/routers/asus/dsl_n16_auth_bypass_cve_2025_59367.py`
+
 ### asus / exploitdb_49036_rb_cve_2018_9285
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -1939,6 +5372,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/asus/gamesdk_v1_0_0_4_gamesdk_exe_unquoted_service_path_cve_2022_35899.py`
+
+### asus / gt_ac2900_auth_bypass_cve_2021_32030
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-32030
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/routers/asus/gt_ac2900_auth_bypass_cve_2021_32030.py`
 
 ### asus / hg100_denial_of_service_cve_2018_11492
 
@@ -1972,6 +5413,22 @@
 - Module paths:
   - `modules/exploits/routers/asus/precision_touchpad_11_0_0_25_denial_of_service_cve_2019_10709.py`
 
+### asus / router_csrf_rce_cve_2025_15101
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-15101
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/asus/router_csrf_rce_cve_2025_15101.py`
+
+### asus / rt_n16_admin_password_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/routers/asus/rt_n16_admin_password_disclosure.py`
+
 ### asus / rt_n16_password_disclosure
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -1979,6 +5436,14 @@
 - Attack classes: creds_disclosure
 - Module paths:
   - `modules/exploits/routers/asus/rt_n16_password_disclosure.py`
+
+### asus / rt_n66u_remote_command_execution
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/asus/rt_n66u_remote_command_execution.py`
 
 ### asus / ssh_default_creds
 
@@ -2004,6 +5469,566 @@
 - Module paths:
   - `modules/creds/routers/asus/telnet_default_creds.py`
 
+### asus_firmware_restore_bypass.py / asus_firmware_restore_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-20334, CVE-2023-41345
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/firmware/asus_firmware_restore_bypass.py`
+
+### atlantis_land / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/atlantis_land/ftp_default_creds.py`
+
+### atlantis_land / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/atlantis_land/ssh_default_creds.py`
+
+### atlantis_land / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/atlantis_land/telnet_default_creds.py`
+
+### atlantis_land / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/atlantis_land/webinterface_http_auth_default_creds.py`
+
+### att / pace_5268ac_admin_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ispcpes/att/pace_5268ac_admin_bypass.py`
+
+### att / pace_5268ac_config_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ispcpes/att/pace_5268ac_config_disclosure.py`
+
+### att / webinterface_http_form_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/att/webinterface_http_form_default_creds.py`
+
+### audiocodes / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/audiocodes/ssh_default_creds.py`
+
+### audiocodes / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/audiocodes/webinterface_http_auth_default_creds.py`
+
+### automotive_qnx_pcx_rce.py / automotive_qnx_pcx_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-22212
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/lateral/automotive_qnx_pcx_rce.py`
+
+### avaya / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/avaya/ssh_default_creds.py`
+
+### avaya / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/avaya/telnet_default_creds.py`
+
+### avaya / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/avaya/webinterface_http_auth_default_creds.py`
+
+### avigilon / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/avigilon/ftp_default_creds.py`
+
+### avigilon / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/avigilon/ssh_default_creds.py`
+
+### avigilon / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/avigilon/telnet_default_creds.py`
+
+### avigilon / videoiq_camera_path_traversal
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/cameras/avigilon/videoiq_camera_path_traversal.py`
+
+### avocent / acs_unauth_cmd_injection_cve_2024_50603
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-50603
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/servers/avocent/acs_unauth_cmd_injection_cve_2024_50603.py`
+
+### avtech / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/avtech/ftp_default_creds.py`
+
+### avtech / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/avtech/ssh_default_creds.py`
+
+### avtech / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/avtech/telnet_default_creds.py`
+
+### awb_networks / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/awb_networks/ftp_default_creds.py`
+
+### awb_networks / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/awb_networks/ssh_default_creds.py`
+
+### awb_networks / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/awb_networks/telnet_default_creds.py`
+
+### awb_networks / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/awb_networks/webinterface_http_auth_default_creds.py`
+
+### axesstel / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/axesstel/ftp_default_creds.py`
+
+### axesstel / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/axesstel/ssh_default_creds.py`
+
+### axesstel / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/axesstel/telnet_default_creds.py`
+
+### axesstel / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/axesstel/webinterface_http_auth_default_creds.py`
+
+### axis / app_install_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/axis/app_install_rce.py`
+
+### axis / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/axis/ftp_default_creds.py`
+
+### axis / srv_parhand_rce_cve_2018_10660
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-10660, CVE-2018-10661, CVE-2018-10662
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/axis/srv_parhand_rce_cve_2018_10660.py`
+
+### axis / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/axis/ssh_default_creds.py`
+
+### axis / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/axis/telnet_default_creds.py`
+
+### axis / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/axis/webinterface_http_auth_default_creds.py`
+
+### aztech / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/aztech/ftp_default_creds.py`
+
+### aztech / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/aztech/ssh_default_creds.py`
+
+### aztech / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/aztech/telnet_default_creds.py`
+
+### aztech / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/aztech/webinterface_http_auth_default_creds.py`
+
+### bandluxe / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bandluxe/ftp_default_creds.py`
+
+### bandluxe / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bandluxe/ssh_default_creds.py`
+
+### bandluxe / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bandluxe/telnet_default_creds.py`
+
+### bandluxe / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bandluxe/webinterface_http_auth_default_creds.py`
+
+### barracuda / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/barracuda/ssh_default_creds.py`
+
+### barracuda / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/barracuda/webinterface_http_auth_default_creds.py`
+
+### basler / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/basler/ftp_default_creds.py`
+
+### basler / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/basler/ssh_default_creds.py`
+
+### basler / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/basler/telnet_default_creds.py`
+
+### basler / webinterface_http_form_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/basler/webinterface_http_form_default_creds.py`
+
+### baudtec / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/baudtec/ftp_default_creds.py`
+
+### baudtec / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/baudtec/ssh_default_creds.py`
+
+### baudtec / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/baudtec/telnet_default_creds.py`
+
+### baudtec / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/baudtec/webinterface_http_auth_default_creds.py`
+
+### baytec / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/baytec/ftp_default_creds.py`
+
+### baytec / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/baytec/ssh_default_creds.py`
+
+### baytec / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/baytec/telnet_default_creds.py`
+
+### baytec / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/baytec/webinterface_http_auth_default_creds.py`
+
+### bec_technologies / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bec_technologies/ftp_default_creds.py`
+
+### bec_technologies / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bec_technologies/ssh_default_creds.py`
+
+### bec_technologies / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bec_technologies/telnet_default_creds.py`
+
+### bec_technologies / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bec_technologies/webinterface_http_auth_default_creds.py`
+
+### beetel / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/beetel/ftp_default_creds.py`
+
+### beetel / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/beetel/ssh_default_creds.py`
+
+### beetel / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/beetel/telnet_default_creds.py`
+
+### beetel / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/beetel/webinterface_http_auth_default_creds.py`
+
+### belgacom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/belgacom/ftp_default_creds.py`
+
+### belgacom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/belgacom/ssh_default_creds.py`
+
+### belgacom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/belgacom/telnet_default_creds.py`
+
+### belgacom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/belgacom/webinterface_http_auth_default_creds.py`
+
 ### belkin / auth_bypass
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -2011,6 +6036,14 @@
 - Attack classes: auth_bypass, creds_disclosure
 - Module paths:
   - `modules/exploits/routers/belkin/auth_bypass.py`
+
+### belkin / dns_hijack_csrf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/belkin/dns_hijack_csrf.py`
 
 ### belkin / f9k1009_f9k1010_2_00_04_2_00_09_hard_coded_credentials_cve_2025_8730
 
@@ -2068,6 +6101,14 @@
 - Module paths:
   - `modules/exploits/routers/belkin/play_max_prce.py`
 
+### belkin / play_n750_login_bof_cve_2014_1635
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2014-1635
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/belkin/play_n750_login_bof_cve_2014_1635.py`
+
 ### belkin / ssh_default_creds
 
 - Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
@@ -2083,6 +6124,78 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/routers/belkin/telnet_default_creds.py`
+
+### bell / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bell/ftp_default_creds.py`
+
+### bell / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bell/ssh_default_creds.py`
+
+### bell / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bell/telnet_default_creds.py`
+
+### bell / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bell/webinterface_http_auth_default_creds.py`
+
+### benq / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/benq/ftp_default_creds.py`
+
+### benq / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/benq/ssh_default_creds.py`
+
+### benq / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/benq/telnet_default_creds.py`
+
+### benq / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/benq/webinterface_http_auth_default_creds.py`
+
+### beward / n100_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/beward/n100_rce.py`
 
 ### bhu / bhu_urouter_rce
 
@@ -2115,6 +6228,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/routers/bhu/telnet_default_creds.py`
+
+### bhu / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bhu/webinterface_http_auth_default_creds.py`
 
 ### billion / billion_5200w_rce
 
@@ -2156,6 +6277,940 @@
 - Module paths:
   - `modules/creds/routers/billion/telnet_default_creds.py`
 
+### binatone / dt850w_change_admin
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/binatone/dt850w_change_admin.py`
+
+### binatone / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/binatone/ftp_default_creds.py`
+
+### binatone / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/binatone/ssh_default_creds.py`
+
+### binatone / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/binatone/telnet_default_creds.py`
+
+### binatone / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/binatone/webinterface_http_auth_default_creds.py`
+
+### blitzz / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/blitzz/ftp_default_creds.py`
+
+### blitzz / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/blitzz/ssh_default_creds.py`
+
+### blitzz / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/blitzz/telnet_default_creds.py`
+
+### blitzz / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/blitzz/webinterface_http_auth_default_creds.py`
+
+### blue_coat / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/blue_coat/ssh_default_creds.py`
+
+### blue_coat / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/blue_coat/webinterface_http_auth_default_creds.py`
+
+### bluetooth_ble / ble_sweyntooth_bridge
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-16336, CVE-2019-17071, CVE-2019-17516, CVE-2019-17517, CVE-2019-17518, CVE-2019-17519, CVE-2019-17520, CVE-2019-17521, CVE-2019-9506
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/ics/bluetooth_ble/ble_sweyntooth_bridge.py`
+
+### bluetooth_ble / blueborne_attack_cve_2017_0781
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-0781, CVE-2017-0785, CVE-2017-1000251
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/ics/bluetooth_ble/blueborne_attack_cve_2017_0781.py`
+
+### bluetooth_ble / wifi_fragattacks_cve_2020_24586
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-24586, CVE-2020-24587, CVE-2020-24588, CVE-2020-26144, CVE-2020-26146
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/bluetooth_ble/wifi_fragattacks_cve_2020_24586.py`
+
+### bluetooth_ble / wifi_kr00k_attack_cve_2019_15126
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-15126
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/bluetooth_ble/wifi_kr00k_attack_cve_2019_15126.py`
+
+### bluetooth_ble / wifi_krack_attack_cve_2017_13077
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-13077
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/bluetooth_ble/wifi_krack_attack_cve_2017_13077.py`
+
+### bmc / bmc_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/bmc/bmc_discover.py`
+
+### bms / bms_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/bms/bms_discover.py`
+
+### bosch / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/bosch/ftp_default_creds.py`
+
+### bosch / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/bosch/ssh_default_creds.py`
+
+### bosch / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/bosch/telnet_default_creds.py`
+
+### bosch / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/bosch/webinterface_http_auth_default_creds.py`
+
+### brickcom / corp_network_cameras_conf_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/brickcom/corp_network_cameras_conf_disclosure.py`
+
+### brickcom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/brickcom/ftp_default_creds.py`
+
+### brickcom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/brickcom/ssh_default_creds.py`
+
+### brickcom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/brickcom/telnet_default_creds.py`
+
+### brickcom / users_cgi_creds_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: creds_disclosure
+- Module paths:
+  - `modules/exploits/cameras/brickcom/users_cgi_creds_disclosure.py`
+
+### brickcom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/brickcom/webinterface_http_auth_default_creds.py`
+
+### broadcom / cable_haunt_spectrum_analyzer_rce_cve_2019_19494
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-19494
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/misc/broadcom/cable_haunt_spectrum_analyzer_rce_cve_2019_19494.py`
+
+### brocade / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/brocade/ftp_default_creds.py`
+
+### brocade / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/brocade/ssh_default_creds.py`
+
+### brocade / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/brocade/telnet_default_creds.py`
+
+### brocade / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/brocade/webinterface_http_auth_default_creds.py`
+
+### brother / brother_dcp1510_auth_bypass_rce_edb_51191
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: auth_bypass, rce
+- Module paths:
+  - `modules/exploits/printers/brother/brother_dcp1510_auth_bypass_rce_edb_51191.py`
+
+### brother / brother_default_auth_bypass_cve_2024_51978
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-51977, CVE-2024-51978
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/printers/brother/brother_default_auth_bypass_cve_2024_51978.py`
+
+### brother / brother_fw_upload_unauth
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-51978
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/brother/brother_fw_upload_unauth.py`
+
+### brother / brother_hl_mfc_default_creds_edb_37956
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/brother/brother_hl_mfc_default_creds_edb_37956.py`
+
+### brother / brother_ldap_smb_passback
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-51977
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/brother/brother_ldap_smb_passback.py`
+
+### brother / brother_nvram_dos
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/printers/brother/brother_nvram_dos.py`
+
+### brother / brother_serial_disclosure_cve_2024_51977
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-51977, CVE-2024-51978
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/printers/brother/brother_serial_disclosure_cve_2024_51977.py`
+
+### brother / brother_serial_pwd_derivation
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-51977, CVE-2024-51978
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/brother/brother_serial_pwd_derivation.py`
+
+### brother / brother_vuln_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-51977, CVE-2024-51978
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/brother/brother_vuln_enum.py`
+
+### brother / brother_wsd_dos
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-51978
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/printers/brother/brother_wsd_dos.py`
+
+### brother / brother_wsd_ssrf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-51977
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/brother/brother_wsd_ssrf.py`
+
+### brother / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/brother/ftp_default_creds.py`
+
+### brother / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/brother/webinterface_http_auth_default_creds.py`
+
+### bt / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bt/ftp_default_creds.py`
+
+### bt / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bt/ssh_default_creds.py`
+
+### bt / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bt/telnet_default_creds.py`
+
+### bt / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/bt/webinterface_http_auth_default_creds.py`
+
+### buffalo / ftp_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/buffalo/ftp_default_creds.py`
+  - `modules/creds/routers/buffalo/ftp_default_creds.py`
+
+### buffalo / ssh_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/buffalo/ssh_default_creds.py`
+  - `modules/creds/routers/buffalo/ssh_default_creds.py`
+
+### buffalo / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/buffalo/telnet_default_creds.py`
+
+### buffalo / webinterface_http_auth_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/buffalo/webinterface_http_auth_default_creds.py`
+  - `modules/creds/routers/buffalo/webinterface_http_auth_default_creds.py`
+
+### buffalo_router / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/buffalo_router/ftp_default_creds.py`
+
+### buffalo_router / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/buffalo_router/ssh_default_creds.py`
+
+### buffalo_router / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/buffalo_router/telnet_default_creds.py`
+
+### buffalo_router / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/buffalo_router/webinterface_http_auth_default_creds.py`
+
+### cabletron / snmp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/cabletron/snmp_default_creds.py`
+
+### cabletron / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/cabletron/ssh_default_creds.py`
+
+### cabletron / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/cabletron/telnet_default_creds.py`
+
+### calix / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/calix/ftp_default_creds.py`
+
+### calix / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/calix/ssh_default_creds.py`
+
+### calix / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/calix/telnet_default_creds.py`
+
+### calix / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/calix/webinterface_http_auth_default_creds.py`
+
+### cambium / epmp1000_get_chart_cmd_shell_cve_2017_5254
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-5254
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/misc/cambium/epmp1000_get_chart_cmd_shell_cve_2017_5254.py`
+
+### cambium / epmp1000_ping_cmd_shell_cve_2017_5255
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-5255
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/misc/cambium/epmp1000_ping_cmd_shell_cve_2017_5255.py`
+
+### cameras / boot_permission_audit
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/hikvision/boot_permission_audit.py`
+
+### cameras / camera_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/camera_scan.py`
+
+### cameras / cctv_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/dahua/cctv_discover.py`
+
+### cameras / dahua_dvr_37777
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/dahua_dvr_37777.py`
+
+### cameras / dahua_dvr_scanner
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2013-6117
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/dahua_dvr_scanner.py`
+
+### cameras / eglibc_version_check
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2013-7423, CVE-2014-0475, CVE-2014-5119, CVE-2014-9761, CVE-2015-0235, CVE-2015-1781, CVE-2015-7547, CVE-2017-1000366
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/hikvision/eglibc_version_check.py`
+
+### cameras / firmware_version_fingerprint
+
+- Totals: modules=2, exploits=0, creds=0, scanners=2, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-36260, CVE-2023-28811, CVE-2025-66173, CVE-2025-66174
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/dahua/firmware_version_fingerprint.py`
+  - `modules/scanners/cameras/hikvision/firmware_version_fingerprint.py`
+
+### cameras / intelbras_boa_detect
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2005-2970, CVE-2009-4496
+- Attack classes: dos_or_crash, path_traversal
+- Module paths:
+  - `modules/scanners/cameras/intelbras_boa_detect.py`
+
+### cameras / intelbras_cctv_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/intelbras_cctv_discover.py`
+
+### cameras / intelbras_onvif_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/intelbras_onvif_scan.py`
+
+### cameras / intelbras_p2p_uid_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/intelbras_p2p_uid_scan.py`
+
+### cameras / intelbras_pvip_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/intelbras_pvip_discover.py`
+
+### cameras / nvr_binary_hardening_audit
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/hikvision/nvr_binary_hardening_audit.py`
+
+### cameras / p2p_pppp_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-11219, CVE-2019-11220
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/dahua/p2p_pppp_scan.py`
+
+### cameras / r0_intercom_firmware_audit
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-29503, CVE-2022-30295
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/hikvision/r0_intercom_firmware_audit.py`
+
+### cameras / r0_intercom_network_detect
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/hikvision/r0_intercom_network_detect.py`
+
+### cameras / rtsp_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/rtsp_discover.py`
+
+### cameras / rtsp_scanner
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/rtsp_scanner.py`
+
+### cameras / tvip_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/cameras/tvip_discover.py`
+
+### canon / canon_driver_privesc_cve_2021_38085
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-38085
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/canon/canon_driver_privesc_cve_2021_38085.py`
+
+### canon / canon_imageclass_slp_bof_cve_2022_24673
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-24673
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/canon/canon_imageclass_slp_bof_cve_2022_24673.py`
+
+### canon / canon_imagerunner_fax_bof_rce_edb_49140
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/canon/canon_imagerunner_fax_bof_rce_edb_49140.py`
+
+### canon / canon_ldif_extract
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/canon/canon_ldif_extract.py`
+
+### canon / canon_pcl_bof_cve_2025_14235
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-14235
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/printers/canon/canon_pcl_bof_cve_2025_14235.py`
+
+### canon / canon_pixma_fw_analysis
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/canon/canon_pixma_fw_analysis.py`
+
+### canon / canon_ps_bof_cve_2025_14232
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-14232
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/canon/canon_ps_bof_cve_2025_14232.py`
+
+### canon / canon_tr150_driver_privesc_cve_2021_38085
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-38085
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/canon/canon_tr150_driver_privesc_cve_2021_38085.py`
+
+### canon / canon_wireless_dos_cve_2013_4615
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2013-4615
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/printers/canon/canon_wireless_dos_cve_2013_4615.py`
+
+### canon / canon_xps_bof_cve_2025_14237
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-14237
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/canon/canon_xps_bof_cve_2025_14237.py`
+
+### canon / ftp_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/canon/ftp_default_creds.py`
+  - `modules/creds/printers/canon/ftp_default_creds.py`
+
+### canon / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/canon/ssh_default_creds.py`
+
+### canon / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/canon/telnet_default_creds.py`
+
+### canon / webinterface_http_auth_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/canon/webinterface_http_auth_default_creds.py`
+  - `modules/creds/printers/canon/webinterface_http_auth_default_creds.py`
+
+### canyon / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/canyon/ftp_default_creds.py`
+
+### canyon / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/canyon/ssh_default_creds.py`
+
+### canyon / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/canyon/telnet_default_creds.py`
+
+### canyon / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/canyon/webinterface_http_auth_default_creds.py`
+
+### cbc_ganz / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/cbc_ganz/ftp_default_creds.py`
+
+### cbc_ganz / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/cbc_ganz/ssh_default_creds.py`
+
+### cbc_ganz / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/cbc_ganz/telnet_default_creds.py`
+
+### cbc_ganz / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/cbc_ganz/webinterface_http_auth_default_creds.py`
+
+### cbn / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cbn/ftp_default_creds.py`
+
+### cbn / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cbn/ssh_default_creds.py`
+
+### cbn / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cbn/telnet_default_creds.py`
+
+### cbn / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cbn/webinterface_http_auth_default_creds.py`
+
+### cd_r_king / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cd_r_king/ftp_default_creds.py`
+
+### cd_r_king / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cd_r_king/ssh_default_creds.py`
+
+### cd_r_king / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cd_r_king/telnet_default_creds.py`
+
+### cd_r_king / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cd_r_king/webinterface_http_auth_default_creds.py`
+
 ### cerio / multi_rce_cve_2018_18852
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -2163,6 +7218,38 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/soho_edge/cerio/multi_rce_cve_2018_18852.py`
+
+### checkpoint / endpoint_security_privesc_cve_2019_8461
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-8461
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/checkpoint/endpoint_security_privesc_cve_2019_8461.py`
+
+### checkpoint / security_gateway_info_disclosure_cve_2024_24919
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-24919
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/firewalls/checkpoint/security_gateway_info_disclosure_cve_2024_24919.py`
+
+### checkpoint / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/checkpoint/ssh_default_creds.py`
+
+### checkpoint / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/checkpoint/webinterface_http_auth_default_creds.py`
 
 ### cisco / adaptive_security_appliance_path_traversal_cve_2018_0296
 
@@ -2236,6 +7323,14 @@
 - Module paths:
   - `modules/exploits/routers/cisco/asa_crash_poc_cve_2018_0101.py`
 
+### cisco / asa_ftd_path_traversal_cve_2020_3452
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-3452
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/firewalls/cisco/asa_ftd_path_traversal_cve_2020_3452.py`
+
 ### cisco / asa_pix_epicbanana_local_privilege_escalation_cve_2016_6367
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -2251,6 +7346,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/cisco/asa_software_8_x_9_x_ikev1_ikev2_buffer_overflow_cve_2016_1287.py`
+
+### cisco / asa_vpn_bruteforce_cve_2023_20269
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-20269
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/cisco/asa_vpn_bruteforce_cve_2023_20269.py`
 
 ### cisco / asa_webvpn_cifs_handling_buffer_overflow_cve_2017_3807
 
@@ -2283,6 +7386,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/switches/cisco/catalyst_2960_rocem.py`
+
+### cisco / catalyst_3850_csrf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-1903
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/switches/cisco/catalyst_3850_csrf.py`
 
 ### cisco / cisco_firepower_management_center_cve_2023_20048
 
@@ -2364,6 +7475,14 @@
 - Module paths:
   - `modules/exploits/routers/cisco/dpc3928_router_arbitrary_file_disclosure_cve_2017_11502.py`
 
+### cisco / epc3925_csrf_password_change
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: password_reset_or_change
+- Module paths:
+  - `modules/exploits/routers/cisco/epc3925_csrf_password_change.py`
+
 ### cisco / epc_3928_multiple_vulnerabilities_cve_2015_6401
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -2371,6 +7490,22 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/cisco/epc_3928_multiple_vulnerabilities_cve_2015_6401.py`
+
+### cisco / firepower_management60_path_traversal
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2016-6435
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/firewalls/cisco/firepower_management60_path_traversal.py`
+
+### cisco / firepower_management60_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2016-6433
+- Attack classes: backdoor, rce
+- Module paths:
+  - `modules/exploits/firewalls/cisco/firepower_management60_rce.py`
 
 ### cisco / firepower_management_center_6_2_2_2_6_2_3_cross_site_scripti_cve_2019_1642
 
@@ -2384,7 +7519,7 @@
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
 - CVEs: CVE-2016-6433
-- Attack classes: none
+- Attack classes: backdoor
 - Module paths:
   - `modules/exploits/routers/cisco/firepower_management_console_6_0_post_authentication_useradd_cve_2016_6433.py`
 
@@ -2414,10 +7549,11 @@
 
 ### cisco / ftp_default_creds
 
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
 - CVEs: none
 - Attack classes: none
 - Module paths:
+  - `modules/creds/cameras/cisco/ftp_default_creds.py`
   - `modules/creds/routers/cisco/ftp_default_creds.py`
 
 ### cisco / immunet_6_2_0_amp_for_endpoints_6_2_0_denial_of_service_cve_2018_15437
@@ -2452,6 +7588,30 @@
 - Module paths:
   - `modules/exploits/routers/cisco/ios_remote_code_execution_cve_2017_6736.py`
 
+### cisco / ios_xe_webui_privesc_cve_2023_20198
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-20198
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/cisco/ios_xe_webui_privesc_cve_2023_20198.py`
+
+### cisco / ios_xe_wlc_jwt_rce_cve_2025_20188
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-20188
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/cisco/ios_xe_wlc_jwt_rce_cve_2025_20188.py`
+
+### cisco / iosxe_webui_rce_cve_2023_20198
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-20198, CVE-2023-20273
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/network_os/cisco/iosxe_webui_rce_cve_2023_20198.py`
+
 ### cisco / ip_phone_11_7_denial_of_service_poc_cve_2020_3161
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -2459,6 +7619,14 @@
 - Attack classes: dos_or_crash
 - Module paths:
   - `modules/exploits/routers/cisco/ip_phone_11_7_denial_of_service_poc_cve_2020_3161.py`
+
+### cisco / isa3000_asa_rce_cve_2018_0101
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-0101
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/cisco/isa3000_asa_rce_cve_2018_0101.py`
 
 ### cisco / ise_3_0_authorization_bypass_cve_2025_20125
 
@@ -2483,6 +7651,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/cisco/node_jos_0_11_0_re_sign_tokens_cve_2018_0114.py`
+
+### cisco / nxos_cli_cmd_injection_cve_2024_20399
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-20399
+- Attack classes: backdoor, rce
+- Module paths:
+  - `modules/exploits/switches/cisco/nxos_cli_cmd_injection_cve_2024_20399.py`
 
 ### cisco / prime_collaboration_provisioning_12_1_authentication_bypass_cve_2017_6622
 
@@ -2588,6 +7764,30 @@
 - Module paths:
   - `modules/exploits/routers/cisco/rv320_dual_gigabit_wan_vpn_router_1_4_2_15_command_injection_cve_2019_1652.py`
 
+### cisco / rv_series_auth_cmd_exec_cve_2023_20118
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-20118
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/cisco/rv_series_auth_cmd_exec_cve_2023_20118.py`
+
+### cisco / secure_acs_5_x_unauthorized_password_change
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: auth_bypass, password_reset_or_change
+- Module paths:
+  - `modules/exploits/routers/cisco/secure_acs_5_x_unauthorized_password_change.py`
+
+### cisco / small_biz_200_300_500_multi_cve_2019_1943
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-1943
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/switches/cisco/small_biz_200_300_500_multi_cve_2019_1943.py`
+
 ### cisco / small_business_200_300_500_switches_multiple_vulnerabilities_cve_2019_1943
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -2622,19 +7822,37 @@
 
 ### cisco / ssh_default_creds
 
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
 - CVEs: none
 - Attack classes: none
 - Module paths:
+  - `modules/creds/cameras/cisco/ssh_default_creds.py`
   - `modules/creds/routers/cisco/ssh_default_creds.py`
 
 ### cisco / telnet_default_creds
 
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
 - CVEs: none
 - Attack classes: none
 - Module paths:
+  - `modules/creds/cameras/cisco/telnet_default_creds.py`
   - `modules/creds/routers/cisco/telnet_default_creds.py`
+
+### cisco / ucm_info_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2013-7030
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/firewalls/cisco/ucm_info_disclosure.py`
+
+### cisco / ucm_tftp_info_disclosure_cve_2013_7030
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2013-7030
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/routers/cisco/ucm_tftp_info_disclosure_cve_2013_7030.py`
 
 ### cisco / ucs_director_default_scpuser_password_metasploit_cve_2019_1935
 
@@ -2660,6 +7878,14 @@
 - Module paths:
   - `modules/exploits/routers/cisco/ucs_manager_2_1_1b_remote_command_injection_shellshock_cve_2014_6278.py`
 
+### cisco / ucs_manager_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/cisco/ucs_manager_rce.py`
+
 ### cisco / ucs_platform_emulator_3_1_2epe1_remote_code_execution_cve_2017_12243
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -2683,6 +7909,30 @@
 - Attack classes: path_traversal
 - Module paths:
   - `modules/exploits/routers/cisco/unified_communications_manager_7_8_9_directory_traversal_cve_2013_5528.py`
+
+### cisco / unified_multi_path_traversal
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2011-3315
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/firewalls/cisco/unified_multi_path_traversal.py`
+
+### cisco / unified_multi_path_traversal_cve_2011_3315
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2011-3315
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/routers/cisco/unified_multi_path_traversal_cve_2011_3315.py`
+
+### cisco / video_surv_path_traversal
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/cameras/cisco/video_surv_path_traversal.py`
 
 ### cisco / webex_meetings_33_6_6_33_9_1_privilege_escalation_cve_2019_1674
 
@@ -2723,6 +7973,166 @@
 - Attack classes: dos_or_crash
 - Module paths:
   - `modules/exploits/routers/cisco/wlc_2504_8_9_denial_of_service_poc_cve_2019_15276.py`
+
+### cisco_asa / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/cisco_asa/ftp_default_creds.py`
+
+### cisco_asa / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/cisco_asa/ssh_default_creds.py`
+
+### cisco_asa / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/cisco_asa/telnet_default_creds.py`
+
+### cisco_asa / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/cisco_asa/webinterface_http_auth_default_creds.py`
+
+### cisco_catalyst / snmp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/cisco_catalyst/snmp_default_creds.py`
+
+### cisco_catalyst / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/cisco_catalyst/ssh_default_creds.py`
+
+### cisco_catalyst / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/cisco_catalyst/telnet_default_creds.py`
+
+### cisco_catalyst / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/cisco_catalyst/webinterface_http_auth_default_creds.py`
+
+### cisco_ios_smart_install_rce_cve_2018_0171.py / cisco_ios_smart_install_rce_cve_2018_0171
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-0171
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cisco/cisco_ios_smart_install_rce_cve_2018_0171.py`
+
+### cisco_linksys / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cisco_linksys/ftp_default_creds.py`
+
+### cisco_linksys / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cisco_linksys/ssh_default_creds.py`
+
+### cisco_linksys / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cisco_linksys/telnet_default_creds.py`
+
+### cisco_linksys / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cisco_linksys/webinterface_http_auth_default_creds.py`
+
+### cisco_voip / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/cisco_voip/ssh_default_creds.py`
+
+### cisco_voip / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/cisco_voip/telnet_default_creds.py`
+
+### cisco_voip / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/cisco_voip/webinterface_http_auth_default_creds.py`
+
+### citrix / adc_gateway_rce_cve_2023_3519
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-3519
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/network_os/citrix/adc_gateway_rce_cve_2023_3519.py`
+
+### citrix / netscaler_citrixbleed_cve_2023_4966
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-4966
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/vpn/citrix/netscaler_citrixbleed_cve_2023_4966.py`
+
+### citrix / netscaler_path_traversal_cve_2019_19781
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-19781
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/appliances/citrix/netscaler_path_traversal_cve_2019_19781.py`
+
+### citrix / netscaler_rce_cve_2023_3519
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-3519
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/appliances/citrix/netscaler_rce_cve_2023_3519.py`
 
 ### cmd / awk_bind_tcp
 
@@ -2836,6 +8246,62 @@
 - Module paths:
   - `modules/payloads/cmd/python_reverse_udp.py`
 
+### cnet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cnet/ftp_default_creds.py`
+
+### cnet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cnet/ssh_default_creds.py`
+
+### cnet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cnet/telnet_default_creds.py`
+
+### cnet / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/cnet/webinterface_http_auth_default_creds.py`
+
+### codesys / codesys_opcua_dos_cve_2021_29242
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-29242
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/ot_iiot/codesys/codesys_opcua_dos_cve_2021_29242.py`
+
+### codesys / codesys_os_cmd_inject_cve_2022_22517
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-22517
+- Attack classes: path_traversal, rce
+- Module paths:
+  - `modules/exploits/ot_iiot/codesys/codesys_os_cmd_inject_cve_2022_22517.py`
+
+### codesys / codesys_webserver_tls_cve_2021_29245
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-29245
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/ot_iiot/codesys/codesys_webserver_tls_cve_2021_29245.py`
+
 ### comtrend / ct_5361t_password_disclosure
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -2884,6 +8350,150 @@
 - Module paths:
   - `modules/exploits/routers/comtrend/vr_3033_command_injection_cve_2020_10173.py`
 
+### conceptronic / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/conceptronic/ftp_default_creds.py`
+
+### conceptronic / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/conceptronic/ssh_default_creds.py`
+
+### conceptronic / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/conceptronic/telnet_default_creds.py`
+
+### conceptronic / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/conceptronic/webinterface_http_auth_default_creds.py`
+
+### conexant / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/conexant/ftp_default_creds.py`
+
+### conexant / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/conexant/ssh_default_creds.py`
+
+### conexant / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/conexant/telnet_default_creds.py`
+
+### conexant / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/conexant/webinterface_http_auth_default_creds.py`
+
+### contiki_ng / contiki_ng_ipv6_oob_rce_cve_2022_41873
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-41873
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/embedded_os/contiki_ng/contiki_ng_ipv6_oob_rce_cve_2022_41873.py`
+
+### contiki_ng / contiki_ng_sixlowpan_heap_oob_cve_2021_21281
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-21281
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/contiki_ng/contiki_ng_sixlowpan_heap_oob_cve_2021_21281.py`
+
+### creative / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/creative/ftp_default_creds.py`
+
+### creative / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/creative/ssh_default_creds.py`
+
+### creative / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/creative/telnet_default_creds.py`
+
+### creative / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/creative/webinterface_http_auth_default_creds.py`
+
+### crypto / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/crypto/ftp_default_creds.py`
+
+### crypto / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/crypto/ssh_default_creds.py`
+
+### crypto / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/crypto/telnet_default_creds.py`
+
+### crypto / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/crypto/webinterface_http_auth_default_creds.py`
+
 ### cve / cve_lookup
 
 - Totals: modules=1, exploits=0, creds=0, scanners=0, generic=1, payloads=0, encoders=0
@@ -2892,6 +8502,438 @@
 - Module paths:
   - `modules/generic/cve/cve_lookup.py`
 
+### cve_2026_0234_auth_bypass.py / cve_2026_0234_auth_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-0234
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/embedded_os/cve_2026_0234_auth_bypass.py`
+
+### cve_2026_21513_privesc.py / cve_2026_21513_privesc
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-21513
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/cve_2026_21513_privesc.py`
+
+### cve_2026_21519_rce.py / cve_2026_21519_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-21519
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/embedded_os/cve_2026_21519_rce.py`
+
+### cve_2026_40683_embedded_rce.py / cve_2026_40683_embedded_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-40683
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/embedded_os/cve_2026_40683_embedded_rce.py`
+
+### d_link / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/d_link/ftp_default_creds.py`
+
+### d_link / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/d_link/ssh_default_creds.py`
+
+### d_link / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/d_link/telnet_default_creds.py`
+
+### d_link / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/d_link/webinterface_http_auth_default_creds.py`
+
+### dahua / auth_bypass_cve_2021_33044
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-33044, CVE-2021-33045
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/cameras/dahua/auth_bypass_cve_2021_33044.py`
+
+### dahua / cctv_37777_credential_extraction
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2013-6117
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/dahua/cctv_37777_credential_extraction.py`
+
+### dahua / cctv_auth_bypass_cve_2021_33044
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-33044, CVE-2021-33045
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/cameras/dahua/cctv_auth_bypass_cve_2021_33044.py`
+
+### dahua / cctv_firmware_upload_no_verify
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/dahua/cctv_firmware_upload_no_verify.py`
+
+### dahua / cctv_pem_key_extraction
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/dahua/cctv_pem_key_extraction.py`
+
+### dahua / cctv_rce_cve_2021_36260
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-33044, CVE-2021-36260
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/dahua/cctv_rce_cve_2021_36260.py`
+
+### dahua / cctv_username_disclosure_cve_2020_25078
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-25078
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/dahua/cctv_username_disclosure_cve_2020_25078.py`
+
+### dahua / dvr_auth_bypass_cve_2013_6117
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2013-6117
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/cameras/dahua/dvr_auth_bypass_cve_2013_6117.py`
+
+### dahua / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/dahua/ftp_default_creds.py`
+
+### dahua / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/dahua/ssh_default_creds.py`
+
+### dahua / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/dahua/telnet_default_creds.py`
+
+### dahua / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/dahua/webinterface_http_auth_default_creds.py`
+
+### dasan / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dasan/ftp_default_creds.py`
+
+### dasan / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dasan/ssh_default_creds.py`
+
+### dasan / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dasan/telnet_default_creds.py`
+
+### dasan / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dasan/webinterface_http_auth_default_creds.py`
+
+### davolink / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/davolink/ftp_default_creds.py`
+
+### davolink / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/davolink/ssh_default_creds.py`
+
+### davolink / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/davolink/telnet_default_creds.py`
+
+### davolink / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/davolink/webinterface_http_auth_default_creds.py`
+
+### ddwrt / ddwrt_command_exec
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/ddwrt/ddwrt_command_exec.py`
+
+### ddwrt / ddwrt_info_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/routers/ddwrt/ddwrt_info_disclosure.py`
+
+### dell / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dell/ftp_default_creds.py`
+
+### dell / idrac9_info_disclosure_cve_2021_36300
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-36300
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/bmc/dell/idrac9_info_disclosure_cve_2021_36300.py`
+
+### dell / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dell/ssh_default_creds.py`
+
+### dell / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dell/telnet_default_creds.py`
+
+### dell / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dell/webinterface_http_auth_default_creds.py`
+
+### dial / dial_cors_bypass_dialstranger
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/dial/dial_cors_bypass_dialstranger.py`
+
+### dial / dial_oob_read_cve_2019_10028
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-10028
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/smart_tv/dial/dial_oob_read_cve_2019_10028.py`
+
+### dick_smith_elec / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dick_smith_elec/ftp_default_creds.py`
+
+### dick_smith_elec / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dick_smith_elec/ssh_default_creds.py`
+
+### dick_smith_elec / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dick_smith_elec/telnet_default_creds.py`
+
+### dick_smith_elec / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dick_smith_elec/webinterface_http_auth_default_creds.py`
+
+### digicom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/digicom/ftp_default_creds.py`
+
+### digicom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/digicom/ssh_default_creds.py`
+
+### digicom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/digicom/telnet_default_creds.py`
+
+### digicom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/digicom/webinterface_http_auth_default_creds.py`
+
+### digisol / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/digisol/ftp_default_creds.py`
+
+### digisol / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/digisol/ssh_default_creds.py`
+
+### digisol / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/digisol/telnet_default_creds.py`
+
+### digisol / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/digisol/webinterface_http_auth_default_creds.py`
+
+### digitus / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/digitus/ftp_default_creds.py`
+
+### digitus / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/digitus/ssh_default_creds.py`
+
+### digitus / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/digitus/telnet_default_creds.py`
+
+### digitus / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/digitus/webinterface_http_auth_default_creds.py`
+
+### dizquetv / rce_edb_52079
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/servers/dizquetv/rce_edb_52079.py`
+
 ### dlink / central_wifimanager_software_controller_1_03_multiple_vulner_cve_2018_17440
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -2899,6 +8941,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/dlink/central_wifimanager_software_controller_1_03_multiple_vulner_cve_2018_17440.py`
+
+### dlink / dap1325_broken_access_edb_51556
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/dlink/dap1325_broken_access_edb_51556.py`
 
 ### dlink / dap_1620_a1_v1_01_directory_traversal_cve_2021_46381
 
@@ -2916,6 +8966,14 @@
 - Module paths:
   - `modules/exploits/routers/dlink/dcs_5020l_remote_code_execution_poc_cve_2017_17020.py`
 
+### dlink / dcs_930l_932l_auth_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/cameras/dlink/dcs_930l_932l_auth_bypass.py`
+
 ### dlink / dcs_930l_auth_rce
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -2931,6 +8989,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/dlink/dcs_931l_arbitrary_file_upload_metasploit_cve_2015_2049.py`
+
+### dlink / dcs_931l_file_upload_rce_cve_2015_2049
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2015-2049
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/dlink/dcs_931l_file_upload_rce_cve_2015_2049.py`
 
 ### dlink / dcs_936l_network_camera_cross_site_request_forgery_cve_2017_7851
 
@@ -2996,6 +9062,14 @@
 - Module paths:
   - `modules/exploits/routers/dlink/di_524_v2_06ru_multiple_cross_site_scripting_cve_2019_11017.py`
 
+### dlink / dir600l_formlogin_bof_cve_2025_4344
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-4344
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/dlink/dir600l_formlogin_bof_cve_2025_4344.py`
+
 ### dlink / dir601_cred_disclosure
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3004,6 +9078,22 @@
 - Module paths:
   - `modules/exploits/routers/dlink/dir601_cred_disclosure.py`
 
+### dlink / dir650in_cmd_injection_edb_52508
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/dlink/dir650in_cmd_injection_edb_52508.py`
+
+### dlink / dir825_stack_overflow_edb_52469
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/routers/dlink/dir825_stack_overflow_edb_52469.py`
+
 ### dlink / dir845l_cred_disclosure_cve_2024_33113
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3011,6 +9101,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/dlink/dir845l_cred_disclosure_cve_2024_33113.py`
+
+### dlink / dir846_rce_edb_51243
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/dlink/dir846_rce_edb_51243.py`
 
 ### dlink / dir850_insecure_access_control_cve_2021_46378
 
@@ -3027,6 +9125,38 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/dlink/dir850_open_redirect_cve_2021_46379.py`
+
+### dlink / dir878_unauth_cmd_injection_cve_2025_60672
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-60672
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/dlink/dir878_unauth_cmd_injection_cve_2025_60672.py`
+
+### dlink / dir882_dmz_cmd_injection_cve_2025_60700
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-60700
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/dlink/dir882_dmz_cmd_injection_cve_2025_60700.py`
+
+### dlink / dir882_syslog_cmd_injection_cve_2025_60698
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-60698
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/dlink/dir882_syslog_cmd_injection_cve_2025_60698.py`
+
+### dlink / dir890l_bof_cve_2022_30521
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-30521
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/routers/dlink/dir890l_bof_cve_2022_30521.py`
 
 ### dlink / dir890l_soapaction_rce
 
@@ -3059,6 +9189,14 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/dlink/dir_300_600_rce.py`
+
+### dlink / dir_300_615_remote_command_execution
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/dlink/dir_300_615_remote_command_execution.py`
 
 ### dlink / dir_300_645_815_upnp_rce
 
@@ -3196,6 +9334,14 @@
 - Module paths:
   - `modules/exploits/routers/dlink/dir_815_850l_rce.py`
 
+### dlink / dir_816l_multi_vuln
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-8755, CVE-2020-15893, CVE-2020-15894, CVE-2022-28956, CVE-2026-4180
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/dlink/dir_816l_multi_vuln.py`
+
 ### dlink / dir_819_a1_denial_of_service_cve_2022_40946
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3268,6 +9414,14 @@
 - Module paths:
   - `modules/exploits/routers/dlink/dns_320l_327l_rce.py`
 
+### dlink / dsl224_rce_cve_2022_36786
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-36786
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/dlink/dsl224_rce_cve_2022_36786.py`
+
 ### dlink / dsl_2640b_dns_change
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3324,6 +9478,22 @@
 - Module paths:
   - `modules/exploits/routers/dlink/dsl_2750b_rce.py`
 
+### dlink / dsl_2750u_auth_bypass_config_download
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/routers/dlink/dsl_2750u_auth_bypass_config_download.py`
+
+### dlink / dsl_320b_config_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/dlink/dsl_320b_config_disclosure.py`
+
 ### dlink / dsl_3782_authentication_bypass_cve_2018_8898
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3331,6 +9501,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/dlink/dsl_3782_authentication_bypass_cve_2018_8898.py`
+
+### dlink / dsl_legacy_unauth_rce_cve_2026_0625
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-0625
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/dlink/dsl_legacy_unauth_rce_cve_2026_0625.py`
 
 ### dlink / dsp_w110_rce
 
@@ -3422,10 +9600,11 @@
 
 ### dlink / ftp_default_creds
 
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
 - CVEs: none
 - Attack classes: none
 - Module paths:
+  - `modules/creds/cameras/dlink/ftp_default_creds.py`
   - `modules/creds/routers/dlink/ftp_default_creds.py`
 
 ### dlink / hedwig_rce_cve_2013_7389
@@ -3451,6 +9630,14 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/dlink/multi_hnap_rce.py`
+
+### dlink / nas_account_mgr_cgi_rce_cve_2024_10914
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-10914
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/nas/dlink/nas_account_mgr_cgi_rce_cve_2024_10914.py`
 
 ### dlink / routers_command_injection_cve_2018_10823
 
@@ -3478,19 +9665,53 @@
 
 ### dlink / ssh_default_creds
 
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
 - CVEs: none
 - Attack classes: none
 - Module paths:
+  - `modules/creds/cameras/dlink/ssh_default_creds.py`
   - `modules/creds/routers/dlink/ssh_default_creds.py`
 
 ### dlink / telnet_default_creds
 
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/dlink/telnet_default_creds.py`
+  - `modules/creds/routers/dlink/telnet_default_creds.py`
+
+### dlink_adsl / ftp_default_creds
+
 - Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
 - CVEs: none
 - Attack classes: none
 - Module paths:
-  - `modules/creds/routers/dlink/telnet_default_creds.py`
+  - `modules/creds/routers/dlink_adsl/ftp_default_creds.py`
+
+### dlink_adsl / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dlink_adsl/ssh_default_creds.py`
+
+### dlink_adsl / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dlink_adsl/telnet_default_creds.py`
+
+### dlink_adsl / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dlink_adsl/webinterface_http_auth_default_creds.py`
 
 ### dlink_dsl / dsl_2640b_wps_rce_cve_2013_5223
 
@@ -3508,6 +9729,62 @@
 - Module paths:
   - `modules/exploits/routers/dlink_dsl/dsl_2750b_remote_code_execution_cve_2016_20017.py`
 
+### dlink_firmware_upload_bypass.py / dlink_firmware_upload_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-16920, CVE-2020-25506, CVE-2021-27860
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/firmware/dlink_firmware_upload_bypass.py`
+
+### dns_hijack_detector.py / dns_hijack_detector
+
+- Totals: modules=1, exploits=0, creds=0, scanners=0, generic=1, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/generic/dns_hijack_detector.py`
+
+### dovado / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dovado/ftp_default_creds.py`
+
+### dovado / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dovado/ssh_default_creds.py`
+
+### dovado / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dovado/telnet_default_creds.py`
+
+### dovado / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dovado/webinterface_http_auth_default_creds.py`
+
+### draytek / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/draytek/ftp_default_creds.py`
+
 ### draytek / multiple_products_pre_authentication_remote_root_code_execut_cve_2020_8515
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3516,6 +9793,22 @@
 - Module paths:
   - `modules/exploits/routers/draytek/multiple_products_pre_authentication_remote_root_code_execut_cve_2020_8515.py`
 
+### draytek / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/draytek/ssh_default_creds.py`
+
+### draytek / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/draytek/telnet_default_creds.py`
+
 ### draytek / vigor_master_key
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3523,6 +9816,718 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/draytek/vigor_master_key.py`
+
+### draytek / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/draytek/webinterface_http_auth_default_creds.py`
+
+### dslink / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dslink/ftp_default_creds.py`
+
+### dslink / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dslink/ssh_default_creds.py`
+
+### dslink / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dslink/telnet_default_creds.py`
+
+### dslink / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dslink/webinterface_http_auth_default_creds.py`
+
+### dvtel / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/dvtel/ftp_default_creds.py`
+
+### dvtel / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/dvtel/ssh_default_creds.py`
+
+### dvtel / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/dvtel/telnet_default_creds.py`
+
+### dvtel / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/dvtel/webinterface_http_auth_default_creds.py`
+
+### dynacolor / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/dynacolor/ftp_default_creds.py`
+
+### dynacolor / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/dynacolor/ssh_default_creds.py`
+
+### dynacolor / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/dynacolor/telnet_default_creds.py`
+
+### dynacolor / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/dynacolor/webinterface_http_auth_default_creds.py`
+
+### dynalink / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dynalink/ftp_default_creds.py`
+
+### dynalink / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dynalink/ssh_default_creds.py`
+
+### dynalink / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dynalink/telnet_default_creds.py`
+
+### dynalink / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dynalink/webinterface_http_auth_default_creds.py`
+
+### dynamode / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dynamode/ftp_default_creds.py`
+
+### dynamode / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dynamode/ssh_default_creds.py`
+
+### dynamode / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dynamode/telnet_default_creds.py`
+
+### dynamode / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dynamode/webinterface_http_auth_default_creds.py`
+
+### dynex / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dynex/ftp_default_creds.py`
+
+### dynex / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dynex/ssh_default_creds.py`
+
+### dynex / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dynex/telnet_default_creds.py`
+
+### dynex / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/dynex/webinterface_http_auth_default_creds.py`
+
+### e_tech / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/e_tech/ftp_default_creds.py`
+
+### e_tech / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/e_tech/ssh_default_creds.py`
+
+### e_tech / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/e_tech/telnet_default_creds.py`
+
+### e_tech / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/e_tech/webinterface_http_auth_default_creds.py`
+
+### easybox / easybox_wpa_keygen
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/easybox/easybox_wpa_keygen.py`
+
+### eci / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eci/ftp_default_creds.py`
+
+### eci / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eci/ssh_default_creds.py`
+
+### eci / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eci/telnet_default_creds.py`
+
+### eci / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eci/webinterface_http_auth_default_creds.py`
+
+### edimax / br6476ac_cmd_injection_cve_2024_48418
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-48418
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/edimax/br6476ac_cmd_injection_cve_2024_48418.py`
+
+### edimax / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/edimax/ftp_default_creds.py`
+
+### edimax / ic7100_unauth_rce_cve_2025_1316
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-1316
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/edimax/ic7100_unauth_rce_cve_2025_1316.py`
+
+### edimax / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/edimax/ssh_default_creds.py`
+
+### edimax / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/edimax/telnet_default_creds.py`
+
+### edimax / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/edimax/webinterface_http_auth_default_creds.py`
+
+### ee / brightbox_config_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/ee/brightbox_config_disclosure.py`
+
+### efficient_siemens / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/efficient_siemens/ftp_default_creds.py`
+
+### efficient_siemens / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/efficient_siemens/ssh_default_creds.py`
+
+### efficient_siemens / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/efficient_siemens/telnet_default_creds.py`
+
+### efficient_siemens / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/efficient_siemens/webinterface_http_auth_default_creds.py`
+
+### elevator / kone_kgc_unauth_config_cve_2021_27439
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-27439
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/specialized/elevator/kone_kgc_unauth_config_cve_2021_27439.py`
+
+### eltex / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eltex/ftp_default_creds.py`
+
+### eltex / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eltex/ssh_default_creds.py`
+
+### eltex / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eltex/telnet_default_creds.py`
+
+### eltex / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eltex/webinterface_http_auth_default_creds.py`
+
+### embedded_os / embedded_os_fingerprint
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/embedded_os/embedded_os_fingerprint.py`
+
+### embedded_os / mdns_iot_discovery
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/embedded_os/mdns_iot_discovery.py`
+
+### embedded_os / mqtt_broker_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/embedded_os/mqtt_broker_scan.py`
+
+### eminent / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eminent/ftp_default_creds.py`
+
+### eminent / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eminent/ssh_default_creds.py`
+
+### eminent / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eminent/telnet_default_creds.py`
+
+### eminent / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eminent/webinterface_http_auth_default_creds.py`
+
+### encore / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/encore/ftp_default_creds.py`
+
+### encore / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/encore/ssh_default_creds.py`
+
+### encore / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/encore/telnet_default_creds.py`
+
+### encore / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/encore/webinterface_http_auth_default_creds.py`
+
+### enet_smarthome_default_creds_cve_2026_26366.py / enet_smarthome_default_creds_cve_2026_26366
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-26366
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_home/enet_smarthome_default_creds_cve_2026_26366.py`
+
+### engenius / enstation5_cmd_injection_cve_2024_31976
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-31976
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/engenius/enstation5_cmd_injection_cve_2024_31976.py`
+
+### engenius / ews356_blind_cmd_injection_cve_2024_36061
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-36061
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/engenius/ews356_blind_cmd_injection_cve_2024_36061.py`
+
+### engenius / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/engenius/ftp_default_creds.py`
+
+### engenius / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/engenius/ssh_default_creds.py`
+
+### engenius / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/engenius/telnet_default_creds.py`
+
+### engenius / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/engenius/webinterface_http_auth_default_creds.py`
+
+### enterasys / snmp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/enterasys/snmp_default_creds.py`
+
+### enterasys / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/enterasys/ssh_default_creds.py`
+
+### enterasys / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/enterasys/telnet_default_creds.py`
+
+### enterasys / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/enterasys/webinterface_http_auth_default_creds.py`
+
+### ericsson / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ericsson/ftp_default_creds.py`
+
+### ericsson / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ericsson/ssh_default_creds.py`
+
+### ericsson / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ericsson/telnet_default_creds.py`
+
+### ericsson / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ericsson/webinterface_http_auth_default_creds.py`
+
+### etec / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/etec/ftp_default_creds.py`
+
+### etec / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/etec/ssh_default_creds.py`
+
+### etec / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/etec/telnet_default_creds.py`
+
+### etec / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/etec/webinterface_http_auth_default_creds.py`
+
+### eusso / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eusso/ftp_default_creds.py`
+
+### eusso / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eusso/ssh_default_creds.py`
+
+### eusso / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eusso/telnet_default_creds.py`
+
+### eusso / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/eusso/webinterface_http_auth_default_creds.py`
+
+### everfocus / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/everfocus/ftp_default_creds.py`
+
+### everfocus / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/everfocus/ssh_default_creds.py`
+
+### everfocus / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/everfocus/telnet_default_creds.py`
+
+### everfocus / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/everfocus/webinterface_http_auth_default_creds.py`
+
+### ewon / cosy_unauth_rce_cve_2026_25823
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-25823
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/vpn/ewon/cosy_unauth_rce_cve_2026_25823.py`
 
 ### external / exploitdb_embedded_lookup
 
@@ -3556,6 +10561,102 @@
 - Module paths:
   - `modules/generic/external/mikrotikapi_bf_bridge.py`
 
+### external / wafw00f_bridge
+
+- Totals: modules=1, exploits=0, creds=0, scanners=0, generic=1, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/generic/external/wafw00f_bridge.py`
+
+### extreme_networks / snmp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/extreme_networks/snmp_default_creds.py`
+
+### extreme_networks / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/extreme_networks/ssh_default_creds.py`
+
+### extreme_networks / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/extreme_networks/telnet_default_creds.py`
+
+### extreme_networks / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/extreme_networks/webinterface_http_auth_default_creds.py`
+
+### f5 / bigip_bigiq_icontrol_rce_cve_2021_22986
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-22986
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/appliances/f5/bigip_bigiq_icontrol_rce_cve_2021_22986.py`
+
+### f5 / bigip_icontrol_rest_rce_cve_2022_1388
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-1388
+- Attack classes: auth_bypass, rce
+- Module paths:
+  - `modules/exploits/appliances/f5/bigip_icontrol_rest_rce_cve_2022_1388.py`
+
+### f5 / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/f5/ssh_default_creds.py`
+
+### fiber_home / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/fiber_home/ftp_default_creds.py`
+
+### fiber_home / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/fiber_home/ssh_default_creds.py`
+
+### fiber_home / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/fiber_home/telnet_default_creds.py`
+
+### fiber_home / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/fiber_home/webinterface_http_auth_default_creds.py`
+
 ### fiberhome / adsl_an1020_25_improper_access_restrictions_cve_2017_14147
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3588,6 +10689,22 @@
 - Module paths:
   - `modules/exploits/routers/fiberhome/lm53q1_multiple_vulnerabilities_cve_2017_16885.py`
 
+### fiberhome / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/fiberhome/ssh_default_creds.py`
+
+### fiberhome / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/fiberhome/telnet_default_creds.py`
+
 ### fiberhome / vdsl2_modem_hg_150_ub_authentication_bypass_cve_2018_9248
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3595,6 +10712,78 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/fiberhome/vdsl2_modem_hg_150_ub_authentication_bypass_cve_2018_9248.py`
+
+### fiberhome / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/fiberhome/webinterface_http_auth_default_creds.py`
+
+### firewalls / fortigate_sslvpn_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-13379, CVE-2022-40684, CVE-2023-27997, CVE-2024-21762, CVE-2025-59718
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/firewalls/fortinet/fortigate_sslvpn_scan.py`
+
+### firewalls / misc_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/firewalls/misc_scan.py`
+
+### firmware_flash_exploit_base.py / firmware_flash_exploit_base
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firmware/firmware_flash_exploit_base.py`
+
+### fitbit / fitbit_ble_exfil
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/wearables/fitbit/fitbit_ble_exfil.py`
+
+### flir / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/flir/ftp_default_creds.py`
+
+### flir / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/flir/ssh_default_creds.py`
+
+### flir / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/flir/telnet_default_creds.py`
+
+### flir / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/flir/webinterface_http_auth_default_creds.py`
 
 ### fortinet / forticlient_5_2_3_windows_10_x64_creators_local_privilege_es_cve_2015_4077
 
@@ -3620,6 +10809,30 @@
 - Module paths:
   - `modules/exploits/routers/fortinet/forticlient_5_2_3_windows_10_x64_pre_anniversary_local_privi_cve_2015_5736.py`
 
+### fortinet / forticlient_ems_preauth_rce_cve_2026_35616
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-35616
+- Attack classes: auth_bypass, rce
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/forticlient_ems_preauth_rce_cve_2026_35616.py`
+
+### fortinet / forticlientems_sqli_rce_cve_2023_48788
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-48788
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/forticlientems_sqli_rce_cve_2023_48788.py`
+
+### fortinet / forticloud_sso_auth_bypass_cve_2026_24858
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-24858
+- Attack classes: auth_bypass, backdoor
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/forticloud_sso_auth_bypass_cve_2026_24858.py`
+
 ### fortinet / fortigate_4_x_5_0_7_ssh_backdoor_access_cve_2016_1909
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3636,6 +10849,22 @@
 - Module paths:
   - `modules/exploits/routers/fortinet/fortigate_fortios_6_0_3_ldap_credential_disclosure_cve_2018_13374.py`
 
+### fortinet / fortigate_os_backdoor
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2014-3413
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/fortigate_os_backdoor.py`
+
+### fortinet / fortigate_ssl_vpn_heap_overflow_cve_2023_27997
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-27997
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/fortigate_ssl_vpn_heap_overflow_cve_2023_27997.py`
+
 ### fortinet / fortimail_7_0_1_reflected_cross_site_scripting_xss_cve_2021_43062
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3643,6 +10872,15 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/fortinet/fortimail_7_0_1_reflected_cross_site_scripting_xss_cve_2021_43062.py`
+
+### fortinet / fortimanager_fortijump_cve_2024_47575
+
+- Totals: modules=2, exploits=2, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-47575
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/fortimanager_fortijump_cve_2024_47575.py`
+  - `modules/exploits/network_os/fortinet/fortimanager_fortijump_cve_2024_47575.py`
 
 ### fortinet / fortios_5_6_0_cross_site_scripting_cve_2017_3131
 
@@ -3668,6 +10906,14 @@
 - Module paths:
   - `modules/exploits/routers/fortinet/fortios_6_0_4_unauthenticated_ssl_vpn_user_password_modifica_cve_2018_13382.py`
 
+### fortinet / fortios_auth_bypass_cve_2022_40684
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-40684
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/fortios_auth_bypass_cve_2022_40684.py`
+
 ### fortinet / fortios_fortiproxy_and_fortiswitchmanager_7_2_0_authenticati_cve_2022_40684
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3675,6 +10921,262 @@
 - Attack classes: auth_bypass
 - Module paths:
   - `modules/exploits/routers/fortinet/fortios_fortiproxy_and_fortiswitchmanager_7_2_0_authenticati_cve_2022_40684.py`
+
+### fortinet / fortios_fortiproxy_ssh_inject_cve_2022_40684_v2
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-40684
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/fortios_fortiproxy_ssh_inject_cve_2022_40684_v2.py`
+
+### fortinet / fortios_sslvpn_heap_rce_cve_2022_42475
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-42475
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/fortios_sslvpn_heap_rce_cve_2022_42475.py`
+
+### fortinet / fortios_sslvpn_path_traversal_cve_2018_13379
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-13379
+- Attack classes: info_disclosure, path_traversal
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/fortios_sslvpn_path_traversal_cve_2018_13379.py`
+
+### fortinet / fortios_sslvpn_rce_cve_2024_21762
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-21762
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/fortios_sslvpn_rce_cve_2024_21762.py`
+
+### fortinet / fortios_sslvpn_session_reuse_cve_2024_50562
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-50562
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/fortios_sslvpn_session_reuse_cve_2024_50562.py`
+
+### fortinet / fortios_websocket_auth_bypass_cve_2024_55591
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-55591
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/fortios_websocket_auth_bypass_cve_2024_55591.py`
+
+### fortinet / fortiweb_auth_bypass_cve_2025_64446
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-64446
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/fortiweb/fortiweb_auth_bypass_cve_2025_64446.py`
+
+### fortinet / fortiweb_sqli_rce_cve_2025_25257
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-25257
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/fortinet/fortiweb/fortiweb_sqli_rce_cve_2025_25257.py`
+
+### fortinet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/fortinet/ftp_default_creds.py`
+
+### fortinet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/fortinet/ssh_default_creds.py`
+
+### fortinet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/fortinet/telnet_default_creds.py`
+
+### fortinet / webinterface_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/fortinet/webinterface_default_creds.py`
+
+### foscam / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/foscam/ftp_default_creds.py`
+
+### foscam / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/foscam/ssh_default_creds.py`
+
+### foscam / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/foscam/telnet_default_creds.py`
+
+### foscam / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/foscam/webinterface_http_auth_default_creds.py`
+
+### foundry / snmp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/foundry/snmp_default_creds.py`
+
+### foundry / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/foundry/ssh_default_creds.py`
+
+### foundry / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/foundry/telnet_default_creds.py`
+
+### franklin_wireless / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/franklin_wireless/ftp_default_creds.py`
+
+### franklin_wireless / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/franklin_wireless/ssh_default_creds.py`
+
+### franklin_wireless / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/franklin_wireless/telnet_default_creds.py`
+
+### franklin_wireless / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/franklin_wireless/webinterface_http_auth_default_creds.py`
+
+### freebox / freebox_auth_bypass_reboot
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/routers/freebox/freebox_auth_bypass_reboot.py`
+
+### freepbx / recordings_sqli_rce_cve_2019_19006
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-19006
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/voip/freepbx/recordings_sqli_rce_cve_2019_19006.py`
+
+### freertos / freertos_mpu_rop_lpe_cve_2021_31572
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-31572
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/freertos/freertos_mpu_rop_lpe_cve_2021_31572.py`
+
+### freertos / freertos_plus_tcp_oob_write_cve_2025_5688
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-5688
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/freertos/freertos_plus_tcp_oob_write_cve_2025_5688.py`
+
+### freertos / freertos_tcpip_heap_oob_cve_2021_31573
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-31573
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/freertos/freertos_tcpip_heap_oob_cve_2021_31573.py`
+
+### fritz_box / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/fritz_box/ftp_default_creds.py`
+
+### fritz_box / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/fritz_box/ssh_default_creds.py`
+
+### fritz_box / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/fritz_box/telnet_default_creds.py`
+
+### fritz_box / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/fritz_box/webinterface_http_auth_default_creds.py`
 
 ### ftp_bruteforce.py / ftp_bruteforce
 
@@ -3691,6 +11193,1030 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/generic/ftp_default.py`
+
+### garmin / garmin_ciq_bof_cve_2023_23300
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-23300
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/wearables/garmin/garmin_ciq_bof_cve_2023_23300.py`
+
+### gates / genie_aladdin_unauth_open_cve_2020_8530
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-8530
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/specialized/gates/genie_aladdin_unauth_open_cve_2020_8530.py`
+
+### gates / rf_rolling_code_replay
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/specialized/gates/rf_rolling_code_replay.py`
+
+### gateway / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/gateway/ftp_default_creds.py`
+
+### gateway / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/gateway/ssh_default_creds.py`
+
+### gateway / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/gateway/telnet_default_creds.py`
+
+### gateway / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/gateway/webinterface_http_auth_default_creds.py`
+
+### geek_adsl / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/geek_adsl/ftp_default_creds.py`
+
+### geek_adsl / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/geek_adsl/ssh_default_creds.py`
+
+### geek_adsl / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/geek_adsl/telnet_default_creds.py`
+
+### geek_adsl / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/geek_adsl/webinterface_http_auth_default_creds.py`
+
+### generic / cve_2026_22812_cmd_injection
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-22812
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/generic/cve_2026_22812_cmd_injection.py`
+
+### generic / cve_2026_31602_unauth_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-31602
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/generic/cve_2026_31602_unauth_rce.py`
+
+### generic / dell_b5460_lexmark_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: creds_disclosure
+- Module paths:
+  - `modules/exploits/printers/generic/dell_b5460_lexmark_enum.py`
+
+### generic / dell_mfp_job_log_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/dell_mfp_job_log_enum.py`
+
+### generic / dnp3_firewall_evasion
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/generic/dnp3_firewall_evasion.py`
+
+### generic / edb_15631_pjl_unrestricted_access
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2002-1048
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/edb_15631_pjl_unrestricted_access.py`
+
+### generic / edb_22319_hp_snmp_info_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2002-1048
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/printers/generic/edb_22319_hp_snmp_info_disclosure.py`
+
+### generic / edb_45205_generic_printer_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-14308
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/generic/edb_45205_generic_printer_rce.py`
+
+### generic / edb_50498_lexmark_stored_xss
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-44736
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/edb_50498_lexmark_stored_xss.py`
+
+### generic / edb_51606_hp_ssrf_cve_2021_3441
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-3441
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/printers/generic/edb_51606_hp_ssrf_cve_2021_3441.py`
+
+### generic / edb_51928_ricoh_auth_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-33888
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/printers/generic/edb_51928_ricoh_auth_bypass.py`
+
+### generic / epson_connect_cloud_email_snmp
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/epson_connect_cloud_email_snmp.py`
+
+### generic / epson_fw_unsigned_upload
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/epson_fw_unsigned_upload.py`
+
+### generic / epson_lpd_unauth_cve_2023_27516
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-27516
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/printers/generic/epson_lpd_unauth_cve_2023_27516.py`
+
+### generic / epson_noauth_disclosure_cve_2022_3426
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-3426
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/epson_noauth_disclosure_cve_2022_3426.py`
+
+### generic / epson_workforce_ews_rce_edb_47812
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/generic/epson_workforce_ews_rce_edb_47812.py`
+
+### generic / ethernetip_cip_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/generic/ethernetip_cip_bypass.py`
+
+### generic / fake_dhcp_server
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/generic/fake_dhcp_server.py`
+
+### generic / fax_config_exfil
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/fax_config_exfil.py`
+
+### generic / fax_dll_inject
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/fax_dll_inject.py`
+
+### generic / ftp_printer_filesystem_grab
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/ftp_printer_filesystem_grab.py`
+
+### generic / fuser_thermal_attack
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/fuser_thermal_attack.py`
+
+### generic / generic_pjl_nvram
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/generic_pjl_nvram.py`
+
+### generic / heartbleed
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/firewalls/generic/heartbleed.py`
+
+### generic / http_form_char_by_char_oracle
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/firewalls/generic/http_form_char_by_char_oracle.py`
+
+### generic / http_smuggling_checker
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/generic/http_smuggling_checker.py`
+
+### generic / iec104_manipulation
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/generic/iec104_manipulation.py`
+
+### generic / ipp_anon_print_inject
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2015-1158
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/ipp_anon_print_inject.py`
+
+### generic / ipp_evil_twin_rogue
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/ipp_evil_twin_rogue.py`
+
+### generic / ipp_fuzz_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/ipp_fuzz_enum.py`
+
+### generic / ipp_print_uri_ssrf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/ipp_print_uri_ssrf.py`
+
+### generic / ipp_printer_check
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-18190
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/ipp_printer_check.py`
+
+### generic / ipp_purge_jobs_dos
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-8675
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/printers/generic/ipp_purge_jobs_dos.py`
+
+### generic / konica_bizhub_user_extract
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/konica_bizhub_user_extract.py`
+
+### generic / konica_fw_upload
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/konica_fw_upload.py`
+
+### generic / konica_minolta_session_fixation_edb_43178
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-6321
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/konica_minolta_session_fixation_edb_43178.py`
+
+### generic / konica_soap_cred_extract
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/konica_soap_cred_extract.py`
+
+### generic / laser_scanner_physical_attack
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/laser_scanner_physical_attack.py`
+
+### generic / ldap_hash_capture_passback
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/ldap_hash_capture_passback.py`
+
+### generic / mirage_rogue_ldap
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/mirage_rogue_ldap.py`
+
+### generic / mirai_printer_scan
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/mirai_printer_scan.py`
+
+### generic / modbus_dpi_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/generic/modbus_dpi_bypass.py`
+
+### generic / motor_jam_physical_attack
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/motor_jam_physical_attack.py`
+
+### generic / ms_rprn_ntlm_coerce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-1678
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/ms_rprn_ntlm_coerce.py`
+
+### generic / nmap_printer_nse
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/nmap_printer_nse.py`
+
+### generic / nse_compat_wrapper
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/nse_compat_wrapper.py`
+
+### generic / oki_b432_config_dump
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/oki_b432_config_dump.py`
+
+### generic / opcua_firewall_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/generic/opcua_firewall_bypass.py`
+
+### generic / openwrt_hotplug_privesc_cve_2026_30874
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-30874
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/generic/openwrt_hotplug_privesc_cve_2026_30874.py`
+
+### generic / papercut_pjl_scanner
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/papercut_pjl_scanner.py`
+
+### generic / pjl_formlines_dos_cve_2024_51982
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-51982
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/printers/generic/pjl_formlines_dos_cve_2024_51982.py`
+
+### generic / pjl_nvram_damage
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/pjl_nvram_damage.py`
+
+### generic / pjl_password_disclosure_cve_2011_4786
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2011-4786
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/pjl_password_disclosure_cve_2011_4786.py`
+
+### generic / pjl_printer_dir_list
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2010-4107
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/printers/generic/pjl_printer_dir_list.py`
+
+### generic / pjl_printer_env_vars
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2010-4107
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/pjl_printer_env_vars.py`
+
+### generic / pjl_printer_file_download
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2010-4107
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/pjl_printer_file_download.py`
+
+### generic / pjl_printer_file_upload
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2010-4107
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/pjl_printer_file_upload.py`
+
+### generic / pjl_printer_info
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/pjl_printer_info.py`
+
+### generic / pjl_pwd_disclosure_cve_2011_4786
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2011-4786
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/pjl_pwd_disclosure_cve_2011_4786.py`
+
+### generic / praeda_mfp_ews_harvest
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/praeda_mfp_ews_harvest.py`
+
+### generic / pret2_wrapper
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/pret2_wrapper.py`
+
+### generic / pret_wrapper
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/pret_wrapper.py`
+
+### generic / print_track_steg
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/print_track_steg.py`
+
+### generic / printer_c2_dnstunnel
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/printer_c2_dnstunnel.py`
+
+### generic / printer_c2_httppoll
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/printer_c2_httppoll.py`
+
+### generic / printer_c2_smb
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/printer_c2_smb.py`
+
+### generic / printer_firmware_tamp
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/printer_firmware_tamp.py`
+
+### generic / printer_grpc_shell
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/printer_grpc_shell.py`
+
+### generic / printer_iot_lateral
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/printer_iot_lateral.py`
+
+### generic / printer_net_reconn
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/printer_net_reconn.py`
+
+### generic / printer_to_pdf_pjl
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/printer_to_pdf_pjl.py`
+
+### generic / printer_wifi_attack
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/printer_wifi_attack.py`
+
+### generic / printjob_capture_msf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/printjob_capture_msf.py`
+
+### generic / ps_dos_infinite_loop
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/printers/generic/ps_dos_infinite_loop.py`
+
+### generic / ps_filesystem_access
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/ps_filesystem_access.py`
+
+### generic / ps_infinite_loop_dos
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2002-1048
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/printers/generic/ps_infinite_loop_dos.py`
+
+### generic / ps_job_capture
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/ps_job_capture.py`
+
+### generic / ps_overlay_watermark
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/ps_overlay_watermark.py`
+
+### generic / ps_printer_lang_abuse
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/ps_printer_lang_abuse.py`
+
+### generic / pyrrha_fw_analysis
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/pyrrha_fw_analysis.py`
+
+### generic / rfid_badge_exfil
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/rfid_badge_exfil.py`
+
+### generic / samsung_cve_2016_11061_xxe
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2016-11061
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/samsung_cve_2016_11061_xxe.py`
+
+### generic / sharp_rce_cve_2022_45796
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-45796
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/generic/sharp_rce_cve_2022_45796.py`
+
+### generic / sharp_smtp_passback
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/sharp_smtp_passback.py`
+
+### generic / shellshock
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2014-6271, CVE-2014-6278, CVE-2014-7169
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/generic/shellshock.py`
+
+### generic / shodan_printer_vuln_map
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/shodan_printer_vuln_map.py`
+
+### generic / smartcard_printer_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/smartcard_printer_bypass.py`
+
+### generic / smb_auth_relay_print
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/smb_auth_relay_print.py`
+
+### generic / snmp_factory_reset
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/snmp_factory_reset.py`
+
+### generic / snmp_printer_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/snmp_printer_enum.py`
+
+### generic / ssh_auth_keys
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/generic/ssh_auth_keys.py`
+
+### generic / ssport_lpe
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-1675, CVE-2022-21999
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/ssport_lpe.py`
+
+### generic / tftp_loop_dos
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2002-1048
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/printers/generic/tftp_loop_dos.py`
+
+### generic / thermal_printer_remote_print
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/thermal_printer_remote_print.py`
+
+### generic / toshiba_auth_bypass_cve_2024_21911
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-21911
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/printers/generic/toshiba_auth_bypass_cve_2024_21911.py`
+
+### generic / universal_printer_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/universal_printer_enum.py`
+
+### generic / wsd_printer_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-26855
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/wsd_printer_enum.py`
+
+### generic / xsp_beef_payload
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/xsp_beef_payload.py`
+
+### generic / zerologon_printserver_cve_2020_1472
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-1472
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/generic/zerologon_printserver_cve_2020_1472.py`
+
+### genexis / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/genexis/ftp_default_creds.py`
+
+### genexis / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/genexis/ssh_default_creds.py`
+
+### genexis / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/genexis/telnet_default_creds.py`
+
+### genexis / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/genexis/webinterface_http_auth_default_creds.py`
+
+### geovision / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/geovision/ftp_default_creds.py`
+
+### geovision / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/geovision/ssh_default_creds.py`
+
+### geovision / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/geovision/telnet_default_creds.py`
+
+### geuterbruck / efd_2250
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-7520
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/geuterbruck/efd_2250.py`
+
+### gigabyte / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/gigabyte/ftp_default_creds.py`
+
+### gigabyte / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/gigabyte/ssh_default_creds.py`
+
+### gigabyte / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/gigabyte/telnet_default_creds.py`
+
+### gigabyte / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/gigabyte/webinterface_http_auth_default_creds.py`
+
+### glinet / cve_2023_46454_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-46454
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/glinet/cve_2023_46454_rce.py`
+
+### glinet / glinet_auth_cmd_injection_cve_2024_57391
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-57391
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/glinet/glinet_auth_cmd_injection_cve_2024_57391.py`
+
+### glinet / glinet_file_download_cve_2025_2850
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-2850
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/glinet/glinet_file_download_cve_2025_2850.py`
+
+### gnu_inetutils_telnetd_auth_bypass_cve_2026_24061.py / gnu_inetutils_telnetd_auth_bypass_cve_2026_24061
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-24061
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/embedded_os/gnu_inetutils_telnetd_auth_bypass_cve_2026_24061.py`
+
+### google_home / google_home_api_backdoor_cve_2023_6702
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-6702
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/smart_home/google_home/google_home_api_backdoor_cve_2023_6702.py`
+
+### google_home / google_nest_secure_boot_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_home/google_home/google_nest_secure_boot_bypass.py`
 
 ### gpon / alcatel_lucent_nokia_i_240w_q_buffer_overflow_cve_2019_3921
 
@@ -3724,6 +12250,225 @@
 - Module paths:
   - `modules/exploits/routers/gpon/skyworth_homegateways_and_optical_network_terminals_stack_ov_cve_2018_19524.py`
 
+### grandstream / ftp_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/grandstream/ftp_default_creds.py`
+  - `modules/creds/voip/grandstream/ftp_default_creds.py`
+
+### grandstream / gxv3611hd_ip_camera_backdoor
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/cameras/grandstream/gxv3611hd_ip_camera_backdoor.py`
+
+### grandstream / gxv3611hd_ip_camera_sqli
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/cameras/grandstream/gxv3611hd_ip_camera_sqli.py`
+
+### grandstream / ssh_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/grandstream/ssh_default_creds.py`
+  - `modules/creds/voip/grandstream/ssh_default_creds.py`
+
+### grandstream / telnet_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/grandstream/telnet_default_creds.py`
+  - `modules/creds/voip/grandstream/telnet_default_creds.py`
+
+### grandstream / ucm6200_sqli_rce_cve_2020_5722
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-5722
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/voip/grandstream/ucm6200_sqli_rce_cve_2020_5722.py`
+
+### grandstream / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/grandstream/webinterface_http_auth_default_creds.py`
+
+### great_speed / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/great_speed/ftp_default_creds.py`
+
+### great_speed / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/great_speed/ssh_default_creds.py`
+
+### great_speed / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/great_speed/telnet_default_creds.py`
+
+### great_speed / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/great_speed/webinterface_http_auth_default_creds.py`
+
+### green_packet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/green_packet/ftp_default_creds.py`
+
+### green_packet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/green_packet/ssh_default_creds.py`
+
+### green_packet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/green_packet/telnet_default_creds.py`
+
+### green_packet / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/green_packet/webinterface_http_auth_default_creds.py`
+
+### hama / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hama/ftp_default_creds.py`
+
+### hama / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hama/ssh_default_creds.py`
+
+### hama / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hama/telnet_default_creds.py`
+
+### hama / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hama/webinterface_http_auth_default_creds.py`
+
+### hamlet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hamlet/ftp_default_creds.py`
+
+### hamlet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hamlet/ssh_default_creds.py`
+
+### hamlet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hamlet/telnet_default_creds.py`
+
+### hamlet / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hamlet/webinterface_http_auth_default_creds.py`
+
+### hawking / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hawking/ftp_default_creds.py`
+
+### hawking / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hawking/ssh_default_creds.py`
+
+### hawking / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hawking/telnet_default_creds.py`
+
+### hawking / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hawking/webinterface_http_auth_default_creds.py`
+
 ### heartbleed.py / heartbleed
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3731,6 +12476,262 @@
 - Attack classes: info_disclosure
 - Module paths:
   - `modules/exploits/generic/heartbleed.py`
+
+### hikvision / firmware_crypto_key_extract
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-66173, CVE-2025-66174
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/cameras/hikvision/firmware_crypto_key_extract.py`
+
+### hikvision / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/hikvision/ftp_default_creds.py`
+
+### hikvision / info_disclosure_cve_2017_7921
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-7921
+- Attack classes: backdoor, info_disclosure
+- Module paths:
+  - `modules/exploits/cameras/hikvision/info_disclosure_cve_2017_7921.py`
+
+### hikvision / ip_camera_command_injection_cve_2021_36260
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-36260
+- Attack classes: backdoor, rce
+- Module paths:
+  - `modules/exploits/routers/hikvision/ip_camera_command_injection_cve_2021_36260.py`
+
+### hikvision / nas_auth_bypass_cve_2023_28808
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-28808
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/cameras/hikvision/nas_auth_bypass_cve_2023_28808.py`
+
+### hikvision / nvr_dvr_serial_privesc
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-66173, CVE-2025-66174
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/hikvision/nvr_dvr_serial_privesc.py`
+
+### hikvision / psh_challenge_predictor
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-66173, CVE-2025-66174
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/hikvision/psh_challenge_predictor.py`
+
+### hikvision / psh_command_injection
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-66173
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/hikvision/psh_command_injection.py`
+
+### hikvision / psh_debug_rsa1024_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-66173, CVE-2025-66174
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/hikvision/psh_debug_rsa1024_bypass.py`
+
+### hikvision / r0_intercom_3des_decrypt
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/hikvision/r0_intercom_3des_decrypt.py`
+
+### hikvision / r0_intercom_developer_nfs
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/hikvision/r0_intercom_developer_nfs.py`
+
+### hikvision / r0_intercom_gpio_door_unlock
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/hikvision/r0_intercom_gpio_door_unlock.py`
+
+### hikvision / r0_intercom_ssh_default_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/hikvision/r0_intercom_ssh_default_bypass.py`
+
+### hikvision / r0_intercom_ssh_mitm
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/hikvision/r0_intercom_ssh_mitm.py`
+
+### hikvision / r0_intercom_suid_privesc
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/hikvision/r0_intercom_suid_privesc.py`
+
+### hikvision / rtsp_rce_cve_2021_36260
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-36260
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/hikvision/rtsp_rce_cve_2021_36260.py`
+
+### hikvision / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/hikvision/ssh_default_creds.py`
+
+### hikvision / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/hikvision/telnet_default_creds.py`
+
+### hirschmann / eagle_auth_bypass_cve_2020_6994
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-6994
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/firewalls/hirschmann/eagle_auth_bypass_cve_2020_6994.py`
+
+### hisense_vidaa / js_api_app_install
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/hisense_vidaa/js_api_app_install.py`
+
+### hisense_vidaa / js_api_file_read
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/hisense_vidaa/js_api_file_read.py`
+
+### hisense_vidaa / js_api_network_info
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/hisense_vidaa/js_api_network_info.py`
+
+### hitron_technologies / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hitron_technologies/ftp_default_creds.py`
+
+### hitron_technologies / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hitron_technologies/ssh_default_creds.py`
+
+### hitron_technologies / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hitron_technologies/telnet_default_creds.py`
+
+### hitron_technologies / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hitron_technologies/webinterface_http_auth_default_creds.py`
+
+### honeywell / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/honeywell/ftp_default_creds.py`
+
+### honeywell / hicc_1100pt_password_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: creds_disclosure
+- Module paths:
+  - `modules/exploits/cameras/honeywell/hicc_1100pt_password_disclosure.py`
+
+### honeywell / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/honeywell/ssh_default_creds.py`
+
+### honeywell / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/honeywell/telnet_default_creds.py`
+
+### honeywell_ot / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/honeywell_ot/ssh_default_creds.py`
+
+### honeywell_ot / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/honeywell_ot/webinterface_http_auth_default_creds.py`
 
 ### hootoo / tripmate_arbitrary_file_upload
 
@@ -3740,6 +12741,22 @@
 - Module paths:
   - `modules/exploits/soho_edge/hootoo/tripmate_arbitrary_file_upload.py`
 
+### hootoo / tripmate_cmd_injection
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/hootoo/tripmate_cmd_injection.py`
+
+### hootoo / tripmate_file_upload
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/hootoo/tripmate_file_upload.py`
+
 ### hootoo / tripmate_open_forwarding_rce
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3748,6 +12765,14 @@
 - Module paths:
   - `modules/exploits/soho_edge/hootoo/tripmate_open_forwarding_rce.py`
 
+### hootoo / tripmate_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/hootoo/tripmate_rce.py`
+
 ### hootoo / tripmate_sysfirm_rce
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -3755,6 +12780,318 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/soho_edge/hootoo/tripmate_sysfirm_rce.py`
+
+### hot / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hot/ftp_default_creds.py`
+
+### hot / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hot/ssh_default_creds.py`
+
+### hot / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hot/telnet_default_creds.py`
+
+### hot / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/hot/webinterface_http_auth_default_creds.py`
+
+### hp / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/hp/ftp_default_creds.py`
+
+### hp / hp_command_inject_cve_2022_3942
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-3942
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_command_inject_cve_2022_3942.py`
+
+### hp / hp_efi_rootkit_research
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_efi_rootkit_research.py`
+
+### hp / hp_futuresmart_scan_disclosure_cve_2023_1707
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-1707
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_futuresmart_scan_disclosure_cve_2023_1707.py`
+
+### hp / hp_fw_extract
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_fw_extract.py`
+
+### hp / hp_fw_sig_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-28786
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_fw_sig_bypass.py`
+
+### hp / hp_jetdirect_lcd_modification_edb_20565
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_jetdirect_lcd_modification_edb_20565.py`
+
+### hp / hp_jetdirect_path_traversal_msf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-2741
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/printers/hp/hp_jetdirect_path_traversal_msf.py`
+
+### hp / hp_jetdirect_pjl_dir_traversal_cve_2010_4107
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2010-4107
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_jetdirect_pjl_dir_traversal_cve_2010_4107.py`
+
+### hp / hp_jetdirect_pjl_rce_edb_45273
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-2741
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/hp/hp_jetdirect_pjl_rce_edb_45273.py`
+
+### hp / hp_jetdirect_pjl_shell_edb_17636
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2010-4107
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_jetdirect_pjl_shell_edb_17636.py`
+
+### hp / hp_jetdirect_rce_cve_2017_2741
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-2741
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/hp/hp_jetdirect_rce_cve_2017_2741.py`
+
+### hp / hp_jetdirect_snmp_pwd_cve_2002_1048
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2002-1048
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_jetdirect_snmp_pwd_cve_2002_1048.py`
+
+### hp / hp_laserjet_bof_cve_2025_26508
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-26508
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_laserjet_bof_cve_2025_26508.py`
+
+### hp / hp_laserjet_cve_2018_5924
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-5924, CVE-2018-5925
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_laserjet_cve_2018_5924.py`
+
+### hp / hp_laserjet_disk_access
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_laserjet_disk_access.py`
+
+### hp / hp_laserjet_fw_auth_bypass_cve_2023_6018
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-6018
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/printers/hp/hp_laserjet_fw_auth_bypass_cve_2023_6018.py`
+
+### hp / hp_laserjet_hardcoded_creds_edb_41920
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-2740
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_laserjet_hardcoded_creds_edb_41920.py`
+
+### hp / hp_laserjet_m401_cmd_injection_edb_50078
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/hp/hp_laserjet_m401_cmd_injection_edb_50078.py`
+
+### hp / hp_laserjet_mfp_bof_cve_2021_39237
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-39237
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_laserjet_mfp_bof_cve_2021_39237.py`
+
+### hp / hp_laserjet_pjl_scan_msf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_laserjet_pjl_scan_msf.py`
+
+### hp / hp_laserjet_pjl_scan_native
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2002-1048
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_laserjet_pjl_scan_native.py`
+
+### hp / hp_laserjet_postscript_rce_cve_2025_26506
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-26506
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/hp/hp_laserjet_postscript_rce_cve_2025_26506.py`
+
+### hp / hp_laserjet_snmp_community_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2002-1048
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_laserjet_snmp_community_enum.py`
+
+### hp / hp_laserjet_snmp_enum_msf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2002-1048
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_laserjet_snmp_enum_msf.py`
+
+### hp / hp_laserjet_ssrf_cve_2024_4479
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-4479
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_laserjet_ssrf_cve_2024_4479.py`
+
+### hp / hp_pagewide_ssrf_cve_2017_2750
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-2750
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_pagewide_ssrf_cve_2017_2750.py`
+
+### hp / hp_printing_shellz_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-28786
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/hp/hp_printing_shellz_rce.py`
+
+### hp / hp_web_jetadmin_rce_cve_2011_4065
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2011-4065
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/hp/hp_web_jetadmin_rce_cve_2011_4065.py`
+
+### hp / hp_xps_bof_cve_2025_26506
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-26506
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/hp/hp_xps_bof_cve_2025_26506.py`
+
+### hp / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/hp/webinterface_http_auth_default_creds.py`
+
+### hp_procurve / snmp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/hp_procurve/snmp_default_creds.py`
+
+### hp_procurve / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/hp_procurve/ssh_default_creds.py`
+
+### hp_procurve / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/hp_procurve/telnet_default_creds.py`
+
+### hp_procurve / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/hp_procurve/webinterface_http_auth_default_creds.py`
 
 ### http_basic_digest_bruteforce.py / http_basic_digest_bruteforce
 
@@ -3980,6 +13317,14 @@
 - Module paths:
   - `modules/exploits/routers/huawei/hg532_rce.py`
 
+### huawei / hg532x_info_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-17215
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/routers/huawei/hg532x_info_disclosure.py`
+
 ### huawei / hg532x_path_traversal
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -4044,6 +13389,14 @@
 - Module paths:
   - `modules/exploits/routers/huawei/router_hg532e_command_execution_cve_2015_7254.py`
 
+### huawei / smartax_mt880_add_admin
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/huawei/smartax_mt880_add_admin.py`
+
 ### huawei / ssh_default_creds
 
 - Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
@@ -4067,6 +13420,398 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/huawei/utps_unquoted_service_path_privilege_escalation_cve_2016_8769.py`
+
+### humax / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/humax/ftp_default_creds.py`
+
+### humax / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/humax/ssh_default_creds.py`
+
+### humax / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/humax/telnet_default_creds.py`
+
+### humax / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/humax/webinterface_http_auth_default_creds.py`
+
+### hvac / johnson_metasys_auth_bypass_cve_2021_27660
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-27660
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/specialized/hvac/johnson_metasys_auth_bypass_cve_2021_27660.py`
+
+### hvac / siemens_desigo_cc_rce_cve_2022_43721
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-43721, CVE-2022-43722, CVE-2022-43723
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/specialized/hvac/siemens_desigo_cc_rce_cve_2022_43721.py`
+
+### hvac / trane_tracer_sc_rce_cve_2021_38456
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-38452, CVE-2021-38454, CVE-2021-38456
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/specialized/hvac/trane_tracer_sc_rce_cve_2021_38456.py`
+
+### hvac / webctrl_rce_cve_2023_28895
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-28895
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/specialized/hvac/webctrl_rce_cve_2023_28895.py`
+
+### hypervisors / proxmox_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/hypervisors/proxmox_discover.py`
+
+### iball / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/iball/ftp_default_creds.py`
+
+### iball / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/iball/ssh_default_creds.py`
+
+### iball / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/iball/telnet_default_creds.py`
+
+### iball / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/iball/webinterface_http_auth_default_creds.py`
+
+### ice_net / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ice_net/ftp_default_creds.py`
+
+### ice_net / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ice_net/ssh_default_creds.py`
+
+### ice_net / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ice_net/telnet_default_creds.py`
+
+### ice_net / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ice_net/webinterface_http_auth_default_creds.py`
+
+### icotera / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/icotera/ftp_default_creds.py`
+
+### icotera / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/icotera/ssh_default_creds.py`
+
+### icotera / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/icotera/telnet_default_creds.py`
+
+### icotera / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/icotera/webinterface_http_auth_default_creds.py`
+
+### ics / bacnet_scanner
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ics/bacnet_scanner.py`
+
+### ics / cip_scanner
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ics/cip_scanner.py`
+
+### ics / dnp3_scanner
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ics/dnp3_scanner.py`
+
+### ics / enip_scanner
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ics/enip_scanner.py`
+
+### ics / modbus_id_fuzzer
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ics/modbus_id_fuzzer.py`
+
+### ics / modbus_scanner
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ics/modbus_scanner.py`
+
+### ics / profinet_dcp_scanner
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ics/profinet_dcp_scanner.py`
+
+### ics / rockwell_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ics/rockwell_discover.py`
+
+### ics / s7_comm_scanner
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ics/s7_comm_scanner.py`
+
+### ics / s7comm_plus_scanner
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ics/s7comm_plus_scanner.py`
+
+### ics / vxworks_scanner
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2010-2967
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ics/vxworks_scanner.py`
+
+### inca / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inca/ftp_default_creds.py`
+
+### inca / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inca/ssh_default_creds.py`
+
+### inca / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inca/telnet_default_creds.py`
+
+### inca / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inca/webinterface_http_auth_default_creds.py`
+
+### inexq / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inexq/ftp_default_creds.py`
+
+### inexq / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inexq/ssh_default_creds.py`
+
+### inexq / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inexq/telnet_default_creds.py`
+
+### inexq / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inexq/webinterface_http_auth_default_creds.py`
+
+### intelbras / cctv_config_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-7927
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/intelbras/cctv_config_disclosure.py`
+
+### intelbras / cctv_dahua_auth_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-7921
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/cameras/intelbras/cctv_dahua_auth_bypass.py`
+
+### intelbras / cctv_dahua_rce_cve_2021_36260
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-36260
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/intelbras/cctv_dahua_rce_cve_2021_36260.py`
+
+### intelbras / cctv_dahua_username_disclosure_cve_2020_25078
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-25078
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/cameras/intelbras/cctv_dahua_username_disclosure_cve_2020_25078.py`
+
+### intelbras / cctv_firmware_upload_no_verify
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/intelbras/cctv_firmware_upload_no_verify.py`
+
+### intelbras / cctv_onvif_auth_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/cameras/intelbras/cctv_onvif_auth_bypass.py`
+
+### intelbras / cctv_rsa_key_extraction
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/intelbras/cctv_rsa_key_extraction.py`
+
+### intelbras / cctv_telnet_default_creds
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/intelbras/cctv_telnet_default_creds.py`
+
+### intelbras / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/intelbras/ftp_default_creds.py`
 
 ### intelbras / iwr_3000n_1_5_0_cross_site_request_forgery_cve_2019_11416
 
@@ -4092,6 +13837,22 @@
 - Module paths:
   - `modules/exploits/routers/intelbras/ncloud_300_1_0_authentication_bypass_cve_2018_11094.py`
 
+### intelbras / nvd_9032_mfa_bypass_cve_2025_67070
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-67070
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/intelbras/nvd_9032_mfa_bypass_cve_2025_67070.py`
+
+### intelbras / pvip1000_config_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/intelbras/pvip1000_config_disclosure.py`
+
 ### intelbras / roteador_wireless_wrn150_cross_site_scripting_cve_2017_14219
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -4116,6 +13877,14 @@
 - Module paths:
   - `modules/exploits/routers/intelbras/router_rf_301k_dns_hijacking_cross_site_request_forgery_csrf_cve_2021_32403.py`
 
+### intelbras / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/intelbras/ssh_default_creds.py`
+
 ### intelbras / telefone_ip_tip200_lite_local_file_disclosure_cve_2018_9010
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -4123,6 +13892,30 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/intelbras/telefone_ip_tip200_lite_local_file_disclosure_cve_2018_9010.py`
+
+### intelbras / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/intelbras/telnet_default_creds.py`
+
+### intelbras / webinterface_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/intelbras/webinterface_default_creds.py`
+
+### intelbras / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/intelbras/webinterface_http_auth_default_creds.py`
 
 ### intelbras / wireless_n_150mbps_wrn240_authentication_bypass_config_uploa_cve_2019_19142
 
@@ -4132,6 +13925,414 @@
 - Module paths:
   - `modules/exploits/routers/intelbras/wireless_n_150mbps_wrn240_authentication_bypass_config_uploa_cve_2019_19142.py`
 
+### intellinet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/intellinet/ftp_default_creds.py`
+
+### intellinet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/intellinet/ssh_default_creds.py`
+
+### intellinet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/intellinet/telnet_default_creds.py`
+
+### intellinet / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/intellinet/webinterface_http_auth_default_creds.py`
+
+### inteno / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inteno/ftp_default_creds.py`
+
+### inteno / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inteno/ssh_default_creds.py`
+
+### inteno / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inteno/telnet_default_creds.py`
+
+### inteno / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inteno/webinterface_http_auth_default_creds.py`
+
+### intracom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/intracom/ftp_default_creds.py`
+
+### intracom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/intracom/ssh_default_creds.py`
+
+### intracom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/intracom/telnet_default_creds.py`
+
+### intracom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/intracom/webinterface_http_auth_default_creds.py`
+
+### inventel / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inventel/ftp_default_creds.py`
+
+### inventel / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inventel/ssh_default_creds.py`
+
+### inventel / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inventel/telnet_default_creds.py`
+
+### inventel / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/inventel/webinterface_http_auth_default_creds.py`
+
+### iomega / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/iomega/ftp_default_creds.py`
+
+### iomega / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/iomega/ssh_default_creds.py`
+
+### iomega / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/iomega/webinterface_http_auth_default_creds.py`
+
+### ios_xe_guest_shell_rce_cve_2023_20273.py / ios_xe_guest_shell_rce_cve_2023_20273
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-20198, CVE-2023-20273
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cisco/ios_xe_guest_shell_rce_cve_2023_20273.py`
+
+### ios_xe_web_ui_priv_esc_cve_2023_20198.py / ios_xe_web_ui_priv_esc_cve_2023_20198
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-20198, CVE-2023-20273
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cisco/ios_xe_web_ui_priv_esc_cve_2023_20198.py`
+
+### iot / ble_gatt_enum_unauth
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/ble/ble_gatt_enum_unauth.py`
+
+### iot / ble_knob_downgrade_cve_2019_9506
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-9506
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/ble/ble_knob_downgrade_cve_2019_9506.py`
+
+### iot / ble_spoofing_impersonation
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/ble/ble_spoofing_impersonation.py`
+
+### iot / coap_amplification_dos
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/protocols/iot/coap/coap_amplification_dos.py`
+
+### iot / coap_block_overflow
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-9750
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/coap/coap_block_overflow.py`
+
+### iot / coap_unauth_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/coap/coap_unauth_enum.py`
+
+### iot / dds_participant_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/dds/dds_participant_enum.py`
+
+### iot / dds_rtps_unauthenticated_rw
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-38447
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/dds/dds_rtps_unauthenticated_rw.py`
+
+### iot / lorawan_bit_flip_adr_cve_2022_39274
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-39274
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/lorawan/lorawan_bit_flip_adr_cve_2022_39274.py`
+
+### iot / lorawan_replay_join_accept
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/lorawan/lorawan_replay_join_accept.py`
+
+### iot / mdns_amplification
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/protocols/iot/mdns/mdns_amplification.py`
+
+### iot / mdns_poisoning
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-8617
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/mdns/mdns_poisoning.py`
+
+### iot / mqtt_auth_bypass_cve_2020_13849
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-13849
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/protocols/iot/mqtt/mqtt_auth_bypass_cve_2020_13849.py`
+
+### iot / mqtt_broker_dos
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-7651
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/protocols/iot/mqtt/mqtt_broker_dos.py`
+
+### iot / mqtt_broker_unauth_rw
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/mqtt/mqtt_broker_unauth_rw.py`
+
+### iot / mqtt_payload_inject
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/mqtt/mqtt_payload_inject.py`
+
+### iot / tftp_firmware_upload_overwrite
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/protocols/iot/tftp/tftp_firmware_upload_overwrite.py`
+
+### iot / tftp_unauth_firmware_download
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/tftp/tftp_unauth_firmware_download.py`
+
+### iot / upnp_callstranger_ssrf_cve_2020_12695
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-12695
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/protocols/iot/upnp/upnp_callstranger_ssrf_cve_2020_12695.py`
+
+### iot / upnp_ssdp_amplification
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/protocols/iot/upnp/upnp_ssdp_amplification.py`
+
+### iot / upnp_ssdp_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2013-0229
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/protocols/iot/upnp/upnp_ssdp_rce.py`
+
+### iot / wifi_dragonblood_cve_2019_9494
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-9494
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/wifi/wifi_dragonblood_cve_2019_9494.py`
+
+### iot / wifi_krack_ptk_reinstall_cve_2017_13077
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-13077
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/wifi/wifi_krack_ptk_reinstall_cve_2017_13077.py`
+
+### iot / wifi_pmkid_capture
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/wifi/wifi_pmkid_capture.py`
+
+### iot / wlan_packet_inject
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/wifi/wlan_packet_inject.py`
+
+### iot / zigbee_network_key_extract
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/zigbee/zigbee_network_key_extract.py`
+
+### iot / zigbee_rejoin_hijack
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/zigbee/zigbee_rejoin_hijack.py`
+
+### iot / zigbee_touchlink_factory_reset
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/zigbee/zigbee_touchlink_factory_reset.py`
+
+### iot / zwave_replay_attack
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/zwave/zwave_replay_attack.py`
+
+### iot / zwave_s0_key_extract
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/iot/zwave/zwave_s0_key_extract.py`
+
 ### ipfire / 2_25_remote_code_execution_authenticated_cve_2021_33393
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -4139,6 +14340,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/soho_edge/ipfire/2_25_remote_code_execution_authenticated_cve_2021_33393.py`
+
+### ipfire / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/ipfire/ftp_default_creds.py`
 
 ### ipfire / ipfire_oinkcode_rce
 
@@ -4172,12 +14381,205 @@
 - Module paths:
   - `modules/exploits/soho_edge/ipfire/shellshock_bash_environment_variable_command_injection_metas_cve_2014_6271.py`
 
-### juniper / ftp_default_creds
+### ipfire / ssh_default_creds
 
 - Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
 - CVEs: none
 - Attack classes: none
 - Module paths:
+  - `modules/creds/firewalls/ipfire/ssh_default_creds.py`
+
+### ipfire / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/ipfire/telnet_default_creds.py`
+
+### iqinvision / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/iqinvision/ftp_default_creds.py`
+
+### iqinvision / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/iqinvision/ssh_default_creds.py`
+
+### iqinvision / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/iqinvision/telnet_default_creds.py`
+
+### iskratel / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/iskratel/ftp_default_creds.py`
+
+### iskratel / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/iskratel/ssh_default_creds.py`
+
+### iskratel / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/iskratel/telnet_default_creds.py`
+
+### iskratel / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/iskratel/webinterface_http_auth_default_creds.py`
+
+### ivanti / connect_secure_auth_bypass_cve_2023_46805
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-46805, CVE-2024-21887
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/vpn/ivanti/connect_secure_auth_bypass_cve_2023_46805.py`
+
+### ivanti / connect_secure_cmd_injection_cve_2024_21887
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-46805, CVE-2024-21887
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/vpn/ivanti/connect_secure_cmd_injection_cve_2024_21887.py`
+
+### ivanti / connect_secure_ssrf_rce_cve_2024_21893
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-21887, CVE-2024-21888, CVE-2024-21893
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/vpn/ivanti/connect_secure_ssrf_rce_cve_2024_21893.py`
+
+### ivanti / connect_secure_stack_overflow_cve_2025_0282
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-0282
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/vpn/ivanti/connect_secure_stack_overflow_cve_2025_0282.py`
+
+### ivanti / connect_secure_stack_rce_cve_2025_22457
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-22457
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/vpn/ivanti/connect_secure_stack_rce_cve_2025_22457.py`
+
+### ivanti / ics_auth_bypass_rce_cve_2023_46805
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-46805, CVE-2024-21887
+- Attack classes: auth_bypass, rce
+- Module paths:
+  - `modules/exploits/network_os/ivanti/ics_auth_bypass_rce_cve_2023_46805.py`
+
+### jaht / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/jaht/ftp_default_creds.py`
+
+### jaht / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/jaht/ssh_default_creds.py`
+
+### jaht / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/jaht/telnet_default_creds.py`
+
+### jaht / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/jaht/webinterface_http_auth_default_creds.py`
+
+### jensen_scandinavia / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/jensen_scandinavia/ftp_default_creds.py`
+
+### jensen_scandinavia / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/jensen_scandinavia/ssh_default_creds.py`
+
+### jensen_scandinavia / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/jensen_scandinavia/telnet_default_creds.py`
+
+### jensen_scandinavia / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/jensen_scandinavia/webinterface_http_auth_default_creds.py`
+
+### jovision / jovision_credentials_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: creds_disclosure
+- Module paths:
+  - `modules/exploits/cameras/jovision/jovision_credentials_disclosure.py`
+
+### juniper / ftp_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/juniper/ftp_default_creds.py`
   - `modules/creds/routers/juniper/ftp_default_creds.py`
 
 ### juniper / junos_backdoor_cve_2015_7755
@@ -4196,21 +14598,631 @@
 - Module paths:
   - `modules/exploits/routers/juniper/junos_web_auth_bypass_cve_2023_36845.py`
 
+### juniper / jweb_oob_write_rce_cve_2024_21591
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-21591
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/juniper/jweb_oob_write_rce_cve_2024_21591.py`
+
+### juniper / jweb_php_rce_cve_2023_36845
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-36845
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/juniper/jweb_php_rce_cve_2023_36845.py`
+
 ### juniper / ssh_default_creds
 
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
 - CVEs: none
 - Attack classes: none
 - Module paths:
+  - `modules/creds/firewalls/juniper/ssh_default_creds.py`
   - `modules/creds/routers/juniper/ssh_default_creds.py`
 
 ### juniper / telnet_default_creds
 
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/juniper/telnet_default_creds.py`
+  - `modules/creds/routers/juniper/telnet_default_creds.py`
+
+### justec / ftp_default_creds
+
 - Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
 - CVEs: none
 - Attack classes: none
 - Module paths:
-  - `modules/creds/routers/juniper/telnet_default_creds.py`
+  - `modules/creds/routers/justec/ftp_default_creds.py`
+
+### justec / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/justec/ssh_default_creds.py`
+
+### justec / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/justec/telnet_default_creds.py`
+
+### justec / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/justec/webinterface_http_auth_default_creds.py`
+
+### jvc / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/jvc/ftp_default_creds.py`
+
+### jvc / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/jvc/ssh_default_creds.py`
+
+### jvc / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/jvc/telnet_default_creds.py`
+
+### kaiomy / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kaiomy/ftp_default_creds.py`
+
+### kaiomy / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kaiomy/ssh_default_creds.py`
+
+### kaiomy / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kaiomy/telnet_default_creds.py`
+
+### kaiomy / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kaiomy/webinterface_http_auth_default_creds.py`
+
+### kaon_media / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kaon_media/ftp_default_creds.py`
+
+### kaon_media / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kaon_media/ssh_default_creds.py`
+
+### kaon_media / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kaon_media/telnet_default_creds.py`
+
+### kaon_media / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kaon_media/webinterface_http_auth_default_creds.py`
+
+### kasda / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kasda/ftp_default_creds.py`
+
+### kasda / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kasda/ssh_default_creds.py`
+
+### kasda / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kasda/telnet_default_creds.py`
+
+### kasda / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kasda/webinterface_http_auth_default_creds.py`
+
+### kingtype / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kingtype/ftp_default_creds.py`
+
+### kingtype / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kingtype/ssh_default_creds.py`
+
+### kingtype / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kingtype/telnet_default_creds.py`
+
+### kingtype / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kingtype/webinterface_http_auth_default_creds.py`
+
+### konica_minolta / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/konica_minolta/ftp_default_creds.py`
+
+### konica_minolta / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/konica_minolta/webinterface_http_auth_default_creds.py`
+
+### kozumi / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kozumi/ftp_default_creds.py`
+
+### kozumi / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kozumi/ssh_default_creds.py`
+
+### kozumi / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kozumi/telnet_default_creds.py`
+
+### kozumi / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kozumi/webinterface_http_auth_default_creds.py`
+
+### kraun / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kraun/ftp_default_creds.py`
+
+### kraun / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kraun/ssh_default_creds.py`
+
+### kraun / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kraun/telnet_default_creds.py`
+
+### kraun / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/kraun/webinterface_http_auth_default_creds.py`
+
+### kuwfi / 4g_lte_ac900_bof_cve_2025_68706
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-68706
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/routers/kuwfi/4g_lte_ac900_bof_cve_2025_68706.py`
+
+### kyocera / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/kyocera/ftp_default_creds.py`
+
+### kyocera / kyocera_ecosys_info_disclosure_edb_23147
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/printers/kyocera/kyocera_ecosys_info_disclosure_edb_23147.py`
+
+### kyocera / kyocera_js_rce_cve_2022_1026
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-1026
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/kyocera/kyocera_js_rce_cve_2022_1026.py`
+
+### kyocera / kyocera_pjl_cred_extract
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/kyocera/kyocera_pjl_cred_extract.py`
+
+### kyocera / kyocera_soap_cred_dump_cve_2022_1026
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-1026
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/kyocera/kyocera_soap_cred_dump_cve_2022_1026.py`
+
+### kyocera / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/kyocera/webinterface_http_auth_default_creds.py`
+
+### lancom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/lancom/ssh_default_creds.py`
+
+### lancom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/lancom/telnet_default_creds.py`
+
+### lancom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/lancom/webinterface_http_auth_default_creds.py`
+
+### lb / bigip_apm_buffer_overflow_cve_2025_53521
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-53521
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/lb/f5/bigip_apm_buffer_overflow_cve_2025_53521.py`
+
+### lb / bigip_config_rce_cve_2023_46747
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-46747
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/lb/f5/bigip_config_rce_cve_2023_46747.py`
+
+### lb / bigip_tmui_lfi_cve_2020_5902
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-5902
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/lb/f5/bigip_tmui_lfi_cve_2020_5902.py`
+
+### lb / softax_path_traversal
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/firewalls/lb/a10/softax_path_traversal.py`
+
+### lectron / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/lectron/ftp_default_creds.py`
+
+### lectron / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/lectron/ssh_default_creds.py`
+
+### lectron / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/lectron/telnet_default_creds.py`
+
+### lectron / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/lectron/webinterface_http_auth_default_creds.py`
+
+### legrand / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/legrand/ftp_default_creds.py`
+
+### legrand / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/legrand/ssh_default_creds.py`
+
+### legrand / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/legrand/telnet_default_creds.py`
+
+### legrand / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/legrand/webinterface_http_auth_default_creds.py`
+
+### level_one / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/level_one/ftp_default_creds.py`
+
+### level_one / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/level_one/ssh_default_creds.py`
+
+### level_one / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/level_one/telnet_default_creds.py`
+
+### level_one / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/level_one/webinterface_http_auth_default_creds.py`
+
+### lexmark / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/lexmark/ftp_default_creds.py`
+
+### lexmark / lexmark_arbitrary_file_read_edb_36913
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2014-8738
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/lexmark/lexmark_arbitrary_file_read_edb_36913.py`
+
+### lexmark / lexmark_auth_bypass_cve_2023_50733
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-50733
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/printers/lexmark/lexmark_auth_bypass_cve_2023_50733.py`
+
+### lexmark / lexmark_cmd_injection_cve_2023_26067
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-26067
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/lexmark/lexmark_cmd_injection_cve_2023_26067.py`
+
+### lexmark / lexmark_cred_dump_msf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-26067, CVE-2023-26068
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/lexmark/lexmark_cred_dump_msf.py`
+
+### lexmark / lexmark_fw_decrypt_analysis
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/lexmark/lexmark_fw_decrypt_analysis.py`
+
+### lexmark / lexmark_heap_bof_cve_2023_50734
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-50734
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/lexmark/lexmark_heap_bof_cve_2023_50734.py`
+
+### lexmark / lexmark_ps_bof_cve_2023_50736
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-50736
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/lexmark/lexmark_ps_bof_cve_2023_50736.py`
+
+### lexmark / lexmark_pwn2own_2026_chain
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-50734, CVE-2023-50736
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/lexmark/lexmark_pwn2own_2026_chain.py`
+
+### lexmark / lexmark_rce_cve_2024_6333
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-12510, CVE-2024-6333
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/lexmark/lexmark_rce_cve_2024_6333.py`
+
+### lexmark / lexmark_ssrf_rce_cve_2023_23560
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-23560
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/lexmark/lexmark_ssrf_rce_cve_2023_23560.py`
+
+### lexmark / lexmark_ssrf_rce_research_cve_2023_26067
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-26067
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/lexmark/lexmark_ssrf_rce_research_cve_2023_26067.py`
+
+### lexmark / lexmark_webserver_rce_cve_2023_50739
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-50739
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/lexmark/lexmark_webserver_rce_cve_2023_50739.py`
+
+### lexmark / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/lexmark/webinterface_http_auth_default_creds.py`
+
+### lg / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/lg/ftp_default_creds.py`
 
 ### lg / nas_3718
 
@@ -4219,6 +15231,150 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/soho_edge/lg/nas_3718.py`
+
+### lg / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/lg/ssh_default_creds.py`
+
+### lg / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/lg/telnet_default_creds.py`
+
+### lg / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/lg/webinterface_http_auth_default_creds.py`
+
+### lg_signage / webos_signage_rce_cve_2024_1885
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-1885
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/smart_tv/lg_signage/webos_signage_rce_cve_2024_1885.py`
+
+### lg_signage / webos_signage_traversal_cve_2024_1886
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-1886
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/smart_tv/lg_signage/webos_signage_traversal_cve_2024_1886.py`
+
+### lg_supersign / supersign_lfi_cve_2018_16288
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-16288
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/lg_supersign/supersign_lfi_cve_2018_16288.py`
+
+### lg_supersign / supersign_rce_cve_2018_17173
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-17173
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/smart_tv/lg_supersign/supersign_rce_cve_2018_17173.py`
+
+### lg_webos / browser_path_traversal_typhoonpwn_2025
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/smart_tv/lg_webos/browser_path_traversal_typhoonpwn_2025.py`
+
+### lg_webos / chariot_endpoint_autoroot_webos1x
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/lg_webos/chariot_endpoint_autoroot_webos1x.py`
+
+### lg_webos / faultmanager_privesc_webos4plus
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/lg_webos/faultmanager_privesc_webos4plus.py`
+
+### lg_webos / luna_rce_analytics_cve_2023_6318
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-6318
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/smart_tv/lg_webos/luna_rce_analytics_cve_2023_6318.py`
+
+### lg_webos / luna_rce_lyrics_cve_2023_6319
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-6319
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/smart_tv/lg_webos/luna_rce_lyrics_cve_2023_6319.py`
+
+### lg_webos / luna_send_priv_esc_cve_2020_9759
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-9759, CVE-2023-6317
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/lg_webos/luna_send_priv_esc_cve_2020_9759.py`
+
+### lg_webos / mvpd_service_rce_webos1_3
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/smart_tv/lg_webos/mvpd_service_rce_webos1_3.py`
+
+### lg_webos / ssap_pin_bypass_cve_2023_6317
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-6317
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/lg_webos/ssap_pin_bypass_cve_2023_6317.py`
+
+### lg_webos / ssap_social_login_escape_cve_2022_23727
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-23727
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/lg_webos/ssap_social_login_escape_cve_2022_23727.py`
+
+### lg_webos / v8_lpe_wampage_cve_2022_23731
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-23731
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/lg_webos/v8_lpe_wampage_cve_2022_23731.py`
+
+### lg_webos / vlan_cmd_injection_cve_2023_6320
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-6317, CVE-2023-6320
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/lg_webos/vlan_cmd_injection_cve_2023_6320.py`
 
 ### linksys / 1500_2500_rce
 
@@ -4276,6 +15432,14 @@
 - Module paths:
   - `modules/creds/routers/linksys/ftp_default_creds.py`
 
+### linksys / jnap_unauth_cve_2014_8244
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2014-8244
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/linksys/jnap_unauth_cve_2014_8244.py`
+
 ### linksys / re6500_rce
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -4332,6 +15496,14 @@
 - Module paths:
   - `modules/exploits/routers/linksys/wrt100_110_rce.py`
 
+### linksys / wrt54gl_remote_command_execution
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/linksys/wrt54gl_remote_command_execution.py`
+
 ### linksys / wvbr0_25_user_agent_command_execution_metasploit_cve_2017_17411
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -4348,6 +15520,422 @@
 - Module paths:
   - `modules/exploits/routers/linksys/wvbr0_user_agent_remote_command_injection_cve_2017_17411.py`
 
+### linksys / x2000_remote_command_execution
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/linksys/x2000_remote_command_execution.py`
+
+### linux / cups_browsed_rce_cve_2024_47176
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-47076, CVE-2024-47175, CVE-2024-47176, CVE-2024-47177
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/linux/cups_browsed_rce_cve_2024_47176.py`
+
+### linux / cups_chain_rce_cve_2026_34980
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-34980
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/linux/cups_chain_rce_cve_2026_34980.py`
+
+### linux / cups_ipp_rce_msf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-47076, CVE-2024-47175, CVE-2024-47176, CVE-2024-47177
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/linux/cups_ipp_rce_msf.py`
+
+### linux / cups_nofaxgiven_ssrf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-47076, CVE-2024-47176
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/linux/cups_nofaxgiven_ssrf.py`
+
+### linux / cups_pwn2own_chain_cve_2026_34480
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-34477, CVE-2026-34478, CVE-2026-34479, CVE-2026-34480
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/linux/cups_pwn2own_chain_cve_2026_34480.py`
+
+### linux / cups_pwn2own_stage1_cve_2026_34477
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-34477, CVE-2026-34478
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/linux/cups_pwn2own_stage1_cve_2026_34477.py`
+
+### linux / cups_pwn2own_stage2_cve_2026_34478
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-34478, CVE-2026-34479
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/linux/cups_pwn2own_stage2_cve_2026_34478.py`
+
+### linux / cups_pwn2own_stage3_cve_2026_34479
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-34479
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/linux/cups_pwn2own_stage3_cve_2026_34479.py`
+
+### linux / cups_root_lpe_cve_2026_34990
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-34990
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/linux/cups_root_lpe_cve_2026_34990.py`
+
+### linux / gooseegg_spooler_cve_2022_38028
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-38028
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/linux/gooseegg_spooler_cve_2022_38028.py`
+
+### linux / ms_rprn_ntlm_coerce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/linux/ms_rprn_ntlm_coerce.py`
+
+### linux / printdemon_cve_2020_1048
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-1048
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/printers/linux/printdemon_cve_2020_1048.py`
+
+### linux / printdemon_hardlink_bypass_cve_2020_1337
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-1048, CVE-2020-1337
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/linux/printdemon_hardlink_bypass_cve_2020_1337.py`
+
+### linux / printnightmare_rce_cve_2021_1675
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-1675, CVE-2021-34527
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/linux/printnightmare_rce_cve_2021_1675.py`
+
+### linux / printnightmare_rce_research
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-1675, CVE-2021-34527
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/linux/printnightmare_rce_research.py`
+
+### linux / spoolfool_lpe_cve_2022_21999
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-21999
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/linux/spoolfool_lpe_cve_2022_21999.py`
+
+### linux / spoolfool_privesc_msf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-21999
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/linux/spoolfool_privesc_msf.py`
+
+### linux_kernel / copy_fail_lpe_cve_2026_31431
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-31431
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/linux_kernel/copy_fail_lpe_cve_2026_31431.py`
+
+### linux_kernel / linux_dirty_pipe_cve_2022_0847
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-0847
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/linux_kernel/linux_dirty_pipe_cve_2022_0847.py`
+
+### linux_kernel / linux_gameoverlay_lpe_cve_2023_2640
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-2640, CVE-2023-32629
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/linux_kernel/linux_gameoverlay_lpe_cve_2023_2640.py`
+
+### linux_kernel / linux_nftables_uaf_cve_2022_32250
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-32250
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/linux_kernel/linux_nftables_uaf_cve_2022_32250.py`
+
+### linux_kernel / linux_overlayfs_privesc_cve_2023_0386
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-0386
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/linux_kernel/linux_overlayfs_privesc_cve_2023_0386.py`
+
+### loopcomm / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/loopcomm/ftp_default_creds.py`
+
+### loopcomm / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/loopcomm/ssh_default_creds.py`
+
+### loopcomm / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/loopcomm/telnet_default_creds.py`
+
+### loopcomm / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/loopcomm/webinterface_http_auth_default_creds.py`
+
+### luxul / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/luxul/ftp_default_creds.py`
+
+### luxul / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/luxul/ssh_default_creds.py`
+
+### luxul / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/luxul/telnet_default_creds.py`
+
+### luxul / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/luxul/webinterface_http_auth_default_creds.py`
+
+### march_networks / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/march_networks/ftp_default_creds.py`
+
+### march_networks / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/march_networks/ssh_default_creds.py`
+
+### march_networks / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/march_networks/telnet_default_creds.py`
+
+### march_networks / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/march_networks/webinterface_http_auth_default_creds.py`
+
+### marconi / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/marconi/ftp_default_creds.py`
+
+### marconi / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/marconi/ssh_default_creds.py`
+
+### marconi / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/marconi/telnet_default_creds.py`
+
+### marconi / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/marconi/webinterface_http_auth_default_creds.py`
+
+### medialink / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/medialink/ftp_default_creds.py`
+
+### medialink / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/medialink/ssh_default_creds.py`
+
+### medialink / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/medialink/telnet_default_creds.py`
+
+### medialink / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/medialink/webinterface_http_auth_default_creds.py`
+
+### mediatek / mt7622_heap_overflow_postauth
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-20017
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/aps/mediatek/mt7622_heap_overflow_postauth.py`
+
+### mediatek / mt7622_heap_overflow_preauth
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-20017
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/aps/mediatek/mt7622_heap_overflow_preauth.py`
+
+### mediatek / mt7622_stack_overflow_postauth
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-20017
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/aps/mediatek/mt7622_stack_overflow_postauth.py`
+
+### mediatek / mt7622_stack_overflow_preauth
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-20017
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/aps/mediatek/mt7622_stack_overflow_preauth.py`
+
+### medical / baxter_sigma_spectrum_cve_2022_26067
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-26066, CVE-2022-26067, CVE-2022-26069
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/specialized/medical/baxter_sigma_spectrum_cve_2022_26067.py`
+
+### medical / bd_alaris_gateway_unauth_cve_2019_10959
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-10959
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/specialized/medical/bd_alaris_gateway_unauth_cve_2019_10959.py`
+
+### medical / bd_alaris_pump_modify_cve_2019_10962
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-10962
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/specialized/medical/bd_alaris_pump_modify_cve_2019_10962.py`
+
+### medical / contec_cms8000_backdoor_cve_2022_38072
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-36621, CVE-2022-38072
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/specialized/medical/contec_cms8000_backdoor_cve_2022_38072.py`
+
+### medical / philips_vue_pacs_unauth_cve_2020_14477
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-14477, CVE-2021-27493, CVE-2021-27497
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/specialized/medical/philips_vue_pacs_unauth_cve_2020_14477.py`
+
 ### mercury / hp_loadrunner_agent_magentproc_exe_remote_command_execution_cve_2010_1549
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -4355,6 +15943,110 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/mercury/hp_loadrunner_agent_magentproc_exe_remote_command_execution_cve_2010_1549.py`
+
+### metis_dfs_unauth_rce_cve_2026_2249.py / metis_dfs_unauth_rce_cve_2026_2249
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-2248, CVE-2026-2249
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/specialized/metis_dfs_unauth_rce_cve_2026_2249.py`
+
+### metis_wic_unauth_rce_cve_2026_2248.py / metis_wic_unauth_rce_cve_2026_2248
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-2248
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/specialized/metis_wic_unauth_rce_cve_2026_2248.py`
+
+### microcom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/microcom/ftp_default_creds.py`
+
+### microcom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/microcom/ssh_default_creds.py`
+
+### microcom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/microcom/telnet_default_creds.py`
+
+### microcom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/microcom/webinterface_http_auth_default_creds.py`
+
+### micronet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/micronet/ftp_default_creds.py`
+
+### micronet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/micronet/ssh_default_creds.py`
+
+### micronet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/micronet/telnet_default_creds.py`
+
+### micronet / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/micronet/webinterface_http_auth_default_creds.py`
+
+### midi / serial_backup_extraction
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/specialized/midi/serial_backup_extraction.py`
+
+### miele / pg8528_path_traversal
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-7240
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/misc/miele/pg8528_path_traversal.py`
+
+### mifi / mifi_config_backup
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/mifi/mifi_config_backup.py`
 
 ### mikrotik / 6_40_5_icmp_denial_of_service_cve_2017_17538
 
@@ -4420,6 +16112,14 @@
 - Module paths:
   - `modules/exploits/routers/mikrotik/routerboard_6_38_5_denial_of_service_cve_2017_7285.py`
 
+### mikrotik / routeros7_rest_api_bof_rce_cve_2025_10948
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-10948
+- Attack classes: backdoor, rce
+- Module paths:
+  - `modules/exploits/routers/mikrotik/routeros7_rest_api_bof_rce_cve_2025_10948.py`
+
 ### mikrotik / routeros_6_41_3_6_42rc27_smb_buffer_overflow_cve_2018_7445
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -4452,6 +16152,14 @@
 - Module paths:
   - `modules/exploits/routers/mikrotik/routeros_7_19_1_reflected_xss_cve_2025_6563.py`
 
+### mikrotik / routeros_dns_hijack_apt28
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/mikrotik/routeros_dns_hijack_apt28.py`
+
 ### mikrotik / routeros_jailbreak
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -4475,6 +16183,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/routers/mikrotik/telnet_default_creds.py`
+
+### mikrotik / webfig_cred_exposure_cve_2025_61481
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-61481
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/mikrotik/webfig_cred_exposure_cve_2025_61481.py`
 
 ### mikrotik / winbox_auth_bypass_creds_disclosure
 
@@ -4540,6 +16256,46 @@
 - Module paths:
   - `modules/scanners/misc/soho_exploit_catalog_server.py`
 
+### mitel / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/mitel/ssh_default_creds.py`
+
+### mitel / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/mitel/telnet_default_creds.py`
+
+### mitel / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/mitel/webinterface_http_auth_default_creds.py`
+
+### mitrastar / dsl100hn_t1_rce_mips
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/mitrastar/dsl100hn_t1_rce_mips.py`
+
+### mitrastar / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/mitrastar/ftp_default_creds.py`
+
 ### mitrastar / gpt2541gnac_stack_overflow
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -4547,6 +16303,222 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/mitrastar/gpt2541gnac_stack_overflow.py`
+
+### mitrastar / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/mitrastar/ssh_default_creds.py`
+
+### mitrastar / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/mitrastar/telnet_default_creds.py`
+
+### mitrastar / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/mitrastar/webinterface_http_auth_default_creds.py`
+
+### mobily / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/mobily/ftp_default_creds.py`
+
+### mobily / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/mobily/ssh_default_creds.py`
+
+### mobily / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/mobily/telnet_default_creds.py`
+
+### mobily / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/mobily/webinterface_http_auth_default_creds.py`
+
+### mobotix / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/mobotix/ftp_default_creds.py`
+
+### mobotix / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/mobotix/ssh_default_creds.py`
+
+### mobotix / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/mobotix/telnet_default_creds.py`
+
+### mobotix / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/mobotix/webinterface_http_auth_default_creds.py`
+
+### modbus / buspwn_modbus_scanner_dos
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/ics/modbus/buspwn_modbus_scanner_dos.py`
+
+### modbus / dos_write_coils
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/ics/modbus/dos_write_coils.py`
+
+### modbus / dos_write_registers
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/ics/modbus/dos_write_registers.py`
+
+### modbus / modbus_ot_attack_scenarios
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/modbus/modbus_ot_attack_scenarios.py`
+
+### modbus / read_coil_status
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/modbus/read_coil_status.py`
+
+### modbus / read_discrete_inputs
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/modbus/read_discrete_inputs.py`
+
+### modbus / read_holding_registers
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/modbus/read_holding_registers.py`
+
+### modbus / read_input_registers
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/modbus/read_input_registers.py`
+
+### modbus / write_single_coil
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/modbus/write_single_coil.py`
+
+### modbus / write_single_register
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/modbus/write_single_register.py`
+
+### motioneye / motioneye_rce_cve_2025_60787
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-60787
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/motioneye/motioneye_rce_cve_2025_60787.py`
+
+### motorola / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/motorola/ftp_default_creds.py`
+
+### motorola / sbg6580_info_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/routers/motorola/sbg6580_info_disclosure.py`
+
+### motorola / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/motorola/ssh_default_creds.py`
+
+### motorola / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/motorola/telnet_default_creds.py`
+
+### motorola / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/motorola/webinterface_http_auth_default_creds.py`
 
 ### movistar / adsl_router_bhs_rta_path_traversal
 
@@ -4579,6 +16551,86 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/routers/movistar/telnet_default_creds.py`
+
+### moxa / edr_cmd_injection_cve_2024_9138
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-9138
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/moxa/edr_cmd_injection_cve_2024_9138.py`
+
+### moxa / edr_g_jwt_hardcoded_cve_2024_9137
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-9137
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/moxa/edr_g_jwt_hardcoded_cve_2024_9137.py`
+
+### moxa / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/moxa/ssh_default_creds.py`
+
+### moxa / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/moxa/telnet_default_creds.py`
+
+### moxa / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/moxa/webinterface_http_auth_default_creds.py`
+
+### mqtt_pivot.py / mqtt_pivot
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/lateral/mqtt_pivot.py`
+
+### msi / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/msi/ftp_default_creds.py`
+
+### msi / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/msi/ssh_default_creds.py`
+
+### msi / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/msi/telnet_default_creds.py`
+
+### msi / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/msi/webinterface_http_auth_default_creds.py`
 
 ### multi / 3com_ap8670_cred_disclosure
 
@@ -4620,6 +16672,14 @@
 - Module paths:
   - `modules/exploits/routers/multi/allegrosoft_rompager_auth_bypass.py`
 
+### multi / arcadyan_buffalo_path_traversal_cve_2021_20090
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-20090
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/routers/multi/arcadyan_buffalo_path_traversal_cve_2021_20090.py`
+
 ### multi / astaro_security_gateway_7_remote_code_execution_cve_2017_6315
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -4643,6 +16703,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/multi/barracuda_load_balancer_firmware_v6_0_1_006_2016_08_19_posta_cve_2017_6320.py`
+
+### multi / cctv_dvr_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/multi/cctv_dvr_rce.py`
 
 ### multi / check_point_security_gateway_information_disclosure_unauthen_cve_2024_24919
 
@@ -4707,6 +16775,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/multi/digisol_dg_hr1400_1_00_02_wireless_router_privilege_escalati_cve_2017_6896.py`
+
+### multi / dvr_creds_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-9995
+- Attack classes: auth_bypass, creds_disclosure
+- Module paths:
+  - `modules/exploits/cameras/multi/dvr_creds_disclosure.py`
 
 ### multi / exploitdb_45942_py_cve_2018_11741
 
@@ -4876,6 +16952,14 @@
 - Module paths:
   - `modules/exploits/routers/multi/irz_mobile_router_csrf_to_rce_cve_2022_27226.py`
 
+### multi / jvc_vanderbilt_honeywell_path_traversal
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/cameras/multi/jvc_vanderbilt_honeywell_path_traversal.py`
+
 ### multi / laser_router_re018_ac1200_cross_site_request_forgery_enable_cve_2021_31152
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -4883,6 +16967,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/multi/laser_router_re018_ac1200_cross_site_request_forgery_enable_cve_2021_31152.py`
+
+### multi / log4shell_rce_cve_2021_44228
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-44228
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/misc/multi/log4shell_rce_cve_2021_44228.py`
 
 ### multi / misfortune_cookie
 
@@ -4932,6 +17024,14 @@
 - Module paths:
   - `modules/exploits/routers/multi/netusb_kernel_stack_overflow_cve_2021_45388.py`
 
+### multi / netwave_ip_camera_information_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/multi/netwave_ip_camera_information_disclosure.py`
+
 ### multi / nexxt_router_firmware_42_103_1_5095_remote_code_execution_rc_cve_2022_44149
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -4963,6 +17063,22 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/multi/openwrt_luci_rce_cve_2021_22161.py`
+
+### multi / P2P_wificam_credential_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-8225
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/multi/P2P_wificam_credential_disclosure.py`
+
+### multi / P2P_wificam_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-8225
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/multi/P2P_wificam_rce.py`
 
 ### multi / pfsensece_v2_6_0_anti_brute_force_protection_bypass_cve_2023_27100
 
@@ -5035,6 +17151,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/multi/rompager_password_disclosure_cve_2014_4019.py`
+
+### multi / rtsp_cameradar_attack
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-7921, CVE-2021-36260
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/multi/rtsp_cameradar_attack.py`
 
 ### multi / ruckus_iot_controller_ruckus_vriot_1_5_1_0_21_remote_code_ex_cve_2020_26878
 
@@ -5164,6 +17288,186 @@
 - Module paths:
   - `modules/exploits/routers/multi/wrt_router_3_0_0_4_380_7743_lan_remote_code_execution_cve_2018_5999.py`
 
+### mvpower / dvr_jaws_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/mvpower/dvr_jaws_rce.py`
+
+### mymax / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/mymax/ftp_default_creds.py`
+
+### mymax / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/mymax/ssh_default_creds.py`
+
+### mymax / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/mymax/telnet_default_creds.py`
+
+### mymax / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/mymax/webinterface_http_auth_default_creds.py`
+
+### nac / clearpass_xss_stored
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/nac/aruba/clearpass_xss_stored.py`
+
+### nac / secure_acs_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/firewalls/nac/cisco/secure_acs_bypass.py`
+
+### nac / vlan_hopping_checker
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/nac/generic/vlan_hopping_checker.py`
+
+### nas / nas_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/nas/nas_discover.py`
+
+### nas / nas_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/nas/nas_scan.py`
+
+### net_lynx / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/net_lynx/ftp_default_creds.py`
+
+### net_lynx / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/net_lynx/ssh_default_creds.py`
+
+### net_lynx / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/net_lynx/telnet_default_creds.py`
+
+### net_lynx / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/net_lynx/webinterface_http_auth_default_creds.py`
+
+### netcomm / ftp_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/netcomm/ftp_default_creds.py`
+  - `modules/creds/routers/netcomm/ftp_default_creds.py`
+
+### netcomm / ssh_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/netcomm/ssh_default_creds.py`
+  - `modules/creds/routers/netcomm/ssh_default_creds.py`
+
+### netcomm / telnet_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/netcomm/telnet_default_creds.py`
+  - `modules/creds/routers/netcomm/telnet_default_creds.py`
+
+### netcomm / webinterface_http_auth_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/netcomm/webinterface_http_auth_default_creds.py`
+  - `modules/creds/routers/netcomm/webinterface_http_auth_default_creds.py`
+
+### netcomm_router / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netcomm_router/ftp_default_creds.py`
+
+### netcomm_router / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netcomm_router/ssh_default_creds.py`
+
+### netcomm_router / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netcomm_router/telnet_default_creds.py`
+
+### netcomm_router / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netcomm_router/webinterface_http_auth_default_creds.py`
+
 ### netcore / ftp_default_creds
 
 - Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
@@ -5204,6 +17508,70 @@
 - Module paths:
   - `modules/exploits/routers/netcore/wf2419_router_cross_site_scripting_cve_2018_6190.py`
 
+### netcoretek / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netcoretek/ftp_default_creds.py`
+
+### netcoretek / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netcoretek/ssh_default_creds.py`
+
+### netcoretek / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netcoretek/telnet_default_creds.py`
+
+### netcoretek / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netcoretek/webinterface_http_auth_default_creds.py`
+
+### netgate / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netgate/ftp_default_creds.py`
+
+### netgate / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netgate/ssh_default_creds.py`
+
+### netgate / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netgate/telnet_default_creds.py`
+
+### netgate / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netgate/webinterface_http_auth_default_creds.py`
+
 ### netgear / devices_unauthenticated_remote_command_execution_metasploit_cve_2016_1555
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -5211,6 +17579,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/netgear/devices_unauthenticated_remote_command_execution_metasploit_cve_2016_1555.py`
+
+### netgear / dg632_bypass_dos
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/routers/netgear/dg632_bypass_dos.py`
 
 ### netgear / dgn1000_setup_cgi_rce
 
@@ -5227,6 +17603,14 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/netgear/dgn1000_unauthenticated_rce.py`
+
+### netgear / dgn1000b_remote_command_execution
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/netgear/dgn1000b_remote_command_execution.py`
 
 ### netgear / dgn2200_dnslookup_cgi_command_injection_metasploit_cve_2017_6334
 
@@ -5259,6 +17643,14 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/netgear/dgn2200_rce.py`
+
+### netgear / dgn2200v1_cmd_injection_cve_2017_6077
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-6077
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/switches/netgear/dgn2200v1_cmd_injection_cve_2017_6077.py`
 
 ### netgear / dgn2200v1_v2_v3_v4_cross_site_request_forgery_cve_2017_6334
 
@@ -5302,10 +17694,11 @@
 
 ### netgear / ftp_default_creds
 
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
 - CVEs: none
 - Attack classes: none
 - Module paths:
+  - `modules/creds/nas/netgear/ftp_default_creds.py`
   - `modules/creds/routers/netgear/ftp_default_creds.py`
 
 ### netgear / jnr1010_path_traversal
@@ -5356,6 +17749,14 @@
 - Module paths:
   - `modules/exploits/routers/netgear/netusb_kernel_stack_buffer_overflow_cve_2015_3036.py`
 
+### netgear / nighthawk_speedtest_rce_cve_2025_12946
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-12946
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/netgear/nighthawk_speedtest_rce_cve_2025_12946.py`
+
 ### netgear / nms300_prosafe_network_management_system_arbitrary_file_uplo_cve_2016_1525
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -5389,6 +17790,30 @@
   - `modules/exploits/routers/netgear/prosafe_rce.py`
   - `modules/exploits/switches/netgear/prosafe_rce.py`
 
+### netgear / r6100_bof_rce_cve_2025_29044
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-29044
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/netgear/r6100_bof_rce_cve_2025_29044.py`
+
+### netgear / r6100_cgimain_bof_cve_2025_29044
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-29044
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/netgear/r6100_cgimain_bof_cve_2025_29044.py`
+
+### netgear / r6900p_host_header_bof_cve_2024_12988
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-12988
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/routers/netgear/r6900p_host_header_bof_cve_2024_12988.py`
+
 ### netgear / r7000_command_injection_cve_2016_6277
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -5412,6 +17837,14 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/netgear/r7000_r6400_rce.py`
+
+### netgear / rax30_cert_validation_rce_cve_2025_12943
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-12943
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/netgear/rax30_cert_validation_rce_cve_2025_12943.py`
 
 ### netgear / rax30_rce
 
@@ -5439,10 +17872,11 @@
 
 ### netgear / ssh_default_creds
 
-- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
 - CVEs: none
 - Attack classes: none
 - Module paths:
+  - `modules/creds/nas/netgear/ssh_default_creds.py`
   - `modules/creds/routers/netgear/ssh_default_creds.py`
 
 ### netgear / telnet_default_creds
@@ -5453,6 +17887,22 @@
 - Module paths:
   - `modules/creds/routers/netgear/telnet_default_creds.py`
 
+### netgear / telnetenable_magic_packet
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/netgear/telnetenable_magic_packet.py`
+
+### netgear / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/netgear/webinterface_http_auth_default_creds.py`
+
 ### netgear / wg102_wn604_rce
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -5461,6 +17911,14 @@
 - Module paths:
   - `modules/exploits/routers/netgear/wg102_wn604_rce.py`
 
+### netgear / wg602_superman_backdoor
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/routers/netgear/wg602_superman_backdoor.py`
+
 ### netgear / wnap320_rce
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -5468,6 +17926,14 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/netgear/wnap320_rce.py`
+
+### netgear / wndr3400_password_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/netgear/wndr3400_password_disclosure.py`
 
 ### netgear / wndr_soap_auth_bypass
 
@@ -5501,6 +17967,30 @@
 - Module paths:
   - `modules/exploits/routers/netgear/wnr500_612v3_jnr1010_2010_path_traversal.py`
 
+### netgear / xr1000_unauth_rce_cve_2025_25246
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-25246
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/netgear/xr1000_unauth_rce_cve_2025_25246.py`
+
+### netgear_firmware_flash.py / netgear_firmware_flash
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-5521, CVE-2021-34991, CVE-2022-27648, CVE-2023-49451
+- Attack classes: backdoor, creds_disclosure
+- Module paths:
+  - `modules/exploits/firmware/netgear_firmware_flash.py`
+
+### netis / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netis/ftp_default_creds.py`
+
 ### netis / mw5360_mw5370_rce_cve_2014_8572
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -5508,6 +17998,86 @@
 - Attack classes: backdoor, rce
 - Module paths:
   - `modules/exploits/routers/netis/mw5360_mw5370_rce_cve_2014_8572.py`
+
+### netis / ping_cgi_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/netis/ping_cgi_rce.py`
+
+### netis / router_backdoor_udp_53413
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/routers/netis/router_backdoor_udp_53413.py`
+
+### netis / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netis/ssh_default_creds.py`
+
+### netis / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netis/telnet_default_creds.py`
+
+### netis / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netis/webinterface_http_auth_default_creds.py`
+
+### netopia / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netopia/ftp_default_creds.py`
+
+### netopia / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netopia/ssh_default_creds.py`
+
+### netopia / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netopia/telnet_default_creds.py`
+
+### netopia / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/netopia/webinterface_http_auth_default_creds.py`
+
+### netscreen / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/netscreen/ssh_default_creds.py`
 
 ### netsys / ftp_default_creds
 
@@ -5540,6 +18110,920 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/routers/netsys/telnet_default_creds.py`
+
+### noganet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/noganet/ftp_default_creds.py`
+
+### noganet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/noganet/ssh_default_creds.py`
+
+### noganet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/noganet/telnet_default_creds.py`
+
+### noganet / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/noganet/webinterface_http_auth_default_creds.py`
+
+### nokia / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/nokia/ftp_default_creds.py`
+
+### nokia / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/nokia/ssh_default_creds.py`
+
+### nokia / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/nokia/telnet_default_creds.py`
+
+### nokia / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/nokia/webinterface_http_auth_default_creds.py`
+
+### nortel / snmp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/nortel/snmp_default_creds.py`
+
+### nortel / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/nortel/ssh_default_creds.py`
+
+### nortel / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/nortel/telnet_default_creds.py`
+
+### nortel / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/switches/nortel/webinterface_http_auth_default_creds.py`
+
+### nucom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/nucom/ftp_default_creds.py`
+
+### nucom / nc_wr644gacv_config_download_cve_2018_8755
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-8755
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/nucom/nc_wr644gacv_config_download_cve_2018_8755.py`
+
+### nucom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/nucom/ssh_default_creds.py`
+
+### nucom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/nucom/telnet_default_creds.py`
+
+### nucom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/nucom/webinterface_http_auth_default_creds.py`
+
+### observa / observa_telecom_cred_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: creds_disclosure
+- Module paths:
+  - `modules/exploits/routers/observa/observa_telecom_cred_disclosure.py`
+
+### oki / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/oki/ftp_default_creds.py`
+
+### oki / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/oki/webinterface_http_auth_default_creds.py`
+
+### olitec / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/olitec/ftp_default_creds.py`
+
+### olitec / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/olitec/ssh_default_creds.py`
+
+### olitec / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/olitec/telnet_default_creds.py`
+
+### olitec / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/olitec/webinterface_http_auth_default_creds.py`
+
+### omron / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/omron/ssh_default_creds.py`
+
+### omron / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/omron/webinterface_http_auth_default_creds.py`
+
+### open_networks / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/open_networks/ftp_default_creds.py`
+
+### open_networks / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/open_networks/ssh_default_creds.py`
+
+### open_networks / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/open_networks/telnet_default_creds.py`
+
+### open_networks / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/open_networks/webinterface_http_auth_default_creds.py`
+
+### openremote_expr_injection_rce_cve_2026_39842.py / openremote_expr_injection_rce_cve_2026_39842
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-39842
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/smart_home/openremote_expr_injection_rce_cve_2026_39842.py`
+
+### openwrt / glinet_ar300m_rce_cve_2023_46454
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-46454
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/openwrt/glinet_ar300m_rce_cve_2023_46454.py`
+
+### openwrt / glinet_mt6000_file_download_cve_2024_27356
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-27356
+- Attack classes: creds_disclosure
+- Module paths:
+  - `modules/exploits/routers/openwrt/glinet_mt6000_file_download_cve_2024_27356.py`
+
+### openwrt / glinet_sid_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/embedded_os/openwrt/glinet_sid_rce.py`
+
+### openwrt / mdns_bof_rce_cve_2026_30871
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-30871
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/embedded_os/openwrt/mdns_bof_rce_cve_2026_30871.py`
+
+### openwrt / mdns_bof_rce_cve_2026_30872
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-30871, CVE-2026-30872
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/embedded_os/openwrt/mdns_bof_rce_cve_2026_30872.py`
+
+### openwrt / openwrt_asu_firmware_poison
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/openwrt/openwrt_asu_firmware_poison.py`
+
+### openwrt / openwrt_luci_rpc_privesc
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/openwrt/openwrt_luci_rpc_privesc.py`
+
+### openwrt / openwrt_wlan_privesc
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/openwrt/openwrt_wlan_privesc.py`
+
+### osprey / pump_controller_auth_bypass_cve_2023_28648
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-28648
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/ics/osprey/pump_controller_auth_bypass_cve_2023_28648.py`
+
+### ot / bacnet_foreign_device_register
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/bacnet/bacnet_foreign_device_register.py`
+
+### ot / bacnet_rce_cve_2022_21952
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-21952
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/protocols/ot/bacnet/bacnet_rce_cve_2022_21952.py`
+
+### ot / bacnet_unauth_rw
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/bacnet/bacnet_unauth_rw.py`
+
+### ot / can_fuzzer
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/can/can_fuzzer.py`
+
+### ot / can_replay_attack
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/can/can_replay_attack.py`
+
+### ot / can_uds_ecu_reset
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/can/can_uds_ecu_reset.py`
+
+### ot / dnp3_malformed_app_dos
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/protocols/ot/dnp3/dnp3_malformed_app_dos.py`
+
+### ot / dnp3_replay_attack
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/dnp3/dnp3_replay_attack.py`
+
+### ot / dnp3_unauth_control
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/dnp3/dnp3_unauth_control.py`
+
+### ot / ethernetip_cip_unauth_control
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/ethernetip/ethernetip_cip_unauth_control.py`
+
+### ot / ethernetip_rce_cve_2020_27886
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-27886
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/protocols/ot/ethernetip/ethernetip_rce_cve_2020_27886.py`
+
+### ot / hartip_unauth_enum_cve_2021_43553
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-43553
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/hartip/hartip_unauth_enum_cve_2021_43553.py`
+
+### ot / iec104_replay_asdu
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/iec104/iec104_replay_asdu.py`
+
+### ot / iec104_unauth_control_cve_2022_29789
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-29789
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/iec104/iec104_unauth_control_cve_2022_29789.py`
+
+### ot / iec61850_goose_spoof
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/iec61850/iec61850_goose_spoof.py`
+
+### ot / iec61850_mms_read
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/iec61850/iec61850_mms_read.py`
+
+### ot / modbus_bof_schneider_cve_2018_7789
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-7789
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/modbus/modbus_bof_schneider_cve_2018_7789.py`
+
+### ot / modbus_tcp_function_abuse
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/modbus/modbus_tcp_function_abuse.py`
+
+### ot / modbus_unauth_write
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/modbus/modbus_unauth_write.py`
+
+### ot / opcda_dcom_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/opcda/opcda_dcom_enum.py`
+
+### ot / opcua_cert_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/opcua/opcua_cert_bypass.py`
+
+### ot / opcua_dos_cve_2022_2586
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-2586
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/protocols/ot/opcua/opcua_dos_cve_2022_2586.py`
+
+### ot / opcua_unauth_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/opcua/opcua_unauth_enum.py`
+
+### ot / opcua_user_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/protocols/ot/opcua/opcua_user_enum.py`
+
+### ot / profinet_dcp_dos
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/protocols/ot/profinet/profinet_dcp_dos.py`
+
+### ot / profinet_dcp_enum_reset
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/profinet/profinet_dcp_enum_reset.py`
+
+### ot / profinet_ptcp_sync_spoof
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/profinet/profinet_ptcp_sync_spoof.py`
+
+### ot / s7comm_cpu_stop_cve_2019_13945
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-13945
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/s7comm/s7comm_cpu_stop_cve_2019_13945.py`
+
+### ot / s7comm_data_read_write
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/protocols/ot/s7comm/s7comm_data_read_write.py`
+
+### ot_iiot / bacnet_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ot_iiot/bacnet_scan.py`
+
+### ot_iiot / dnp3_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ot_iiot/dnp3_scan.py`
+
+### ot_iiot / ics_device_fingerprint
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ot_iiot/ics_device_fingerprint.py`
+
+### ot_iiot / modbus_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ot_iiot/modbus_scan.py`
+
+### ot_iiot / opcua_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ot_iiot/opcua_scan.py`
+
+### ot_iiot / profinet_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/ot_iiot/profinet_scan.py`
+
+### ovislink / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ovislink/ftp_default_creds.py`
+
+### ovislink / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ovislink/ssh_default_creds.py`
+
+### ovislink / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ovislink/telnet_default_creds.py`
+
+### ovislink / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ovislink/webinterface_http_auth_default_creds.py`
+
+### pace_plc / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pace_plc/ftp_default_creds.py`
+
+### pace_plc / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pace_plc/ssh_default_creds.py`
+
+### pace_plc / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pace_plc/telnet_default_creds.py`
+
+### pace_plc / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pace_plc/webinterface_http_auth_default_creds.py`
+
+### paloalto / globalprotect_cmd_injection_cve_2024_3400
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-3400
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/paloalto/globalprotect_cmd_injection_cve_2024_3400.py`
+
+### paloalto / pan_os_globalprotect_rce_cve_2024_3400
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-3400
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/ngfw/paloalto/pan_os_globalprotect_rce_cve_2024_3400.py`
+
+### paloalto / panos_auth_bypass_cve_2025_0108
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-0108
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/firewalls/paloalto/panos_auth_bypass_cve_2025_0108.py`
+
+### paloalto / panos_mgmt_auth_bypass_cve_2024_0012
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-0012, CVE-2024-9474
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/firewalls/paloalto/panos_mgmt_auth_bypass_cve_2024_0012.py`
+
+### paloalto / panos_privesc_cve_2024_9474
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-0012, CVE-2024-9474
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/paloalto/panos_privesc_cve_2024_9474.py`
+
+### paloalto / panos_saml_auth_bypass_cve_2020_2021
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-2021
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/firewalls/paloalto/panos_saml_auth_bypass_cve_2020_2021.py`
+
+### paloalto / panos_userid_bof_rce_cve_2026_0300
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-0300
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/paloalto/panos_userid_bof_rce_cve_2026_0300.py`
+
+### panasonic / ftp_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/panasonic/ftp_default_creds.py`
+  - `modules/creds/printers/panasonic/ftp_default_creds.py`
+
+### panasonic / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/panasonic/ssh_default_creds.py`
+
+### panasonic / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/panasonic/telnet_default_creds.py`
+
+### panasonic / webinterface_http_auth_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/panasonic/webinterface_http_auth_default_creds.py`
+  - `modules/creds/printers/panasonic/webinterface_http_auth_default_creds.py`
+
+### paradigm / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/paradigm/ftp_default_creds.py`
+
+### paradigm / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/paradigm/ssh_default_creds.py`
+
+### paradigm / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/paradigm/telnet_default_creds.py`
+
+### paradigm / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/paradigm/webinterface_http_auth_default_creds.py`
+
+### paradyne / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/paradyne/ftp_default_creds.py`
+
+### paradyne / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/paradyne/ssh_default_creds.py`
+
+### paradyne / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/paradyne/telnet_default_creds.py`
+
+### paradyne / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/paradyne/webinterface_http_auth_default_creds.py`
+
+### pci / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pci/ftp_default_creds.py`
+
+### pci / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pci/ssh_default_creds.py`
+
+### pci / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pci/telnet_default_creds.py`
+
+### pci / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pci/webinterface_http_auth_default_creds.py`
+
+### pelco / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/pelco/ftp_default_creds.py`
+
+### pelco / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/pelco/ssh_default_creds.py`
+
+### pelco / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/pelco/telnet_default_creds.py`
+
+### pelco / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/pelco/webinterface_http_auth_default_creds.py`
+
+### pentagram / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pentagram/ftp_default_creds.py`
+
+### pentagram / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pentagram/ssh_default_creds.py`
+
+### pentagram / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pentagram/telnet_default_creds.py`
+
+### pentagram / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pentagram/webinterface_http_auth_default_creds.py`
 
 ### perl / base64
 
@@ -5589,6 +19073,31 @@
 - Module paths:
   - `modules/encoders/perl/url.py`
 
+### pfsense / antibruteforce_bypass_cve_2023_27100
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-27100
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/pfsense/antibruteforce_bypass_cve_2023_27100.py`
+
+### pfsense / interfaces_cmd_injection_cve_2023_42326
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-42326
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/pfsense/interfaces_cmd_injection_cve_2023_42326.py`
+
+### pfsense / pfblockerng_rce_cve_2022_31814
+
+- Totals: modules=2, exploits=2, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-31814
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/pfsense/pfblockerng_rce_cve_2022_31814.py`
+  - `modules/exploits/misc/pfsense/pfblockerng_rce_cve_2022_31814.py`
+
 ### pfsense / pfsense_2_2_6_command_injection_cve_2016_10709
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -5596,6 +19105,86 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/pfsense/pfsense_2_2_6_command_injection_cve_2016_10709.py`
+
+### pfsense / pfsense_csrf_rce_cve_2019_16667
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-16667
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/pfsense/pfsense_csrf_rce_cve_2019_16667.py`
+
+### pfsense / pfsense_diag_routes_webshell
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/misc/pfsense/pfsense_diag_routes_webshell.py`
+
+### pfsense / pfsense_rrd_cmd_injection_cve_2023_27253
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-27253
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/pfsense/pfsense_rrd_cmd_injection_cve_2023_27253.py`
+
+### pfsense / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/pfsense/ssh_default_creds.py`
+
+### pfsense / webinterface_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/pfsense/webinterface_default_creds.py`
+
+### phoenix / mguard_cmd_injection_cve_2024_43386
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-43386
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/phoenix/mguard_cmd_injection_cve_2024_43386.py`
+
+### phoenix_contact / mguard_cmd_injection_cve_2024_43386
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-43386
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/phoenix_contact/mguard_cmd_injection_cve_2024_43386.py`
+
+### phoenix_contact / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/phoenix_contact/ssh_default_creds.py`
+
+### phoenix_contact / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/phoenix_contact/telnet_default_creds.py`
+
+### phoenix_contact / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/phoenix_contact/webinterface_http_auth_default_creds.py`
 
 ### php / base64
 
@@ -5644,6 +19233,553 @@
 - Attack classes: none
 - Module paths:
   - `modules/encoders/php/url.py`
+
+### pihole / blocklist_rce_cve_2020_11108
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-11108
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/misc/pihole/blocklist_rce_cve_2020_11108.py`
+
+### pikatel / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pikatel/ftp_default_creds.py`
+
+### pikatel / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pikatel/ssh_default_creds.py`
+
+### pikatel / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pikatel/telnet_default_creds.py`
+
+### pikatel / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pikatel/webinterface_http_auth_default_creds.py`
+
+### ping_communication / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ping_communication/ftp_default_creds.py`
+
+### ping_communication / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ping_communication/ssh_default_creds.py`
+
+### ping_communication / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ping_communication/telnet_default_creds.py`
+
+### ping_communication / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ping_communication/webinterface_http_auth_default_creds.py`
+
+### pirelli / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pirelli/ftp_default_creds.py`
+
+### pirelli / pirelli_wpa_keygen
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/pirelli/pirelli_wpa_keygen.py`
+
+### pirelli / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pirelli/ssh_default_creds.py`
+
+### pirelli / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pirelli/telnet_default_creds.py`
+
+### pirelli / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pirelli/webinterface_http_auth_default_creds.py`
+
+### planet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/planet/ftp_default_creds.py`
+
+### planet / ssh_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/planet/ssh_default_creds.py`
+  - `modules/creds/switches/planet/ssh_default_creds.py`
+
+### planet / telnet_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/planet/telnet_default_creds.py`
+  - `modules/creds/switches/planet/telnet_default_creds.py`
+
+### planet / webinterface_http_auth_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/planet/webinterface_http_auth_default_creds.py`
+  - `modules/creds/switches/planet/webinterface_http_auth_default_creds.py`
+
+### planet_router / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/planet_router/ftp_default_creds.py`
+
+### planet_router / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/planet_router/ssh_default_creds.py`
+
+### planet_router / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/planet_router/telnet_default_creds.py`
+
+### planet_router / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/planet_router/webinterface_http_auth_default_creds.py`
+
+### planex / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/planex/ftp_default_creds.py`
+
+### planex / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/planex/ssh_default_creds.py`
+
+### planex / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/planex/telnet_default_creds.py`
+
+### planex / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/planex/webinterface_http_auth_default_creds.py`
+
+### pluscom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pluscom/ftp_default_creds.py`
+
+### pluscom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pluscom/ssh_default_creds.py`
+
+### pluscom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pluscom/telnet_default_creds.py`
+
+### pluscom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pluscom/webinterface_http_auth_default_creds.py`
+
+### polycom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/polycom/ftp_default_creds.py`
+
+### polycom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/polycom/ssh_default_creds.py`
+
+### polycom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/polycom/telnet_default_creds.py`
+
+### polycom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/polycom/webinterface_http_auth_default_creds.py`
+
+### printers / hp_rawprint_9100
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/printers/hp_rawprint_9100.py`
+
+### prolink / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/prolink/ftp_default_creds.py`
+
+### prolink / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/prolink/ssh_default_creds.py`
+
+### prolink / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/prolink/telnet_default_creds.py`
+
+### prolink / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/prolink/webinterface_http_auth_default_creds.py`
+
+### pronets / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pronets/ftp_default_creds.py`
+
+### pronets / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pronets/ssh_default_creds.py`
+
+### pronets / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pronets/telnet_default_creds.py`
+
+### pronets / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pronets/webinterface_http_auth_default_creds.py`
+
+### protocols / ble_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/protocols/iot/ble_scan.py`
+
+### protocols / can_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/protocols/ot/can_scan.py`
+
+### protocols / coap_protocol_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/protocols/iot/coap_protocol_scan.py`
+
+### protocols / dds_rtps_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/protocols/iot/dds_rtps_scan.py`
+
+### protocols / ethernetip_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/protocols/ot/ethernetip_scan.py`
+
+### protocols / hartip_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/protocols/ot/hartip_scan.py`
+
+### protocols / lorawan_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/protocols/iot/lorawan_scan.py`
+
+### protocols / mqtt_protocol_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/protocols/iot/mqtt_protocol_scan.py`
+
+### protocols / s7comm_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/protocols/ot/s7comm_scan.py`
+
+### protocols / upnp_ssdp_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/protocols/iot/upnp_ssdp_scan.py`
+
+### protocols / wifi_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/protocols/iot/wifi_scan.py`
+
+### protocols / zigbee_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/protocols/iot/zigbee_scan.py`
+
+### protocols / zwave_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/protocols/iot/zwave_scan.py`
+
+### proxim / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/proxim/ssh_default_creds.py`
+
+### proxim / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/proxim/telnet_default_creds.py`
+
+### proxim / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/proxim/webinterface_http_auth_default_creds.py`
+
+### proxmox / file_read_cve_2024_21545
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-21545
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/hypervisors/proxmox/file_read_cve_2024_21545.py`
+
+### proxmox / reflected_xss_cve_2022_31358
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-31358
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/hypervisors/proxmox/reflected_xss_cve_2022_31358.py`
+
+### proxmox / tfa_bypass_cve_2023_43320
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-43320
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/hypervisors/proxmox/tfa_bypass_cve_2023_43320.py`
+
+### proxmox / webinterface_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/hypervisors/proxmox/webinterface_default_creds.py`
+
+### pti / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pti/ftp_default_creds.py`
+
+### pti / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pti/ssh_default_creds.py`
+
+### pti / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pti/telnet_default_creds.py`
+
+### pti / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/pti/webinterface_http_auth_default_creds.py`
+
+### pulse / pulse_connect_secure_path_traversal_cve_2019_11510
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-11510, CVE-2019-11539, CVE-2021-22893
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/vpn/pulse/pulse_connect_secure_path_traversal_cve_2019_11510.py`
 
 ### python / base32
 
@@ -5717,6 +19853,582 @@
 - Module paths:
   - `modules/encoders/python/url.py`
 
+### q_tec / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/q_tec/ftp_default_creds.py`
+
+### q_tec / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/q_tec/ssh_default_creds.py`
+
+### q_tec / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/q_tec/telnet_default_creds.py`
+
+### q_tec / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/q_tec/webinterface_http_auth_default_creds.py`
+
+### qnap / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/qnap/ftp_default_creds.py`
+
+### qnap / photo_station_rce_cve_2022_27593
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-27593
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/nas/qnap/photo_station_rce_cve_2022_27593.py`
+
+### qnap / qts_cgi_auth_bypass_rce_cve_2019_7192
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-7192, CVE-2019-7193, CVE-2019-7194, CVE-2019-7195
+- Attack classes: auth_bypass, rce
+- Module paths:
+  - `modules/exploits/nas/qnap/qts_cgi_auth_bypass_rce_cve_2019_7192.py`
+
+### qnap / qts_quick_cgi_rce_cve_2023_47218
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-47218
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/nas/qnap/qts_quick_cgi_rce_cve_2023_47218.py`
+
+### qnap / qts_share_cgi_rce_cve_2024_27130
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-27127, CVE-2024-27130, CVE-2024-27140
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/nas/qnap/qts_share_cgi_rce_cve_2024_27130.py`
+
+### qnap / qts_sql_injection_rce_cve_2022_27596
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-27596
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/nas/qnap/qts_sql_injection_rce_cve_2022_27596.py`
+
+### qnap / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/qnap/ssh_default_creds.py`
+
+### qnap / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/qnap/webinterface_http_auth_default_creds.py`
+
+### qnx / crash_qnx_inetd
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/qnx/crash_qnx_inetd.py`
+
+### qnx / qconn_remote_exec
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/qnx/qconn_remote_exec.py`
+
+### qnx / qnx_networking_info_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/embedded_os/qnx/qnx_networking_info_disclosure.py`
+
+### qnx / qnx_pcx_oob_rce_cve_2021_22212
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-22212
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/embedded_os/qnx/qnx_pcx_oob_rce_cve_2021_22212.py`
+
+### qnx / qnx_pcx_oob_rce_cve_2021_22213
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-22212, CVE-2021-22213
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/embedded_os/qnx/qnx_pcx_oob_rce_cve_2021_22213.py`
+
+### quicktel / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/quicktel/ftp_default_creds.py`
+
+### quicktel / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/quicktel/ssh_default_creds.py`
+
+### quicktel / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/quicktel/telnet_default_creds.py`
+
+### quicktel / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/quicktel/webinterface_http_auth_default_creds.py`
+
+### raspap / raspap_rce_cve_2022_28055
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-28055
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/misc/raspap/raspap_rce_cve_2022_28055.py`
+
+### raspberrypi / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/iot/raspberrypi/ssh_default_creds.py`
+
+### rauc_integer_overflow_cve_2026_34155.py / rauc_integer_overflow_cve_2026_34155
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-34155
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/rauc_integer_overflow_cve_2026_34155.py`
+
+### readynet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/readynet/ftp_default_creds.py`
+
+### readynet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/readynet/ssh_default_creds.py`
+
+### readynet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/readynet/telnet_default_creds.py`
+
+### readynet / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/readynet/webinterface_http_auth_default_creds.py`
+
+### reolink / reolink_baicells_auth_bypass_rce_cve_2021_40655
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-40655
+- Attack classes: auth_bypass, rce
+- Module paths:
+  - `modules/exploits/cameras/reolink/reolink_baicells_auth_bypass_rce_cve_2021_40655.py`
+
+### reolink_nvr / reolink_nvr_p2p_uid_extract_cve_2022_30600
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-30600
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/reolink_nvr/reolink_nvr_p2p_uid_extract_cve_2022_30600.py`
+
+### repotec / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/repotec/ftp_default_creds.py`
+
+### repotec / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/repotec/ssh_default_creds.py`
+
+### repotec / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/repotec/telnet_default_creds.py`
+
+### repotec / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/repotec/webinterface_http_auth_default_creds.py`
+
+### ricoh / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/ricoh/ftp_default_creds.py`
+
+### ricoh / ricoh_driver_privesc_cve_2019_19363
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-19363
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/ricoh/ricoh_driver_privesc_cve_2019_19363.py`
+
+### ricoh / ricoh_ews_rce_cve_2024_34161
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-34161
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/ricoh/ricoh_ews_rce_cve_2024_34161.py`
+
+### ricoh / ricoh_ftp_guest_exposure_edb_51755
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/ricoh/ricoh_ftp_guest_exposure_edb_51755.py`
+
+### ricoh / ricoh_fw_unsigned_upload
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/printers/ricoh/ricoh_fw_unsigned_upload.py`
+
+### ricoh / ricoh_http_bof_cve_2024_34161
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-34161
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/ricoh/ricoh_http_bof_cve_2024_34161.py`
+
+### ricoh / ricoh_infoprint_xss_edb_47850
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/ricoh/ricoh_infoprint_xss_edb_47850.py`
+
+### ricoh / ricoh_ldap_passback
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/ricoh/ricoh_ldap_passback.py`
+
+### ricoh / ricoh_loginout_dos_snmp
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/printers/ricoh/ricoh_loginout_dos_snmp.py`
+
+### ricoh / ricoh_mp_auth_bypass_edb_36608
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2014-9321
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/printers/ricoh/ricoh_mp_auth_bypass_edb_36608.py`
+
+### ricoh / ricoh_web_cmd_inject_cve_2022_29943
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-29943
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/ricoh/ricoh_web_cmd_inject_cve_2022_29943.py`
+
+### ricoh / ricoh_wpa_bof_cve_2021_33945
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-33945
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/printers/ricoh/ricoh_wpa_bof_cve_2021_33945.py`
+
+### ricoh / web_monitor_overflow_cve_2019_14308
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-14308
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/printers/ricoh/web_monitor_overflow_cve_2019_14308.py`
+
+### ricoh / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/ricoh/webinterface_http_auth_default_creds.py`
+
+### riger / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/riger/ftp_default_creds.py`
+
+### riger / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/riger/ssh_default_creds.py`
+
+### riger / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/riger/telnet_default_creds.py`
+
+### riger / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/riger/webinterface_http_auth_default_creds.py`
+
+### riot_os / riot_cord_lc_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/embedded_os/riot_os/riot_cord_lc_rce.py`
+
+### riot_os / riot_ipv6_frag_bof_cve_2021_27357
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-27357
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/riot_os/riot_ipv6_frag_bof_cve_2021_27357.py`
+
+### riot_os / riot_ipv6_frag_bof_cve_2021_31966
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-31966
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/riot_os/riot_ipv6_frag_bof_cve_2021_31966.py`
+
+### riot_os / riot_sixlowpan_heap_oob_cve_2021_31966
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-31966
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/riot_os/riot_sixlowpan_heap_oob_cve_2021_31966.py`
+
+### riot_sixlowpan_oob_read_cve_2026_25139.py / riot_sixlowpan_oob_read_cve_2026_25139
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-25139
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/embedded_os/riot_sixlowpan_oob_read_cve_2026_25139.py`
+
+### rockwell / compactlogix_auth_bypass_cve_2021_22681
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-22681
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/ics/rockwell/compactlogix_auth_bypass_cve_2021_22681.py`
+
+### rockwell / compactlogix_cip_dos_cve_2024_6077
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-6077
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/ics/rockwell/compactlogix_cip_dos_cve_2024_6077.py`
+
+### rockwell / compactlogix_code_injection_cve_2022_1161
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-1161
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/rockwell/compactlogix_code_injection_cve_2022_1161.py`
+
+### rockwell / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/rockwell/ssh_default_creds.py`
+
+### rockwell / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/rockwell/webinterface_http_auth_default_creds.py`
+
+### roku / debug_brightscript_console
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/roku/debug_brightscript_console.py`
+
+### roku / dns_rebind_ecp_bypass_cve_2018_11314
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-11314
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/roku/dns_rebind_ecp_bypass_cve_2018_11314.py`
+
+### roku / ecp_app_launcher
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/roku/ecp_app_launcher.py`
+
+### roku / ecp_channel_install
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/roku/ecp_channel_install.py`
+
+### roku / ecp_device_info
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/roku/ecp_device_info.py`
+
+### roku / ecp_keypress_inject
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/roku/ecp_keypress_inject.py`
+
+### rosewill / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/rosewill/ftp_default_creds.py`
+
+### rosewill / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/rosewill/ssh_default_creds.py`
+
+### rosewill / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/rosewill/telnet_default_creds.py`
+
+### rosewill / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/rosewill/webinterface_http_auth_default_creds.py`
+
 ### routers / router_scan
 
 - Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
@@ -5724,6 +20436,62 @@
 - Attack classes: none
 - Module paths:
   - `modules/scanners/routers/router_scan.py`
+
+### routers / soho_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/routers/soho_discover.py`
+
+### rtsp_brute.py / rtsp_brute
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/rtsp_brute.py`
+
+### ruggedcom / ruggedcom_factory_password
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/routers/ruggedcom/ruggedcom_factory_password.py`
+
+### ruijie / eweb_dir_traversal
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/switches/ruijie/eweb_dir_traversal.py`
+
+### ruijie / psg5124_cmd_injection_cve_2020_10882
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-10882
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/switches/ruijie/psg5124_cmd_injection_cve_2020_10882.py`
+
+### ruijie / psg5124_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-10882
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/switches/ruijie/psg5124_rce.py`
+
+### ruijie / reyee_mesh_mitm_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/ruijie/reyee_mesh_mitm_rce.py`
 
 ### ruijie / reyee_mesh_router_remote_code_execution_rce_authenticated_cve_2021_43164
 
@@ -5733,6 +20501,335 @@
 - Module paths:
   - `modules/exploits/routers/ruijie/reyee_mesh_router_remote_code_execution_rce_authenticated_cve_2021_43164.py`
 
+### safecom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/safecom/ftp_default_creds.py`
+
+### safecom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/safecom/ssh_default_creds.py`
+
+### safecom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/safecom/telnet_default_creds.py`
+
+### safecom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/safecom/webinterface_http_auth_default_creds.py`
+
+### sagem / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sagem/ftp_default_creds.py`
+
+### sagem / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sagem/ssh_default_creds.py`
+
+### sagem / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sagem/telnet_default_creds.py`
+
+### sagem / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sagem/webinterface_http_auth_default_creds.py`
+
+### sagemcom / ftp_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/sagemcom/ftp_default_creds.py`
+  - `modules/creds/routers/sagemcom/ftp_default_creds.py`
+
+### sagemcom / ssh_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/sagemcom/ssh_default_creds.py`
+  - `modules/creds/routers/sagemcom/ssh_default_creds.py`
+
+### sagemcom / telnet_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/sagemcom/telnet_default_creds.py`
+  - `modules/creds/routers/sagemcom/telnet_default_creds.py`
+
+### sagemcom / webinterface_http_auth_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ispcpes/sagemcom/webinterface_http_auth_default_creds.py`
+  - `modules/creds/routers/sagemcom/webinterface_http_auth_default_creds.py`
+
+### samsung / ftp_default_creds
+
+- Totals: modules=3, exploits=0, creds=3, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/samsung/ftp_default_creds.py`
+  - `modules/creds/printers/samsung/ftp_default_creds.py`
+  - `modules/creds/routers/samsung/ftp_default_creds.py`
+
+### samsung / samsung_scx_cmd_injection_edb_40909
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2016-6556
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/samsung/samsung_scx_cmd_injection_edb_40909.py`
+
+### samsung / ssh_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/samsung/ssh_default_creds.py`
+  - `modules/creds/routers/samsung/ssh_default_creds.py`
+
+### samsung / telnet_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/samsung/telnet_default_creds.py`
+  - `modules/creds/routers/samsung/telnet_default_creds.py`
+
+### samsung / webinterface_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/smart_tv/samsung/webinterface_default_creds.py`
+
+### samsung / webinterface_http_auth_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/samsung/webinterface_http_auth_default_creds.py`
+  - `modules/creds/routers/samsung/webinterface_http_auth_default_creds.py`
+
+### samsung_gear / samsung_tizen_gear_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/wearables/samsung_gear/samsung_tizen_gear_rce.py`
+
+### samsung_magicinfo / auth_bypass_cve_2025_54452
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-54452
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/smart_tv/samsung_magicinfo/auth_bypass_cve_2025_54452.py`
+
+### samsung_magicinfo / db_hardcoded_cve_2026_25202
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-25202
+- Attack classes: none
+- Module paths:
+  - `modules/creds/smart_tv/samsung_magicinfo/db_hardcoded_cve_2026_25202.py`
+
+### samsung_magicinfo / default_perms_lpe_cve_2026_25203
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-25203
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/samsung_magicinfo/default_perms_lpe_cve_2026_25203.py`
+
+### samsung_magicinfo / file_upload_rce_cve_2026_25201
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-25201
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/smart_tv/samsung_magicinfo/file_upload_rce_cve_2026_25201.py`
+
+### samsung_magicinfo / file_write_cve_2025_4632
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-4632
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/samsung_magicinfo/file_write_cve_2025_4632.py`
+
+### samsung_magicinfo / hardcoded_creds_cve_2025_54454
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-54454
+- Attack classes: none
+- Module paths:
+  - `modules/creds/smart_tv/samsung_magicinfo/hardcoded_creds_cve_2025_54454.py`
+
+### samsung_magicinfo / xss_takeover_cve_2026_25200
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-25200
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/samsung_magicinfo/xss_takeover_cve_2026_25200.py`
+
+### samsung_magicinfo / xxe_ssrf_cve_2025_54445
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-54445
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/samsung_magicinfo/xxe_ssrf_cve_2025_54445.py`
+
+### samsung_smartthings / samsung_smartthings_rce_cve_2018_3911
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-3911
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/smart_home/samsung_smartthings/samsung_smartthings_rce_cve_2018_3911.py`
+
+### samsung_tizen / dos_allshare_cve_2012_4329
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2012-4329
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/smart_tv/samsung_tizen/dos_allshare_cve_2012_4329.py`
+
+### samsung_tizen / dos_webserver_cve_2013_4890
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2013-4890
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/smart_tv/samsung_tizen/dos_webserver_cve_2013_4890.py`
+
+### samsung_tizen / fota_rce_cve_2021_25436
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-25436
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/smart_tv/samsung_tizen/fota_rce_cve_2021_25436.py`
+
+### samsung_tizen / fota_rce_cve_2021_25437
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-25437
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/smart_tv/samsung_tizen/fota_rce_cve_2021_25437.py`
+
+### samsung_tizen / smarthub_token_replay_tizen_2026_005
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/samsung_tizen/smarthub_token_replay_tizen_2026_005.py`
+
+### samsung_tizen / smarthub_unauth_ctrl_tizen_2026_001
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/samsung_tizen/smarthub_unauth_ctrl_tizen_2026_001.py`
+
+### samsung_tizen / v8_vuln_checker_cve_2020_6383
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-6383
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/samsung_tizen/v8_vuln_checker_cve_2020_6383.py`
+
+### sangoma / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/sangoma/ssh_default_creds.py`
+
+### sangoma / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/sangoma/webinterface_http_auth_default_creds.py`
+
+### scada / fuxa_scheduler_rce_cve_2026_25939
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-25939
+- Attack classes: auth_bypass, rce
+- Module paths:
+  - `modules/exploits/ics/scada/fuxa_scheduler_rce_cve_2026_25939.py`
+
+### scada / laquis_arb_file_write_cve_2021_41579
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-41579
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/scada/laquis_arb_file_write_cve_2021_41579.py`
+
+### scadaflex / sc168_file_write_cve_2022_25359
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-25359
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/scadaflex/sc168_file_write_cve_2022_25359.py`
+
 ### scanners / autopwn
 
 - Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
@@ -5740,6 +20837,230 @@
 - Attack classes: none
 - Module paths:
   - `modules/scanners/autopwn.py`
+
+### schneider / connexium_ssh_hardcoded_cve_2017_6026
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-6026
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/schneider/connexium_ssh_hardcoded_cve_2017_6026.py`
+
+### schneider / modicon_modbus_control_cve_2018_7841
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-7841
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/schneider/modicon_modbus_control_cve_2018_7841.py`
+
+### schneider / net55xx_encoder_rce_cve_2018_7784
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-7784
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/ics/schneider/net55xx_encoder_rce_cve_2018_7784.py`
+
+### schneider / quantum_plc_control
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2012-6435
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/schneider/quantum_plc_control.py`
+
+### schneider / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/schneider/ssh_default_creds.py`
+
+### schneider / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/schneider/telnet_default_creds.py`
+
+### schneider / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/schneider/webinterface_http_auth_default_creds.py`
+
+### scientific_atlanta / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/scientific_atlanta/ftp_default_creds.py`
+
+### scientific_atlanta / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/scientific_atlanta/ssh_default_creds.py`
+
+### scientific_atlanta / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/scientific_atlanta/telnet_default_creds.py`
+
+### scientific_atlanta / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/scientific_atlanta/webinterface_http_auth_default_creds.py`
+
+### seagate / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/seagate/ftp_default_creds.py`
+
+### seagate / nas_php_exec_cve_2014_8684
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2014-8684, CVE-2014-8686, CVE-2014-8687
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/nas/seagate/nas_php_exec_cve_2014_8684.py`
+
+### seagate / seagate_nas_php_backdoor
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2014-4169, CVE-2014-8684
+- Attack classes: backdoor, rce
+- Module paths:
+  - `modules/exploits/routers/seagate/seagate_nas_php_backdoor.py`
+
+### seagate / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/seagate/ssh_default_creds.py`
+
+### seagate / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/seagate/webinterface_http_auth_default_creds.py`
+
+### secomea / gatemanager_rce_cve_2020_14500
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-14500
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/vpn/secomea/gatemanager_rce_cve_2020_14500.py`
+
+### senao / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/senao/ftp_default_creds.py`
+
+### senao / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/senao/ssh_default_creds.py`
+
+### senao / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/senao/telnet_default_creds.py`
+
+### senao / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/senao/webinterface_http_auth_default_creds.py`
+
+### sentry360 / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/sentry360/ftp_default_creds.py`
+
+### sentry360 / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/sentry360/ssh_default_creds.py`
+
+### sentry360 / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/sentry360/telnet_default_creds.py`
+
+### sercomm / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sercomm/ftp_default_creds.py`
+
+### sercomm / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sercomm/ssh_default_creds.py`
+
+### sercomm / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sercomm/telnet_default_creds.py`
+
+### sercomm / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sercomm/webinterface_http_auth_default_creds.py`
 
 ### sftp_bruteforce.py / sftp_bruteforce
 
@@ -5756,6 +21077,22 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/generic/sftp_default.py`
+
+### sharp / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/sharp/ftp_default_creds.py`
+
+### sharp / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/sharp/webinterface_http_auth_default_creds.py`
 
 ### shellshock.py / shellshock
 
@@ -5789,6 +21126,463 @@
 - Module paths:
   - `modules/exploits/routers/siemens/ccms2025_path_traversal.py`
 
+### siemens / cvms2025_credentials_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: creds_disclosure
+- Module paths:
+  - `modules/exploits/cameras/siemens/cvms2025_credentials_disclosure.py`
+
+### siemens / ftp_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/siemens/ftp_default_creds.py`
+  - `modules/creds/routers/siemens/ftp_default_creds.py`
+
+### siemens / profinet_set_ip
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/siemens/profinet_set_ip.py`
+
+### siemens / ruggedcom_web_rce_cve_2023_24845
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-24845
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/siemens/ruggedcom_web_rce_cve_2023_24845.py`
+
+### siemens / s7_1200_plc_control
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/siemens/s7_1200_plc_control.py`
+
+### siemens / s7_300_400_plc_control
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ics/siemens/s7_300_400_plc_control.py`
+
+### siemens / scalance_cmd_injection_cve_2023_44373
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-44373
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/siemens/scalance_cmd_injection_cve_2023_44373.py`
+
+### siemens / siemens_wincc_dcom_privesc
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-10929
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ot_iiot/siemens/siemens_wincc_dcom_privesc.py`
+
+### siemens / siemens_wincc_sqli_cve_2012_3015
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2012-3015
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/ot_iiot/siemens/siemens_wincc_sqli_cve_2012_3015.py`
+
+### siemens / siemens_wincc_unauth_rce_cve_2019_10929
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-10929
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/ot_iiot/siemens/siemens_wincc_unauth_rce_cve_2019_10929.py`
+
+### siemens / sinema_rc_path_traversal_cve_2022_32257
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-32257
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/firewalls/siemens/sinema_rc_path_traversal_cve_2022_32257.py`
+
+### siemens / siprotec_relay_dos_cve_2015_5374
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2015-5374
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/ics/siemens/siprotec_relay_dos_cve_2015_5374.py`
+
+### siemens / ssh_default_creds
+
+- Totals: modules=3, exploits=0, creds=3, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/siemens/ssh_default_creds.py`
+  - `modules/creds/ics/siemens/ssh_default_creds.py`
+  - `modules/creds/routers/siemens/ssh_default_creds.py`
+
+### siemens / telnet_default_creds
+
+- Totals: modules=3, exploits=0, creds=3, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/siemens/telnet_default_creds.py`
+  - `modules/creds/ics/siemens/telnet_default_creds.py`
+  - `modules/creds/routers/siemens/telnet_default_creds.py`
+
+### siemens / webinterface_http_auth_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/ics/siemens/webinterface_http_auth_default_creds.py`
+  - `modules/creds/routers/siemens/webinterface_http_auth_default_creds.py`
+
+### sierra_wireless / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sierra_wireless/ftp_default_creds.py`
+
+### sierra_wireless / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sierra_wireless/ssh_default_creds.py`
+
+### sierra_wireless / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sierra_wireless/telnet_default_creds.py`
+
+### sierra_wireless / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sierra_wireless/webinterface_http_auth_default_creds.py`
+
+### siklu / etherhaul_rce_cve_2025_57174
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-57174
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/siklu/etherhaul_rce_cve_2025_57174.py`
+
+### sitecom / dc227_backdoor_password
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/routers/sitecom/dc227_backdoor_password.py`
+
+### sitecom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sitecom/ftp_default_creds.py`
+
+### sitecom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sitecom/ssh_default_creds.py`
+
+### sitecom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sitecom/telnet_default_creds.py`
+
+### sitecom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sitecom/webinterface_http_auth_default_creds.py`
+
+### sitel / sitel_default_credentials
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/routers/sitel/sitel_default_credentials.py`
+
+### sky / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sky/ftp_default_creds.py`
+
+### sky / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sky/ssh_default_creds.py`
+
+### sky / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sky/telnet_default_creds.py`
+
+### sky / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sky/webinterface_http_auth_default_creds.py`
+
+### sma / sunny_webbox_sqli_cve_2019_13529
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-13529
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_meters/sma/sunny_webbox_sqli_cve_2019_13529.py`
+
+### smart_home / smart_home_assistant_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_home/smart_home_assistant_scan.py`
+
+### smart_meters / wattrout_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_meters/wattrout_discover.py`
+
+### smart_tv / adb_mass_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_tv/adb_mass_scan.py`
+
+### smart_tv / adb_tcpip_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_tv/adb_tcpip_discover.py`
+
+### smart_tv / bravia_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-16593
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_tv/bravia_discover.py`
+
+### smart_tv / bravia_upnp_audit
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-11889
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_tv/bravia_upnp_audit.py`
+
+### smart_tv / dial_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_tv/dial_discover.py`
+
+### smart_tv / firetv_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_tv/firetv_discover.py`
+
+### smart_tv / hbbtv_detect
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_tv/hbbtv_detect.py`
+
+### smart_tv / magicinfo_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-4632
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_tv/magicinfo_discover.py`
+
+### smart_tv / roku_ecp_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_tv/roku_ecp_discover.py`
+
+### smart_tv / smart_tv_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_tv/smart_tv_discover.py`
+
+### smart_tv / tizen_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_tv/tizen_discover.py`
+
+### smart_tv / vidaa_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_tv/vidaa_discover.py`
+
+### smart_tv / webos_discover
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/smart_tv/webos_discover.py`
+
+### smartrg / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/smartrg/ftp_default_creds.py`
+
+### smartrg / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/smartrg/ssh_default_creds.py`
+
+### smartrg / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/smartrg/telnet_default_creds.py`
+
+### smartrg / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/smartrg/webinterface_http_auth_default_creds.py`
+
+### smb / smb_share_enum
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/generic/smb/smb_share_enum.py`
+
+### smc / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/smc/ftp_default_creds.py`
+
+### smc / smc_config_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/smc/smc_config_disclosure.py`
+
+### smc / ssh_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/smc/ssh_default_creds.py`
+  - `modules/creds/switches/smc/ssh_default_creds.py`
+
+### smc / telnet_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/smc/telnet_default_creds.py`
+  - `modules/creds/switches/smc/telnet_default_creds.py`
+
+### smc / webinterface_http_auth_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/smc/webinterface_http_auth_default_creds.py`
+  - `modules/creds/switches/smc/webinterface_http_auth_default_creds.py`
+
 ### snmp / snmp_bruteforce
 
 - Totals: modules=1, exploits=0, creds=0, scanners=0, generic=1, payloads=0, encoders=0
@@ -5821,6 +21615,38 @@
 - Module paths:
   - `modules/creds/generic/snmpv3_default.py`
 
+### soho / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/soho/ftp_default_creds.py`
+
+### soho / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/soho/ssh_default_creds.py`
+
+### soho / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/soho/telnet_default_creds.py`
+
+### soho / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/soho/webinterface_http_auth_default_creds.py`
+
 ### soho_edge / hootoo_scan
 
 - Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
@@ -5828,6 +21654,38 @@
 - Attack classes: none
 - Module paths:
   - `modules/scanners/soho_edge/hootoo_scan.py`
+
+### solwise / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/solwise/ftp_default_creds.py`
+
+### solwise / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/solwise/ssh_default_creds.py`
+
+### solwise / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/solwise/telnet_default_creds.py`
+
+### solwise / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/solwise/webinterface_http_auth_default_creds.py`
 
 ### sonicwall / 8_1_0_2_14sv_extensionsettings_cgi_remote_command_injection_cve_2016_9683
 
@@ -5853,6 +21711,14 @@
 - Module paths:
   - `modules/exploits/routers/sonicwall/dell_scrutinizer_11_01_methoddetail_sql_injection_metasploit_cve_2014_4977.py`
 
+### sonicwall / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sonicwall/ftp_default_creds.py`
+
 ### sonicwall / netextender_10_2_0_300_unquoted_service_path_cve_2020_5147
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -5869,6 +21735,30 @@
 - Module paths:
   - `modules/exploits/routers/sonicwall/secure_remote_access_8_1_0_2_14sv_command_injection_cve_2016_9682.py`
 
+### sonicwall / sma100_preauth_rce_cve_2025_23006
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-23006
+- Attack classes: auth_bypass, rce
+- Module paths:
+  - `modules/exploits/vpn/sonicwall/sma100_preauth_rce_cve_2025_23006.py`
+
+### sonicwall / sma100_sqli_cve_2021_20016
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-20016
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/sonicwall/sma100_sqli_cve_2021_20016.py`
+
+### sonicwall / sma100_stack_overflow_cve_2021_20038
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-20038
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/network_os/sonicwall/sma100_stack_overflow_cve_2021_20038.py`
+
 ### sonicwall / sma_10_2_1_0_17sv_password_reset_cve_2021_20034
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -5877,6 +21767,14 @@
 - Module paths:
   - `modules/exploits/routers/sonicwall/sma_10_2_1_0_17sv_password_reset_cve_2021_20034.py`
 
+### sonicwall / sma_password_reset_cve_2021_20034
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-20034
+- Attack classes: password_reset_or_change
+- Module paths:
+  - `modules/exploits/firewalls/sonicwall/sma_password_reset_cve_2021_20034.py`
+
 ### sonicwall / sonicos_7_0_host_header_injection_cve_2021_20031
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -5884,6 +21782,288 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/sonicwall/sonicos_7_0_host_header_injection_cve_2021_20031.py`
+
+### sonicwall / sonicos_sslvpn_access_cve_2024_40766
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-40766
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/sonicwall/sonicos_sslvpn_access_cve_2024_40766.py`
+
+### sonicwall / sonicos_sslvpn_auth_bypass_cve_2024_53700
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-53700, CVE-2025-23006
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/firewalls/sonicwall/sonicos_sslvpn_auth_bypass_cve_2024_53700.py`
+
+### sonicwall / sonicos_sslvpn_auth_bypass_cve_2024_53704
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-53704
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/firewalls/sonicwall/sonicos_sslvpn_auth_bypass_cve_2024_53704.py`
+
+### sonicwall / sonicos_vpn_buffer_overflow_cve_2020_5135
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-5135
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/sonicwall/sonicos_vpn_buffer_overflow_cve_2020_5135.py`
+
+### sonicwall / ssh_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/sonicwall/ssh_default_creds.py`
+  - `modules/creds/routers/sonicwall/ssh_default_creds.py`
+
+### sonicwall / sslvpn_shellshock_rce_visualdoor
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2014-6271
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/sonicwall/sslvpn_shellshock_rce_visualdoor.py`
+
+### sonicwall / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sonicwall/telnet_default_creds.py`
+
+### sonicwall / webinterface_http_auth_default_creds
+
+- Totals: modules=2, exploits=0, creds=2, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/sonicwall/webinterface_http_auth_default_creds.py`
+  - `modules/creds/routers/sonicwall/webinterface_http_auth_default_creds.py`
+
+### sony / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/sony/ftp_default_creds.py`
+
+### sony / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/sony/ssh_default_creds.py`
+
+### sony / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/sony/telnet_default_creds.py`
+
+### sony / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/sony/webinterface_http_auth_default_creds.py`
+
+### sony_bravia / photo_sharing_rce_cve_2018_16593
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-16593
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/smart_tv/sony_bravia/photo_sharing_rce_cve_2018_16593.py`
+
+### sony_bravia / photo_sharing_traversal_cve_2018_16594
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-16594
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/sony_bravia/photo_sharing_traversal_cve_2018_16594.py`
+
+### sony_bravia / upnp_av_transport_ssrf
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/sony_bravia/upnp_av_transport_ssrf.py`
+
+### sony_bravia / upnp_unauth_volume_control
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/sony_bravia/upnp_unauth_volume_control.py`
+
+### sony_bravia / wifi_password_disclosure_cve_2019_11336
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-11336
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/sony_bravia/wifi_password_disclosure_cve_2019_11336.py`
+
+### sophos / firewall_code_injection_cve_2022_3236
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-3236
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/sophos/firewall_code_injection_cve_2022_3236.py`
+
+### sophos / xg_auth_bypass_cve_2022_1040
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-1040
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/firewalls/sophos/xg_auth_bypass_cve_2022_1040.py`
+
+### sophos / xg_sqli_asnarok_cve_2020_12271
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-12271
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/sophos/xg_sqli_asnarok_cve_2020_12271.py`
+
+### sparkcom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sparkcom/ftp_default_creds.py`
+
+### sparkcom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sparkcom/ssh_default_creds.py`
+
+### sparkcom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sparkcom/telnet_default_creds.py`
+
+### sparkcom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sparkcom/webinterface_http_auth_default_creds.py`
+
+### speco / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/speco/ftp_default_creds.py`
+
+### speco / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/speco/ssh_default_creds.py`
+
+### speco / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/speco/telnet_default_creds.py`
+
+### spectrum / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/spectrum/ftp_default_creds.py`
+
+### spectrum / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/spectrum/ssh_default_creds.py`
+
+### spectrum / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/spectrum/telnet_default_creds.py`
+
+### spectrum / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/spectrum/webinterface_http_auth_default_creds.py`
+
+### speedcom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/speedcom/ftp_default_creds.py`
+
+### speedcom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/speedcom/ssh_default_creds.py`
+
+### speedcom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/speedcom/telnet_default_creds.py`
+
+### speedcom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/speedcom/webinterface_http_auth_default_creds.py`
 
 ### ssh_auth_keys.py / ssh_auth_keys
 
@@ -5908,6 +22088,278 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/generic/ssh_default.py`
+
+### starbridge / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/starbridge/ftp_default_creds.py`
+
+### starbridge / lynx526_password_reset
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: password_reset_or_change
+- Module paths:
+  - `modules/exploits/routers/starbridge/lynx526_password_reset.py`
+
+### starbridge / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/starbridge/ssh_default_creds.py`
+
+### starbridge / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/starbridge/telnet_default_creds.py`
+
+### starbridge / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/starbridge/webinterface_http_auth_default_creds.py`
+
+### stardot / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/stardot/ftp_default_creds.py`
+
+### stardot / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/stardot/ssh_default_creds.py`
+
+### stardot / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/stardot/telnet_default_creds.py`
+
+### supermicro / ipmi_auth_bypass_cve_2013_4786
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2013-4786
+- Attack classes: auth_bypass, info_disclosure
+- Module paths:
+  - `modules/exploits/bmc/supermicro/ipmi_auth_bypass_cve_2013_4786.py`
+
+### supra / smart_cloud_tv_rfi_cve_2019_12477
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-12477
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/supra/smart_cloud_tv_rfi_cve_2019_12477.py`
+
+### surecom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/surecom/ftp_default_creds.py`
+
+### surecom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/surecom/ssh_default_creds.py`
+
+### surecom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/surecom/telnet_default_creds.py`
+
+### surecom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/surecom/webinterface_http_auth_default_creds.py`
+
+### swann / swann_dvr_nvr_default_creds_rtsp
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/cameras/swann/swann_dvr_nvr_default_creds_rtsp.py`
+
+### sweex / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sweex/ftp_default_creds.py`
+
+### sweex / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sweex/ssh_default_creds.py`
+
+### sweex / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sweex/telnet_default_creds.py`
+
+### sweex / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/sweex/webinterface_http_auth_default_creds.py`
+
+### synology / dsm_smart_cgi_rce_cve_2017_15889
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-15889
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/nas/synology/dsm_smart_cgi_rce_cve_2017_15889.py`
+
+### synology / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/synology/ftp_default_creds.py`
+
+### synology / netatalk_rce_cve_2021_31439
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-31439
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/nas/synology/netatalk_rce_cve_2021_31439.py`
+
+### synology / srm_ddns_cmd_injection_cve_2024_53286
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-53286
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/synology/srm_ddns_cmd_injection_cve_2024_53286.py`
+
+### synology / srm_otp_traversal_cve_2024_11398
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-11398
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/synology/srm_otp_traversal_cve_2024_11398.py`
+
+### synology / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/synology/ssh_default_creds.py`
+
+### synology / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/synology/webinterface_http_auth_default_creds.py`
+
+### tactio / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tactio/ftp_default_creds.py`
+
+### tactio / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tactio/ssh_default_creds.py`
+
+### tactio / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tactio/telnet_default_creds.py`
+
+### tactio / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tactio/webinterface_http_auth_default_creds.py`
+
+### tandberg / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/tandberg/ssh_default_creds.py`
+
+### tandberg / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/tandberg/telnet_default_creds.py`
+
+### tandberg / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/voip/tandberg/webinterface_http_auth_default_creds.py`
+
+### tapo / tapo_c200_c210_unauth_rce_cve_2021_4045
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-4045
+- Attack classes: auth_bypass, rce
+- Module paths:
+  - `modules/exploits/cameras/tapo/tapo_c200_c210_unauth_rce_cve_2021_4045.py`
 
 ### tcp_xmas.py / tcp_xmas
 
@@ -6013,6 +22465,134 @@
 - Module paths:
   - `modules/exploits/routers/technicolor/xfinity_gateway_dpc3941t_cross_site_request_forgery_cve_2016_7454.py`
 
+### tecom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tecom/ftp_default_creds.py`
+
+### tecom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tecom/ssh_default_creds.py`
+
+### tecom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tecom/telnet_default_creds.py`
+
+### tecom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tecom/webinterface_http_auth_default_creds.py`
+
+### telewell / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telewell/ftp_default_creds.py`
+
+### telewell / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telewell/ssh_default_creds.py`
+
+### telewell / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telewell/telnet_default_creds.py`
+
+### telewell / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telewell/webinterface_http_auth_default_creds.py`
+
+### telindus / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telindus/ftp_default_creds.py`
+
+### telindus / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telindus/ssh_default_creds.py`
+
+### telindus / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telindus/telnet_default_creds.py`
+
+### telindus / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telindus/webinterface_http_auth_default_creds.py`
+
+### telkom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telkom/ftp_default_creds.py`
+
+### telkom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telkom/ssh_default_creds.py`
+
+### telkom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telkom/telnet_default_creds.py`
+
+### telkom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telkom/webinterface_http_auth_default_creds.py`
+
 ### telnet_bruteforce.py / telnet_bruteforce
 
 - Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
@@ -6028,6 +22608,134 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/generic/telnet_default.py`
+
+### telsey / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telsey/ftp_default_creds.py`
+
+### telsey / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telsey/ssh_default_creds.py`
+
+### telsey / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telsey/telnet_default_creds.py`
+
+### telsey / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telsey/webinterface_http_auth_default_creds.py`
+
+### telstra / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telstra/ftp_default_creds.py`
+
+### telstra / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telstra/ssh_default_creds.py`
+
+### telstra / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telstra/telnet_default_creds.py`
+
+### telstra / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telstra/webinterface_http_auth_default_creds.py`
+
+### teltonika / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/teltonika/ftp_default_creds.py`
+
+### teltonika / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/teltonika/ssh_default_creds.py`
+
+### teltonika / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/teltonika/telnet_default_creds.py`
+
+### teltonika / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/teltonika/webinterface_http_auth_default_creds.py`
+
+### telus / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telus/ftp_default_creds.py`
+
+### telus / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telus/ssh_default_creds.py`
+
+### telus / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telus/telnet_default_creds.py`
+
+### telus / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/telus/webinterface_http_auth_default_creds.py`
 
 ### tenda / ac15_router_remote_code_execution_cve_2018_5767
 
@@ -6053,6 +22761,14 @@
 - Module paths:
   - `modules/exploits/routers/tenda/ac5_ac1200_wireless_wifi_name_password_stored_cross_site_scr_cve_2021_3186.py`
 
+### tenda / ac_stack_overflow_cve_2024_2856
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-2856
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/routers/tenda/ac_stack_overflow_cve_2024_2856.py`
+
 ### tenda / adsl_router_d152_cross_site_scripting_cve_2018_14497
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6077,6 +22793,30 @@
 - Module paths:
   - `modules/exploits/routers/tenda/fh451_1_0_0_9_router_stack_based_buffer_overflow_cve_2025_7795.py`
 
+### tenda / fh451_stack_bof_cve_2025_7795
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-7795
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/tenda/fh451_stack_bof_cve_2025_7795.py`
+
+### tenda / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tenda/ftp_default_creds.py`
+
+### tenda / g300f_rce_cve_2026_25857
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-25857
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/tenda/g300f_rce_cve_2026_25857.py`
+
 ### tenda / n300_f3_12_01_01_48_malformed_http_request_header_processing_cve_2020_35391
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6085,6 +22825,38 @@
 - Module paths:
   - `modules/exploits/routers/tenda/n300_f3_12_01_01_48_malformed_http_request_header_processing_cve_2020_35391.py`
 
+### tenda / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tenda/ssh_default_creds.py`
+
+### tenda / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tenda/telnet_default_creds.py`
+
+### tenda / w15e_config_download_cve_2026_30140
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-30140
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/tenda/w15e_config_download_cve_2026_30140.py`
+
+### tenda / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tenda/webinterface_http_auth_default_creds.py`
+
 ### tenda / wireless_n150_router_5_07_50_cross_site_request_forgery_rebo_cve_2015_5996
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6092,6 +22864,62 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/tenda/wireless_n150_router_5_07_50_cross_site_request_forgery_rebo_cve_2015_5996.py`
+
+### teracom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/teracom/ftp_default_creds.py`
+
+### teracom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/teracom/ssh_default_creds.py`
+
+### teracom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/teracom/telnet_default_creds.py`
+
+### teracom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/teracom/webinterface_http_auth_default_creds.py`
+
+### thermostat / bosch_bcc100_rce_cve_2023_49722
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-49722
+- Attack classes: backdoor, rce
+- Module paths:
+  - `modules/exploits/specialized/thermostat/bosch_bcc100_rce_cve_2023_49722.py`
+
+### thermostat / ecobee3_unauth_api_cve_2020_10623
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-10623
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/specialized/thermostat/ecobee3_unauth_api_cve_2020_10623.py`
+
+### thermostat / radio_thermostat_unauth_setpoint
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/specialized/thermostat/radio_thermostat_unauth_setpoint.py`
 
 ### thomson / ftp_default_creds
 
@@ -6141,6 +22969,246 @@
 - Module paths:
   - `modules/exploits/routers/thomson/twg850_password_disclosure.py`
 
+### thomson_alcatel / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/thomson_alcatel/ftp_default_creds.py`
+
+### thomson_alcatel / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/thomson_alcatel/ssh_default_creds.py`
+
+### thomson_alcatel / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/thomson_alcatel/telnet_default_creds.py`
+
+### thomson_alcatel / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/thomson_alcatel/webinterface_http_auth_default_creds.py`
+
+### threat_detection / botnet_c2_port_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2013-0230, CVE-2016-10372, CVE-2017-17215
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/threat_detection/botnet_c2_port_scan.py`
+
+### threat_detection / gpon_exploitation_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-10561, CVE-2018-10562
+- Attack classes: rce
+- Module paths:
+  - `modules/scanners/threat_detection/gpon_exploitation_scan.py`
+
+### threat_detection / mirai_c2_beacon_detect
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/threat_detection/mirai_c2_beacon_detect.py`
+
+### threat_detection / mirai_default_creds_sweep
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/threat_detection/mirai_default_creds_sweep.py`
+
+### threat_detection / mirai_infection_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/threat_detection/mirai_infection_scan.py`
+
+### threat_detection / mozi_dht_presence_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/threat_detection/mozi_dht_presence_scan.py`
+
+### tilgin / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tilgin/ftp_default_creds.py`
+
+### tilgin / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tilgin/ssh_default_creds.py`
+
+### tilgin / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tilgin/telnet_default_creds.py`
+
+### tilgin / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tilgin/webinterface_http_auth_default_creds.py`
+
+### topcom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/topcom/ftp_default_creds.py`
+
+### topcom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/topcom/ssh_default_creds.py`
+
+### topcom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/topcom/telnet_default_creds.py`
+
+### topcom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/topcom/webinterface_http_auth_default_creds.py`
+
+### tornado / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tornado/ftp_default_creds.py`
+
+### tornado / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tornado/ssh_default_creds.py`
+
+### tornado / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tornado/telnet_default_creds.py`
+
+### tornado / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tornado/webinterface_http_auth_default_creds.py`
+
+### toshiba / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/toshiba/ftp_default_creds.py`
+
+### toshiba / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/toshiba/webinterface_http_auth_default_creds.py`
+
+### tot / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tot/ftp_default_creds.py`
+
+### tot / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tot/ssh_default_creds.py`
+
+### tot / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tot/telnet_default_creds.py`
+
+### tot / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tot/webinterface_http_auth_default_creds.py`
+
+### totolink / a7000r_cmd_injection_cve_2026_1623
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-1623
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/totolink/a7000r_cmd_injection_cve_2026_1623.py`
+
+### totolink / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/totolink/ftp_default_creds.py`
+
 ### totolink / n300rb_8_54_command_execution_cve_2025_52089
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6149,6 +23217,70 @@
 - Module paths:
   - `modules/exploits/routers/totolink/n300rb_8_54_command_execution_cve_2025_52089.py`
 
+### totolink / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/totolink/ssh_default_creds.py`
+
+### totolink / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/totolink/telnet_default_creds.py`
+
+### totolink / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/totolink/webinterface_http_auth_default_creds.py`
+
+### tp_link / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tp_link/ftp_default_creds.py`
+
+### tp_link / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tp_link/ssh_default_creds.py`
+
+### tp_link / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tp_link/telnet_default_creds.py`
+
+### tp_link / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/tp_link/webinterface_http_auth_default_creds.py`
+
+### tplink / apt28_full_chain_autopwn
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-50224, CVE-2025-9377
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/tplink/apt28_full_chain_autopwn.py`
+
 ### tplink / archer_a7_c7_unauthenticated_lan_remote_code_execution_metas_cve_2020_10882
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6156,6 +23288,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/tplink/archer_a7_c7_unauthenticated_lan_remote_code_execution_metas_cve_2020_10882.py`
+
+### tplink / archer_ax21_cmd_injection_cve_2023_1389
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-1389
+- Attack classes: dos_or_crash, rce
+- Module paths:
+  - `modules/exploits/routers/tplink/archer_ax21_cmd_injection_cve_2023_1389.py`
 
 ### tplink / archer_ax21_rce
 
@@ -6172,6 +23312,38 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/tplink/archer_ax21_unauthenticated_command_injection_cve_2023_1389.py`
+
+### tplink / archer_ax50_backup_rce_cve_2022_30075
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-30075
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/tplink/archer_ax50_backup_rce_cve_2022_30075.py`
+
+### tplink / archer_ax50_bof_cve_2025_40634
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-40634
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/routers/tplink/archer_ax50_bof_cve_2025_40634.py`
+
+### tplink / archer_be230_auth_cmd_injection_cve_2026_0630
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-0630
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/tplink/archer_be230_auth_cmd_injection_cve_2026_0630.py`
+
+### tplink / archer_c20_auth_bypass_cve_2024_57049
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-57049
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/routers/tplink/archer_c20_auth_bypass_cve_2024_57049.py`
 
 ### tplink / archer_c2_c20i_rce
 
@@ -6205,6 +23377,14 @@
 - Module paths:
   - `modules/exploits/routers/tplink/archer_c7_netusb_rce_cve_2022_24354.py`
 
+### tplink / archer_c7_rce_cve_2025_9377
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-9377
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/tplink/archer_c7_rce_cve_2025_9377.py`
+
 ### tplink / archer_c9_admin_password_reset
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6212,6 +23392,22 @@
 - Attack classes: password_reset_or_change
 - Module paths:
   - `modules/exploits/routers/tplink/archer_c9_admin_password_reset.py`
+
+### tplink / archer_mr600_cmd_injection_cve_2025_14756
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-14756
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/tplink/archer_mr600_cmd_injection_cve_2025_14756.py`
+
+### tplink / archer_nx_missing_auth_cve_2025_15517
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-15517
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/tplink/archer_nx_missing_auth_cve_2025_15517.py`
 
 ### tplink / ax50_rce
 
@@ -6221,6 +23417,14 @@
 - Module paths:
   - `modules/exploits/routers/tplink/ax50_rce.py`
 
+### tplink / er605_cmd_injection_cve_2025_7850
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-7850
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/tplink/er605_cmd_injection_cve_2025_7850.py`
+
 ### tplink / ftp_default_creds
 
 - Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
@@ -6228,6 +23432,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/routers/tplink/ftp_default_creds.py`
+
+### tplink / multi_dns_hijack_apt28
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/tplink/multi_dns_hijack_apt28.py`
 
 ### tplink / router_ax50_firmware_210730_remote_code_execution_rce_authen_cve_2022_30075
 
@@ -6252,6 +23464,14 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/tplink/tapo_c200_1_1_15_remote_code_execution_rce_cve_2021_4045.py`
+
+### tplink / td_8840t_password_reset
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: password_reset_or_change
+- Module paths:
+  - `modules/exploits/routers/tplink/td_8840t_password_reset.py`
 
 ### tplink / telnet_default_creds
 
@@ -6293,6 +23513,22 @@
 - Module paths:
   - `modules/exploits/routers/tplink/tl_wr1043nd_2_authentication_bypass_cve_2019_6971.py`
 
+### tplink / tl_wr820n_ssh_weak_crypto_cve_2025_14175
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2025-14175
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/tplink/tl_wr820n_ssh_weak_crypto_cve_2025_14175.py`
+
+### tplink / tl_wr840n_841n_cmd_injection_cve_2022_26186
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-26186, CVE-2022-26258, CVE-2023-50224
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/tplink/tl_wr840n_841n_cmd_injection_cve_2022_26186.py`
+
 ### tplink / tl_wr840n_denial_of_service_cve_2018_14336
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6300,6 +23536,14 @@
 - Attack classes: dos_or_crash
 - Module paths:
   - `modules/exploits/routers/tplink/tl_wr840n_denial_of_service_cve_2018_14336.py`
+
+### tplink / tl_wr840n_ipv6_cmd_injection_cve_2022_25061
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-25061
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/tplink/tl_wr840n_ipv6_cmd_injection_cve_2022_25061.py`
 
 ### tplink / tl_wr840n_v5_00000005_cross_site_scripting_cve_2019_12195
 
@@ -6357,6 +23601,14 @@
 - Module paths:
   - `modules/exploits/routers/tplink/tp_sg105e_1_0_0_unauthenticated_remote_reboot_cve_2019_16893.py`
 
+### tplink / vn020_dhcp_overflow_cve_2024_11237
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-11237
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/tplink/vn020_dhcp_overflow_cve_2024_11237.py`
+
 ### tplink / vn020_f3v_t_tt_v6_2_1021_buffer_overflow_memory_corruption_cve_2024_12344
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6381,6 +23633,22 @@
 - Module paths:
   - `modules/exploits/routers/tplink/vn020_f3v_t_tt_v6_2_1021_dhcp_stack_buffer_overflow_cve_2024_11237.py`
 
+### tplink / vn020_ftp_overflow_cve_2024_12344
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-12344
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/routers/tplink/vn020_ftp_overflow_cve_2024_12344.py`
+
+### tplink / vn020_upnp_dos_edb_52250
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/routers/tplink/vn020_upnp_dos_edb_52250.py`
+
 ### tplink / wdr4300_remote_code_execution_authenticated_cve_2017_13772
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6396,6 +23664,14 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/tplink/wdr5620_cmd_injection.py`
+
+### tplink / wdr5620_command_injection
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/tplink/wdr5620_command_injection.py`
 
 ### tplink / wdr740nd_wdr740n_backdoor
 
@@ -6445,6 +23721,22 @@
 - Module paths:
   - `modules/exploits/routers/tplink/wr840n_0_9_1_3_16_denial_of_service_poc_cve_2018_15172.py`
 
+### tplink / wr841n_credential_disclosure_cve_2023_50224
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-50224
+- Attack classes: creds_disclosure
+- Module paths:
+  - `modules/exploits/routers/tplink/wr841n_credential_disclosure_cve_2023_50224.py`
+
+### tplink / wr841n_parental_control_rce_cve_2025_9377
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-50224, CVE-2025-9377
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/tplink/wr841n_parental_control_rce_cve_2025_9377.py`
+
 ### tplink / wr841nd_password_disclosure_cve_2020_35575
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6477,6 +23769,14 @@
 - Module paths:
   - `modules/exploits/routers/tplink/wr849n_traceroute_rce.py`
 
+### tplink / wr940n_740n_841n_ssid_cmd_injection_cve_2023_33538
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-33538
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/tplink/wr940n_740n_841n_ssid_cmd_injection_cve_2023_33538.py`
+
 ### tplink / wr940n_authenticated_remote_code_cve_2017_13772
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6492,6 +23792,86 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/tplink/wvr_war_diagnostic_rce_cve_2017_16957.py`
+
+### tplink_firmware_flash.py / tplink_firmware_flash
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-41450
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firmware/tplink_firmware_flash.py`
+
+### trendchip / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/trendchip/ftp_default_creds.py`
+
+### trendchip / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/trendchip/ssh_default_creds.py`
+
+### trendchip / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/trendchip/telnet_default_creds.py`
+
+### trendchip / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/trendchip/webinterface_http_auth_default_creds.py`
+
+### trendnet / camera_mjpeg_unauth
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/trendnet/camera_mjpeg_unauth.py`
+
+### trendnet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/trendnet/ftp_default_creds.py`
+
+### trendnet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/trendnet/ssh_default_creds.py`
+
+### trendnet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/trendnet/telnet_default_creds.py`
+
+### trendnet / tew827_backdoor_password
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: backdoor
+- Module paths:
+  - `modules/exploits/routers/trendnet/tew827_backdoor_password.py`
 
 ### trendnet / tew827dru_cmd_injection_cve_2019_13276
 
@@ -6557,6 +23937,102 @@
 - Module paths:
   - `modules/exploits/routers/trendnet/tew_827dru_ping_command_injection_cve_2019_13150.py`
 
+### trendnet / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/trendnet/webinterface_http_auth_default_creds.py`
+
+### trust / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/trust/ftp_default_creds.py`
+
+### trust / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/trust/ssh_default_creds.py`
+
+### trust / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/trust/telnet_default_creds.py`
+
+### trust / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/trust/webinterface_http_auth_default_creds.py`
+
+### tuya_arduino_dns_bof_cve_2026_28519.py / tuya_arduino_dns_bof_cve_2026_28519
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-28519
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/embedded_os/tuya_arduino_dns_bof_cve_2026_28519.py`
+
+### uart_shell_detect.py / uart_shell_detect
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/lateral/uart_shell_detect.py`
+
+### ubee / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ubee/ftp_default_creds.py`
+
+### ubee / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ubee/ssh_default_creds.py`
+
+### ubee / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ubee/telnet_default_creds.py`
+
+### ubee / ubee_cablemas_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/ubee/ubee_cablemas_bypass.py`
+
+### ubee / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/ubee/webinterface_http_auth_default_creds.py`
+
 ### ubiquiti / airos_6_x
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6564,6 +24040,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/ubiquiti/airos_6_x.py`
+
+### ubiquiti / airos_pre_auth_command_execution
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/ubiquiti/airos_pre_auth_command_execution.py`
 
 ### ubiquiti / ftp_default_creds
 
@@ -6605,6 +24089,22 @@
 - Module paths:
   - `modules/generic/udp_amplification.py`
 
+### unicorn / wb3300nr_factory_reset
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/unicorn/wb3300nr_factory_reset.py`
+
+### uniview / uniview_nvr_unauth_rce_cve_2024_37630
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-37630
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/uniview/uniview_nvr_unauth_rce_cve_2024_37630.py`
+
 ### upnp / igd_exploit
 
 - Totals: modules=1, exploits=0, creds=0, scanners=0, generic=1, payloads=0, encoders=0
@@ -6620,6 +24120,487 @@
 - Attack classes: none
 - Module paths:
   - `modules/generic/upnp/ssdp_msearch.py`
+
+### ur_polyscope5_dashboard_cmd_injection_cve_2026_8153.py / ur_polyscope5_dashboard_cmd_injection_cve_2026_8153
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-8153
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/ics/ur_polyscope5_dashboard_cmd_injection_cve_2026_8153.py`
+
+### utstarcom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/utstarcom/ftp_default_creds.py`
+
+### utstarcom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/utstarcom/ssh_default_creds.py`
+
+### utstarcom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/utstarcom/telnet_default_creds.py`
+
+### utstarcom / utstar_ppp_password_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/utstarcom/utstar_ppp_password_disclosure.py`
+
+### utstarcom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/utstarcom/webinterface_http_auth_default_creds.py`
+
+### v_link / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/v_link/ftp_default_creds.py`
+
+### v_link / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/v_link/ssh_default_creds.py`
+
+### v_link / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/v_link/telnet_default_creds.py`
+
+### v_link / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/v_link/webinterface_http_auth_default_creds.py`
+
+### vacron / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/vacron/ftp_default_creds.py`
+
+### vacron / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/vacron/ssh_default_creds.py`
+
+### vacron / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/vacron/telnet_default_creds.py`
+
+### vehicles / jeep_uconnect_can_inject_cve_2015_5611
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2015-5600, CVE-2015-5611
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/specialized/vehicles/jeep_uconnect_can_inject_cve_2015_5611.py`
+
+### vehicles / mercedes_mbux_bt_rce_cve_2023_37462
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-37462
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/specialized/vehicles/mercedes_mbux_bt_rce_cve_2023_37462.py`
+
+### vehicles / obd2_can_generic_inject
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/specialized/vehicles/obd2_can_generic_inject.py`
+
+### verizon / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/verizon/ftp_default_creds.py`
+
+### verizon / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/verizon/ssh_default_creds.py`
+
+### verizon / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/verizon/telnet_default_creds.py`
+
+### verizon / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/verizon/webinterface_http_auth_default_creds.py`
+
+### versa / versa_director_file_upload_cve_2024_39717
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-39717
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/sdwan/versa/versa_director_file_upload_cve_2024_39717.py`
+
+### videoiq / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/videoiq/ftp_default_creds.py`
+
+### videoiq / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/videoiq/ssh_default_creds.py`
+
+### videoiq / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/videoiq/telnet_default_creds.py`
+
+### visionnet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/visionnet/ftp_default_creds.py`
+
+### visionnet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/visionnet/ssh_default_creds.py`
+
+### visionnet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/visionnet/telnet_default_creds.py`
+
+### visionnet / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/visionnet/webinterface_http_auth_default_creds.py`
+
+### vivotek / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/vivotek/ftp_default_creds.py`
+
+### vivotek / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/vivotek/ssh_default_creds.py`
+
+### vivotek / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/vivotek/telnet_default_creds.py`
+
+### vivotek / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/vivotek/webinterface_http_auth_default_creds.py`
+
+### vizio / smartcast_pin_bruteforce_cve_2021_27943
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-27943
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/smart_tv/vizio/smartcast_pin_bruteforce_cve_2021_27943.py`
+
+### vizio / smartcast_rce_cve_2021_27944
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-27944
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/smart_tv/vizio/smartcast_rce_cve_2021_27944.py`
+
+### vodafone / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/vodafone/ftp_default_creds.py`
+
+### vodafone / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/vodafone/ssh_default_creds.py`
+
+### vodafone / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/vodafone/telnet_default_creds.py`
+
+### vodafone / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/vodafone/webinterface_http_auth_default_creds.py`
+
+### vonage / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/vonage/ftp_default_creds.py`
+
+### vonage / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/vonage/ssh_default_creds.py`
+
+### vonage / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/vonage/telnet_default_creds.py`
+
+### vonage / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/vonage/webinterface_http_auth_default_creds.py`
+
+### vtech / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/vtech/ftp_default_creds.py`
+
+### vtech / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/vtech/ssh_default_creds.py`
+
+### vtech / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/vtech/telnet_default_creds.py`
+
+### vtech / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/vtech/webinterface_http_auth_default_creds.py`
+
+### vxworks / vxworks_dhcp_oob_rce_cve_2019_12261
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-12261
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/embedded_os/vxworks/vxworks_dhcp_oob_rce_cve_2019_12261.py`
+
+### vxworks / vxworks_rpc_dos
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2010-2967, CVE-2015-7599
+- Attack classes: dos_or_crash
+- Module paths:
+  - `modules/exploits/ics/vxworks/vxworks_rpc_dos.py`
+
+### vxworks / vxworks_tcp_opts_oob_cve_2019_12259
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-12259
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/vxworks/vxworks_tcp_opts_oob_cve_2019_12259.py`
+
+### vxworks / vxworks_urgent11_rce_cve_2019_12255
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2019-12255
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/embedded_os/vxworks/vxworks_urgent11_rce_cve_2019_12255.py`
+
+### waf / esg_cmd_injection_cve_2023_2868
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-2868
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/waf/barracuda/esg_cmd_injection_cve_2023_2868.py`
+
+### waf / esg_spreadsheet_rce_cve_2023_7102
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-7102
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/waf/barracuda/esg_spreadsheet_rce_cve_2023_7102.py`
+
+### waf / securesphere_sqli_cve_2013_xxxx
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/waf/imperva/securesphere_sqli_cve_2013_xxxx.py`
+
+### watchguard / firebox_auth_bypass_cve_2022_26776
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-26776
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/firewalls/watchguard/firebox_auth_bypass_cve_2022_26776.py`
+
+### watchguard / firebox_cyclops_blink_cve_2022_23176
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-23176
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/watchguard/firebox_cyclops_blink_cve_2022_23176.py`
+
+### watchguard / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/watchguard/ssh_default_creds.py`
+
+### watchguard / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/firewalls/watchguard/webinterface_http_auth_default_creds.py`
+
+### watchguard / xcs_9_rce
+
+- Totals: modules=2, exploits=2, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/watchguard/xcs_9_rce.py`
+  - `modules/exploits/misc/watchguard/xcs_9_rce.py`
+
+### wattrout / webinterface_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/smart_meters/wattrout/webinterface_default_creds.py`
+
+### wattrout / webinterface_info_disclosure
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: info_disclosure
+- Module paths:
+  - `modules/exploits/smart_meters/wattrout/webinterface_info_disclosure.py`
 
 ### wavlink / wn530hg4_password_disclosure_cve_2022_34047
 
@@ -6644,6 +24625,190 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/wavlink/wn533a8_password_disclosure_cve_2022_34046.py`
+
+### wd / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/wd/ftp_default_creds.py`
+
+### wd / mycloud_auth_bypass_cve_2018_18472
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-18472
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/nas/wd/mycloud_auth_bypass_cve_2018_18472.py`
+
+### wd / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/wd/ssh_default_creds.py`
+
+### wd / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/nas/wd/webinterface_http_auth_default_creds.py`
+
+### wearables / wearable_ble_scan
+
+- Totals: modules=1, exploits=0, creds=0, scanners=1, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/scanners/wearables/wearable_ble_scan.py`
+
+### web_excel / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/web_excel/ftp_default_creds.py`
+
+### web_excel / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/web_excel/ssh_default_creds.py`
+
+### web_excel / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/web_excel/telnet_default_creds.py`
+
+### web_excel / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/web_excel/webinterface_http_auth_default_creds.py`
+
+### wepresent / wipg1000_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/misc/wepresent/wipg1000_rce.py`
+
+### westell / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/westell/ftp_default_creds.py`
+
+### westell / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/westell/ssh_default_creds.py`
+
+### westell / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/westell/telnet_default_creds.py`
+
+### westell / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/westell/webinterface_http_auth_default_creds.py`
+
+### western_digital / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/western_digital/ftp_default_creds.py`
+
+### western_digital / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/western_digital/ssh_default_creds.py`
+
+### western_digital / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/western_digital/telnet_default_creds.py`
+
+### western_digital / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/western_digital/webinterface_http_auth_default_creds.py`
+
+### wodsee / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/wodsee/ftp_default_creds.py`
+
+### wodsee / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/wodsee/ssh_default_creds.py`
+
+### wodsee / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/wodsee/telnet_default_creds.py`
+
+### wodsee / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/cameras/wodsee/webinterface_http_auth_default_creds.py`
+
+### wolfssl_identity_forgery_cve_2026_5194.py / wolfssl_identity_forgery_cve_2026_5194
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-5194
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/wolfssl_identity_forgery_cve_2026_5194.py`
 
 ### wordlist / wordlist_generator
 
@@ -6685,6 +24850,166 @@
 - Module paths:
   - `modules/payloads/x86/reverse_tcp.py`
 
+### x_micro / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/x_micro/ftp_default_creds.py`
+
+### x_micro / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/x_micro/ssh_default_creds.py`
+
+### x_micro / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/x_micro/telnet_default_creds.py`
+
+### x_micro / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/x_micro/webinterface_http_auth_default_creds.py`
+
+### xavi / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/xavi/ftp_default_creds.py`
+
+### xavi / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/xavi/ssh_default_creds.py`
+
+### xavi / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/xavi/telnet_default_creds.py`
+
+### xavi / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/xavi/webinterface_http_auth_default_creds.py`
+
+### xavi / xavi_csrf_dns_change
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: dns_change
+- Module paths:
+  - `modules/exploits/routers/xavi/xavi_csrf_dns_change.py`
+
+### xerox / altalink_unauth_api_cve_2022_23968
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-23968
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/xerox/altalink_unauth_api_cve_2022_23968.py`
+
+### xerox / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/xerox/ftp_default_creds.py`
+
+### xerox / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/printers/xerox/webinterface_http_auth_default_creds.py`
+
+### xerox / xerox_cve_2023_3710_workcentre_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-3710
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/xerox/xerox_cve_2023_3710_workcentre_rce.py`
+
+### xerox / xerox_firmware_root
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/xerox/xerox_firmware_root.py`
+
+### xerox / xerox_http_bof_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-23968
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/xerox/xerox_http_bof_rce.py`
+
+### xerox / xerox_ipp_bof_rce
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-27508
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/xerox/xerox_ipp_bof_rce.py`
+
+### xerox / xerox_mfp_dlm_rce_edb_35151
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/printers/xerox/xerox_mfp_dlm_rce_edb_35151.py`
+
+### xerox / xerox_passback_ldap_smb
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/xerox/xerox_passback_ldap_smb.py`
+
+### xerox / xerox_pjl_dlm_pwd
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/xerox/xerox_pjl_dlm_pwd.py`
+
+### xerox / xerox_workcentre_cmd_inject_cve_2021_27508
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-27508
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/printers/xerox/xerox_workcentre_cmd_inject_cve_2021_27508.py`
+
 ### xiaomi / browser_10_2_4_g_browser_search_history_disclosure_cve_2018_20523
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6692,6 +25017,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/xiaomi/browser_10_2_4_g_browser_search_history_disclosure_cve_2018_20523.py`
+
+### xiaomi / mi_router_command_injection_cve_2023_26319
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-26319
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/xiaomi/mi_router_command_injection_cve_2023_26319.py`
 
 ### xiaomi / stock_firmware_rce
 
@@ -6701,6 +25034,54 @@
 - Module paths:
   - `modules/exploits/routers/xiaomi/stock_firmware_rce.py`
 
+### xiaomi / xiaomi_miband_breakmi_ble
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/wearables/xiaomi/xiaomi_miband_breakmi_ble.py`
+
+### xiongmai / uc_httpd_path_traversal
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-7577
+- Attack classes: path_traversal
+- Module paths:
+  - `modules/exploits/cameras/xiongmai/uc_httpd_path_traversal.py`
+
+### zephyr / zephyr_bt_bof_cve_2021_3432
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-3432
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/zephyr/zephyr_bt_bof_cve_2021_3432.py`
+
+### zephyr / zephyr_cortexm_syscall_race_lpe
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/zephyr/zephyr_cortexm_syscall_race_lpe.py`
+
+### zephyr / zephyr_dns_oob_rce_cve_2020_10024
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2020-10024
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/embedded_os/zephyr/zephyr_dns_oob_rce_cve_2020_10024.py`
+
+### zephyr / zephyr_usb_oob_cve_2021_3435
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2021-3435
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/embedded_os/zephyr/zephyr_usb_oob_cve_2021_3435.py`
+
 ### zhone / dasan_znid_2426a_eu_multiple_cross_site_scripting_cve_2019_10677
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6708,6 +25089,158 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/zhone/dasan_znid_2426a_eu_multiple_cross_site_scripting_cve_2019_10677.py`
+
+### zhone / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zhone/ftp_default_creds.py`
+
+### zhone / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zhone/ssh_default_creds.py`
+
+### zhone / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zhone/telnet_default_creds.py`
+
+### zhone / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zhone/webinterface_http_auth_default_creds.py`
+
+### zigbee_passive_scan.py / zigbee_passive_scan
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/lateral/zigbee_passive_scan.py`
+
+### zioncom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zioncom/ftp_default_creds.py`
+
+### zioncom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zioncom/ssh_default_creds.py`
+
+### zioncom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zioncom/telnet_default_creds.py`
+
+### zioncom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zioncom/webinterface_http_auth_default_creds.py`
+
+### zivif / ipcheck_rce_cve_2017_17105
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2017-17105
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/cameras/zivif/ipcheck_rce_cve_2017_17105.py`
+
+### zonet / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zonet/ftp_default_creds.py`
+
+### zonet / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zonet/ssh_default_creds.py`
+
+### zonet / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zonet/telnet_default_creds.py`
+
+### zonet / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zonet/webinterface_http_auth_default_creds.py`
+
+### zoom / ftp_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zoom/ftp_default_creds.py`
+
+### zoom / ssh_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zoom/ssh_default_creds.py`
+
+### zoom / telnet_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zoom/telnet_default_creds.py`
+
+### zoom / webinterface_http_auth_default_creds
+
+- Totals: modules=1, exploits=0, creds=1, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/creds/routers/zoom/webinterface_http_auth_default_creds.py`
+
+### zoom / zoom_x4_x5_add_admin
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/zoom/zoom_x4_x5_add_admin.py`
 
 ### zte / f460_f660_backdoor
 
@@ -6732,6 +25265,14 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/zte/f660_config_download_decrypt.py`
+
+### zte / f670l_cmd_injection_cve_2024_22059
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-22059
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/zte/f670l_cmd_injection_cve_2024_22059.py`
 
 ### zte / ftp_default_creds
 
@@ -6797,6 +25338,38 @@
 - Module paths:
   - `modules/exploits/routers/zte/zxhn_h168n_improper_access_restrictions_cve_2018_7357.py`
 
+### zte / zxhn_h168n_rce_auth_bypass
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: auth_bypass, rce
+- Module paths:
+  - `modules/exploits/routers/zte/zxhn_h168n_rce_auth_bypass.py`
+
+### zte / zxhn_h168n_upnp_igd_port_mapping
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2018-7357, CVE-2018-7358
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/zte/zxhn_h168n_upnp_igd_port_mapping.py`
+
+### zte / zxhn_h188a_cred_disclosure_cve_2026_34472
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2026-34472
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/zte/zxhn_h188a_cred_disclosure_cve_2026_34472.py`
+
+### zte / zxr10_privesc_cve_2024_22066
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-22066
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/zte/zxr10_privesc_cve_2024_22066.py`
+
 ### zte / zxv10_h108l_cmd_injection
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6804,6 +25377,14 @@
 - Attack classes: rce
 - Module paths:
   - `modules/exploits/routers/zte/zxv10_h108l_cmd_injection.py`
+
+### zte / zxv10_h108l_rce_cve_2013_custom
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/zte/zxv10_h108l_rce_cve_2013_custom.py`
 
 ### zte / zxv10_rce
 
@@ -6829,6 +25410,14 @@
 - Module paths:
   - `modules/exploits/routers/zyxel/armor_x1_wap6806_directory_traversal_cve_2020_14461.py`
 
+### zyxel / buffer_overflow_cve_2023_33009
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-33009
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/firewalls/zyxel/buffer_overflow_cve_2023_33009.py`
+
 ### zyxel / d1000_rce
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6852,6 +25441,38 @@
 - Attack classes: none
 - Module paths:
   - `modules/creds/routers/zyxel/ftp_default_creds.py`
+
+### zyxel / ike_cmd_injection_cve_2023_28771
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-28771
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/zyxel/ike_cmd_injection_cve_2023_28771.py`
+
+### zyxel / ike_heap_overflow_cve_2023_28771
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-28771
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/zyxel/ike_heap_overflow_cve_2023_28771.py`
+
+### zyxel / lfi_cgi_cve_2022_26531
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-0342, CVE-2022-26531
+- Attack classes: none
+- Module paths:
+  - `modules/exploits/routers/zyxel/lfi_cgi_cve_2022_26531.py`
+
+### zyxel / nas326_nas542_unauth_rce_cve_2024_29972
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-29972, CVE-2024-29973
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/nas/zyxel/nas326_nas542_unauth_rce_cve_2024_29972.py`
 
 ### zyxel / nbg_418n_v2_modem_1_00_aaxm_6_c0_cross_site_request_forgery_cve_2019_6710
 
@@ -6917,6 +25538,14 @@
 - Module paths:
   - `modules/exploits/routers/zyxel/usg_flex_5_21_os_command_injection_cve_2022_30525.py`
 
+### zyxel / usg_flex_cmd_injection_cve_2022_30525
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2022-30525
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/firewalls/zyxel/usg_flex_cmd_injection_cve_2022_30525.py`
+
 ### zyxel / usg_flex_h_series_uos_1_31_privilege_escalation_cve_2025_1731
 
 - Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
@@ -6972,3 +25601,27 @@
 - Attack classes: none
 - Module paths:
   - `modules/exploits/routers/zyxel/zywall_310_zywall_110_usg1900_atp500_usg40_login_page_cross_cve_2019_9955.py`
+
+### zyxel / zywall_usg_cmd_injection_cve_2023_28771
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2023-28771
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/zyxel/zywall_usg_cmd_injection_cve_2023_28771.py`
+
+### zyxel / zywall_usg_config_hash_extraction
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: none
+- Attack classes: auth_bypass
+- Module paths:
+  - `modules/exploits/routers/zyxel/zywall_usg_config_hash_extraction.py`
+
+### zyxel / zyxel_dsl_cpe_cmd_injection_cve_2024_40890
+
+- Totals: modules=1, exploits=1, creds=0, scanners=0, generic=0, payloads=0, encoders=0
+- CVEs: CVE-2024-40890, CVE-2024-40891
+- Attack classes: rce
+- Module paths:
+  - `modules/exploits/routers/zyxel/zyxel_dsl_cpe_cmd_injection_cve_2024_40890.py`

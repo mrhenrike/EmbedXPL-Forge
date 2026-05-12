@@ -51,6 +51,18 @@ End-to-end flow from target input through discovery, fingerprinting, module sele
 
 ## Install
 
+Recommended (PyPI):
+
+```bash
+python3 -m pip install embedxpl
+# optional domain extras
+python3 -m pip install "embedxpl[nse]"        # Nmap NSE helper scripts
+python3 -m pip install "embedxpl[printers]"   # printer stack
+python3 -m pip install "embedxpl[all]"        # everything
+```
+
+Alternative (repository clone, for development):
+
 ```bash
 git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
 cd EmbedXPL-Forge
@@ -58,6 +70,7 @@ python3 -m venv .venv
 source .venv/bin/activate   # Linux/macOS
 # .venv\Scripts\activate    # Windows
 python3 -m pip install -r requirements.txt
+python3 -m pip install -e .                   # editable install (optional)
 ```
 
 ## Diagnostics
@@ -70,8 +83,17 @@ python tools/env_doctor.py
 
 ## Start the interactive shell
 
+After `pip install embedxpl`, just run:
+
 ```bash
-python exf.py
+embedxpl
+```
+
+Equivalents when running from a clone:
+
+```bash
+python -m embedxpl
+python exf.py            # legacy bootstrap
 ```
 
 ## Log file and history

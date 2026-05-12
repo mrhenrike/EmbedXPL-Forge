@@ -4,7 +4,7 @@ Module encodes Python payload to base64 format.
 
 ## Verification Steps
 
-  1. Start `./exf.py`
+  1. Start the framework: `embedxpl` (or `python -m embedxpl` / `./exf.py`)
   2. Do: `use encoders/python/base64`
   3. Do: `show info`
 
