@@ -715,14 +715,14 @@ def gate_final_new() -> List[CheckResult]:
         results.append(_fail("announcement", f"docs/ANNOUNCEMENT.md missing or too short ({ann.stat().st_size if ann.exists() else 0} bytes)"))
     else:
         ann_text = _read_file(ann)
-        required_platforms = ("X / Twitter", "LinkedIn", "Telegram", "WhatsApp", "Discord")
+        required_platforms = ("X / Twitter", "LinkedIn", "Instagram", "Telegram", "WhatsApp", "Discord")
         missing = [p for p in required_platforms if p not in ann_text]
         if missing:
             results.append(_fail("announcement", f"ANNOUNCEMENT.md missing platforms: {', '.join(missing)}"))
         elif "Português (pt-BR)" not in ann_text or "English (en-US)" not in ann_text:
             results.append(_fail("announcement", "ANNOUNCEMENT.md missing en-US or pt-BR section"))
         else:
-            results.append(_ok("announcement", f"ANNOUNCEMENT.md: {ann.stat().st_size} bytes (5 platforms x 2 languages)"))
+            results.append(_ok("announcement", f"ANNOUNCEMENT.md: {ann.stat().st_size} bytes (6 platforms x 2 languages)"))
 
     # No em-dash or AI markers in new py/md files
     em_dash = "\u2014"

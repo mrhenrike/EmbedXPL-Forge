@@ -4,7 +4,7 @@
 >
 > **Repo:** https://github.com/mrhenrike/EmbedXPL-Forge · **Install:** `pip install embedxpl`
 
-This file is copy-paste ready: pick the language, pick the platform, paste it. No edits required.
+This file is copy-paste ready: pick the language, pick the platform, paste it. No edits required. Six channels per language: X, LinkedIn, Instagram, Telegram, WhatsApp, Discord.
 
 ---
 
@@ -74,6 +74,43 @@ https://github.com/mrhenrike/EmbedXPL-Forge
 If you build, defend, audit or research embedded systems, take it for a spin and tell me what is missing. The roadmap is driven by the community, not by hype.
 
 #cybersecurity #pentest #redteam #blueteam #iotsecurity #otsecurity #icssecurity #embeddedsecurity #vulnerabilityresearch #infosec #networksecurity #pentesting #securityresearch #soc #ciso #appsec #devsecops #opensource #python
+```
+
+---
+
+### Instagram (caption + hashtags, link in bio)
+
+*(First line is the hook in feed preview. Put repo URL in your bio or use a link sticker in Stories.)*
+
+```
+🛡️ EmbedXPL-Forge is now PUBLIC.
+
+The most complete open-source exploitation and scanning framework on the planet for embedded, IoT, OT/ICS, IT and AT. One CLI. Full arsenal. Production-grade.
+
+What you get in one tool:
+🔥 Routers, GPON ONTs, ISP CPEs, firewalls, NGFW, VPN boxes, switches
+🖨️ Network printers and MFP: HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, CUPS
+📷 IP cameras, NVR, DVR, RTSP, ONVIF
+🏭 OT and ICS: PLCs, SCADA, Modbus, S7comm, EtherNet/IP, BACnet, DNP3
+🏠 Smart home, smart meters, HVAC, wearables, CAN, medical, access control, maritime IoT, BMC, IPMI
+
+Built for real red-team and research work: vendor fingerprinting, OUI lookup, persistent sessions per host, Nmap NSE integration, APT chain replay with MITRE mapping.
+
+Every module passes 7 automated quality gates. No fake placeholders. Contributions welcome: modules, vendors, coverage, hardening. Direct reviews.
+
+Install:
+pip install embedxpl
+embedxpl
+
+Link in bio: github.com/mrhenrike/EmbedXPL-Forge
+
+Authorized testing only. Always get written permission from the asset owner.
+
+.
+.
+.
+
+#embedxpl #cybersecurity #infosec #pentesting #redteam #blueteam #iotsecurity #otsecurity #icssecurity #embeddedsecurity #networksecurity #hacking #ethicalhacking #bugbounty #vulnerabilityresearch #python #opensource #devsecops #soc #ciso #appsec #smartdevices #industrialsecurity #printersecurity #routersecurity #camerasecurity #cybersec #securityresearch #pentest #hacktheplanet
 ```
 
 ---
@@ -296,6 +333,43 @@ https://github.com/mrhenrike/EmbedXPL-Forge
 Se você constrói, defende, audita ou pesquisa sistemas embarcados, dê uma rodada e me diga o que está faltando. O roadmap é guiado pela comunidade, não por hype.
 
 #cybersecurity #pentest #redteam #blueteam #iotsecurity #otsecurity #icssecurity #embeddedsecurity #infosec #segurancadainformacao #pentesting #cybersec #soc #ciso #appsec #devsecops #opensource #python #seguranca
+```
+
+---
+
+### Instagram (legenda + hashtags, link na bio)
+
+*(A primeira linha e o gancho no preview do feed. Coloque o link do repo na bio ou use sticker de link nos Stories.)*
+
+```
+🛡️ EmbedXPL-Forge agora é PÚBLICO.
+
+O framework open-source mais completo do planeta para auditoria de embarcados, IoT, OT/ICS, IT e AT. Uma CLI. Arsenal inteiro. Pronto para produção.
+
+O que você ganha em uma ferramenta só:
+🔥 Roteadores, ONTs GPON, CPEs de ISP, firewalls, NGFW, VPN, switches
+🖨️ Impressoras e MFP: HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, CUPS
+📷 Câmeras IP, NVR, DVR, RTSP, ONVIF
+🏭 OT e ICS: PLCs, SCADA, Modbus, S7comm, EtherNet/IP, BACnet, DNP3
+🏠 Smart home, medidores, HVAC, wearables, CAN, médico, controle de acesso, IoT marítimo, BMC, IPMI
+
+Feito para red-team e pesquisa real: fingerprint de vendor, OUI lookup, sessões persistentes por host, integração Nmap NSE, replay de cadeias APT com MITRE.
+
+Todo módulo passa por 7 gates automatizados. Sem placeholders falsos. Contribuições bem-vindas: módulos, fabricantes, cobertura, hardening. Reviews diretos.
+
+Instale:
+pip install embedxpl
+embedxpl
+
+Link na bio: github.com/mrhenrike/EmbedXPL-Forge
+
+Apenas testes autorizados. Sempre com permissão escrita do dono do ativo.
+
+.
+.
+.
+
+#embedxpl #cybersecurity #segurancadainformacao #pentest #redteam #blueteam #iotsecurity #otsecurity #icssecurity #embeddedsecurity #infosec #hacking #ethicalhacking #bugbounty #python #opensource #devsecops #soc #ciso #appsec #seguranca #pentesting #cybersec #smartdevices #industrialsecurity #printersecurity #routersecurity #camerasecurity #pesquisaemseguranca #hackeretico
 ```
 
 ---
