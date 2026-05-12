@@ -105,10 +105,5 @@ Results: 27/27 passed  (all passed)
 Gate B PASSED.
 ```
 
----
 
 [Hub wiki](../README.md)
-
----
-
-> **Author:** Andre Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **Uniao Geek** - [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

@@ -73,10 +73,5 @@ EmbedXPL-Forge (snmp_bruteforce) > run
 
 Adjust options with `show options` before execution.
 
----
 
 [Wiki hub](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

@@ -16,7 +16,6 @@ mais recentes dos modulos), execute:
 python -m embedxpl.tools.docgen --lang en-US --output docs/en-US/
 ```
 
----
 
 ## Wi-Fi Monitor (`wifi_monitor_mode`)
 
@@ -41,7 +40,6 @@ raw nas bandas 2.4/5 GHz.
 - Modulos que usam este adaptador: Wi-Fi deauth, captura de WPA handshake,
   evil twin AP, extracao de PMKID.
 
----
 
 ## Adaptador BLE (`ble_adapter`)
 
@@ -66,7 +64,6 @@ de dispositivos, hijack de pareamento e manipulacao de conexao.
 - Modulos que usam este adaptador: enumeracao BLE, fuzzing GATT,
   hijack de pareamento BLE, spoofing de beacon.
 
----
 
 ## SDR TX/RX (`sdr_txrx`)
 
@@ -91,7 +88,6 @@ em sub-GHz (315/433/868/915 MHz) e frequencias de 2.4 GHz.
 - Modulos que usam este adaptador: replay sub-GHz, analise de banda ISM,
   captura de sinal de portao de garagem, deteccao de RF jamming.
 
----
 
 ## RFID Proxmark (`rfid_proxmark`)
 
@@ -116,7 +112,6 @@ sniffing de protocolo, recuperacao de chaves e extracao de credenciais.
 - Modulos que usam este adaptador: clone RFID, recuperacao de chaves Mifare,
   emulacao de cracha de acesso, relay attack NFC.
 
----
 
 ## Interface CAN (`can_interface`)
 
@@ -141,7 +136,6 @@ diagnosticos UDS e fuzzing de barramento.
 - Modulos que usam este adaptador: sniffing de CAN bus, scanning UDS,
   injecao de frames CAN, fuzzing de ECU.
 
----
 
 ## Adaptador UART (`uart_ttl_adapter`)
 
@@ -167,7 +161,6 @@ pads de debug expostos.
 - Modulos que usam este adaptador: root shell via UART, interrupcao de U-Boot,
   dump serial de firmware, modificacao de bootloader.
 
----
 
 ## Alto-falante Ultrassonico (`ultrasonic_speaker`)
 
@@ -193,7 +186,6 @@ assistentes inteligentes.
 - Modulos que usam este adaptador: injecao de voz DolphinAttack,
   replay de comando ultrassonico.
 
----
 
 ## Thread Border USB (`thread_border_usb`)
 
@@ -218,7 +210,6 @@ commissioning e injecao de frames IEEE 802.15.4.
 - Modulos que usam este adaptador: sniffing de rede Thread, injecao de
   frames 802.15.4, exploit de commissioning Thread.
 
----
 
 ## Resumo de Custos
 
@@ -237,7 +228,3 @@ commissioning e injecao de frames IEEE 802.15.4.
 A maioria dos modulos requer apenas conectividade de rede (sem hardware especial).
 Adaptadores fisicos sao necessarios principalmente para modulos de ataque RF,
 console serial e nivel de barramento.
-
----
-
-Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek

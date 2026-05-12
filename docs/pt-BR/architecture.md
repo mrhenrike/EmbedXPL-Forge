@@ -186,7 +186,3 @@ Todo modulo deve definir `__info__` como um dict a nivel de classe com:
 - **Novos backends GPU**: Implemente o ABC `Backend` em `core/gpu/`.
 - **Novos protocolos**: Adicione bibliotecas cliente em `core/` e
   referencie-as a partir dos modulos.
-
----
-
-Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek

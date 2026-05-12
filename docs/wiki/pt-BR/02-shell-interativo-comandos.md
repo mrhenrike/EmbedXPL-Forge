@@ -95,10 +95,5 @@ EmbedXPL-Forge > sessions purge
 
 Completação automática está disponível para comandos e caminhos de módulos onde a camada readline estiver ativa.
 
----
 
 [Hub da Wiki](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

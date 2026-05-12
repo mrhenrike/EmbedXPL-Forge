@@ -17,7 +17,6 @@ module data), run:
 python -m embedxpl.tools.docgen --lang en-US --output docs/en-US/
 ```
 
----
 
 ## Wi-Fi Monitor (`wifi_monitor_mode`)
 
@@ -42,7 +41,6 @@ crafting on 2.4/5 GHz bands.
 - Modules using this adapter: Wi-Fi deauth, WPA handshake capture,
   evil twin AP, PMKID extraction.
 
----
 
 ## BLE Adapter (`ble_adapter`)
 
@@ -67,7 +65,6 @@ pairing hijack, and connection manipulation.
 - Modules using this adapter: BLE enumeration, GATT fuzzing,
   BLE pairing hijack, beacon spoofing.
 
----
 
 ## SDR TX/RX (`sdr_txrx`)
 
@@ -92,7 +89,6 @@ sub-GHz (315/433/868/915 MHz) and 2.4 GHz frequencies.
 - Modules using this adapter: sub-GHz replay, ISM-band analysis,
   garage door signal capture, RF jamming detection.
 
----
 
 ## RFID Proxmark (`rfid_proxmark`)
 
@@ -117,7 +113,6 @@ protocol sniffing, key recovery, and credential extraction.
 - Modules using this adapter: RFID clone, Mifare key recovery,
   access badge emulation, NFC relay attack.
 
----
 
 ## CAN Interface (`can_interface`)
 
@@ -142,7 +137,6 @@ sniffing, UDS diagnostics, and bus fuzzing.
 - Modules using this adapter: CAN bus sniffing, UDS scanning,
   CAN frame injection, ECU fuzzing.
 
----
 
 ## UART Adapter (`uart_ttl_adapter`)
 
@@ -168,7 +162,6 @@ exposed debug pads.
 - Modules using this adapter: UART root shell, U-Boot interrupt,
   firmware serial dump, bootloader modification.
 
----
 
 ## Ultrasonic Speaker (`ultrasonic_speaker`)
 
@@ -194,7 +187,6 @@ in smart assistants.
 - Modules using this adapter: DolphinAttack voice injection,
   ultrasonic command replay.
 
----
 
 ## Thread Border USB (`thread_border_usb`)
 
@@ -219,7 +211,6 @@ attacks, and IEEE 802.15.4 frame injection.
 - Modules using this adapter: Thread network sniffing, 802.15.4 frame
   injection, Thread commissioning exploit.
 
----
 
 ## Cost Summary
 
@@ -238,7 +229,3 @@ attacks, and IEEE 802.15.4 frame injection.
 Most modules require only network connectivity (no special hardware).
 Physical adapters are needed primarily for RF, serial console, and
 bus-level attack modules.
-
----
-
-Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek

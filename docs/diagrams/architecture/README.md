@@ -1,6 +1,5 @@
 # Architecture Diagrams — EmbedXPL-Forge
 
-**Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
 
 **Languages:** Diagram labels are **English (en-US)** by default. **Português (pt-BR):** [README.pt-BR.md](README.pt-BR.md).
 
@@ -49,7 +48,3 @@ With [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli):
 ```bash
 npx @mermaid-js/mermaid-cli -i docs/diagrams/architecture/01-router-soho.mmd -o docs/img/architecture/router_soho.png -b transparent
 ```
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

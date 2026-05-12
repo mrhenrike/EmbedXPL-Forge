@@ -4,10 +4,8 @@
 
 EmbedXPL-Forge é um framework open-source de exploração e scanning para profissionais de segurança auditarem roteadores, switches, câmeras IP, NVR/DVR, GPON ONTs, CPEs de ISP, impressoras, dispositivos IoT, OT/ICS e dispositivos embarcados. Oferece **2800+ módulos ativos** cobrindo testes de credenciais, exploração de vulnerabilidades, varredura de rede, geração de payloads, ataques a câmeras RTSP, manipulação de firmware, arsenal completo de impressoras e orquestração PolyExploit multilinguagem — com **700+ CVEs** mapeados em **114+ fabricantes** e um **APT Group Attack Engine** que reproduz cadeias de ataque reais de grupos nação-estado.
 
-> **Autor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 > **Versão:** 3.1.0
 
----
 
 ## Funcionalidades
 
@@ -235,7 +233,6 @@ Fluxo de ponta a ponta: entrada do alvo, descoberta, identificacao, selecao de m
   <img src="docs/assets/embedxpl_flow.png" width="960" alt="EmbedXPL-Forge Fluxo de Exploracao v3.1.0"/>
 </p>
 
----
 
 ## Requisitos
 
@@ -255,7 +252,3 @@ EmbedXPL-Forge é destinado exclusivamente para testes de segurança autorizados
 ## Licença
 
 Licença BSD — veja [LICENSE](LICENSE) para detalhes.
-
----
-
-> **Autor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

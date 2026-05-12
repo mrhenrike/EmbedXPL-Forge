@@ -37,10 +37,5 @@ External wordlists ship under `embedxpl/resources/wordlists/vendors/` and relate
 
 HTTP `401/407`-style login checks live under the `creds` tree; combine with `target`, `port`, and path options as documented per module.
 
----
 
 [Wiki hub](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

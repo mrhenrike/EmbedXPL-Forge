@@ -31,6 +31,5 @@ Reproducible steps and outcome.
 - Security:
 - Rollback:
 
----
 
 Governance: [CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md) · [CONTRIBUTING.md](../CONTRIBUTING.md) · [CONTRIBUTING.pt-BR.md](../CONTRIBUTING.pt-BR.md)

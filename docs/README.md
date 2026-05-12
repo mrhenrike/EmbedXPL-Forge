@@ -1,6 +1,5 @@
 # Documentation — EmbedXPL-Forge
 
-**Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
 
 **Languages:** Files below are primarily **English (en-US)**. **Português (pt-BR)** hub: [README.pt-BR.md](README.pt-BR.md). Wiki: [wiki/pt-BR/README.md](wiki/pt-BR/README.md).
 
@@ -41,7 +40,3 @@ python tools/generate_coverage_matrix.py
 python tools/generate_full_catalog.py
 python tools/gen_wiki_module_index.py
 ```
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

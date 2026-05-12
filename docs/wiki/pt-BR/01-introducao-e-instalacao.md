@@ -78,10 +78,5 @@ python exf.py
 - **Histórico de comandos:** em geral `~/.exf_history`.
 - **Dados de sessão:** `~/.exf_sessions/` — histórico persistente de scan por host.
 
----
 
 [Hub wiki](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

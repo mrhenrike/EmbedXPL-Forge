@@ -185,7 +185,3 @@ Every module must define `__info__` as a class-level dict with:
 - **New GPU backends**: Implement the `Backend` ABC in `core/gpu/`.
 - **New protocols**: Add client libraries under `core/` and reference
   them from modules.
-
----
-
-Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek

@@ -29,10 +29,5 @@ Use `show devices` quando suportado para inspecionar entradas orientadas a devic
 
 Para todos os caminhos de módulos na árvore, veja [Anexo: índice de módulos](../ANEXO-INDICE-MODULOS.md).
 
----
 
 [Hub wiki](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

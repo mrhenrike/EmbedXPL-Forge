@@ -36,6 +36,5 @@
 - Module path(s):
 - References (CVE, advisory):
 
----
 
 [CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md) · [CODE_OF_CONDUCT.pt-BR.md](../CODE_OF_CONDUCT.pt-BR.md)

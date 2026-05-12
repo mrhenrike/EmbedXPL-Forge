@@ -29,10 +29,5 @@ Use `show devices` where supported to inspect device-oriented entries.
 
 For every module path in the tree, see [Module path index (all locales)](../ANEXO-INDICE-MODULOS.md).
 
----
 
 [Wiki hub](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

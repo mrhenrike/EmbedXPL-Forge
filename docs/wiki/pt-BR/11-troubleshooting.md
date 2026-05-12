@@ -26,10 +26,5 @@ Rode a partir da raiz do repositório e garanta que `PYTHONPATH` não esteja sob
 
 Sockets raw e alguns caminhos de captura exigem capability elevada ou `sudo` quando o SO exige — use o menor privilégio compatível com as regras do engagement.
 
----
 
 [Hub wiki](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

@@ -4,10 +4,8 @@
 
 EmbedXPL-Forge is an open-source exploitation and scanning framework for security professionals auditing routers, switches, IP cameras, NVR/DVR, GPON ONTs, ISP CPEs, printers, IoT, OT/ICS, and embedded edge devices. It provides **2800+ active modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, RTSP camera attacks, firmware manipulation, multi-language PolyExploit orchestration, and a full printer arsenal — with **700+ CVEs** mapped across **114+ vendors** and an **APT Group Attack Engine** that reproduces real-world nation-state attack chains.
 
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
 > **Version:** 3.1.0
 
----
 
 ## Features
 
@@ -354,7 +352,6 @@ embedxpl (RTSP Cameradar Attack) > set output_m3u true
 embedxpl (RTSP Cameradar Attack) > run
 ```
 
----
 
 ## Nmap NSE Scripts
 
@@ -427,7 +424,6 @@ nmap -p 554,5554,8554 --script embedxpl-rtsp-discover --script-args rtsp.timeout
 |_  Full attack: embedxpl > use exploits/cameras/multi/rtsp_cameradar_attack
 ```
 
----
 
 #### `embedxpl-camera-identify` — Deep Camera Fingerprinting
 
@@ -453,7 +449,6 @@ nmap -sV -p- --script embedxpl-camera-identify 192.168.1.0/24
 |_  Run exploit: embedxpl > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
 ```
 
----
 
 #### `embedxpl-hikvision-vuln` — Hikvision CVE Checker
 
@@ -477,7 +472,6 @@ nmap -p 80,443,8080 --script embedxpl-hikvision-vuln --script-args timeout=10 19
 |_  Run full exploit: embedxpl > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
 ```
 
----
 
 #### `embedxpl-dahua-vuln` — Dahua CVE Checker
 
@@ -500,7 +494,6 @@ nmap -p 80,37777 --script embedxpl-dahua-vuln 192.168.1.0/24
 |_  Run exploit: embedxpl > use exploits/cameras/dahua/cctv_auth_bypass_cve_2021_33044
 ```
 
----
 
 #### `embedxpl-rtsp-creds` — RTSP Default Credential Tester
 
@@ -526,7 +519,6 @@ nmap -p 554 --script embedxpl-rtsp-creds --script-args rtsp.route=live.sdp 192.1
 |_  Run exploit: embedxpl > use exploits/cameras/multi/rtsp_cameradar_attack
 ```
 
----
 
 #### `embedxpl-iot-cve-check` — Multi-Vendor CVE Fingerprint
 
@@ -547,7 +539,6 @@ nmap -p 80,443,8080 --script embedxpl-iot-cve-check 192.168.1.0/24
 |_  Full exploitation: pip install embedxpl && embedxpl
 ```
 
----
 
 #### `embedxpl-camera-snapshot` — Unauthenticated Snapshot Access
 
@@ -594,7 +585,6 @@ python -m embedxpl.nse run --target 192.168.1.0/24 --scripts all --ports 80,443,
 python -m embedxpl.nse uninstall
 ```
 
----
 
 ## Firmware Exploitation
 
@@ -614,7 +604,6 @@ embedxpl (NETGEAR Firmware Flash) > run
 4. Uploads via vendor-specific flash endpoint (bypassing auth where applicable)
 5. Waits for device reboot and verifies backdoor execution
 
----
 
 ## PolyExploit Orchestrator
 
@@ -680,7 +669,6 @@ for r in results:
     print(r["Title"], r["Path"])
 ```
 
----
 
 ## New in v3.1.0 — CVE 2026/2025/2024 + Printer Domain + Quality Gates
 
@@ -848,7 +836,6 @@ exf (WG602 Backdoor) > run
 **All 27 new vendors/modules:**
 `alcatel_lucent` · `alpha_networks` · `astoria` · `binatone` · `ddwrt` · `easybox` · `ee` · `freebox` · `mifi` · `motorola` · `observa` · `ruggedcom` · `seagate` · `sitecom` · `starbridge` · `ubee` · `unicorn` · `utstarcom` · `zoom` · plus belkin, netgear, trendnet gap-fills.
 
----
 
 ## Module Structure
 
@@ -926,7 +913,6 @@ End-to-end data flow from target input through discovery, fingerprinting, module
   <img src="docs/assets/embedxpl_flow.png" width="960" alt="EmbedXPL-Forge Exploitation Flow v3.1.0"/>
 </p>
 
----
 
 ## Architecture & Attack Surface Maps
 
@@ -992,7 +978,3 @@ EmbedXPL-Forge is intended for authorized security testing and research only. Us
 ## License
 
 BSD License — see [LICENSE](LICENSE) for details.
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
