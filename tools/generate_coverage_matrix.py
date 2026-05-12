@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek - https://github.com/Uniao-Geek
 
 import ast
 import json
@@ -41,7 +41,7 @@ def _matrix_source_revision(repo_root: Path) -> str:
 
 
 RE_CVE = re.compile(r"CVE-\d{4}-\d{4,7}", re.IGNORECASE)
-DISABLED_DOMAINS: Tuple[str, ...] = ("cameras", "printers", "dvr", "dvrs")
+DISABLED_DOMAINS: Tuple[str, ...] = ()
 
 ATTACK_KEYWORDS: Dict[str, Tuple[str, ...]] = {
     "rce": ("_rce", "remote code execution", "command injection", "shellshock"),
@@ -227,9 +227,12 @@ def _aggregate(records: List[ModuleRecord]) -> Dict[Tuple[str, str], CoverageEnt
 def _platform_section() -> str:
     """Return current platform compatibility status text."""
     return (
-        "## Product Scope\n\n"
-        "- In scope: routers, switches, taps, fw and ngfw (residential, ISP, enterprise/corporate, industrial; IT/OT/AT/IoT/IIoT).\n"
-        "- Out of scope: camera/printer/dvr modules (disabled in this product line).\n\n"
+        "## Product Scope (v3.1.0)\n\n"
+        "- In scope: routers, switches, TAPs, firewalls/NGFW, network printers/MFP, IP cameras, DVR/NVR,\n"
+        "  embedded/IoT (cameras, smart TVs, VoIP, NAS, UPS), OT/ICS/SCADA, BMS, smart meters, IIoT/BMC/IPMI,\n"
+        "  smart-home (assistants, appliances, HVAC), wearables, automotive (CAN bus), medical embedded, access\n"
+        "  control (RFID/gates/elevators), maritime IoT.\n"
+        "- All module categories are active in v3.1.0; no domains are disabled by default.\n\n"
         "## Platform Compatibility Status\n\n"
         "| Platform | Status |\n"
         "|---|---|\n"

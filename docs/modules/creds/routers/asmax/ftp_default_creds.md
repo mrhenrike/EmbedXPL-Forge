@@ -5,7 +5,7 @@ If valid credentials are found, they are displayed to the user.
 
 ## Verification Steps
 
-  1. Start `./exf.py`
+  1. Start the framework: `embedxpl` (or `python -m embedxpl` / `./exf.py`)
   2. Do: `use creds/routers/asmax/ftp_default_creds`
   3. Do: `set target [TargetIP]`
   4. Do: `run`

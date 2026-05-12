@@ -4,7 +4,7 @@ Module sends M-SEARCH request to target and retrieve information from UPnP enabl
 
 ## Verification Steps
 
-  1. Start `./exf.py`
+  1. Start the framework: `embedxpl` (or `python -m embedxpl` / `./exf.py`)
   2. Do: `use generic/upnp/ssdp_msearch`
   3. Do: `set target [TargetIP]`
   4. Do: `run`
