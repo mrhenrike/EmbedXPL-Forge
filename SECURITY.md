@@ -1,7 +1,5 @@
 # Security Policy — EmbedXPL-Forge
 
-**Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
-
 **Language:** **English (en-US)** — default. **Português (pt-BR):** [SECURITY.pt-BR.md](SECURITY.pt-BR.md)
 
 ## Supported scope
@@ -45,7 +43,3 @@ We prefer **coordinated disclosure**: keep details private until a fix or agreed
 ## Conduct
 
 Harassment or abuse in project channels: see [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and use private reporting where appropriate.
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

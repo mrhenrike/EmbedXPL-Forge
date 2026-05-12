@@ -95,10 +95,5 @@ EmbedXPL-Forge > sessions purge
 
 Tab completion is available for commands and module paths where the readline layer is active.
 
----
 
 [Wiki hub](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

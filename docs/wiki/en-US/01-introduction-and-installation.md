@@ -80,10 +80,5 @@ python exf.py
 - **Command history:** typically `~/.exf_history`.
 - **Session data:** `~/.exf_sessions/` — persistent scan history per host.
 
----
 
 [Wiki hub](../README.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)

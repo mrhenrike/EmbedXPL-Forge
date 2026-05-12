@@ -64,6 +64,10 @@ ehthumbs.db
 *.log
 .log/
 .tmp/
+.tmp*/
+
+# === Local lab / test environments (Dockerfiles, simulators) - do NOT publish ===
+lab/
 
 # === Package metadata (generated) ===
 routerxpl.egg-info/

@@ -1,11 +1,9 @@
 # EmbedXPL-Forge Announcement
 
----
 
 ## BLOCK 1 - WhatsApp / Telegram
 *(plain text + emojis, copy-paste ready)*
 
----
 
 🛡️ *EmbedXPL-Forge* - The largest embedded & IoT security arsenal on the planet just went public.
 
@@ -47,12 +45,10 @@ https://github.com/mrhenrike/EmbedXPL-Forge/issues
 
 #cybersecurity #iot #pentest #redteam #embeddedsecurity #embedxpl #vulnresearch #soc #cve2026
 
----
 
 ## BLOCK 2 - Discord
 *(full markdown, native Discord formatting)*
 
----
 
 ## 🛡️ EmbedXPL-Forge - The Largest Embedded & IoT Security Arsenal
 
@@ -60,7 +56,6 @@ Just went **public**. Open-source. Production-grade.
 
 **EmbedXPL-Forge** is a modular exploitation and scanning framework for security professionals conducting authorized audits of embedded devices, IoT, OT/ICS, IT and AT infrastructure.
 
----
 
 ### 🔥 Key Numbers
 
@@ -70,7 +65,6 @@ Just went **public**. Open-source. Production-grade.
 - **35+ device categories** from routers to maritime IoT
 - **APT Group Attack Engine** - reproduce APT28, Volt Typhoon, Sandworm, Quad7 attack chains
 
----
 
 ### 🎯 What Can You Audit?
 
@@ -81,7 +75,6 @@ Just went **public**. Open-source. Production-grade.
 - **Embedded OS** - RIOT OS, OpenWrt, VxWorks, QNX, Zephyr, wolfSSL devices
 - **Specialized** - maritime (Metis WIC/DFS), medical, smart meters, industrial robots (Universal Robots)
 
----
 
 ### ⚡ New in This Release
 
@@ -101,7 +94,6 @@ Just went **public**. Open-source. Production-grade.
 
 Plus 20 printer research modules (HP PrintingShellz, Lexmark Pwn2Own 2026, CUPS chains, Xerox/Ricoh BOFs, Brother WSD SSRF...)
 
----
 
 ### 🚀 Installation
 
@@ -117,7 +109,6 @@ pip install -r requirements.txt
 python exf.py
 ```
 
----
 
 ### 🤝 Contribute
 
@@ -126,7 +117,6 @@ python exf.py
 - **PRs welcome** - see `CONTRIBUTING.md`
 - Module requests, CVE additions, vendor coverage gaps - open an issue
 
----
 
 *For authorized security assessments only. Users are responsible for compliance with applicable laws and regulations.*
 

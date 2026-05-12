@@ -2,7 +2,6 @@
 
 **Language:** English (en-US). **Português (pt-BR):** [../pt-BR/README.md](../pt-BR/README.md)
 
-**Maintainer:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| União Geek
 
 Official usage documentation for the framework. Read on GitHub or copy into the **GitHub Wiki** (separate Git repository).
 
@@ -125,7 +124,3 @@ Expected output:
 - [README.md](../../../README.md)
 - [CONTRIBUTING.md](../../../CONTRIBUTING.md)
 - [docs/COVERAGE_MATRIX.md](../../COVERAGE_MATRIX.md)
-
----
-
-> **Author:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) \| **União Geek** — [https://github.com/Uniao-Geek](https://github.com/Uniao-Geek)
