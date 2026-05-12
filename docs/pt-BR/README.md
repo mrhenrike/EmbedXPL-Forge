@@ -1,112 +1,183 @@
-# EmbedXPL-Forge
+# Hub de Documentacao EmbedXPL-Forge (pt-BR)
 
-**Framework de Exploit Embarcado para Avaliacao de Seguranca IoT/OT**
+Idioma padrao da documentacao do repositorio: `en-US`.
 
-EmbedXPL-Forge e um framework extensivel de exploits e scanning
-desenvolvido especificamente para sistemas embarcados, dispositivos IoT,
-infraestrutura OT/ICS e equipamentos de rede SOHO. Oferece uma arquitetura
-modular para pesquisa de vulnerabilidades, testes de penetracao e operacoes
-de red team abrangendo dezenas de categorias de dispositivos e protocolos
-de comunicacao.
+Versao em ingles: `../en-US/README.md`.
 
-## Principais Recursos
+Autor: André Henrique (@mrhenrike) | União Geek - https://github.com/Uniao-Geek
 
-- 35+ categorias de dispositivos: roteadores, cameras, PLCs, smart home,
-  BMC/IPMI, NAS, impressoras, VoIP, UPS, wearables, appliances VPN e mais.
-- Cobertura de protocolos: HTTP/S, SSH, Telnet, FTP, SNMP, RTSP, Modbus,
-  S7comm, CIP, MQTT, CoAP, UPnP, CAN bus, BLE, 802.15.4, sub-GHz RF.
-- Orquestrador de exploits multi-linguagem (Python, C, C++, Rust, ASM) com
-  suporte a compilacao cruzada para ARM, MIPS, x86 e x64.
-- Engine de scan assincrono para execucao concorrente de modulos em escala.
-- SmartPool com selecao adaptativa de threads/processos.
-- Sistema de hardware gate com guias de compra e referencias de drivers.
-- Shell engines: raw TCP/UDP, ICMP covert, DNS tunnel, HTTP poll,
-  MQTT shell, Meterpreter bridge.
-- Fingerprinting de banners assistido por ML e classificacao de respostas.
-- Backends de cracking com aceleracao GPU (CUDA, OpenCL, ROCm).
+## Escopo
 
-## Inicio Rapido
+Este conjunto de documentos cobre:
 
-### Instalacao
+- instalacao e execucao;
+- uso interativo e nao interativo;
+- exemplos de entrada e saida esperada;
+- referencias de modulos e protocolos;
+- requisitos de hardware para auditorias.
+
+Guias principais no repositorio:
+
+- `README.md` (en-US padrao);
+- `README.pt-BR.md` (traducao em portugues);
+- Wiki `../wiki/en-US/README.md` e `../wiki/pt-BR/README.md`.
+
+## Instalacao
+
+### PyPI
 
 ```bash
-git clone <repository-url> EmbedXPL-Forge
+pip install embedxpl
+embedxpl
+```
+
+Saida esperada:
+
+```text
+EmbedXPL-Forge vX.Y.Z
+exf >
+```
+
+### Codigo-fonte
+
+```bash
+git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
 cd EmbedXPL-Forge
-pip install -e .
+pip install -r requirements.txt
+python exf.py
 ```
 
-### Shell Interativo
+Saida esperada:
+
+```text
+[*] Carregando modulos...
+[+] Modulos carregados: <quantidade>
+exf >
+```
+
+## Uso Interativo
+
+### 1) Buscar modulo
+
+```text
+exf > search huawei
+```
+
+Saida esperada:
+
+```text
+[+] Found <n> module(s)
+...
+```
+
+### 2) Selecionar modulo
+
+```text
+exf > use exploits/routers/huawei/eg8145x6_info_disclosure
+```
+
+Saida esperada:
+
+```text
+exf (EG8145X6 Info Disclosure) >
+```
+
+### 3) Ver opcoes
+
+```text
+exf (EG8145X6 Info Disclosure) > show options
+```
+
+Saida esperada:
+
+```text
+Name    Current Value  Required  Description
+target                 yes       Target IPv4/IPv6
+port    80             no        HTTP port
+```
+
+### 4) Definir entradas
+
+```text
+exf (EG8145X6 Info Disclosure) > set target 192.168.18.1
+exf (EG8145X6 Info Disclosure) > set port 80
+```
+
+### 5) Validar e executar
+
+```text
+exf (EG8145X6 Info Disclosure) > check
+exf (EG8145X6 Info Disclosure) > run
+```
+
+Saida esperada:
+
+```text
+[+] Target appears vulnerable
+[*] Collecting metadata...
+[+] ProductName: ...
+```
+
+## Uso Nao Interativo
+
+### Execucao direta de modulo
 
 ```bash
-python -m embedxpl
+python -m embedxpl -m exploits/routers/huawei/eg8145x6_info_disclosure -s target 192.168.18.1 -s port 80
 ```
 
-```
-exf > search cameras
-exf > use exploits/cameras/hikvision/hikvision_backdoor_cve_2017_7921
-exf > show options
-exf > set target 192.168.1.100
-exf > run
+Saida esperada:
+
+```text
+[*] Running module: exploits/routers/huawei/eg8145x6_info_disclosure
+[+] ...
 ```
 
-### Modo Nao-Interativo
+### Descoberta de rede
 
 ```bash
-python -m embedxpl -m exploits/routers/dlink/dsl_2750b_rce \
-    --target 10.0.0.1 --port 80 --run
+embedxpl -c "discover 192.168.1.0/24 --timing T3"
 ```
 
-### Gerar Documentacao de Modulos
+Saida esperada:
 
-```bash
-python -m embedxpl.tools.docgen --lang en-US --output docs/en-US/
-python -m embedxpl.tools.docgen --stats
+```text
+[*] Discovery started
+[+] Hosts discovered: <n>
+[+] Suggested modules: <n>
 ```
 
-## Estrutura da Documentacao
+## Convencoes de Entrada e Saida
 
-| Caminho | Conteudo |
-|---------|----------|
-| [architecture.md](./architecture.md) | Internos do framework e hierarquia de classes |
-| [hardware-requirements.md](./hardware-requirements.md) | Catalogo de adaptadores fisicos |
-| [modules/](./modules/) | Documentacao por modulo (gerada automaticamente) |
-| [protocols/](./protocols/) | Guias especificos por protocolo |
-| [attack-chains/](./attack-chains/) | Playbooks de ataques multi-estagio |
+- Entradas sao definidas via opcoes (`set <nome> <valor>`) ou `-s chave valor`.
+- `check` valida pre-condicoes de exploracao:
+  - positivo: alvo compativel com o modulo;
+  - negativo: alvo nao aplicavel, corrigido ou indisponivel.
+- `run` executa o scanner ou exploit e imprime os resultados.
 
-## Categorias de Modulos
+Marcadores de status:
 
-### Exploits
+- `[*]` status de execucao;
+- `[+]` sucesso ou achado positivo;
+- `[-]` resultado negativo, bloqueio ou condicao ausente.
 
-appliances, aps, bmc, bms, cameras, cisco, embedded_os, firewalls,
-firmware, generic, hypervisors, ics, ispcpes, lateral, misc, nas,
-network_os, ngfw, ot_iiot, printers, protocols, routers, sdwan,
-servers, smart_home, smart_meters, smart_tv, soho_edge, specialized,
-switches, taps, ups, voip, vpn, wearables.
+## Mapa da Documentacao
 
-### Scanners
+| Caminho | Descricao |
+|---------|-----------|
+| `architecture.md` | arquitetura do framework e fluxo de execucao |
+| `hardware-requirements.md` | adaptadores, monitor mode e pre-requisitos de captura |
+| `../wiki/en-US/` | wiki completa em ingles |
+| `../wiki/pt-BR/` | wiki completa em portugues |
+| `../modules/` | documentacao gerada por modulo |
+| `../diagrams/architecture/` | fontes Mermaid e diagramas de arquitetura |
 
-aruba, bmc, bms, cameras, embedded_os, firewalls, hypervisors, ics,
-misc, nas, network_os, ot_iiot, printers, protocols, routers,
-smart_home, smart_meters, smart_tv, soho_edge, specialized, switches,
-taps, threat_detection, ups, voip, vpn, wearables.
+## Notas de Seguranca e Legalidade
 
-### Modulos de Credenciais
-
-BMC, cameras, firewalls, generic, hypervisors, ICS, IoT, ISP CPEs,
-NAS, printers, routers, smart meters, smart TV, SOHO edge, switches,
-taps, UPS, VoIP.
-
-## Protocolos
-
-HTTP/S, SSH, Telnet, FTP/SFTP, SNMP v1/v2c/v3, RTSP, Modbus TCP,
-Siemens S7/S7+, EtherNet/IP (CIP), WDB/VxWorks, MQTT, CoAP, UPnP/SSDP,
-IPMI, RouterOS API, CAN 2.0/FD, BLE GATT, IEEE 802.15.4/Thread,
-sub-GHz ISM (315/433/868/915 MHz), UART serial.
+- Utilize somente em ambientes autorizados.
+- Valide autorizacao legal antes de escanear ou explorar.
+- Siga procedimentos de divulgacao responsavel para vulnerabilidades.
 
 ## Licenca
 
-Proprietario. Uso interno apenas. Distribuicao nao autorizada proibida.
-
----
-
-Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
+Consulte o arquivo `LICENSE` do repositorio.
