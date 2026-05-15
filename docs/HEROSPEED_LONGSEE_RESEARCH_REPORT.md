@@ -258,18 +258,52 @@ No API endpoints were added or removed between v2.0.4 and v2.0.6 (same set of `/
 | `exploits/cameras/herospeed/herospeed_nvr_hardcoded_root_hash` | 9.8 | VULN-4: Universal hardcoded root hash 2023-2025 |
 | `exploits/cameras/herospeed/herospeed_nvr_config_export_cred_recovery` | 8.8 | **Case A (c3l3r1on)**: Config export + hardcoded AES key decryption |
 | `exploits/cameras/herospeed/herospeed_nvr_ftp_diagnostic_rce` | 8.8 | **Case B (c3l3r1on)**: FTP diagnostic server parameter injection RCE |
+| `exploits/cameras/herospeed/herospeed_nvr_telnet_safecode_backdoor` | **9.8** | `/open_telnet` with SafeCode from MAC/SN → root:`cxlinux` |
+| `exploits/cameras/herospeed/herospeed_nvr_paramconfig_bypass` | **9.8** | `MI1YSANORQ4NAELR` hardcoded bypass for `/paramconfig` |
+| `exploits/cameras/herospeed/herospeed_nvr_camera_creds_decrypt` | 7.5 | Camera creds via static salt `World!@##$` + roundFive AES |
 | `scanners/cameras/herospeed_longsee_nvr_scan` | 9.1 | Device discovery + vuln fingerprint (Shodan query: variable.js) |
 
-**Total: 8 modules covering 6 confirmed vulnerabilities + 2 community-discovered attack vectors**
+**Total: 11 modules covering 9 confirmed vulnerability classes**
 
-### c3l3r1on Cases Summary
+### Root Password Cracked
 
-| Case | Description | CVSS | Module |
+**c3l3r1on cracked the root hash** (`12ZpTwfyH6/Bs`) → **password: `cxlinux`**
+
+This was confirmed in `_encyklopedia` (March 2026):
+```
+"12ZpTwfyH6/Bs" | Sama platforma FH6830 | /etc/shadow | Root access: hasło "cxlinux"
+```
+This affects ALL firmware versions 2023-2025 sharing the same hardcoded hash.
+
+### c3l3r1on Cases + New Discoveries Summary
+
+| # | Description | CVSS | Module | Source |
+|---|---|---|---|---|
+| Case A | Pre-auth config export + **DES key `13141314`** + SQLite DB → all credentials | 8.8 | `herospeed_nvr_config_export_cred_recovery` | nvr_h4rv3st3r.py |
+| Case B | FTP diagnostic server param → popen() → root RCE (live hardware confirmed) | 8.8 | `herospeed_nvr_ftp_diagnostic_rce` | lab + Discord |
+| Case C | Persistence via `debug.sh` in `appStart.sh` (survives reboots/factory reset) | Doc | research report | _encyklopedia |
+| Case D | Unsigned firmware updates, no integrity verification | Doc | VULN-3 | _encyklopedia |
+| **NEW** | `/open_telnet` backdoor with SafeCode from MAC/SN + root:`cxlinux` | **9.8** | `herospeed_nvr_telnet_safecode_backdoor` | longse_auth_matrix.py |
+| **NEW** | `/paramconfig` hardcoded bypass `MI1YSANORQ4NAELR` (admin access, no auth) | **9.8** | `herospeed_nvr_paramconfig_bypass` | longse_auth_matrix.py + _encyklopedia |
+| **NEW** | Camera credential decryption via static salt **`World!@##$`** + roundFive | 7.5 | `herospeed_nvr_camera_creds_decrypt` | nvr_api.py + Discord |
+
+### c3l3r1on Discord Notes (May 2026)
+- "yep, search (shifted bits, roundFive, **statyczna sól 'World!@##$'** w JS"
+- "i've over 20mb of pure text describing this platform (n9000)"
+- "currently the challenge is dynamically downloaded from js" (newer firmware anti-scraping)
+- `roundFive` = extract chars `[22:38]` from SHA-256 hash = 16-char AES key
+
+### Hardcoded Keys Registry (from c3l3r1on _encyklopedia)
+
+| Key/Password | Purpose | Location | Source |
 |---|---|---|---|
-| **Case A** | Pre-auth config export + hardcoded AES key `0123456789ABCDEF0123456789abcdef` + credential recovery | 8.8 | `herospeed_nvr_config_export_cred_recovery` |
-| **Case B** | Authenticated FTP diagnostic server param → popen() → root RCE (confirmed on live hardware: wget + telnetd) | 8.8 | `herospeed_nvr_ftp_diagnostic_rce` |
-| **Case C** | Persistence via boot-trusted script path surviving factory reset | Doc only | Research report |
-| **Case D** | Insecure firmware trust (unsigned updates, no integrity verification) | Doc only | Update VULN-3 |
+| `cxlinux` | Root password (hash `12ZpTwfyH6/Bs`) | `/etc/passwd` | c3l3r1on cracked |
+| `13141314` | DES key for `sys_data.db` / config export | `libalgorithm.so` | nvr_h4rv3st3r.py |
+| `MI1YSANORQ4NAELR` | Admin hardcoded bypass | `/paramconfig`, `/cmdlist.htm` | longse_auth_matrix.py |
+| `World!@##$` | Static salt for camera cred AES key | `reverseRoundThree` in JS | nvr_api.py line 64 |
+| `afe13ds34cdjk08c` | AES-128-CBC IV for camera credentials | `/api/channel/search-camera` | nvr_api.py |
+| `+2G-WQVK00hCt7Yb(*__*)+_%^LONGSE` | SafeCode AES key | `/open_telnet` | longse_auth_matrix.py |
+| `(*__*)+_%^LONGSE` | SafeCode AES IV | `/open_telnet` | longse_auth_matrix.py |
 
 ---
 
