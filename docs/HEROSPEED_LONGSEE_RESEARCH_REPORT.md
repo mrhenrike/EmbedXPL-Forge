@@ -1,10 +1,38 @@
 # Herospeed / Longsee NVR — Comprehensive Security Research Report
 
-**Research scope:** All publicly available Herospeed/Longsee N-series NVR firmware (2023-2026)
-**Method:** Firmware download, static analysis, binwalk extraction, reverse engineering, QEMU emulation, live API testing
+**Research scope:** All publicly available Herospeed/Longsee N-series NVR firmware (2023-2026) + full NAND flash dump
+**Method:** Firmware download, static analysis, binwalk extraction, reverse engineering, QEMU emulation, live API testing, NAND flash analysis
 **Date:** May 2026
 **Researcher:** André Henrique (@mrhenrike) — EmbedXPL-Forge
-**Community discovery credit:** c3l3r1on (github.com/c3l3r1on) — original QNVR findings
+**Community discovery credit:** c3l3r1on (github.com/c3l3r1on) — original lab research, Cases A/B/C/D, nvr_h4rv3st3r.py v8
+
+---
+
+## Shodan/FOFA Fingerprints (Updated)
+
+| Source | Query | Scope |
+|---|---|---|
+| **Shodan** (c3l3r1on, confirmed) | `http.html:"statics/js/variable.js"` | **Best fingerprint** — all NVR families |
+| Shodan | `http.html:"longseSha256"` | Longsee platform |
+| Shodan | `http.html:"LsNXVRPlugin"` | NVR-specific plugin |
+| Shodan | `"Boa/0.94.13" http.title:"NVR"` | Boa HTTP server |
+| FOFA (c3l3r1on, May 2026) | `body="longseSha256"` | ~100k+ EU, ~50k+ global |
+
+**`variable.js` contains `DEFAULT_ADMIN_PASSWORD="12345"` hardcoded** — confirms the Shodan fingerprint also reveals the default credential.
+
+## Known OEM Re-brands (c3l3r1on, not independently verified)
+
+| Brand | Models | Firmware |
+|---|---|---|
+| HeroSpeed (OEM) | 6804 / 6808 / 6816 | V21.1.50.4 / V21.1.34.4 |
+| TVT Digital | TD-3000H1 / TD-3300 | V21.1.x / V22.1.x |
+| GISE (Poland) | V5 series (XVR/NVR) | V21.1.20.x - V21.1.27.x |
+| Longse | LSN-9836 / LSN-9436 | Web v6.0 series (2021-2023) |
+| Zintronic | P5 / NVR series | N9000 platform (BitVision) |
+| Turing AI (USA) | SMART series | N9000 platform |
+| Speco Technologies | ZIP series | OEM TVT variants |
+| Alibi Security | Vigilant series | OEM TVT variants |
+| IRBIS | MBD6804T-EL | V4.02.R11 (legacy) |
 
 ---
 
@@ -20,8 +48,18 @@
 | N3332_32NR_ALH2P0A4 | 32CH | **v2.0.4** (VULNERABLE) | 2023-09-04 | MC6830 | 1102 | 742KB |
 | NVR_F30_BV | F30 | v2.0.8 | 2025-12-03 | MC6830 | 913 | 919KB |
 | HI3536D_H265_9CH_BD | 9CH | V21.1.23.3 | 2021-06 | HI3536D | 7737 | (Boa embedded in demo) |
+| **nvr_full_flash.bin** (c3l3r1on lab) | 9CH? | **2024-04-28** | Lab device | MC6830 | 860 | 814KB |
 
-**Total firmwares analyzed: 8** (7 N-series + 1 legacy HI3536D for comparison)
+**Total firmwares analyzed: 9** (8 standard + 1 full NAND flash dump from c3l3r1on's lab device)
+
+### Flash Dump Key Findings (nvr_full_flash.bin)
+- **PERF magic**: Full NAND flash (32MB) — kernel at 0x60000, SquashFS at 0x400000, JFFS2 config at 0x1900000
+- **Plugin**: `LsNXVRPlugin_V24.2.3.240201_R1.exe` (2024-02-01 build)
+- **Root hash**: `12ZpTwfyH6/Bs` — same hardcoded hash confirmed in real device
+- **libweb.so**: 814,008B — unique version between v2.0.4 (686KB) and v2.0.6 (868KB)
+- **nvr_main**: 5,357KB (larger than N3009 v2.0.4 4,820KB — more features)
+- **AES key in libdatamanager.so**: `0123456789ABCDEF0123456789abcdef` (hardcoded encryption key)
+- **Case B confirmed**: `FTP_UploadJpgBuffer(server:%s)` + `popen()` in nvr_main
 
 ---
 
@@ -213,14 +251,25 @@ No API endpoints were added or removed between v2.0.4 and v2.0.6 (same set of `/
 
 | Module | CVSS | Description |
 |---|---|---|
-| `exploits/cameras/herospeed/herospeed_nvr_unauth_account_enum` | 9.1 | Unauthenticated credential metadata (VULN-1) |
-| `exploits/cameras/herospeed/herospeed_nvr_rce` | 9.8 | Post-auth API command injection (VULN-4 chain) |
-| `exploits/cameras/herospeed/herospeed_nvr_vbhtm_cred_disclosure` | 6.5 | XVR /vb.htm credential disclosure (VULN-2) |
-| `exploits/cameras/herospeed/herospeed_nvr_upgrade_source_injection_rce` | 8.8 | Upgrade shell execution (VULN-3, v2.0.4+v2.0.6) |
-| `exploits/cameras/herospeed/herospeed_nvr_hardcoded_root_hash` | 9.8 | Universal hardcoded root hash 2023-2025 (VULN-4) |
-| `scanners/cameras/herospeed_longsee_nvr_scan` | 9.1 | Device discovery + vuln fingerprint |
+| `exploits/cameras/herospeed/herospeed_nvr_unauth_account_enum` | 9.1 | VULN-1: Unauthenticated credential metadata |
+| `exploits/cameras/herospeed/herospeed_nvr_rce` | 9.8 | Post-auth API command injection chain |
+| `exploits/cameras/herospeed/herospeed_nvr_vbhtm_cred_disclosure` | 6.5 | VULN-2: XVR /vb.htm credential disclosure |
+| `exploits/cameras/herospeed/herospeed_nvr_upgrade_source_injection_rce` | 8.8 | VULN-3: Upgrade shell execution (v2.0.4 source + v2.0.6 retreat.sh) |
+| `exploits/cameras/herospeed/herospeed_nvr_hardcoded_root_hash` | 9.8 | VULN-4: Universal hardcoded root hash 2023-2025 |
+| `exploits/cameras/herospeed/herospeed_nvr_config_export_cred_recovery` | 8.8 | **Case A (c3l3r1on)**: Config export + hardcoded AES key decryption |
+| `exploits/cameras/herospeed/herospeed_nvr_ftp_diagnostic_rce` | 8.8 | **Case B (c3l3r1on)**: FTP diagnostic server parameter injection RCE |
+| `scanners/cameras/herospeed_longsee_nvr_scan` | 9.1 | Device discovery + vuln fingerprint (Shodan query: variable.js) |
 
-**Total: 6 modules covering 5 confirmed vulnerabilities**
+**Total: 8 modules covering 6 confirmed vulnerabilities + 2 community-discovered attack vectors**
+
+### c3l3r1on Cases Summary
+
+| Case | Description | CVSS | Module |
+|---|---|---|---|
+| **Case A** | Pre-auth config export + hardcoded AES key `0123456789ABCDEF0123456789abcdef` + credential recovery | 8.8 | `herospeed_nvr_config_export_cred_recovery` |
+| **Case B** | Authenticated FTP diagnostic server param → popen() → root RCE (confirmed on live hardware: wget + telnetd) | 8.8 | `herospeed_nvr_ftp_diagnostic_rce` |
+| **Case C** | Persistence via boot-trusted script path surviving factory reset | Doc only | Research report |
+| **Case D** | Insecure firmware trust (unsigned updates, no integrity verification) | Doc only | Update VULN-3 |
 
 ---
 
