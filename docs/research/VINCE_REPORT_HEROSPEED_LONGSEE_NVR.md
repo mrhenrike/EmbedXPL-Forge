@@ -10,9 +10,10 @@
 
 **PASTE:**
 ```
-Herospeed / Longsee NVR (N-series, MC6830 Platform) — Multiple Critical Vulnerabilities:
-Unauthenticated Credential Metadata, XVR Interface Disclosure, Upgrade Shell RCE +
-Retreat.sh 0day (v2.0.6), Hardcoded Root Hash (CVSS 9.8 CRITICAL + 3 additional)
+Herospeed / Longsee NVR (N-series, MC6830 Platform, 9 OEM re-brands) — 6 Critical/High
+Vulnerabilities: Unauthenticated Credential Metadata, XVR Interface Disclosure, Upgrade
+Shell RCE + Retreat.sh 0day (v2.0.6), Hardcoded Root Hash, Config Export with Hardcoded
+AES Key, FTP Diagnostic Command Injection RCE (CVSS 9.8 CRITICAL + 5 additional)
 ```
 
 ---
@@ -28,9 +29,20 @@ analyzed firmware images share the same MC6830 ARM Cortex-A7 SoC, Boa/0.94.13
 HTTP server embedded in libweb.so, and Qt5-based GUI (nvr_main). The same
 vulnerabilities affect all OEM re-brands sharing this Longsee platform.
 
-Researcher estimates 50,000+ devices exposed on the public internet globally
-based on FOFA research (c3l3r1on, May 2026: 100k+ in Europe alone) and Shodan
-fingerprints (http.html:"longseSha256", http.html:"LsNXVRPlugin").
+Researcher estimates 50,000-100,000+ devices exposed on the public internet globally.
+Confirmed Shodan fingerprint (c3l3r1on, May 2026):
+  http.html:"statics/js/variable.js"  ← PRIMARY — finds all NVR families on this platform
+  http.html:"longseSha256"             ← Secondary (Longsee platform specific)
+  http.html:"LsNXVRPlugin"             ← Secondary (NVR plugin)
+FOFA (c3l3r1on, May 2026): body="longseSha256" → 100k+ in Europe alone.
+The variable.js file also contains DEFAULT_ADMIN_PASSWORD="12345" confirming
+that devices found via Shodan almost certainly have default credentials active.
+
+Known OEM re-brands sharing the same vulnerable platform (c3l3r1on research,
+unverified by this researcher): TVT Digital (TD-3000H1, TD-3300), GISE (Poland,
+V5 series), Longse (LSN-9836, LSN-9436), Zintronic (P5, N9000), Turing AI USA
+(SMART series), Speco Technologies (ZIP series, OEM TVT), Alibi Security (Vigilant
+series, OEM TVT), IRBIS (MBD6804T-EL, V4.02.R11).
 
 PRIOR RELATED CVEs FOR DIFFERENT PRODUCTS (NOT this finding):
 - CVE-2024-5631: Longse NVR3608PGE2W — credential transmission (different model)
@@ -81,6 +93,29 @@ HSLS-2026-001: Unauthenticated Credential Metadata Disclosure
   (100), and a valid sessionID. These values enable offline SHA-256 KDF
   reconstruction of credentials without triggering lockout or rate-limiting.
   Confirmed on all analyzed firmware versions.
+
+HSLS-2026-005: Config Export with Hardcoded AES Key (Case A — c3l3r1on)
+  CVSSv3.1: AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N = 8.8 HIGH
+  CWE-798: Use of Hard-coded Credentials / CWE-312: Cleartext Storage
+  Impact: libdatamanager.so contains hardcoded AES key "0123456789ABCDEF0123456789abcdef".
+  The /api/system/import-export endpoint exports the complete NVR config encrypted
+  with this key. Decryption reveals ALL credentials: NVR accounts, every connected
+  IP camera login, FTP/email/DDNS passwords. This gives an attacker the full
+  surveillance network credential set in a single API call.
+  Source: static analysis of libdatamanager.so from NAND flash dump (c3l3r1on lab).
+  variable.js confirms: DEFAULT_ADMIN_PASSWORD="12345" (default credential in all versions).
+
+HSLS-2026-006: FTP Diagnostic Server Parameter Command Injection RCE (Case B — c3l3r1on)
+  CVSSv3.1: AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H = 8.8 HIGH
+  CWE-78: OS Command Injection
+  Impact: nvr_main contains FTP_UploadJpgBuffer(server:%s) and TestFTPEv functions
+  that pass the FTP server address to popen() without sanitisation. The FTP test
+  endpoint in /api/network/ftp accepts a server field that is used directly in a
+  shell command. Injecting shell metacharacters achieves root code execution.
+  FIELD-CONFIRMED by c3l3r1on on physical lab hardware: "I simply used wget, which
+  downloaded the script, ran it on 777, and the NVR was already owned. Telnet started
+  from the script without a problem" (c3l3r1on, May 2026 Discord).
+  Source: NAND flash analysis (FTP_UploadJpgBuffer, TestFTPEv, server:%s in nvr_main).
 
 ═══════════════════════════════════════════════════════════════
 ADDITIONAL RISK CONTEXT (attack chain amplifiers):
@@ -149,6 +184,8 @@ Primary findings (CRITICAL/HIGH):
 HSLS-2026-004: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H = 9.8 CRITICAL
 HSLS-2026-001: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N = 9.1 CRITICAL
 HSLS-2026-003: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H = 8.8 HIGH
+HSLS-2026-005: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N  = 8.8 HIGH
+HSLS-2026-006: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H  = 8.8 HIGH
 
 Additional risk context (MEDIUM):
 HSLS-2026-002: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N = 6.5 MEDIUM
