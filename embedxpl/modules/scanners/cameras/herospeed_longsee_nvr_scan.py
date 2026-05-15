@@ -102,7 +102,9 @@ def _sha256hex(data: str) -> str:
 
 
 def _hex_to_str(hex_text: str) -> str:
-    hex_text = hex_text.strip().lower().lstrip("0x")
+    hex_text = hex_text.strip().lower()
+    if hex_text.startswith("0x"):
+        hex_text = hex_text[2:]
     return bytes.fromhex(hex_text).decode("latin1")
 
 
