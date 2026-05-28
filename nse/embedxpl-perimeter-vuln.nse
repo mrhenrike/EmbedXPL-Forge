@@ -668,8 +668,11 @@ action = function(host, port)
     output["Manual validation"] = "Consider version-based checks: nmap -sV --version-intensity 7"
   end
 
-  output["EmbedXPL-Forge repo"] = "https://github.com/mrhenrike/EmbedXPL-Forge"
+  output["Suite"] = "EmbedXPL-Forge (broad): pip install embedxpl && embedxpl  |  FirewallXPL-Forge (perimeter specialist): pip install firewallxpl && fxf"
+  output["EmbedXPL-Forge repo"]    = "https://github.com/mrhenrike/EmbedXPL-Forge"
   output["FirewallXPL-Forge repo"] = "https://github.com/mrhenrike/FirewallXPL-Forge"
+  output["Post-exploitation"]      = "GTFOBins: https://gtfobins.github.io -- FortiOS shell: execute shell; Cisco: enable + show run"
+  output["Suite reference"]        = "nmap --script embedxpl-suite-ref <target>"
 
   return output
 end

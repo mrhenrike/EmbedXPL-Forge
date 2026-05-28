@@ -512,13 +512,27 @@ action = function(host, port)
   output["Confirmed/Possible vulns"] = tostring(vuln_count)
 
   if vuln_count > 0 then
-    output["EXPLOITATION"] = "Target has exploitable CVEs -- use modules above"
-    output["EmbedXPL-Forge"] = "pip install embedxpl && embedxpl"
+    output["EXPLOITATION"] = "Target has exploitable router/CPE CVEs -- use suite tools below"
+    output["[1] EmbedXPL-Forge"] = "pip install embedxpl && embedxpl  (broad IoT/router: 700+ CVEs, 55+ vendors)"
+    if vendor and vendor:match("[Mm]ikro[Tt]ik") then
+      output["[2] MikrotikAPI-BF"] = "pip install mikrotikapi-bf && mikrotik-bf  (MikroTik specialist: 100+ CVE/EDB, MAC-layer, 8-phase audit)"
+      output["MikrotikAPI-BF repo"] = "https://github.com/mrhenrike/MikrotikAPI-BF"
+    end
+    if vendor and (vendor:match("[Aa]irport") or vendor:match("[Aa][Pp]") or
+                   vendor:match("[Ww]ireless") or vendor:match("[Ww][Pp][Aa]")) then
+      output["[3] WirelessXPL-Forge"] = "pip install wirelessxpl && wxf  (wireless: Wi-Fi/BLE/Zigbee/rogue AP)"
+      output["WirelessXPL-Forge repo"] = "https://github.com/mrhenrike/WirelessXPL-Forge"
+    end
+    output["Post-exploitation"] = "GTFOBins: https://gtfobins.github.io -- NVRAM creds, BusyBox escape, cron persist"
   else
-    output["Assessment"] = "No CVEs confirmed -- target may be patched"
+    output["Assessment"] = "No CVEs confirmed -- target may be patched or firmware not matching"
+    if vendor and vendor:match("[Mm]ikro[Tt]ik") then
+      output["MikroTik audit"] = "pip install mikrotikapi-bf && mikrotik-bf --target " .. host.ip
+    end
   end
 
-  output["EmbedXPL-Forge repo"] = "https://github.com/mrhenrike/EmbedXPL-Forge"
+  output["EmbedXPL-Forge repo"]   = "https://github.com/mrhenrike/EmbedXPL-Forge"
+  output["Suite reference"]        = "nmap --script embedxpl-suite-ref <target>"
 
   return output
 end
