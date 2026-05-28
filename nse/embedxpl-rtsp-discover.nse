@@ -1,7 +1,7 @@
 -- embedxpl-rtsp-discover.nse
--- EmbedXPL-Forge NSE Script — RTSP Service Discovery & Banner Grab
+-- EmbedXPL-Forge NSE Script -- RTSP Service Discovery & Banner Grab
 --
--- Author : André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+-- Author : Andre Henrique (@mrhenrike) | Uniao Geek -- https://github.com/Uniao-Geek
 -- Version: 1.0.0
 -- License: BSD
 --
@@ -27,7 +27,7 @@
 --   |_  EmbedXPL: use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
 --
 -- REFERENCES:
---   RFC 2326 — Real Time Streaming Protocol
+--   RFC 2326 -- Real Time Streaming Protocol
 --   https://github.com/mrhenrike/EmbedXPL-Forge
 
 local nmap   = require "nmap"
@@ -42,7 +42,7 @@ vendor/model, and cross-references known CVEs. Suggests the corresponding
 EmbedXPL-Forge module for complete exploitation.
 ]]
 
-author     = "André Henrique (@mrhenrike) | União Geek"
+author     = "Andre Henrique (@mrhenrike) | Uniao Geek"
 license    = "Same as Nmap -- See https://nmap.org/book/man-legal.html"
 categories = { "discovery", "safe", "version" }
 
