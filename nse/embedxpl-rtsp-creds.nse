@@ -1,7 +1,7 @@
 -- embedxpl-rtsp-creds.nse
--- EmbedXPL-Forge NSE Script — RTSP Default Credential Tester
+-- EmbedXPL-Forge NSE Script -- RTSP Default Credential Tester
 --
--- Author : André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+-- Author : Andre Henrique (@mrhenrike) | Uniao Geek -- https://github.com/Uniao-Geek
 -- Version: 1.0.0
 -- License: BSD
 --
@@ -38,7 +38,7 @@ Tests RTSP streams against a curated list of default camera credentials
 authentication and suggests EmbedXPL-Forge for complete exploitation.
 ]]
 
-author     = "André Henrique (@mrhenrike) | União Geek"
+author     = "Andre Henrique (@mrhenrike) | Uniao Geek"
 license    = "Same as Nmap -- See https://nmap.org/book/man-legal.html"
 categories = { "auth", "vuln", "safe" }
 

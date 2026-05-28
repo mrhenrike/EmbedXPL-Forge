@@ -1,7 +1,7 @@
 -- embedxpl-camera-identify.nse
--- EmbedXPL-Forge NSE Script — IP Camera / DVR / NVR Deep Fingerprinting
+-- EmbedXPL-Forge NSE Script -- IP Camera / DVR / NVR Deep Fingerprinting
 --
--- Author : André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+-- Author : Andre Henrique (@mrhenrike) | Uniao Geek -- https://github.com/Uniao-Geek
 -- Version: 1.0.0
 -- License: BSD
 --
@@ -40,7 +40,7 @@ RTSP banner, and Dahua proprietary protocol to identify vendor, model,
 firmware, serial, and applicable CVEs with EmbedXPL-Forge module suggestion.
 ]]
 
-author     = "André Henrique (@mrhenrike) | União Geek"
+author     = "Andre Henrique (@mrhenrike) | Uniao Geek"
 license    = "Same as Nmap -- See https://nmap.org/book/man-legal.html"
 categories = { "discovery", "safe", "version" }
 
@@ -187,7 +187,7 @@ action = function(host, port)
       if result.status == 200 then
         output["Vuln assessment"] = "LIKELY VULNERABLE (endpoint accessible without auth)"
       else
-        output["Vuln assessment"] = "POSSIBLY VULNERABLE (auth required — test credentials)"
+        output["Vuln assessment"] = "POSSIBLY VULNERABLE (auth required -- test credentials)"
       end
     end
     output["EmbedXPL module"] = result.mod
