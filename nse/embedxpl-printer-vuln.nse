@@ -490,13 +490,18 @@ action = function(host, port)
   output["Confirmed/Possible vulns"] = tostring(vuln_count)
 
   if vuln_count > 0 then
-    output["EXPLOITATION"] = "Target has exploitable CVEs -- see module paths above"
-    output["EmbedXPL-Forge"] = "pip install embedxpl && embedxpl"
+    output["EXPLOITATION"] = "Target has exploitable printer CVEs -- use suite tools below"
+    output["[1] PrinterXPL-Forge"] = "pip install printerxpl-forge && printerxpl-forge  (printer specialist: PJL/PostScript/PCL/IPP/SNMP, 185 modules)"
+    output["[2] EmbedXPL-Forge"]   = "pip install embedxpl && embedxpl  (IoT broad, includes printer modules)"
+    output["Post-exploitation"]    = "GTFOBins: https://gtfobins.github.io -- busybox/python shell escape after initial access"
   else
-    output["Assessment"] = "No CVEs confirmed via active probes"
+    output["Assessment"] = "No CVEs confirmed via active probes -- manual PJL/SNMP check recommended"
+    output["Manual check"] = "nmap -p 9100 --script pjl-ready-message,printer-info <target>"
   end
 
-  output["EmbedXPL-Forge repo"] = "https://github.com/mrhenrike/EmbedXPL-Forge"
+  output["PrinterXPL-Forge repo"] = "https://github.com/mrhenrike/PrinterXPL-Forge"
+  output["EmbedXPL-Forge repo"]   = "https://github.com/mrhenrike/EmbedXPL-Forge"
+  output["Suite ref"]             = "nmap --script embedxpl-suite-ref <target>"
 
   return output
 end
