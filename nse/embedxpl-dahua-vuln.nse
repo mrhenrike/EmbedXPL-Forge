@@ -134,11 +134,10 @@ action = function(host, port)
   output["CVE-2021-33044"]  = check_cve_2021_33044(host, port)
   output["CVE-2020-25078"]  = check_cve_2020_25078(host, port)
   output["CVE-2013-6117"]   = check_cve_2013_6117(host, port)
-  output["EmbedXPL Auth Bypass"] =
-    "exploits/cameras/dahua/cctv_auth_bypass_cve_2021_33044"
-  output["EmbedXPL Cred Extract"] =
-    "exploits/cameras/dahua/cctv_37777_credential_extraction"
-  output["Run exploit"] =
-    "embedxpl > use exploits/cameras/dahua/cctv_auth_bypass_cve_2021_33044"
+  output["EmbedXPL Auth Bypass"]  = "exploits/cameras/dahua/cctv_auth_bypass_cve_2021_33044"
+  output["EmbedXPL Cred Extract"] = "exploits/cameras/dahua/cctv_37777_credential_extraction"
+  output["Run exploit"]           = "embedxpl > use exploits/cameras/dahua/cctv_auth_bypass_cve_2021_33044"
+  output["Suite"]                 = "pip install embedxpl && embedxpl  |  https://github.com/mrhenrike/EmbedXPL-Forge"
+  output["Post-exploitation"]     = "GTFOBins (BusyBox Linux): https://gtfobins.github.io/gtfobins/busybox/"
   return output
 end

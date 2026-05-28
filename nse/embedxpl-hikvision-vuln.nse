@@ -122,12 +122,11 @@ action = function(host, port)
   output["CVE-2021-36260"] = check_cve_2021_36260(host, port)
   output["CVE-2017-7921"]  = check_cve_2017_7921(host, port)
 
-  output["EmbedXPL RCE module"] =
-    "exploits/cameras/hikvision/rtsp_rce_cve_2021_36260"
-  output["EmbedXPL Auth Bypass"] =
-    "exploits/cameras/hikvision/info_disclosure_cve_2017_7921"
-  output["Run full exploit"] =
-    "embedxpl > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260"
+  output["EmbedXPL RCE module"]   = "exploits/cameras/hikvision/rtsp_rce_cve_2021_36260"
+  output["EmbedXPL Auth Bypass"]  = "exploits/cameras/hikvision/info_disclosure_cve_2017_7921"
+  output["Run full exploit"]      = "embedxpl > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260"
+  output["Suite"]                 = "pip install embedxpl && embedxpl  |  https://github.com/mrhenrike/EmbedXPL-Forge"
+  output["Post-exploitation"]     = "GTFOBins (BusyBox Linux): https://gtfobins.github.io/gtfobins/busybox/"
 
   return output
 end
