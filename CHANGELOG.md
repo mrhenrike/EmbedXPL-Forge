@@ -5,7 +5,43 @@ All notable changes to EmbedXPL-Forge are documented here.
 Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 
-## [3.1.0] — 2026-05-12
+## [3.2.0] - 2026-05-28
+
+### Added - CVE-2026-35616 E2E Weaponization + GTFOBins + FIRESTARTER Chain + NSE Suite
+
+#### Core: Shell Stager Framework
+
+- New `shell_stager.py`: 26 shell types, PTY-aware listener (tty.setraw + select +
+  SIGWINCH), Meterpreter RC generation, ShellStagingMixin (force_exploit, ask_on_fail)
+- GTFOBins post-exploitation cheatsheet (35 entries): SUID/sudo/capabilities/BusyBox
+  escape/NVRAM/cron persist/exfiltration -- printed automatically after shell session
+
+#### CVE Modules Updated/Added
+
+| CVE | Tool | Change |
+|---|---|---|
+| CVE-2026-35616 | FortiClient EMS | Rewritten v1.1.0->v4.0.0: correct X-SSL-CLIENT-VERIFY header spoofing, real X.509 cert forge (RSA-2048/SHA-256), fleet enumeration, shell staging |
+| CVE-2022-40684 | FortiOS | v2.0.0: Forwarded header bypass, config dump, SSH key inject, CLI shell |
+| CVE-2022-42475 | FortiOS | v2.0.0: Heap overflow trigger, crash detection, listener |
+| CVE-2023-48788 | FortiClientEMS | v2.0.0: Time-based SQLi, xp_cmdshell, OS exec, shell |
+| CVE-2024-55591 | FortiOS | v2.0.0: WebSocket bypass, admin inject, config dump, shell |
+| CVE-2025-20362+20333 | Cisco ASA/FTD | New: FIRESTARTER chain (UAT4356/ArcaneDoor, CISA AR26-113A), shell staging |
+
+#### NSE Scripts (10 total, 4 new)
+
+- `embedxpl-perimeter-vuln.nse`: 15 firewall/VPN vendors, 19 CVEs, EmbedXPL+FirewallXPL refs
+- `embedxpl-router-vuln.nse`: 15 SOHO router vendors, 14 CVEs, MikrotikAPI-BF + WirelessXPL refs
+- `embedxpl-printer-vuln.nse`: 11 printer/MFP vendors, PJL+IPP+HTTP, PrinterXPL-Forge primary ref
+- `embedxpl-suite-ref.nse`: full 5-tool suite install guide + GTFOBins quick reference
+- All 7 existing NSEs: en-US corrected, full suite refs, GTFOBins links
+
+#### CVE Catalog
+
+- +4 entries: CVE-2026-35616, CVE-2026-24858, CVE-2025-20362, CVE-2025-20333
+
+---
+
+## [3.1.0] -- 2026-05-12
 
 ### Added — CVE 2026/2025/2024 Integration + PrinterXPL Port + Domain Enable
 
