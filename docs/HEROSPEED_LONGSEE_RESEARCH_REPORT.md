@@ -12,7 +12,8 @@
 
 | Source | Query | Scope |
 |---|---|---|
-| **Shodan** (c3l3r1on, confirmed) | `http.html:"statics/js/variable.js"` | **Best fingerprint** — all NVR families |
+| **Shodan** (c3l3r1on, confirmed) | `http.html:"statics/js/variable.js"` | **Best fingerprint** -- all NVR families |
+| **Shodan** (c3l3r1on, confirmed) | `http.favicon.hash:-873627015` | **Favicon hash fingerprint** -- all NVR families (web UI favicon) |
 | Shodan | `http.html:"longseSha256"` | Longsee platform |
 | Shodan | `http.html:"LsNXVRPlugin"` | NVR-specific plugin |
 | Shodan | `"Boa/0.94.13" http.title:"NVR"` | Boa HTTP server |
