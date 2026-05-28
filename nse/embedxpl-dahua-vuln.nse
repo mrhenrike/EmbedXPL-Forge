@@ -1,15 +1,15 @@
 -- embedxpl-dahua-vuln.nse
--- EmbedXPL-Forge NSE Script — Dahua IP Camera / DVR / NVR CVE Checker
+-- EmbedXPL-Forge NSE Script -- Dahua IP Camera / DVR / NVR CVE Checker
 --
--- Author : André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+-- Author : Andre Henrique (@mrhenrike) | Uniao Geek -- https://github.com/Uniao-Geek
 -- Version: 1.0.0
 -- License: BSD
 --
 -- DESCRIPTION:
 --   Tests Dahua (and OEM-Dahua: Amcrest, Intelbras, TVT, Jovision, ANNKE) devices for:
---     CVE-2021-33044  — Authentication bypass via crafted HTTP packet (CVSS 9.8)
---     CVE-2020-25078  — Unauthenticated username disclosure via API
---     CVE-2013-6117   — DVR password recovery without authentication (legacy)
+--     CVE-2021-33044  -- Authentication bypass via crafted HTTP packet (CVSS 9.8)
+--     CVE-2020-25078  -- Unauthenticated username disclosure via API
+--     CVE-2013-6117   -- DVR password recovery without authentication (legacy)
 --
 -- USAGE:
 --   nmap -p 80,37777 --script embedxpl-dahua-vuln <target>
@@ -18,8 +18,8 @@
 -- OUTPUT EXAMPLE:
 --   80/tcp open http
 --   | embedxpl-dahua-vuln:
---   |   CVE-2021-33044: VULNERABLE — auth bypass accepted, admin session obtained
---   |   CVE-2020-25078: VULNERABLE — users=[admin, operator, viewer]
+--   |   CVE-2021-33044: VULNERABLE -- auth bypass accepted, admin session obtained
+--   |   CVE-2020-25078: VULNERABLE -- users=[admin, operator, viewer]
 --   |_  EmbedXPL: embedxpl > use exploits/cameras/dahua/cctv_auth_bypass_cve_2021_33044
 
 local http   = require "http"
@@ -34,7 +34,7 @@ for CVE-2021-33044 (auth bypass), CVE-2020-25078 (user disclosure), and legacy D
 credential recovery. Suggests EmbedXPL-Forge modules for full exploitation.
 ]]
 
-author     = "André Henrique (@mrhenrike) | União Geek"
+author     = "Andre Henrique (@mrhenrike) | Uniao Geek"
 license    = "Same as Nmap -- See https://nmap.org/book/man-legal.html"
 categories = { "vuln", "exploit", "safe" }
 
@@ -79,10 +79,10 @@ local function check_cve_2021_33044(host, port)
   if resp then
     local ct = (resp.header and resp.header["content-type"]) or ""
     if resp.status == 200 and ct:match("image/") then
-      return "VULNERABLE — snapshot captured via Digest bypass (CVE-2021-33044, CVSS 9.8)"
+      return "VULNERABLE -- snapshot captured via Digest bypass (CVE-2021-33044, CVSS 9.8)"
     end
     if resp.status == 200 then
-      return "LIKELY VULNERABLE — HTTP 200 returned without valid credentials"
+      return "LIKELY VULNERABLE -- HTTP 200 returned without valid credentials"
     end
   end
   return "NOT VULNERABLE or patched"
@@ -99,10 +99,10 @@ local function check_cve_2020_25078(host, port)
       table.insert(users, user)
     end
     if #users > 0 then
-      return "VULNERABLE — Users disclosed: [" .. table.concat(users, ", ") .. "]"
+      return "VULNERABLE -- Users disclosed: [" .. table.concat(users, ", ") .. "]"
     end
     if #resp.body > 20 then
-      return "LIKELY VULNERABLE — Response body returned without auth: " ..
+      return "LIKELY VULNERABLE -- Response body returned without auth: " ..
              resp.body:sub(1, 80)
     end
   end
@@ -115,10 +115,10 @@ local function check_cve_2013_6117(host, port)
   if resp and resp.status == 200 and resp.body then
     local pw = resp.body:match("admin:(.-)\n")
     if pw then
-      return "VULNERABLE (CVE-2013-6117) — admin password: " .. pw
+      return "VULNERABLE (CVE-2013-6117) -- admin password: " .. pw
     end
     if #resp.body > 5 then
-      return "POSSIBLY VULNERABLE (CVE-2013-6117) — endpoint responds"
+      return "POSSIBLY VULNERABLE (CVE-2013-6117) -- endpoint responds"
     end
   end
   return "NOT VULNERABLE"

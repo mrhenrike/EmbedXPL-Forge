@@ -1,7 +1,7 @@
 -- embedxpl-camera-snapshot.nse
--- EmbedXPL-Forge NSE Script — Unauthenticated Camera Snapshot Capture
+-- EmbedXPL-Forge NSE Script -- Unauthenticated Camera Snapshot Capture
 --
--- Author : André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+-- Author : Andre Henrique (@mrhenrike) | Uniao Geek -- https://github.com/Uniao-Geek
 -- Version: 1.0.0
 -- License: BSD
 --
@@ -37,7 +37,7 @@ snapshot endpoints across Hikvision, Dahua, Axis, Reolink, Foscam, Vivotek,
 and generic cameras. Reports accessible URLs and download size.
 ]]
 
-author     = "André Henrique (@mrhenrike) | União Geek"
+author     = "Andre Henrique (@mrhenrike) | Uniao Geek"
 license    = "Same as Nmap -- See https://nmap.org/book/man-legal.html"
 categories = { "vuln", "safe", "discovery" }
 
@@ -158,7 +158,7 @@ action = function(host, port)
         local entry = {
           vendor  = probe.vendor,
           url     = url,
-          status  = ("HTTP %d — auth required (endpoint exists)"):format(resp.status),
+          status  = ("HTTP %d -- auth required (endpoint exists)"):format(resp.status),
           mod     = probe.mod,
         }
         table.insert(found, entry)
