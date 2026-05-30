@@ -65,6 +65,9 @@ ehthumbs.db
 .log/
 .tmp/
 .tmp*/
+.tmp_*.py
+.tmp_*.sh
+.tmp_*.txt
 
 # === Local lab / test environments (Dockerfiles, simulators) - do NOT publish ===
 lab/
