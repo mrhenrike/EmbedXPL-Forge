@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+"""commit-msg hook: strip any Co-authored-by: Cursor attribution injected by the IDE.
+
+Install (once per clone):
+    python tools/install_hooks.py
+or manually:
+    cp .githooks/commit-msg .git/hooks/commit-msg
+    chmod +x .git/hooks/commit-msg
+"""
+import sys
+from pathlib import Path
+
+msg_file = Path(sys.argv[1])
+original = msg_file.read_text(encoding="utf-8", errors="replace")
+
+cleaned_lines = [
+    line for line in original.splitlines()
+    if not line.startswith("Co-authored-by: Cursor")
+    and not line.startswith("Co-authored-by: cursoragent")
+]
+
+# Strip trailing blank lines introduced by removal
+while cleaned_lines and cleaned_lines[-1].strip() == "":
+    cleaned_lines.pop()
+
+cleaned = "\n".join(cleaned_lines) + "\n"
+
+if cleaned != original:
+    msg_file.write_text(cleaned, encoding="utf-8")
+
+sys.exit(0)
