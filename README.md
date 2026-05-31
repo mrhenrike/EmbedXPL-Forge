@@ -1,10 +1,14 @@
+<p align="center">
+  <img src="docs/img/embedxpl-forge-1.png" alt="EmbedXPL-Forge" width="100%">
+</p>
+
 # EmbedXPL-Forge
 
 **Embedded & Perimeter Security Assessment Framework**
 
 EmbedXPL-Forge is an open-source exploitation and scanning framework for security professionals auditing routers, switches, IP cameras, NVR/DVR, GPON ONTs, ISP CPEs, printers, IoT, OT/ICS, and embedded edge devices. It provides **2800+ active modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, RTSP camera attacks, firmware manipulation, multi-language PolyExploit orchestration, and a full printer arsenal — with **700+ CVEs** mapped across **114+ vendors** and an **APT Group Attack Engine** that reproduces real-world nation-state attack chains.
 
-> **Version:** 3.1.0
+> **Version:** 3.2.0
 
 
 ## Features
