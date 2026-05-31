@@ -4,6 +4,7 @@ paramiko
 pysnmp
 pycryptodome
 scapy
+colorama
 setuptools
 telnetlib3; python_version >= "3.13"
 rich>=13.0
