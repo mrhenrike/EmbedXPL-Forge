@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../../img/embedxpl-forge-1.png" alt="EmbedXPL-Forge" width="100%">
+</p>
+
 # Wiki EmbedXPL-Forge (pt-BR)
 
 **Idioma: Português (pt-BR)**. **English (en-US):** [../en-US/README.md](../en-US/README.md)
