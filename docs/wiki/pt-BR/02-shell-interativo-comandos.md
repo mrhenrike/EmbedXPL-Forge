@@ -1,99 +1,197 @@
-# Shell Interativo — Comandos
+# Comandos do Shell Interativo
 
-**Idioma:** Português (pt-BR). **en-US:** [../en-US/02-interactive-shell-commands.md](../en-US/02-interactive-shell-commands.md)
+**Idioma:** Portugues (pt-BR) | **English (en-US):** [../en-US/02-interactive-shell-commands.md](../en-US/02-interactive-shell-commands.md)
 
-## Referência de Comandos
+---
 
-| Comando | Finalidade |
-|---------|-----------|
-| `use <módulo>` | Carregar um módulo pelo caminho |
-| `back` | Sair do contexto do módulo atual |
-| `show options` | Listar opções do módulo |
-| `show info` | Exibir metadados do módulo |
-| `show devices` | Listar devices conhecidos / catálogo |
-| `set <opção> <valor>` | Configurar uma opção local do módulo |
-| `setg <opção> <valor>` | Configurar uma opção global (persiste entre módulos) |
-| `unset <opção>` | Limpar uma opção local |
-| `unsetg <opção>` | Limpar uma opção global |
-| `check` | Executar verificação de vulnerabilidade do módulo |
-| `run` / `exploit` | Executar o módulo carregado |
-| `search <termo>` | Buscar módulos por palavra-chave, CVE ou vendor |
-| `discover [subnet] [--timing T0-T5] [--fresh]` | Descobrir e fingerprinting de targets na subnet |
-| `sessions <subcomando>` | Gerenciar histórico persistente de scans |
-| `help` | Ajuda integrada |
-| `exit` | Sair da aplicação |
+## Iniciando o shell
 
-## Sessão de Exemplo
-
-```text
-EmbedXPL-Forge > use exploits/routers/dlink/dir_300_600_rce
-EmbedXPL-Forge (dir_300_600_rce) > show options
-EmbedXPL-Forge (dir_300_600_rce) > set target 192.168.0.1
-EmbedXPL-Forge (dir_300_600_rce) > check
-EmbedXPL-Forge (dir_300_600_rce) > run
+```bash
+embedxpl           # recomendado (apos pip install)
+exf                # alias
+python -m embedxpl # ponto de entrada do modulo
+python exf.py      # bootstrap legado (git clone)
 ```
 
-## Discovery de Rede
-
-O comando `discover` realiza varredura multi-fase para identificar devices conhecidos:
+O prompt muda conforme o modulo carregado:
 
 ```text
-# Varrer a subnet padrão (detectada automaticamente pelas interfaces ativas)
-EmbedXPL-Forge > discover
-
-# Varrer subnet específica com timing T4 (agressivo)
-EmbedXPL-Forge > discover 192.168.1.0/24 --timing T4
-
-# Varrer um host único
-EmbedXPL-Forge > discover 192.168.1.1
-
-# Ignorar histórico de sessão e fazer varredura completa
-EmbedXPL-Forge > discover --fresh
+exf >                          # sem modulo carregado
+exf (dir_300_600_rce) >        # com modulo carregado
 ```
 
-### Perfis de Timing (T0–T5)
+Completacao por Tab disponivel para todos os comandos e caminhos de modulo.
 
-| Perfil | Delay entre probes | Caso de uso |
-|--------|-------------------|-------------|
-| `T0` | paranóico — 300 s | Evasão extrema de IDS |
-| `T1` | furtivo — 15 s | Auditorias silenciosas |
-| `T2` | educado — 2 s | Impacto mínimo na rede |
-| `T3` | normal — 0,5 s | **Padrão** |
-| `T4` | agressivo — 0,1 s | Scans rápidos em LAN |
-| `T5` | insano — 0 s | CTF / laboratório isolado |
+---
 
-Pipeline de discovery: **ARP sweep → Nmap (probes multi-método) → Scapy → TCP connect fallback**.
+## Referencia completa de comandos
 
-A resolução de vendor por MAC usa a [base OUI da IEEE](https://standards-oui.ieee.org/oui/oui.txt) com busca online prioritária e fallback local (`embedxpl/data/oui.txt`).
+### Comandos globais (sempre disponiveis)
 
-Quando um host descoberto expõe capacidades wireless, o EmbedXPL-Forge exibe uma recomendação para usar [WirelessXPL-Forge](https://github.com/mrhenrike/WirelessXPL-Forge) para ataques específicos de WiFi.
+| Comando | Sintaxe | Descricao |
+|---------|---------|-----------|
+| `help` | `help` | Imprime a referencia de comandos |
+| `use` | `use <caminho>` | Carrega um modulo pelo caminho |
+| `search` | `search [termo] [filtros]` | Busca modulos por palavra-chave, CVE ou fabricante |
+| `show` | `show <sub>` | Exibe listagens |
+| `exec` | `exec <comando shell>` | Executa um comando no SO |
+| `sysinfo` | `sysinfo` | Exibe CPU, RAM, GPU, modo de computacao |
+| `compute` | `compute <modo>` | Define o backend de computacao |
+| `discover` | `discover [alvo] [opcoes]` | Descoberta e fingerprinting de rede |
+| `sessions` | `sessions [sub]` | Gerencia sessoes de scan persistentes |
+| `apt` | `apt [sub]` | Catalogo de cadeias de ataque APT |
+| `exit` | `exit` | Sai do shell |
 
-## Gerenciamento de Sessões
+### Comandos de contexto de modulo (requerem `use` primeiro)
 
-Sessões persistem o histórico de scan por host único (indexado por SHA-256 de IP + MAC). Em re-discovery de um host conhecido, módulos já testados aparecem como `[Testado]` e são pulados por padrão.
+| Comando | Sintaxe | Descricao |
+|---------|---------|-----------|
+| `run` | `run` | Executa o modulo carregado |
+| `exploit` | `exploit` | Alias de `run` |
+| `check` | `check` | Executa a verificacao de vulnerabilidade do modulo |
+| `set` | `set <opcao> <valor>` | Define uma opcao do modulo |
+| `setg` | `setg <opcao> <valor>` | Define uma opcao global (persiste entre modulos) |
+| `unset` | `unset <opcao>` | Limpa uma opcao do modulo |
+| `unsetg` | `unsetg <opcao>` | Limpa uma opcao global |
+| `show options` | `show options` | Lista todas as opcoes do modulo |
+| `show advanced` | `show advanced` | Lista opcoes avancadas |
+| `show info` | `show info` | Exibe metadados do modulo |
+| `show devices` | `show devices` | Lista dispositivos alvo do modulo |
+| `back` | `back` | Descarrega o modulo atual |
 
-Sessões são armazenadas em `~/.exf_sessions/`.
+---
+
+## `set` / `setg` -- configurar opcoes
 
 ```text
-# Listar todos os hosts com histórico
-EmbedXPL-Forge > sessions list
+exf (dir_300_600_rce) > set target 192.168.0.1
+[+] target => 192.168.0.1
 
-# Exibir histórico completo de um host: módulos testados, findings, timestamps
-EmbedXPL-Forge > sessions show 192.168.1.1
+exf (dir_300_600_rce) > set port 8080
+[+] port => 8080
 
-# Exportar sessão como arquivo JSON
-EmbedXPL-Forge > sessions export 192.168.1.1
+exf (dir_300_600_rce) > set ssl true
+[+] ssl => true
 
-# Deletar sessão de um host
-EmbedXPL-Forge > sessions delete 192.168.1.1
-
-# Deletar todas as sessões
-EmbedXPL-Forge > sessions purge
+# Opcao global que persiste entre modulos:
+exf (dir_300_600_rce) > setg target 192.168.0.1
+[+] target => 192.168.0.1 (global)
 ```
 
-## Completação por Tab
+**Tipos de dados das opcoes:**
 
-Completação automática está disponível para comandos e caminhos de módulos onde a camada readline estiver ativa.
+| Tipo | Entrada no shell | Exemplo |
+|------|-----------------|---------|
+| `OptIP` | IPv4, IPv6 ou `file://caminho` (multi-alvo) | `192.168.1.1`, `file:///tmp/hosts.txt` |
+| `OptPort` | Inteiro 1-65535 | `443`, `9100` |
+| `OptBool` | Exatamente `true` ou `false` | `true`, `false` |
+| `OptString` | Qualquer string | `admin`, `id`, `whoami` |
+| `OptInteger` | Inteiro decimal ou hexadecimal | `10`, `0x1F` |
+| `OptFloat` | Numero decimal | `2.0`, `0.5` |
+| `OptMAC` | Endereco MAC | `aa:bb:cc:dd:ee:ff` |
+| `OptWordlist` | `file://caminho` ou `usuario:senha,...` | `file:///usr/share/wordlists/rockyou.txt` |
+
+---
+
+## `check` e `run`
+
+```text
+exf (dir_300_600_rce) > check
+[*] Verificando vulnerabilidade...
+[+] Alvo e vulneravel
+
+exf (dir_300_600_rce) > run
+[*] Executando modulo dir_300_600_rce...
+[+] Saida do comando: uid=0(root) gid=0(root)
+```
+
+| Retorno de `check` | Mensagem no shell |
+|-------------------|------------------|
+| `True` | `[+] Alvo e vulneravel` |
+| `False` | `[-] Alvo nao e vulneravel` |
+| Outro / excecao | `[*] Nao foi possivel verificar o alvo` |
+
+**Opcoes do Shell Stager** (disponiveis em todos os modulos de exploit armados):
+
+| Opcao | Tipo | Padrao | Descricao |
+|-------|------|--------|-----------|
+| `lhost` | `OptString` | `""` | IP do atacante para shells reversos |
+| `lport` | `OptPort` | `4444` | Porta TCP do listener |
+| `shell_type` | `OptString` | `auto` | Tipo de shell: `bash`, `nc`, `python`, `perl`, `ruby`, `php`, `powershell`, `meterpreter_linux`, `meterpreter_windows`, `auto`, entre outros |
+| `force_exploit` | `OptBool` | `false` | Pula `check()` e vai direto ao exploit |
+| `ask_on_fail` | `OptBool` | `true` | Pergunta ao usuario se `check()` retornar False |
+| `pty_upgrade` | `OptBool` | `true` | Envia automaticamente `python3 pty.spawn()` ao conectar |
+| `listener_timeout` | `OptPort` | `60` | Segundos para aguardar conexao reversa |
+
+---
+
+## `search` -- buscar modulos
+
+```text
+exf > search dlink
+exf > search CVE-2021-36260
+exf > search hikvision
+exf > search fortinet
+exf > search type=exploits cisco
+exf > search vendor=sonicwall
+exf > search device=routers netgear
+```
+
+**Filtros de busca:**
+
+| Filtro | Valores | Exemplo |
+|--------|---------|---------|
+| `type=` | `exploits`, `creds`, `scanners`, `payloads`, `encoders`, `generic` | `type=exploits` |
+| `device=` | Subdiretorio de `exploits/` | `device=cameras` |
+| `vendor=` | Qualquer segmento de caminho | `vendor=paloalto` |
+| `language=` | Subdiretorio de `encoders/` | `language=python` |
+| `payload=` | Subdiretorio de `payloads/` | `payload=python` |
+
+---
+
+## `discover` -- descoberta de rede
+
+```text
+exf > discover 192.168.1.0/24
+exf > discover 192.168.1.0/24 --timing T4
+exf > discover -T /tmp/alvos.txt
+exf > discover 192.168.1.0/24 --fresh
+```
+
+**Perfis de timing:**
+
+| Perfil | Atraso | Caso de uso |
+|--------|--------|-------------|
+| `T0` | 300 s/probe | Evasao extrema de IDS |
+| `T1` | 15 s/probe | Auditorias silenciosas |
+| `T2` | 2 s/probe | Impacto minimo na rede |
+| `T3` | 0,5 s/probe | **Padrao** -- normal |
+| `T4` | 0,1 s/probe | Scans rapidos em LAN |
+| `T5` | 0 s/probe | Somente CTF / lab isolado |
+
+---
+
+## `sessions` -- gerenciar historico de scan
+
+```text
+exf > sessions list
+exf > sessions show 192.168.1.1
+exf > sessions export 192.168.1.1
+exf > sessions delete 192.168.1.1
+exf > sessions purge           # solicita confirmacao: digite "yes"
+```
+
+---
+
+## Convencoes de prefixo de saida
+
+| Prefixo | Cor | Significado |
+|---------|-----|-------------|
+| `[+]` | Verde | Sucesso / descoberta |
+| `[-]` | Vermelho | Erro / falha |
+| `[*]` | Azul | Status / progresso |
+| `[!]` | Amarelo | Aviso |
+| (nenhum) | Branco | Informativo |
 
 
-[Hub da Wiki](../README.md)
+[Hub da wiki](../README.md)

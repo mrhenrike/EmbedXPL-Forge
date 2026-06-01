@@ -1,30 +1,141 @@
-# Solução de problemas
+# Solucao de Problemas
 
-**Idioma: Português (pt-BR)**. **en-US:** [../en-US/11-troubleshooting.md](../en-US/11-troubleshooting.md)
+**Idioma:** Portugues (pt-BR) | **English (en-US):** [../en-US/11-troubleshooting.md](../en-US/11-troubleshooting.md)
 
-## ImportError na inicialização
+---
 
-Execute novamente `python -m pip install -r requirements.txt` dentro do `venv` ativo. Se um pacote opcional falhar, instale a dependencia extra correspondente (por exemplo **Scapy** para descoberta de rede com captura raw, ou **telnetlib3** para modulos Telnet em Python 3.13+).
+## Problemas de inicializacao
 
-## Telnet no Python 3.13+
+### `ImportError` ou `ModuleNotFoundError` ao iniciar
 
-A biblioteca padrão removeu `telnetlib`; instale e use **`telnetlib3`** conforme `requirements.txt` para módulos Telnet.
+```bash
+pip install -r requirements.txt   # reinstala todas as dependencias
+pip install embedxpl[all]          # ou reinstala com todos os extras
+python tools/env_doctor.py         # diagnostico completo
+```
 
-## Erros do Scapy
+### Erro de TTY / modo nao-interativo falha
 
-Confirme que **Scapy** está instalado e que pré-requisitos de captura ao vivo (por exemplo **Npcap** no Windows) existem quando o módulo faz captura raw.
+```text
+[-] EmbedXPL-Forge requer terminal interativo para o modo shell.
+    Use a flag -m para execucao nao-interativa.
+```
 
-## Sem cores no Windows
+Solucao: use a flag `-m` para modo nao-interativo, ou garanta que o terminal tenha um TTY real.
 
-Instale **`colorama`** (via `requirements.txt`) para ANSI em consoles padrão.
+---
 
-## Módulo não encontrado após mover arquivos
+## Problemas de versao do Python
 
-Rode a partir da raiz do repositorio e garanta que `PYTHONPATH` nao esteja sobrescrevendo a descoberta de pacotes. Prefira o entry point oficial `embedxpl` (instalado via `pip install embedxpl`) ou `python -m embedxpl`. O bootstrap legacy `./exf.py` continua disponivel se voce esta rodando direto do clone.
+### Telnet no Python 3.13+
 
-## Permission denied no Linux
+`telnetlib` foi removido no Python 3.13. Instale `telnetlib3`:
 
-Sockets raw e alguns caminhos de captura exigem capability elevada ou `sudo` quando o SO exige; use o menor privilegio compativel com as regras do engagement.
+```bash
+pip install telnetlib3
+```
+
+---
+
+## Problemas de rede e SO
+
+### Erros do Scapy / acesso a raw socket
+
+```bash
+sudo embedxpl
+# ou (Linux):
+sudo setcap cap_net_raw+eip $(which python3)
+```
+
+No **Windows**, instale o **Npcap** para suporte a raw socket.
+
+### Sem cores no Windows
+
+```bash
+pip install colorama
+```
+
+### Permissao negada no Linux (NSE ou raw sockets)
+
+```bash
+sudo embedxpl-nse install
+sudo embedxpl
+```
+
+---
+
+## Problemas com Shell Stager
+
+### Listener ativo mas sem conexao
+
+1. Verifique se `lhost` e o IP do atacante acessivel a partir do alvo.
+2. Verifique regras de firewall: `lport` deve estar aberta para entrada.
+3. Aumente `listener_timeout`.
+4. Tente outro `shell_type` (`python`, `nc_mkfifo`, `socat`).
+
+### Terminal corrompido apos fechar o shell
+
+```bash
+reset         # restaura o estado do terminal
+stty sane     # alternativa
+```
+
+### Stager Meterpreter falha
+
+1. Verifique se `msfvenom` esta instalado (`metasploit-framework`).
+2. O modulo imprime o comando `msfvenom` -- execute manualmente.
+3. Inicie o handler: `msfconsole -r .tmp/msf_handler_<porta>.rc`
+
+---
+
+## Problemas com scripts NSE
+
+### Scripts nao encontrados pelo Nmap apos instalacao
+
+```bash
+sudo nmap --script-updatedb
+```
+
+### `embedxpl-nse install` retorna erro de permissao
+
+```bash
+sudo embedxpl-nse install
+# ou especifique um diretorio gravavel:
+embedxpl-nse install --nse-dir ~/.nmap/scripts
+```
+
+---
+
+## Problemas com modulos especificos
+
+### `check()` retorna "nao foi possivel verificar"
+
+```text
+exf (nome_modulo) > set force_exploit true
+exf (nome_modulo) > run
+```
+
+### `[WARN] Alvo pode estar corrigido`
+
+O alvo pode estar corrigido, atras de um WAF ou usando configuracao nao-padrao. Use `force_exploit=true` para tentar mesmo assim.
+
+---
+
+## Dependencias
+
+Reinstalar todas as dependencias:
+
+```bash
+pip install -r requirements.txt --upgrade
+```
+
+---
+
+## Obtendo ajuda
+
+- **Issues no GitHub:** https://github.com/mrhenrike/EmbedXPL-Forge/issues
+- **Diagnostico:** `python tools/env_doctor.py`
+- **Teste de compatibilidade:** `python tools/compat_smoke.py`
 
 
-[Hub wiki](../README.md)
+[Hub da wiki](../README.md)
