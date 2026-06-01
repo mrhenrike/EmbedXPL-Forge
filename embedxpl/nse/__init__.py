@@ -1,16 +1,26 @@
-# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek — https://github.com/Uniao-Geek
-"""EmbedXPL-Forge — Nmap NSE Script Manager.
+# Author: Andre Henrique (@mrhenrike) | Uniao Geek -- https://github.com/Uniao-Geek
+"""EmbedXPL-Forge -- Nmap NSE Script Manager package.
 
-Installs, updates, and lists EmbedXPL custom NSE scripts into Nmap's
-script directory so they can be called with ``--script embedxpl-*``.
+Install, list, and run EmbedXPL custom NSE scripts with automatic Nmap detection.
 
 Usage::
 
-    pip install embedxpl[nse]
-    python -m embedxpl.nse install
-    python -m embedxpl.nse list
-    python -m embedxpl.nse run --target 192.168.1.1 --scripts all
+    embedxpl-nse install          # install to nmap scripts dir (validates nmap first)
+    embedxpl-nse install --force  # overwrite existing
+    embedxpl-nse list             # show all scripts and their status
+    embedxpl-nse check            # validate nmap installation only
+    embedxpl-nse run --target 192.168.1.0/24 --scripts all
+    embedxpl-nse run --target 10.0.0.1 --scripts perimeter-vuln,router-vuln
+    embedxpl-nse uninstall
+    embedxpl-nse info hikvision-vuln
 
-Author: André Henrique (@mrhenrike) | União Geek
-Version: 1.0.0
+    python -m embedxpl.nse install    # alternative invocation
+
+Author: Andre Henrique (@mrhenrike) | Uniao Geek
+Version: 2.0.0
 """
+
+from embedxpl.nse.manager import NSEManager
+
+__all__ = ["NSEManager"]
+__version__ = "2.0.0"
