@@ -333,3 +333,45 @@
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/modules/exploits/firewalls/
 - Catalog: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\resources\catalogs\cve_extended_catalog.json
+
+## [2026-06-01 20:25] — EmbedXPL-Forge wiki pages 06-09 rewrite + 19-23 new pages
+
+### Estado ao encerrar
+- Reescrita completa de 06-exploits-modules.md: todas seções por vendor (Palo Alto 9 módulos, Fortinet 17, Cisco 13, SonicWall 7, Check Point 5, Juniper 4, F5 3, Sophos 3, WatchGuard 3, Zyxel 3, pfSense 6, Siemens 3, Moxa 2, MikroTik 3, Huawei 2, e mais) com typed option tables e terminal sessions completas
+- Reescrita completa de 07-scanners-and-autopwn.md: AutoPwn com show options + show advanced, todos os templates T0-T5 com output de terminal, integração discover, RTSP scanner, ICS scanner
+- Reescrita completa de 08-generic-modules.md: CVE lookup com output completo, SNMP bruteforce+trap, UPnP IGD chain, wordlist gen, Bluetooth/BLE, external bridges
+- Reescrita completa de 09-payloads-and-encoders.md: todas arquiteturas (x86/x64/armle/mipsbe/mipsle), cmd/python/php/perl payloads, todos 13 encoders (python/php/perl × base64/hex/rot13/url/base32)
+- Criação de 19-infra-wizard-mode.md: flags --infra ot/it/iot --context ics/scada, --wizard walkthrough completo
+- Criação de 20-ics-ot-modules.md: Modbus TCP, S7comm (Siemens), CIP (Rockwell), BACnet, DNP3, FUXA RCE, QNX Qconn, Universal Robots
+- Criação de 21-rtsp-camera-engine.md: rtsp_scanner opções completas, 20 paths, 20 credential pairs, snapshot, Cameradar chain
+- Criação de 22-cve-module-reference.md: tabela completa de todos CVE modules (firewalls, cameras, ICS, BMC) com check() behavior
+- Criação de 23-vendor-reference-firewalls.md: Palo Alto (9), Fortinet (17), Cisco (13), SonicWall (7), Check Point (5), Juniper (4), F5 (3), Sophos (3), MikroTik (3), Huawei (2), WatchGuard (3), Zyxel (3), pfSense (5), Siemens (3), Moxa (2)
+
+### Arquivos modificados
+- docs/wiki/en-US/06-exploits-modules.md (reescrita completa, 58.8 KB)
+- docs/wiki/en-US/07-scanners-and-autopwn.md (reescrita completa, 35.7 KB)
+- docs/wiki/en-US/08-generic-modules.md (reescrita completa, 29.3 KB)
+- docs/wiki/en-US/09-payloads-and-encoders.md (reescrita completa, 27.0 KB)
+- docs/wiki/en-US/19-infra-wizard-mode.md (novo, 11.2 KB)
+- docs/wiki/en-US/20-ics-ot-modules.md (novo, 21.4 KB)
+- docs/wiki/en-US/21-rtsp-camera-engine.md (novo, 16.5 KB)
+- docs/wiki/en-US/22-cve-module-reference.md (novo, 25.3 KB)
+- docs/wiki/en-US/23-vendor-reference-firewalls.md (novo, 23.6 KB)
+
+### Próximo passo imediato
+- Criar pt-BR correspondentes (../pt-BR/) para todos os 9 arquivos se necessário
+- Atualizar README.md da wiki para incluir links para 19-23
+
+### Pendências conhecidas
+- [ ] Criar versões pt-BR de 19-23 (se solicitado)
+- [ ] Atualizar README.md da wiki com links para páginas 19-23
+- [ ] Verificar se fortiweb/ subdir precisa de documentação própria
+
+### Ambiente necessário
+- Python 3.10+ com embedxpl instalado
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\docs\wiki\en-US\
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/docs/wiki/en-US/
