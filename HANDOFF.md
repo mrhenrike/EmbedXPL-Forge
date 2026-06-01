@@ -295,3 +295,41 @@
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/modules/exploits/firewalls/
+
+## [2026-06-01 20:00] -- Scaffold fix + new CVE modules + catalog update
+
+### Estado ao encerrar
+- Reescreveu 9 modulos scaffold com implementacao real do primitivo CVE:
+  - siemens/scalance_cmd_injection_cve_2023_44373.py (POST ping injection)
+  - siemens/ruggedcom_web_rce_cve_2023_24845.py (path traversal + CGI exec)
+  - siemens/sinema_rc_path_traversal_cve_2022_32257.py (LFI via REST API)
+  - moxa/edr_cmd_injection_cve_2024_9138.py (doIpDiag OS injection)
+  - moxa/edr_g_jwt_hardcoded_cve_2024_9137.py (HMAC-SHA256 JWT forging)
+  - sophos/firewall_code_injection_cve_2022_3236.py (PHP eval injection)
+  - watchguard/firebox_cyclops_blink_cve_2022_23176.py (SOAP mgmt + default creds)
+  - zyxel/buffer_overflow_cve_2023_33009.py (fbwifi_wan.cgi stack overflow)
+  - zyxel/ike_cmd_injection_cve_2023_28771.py (IKEv1 Aggressive Mode ID injection via UDP/500)
+- Criou 5 novos modulos Tier 1:
+  - cisco/cisco_fmc_deserialization_rce_cve_2026_20131.py (Java deser via REST)
+  - paloalto/panos_ikev2_rce_cve_2026_0263.py (IKEv2 PQC heap overflow via UDP/500)
+  - sonicwall/sonicwall_gen6_mfa_bypass_cve_2024_12802.py (LDAP passthrough MFA bypass)
+  - lb/f5/bigip_icontrol_rest_rce_cve_2021_22986.py (unauth RCE via iControl REST)
+  - lb/f5/bigip_icontrol_auth_bypass_cve_2022_1388.py (Connection hop-by-hop bypass + RCE)
+- Atualizou cve_extended_catalog.json: 27 novos entries (355 -> 383 total), last_updated=2026-06-01
+
+### Proximo passo imediato
+- Verificar linter nos modulos reescritos (OptInt import em buffer_overflow pode nao existir)
+
+### Pendencias conhecidas
+- [ ] OptInt pode nao existir em embedxpl.core.exploit -- verificar e substituir por OptPort se necessario
+- [ ] Modulo IKE Zyxel nao importa struct mas usa -- ja foi corrigido no codigo
+
+### Ambiente necessario
+- Python 3.x (embedxpl)
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/modules/exploits/firewalls/
+- Catalog: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\resources\catalogs\cve_extended_catalog.json
