@@ -5,6 +5,79 @@ All notable changes to EmbedXPL-Forge are documented here.
 Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 
+
+## [3.3.0] - 2026-06-01
+
+### Added - Firewall CVE Expansion (30+ E2E Modules), 12 New Vendor Folders, Complete Wiki Rewrite
+
+#### Firewall exploit modules (new)
+
+**Cisco (3 new)**
+
+- xploits/firewalls/cisco/cisco_sdwan_dtls_auth_bypass_cve_2026_20182.py
+  - CVE-2026-20182, CVSS 10.0 -- SD-WAN vManage DTLS unauthenticated authentication bypass
+- xploits/firewalls/cisco/cisco_fmc_auth_bypass_rce_cve_2026_20079.py
+  - CVE-2026-20079, CVSS 10.0 -- Firepower Management Center authentication bypass + RCE
+- xploits/firewalls/cisco/cisco_fmc_deserialization_rce_cve_2026_20131.py
+  - CVE-2026-20131, CVSS 10.0 -- FMC Java deserialization remote code execution
+
+**PAN-OS (3 new)**
+
+- xploits/firewalls/paloalto/panos_dns_heap_rce_cve_2026_0264.py
+  - CVE-2026-0264, CVSS 7.2 -- DNS proxy heap overflow RCE
+- xploits/firewalls/paloalto/panos_ikev2_rce_cve_2026_0263.py
+  - CVE-2026-0263, CVSS 7.2 -- IKEv2 daemon memory corruption RCE
+- xploits/firewalls/paloalto/panos_cas_auth_bypass_cve_2026_0265.py
+  - CVE-2026-0265, CVSS 7.2 -- Certificate Authentication Service auth bypass
+
+**Fortinet (3 new)**
+
+- xploits/firewalls/fortinet/fortios_heap_overflow_rce_cve_2026_25249.py
+  - CVE-2026-25249, CVSS 9.6 -- FortiOS httpsd heap overflow unauthenticated RCE
+- xploits/firewalls/fortinet/fortios_oob_write_rce_cve_2025_53844.py
+  - CVE-2025-53844, CVSS 9.3 -- FortiOS out-of-bounds write memory corruption RCE
+- xploits/firewalls/fortinet/fortiswitch_unauth_passwd_cve_2024_48887.py
+  - CVE-2024-48887, CVSS 9.3 -- FortiSwitch unauthenticated admin password reset
+
+**Check Point (2 new)**
+
+- xploits/firewalls/checkpoint/checkpoint_vpn_lfi_chain_cve_2024_24919.py
+  - CVE-2024-24919, CVSS 8.6 -- VPN Gateway LFI to credential extraction full chain
+- xploits/firewalls/checkpoint/checkpoint_remote_code_exec_cve_2023_28461.py
+  - CVE-2023-28461, CVSS 9.8 -- SSL Network Extender RFI remote code execution
+
+**Juniper (2 new)**
+
+- xploits/firewalls/juniper/juniper_srx_file_upload_rce_cve_2023_36851.py
+  - CVE-2023-36851, CVSS 9.8 -- SRX J-Web unauthenticated file upload RCE
+- xploits/firewalls/juniper/juniper_srx_unauth_rce_cve_2025_21590.py
+  - CVE-2025-21590, CVSS 9.8 -- SRX session prediction unauthenticated RCE
+
+#### New vendor coverage
+
+New vendor folders added under xploits/firewalls/:
+mikrotik (3 modules), huawei (2), opnsense (1), kerio (1), stormshield, hillstone, yos
+
+#### Scaffold upgrades
+
+Replaced HTTP-only check() stubs with CVE-specific network probes in:
+- Siemens SCALANCE
+- Siemens RUGGEDCOM
+- Siemens SINEMA RC
+- Moxa EDR-G9010
+- Sophos Firewall
+- WatchGuard Firebox
+- Zyxel USG
+- pfSense pfBlockerNG
+
+#### Documentation
+
+- Rewrote all 13 existing wiki pages EN-US with complete I/O samples for all 47 shell functions
+- Created 10 new wiki pages EN-US (14-23) with full parameter tables and terminal examples
+- Created 23 wiki pages PT-BR covering all commands and modules
+- Updated wiki index README in both languages (en-US and pt-BR)
+
+---
 ## [3.2.1] - 2026-06-01
 
 ### Added - CVE-2026-0257 PAN-OS GlobalProtect Authentication Override Cookie Bypass
