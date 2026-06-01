@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "3.2.0"
+version = "3.2.1"
 description = "Embedded & Perimeter Security Assessment Framework — 2800+ modules, 700+ CVEs, 114+ vendors. v3.1.0: 54 new CVE modules (2024/2025/2026), printer domain enabled (185+ modules), 7 automated quality gates via phase_gate.py, CUPS Pwn2Own 2026 chain, wolfSSL CVE-2026-5194, PAN-OS CVE-2026-0300, Cisco IOS XE CVE-2025-20188 (CVSS 10.0)."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
