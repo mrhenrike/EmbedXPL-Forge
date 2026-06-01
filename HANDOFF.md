@@ -255,3 +255,43 @@
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\docs\wiki\en-US\
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/docs/wiki/en-US/
+
+## [2026-06-01 20:00] -- E2E Firewall Exploit Modules Batch (14 modules)
+
+### Estado ao encerrar
+- Criados 14 modulos de exploits E2E completos para EmbedXPL-Forge
+- Arquivos modificados:
+  - sonicwall\sonicwall_sslvpn_sqli_rce_cve_2019_7481.py (novo)
+  - sonicwall\sonicwall_nsa_buffer_overflow_cve_2020_5133.py (novo)
+  - lb\f5\bigip_ssrf_rce_cve_2023_22374.py (novo)
+  - fortinet\fortiproxy_auth_bypass_cve_2023_25610.py (novo)
+  - fortinet\fortios_sslvpn_xsrf_ssrf_cve_2023_48789.py (novo)
+  - sophos\sophos_web_appliance_cmd_inject_cve_2023_1671.py (novo)
+  - watchguard\watchguard_firebox_rce_cve_2024_1212.py (novo)
+  - pfsense\pfsense_rrd_cmd_injection.py (novo)
+  - array_networks\__init__.py (novo)
+  - array_networks\array_networks_vxag_rce_cve_2023_28461.py (novo)
+  - array_networks\array_networks_arrayos_rce_cve_2021_43139.py (novo)
+  - trellix\__init__.py (novo)
+  - trellix\trellix_ngfw_rce_cve_2020_7270.py (novo)
+  - ipfire\__init__.py (novo)
+  - ipfire\ipfire_rce_cve_2019_18981.py (novo)
+  - ipfire\ipfire_ids_cmd_inject_cve_2023_46226.py (novo)
+  - cisco_meraki\__init__.py (novo)
+  - cisco_meraki\meraki_mx_dashboard_rce_cve_2021_1497.py (novo)
+- Nenhum commit realizado (nao solicitado)
+
+### Proximo passo imediato
+- Revisar e testar os novos modulos em lab environment com targets vulneraveis
+
+### Pendencias conhecidas
+- [ ] Testes de integracao com o framework EmbedXPL-Forge (import/load de cada modulo)
+- [ ] Nota: CVE-2021-1497 e originalmente Cisco HyperFlex -- implementacao adaptada para Meraki MX local dashboard conforme especificacao do usuario
+
+### Ambiente necessario
+- Python 3.x com embedxpl instalado
+- Acesso ao repositorio EmbedXPL-Forge
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/modules/exploits/firewalls/
