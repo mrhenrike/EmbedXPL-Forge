@@ -5,6 +5,25 @@ All notable changes to EmbedXPL-Forge are documented here.
 Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 
+## [3.2.1] - 2026-06-01
+
+### Added - CVE-2026-0257 PAN-OS GlobalProtect Authentication Override Cookie Bypass
+
+**CVE-2026-0257 (CVSS 7.8 HIGH, CISA KEV 2026-05-29, Active exploitation)**
+- `exploits/firewalls/paloalto/globalprotect_auth_bypass_cve_2026_0257.py`
+  - Full E2E PoC: TLS certificate chain extraction -> RSA-PKCS1v15 cookie forge -> auth bypass -> VPN session
+  - No credentials required; only HTTPS access to GlobalProtect portal/gateway
+  - Requires auth override cookies enabled with cert shared with HTTPS service (common default)
+  - CISA KEV deadline: 2026-06-19
+
+**NSE Update**
+- `nse/embedxpl-perimeter-vuln.nse`: added CVE-2026-0257 probe
+
+**Catalog**
+- `cve_extended_catalog.json`: +1 entry (CVE-2026-0257), count 354->355
+
+---
+
 ## [3.2.0] - 2026-05-28
 
 ### Added - CVE-2026-35616 E2E Weaponization + GTFOBins + FIRESTARTER Chain + NSE Suite
