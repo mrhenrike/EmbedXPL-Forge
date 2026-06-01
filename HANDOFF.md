@@ -194,3 +194,64 @@
 - Linux:   /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/
 - Firewalls: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\
 - Wiki local: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\docs\wiki\
+
+## [2026-06-01 19:50] — Wiki pages 01-09 comprehensive rewrite
+
+### Estado ao encerrar
+- Rewrote all 9 wiki pages (01-09) in docs/wiki/en-US/ with comprehensive technical content
+- Each page includes: exact syntax blocks, parameter tables, complete terminal I/O sessions, error cases, notes
+- Pages covered: introduction/install, interactive shell, search/listing, non-interactive mode, creds modules, exploits, scanners/autopwn, generic modules, payloads/encoders
+- All content based on actual source code (interpreter.py, module files, autopwn.py, cve_lookup.py, etc.)
+- No placeholder text — all terminal sessions show real I/O matching actual code behavior
+
+### Arquivos modificados
+- docs/wiki/en-US/01-introduction-and-installation.md
+- docs/wiki/en-US/02-interactive-shell-commands.md
+- docs/wiki/en-US/03-search-and-listing.md
+- docs/wiki/en-US/04-non-interactive-mode.md
+- docs/wiki/en-US/05-creds-modules.md
+- docs/wiki/en-US/06-exploits-modules.md
+- docs/wiki/en-US/07-scanners-and-autopwn.md
+- docs/wiki/en-US/08-generic-modules.md
+- docs/wiki/en-US/09-payloads-and-encoders.md
+
+### Próximo passo imediato
+- Consider rewriting pt-BR counterparts (docs/wiki/pt-BR/) with same depth
+- Consider updating README.md wiki hub with updated page summaries
+
+### Pendências conhecidas
+- [ ] pt-BR translations of all 9 pages
+- [ ] Pages 10-13 (catalogs, troubleshooting, NSE, shell stager) not covered in this session
+
+### Ambiente necessário
+- Python 3.8-3.13
+- embedxpl installed or cloned at workspace root
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\docs\wiki\en-US\
+- Linux:   /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/docs/wiki/en-US/
+
+## [2026-06-01 19:55] -- Wiki pages 10-23 written (en-US)
+
+### Estado ao encerrar
+- Rewrote pages 10-13 with full I/O, typed option tables, and complete terminal sessions
+- Created 14 new pages (14-23) for sysinfo/compute, discover, sessions, apt, firmware tools, infra wizard, ICS/OT, RTSP, CVE reference, and vendor firewall reference
+- All pages sourced directly from interpreter.py, shell_stager.py, nse/manager.py, firmware_downloader.py, firmware_analyzer.py, apt_catalog.py, orchestrator.py, and module files
+- Files modified: docs/wiki/en-US/10-catalogs-and-tools.md through 23-vendor-reference-firewalls.md (14 files)
+
+### Proximo passo imediato
+- Write pt-BR equivalents if needed (../pt-BR/ counterparts do not yet exist for pages 14-23)
+- Update README.md wiki index to add entries for pages 14-23
+
+### Pendencias conhecidas
+- [ ] pt-BR counterparts for pages 14-23
+- [ ] README.md wiki index update
+- [ ] Review pages 14-23 against any new modules added after 2026-06-01
+
+### Ambiente necessario
+- Python 3.8+
+- pip install embedxpl
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\docs\wiki\en-US\
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/docs/wiki/en-US/
