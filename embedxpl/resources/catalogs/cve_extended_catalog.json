@@ -1,7 +1,7 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 354,
-  "last_updated": "2026-05-28",
+  "entry_count": 355,
+  "last_updated": "2026-06-01",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
     {
@@ -4025,6 +4025,33 @@
       ],
       "exploit_available": true,
       "note": "Post-auth RCE via Parental Control url_0 injection. Second stage of Quad 7 / APT28 chain."
+    },
+    {
+      "cve_id": "CVE-2026-0257",
+      "vendor": "paloalto",
+      "product": "pan-os",
+      "affected_versions": "PAN-OS 10.2.x/11.1.x/11.2.x/12.1.x (pre-fix); Prisma Access 10.2.x/11.2.x (pre-fix)",
+      "description": "Authentication override cookie bypass in PAN-OS GlobalProtect. gpsvc encrypts cookies with RSA-PKCS1v15 using a certificate whose public key is exposed via TLS handshake when shared with the HTTPS service. No signature verification after decryption -- attacker extracts public key, forges cookie for any username including admin, establishes unauthorized VPN session. CVSS 7.8 HIGH. CISA KEV 2026-05-29. Active exploitation confirmed from 2026-05-17.",
+      "cvss_score": 7.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/paloalto/globalprotect_auth_bypass_cve_2026_0257.py"
+      ],
+      "devices": [
+        "Palo Alto Networks PAN-OS 10.2.x (< 10.2.7-h34 / 10.2.10-h36 / 10.2.13-h21 / 10.2.16-h7 / 10.2.18-h6)",
+        "Palo Alto Networks PAN-OS 11.1.x (< 11.1.15 / various h-fixes)",
+        "Palo Alto Networks PAN-OS 11.2.x (< 11.2.12 / various h-fixes)",
+        "Palo Alto Networks PAN-OS 12.1.x (< 12.1.4-h6 / 12.1.7)",
+        "Prisma Access 10.2.x / 11.2.x (pre-fix)"
+      ],
+      "references": [
+        "https://security.paloaltonetworks.com/CVE-2026-0257",
+        "https://www.rapid7.com/blog/post/etr-rapid7-observed-exploitation-of-pan-os-globalprotect-authentication-bypass-vulnerability-cve-2026-0257/",
+        "https://nefariousplan.com/posts/pan-os-cve-2026-0257-cookie-cert-was-the-tls-cert",
+        "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+      ],
+      "note": "CISA KEV 2026-05-29 (deadline 2026-06-19). Non-default feature (auth override cookies must be enabled). Requires shared cert between cookie encryption and HTTPS service (common default). Fixed: 12.1.7, 11.2.12, 11.1.15, 10.2.18-h6."
     },
     {
       "cve_id": "APT28-DNS-HIJACK-TTP",

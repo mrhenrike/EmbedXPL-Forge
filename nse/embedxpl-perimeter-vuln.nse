@@ -355,6 +355,24 @@ local CVE_PROBES = {
 
   -- ── Palo Alto Networks ────────────────────────────────────────────────
   {
+    cve          = "CVE-2026-0257",
+    vendors      = { "Palo Alto Networks PAN-OS" },
+    probe_path   = "/global-protect/prelogin.esp",
+    probe_method = "POST",
+    probe_body   = "tmp=tmp&kerberos-support=yes&ipv6-support=yes&prelogin-cookie=AAAA",
+    probe_headers = {
+      ["Content-Type"] = "application/x-www-form-urlencoded",
+      ["User-Agent"]   = "GlobalProtect/6.3.0-Windows (device serial)",
+    },
+    vuln_pat     = "authentication%-override",
+    vuln_status  = { 200 },
+    cvss         = "7.8",
+    cve_type     = "GlobalProtect Auth Override Cookie Bypass (CISA KEV 2026-05-29, Active Exploitation)",
+    embedxpl_mod = "exploits/firewalls/paloalto/globalprotect_auth_bypass_cve_2026_0257",
+    firewallxpl_mod = "exploits/perimeter/paloalto/globalprotect_auth_bypass_cve_2026_0257",
+    notes        = "RSA-PKCS1v15 cookie forge using cert public key exposed via TLS handshake. No credentials needed. PAN-OS 10.2/11.1/11.2/12.1 pre-fix.",
+  },
+  {
     cve          = "CVE-2024-3400",
     vendors      = { "Palo Alto Networks PAN-OS" },
     probe_path   = "/global-protect/portal/css/bootstrap.min.css",
