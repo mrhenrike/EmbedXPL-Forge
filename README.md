@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/img/embedxpl-forge-1.png" alt="EmbedXPL-Forge" width="100%">
+  <img src="docs/img/embedxpl-forge-banner_16x9.png" alt="EmbedXPL-Forge" width="100%">
 </p>
 
 # EmbedXPL-Forge
