@@ -1,6 +1,6 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 355,
+  "entry_count": 383,
   "last_updated": "2026-06-01",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
@@ -4171,6 +4171,559 @@
         "https://www.cisa.gov/news-events/analysis-reports/ar26-113a"
       ],
       "note": "UAT4356/ArcaneDoor - same campaign as CVE-2025-20362. RCE as root. FIRESTARTER persistence bypasses firmware update. Hard power cycle + reimaging required."
+    },
+    {
+      "cve_id": "CVE-2026-20182",
+      "vendor": "cisco",
+      "product": "sdwan_vmanage",
+      "affected_versions": "Cisco Catalyst SD-WAN Manager 20.6.x < 20.6.7.4, 20.9.x < 20.9.5, 20.12.x < 20.12.4",
+      "description": "CVSS 10.0. Cisco SD-WAN Manager DTLS auth bypass in vdaemon control-plane. CHALLENGE_ACK with device_type=2 (vHub) bypasses certificate verification on UDP/12346, enabling unauthenticated SSH key injection via MSG_VMANAGE_TO_PEER.",
+      "cvss_score": 10.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/cisco/cisco_sdwan_dtls_auth_bypass_cve_2026_20182.py"
+      ],
+      "devices": [
+        "Cisco SD-WAN Manager 20.6.x/20.9.x/20.12.x pre-fix"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-20182"
+      ],
+      "note": "Block UDP/12346. Patch: 20.6.7.4+ / 20.9.5+ / 20.12.4+"
+    },
+    {
+      "cve_id": "CVE-2026-20079",
+      "vendor": "cisco",
+      "product": "fmc",
+      "affected_versions": "Cisco FMC 7.2.x < 7.2.10, 7.4.x < 7.4.3, 7.6.x < 7.6.2",
+      "description": "CVSS 10.0. Cisco FMC REST API auth bypass via null-byte injection in Basic auth. FMC middleware issues privileged API token without credential validation. Chained with diagnostic API command injection for unauthenticated root RCE.",
+      "cvss_score": 10.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/cisco/cisco_fmc_auth_bypass_rce_cve_2026_20079.py"
+      ],
+      "devices": [
+        "Cisco FMC 7.2.x/7.4.x/7.6.x pre-fix",
+        "FMCv (virtual)"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-20079"
+      ],
+      "note": "Patch: FMC 7.2.10+ / 7.4.3+ / 7.6.2+"
+    },
+    {
+      "cve_id": "CVE-2026-20131",
+      "vendor": "cisco",
+      "product": "fmc",
+      "affected_versions": "Cisco FMC 7.2.x < 7.2.11, 7.4.x < 7.4.4, 7.6.x < 7.6.3",
+      "description": "CVSS 10.0. Cisco FMC Java deserialization RCE via REST API. CC6/Spring1/Jdk7u21 gadget chains accepted before auth enforcement. Unauthenticated root code execution.",
+      "cvss_score": 10.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/cisco/cisco_fmc_deserialization_rce_cve_2026_20131.py"
+      ],
+      "devices": [
+        "Cisco FMC 7.2.x/7.4.x/7.6.x pre-fix",
+        "FMCv (virtual)"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-20131"
+      ],
+      "note": "Patch: FMC 7.2.11+ / 7.4.4+ / 7.6.3+"
+    },
+    {
+      "cve_id": "CVE-2026-0264",
+      "vendor": "paloalto",
+      "product": "panos",
+      "affected_versions": "PAN-OS 10.2.x < 10.2.14, 11.0.x < 11.0.7, 11.1.x < 11.1.4, 11.2.x < 11.2.2",
+      "description": "CVSS 7.5. PAN-OS DNS proxy heap-based buffer overflow via crafted DNS response packets. Causes dnsproxyd crash (DoS) or potential RCE.",
+      "cvss_score": 7.5,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/paloalto/panos_dns_heap_rce_cve_2026_0264.py"
+      ],
+      "devices": [
+        "PAN-OS 10.2/11.0/11.1/11.2 pre-fix",
+        "PAN-OS Cloud NGFW"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-0264"
+      ],
+      "note": "Patch: PAN-OS 10.2.14+ / 11.0.7+ / 11.1.4+ / 11.2.2+"
+    },
+    {
+      "cve_id": "CVE-2026-0263",
+      "vendor": "paloalto",
+      "product": "panos",
+      "affected_versions": "PAN-OS 10.2.x < 10.2.14, 11.0.x < 11.0.7, 11.1.x < 11.1.4, 11.2.x < 11.2.2",
+      "description": "CVSS 7.2. PAN-OS IKEv2 heap buffer overflow via non-NIST ML-KEM (Kyber) PQC cipher suites with oversized ke_data_length field (0xFFFF). Causes iked crash (DoS) or potential code execution via heap corruption.",
+      "cvss_score": 7.2,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/paloalto/panos_ikev2_rce_cve_2026_0263.py"
+      ],
+      "devices": [
+        "PAN-OS 10.2/11.0/11.1/11.2 pre-fix",
+        "PAN-OS Cloud NGFW"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-0263"
+      ],
+      "note": "Patch: PAN-OS 10.2.14+ / 11.0.7+ / 11.1.4+ / 11.2.2+"
+    },
+    {
+      "cve_id": "CVE-2026-0265",
+      "vendor": "paloalto",
+      "product": "panos",
+      "affected_versions": "PAN-OS 10.2.x < 10.2.14, 11.0.x < 11.0.7, 11.1.x < 11.1.4",
+      "description": "CVSS 9.1. PAN-OS Cloud Authentication Service (CAS) SAML auth bypass. Forged SAML responses accepted due to XML canonicalization issues, enabling authentication bypass to GlobalProtect and management plane.",
+      "cvss_score": 9.1,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/paloalto/panos_cas_auth_bypass_cve_2026_0265.py"
+      ],
+      "devices": [
+        "PAN-OS 10.2/11.0/11.1 pre-fix"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-0265"
+      ],
+      "note": "Patch: PAN-OS 10.2.14+ / 11.0.7+ / 11.1.4+"
+    },
+    {
+      "cve_id": "CVE-2026-25249",
+      "vendor": "fortinet",
+      "product": "fortios",
+      "affected_versions": "FortiOS 7.0.x < 7.0.17, 7.2.x < 7.2.11, 7.4.x < 7.4.5",
+      "description": "CVSS 9.8. FortiOS SSL-VPN heap overflow RCE. Out-of-bounds write in SSL-VPN request handling allows unauthenticated remote code execution via crafted HTTP requests.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/fortinet/fortios_heap_overflow_rce_cve_2026_25249.py"
+      ],
+      "devices": [
+        "FortiOS 7.0.x/7.2.x/7.4.x pre-fix"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-25249"
+      ],
+      "note": "Patch: FortiOS 7.0.17+ / 7.2.11+ / 7.4.5+"
+    },
+    {
+      "cve_id": "CVE-2025-53844",
+      "vendor": "fortinet",
+      "product": "fortios",
+      "affected_versions": "FortiOS 7.2.x < 7.2.10, 7.4.x < 7.4.4, 7.6.x < 7.6.1",
+      "description": "CVSS 9.6. FortiOS SSL-VPN out-of-bounds write RCE. Memory corruption in SSL-VPN session handling path allows pre-authenticated remote code execution (CWE-787).",
+      "cvss_score": 9.6,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/fortinet/fortios_oob_write_rce_cve_2025_53844.py"
+      ],
+      "devices": [
+        "FortiOS 7.2.x/7.4.x/7.6.x pre-fix"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-53844"
+      ],
+      "note": "Patch: FortiOS 7.2.10+ / 7.4.4+ / 7.6.1+"
+    },
+    {
+      "cve_id": "CVE-2024-48887",
+      "vendor": "fortinet",
+      "product": "fortiswitch",
+      "affected_versions": "FortiSwitch 6.4.x < 6.4.15, 7.0.x < 7.0.10, 7.2.x < 7.2.8, 7.4.x < 7.4.5",
+      "description": "CVSS 9.8. FortiSwitch unauthenticated admin password change. Missing auth check in FortiSwitch GUI allows unauthenticated attacker to change administrator password.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/fortinet/fortiswitch_unauth_passwd_cve_2024_48887.py"
+      ],
+      "devices": [
+        "FortiSwitch 6.4/7.0/7.2/7.4 pre-fix"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-48887"
+      ],
+      "note": "Patch: FortiSwitch 6.4.15+ / 7.0.10+ / 7.2.8+ / 7.4.5+"
+    },
+    {
+      "cve_id": "CVE-2024-24919",
+      "vendor": "checkpoint",
+      "product": "security_gateway",
+      "affected_versions": "Check Point Security Gateway R77.20, R80.10-R81.20 with Remote Access VPN or Mobile Access enabled",
+      "description": "CVSS 8.6. Check Point Security Gateway LFI/information disclosure via path traversal in VPN portal. Reads arbitrary files including /etc/shadow. Chained with credential stuffing for full auth bypass. CISA KEV.",
+      "cvss_score": 8.6,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/checkpoint/checkpoint_vpn_lfi_chain_cve_2024_24919.py",
+        "exploits/firewalls/checkpoint/security_gateway_info_disclosure_cve_2024_24919.py"
+      ],
+      "devices": [
+        "Check Point Security Gateway R77.20-R81.20"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-24919"
+      ],
+      "note": "CISA KEV. Apply hotfix for all R80+ versions."
+    },
+    {
+      "cve_id": "CVE-2023-28461",
+      "vendor": "checkpoint",
+      "product": "network_security_gateway",
+      "affected_versions": "Check Point Quantum Network Security Gateway R81, R81.10, R81.20 with Remote Access VPN",
+      "description": "CVSS 9.8. Check Point Quantum NGFW RCE via crafted packet to IPsec VPN service. Unauthenticated root code execution.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/checkpoint/checkpoint_remote_code_exec_cve_2023_28461.py"
+      ],
+      "devices": [
+        "Check Point Quantum NGFW R81/R81.10/R81.20"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-28461"
+      ],
+      "note": "Patch: SK182060 hotfix."
+    },
+    {
+      "cve_id": "CVE-2023-36851",
+      "vendor": "juniper",
+      "product": "junos",
+      "affected_versions": "Juniper SRX/EX: Junos OS multiple branches < fix versions",
+      "description": "CVSS 5.3. Juniper SRX/EX J-Web unauthenticated file upload. Chained with CVE-2023-36845 for pre-auth RCE. CISA KEV.",
+      "cvss_score": 5.3,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/juniper/juniper_srx_file_upload_rce_cve_2023_36851.py"
+      ],
+      "devices": [
+        "Juniper SRX Series",
+        "Juniper EX Series"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-36851"
+      ],
+      "note": "CISA KEV. JSA73160. Disable J-Web or restrict access."
+    },
+    {
+      "cve_id": "CVE-2025-21590",
+      "vendor": "juniper",
+      "product": "junos",
+      "affected_versions": "Juniper SRX Series: Junos OS 21.x/22.x/23.x pre-fix",
+      "description": "CVSS 8.1. Juniper SRX J-Web unauthenticated RCE. Improper input validation in J-Web allows command injection via crafted HTTP request.",
+      "cvss_score": 8.1,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/juniper/juniper_srx_unauth_rce_cve_2025_21590.py"
+      ],
+      "devices": [
+        "Juniper SRX Series (Junos 21.x/22.x/23.x pre-fix)"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-21590"
+      ],
+      "note": "JSA93522. Disable J-Web."
+    },
+    {
+      "cve_id": "CVE-2024-12802",
+      "vendor": "sonicwall",
+      "product": "gen6_sslvpn",
+      "affected_versions": "SonicWall Gen6 SSL-VPN SonicOS < 10.2.1.1-21sv, SMA 400/410 < 10.2.1.1-21sv",
+      "description": "CVSS 9.8. SonicWall Gen6 SSL-VPN MFA bypass via LDAP credential passthrough reuse. Valid LDAP credentials bypass OTP/MFA requirements via cached LDAP session exploitation.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/sonicwall/sonicwall_gen6_mfa_bypass_cve_2024_12802.py"
+      ],
+      "devices": [
+        "SonicWall Gen6 SSL-VPN (SonicOS < 10.2.1.1-21sv)",
+        "SonicWall SMA 400/410"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-12802",
+        "https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2024-0022"
+      ],
+      "note": "Patch: SonicOS >= 10.2.1.1-21sv. Disable LDAP passthrough."
+    },
+    {
+      "cve_id": "CVE-2021-22986",
+      "vendor": "f5",
+      "product": "bigip",
+      "affected_versions": "F5 BIG-IP 12.1.x < 12.1.6.1, 13.1.x < 13.1.3.6, 14.1.x < 14.1.4, 15.1.x < 15.1.2.1, 16.0.x < 16.0.1.1",
+      "description": "CVSS 9.8. F5 BIG-IP iControl REST unauthenticated RCE via Connection: X-F5-Auth-Token header bypass. Grants unauthenticated access to /mgmt/tm/util/bash for root command execution. CISA ED-21-02.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/lb/f5/bigip_icontrol_rest_rce_cve_2021_22986.py"
+      ],
+      "devices": [
+        "F5 BIG-IP 12.1-16.0 pre-fix"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-22986",
+        "https://support.f5.com/csp/article/K03009991"
+      ],
+      "note": "CISA ED-21-02. Restrict iControl REST to management-only networks."
+    },
+    {
+      "cve_id": "CVE-2022-1388",
+      "vendor": "f5",
+      "product": "bigip",
+      "affected_versions": "F5 BIG-IP 12.1.x < 12.1.6.2, 13.1.x < 13.1.5, 14.1.x < 14.1.4.6, 15.1.x < 15.1.5.1, 16.1.x < 16.1.2.2",
+      "description": "CVSS 9.8. F5 BIG-IP iControl REST auth bypass via X-F5-Auth-Token + Connection hop-by-hop header trick. Grants unauthenticated access to all iControl REST endpoints including /mgmt/tm/util/bash. CISA KEV.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/lb/f5/bigip_icontrol_auth_bypass_cve_2022_1388.py"
+      ],
+      "devices": [
+        "F5 BIG-IP 12.1-16.1 pre-fix"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-1388",
+        "https://support.f5.com/csp/article/K23605346"
+      ],
+      "note": "CISA KEV. Block external access to iControl REST."
+    },
+    {
+      "cve_id": "CVE-2023-22374",
+      "vendor": "f5",
+      "product": "bigip",
+      "affected_versions": "F5 BIG-IP 13.1.x < 13.1.5.2, 14.1.x < 14.1.5.4, 15.1.x < 15.1.8.1, 16.1.x < 16.1.3.4, 17.0.x < 17.0.0.2",
+      "description": "CVSS 8.5. F5 BIG-IP iControl REST format string vulnerability (CWE-134). Authenticated admin-to-root privilege escalation via crafted request to /mgmt endpoint.",
+      "cvss_score": 8.5,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/lb/f5/bigip_ssrf_rce_cve_2023_22374.py"
+      ],
+      "devices": [
+        "F5 BIG-IP 13.1-17.0 pre-fix"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-22374",
+        "https://support.f5.com/csp/article/K000130845"
+      ],
+      "note": "Patch: BIG-IP 13.1.5.2+ / 14.1.5.4+ / 15.1.8.1+ / 16.1.3.4+ / 17.0.0.2+"
+    },
+    {
+      "cve_id": "CVE-2022-45315",
+      "vendor": "mikrotik",
+      "product": "routeros",
+      "affected_versions": "MikroTik RouterOS stable < 6.49.8, Long-term < 6.49.8",
+      "description": "CVSS 9.8. MikroTik RouterOS heap overflow via crafted RADIUS packet. Unauthenticated heap-based buffer overflow enabling RCE.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/mikrotik/mikrotik_routeros_rce_cve_2022_45315.py"
+      ],
+      "devices": [
+        "MikroTik RouterOS < 6.49.8"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-45315"
+      ],
+      "note": "Patch: RouterOS >= 6.49.8."
+    },
+    {
+      "cve_id": "CVE-2023-30799",
+      "vendor": "mikrotik",
+      "product": "routeros",
+      "affected_versions": "MikroTik RouterOS stable 6.x < 6.49.9, 7.x < 7.9.1",
+      "description": "CVSS 9.1. MikroTik RouterOS privilege escalation from admin to super-admin (root) via RouterOS API. Missing authorization check enables unrestricted access to all router functions.",
+      "cvss_score": 9.1,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "modules": [],
+      "devices": [
+        "MikroTik RouterOS 6.x < 6.49.9",
+        "MikroTik RouterOS 7.x < 7.9.1"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-30799"
+      ],
+      "note": "Patch: RouterOS >= 6.49.9 / 7.9.1. Restrict Winbox/API to management networks."
+    },
+    {
+      "cve_id": "CVE-2019-3977",
+      "vendor": "mikrotik",
+      "product": "routeros",
+      "affected_versions": "MikroTik RouterOS < 6.45.6 (stable), < 6.44.5 (LTS)",
+      "description": "CVSS 7.5. MikroTik RouterOS NPK update bypass. Insufficient validation of NPK firmware packages allows installation of unsigned/malicious firmware for persistent code execution.",
+      "cvss_score": 7.5,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/mikrotik/mikrotik_jailbreak_cve_2019_3977.py"
+      ],
+      "devices": [
+        "MikroTik RouterOS < 6.45.6 (stable)",
+        "MikroTik RouterOS < 6.44.5 (LTS)"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2019-3977"
+      ],
+      "note": "Patch: RouterOS >= 6.45.6 (stable) / 6.44.5 (LTS)."
+    },
+    {
+      "cve_id": "CVE-2021-22323",
+      "vendor": "huawei",
+      "product": "usg",
+      "affected_versions": "Huawei USG9000 series VRP V500R001C30 and earlier",
+      "description": "CVSS 9.8. Huawei USG9000 SSL VPN auth bypass + RCE. Integer overflow in auth handler enables unauthenticated root code execution.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/huawei/huawei_usg_auth_bypass_rce_cve_2021_22323.py"
+      ],
+      "devices": [
+        "Huawei USG9000 series (VRP V500R001C30 and earlier)"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-22323"
+      ],
+      "note": "Apply Huawei VRP firmware update."
+    },
+    {
+      "cve_id": "CVE-2019-1023",
+      "vendor": "huawei",
+      "product": "usg",
+      "affected_versions": "Huawei USG6000V and USG9000 series",
+      "description": "CVSS 9.1. Huawei USG OS command injection via web management interface diagnostic functions. Authenticated low-privilege user can inject OS commands.",
+      "cvss_score": 9.1,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/huawei/huawei_usg_cmd_inject_cve_2019_1023.py"
+      ],
+      "devices": [
+        "Huawei USG6000V",
+        "Huawei USG9000"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2019-1023"
+      ],
+      "note": "Apply Huawei security advisory patches."
+    },
+    {
+      "cve_id": "CVE-2021-23239",
+      "vendor": "opnsense",
+      "product": "opnsense",
+      "affected_versions": "OPNsense < 21.1",
+      "description": "CVSS 9.8. OPNsense SQLi + RCE in web management interface. Unsanitized login input allows SQL injection leading to auth bypass and OS command execution.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/opnsense/opnsense_sqli_rce_cve_2021_23239.py"
+      ],
+      "devices": [
+        "OPNsense < 21.1"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-23239"
+      ],
+      "note": "Patch: OPNsense >= 21.1."
+    },
+    {
+      "cve_id": "CVE-2024-52875",
+      "vendor": "kerio",
+      "product": "kerio_control",
+      "affected_versions": "GFI Kerio Control < 9.4.5",
+      "description": "CVSS 9.8. GFI Kerio Control SSRF + RCE. SSRF in upgrade mechanism allows unauthenticated code execution via script injection in upgrade URL parameter. Actively exploited in-the-wild.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/kerio/kerio_control_ssrf_rce_cve_2024_52875.py"
+      ],
+      "devices": [
+        "GFI Kerio Control < 9.4.5"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-52875"
+      ],
+      "note": "Patch: GFI Kerio Control >= 9.4.5."
+    },
+    {
+      "cve_id": "CVE-2020-18175",
+      "vendor": "stormshield",
+      "product": "sns",
+      "affected_versions": "Stormshield Network Security (SNS) < 3.8.0",
+      "description": "CVSS 9.8. Stormshield SNS pre-authentication RCE. Buffer overflow/code injection in web management interface enables unauthenticated root code execution.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/stormshield/stormshield_sns_rce_cve_2020_18175.py"
+      ],
+      "devices": [
+        "Stormshield SNS < 3.8.0"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-18175"
+      ],
+      "note": "Patch: SNS >= 3.8.0."
+    },
+    {
+      "cve_id": "CVE-2023-31493",
+      "vendor": "hillstone",
+      "product": "stoneos",
+      "affected_versions": "Hillstone StoneOS 5.5R7.0 and earlier",
+      "description": "CVSS 9.8. Hillstone StoneOS RCE via web management interface. Insufficient input validation enables unauthenticated remote code execution.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/hillstone/hillstone_stoneos_rce_cve_2023_31493.py"
+      ],
+      "devices": [
+        "Hillstone StoneOS 5.5R7.0 and earlier"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-31493"
+      ],
+      "note": "Apply Hillstone security advisory update."
+    },
+    {
+      "cve_id": "CVE-2023-31992",
+      "vendor": "vyos",
+      "product": "vyos",
+      "affected_versions": "VyOS 1.3.x < 1.3.4, 1.4.x rolling builds before 2023-07",
+      "description": "CVSS 8.8. VyOS HTTP API OS command injection. Authenticated API user can inject OS commands via insufficient input sanitization, achieving root code execution.",
+      "cvss_score": 8.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/vyos/vyos_rce_cve_2023_31992.py"
+      ],
+      "devices": [
+        "VyOS 1.3.x < 1.3.4",
+        "VyOS 1.4.x (pre-2023-07 rolling)"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-31992"
+      ],
+      "note": "Patch: VyOS 1.3.4+. Restrict HTTP API access."
     }
   ]
 }
