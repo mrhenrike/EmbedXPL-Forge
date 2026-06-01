@@ -375,3 +375,21 @@
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\docs\wiki\en-US\
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/docs/wiki/en-US/
+
+## [2026-06-01 20:00] - Wiki PT-BR: 23 paginas completas criadas
+
+### Estado ao encerrar
+- Criadas/atualizadas TODAS as 23 paginas PT-BR da wiki EmbedXPL-Forge
+- README.md PT-BR atualizado com indice completo das 23 paginas
+- Paginas 01-18 sao traducoes completas das paginas EN-US correspondentes
+- Paginas 19-23 sao paginas exclusivas PT-BR
+
+### Proximo passo imediato
+- Verificar se alguma pagina EN-US foi adicionada apos as 18 existentes
+
+### Pendencias conhecidas
+- [ ] Criar paginas EN-US correspondentes para 19-23 se necessario
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\docs\wiki\pt-BR\
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/docs/wiki/pt-BR/
