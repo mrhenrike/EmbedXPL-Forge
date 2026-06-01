@@ -29,17 +29,19 @@ PNG gallery. Mermaid sources: [../../diagrams/architecture/README.md](../../diag
 
 | Doc | Topics |
 |-----|--------|
-| [01-introduction-and-installation.md](01-introduction-and-installation.md) | Introduction, scope, Python, install, diagnostics, logs |
-| [02-interactive-shell-commands.md](02-interactive-shell-commands.md) | Interactive commands, discover, sessions |
-| [03-search-and-listing.md](03-search-and-listing.md) | `search`, `show`, listing modules and devices |
-| [04-non-interactive-mode.md](04-non-interactive-mode.md) | `exf.py -m` / `-s`, automation |
-| [05-creds-modules.md](05-creds-modules.md) | Credential modules and options |
-| [06-exploits-modules.md](06-exploits-modules.md) | Exploit modules, `check`, layout |
-| [07-scanners-and-autopwn.md](07-scanners-and-autopwn.md) | Scanners and AutoPwn |
+| [01-introduction-and-installation.md](01-introduction-and-installation.md) | Introduction, scope, Python, install, diagnostics, logs, architecture |
+| [02-interactive-shell-commands.md](02-interactive-shell-commands.md) | Interactive commands, all options, shell stager, discover, sessions |
+| [03-search-and-listing.md](03-search-and-listing.md) | `search`, `show`, listing modules, devices, CVE lookup |
+| [04-non-interactive-mode.md](04-non-interactive-mode.md) | `embedxpl -m / -s`, all flags, automation, multi-target |
+| [05-creds-modules.md](05-creds-modules.md) | Credential modules, all options, wordlists, examples |
+| [06-exploits-modules.md](06-exploits-modules.md) | Exploit modules, CVE list, check/run flow, shell stager |
+| [07-scanners-and-autopwn.md](07-scanners-and-autopwn.md) | Scanners, AutoPwn, OUI lookup, phase gate |
 | [08-generic-modules.md](08-generic-modules.md) | Generic cross-vendor modules (UPnP IGD, SSDP, SNMP, etc.) |
-| [09-payloads-and-encoders.md](09-payloads-and-encoders.md) | Payloads and encoders |
-| [10-catalogs-and-tools.md](10-catalogs-and-tools.md) | JSON catalogs and `tools/` scripts |
+| [09-payloads-and-encoders.md](09-payloads-and-encoders.md) | Payloads (32), encoders (13), architecture list |
+| [10-catalogs-and-tools.md](10-catalogs-and-tools.md) | JSON catalogs, tools/ scripts, quality gates |
 | [11-troubleshooting.md](11-troubleshooting.md) | Common failures and fixes |
+| [12-nse-script-manager.md](12-nse-script-manager.md) | NSE manager: install, list, run, check, info (11 scripts) |
+| [13-shell-stager.md](13-shell-stager.md) | Shell stager: 26 types, PTY listener, Meterpreter, GTFOBins |
 | [Module path index (all locales)](../ANEXO-INDICE-MODULOS.md) | Full module path list |
 
 ## End-to-End Examples (input and expected output)

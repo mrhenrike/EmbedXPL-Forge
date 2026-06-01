@@ -27,20 +27,22 @@ Galeria PNG. Fontes Mermaid: [../../diagrams/architecture/README.md](../../diagr
 
 ## Índice
 
-| Documento | Conteúdo |
+| Documento | Conteudo |
 |-----------|----------|
-| [01-introducao-e-instalacao.md](01-introducao-e-instalacao.md) | Introdução, escopo, Python, instalação, diagnóstico, logs |
-| [02-shell-interativo-comandos.md](02-shell-interativo-comandos.md) | Comandos interativos, discover, sessions |
-| [03-busca-e-listagem.md](03-busca-e-listagem.md) | `search`, `show`, listagem de módulos e devices |
-| [04-modo-nao-interativo.md](04-modo-nao-interativo.md) | `exf.py -m` / `-s`, automação |
-| [05-modulos-creds.md](05-modulos-creds.md) | Módulos de credenciais e opções |
-| [06-modulos-exploits.md](06-modulos-exploits.md) | Módulos de exploit, `check`, layout |
-| [07-scanners-e-autopwn.md](07-scanners-e-autopwn.md) | Scanners e AutoPwn |
-| [08-modulos-generic.md](08-modulos-generic.md) | Módulos genéricos multi-vendor (UPnP IGD, SSDP, SNMP, etc.) |
-| [09-payloads-e-encoders.md](09-payloads-e-encoders.md) | Payloads e encoders |
-| [10-catalogos-e-ferramentas.md](10-catalogos-e-ferramentas.md) | Catálogos JSON e scripts em `tools/` |
-| [11-troubleshooting.md](11-troubleshooting.md) | Falhas comuns e correções |
-| [Anexo: índice de módulos](../ANEXO-INDICE-MODULOS.md) | Lista completa de caminhos de módulos |
+| [01-introducao-e-instalacao.md](01-introducao-e-instalacao.md) | Introducao, escopo, Python, instalacao, diagnostico, logs, arquitetura |
+| [02-shell-interativo-comandos.md](02-shell-interativo-comandos.md) | Todos os comandos, tipos de opcoes, shell stager, discover, sessions |
+| [03-busca-e-listagem.md](03-busca-e-listagem.md) | `search`, `show`, listagem de modulos, devices, lookup de CVE |
+| [04-modo-nao-interativo.md](04-modo-nao-interativo.md) | `embedxpl -m / -s`, todas as flags, automacao, multi-alvo |
+| [05-modulos-creds.md](05-modulos-creds.md) | Modulos de credenciais, todas as opcoes, wordlists, exemplos |
+| [06-modulos-exploits.md](06-modulos-exploits.md) | Modulos de exploit, lista de CVEs, fluxo check/run, shell stager |
+| [07-scanners-e-autopwn.md](07-scanners-e-autopwn.md) | Scanners, AutoPwn, lookup OUI, phase gate |
+| [08-modulos-generic.md](08-modulos-generic.md) | Modulos genericos multi-vendor (UPnP IGD, SSDP, SNMP, etc.) |
+| [09-payloads-e-encoders.md](09-payloads-e-encoders.md) | Payloads (32), encoders (13), lista de arquiteturas |
+| [10-catalogos-e-ferramentas.md](10-catalogos-e-ferramentas.md) | Catalogos JSON, scripts em `tools/`, quality gates |
+| [11-troubleshooting.md](11-troubleshooting.md) | Falhas comuns e correcoes |
+| [12-nse-script-manager.md](12-nse-script-manager.md) | Gerenciador NSE: install, list, run, check, info (11 scripts) |
+| [13-shell-stager.md](13-shell-stager.md) | Shell stager: 26 tipos, listener PTY, Meterpreter, GTFOBins |
+| [Anexo: indice de modulos](../ANEXO-INDICE-MODULOS.md) | Lista completa de caminhos de modulos |
 
 ## Exemplos ponta a ponta (entrada e saida esperada)
 
