@@ -255,3 +255,66 @@
 - Python 3.8-3.13 (paramiko >= 2.0 para Schneider SSH)
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge
+
+## [2026-06-02 02:20] -- Novos módulos E2E exploit para firewalls (7 módulos)
+
+### Estado ao encerrar
+- Criados 7 novos módulos de exploit E2E em embedxpl/modules/exploits/firewalls/
+- Arquivos modificados:
+  - fortinet/fortios_format_string_rce_cve_2024_23113.py (novo)
+  - fortinet/fortios_stack_overflow_rce_cve_2025_32756.py (novo)
+  - citrix/citrix_adc_path_traversal_rce_cve_2019_19781.py (novo)
+  - citrix/citrix_adc_auth_bypass_cve_2022_27510.py (novo)
+  - citrix/citrix_adc_rce_cve_2022_27518.py (novo)
+  - cisco/cisco_ftd_asdm_bypass_cve_2022_20713.py (novo)
+  - cisco/cisco_fmc_rce_cve_2023_20032.py (novo)
+- Zero erros de lint
+- Sem commits realizados
+
+### Próximo passo imediato
+- Revisar os módulos em ambiente controlado e validar comportamento de check()/run() contra instâncias de teste
+
+### Pendências conhecidas
+- [ ] Teste funcional em lab com appliances FortiOS/Citrix/Cisco simulados
+- [ ] Adição de suporte a shell staging via embedxpl.core.shells quando confirmado RCE
+- [ ] Atualizar __init__.py dos diretórios se necessário para registro automático dos módulos
+
+### Ambiente necessário
+- Python 3.10+
+- embedxpl instalado (pip install -e . na raiz do EmbedXPL-Forge)
+- Acesso de rede aos appliances-alvo em ambiente de laboratório isolado
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/modules/exploits/firewalls/
+
+## [2026-06-02 02:15] -- Novos modulos de exploit: firewalls (WAF, LB, SonicWall, Cisco, Fortinet)
+
+### Estado ao encerrar
+- Atualizado securesphere_sqli_cve_2013_xxxx.py com CVE-2013-2681 (blind time-based SQLi, tipagem completa, MITRE ATT&CK)
+- Criado imperva_cloud_waf_bypass_cve_2023_28051.py (bypass Imperva Cloud WAF via encoding variations)
+- Criado lb/f5/bigip_icontrol_rest_auth_bypass_cve_2024_21793.py (F5 BIG-IP OData injection, CVSS 7.5)
+- Criado sonicwall/sonicwall_scp_cmd_inject_cve_2020_15778.py (SonicOS SCP filename cmd injection, CVSS 7.8)
+- Criado cisco/cisco_ftd_webvpn_xss_cve_2020_3580.py (Cisco ASA/FTD WebVPN stored XSS chain, CVSS 8.8)
+- Criado fortinet/fortios_fgfm_preauth_rce_cve_2024_47575.py (FortiJump FGFM preauth RCE, CVSS 9.8)
+- Atualizado cve_extended_catalog.json: entry_count 477 -> 482 (5 novos CVEs + update CVE-2024-47575)
+
+### Arquivos modificados
+- embedxpl/modules/exploits/firewalls/waf/imperva/securesphere_sqli_cve_2013_xxxx.py
+- embedxpl/modules/exploits/firewalls/waf/imperva/imperva_cloud_waf_bypass_cve_2023_28051.py (novo)
+- embedxpl/modules/exploits/firewalls/lb/f5/bigip_icontrol_rest_auth_bypass_cve_2024_21793.py (novo)
+- embedxpl/modules/exploits/firewalls/sonicwall/sonicwall_scp_cmd_inject_cve_2020_15778.py (novo)
+- embedxpl/modules/exploits/firewalls/cisco/cisco_ftd_webvpn_xss_cve_2020_3580.py (novo)
+- embedxpl/modules/exploits/firewalls/fortinet/fortios_fgfm_preauth_rce_cve_2024_47575.py (novo)
+- embedxpl/resources/catalogs/cve_extended_catalog.json
+
+### Proximo passo imediato
+- Executar suite de testes do projeto para validar imports dos novos modulos
+
+### Pendencias conhecidas
+- [ ] fortimanager_fortijump_cve_2024_47575.py (existente) ainda e stub basico -- pode ser expandido com lógica da nova versao
+
+### Ambiente necessario
+- Python 3.8+ com embedxpl instalado (pip install -e .)
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge
