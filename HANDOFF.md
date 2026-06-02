@@ -92,3 +92,35 @@
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/modules/exploits/firewalls/
+
+## [2026-06-02 01:55] -- Wiki Tier 3 CVE Expansion
+
+### Estado ao encerrar
+- Adicionados 17 novos modulos CVE (Tier 3) a tabela de firewalls do CVE module reference
+- Criadas secoes de vendor para Sangfor, Citrix/NetScaler e Aruba ClearPass no vendor reference
+- Adicionado modulo Ivanti Connect Secure (CVE-2024-21888) como nova secao de vendor
+- Todas as atualizacoes replicadas para os equivalentes pt-BR
+- READMEs atualizados para mencionar cobertura expandida (34 vendors, 151+ modulos)
+
+### Arquivos modificados
+- docs/wiki/en-US/22-cve-module-reference.md
+- docs/wiki/en-US/23-vendor-reference-firewalls.md
+- docs/wiki/pt-BR/22-referencia-modulos-cve.md
+- docs/wiki/pt-BR/23-referencia-vendors-firewalls.md
+- docs/wiki/en-US/README.md
+- docs/wiki/pt-BR/README.md
+
+### Proximo passo imediato
+- Criar os modulos Python correspondentes em embedxpl/modules/exploits/ para os 17 novos CVEs se necessario
+
+### Pendencias conhecidas
+- [ ] Criar arquivos de modulo Python para os novos vendors (Sangfor, Aruba ClearPass, Ivanti)
+- [ ] Adicionar entradas de scanner para ClearPass e Sangfor
+- [ ] Revisar o incorporated_poc_tree.py para incluir os novos paths
+
+### Ambiente necessario
+- Python 3.10+, embedxpl instalado
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\docs\wiki\
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/docs/wiki/
