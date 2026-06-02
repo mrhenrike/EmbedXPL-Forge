@@ -318,3 +318,31 @@
 - Python 3.8+ com embedxpl instalado (pip install -e .)
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge
+
+## [2026-06-02 02:14] -- Adicionar 10 novos modulos E2E + diretorio pulsesecure
+
+### Estado ao encerrar
+- Criados 10 novos modulos E2E de exploit + vpn/pulsesecure/__init__.py
+- hillstone/hillstone_stoneos_web_rce_cve_2024_5829.py (CVE-2024-5829, CVSS 9.3)
+- kerio/kerio_control_rce_cve_2022_24665.py (CVE-2022-24665, CVSS 9.8)
+- opnsense/opnsense_csrf_rce_cve_2022_0993.py (CVE-2022-0993, CVSS 8.0)
+- stormshield/stormshield_sns_privesc_cve_2023_23770.py (CVE-2023-23770, CVSS 8.8)
+- sangfor/sangfor_ssl_vpn_rce_cve_2021_1782.py (CVE-2021-1782 class, CVSS 9.8)
+- vpn/pulsesecure/__init__.py (novo diretorio criado)
+- vpn/pulsesecure/pulse_connect_secure_rce_cve_2021_22893.py (CVE-2021-22893, CVSS 10.0)
+- vpn/pulsesecure/pulse_connect_rce_cve_2019_11510.py (CVE-2019-11510, CVSS 10.0, CISA KEV)
+- citrix/citrix_adc_xmlagent_rce_cve_2021_22941.py (CVE-2021-22941, CVSS 9.8)
+- moxa/edr_web_rce_cve_2023_34992.py (CVE-2023-34992, CVSS 9.8)
+- hirschmann/hirschmann_hios_bypass_cve_2019_11831.py (CVE-2019-11831, CVSS 9.8)
+- Todos com: typed options, @mute, check(), run(), MITRE ATT&CK, referencias NVD
+
+### Proximo passo imediato
+- Smoke test de import nos 10 novos modulos via `python -c "from embedxpl..."`
+
+### Pendencias conhecidas
+- [ ] Smoke test de import em todos os novos modulos
+- [ ] Verificar se ha registro central de modulos a atualizar
+
+### Paths importantes
+- Windows: `D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\`
+- Linux: `/mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/modules/exploits/firewalls/`

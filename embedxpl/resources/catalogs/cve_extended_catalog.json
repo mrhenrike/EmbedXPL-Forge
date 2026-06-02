@@ -1,6 +1,6 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 497,
+  "entry_count": 511,
   "last_updated": "2026-06-02",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
@@ -6038,6 +6038,160 @@
       ],
       "devices": [
         "Moxa EDR-G9010 series"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2021-1585",
+      "vendor": "cisco",
+      "modules": [
+        "exploits/firewalls/cisco/cisco_asa_asdm_overflow_cve_2021_1585"
+      ],
+      "devices": [
+        "cisco appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2024-20353",
+      "vendor": "cisco",
+      "modules": [
+        "exploits/firewalls/cisco/cisco_firepower_asa_bypass_cve_2024_20353"
+      ],
+      "devices": [
+        "cisco appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2024-20399",
+      "vendor": "cisco",
+      "modules": [
+        "exploits/firewalls/cisco/cisco_nxos_cmd_inject_cve_2024_20399"
+      ],
+      "devices": [
+        "cisco appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-35534",
+      "vendor": "h3c",
+      "modules": [
+        "exploits/firewalls/h3c/h3c_ngfw_rce_cve_2022_35534"
+      ],
+      "devices": [
+        "h3c appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2019-20224",
+      "vendor": "h3c",
+      "modules": [
+        "exploits/firewalls/h3c/h3c_secpath_auth_bypass_cve_2019_20224"
+      ],
+      "devices": [
+        "h3c appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2019-11831",
+      "vendor": "hirschmann",
+      "modules": [
+        "exploits/firewalls/hirschmann/hirschmann_hios_bypass_cve_2019_11831"
+      ],
+      "devices": [
+        "hirschmann appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-22509",
+      "vendor": "phoenix",
+      "modules": [
+        "exploits/firewalls/phoenix/mguard_firmware_extract_cve_2022_22509"
+      ],
+      "devices": [
+        "phoenix appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-22509",
+      "vendor": "phoenix_contact",
+      "modules": [
+        "exploits/firewalls/phoenix_contact/mguard_firmware_extract_cve_2022_22509"
+      ],
+      "devices": [
+        "phoenix_contact appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2020-27232",
+      "vendor": "radware",
+      "modules": [
+        "exploits/firewalls/radware/alteon_rce_cve_2020_27232"
+      ],
+      "devices": [
+        "radware appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2018-9195",
+      "vendor": "radware",
+      "modules": [
+        "exploits/firewalls/radware/defensessl_auth_bypass_cve_2018_9195"
+      ],
+      "devices": [
+        "radware appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2021-30641",
+      "vendor": "symantec",
+      "modules": [
+        "exploits/firewalls/symantec/proxysg_auth_bypass_cve_2021_30641"
+      ],
+      "devices": [
+        "symantec appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-25752",
+      "vendor": "symantec",
+      "modules": [
+        "exploits/firewalls/symantec/symantec_edr_rce_cve_2022_25752"
+      ],
+      "devices": [
+        "symantec appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2020-15921",
+      "vendor": "trendmicro",
+      "modules": [
+        "exploits/firewalls/trendmicro/trendmicro_deep_security_rce_cve_2020_15921"
+      ],
+      "devices": [
+        "trendmicro appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2021-28250",
+      "vendor": "trendmicro",
+      "modules": [
+        "exploits/firewalls/trendmicro/trendmicro_tippingpoint_rce_cve_2021_28250"
+      ],
+      "devices": [
+        "trendmicro appliances"
       ],
       "exploit_available": true
     }
