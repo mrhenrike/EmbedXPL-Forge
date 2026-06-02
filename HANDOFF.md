@@ -155,3 +155,41 @@
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\resources\catalogs\cve_extended_catalog.json
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\zyxel\zyxel_usg_path_traversal_cve_2021_35028.py
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/resources/catalogs/cve_extended_catalog.json
+
+
+---
+
+## [2026-06-02 01:55] - Scaffold elimination complete + Tier 3 CVEs + final sync
+
+### Estado ao encerrar (COMPLETO)
+- ZERO scaffolds restantes em toda a arvore firewalls/ (159 modulos com primitivas CVE reais)
+- Todos os modulos OT/ICS corrigidos com protocolo nativo: Modbus TCP/502, DNP3 TCP/20000,
+  IEC 60870-5-104 TCP/2404, EtherNet/IP TCP/44818+UDP/2222, OPC UA TCP/4840
+- Hirschmann EAGLE One, Schneider ConneXium SSH, Phoenix mGuard - todos com implementacao real
+- nac/__init__.py criado
+- Tier 3 CVE expansion completa: +27 novos modulos (Sophos, CheckPoint, Juniper, Cisco historico,
+  Fortinet, Aruba, Meraki, pfSense, F5, Zyxel, SonicWall, WatchGuard, Barracuda, Citrix, Ivanti,
+  Sangfor)
+- CVE catalog: 385 -> 411 entradas
+- CHANGELOG.md: entrada [3.5.0] adicionada
+- Wiki: 24 EN-US + 24 PT-BR com cobertura total de todas as 47 funcoes
+- GitHub Wiki sincronizada com 48 paginas
+
+### Proximo passo imediato
+- Verificar CI (compat-matrix.yml) para validar que todos os novos modulos compilam
+- Considerar release 3.5.0 no PyPI se CI passar
+
+### Pendencias conhecidas (TODAS RESOLVIDAS nesta sessao)
+- [x] Scaffolds: ZERO restantes
+- [x] Sangfor NGFW: criado
+- [x] pfBlockerNG: scaffold substituido por implementacao real
+- [x] Phoenix mGuard: scaffold substituido
+- [x] OT/ICS genericos: protocolo nativo implementado
+- [x] nac/__init__.py: criado
+- [x] Tier 3 CVEs: completado
+- [x] CVE catalog: atualizado
+
+### Ambiente necessario
+- Python 3.8-3.13
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge

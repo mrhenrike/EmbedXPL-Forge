@@ -1,5 +1,40 @@
 # Changelog
 
+---
+
+## [3.5.0] - 2026-06-02
+
+### Added - Scaffold elimination complete, 159 modules with real CVE primitives
+
+**Final scaffold fixes (all modules now have real CVE implementations):**
+- hirschmann/eagle_auth_bypass_cve_2020_6994.py: REST API auth bypass via empty
+  session token, 3-stage config extraction chain
+- schneider/connexium_ssh_hardcoded_cve_2017_6026.py: SSH credential sweep with
+  8 hardcoded pairs via paramiko, enumeration, reverse shell staging
+- phoenix/mguard_cmd_injection_cve_2024_43386.py: form-based auth + diagnostic
+  cmd injection, synced to phoenix_contact/
+- generic/modbus_dpi_bypass.py: Modbus TCP/502 raw socket, 5 bypass techniques
+- generic/dnp3_firewall_evasion.py: DNP3 TCP/20000 raw socket, 4 evasion techniques
+- generic/iec104_manipulation.py: IEC 60870-5-104 TCP/2404 raw socket, 5 APDU tests
+- generic/ethernetip_cip_bypass.py: EtherNet/IP TCP/44818+UDP/2222, 4 CIP tests
+- generic/opcua_firewall_bypass.py: OPC UA TCP/4840 binary transport, 5 bypass tests
+- 
+ac/__init__.py: created missing package init file
+
+**Tier 3 additional modules (from parallel agents):**
+- sophos x2, checkpoint x2, juniper x1, cisco x4, fortinet x2, aruba x2, meraki x1,
+  pfSense x2, f5 x1, zyxel x1, sonicwall x1, watchguard x1, barracuda x1, citrix x2,
+  ivanti x2, sangfor x1 â€” all with real exploitation chains
+
+**CVE catalog:** 385 -> 411 entries (+26 from Tier 3)
+
+### Summary
+- Total firewall exploit modules: 159 (all with real CVE-specific implementations)
+- Zero HTTP scaffolds remaining
+- Vendor coverage: 34 folders
+- CVE catalog: 411 entries
+- Wiki: 24 EN-US + 24 PT-BR pages covering all 47 functions
+
 All notable changes to EmbedXPL-Forge are documented here.
 
 Format: [Semantic Versioning](https://semver.org) â€” `MAJOR.MINOR.PATCH`.
@@ -23,15 +58,15 @@ Format: [Semantic Versioning](https://semver.org) â€” `MAJOR.MINOR.PATCH`.
 - `exploits/firewalls/vpn/ivanti/ivanti_policy_secure_rce_cve_2024_22024.py` (CVE-2024-22024, CVSS 8.3)
 
 **Sophos additional modules**
-- `sophos_xg_rce_cve_2020_29583.py` (CVE-2020-29583, CVSS 9.8) — hardcoded PostgreSQL credentials
-- `sophos_utm_rce_cve_2022_4934.py` (CVE-2022-4934, CVSS 8.8) — UTM web proxy cmd injection
+- `sophos_xg_rce_cve_2020_29583.py` (CVE-2020-29583, CVSS 9.8) ï¿½ hardcoded PostgreSQL credentials
+- `sophos_utm_rce_cve_2022_4934.py` (CVE-2022-4934, CVSS 8.8) ï¿½ UTM web proxy cmd injection
 
 **Check Point additional modules**
-- `checkpoint_gaia_portal_sqli_cve_2021_30358.py` (CVE-2021-30358, CVSS 9.8) — Gaia portal SQLi
-- `checkpoint_mobile_access_ssrf_cve_2020_6017.py` (CVE-2020-6017, CVSS 8.1) — Mobile Access SSRF
+- `checkpoint_gaia_portal_sqli_cve_2021_30358.py` (CVE-2021-30358, CVSS 9.8) ï¿½ Gaia portal SQLi
+- `checkpoint_mobile_access_ssrf_cve_2020_6017.py` (CVE-2020-6017, CVSS 8.1) ï¿½ Mobile Access SSRF
 
 **Juniper additional**
-- `juniper_ex_auth_bypass_cve_2019_0028.py` (CVE-2019-0028, CVSS 9.8) — EX J-Web auth bypass
+- `juniper_ex_auth_bypass_cve_2019_0028.py` (CVE-2019-0028, CVSS 9.8) ï¿½ EX J-Web auth bypass
 
 **Cisco ASA historical CVEs**
 - `cisco_asa_snmp_rce_cve_2016_6366.py` (CVE-2016-6366, CVSS 9.8)
@@ -51,7 +86,7 @@ Format: [Semantic Versioning](https://semver.org) â€” `MAJOR.MINOR.PATCH`.
 - `meraki_mx_config_api_bypass_cve_2023_20014.py` (CVE-2023-20014, CVSS 9.1)
 
 **pfSense additional**
-- `pfsense_sqli_cve_2021_41283.py` (CVE-2021-41283, CVSS 8.8) — SQLi in diag_backup.php
+- `pfsense_sqli_cve_2021_41283.py` (CVE-2021-41283, CVSS 8.8) ï¿½ SQLi in diag_backup.php
 
 ### Fixed
 - `pfsense/pfblockerng_rce_cve_2022_31814.py`: replaced HTTP availability scaffold with real
