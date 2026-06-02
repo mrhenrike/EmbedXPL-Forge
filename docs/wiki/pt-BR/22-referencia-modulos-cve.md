@@ -58,9 +58,11 @@ exploits/cameras/dahua/cctv_rce_cve_2021_36260
 | CVE | CVSS | Vendor / Produto | Tipo | Módulo EmbedXPL |
 |-----|------|-----------------|------|----------------|
 | CVE-2023-50224 | 7.5 | TP-Link / WR841N | Divulgação de credenciais | `exploits/routers/tplink/wr841n_credential_disclosure_cve_2023_50224` |
+| CVE-2023-46853 | 9.8 | OpenVPN / Access Server | Bypass de auth via REST API (pre-auth) | `exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2023_46853` |
 | CVE-2023-28808 | 9.8 | Hikvision / NAS | Bypass de auth | `exploits/cameras/hikvision/nas_auth_bypass_cve_2023_28808` |
 | CVE-2023-27997 | 9.8 | Fortinet / FortiOS SSL-VPN | Heap overflow RCE | `exploits/firewalls/fortinet/fortigate_ssl_vpn_heap_overflow_cve_2023_27997` |
 | CVE-2023-25594 | 9.8 | Aruba / ClearPass Policy Manager | RCE não autenticado | `exploits/nac/aruba/aruba_clearpass_rce_cve_2023_25594` |
+| CVE-2023-24512 | 9.8 | Arista / EOS | Bypass de auth REST API (eAPI) + execução de CLI | `exploits/firewalls/arista/arista_eos_rest_api_bypass_cve_2023_24512` |
 | CVE-2023-20198 | 10.0 | Cisco / IOS XE WebUI | Escalada de privilégio | `exploits/network_os/cisco/ios_xe_webui_privesc_cve_2023_20198` |
 | CVE-2023-4966 | 9.4 | Citrix / NetScaler ADC/Gateway | CitrixBleed — vazamento de token de sessão | `exploits/appliances/citrix/citrix_bleed_info_disclosure_cve_2023_4966` |
 | CVE-2023-3519 | 9.8 | Citrix / NetScaler | RCE não autenticado | `exploits/appliances/citrix/netscaler_rce_cve_2023_3519` |
@@ -77,6 +79,7 @@ exploits/cameras/dahua/cctv_rce_cve_2021_36260
 | CVE-2022-30600 | 9.8 | Reolink / NVR | Extração de UID P2P | `exploits/cameras/reolink/reolink_nvr_p2p_uid_extract_cve_2022_30600` |
 | CVE-2022-4934 | 8.8 | Sophos / UTM | Injeção de comando via web proxy | `exploits/firewalls/sophos/sophos_utm_rce_cve_2022_4934` |
 | CVE-2022-1388 | 9.8 | F5 / BIG-IP iControl REST | RCE não autenticado | `exploits/appliances/f5/bigip_icontrol_rest_rce_cve_2022_1388` |
+| CVE-2022-0547 | 9.8 | OpenVPN / Access Server | Bypass de auth via injeção LDAP (requer modo LDAP) | `exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2022_0547` |
 
 ---
 
