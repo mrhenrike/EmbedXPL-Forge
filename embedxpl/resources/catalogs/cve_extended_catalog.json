@@ -1,6 +1,6 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 477,
+  "entry_count": 494,
   "last_updated": "2026-06-02",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
@@ -5160,10 +5160,17 @@
       "cve_id": "CVE-2024-47575",
       "vendor": "fortinet",
       "modules": [
-        "exploits/firewalls/fortinet/fortimanager_fortijump_cve_2024_47575"
+        "exploits/firewalls/fortinet/fortimanager_fortijump_cve_2024_47575.py",
+        "exploits/firewalls/fortinet/fortios_fgfm_preauth_rce_cve_2024_47575.py"
       ],
       "devices": [
-        "fortinet appliances"
+        "FortiManager 7.6.x < 7.6.1",
+        "FortiManager 7.4.x < 7.4.5",
+        "FortiManager 7.2.x < 7.2.8",
+        "FortiManager 7.0.x < 7.0.13",
+        "FortiManager 6.4.x < 6.4.15",
+        "FortiManager 6.2.x < 6.2.13",
+        "FortiManager Cloud 7.4.x < 7.4.3"
       ],
       "exploit_available": true
     },
@@ -5802,6 +5809,202 @@
       ],
       "devices": [
         "zyxel appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2013-2681",
+      "vendor": "imperva",
+      "modules": [
+        "exploits/firewalls/waf/imperva/securesphere_sqli_cve_2013_xxxx.py"
+      ],
+      "devices": [
+        "Imperva SecureSphere WAF MX 9.0",
+        "Imperva SecureSphere WAF MX 9.5",
+        "Imperva SecureSphere WAF MX 9.5.6"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2023-28051",
+      "vendor": "imperva",
+      "modules": [
+        "exploits/firewalls/waf/imperva/imperva_cloud_waf_bypass_cve_2023_28051.py"
+      ],
+      "devices": [
+        "Imperva Cloud WAF (Incapsula) before 2023-Q2 rule engine update"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2024-21793",
+      "vendor": "f5",
+      "modules": [
+        "exploits/firewalls/lb/f5/bigip_icontrol_rest_auth_bypass_cve_2024_21793.py"
+      ],
+      "devices": [
+        "F5 BIG-IP 17.x < 17.1.1",
+        "F5 BIG-IP 16.x < 16.1.4.1",
+        "F5 BIG-IP 15.x < 15.1.9.4"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2020-15778",
+      "vendor": "sonicwall",
+      "modules": [
+        "exploits/firewalls/sonicwall/sonicwall_scp_cmd_inject_cve_2020_15778.py"
+      ],
+      "devices": [
+        "SonicWall SonicOS 6.5.x GEN 6 and GEN 7 with SSH/SCP enabled",
+        "SonicWall TZ series",
+        "SonicWall NSA series",
+        "SonicWall NSsp series",
+        "SonicWall SuperMassive series"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2020-3580",
+      "vendor": "cisco",
+      "modules": [
+        "exploits/firewalls/cisco/cisco_ftd_webvpn_xss_cve_2020_3580.py"
+      ],
+      "devices": [
+        "Cisco ASA Software 9.6 through 9.14.1.6 with WebVPN",
+        "Cisco FTD Software 6.2.3 through 6.6.0.1 with AnyConnect/WebVPN"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2023-20032",
+      "vendor": "cisco",
+      "modules": [
+        "exploits/firewalls/cisco/cisco_fmc_rce_cve_2023_20032"
+      ],
+      "devices": [
+        "cisco appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-20713",
+      "vendor": "cisco",
+      "modules": [
+        "exploits/firewalls/cisco/cisco_ftd_asdm_bypass_cve_2022_20713"
+      ],
+      "devices": [
+        "cisco appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-27510",
+      "vendor": "citrix",
+      "modules": [
+        "exploits/firewalls/citrix/citrix_adc_auth_bypass_cve_2022_27510"
+      ],
+      "devices": [
+        "citrix appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-27518",
+      "vendor": "citrix",
+      "modules": [
+        "exploits/firewalls/citrix/citrix_adc_rce_cve_2022_27518"
+      ],
+      "devices": [
+        "citrix appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2024-23113",
+      "vendor": "fortinet",
+      "modules": [
+        "exploits/firewalls/fortinet/fortios_format_string_rce_cve_2024_23113"
+      ],
+      "devices": [
+        "fortinet appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2025-32756",
+      "vendor": "fortinet",
+      "modules": [
+        "exploits/firewalls/fortinet/fortios_stack_overflow_rce_cve_2025_32756"
+      ],
+      "devices": [
+        "fortinet appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2024-5829",
+      "vendor": "hillstone",
+      "modules": [
+        "exploits/firewalls/hillstone/hillstone_stoneos_web_rce_cve_2024_5829"
+      ],
+      "devices": [
+        "hillstone appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-24665",
+      "vendor": "kerio",
+      "modules": [
+        "exploits/firewalls/kerio/kerio_control_rce_cve_2022_24665"
+      ],
+      "devices": [
+        "kerio appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-0993",
+      "vendor": "opnsense",
+      "modules": [
+        "exploits/firewalls/opnsense/opnsense_csrf_rce_cve_2022_0993"
+      ],
+      "devices": [
+        "opnsense appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2021-1782",
+      "vendor": "sangfor",
+      "modules": [
+        "exploits/firewalls/sangfor/sangfor_ssl_vpn_rce_cve_2021_1782"
+      ],
+      "devices": [
+        "sangfor appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2023-23770",
+      "vendor": "stormshield",
+      "modules": [
+        "exploits/firewalls/stormshield/stormshield_sns_privesc_cve_2023_23770"
+      ],
+      "devices": [
+        "stormshield appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2021-22893",
+      "vendor": "pulsesecure",
+      "modules": [
+        "exploits/firewalls/vpn/pulsesecure/pulse_connect_secure_rce_cve_2021_22893"
+      ],
+      "devices": [
+        "pulsesecure appliances"
       ],
       "exploit_available": true
     }
