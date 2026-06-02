@@ -2,6 +2,25 @@
 
 ---
 
+## [3.5.1] - 2026-06-02
+
+### Added - CVE catalog completion: all 159 modules indexed (0 gaps)
+
+- `cve_extended_catalog.json`: 411 -> **477 entries**
+  Added 66 missing catalog entries so that every firewalls/ exploit module
+  now has a corresponding CVE record. Zero gaps in module-catalog coverage.
+- `embedxpl/modules/exploits/firewalls/lb/__init__.py`: created missing package init
+- `embedxpl/modules/exploits/firewalls/waf/__init__.py`: created missing package init
+
+### Summary (final state)
+- Firewall exploit modules: **159** (all with real CVE-specific implementations)
+- HTTP scaffolds remaining: **0** (zero)
+- Vendor folders: **34**
+- CVE catalog entries: **477** (covers all 159 modules)
+- Wiki: **24 EN-US + 24 PT-BR pages** (all 47 functions documented with I/O samples)
+
+---
+
 ## [3.5.0] - 2026-06-02
 
 ### Added - Scaffold elimination complete, 159 modules with real CVE primitives
