@@ -58,3 +58,37 @@
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/modules/exploits/firewalls/
+
+## [2026-06-02 01:50] -- Criacao de 11 modulos E2E para firewalls (Sophos, CheckPoint, Juniper, F5, SonicWall, WatchGuard)
+
+### Estado ao encerrar
+- Criados 11 novos modulos de exploit com implementacoes reais (nao scaffolds) para CVEs criticos de firewall
+- Todos os modulos passam py_compile (validacao de sintaxe Python)
+- Arquivos modificados (paths relativos):
+  - embedxpl/modules/exploits/firewalls/sophos/sophos_xg_rce_cve_2020_29583.py (hardcoded cred + PostgreSQL RCE, CVSS 9.8)
+  - embedxpl/modules/exploits/firewalls/sophos/sophos_utm_rce_cve_2022_4934.py (proxy config cmd inject, CVSS 8.8)
+  - embedxpl/modules/exploits/firewalls/checkpoint/checkpoint_gaia_portal_sqli_cve_2021_30358.py (SQLi -> RCE, CVSS 9.8)
+  - embedxpl/modules/exploits/firewalls/checkpoint/checkpoint_mobile_access_ssrf_cve_2020_6017.py (SSRF, CVSS 8.1)
+  - embedxpl/modules/exploits/firewalls/juniper/juniper_ex_auth_bypass_cve_2019_0028.py (J-Web auth bypass, CVSS 9.8)
+  - embedxpl/modules/exploits/firewalls/juniper/juniper_nsmjws_rce_cve_2012_0377.py (JBoss deser RCE, CVSS 10.0)
+  - embedxpl/modules/exploits/firewalls/lb/f5/bigip_management_rce_cve_2021_22987.py (Appliance mode bypass, CVSS 9.9)
+  - embedxpl/modules/exploits/firewalls/lb/f5/bigip_config_sync_bypass_cve_2024_45844.py (config sync bypass, CVSS 8.8)
+  - embedxpl/modules/exploits/firewalls/sonicwall/sonicwall_sra_rce_cve_2021_20028.py (pre-auth cmd inject, CVSS 9.8)
+  - embedxpl/modules/exploits/firewalls/sonicwall/sonicwall_sma_path_traversal_cve_2021_20038.py (stack overflow, CVSS 9.8)
+  - embedxpl/modules/exploits/firewalls/watchguard/watchguard_fireware_rce_cve_2023_26244.py (auth cmd inject, CVSS 8.8)
+
+### Proximo passo imediato
+- Testar importacao de cada modulo com python -c "from embedxpl.modules.exploits.firewalls.<vendor>.<module> import Exploit" contra o ambiente real
+- Verificar que OptInteger esta disponivel em embedxpl.core.exploit (alguns modulos usam OptInteger para timeout)
+
+### Pendencias conhecidas
+- [ ] Testes de integracao contra labs/rangos reais
+- [ ] Adicionar os novos modulos ao incorporated_poc_tree.py se aplicavel
+- [ ] Verificar disponibilidade de ShellStagingMixin para modulos que possam precisar dela no futuro
+
+### Ambiente necessario
+- Python 3.10+, embedxpl instalado com dependencias (requests, etc.)
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/modules/exploits/firewalls/
