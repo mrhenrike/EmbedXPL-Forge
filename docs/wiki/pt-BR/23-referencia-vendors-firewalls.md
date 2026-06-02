@@ -584,4 +584,3 @@ O módulo `embedxpl-printer-vuln.nse` verifica 11 vendors de impressoras (HP, Ca
 
 > Para a referencia completa de CVEs, consulte [22-referencia-modulos-cve.md](22-referencia-modulos-cve.md).
 [Hub da Wiki](../README.md)
-
