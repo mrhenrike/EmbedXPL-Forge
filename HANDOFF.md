@@ -489,3 +489,27 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/
+
+## [2026-06-02 02:50] — Expansao wiki PT-BR: vendors e CVEs
+
+### Estado ao encerrar
+- Adicionados 26 vendors ausentes em docs/wiki/pt-BR/23-referencia-vendors-firewalls.md (arista, array_networks, checkpoint, cisco_meraki, h3c, hillstone, hirschmann, ipfire, kerio, moxa, openvpn, opnsense, pfsense, phoenix/phoenix_contact, radware, schneider, siemens, sophos, stormshield, symantec, trellix, trendmicro, vyos, watchguard, zyxel)
+- Secao Check Point substituida por entrada completa com tabela de modulos e sessao terminal
+- Secao Juniper expandida com tabela de 5 modulos
+- Corrigido header do arquivo 23 para apontar para EN-US equivalente
+- Reescrito docs/wiki/pt-BR/22-referencia-modulos-cve.md com todos os CVEs ausentes adicionados (60+ novas entradas)
+- Arquivos modificados: docs/wiki/pt-BR/23-referencia-vendors-firewalls.md, docs/wiki/pt-BR/22-referencia-modulos-cve.md
+
+### Proximo passo imediato
+- Revisar a tabela de resumo de cobertura (secao final de 23) para atualizar contagens se necessario
+
+### Pendencias conhecidas
+- [ ] Validar que todos os caminhos de modulos em pt-BR correspondem exatamente aos da EN-US
+- [ ] Atualizar tabela de resumo de cobertura em 23-referencia-vendors-firewalls.md com novos totais de vendors
+
+### Ambiente necessario
+- Nenhum ambiente especial necessario para edicao de documentacao
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\docs\wiki\pt-BR\
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/docs/wiki/pt-BR/
