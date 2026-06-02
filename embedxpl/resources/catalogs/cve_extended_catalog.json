@@ -1,6 +1,6 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 518,
+  "entry_count": 519,
   "last_updated": "2026-06-02",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
@@ -6269,6 +6269,17 @@
       ],
       "devices": [
         "openvpn appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2023-24512",
+      "vendor": "arista",
+      "modules": [
+        "exploits/firewalls/arista/arista_eos_rest_api_bypass_cve_2023_24512"
+      ],
+      "devices": [
+        "Arista EOS network appliances"
       ],
       "exploit_available": true
     }
