@@ -124,3 +124,34 @@
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\docs\wiki\
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/docs/wiki/
+
+## [2026-06-02 01:57] -- CVE catalog expansion + Zyxel USG path traversal module
+
+### Estado ao encerrar
+- Adicionadas 26 novas entradas ao `embedxpl/resources/catalogs/cve_extended_catalog.json`
+  - entry_count atualizado de 385 para 411 (valor real de entradas)
+  - last_updated mantido em "2026-06-02"
+  - CVEs adicionados: CVE-2014-3390, CVE-2019-0028, CVE-2020-6017, CVE-2020-29583,
+    CVE-2021-1442, CVE-2021-20028, CVE-2021-20038, CVE-2021-26103, CVE-2021-30358,
+    CVE-2021-35028, CVE-2021-41282, CVE-2021-41283, CVE-2022-4934, CVE-2022-26413,
+    CVE-2022-37897, CVE-2022-40685, CVE-2023-2869, CVE-2023-20014, CVE-2023-25594,
+    CVE-2023-26244, CVE-2023-4966, CVE-2024-21888, CVE-2024-22024, CVE-2024-45844
+    (CVE-2016-6366, CVE-2018-0296, CVE-2023-3519 ja existiam no catalogo)
+  - Criado modulo: `embedxpl/modules/exploits/firewalls/zyxel/zyxel_usg_path_traversal_cve_2021_35028.py`
+  - Nota: `barracuda_waf_rce_cve_2023_2869.py` ja existia cobrindo CVE-2023-2869 (mesmo CVE, diferente nome de arquivo)
+  - `pfsense_csrf_rce_cve_2021_41282.py` ja existia, apenas catalogado
+
+### Proximo passo imediato
+- Verificar se os modulos referenciados nos novos entries do catalogo existem nos paths corretos
+
+### Pendencias conhecidas
+- [ ] Auditar se ha outros modulos em `exploits/firewalls/` sem entrada no catalogo
+
+### Ambiente necessario
+- Python 3.9+
+- EmbedXPL-Forge virtualenv ativo
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\resources\catalogs\cve_extended_catalog.json
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\zyxel\zyxel_usg_path_traversal_cve_2021_35028.py
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/resources/catalogs/cve_extended_catalog.json
