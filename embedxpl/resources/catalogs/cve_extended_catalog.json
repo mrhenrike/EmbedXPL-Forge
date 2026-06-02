@@ -1,6 +1,6 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 496,
+  "entry_count": 497,
   "last_updated": "2026-06-02",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
@@ -6027,6 +6027,17 @@
       ],
       "devices": [
         "Citrix ADC and Gateway"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2023-34992",
+      "vendor": "moxa",
+      "modules": [
+        "exploits/firewalls/moxa/edr_web_rce_cve_2023_34992"
+      ],
+      "devices": [
+        "Moxa EDR-G9010 series"
       ],
       "exploit_available": true
     }
