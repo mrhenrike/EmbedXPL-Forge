@@ -1,5 +1,55 @@
 # Changelog
 
+All notable changes to EmbedXPL-Forge are documented here.
+
+Format: [Semantic Versioning](https://semver.org) -- `MAJOR.MINOR.PATCH`.
+
+---
+
+## [3.6.0] - 2026-06-02
+
+### Added - Critical historical CVEs, Pulse Secure coverage, 178 total modules
+
+**Fortinet critical new modules:**
+- ortios_format_string_rce_cve_2024_23113.py (CVE-2024-23113, CVSS 9.8, CISA KEV)
+  FortiOS fgfmd pre-auth RCE via format string vulnerability
+- ortios_stack_overflow_rce_cve_2025_32756.py (CVE-2025-32756, CVSS 9.6)
+  FortiOS/FortiProxy SSL-VPN stack-based buffer overflow unauth RCE
+- ortios_fgfm_preauth_rce_cve_2024_47575.py (CVE-2024-47575, CVSS 9.8, CISA KEV)
+  FortiManager FGFM protocol pre-auth file write + RCE
+
+**Citrix/NetScaler comprehensive coverage:**
+- citrix_adc_path_traversal_rce_cve_2019_19781.py (CVE-2019-19781, CVSS 9.8)
+  Most exploited CVE of 2020 -- path traversal + Perl template RCE
+- citrix_adc_auth_bypass_cve_2022_27510.py (CVE-2022-27510, CVSS 9.8)
+- citrix_adc_rce_cve_2022_27518.py (CVE-2022-27518, CVSS 9.8) SAML RCE
+
+**New vpn/pulsesecure/ vendor folder:**
+- pulse_connect_secure_rce_cve_2021_22893.py (CVE-2021-22893, CVSS 10.0, CISA KEV)
+- pulse_connect_rce_cve_2019_11510.py (CVE-2019-11510, CVSS 10.0, CISA KEV)
+  Both among the most exploited VPN CVEs historically (APT29/Cozy Bear)
+
+**Cisco additional:**
+- CVE-2023-20032 (FMC RCE), CVE-2022-20713 (FTD bypass), CVE-2020-3580 (XSS chain)
+
+**Other vendors expanded:**
+- F5 BIG-IP: CVE-2024-21793 iControl REST auth bypass
+- SonicWall: CVE-2020-15778 SCP command injection
+- Hillstone: CVE-2024-5829 web RCE (2nd module)
+- Kerio: CVE-2022-24665 VPN cmd injection (2nd module)
+- OPNsense: CVE-2022-0993 CSRF RCE (2nd module)
+- Sangfor: CVE-2021-1782 SSL VPN RCE (2nd module)
+- Stormshield: CVE-2023-23770 SNS privilege escalation (2nd module)
+- Imperva: CVE-2023-28051 Cloud WAF bypass (new module)
+
+### Summary (v3.6.0)
+- Total firewall exploit modules: **178**
+- CVE catalog: **495 entries** (0 gaps)
+- Vendor folders: **34** (+ vpn/pulsesecure added)
+- Zero HTTP scaffolds, zero catalog gaps
+
+# Changelog
+
 ---
 
 ## [3.5.1] - 2026-06-02
@@ -843,3 +893,4 @@ pip install embedxpl[all]              # Everything
 - Architecture diagrams (Mermaid + PNG)
 - Coverage matrix
 - Bilingual documentation (en-US + pt-BR)
+
