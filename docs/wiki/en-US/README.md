@@ -42,6 +42,16 @@ PNG gallery. Mermaid sources: [../../diagrams/architecture/README.md](../../diag
 | [11-troubleshooting.md](11-troubleshooting.md) | Common failures and fixes |
 | [12-nse-script-manager.md](12-nse-script-manager.md) | NSE manager: install, list, run, check, info (11 scripts) |
 | [13-shell-stager.md](13-shell-stager.md) | Shell stager: 26 types, PTY listener, Meterpreter, GTFOBins |
+| [14-sysinfo-and-compute.md](14-sysinfo-and-compute.md) | `sysinfo`, compute modes (cpu/gpu/hybrid), hardware audit |
+| [15-discover-command.md](15-discover-command.md) | `discover` deep dive: timing, OUI, ARP/Nmap/Scapy pipeline |
+| [16-sessions-command.md](16-sessions-command.md) | `sessions` full reference: list, show, export, delete, purge |
+| [17-apt-catalog.md](17-apt-catalog.md) | APT attack chain catalog: list, show, search, run |
+| [18-firmware-tools.md](18-firmware-tools.md) | `firmware-dl` and `firmware-analyze` CLI reference |
+| [19-infra-wizard-mode.md](19-infra-wizard-mode.md) | `--infra wizard` and `--infra ot` infrastructure modes |
+| [20-ics-ot-modules.md](20-ics-ot-modules.md) | ICS/OT module coverage: Modbus, S7, EtherNet/IP, Universal Robots |
+| [21-rtsp-camera-engine.md](21-rtsp-camera-engine.md) | RTSP/cameradar engine: discovery, attacks, credential testing |
+| [22-cve-module-reference.md](22-cve-module-reference.md) | Full CVE module index with CVSS and affected versions |
+| [23-vendor-reference-firewalls.md](23-vendor-reference-firewalls.md) | Firewall/VPN vendor module reference |
 | [Module path index (all locales)](../ANEXO-INDICE-MODULOS.md) | Full module path list |
 
 ## End-to-End Examples (input and expected output)
