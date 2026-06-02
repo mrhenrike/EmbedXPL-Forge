@@ -652,15 +652,119 @@ exf (Aruba ClearPass SQLi CVE-2022-37897) > run
 
 | Vendor | Modules | Key CVEs |
 |--------|---------|----------|
-| Stormshield SNS | `firewalls/stormshield/stormshield_sns_rce_cve_2020_18175` | CVE-2020-18175 |
-| VyOS | `firewalls/vyos/vyos_rce_cve_2023_31992` | CVE-2023-31992 |
-| OPNsense | `firewalls/opnsense/opnsense_sqli_rce_cve_2021_23239` | CVE-2021-23239 |
-| Hirschmann/Belden | `firewalls/hirschmann/connexium_ssh_hardcoded_cve_2017_6026` | CVE-2017-6026 |
-| Hillstone | `firewalls/hillstone/` | various |
-| Kerio Control | `firewalls/kerio/` | various |
-| Phoenix Contact mGuard | `firewalls/phoenix_contact/` | various |
-| A10 Networks | `firewalls/lb/a10/` | various |
-| F5 (load balancer path) | `firewalls/lb/f5/` | various |
+| Stormshield SNS | `firewalls/stormshield/` (2) | CVE-2020-18175, CVE-2023-23770 |
+| VyOS | `firewalls/vyos/` (2) | CVE-2023-31992, CVE-2021-35278 |
+| OPNsense | `firewalls/opnsense/` (2) | CVE-2021-23239, CVE-2022-0993 |
+| Hirschmann/Belden | `firewalls/hirschmann/` (2) | CVE-2020-6994, CVE-2019-11831 |
+| Hillstone | `firewalls/hillstone/` (2) | CVE-2023-31493, CVE-2024-5829 |
+| Kerio Control | `firewalls/kerio/` (2) | CVE-2024-52875, CVE-2022-24665 |
+| Phoenix Contact mGuard | `firewalls/phoenix/` (3) | CVE-2024-43386, CVE-2022-22509 |
+| A10 Networks | `firewalls/lb/a10/` (1) | Softax path traversal |
+| F5 BIG-IP | `firewalls/lb/f5/` (8) | CVE-2020-5902, CVE-2022-1388, CVE-2021-22986 |
+
+---
+
+## Newly Added Vendors (v3.7.0+)
+
+### Array Networks
+
+| Module | CVE | CVSS | Type |
+|--------|-----|------|------|
+| `array_networks_vxag_rce_cve_2023_28461` | CVE-2023-28461 | 9.8 | Unauth RCE via exec proxy |
+| `array_networks_arrayos_rce_cve_2021_43139` | CVE-2021-43139 | 9.8 | Pre-auth POST field injection |
+
+```
+exf > use exploits/firewalls/array_networks/array_networks_vxag_rce_cve_2023_28461
+exf (...) > set target 10.0.0.1
+exf (...) > check
+[+] Target is vulnerable
+exf (...) > run
+[*] Stage 1 - Fingerprinting Array Networks vxAG...
+[+] Array Networks vxAG detected
+[*] Stage 2 - Sending unauthenticated exec proxy request...
+[+] RCE CONFIRMED! Command output: uid=0(root)
+```
+
+### Cisco Meraki MX (cisco_meraki/)
+
+| Module | CVE | CVSS | Type |
+|--------|-----|------|------|
+| `meraki_mx_dashboard_rce_cve_2021_1497` | CVE-2021-1497 | 9.8 | Dashboard file upload RCE |
+| `meraki_mx_config_api_bypass_cve_2023_20014` | CVE-2023-20014 | 9.1 | Config API auth bypass |
+
+### Phoenix Contact mGuard (phoenix_contact/)
+
+| Module | CVE | CVSS | Type |
+|--------|-----|------|------|
+| `mguard_cmd_injection_cve_2024_43386` | CVE-2024-43386 | 8.8 | Web diagnostic cmd injection |
+| `mguard_firmware_extract_cve_2022_22509` | CVE-2022-22509 | 7.5 | SNMP public exposes VPN keys |
+
+### H3C (New H3C Group)
+
+H3C is a major Chinese network vendor widely deployed in government and enterprise.
+
+| Module | CVE | CVSS | Type |
+|--------|-----|------|------|
+| `h3c_ngfw_rce_cve_2022_35534` | CVE-2022-35534 | 9.8 | NGFW OS command injection |
+| `h3c_secpath_auth_bypass_cve_2019_20224` | CVE-2019-20224 | 9.8 | SecPath auth bypass |
+
+```
+exf > use exploits/firewalls/h3c/h3c_ngfw_rce_cve_2022_35534
+exf (...) > set target 192.168.1.1
+exf (...) > run
+[*] Stage 1 - Detecting H3C NGFW web management...
+[+] H3C management interface detected
+[*] Stage 2 - Injecting command via network configuration...
+[+] RCE confirmed: uid=0(root)
+```
+
+### IPFire
+
+| Module | CVE | CVSS | Type |
+|--------|-----|------|------|
+| `ipfire_rce_cve_2019_18981` | CVE-2019-18981 | 9.8 | CGI network injection |
+| `ipfire_ids_cmd_inject_cve_2023_46226` | CVE-2023-46226 | 8.8 | IDS rule_path injection |
+
+### Radware
+
+| Module | CVE | CVSS | Type |
+|--------|-----|------|------|
+| `alteon_rce_cve_2020_27232` | CVE-2020-27232 | 9.8 | Alteon ADC unauth RCE |
+| `defensessl_auth_bypass_cve_2018_9195` | CVE-2018-9195 | 9.8 | DefenseSSL auth bypass |
+
+### Symantec (Broadcom ProxySG)
+
+| Module | CVE | CVSS | Type |
+|--------|-----|------|------|
+| `proxysg_auth_bypass_cve_2021_30641` | CVE-2021-30641 | 9.8 | ProxySG management bypass |
+| `symantec_edr_rce_cve_2022_25752` | CVE-2022-25752 | 9.8 | EDR appliance RCE |
+
+### Trellix (formerly McAfee Firewall Enterprise)
+
+| Module | CVE | CVSS | Type |
+|--------|-----|------|------|
+| `trellix_ngfw_rce_cve_2020_7270` | CVE-2020-7270 | 9.0 | Admin script injection |
+| `trellix_ngfw_config_rce_cve_2021_4080` | CVE-2021-4080 | 8.8 | Config injection RCE |
+
+### Trend Micro
+
+| Module | CVE | CVSS | Type |
+|--------|-----|------|------|
+| `trendmicro_tippingpoint_rce_cve_2021_28250` | CVE-2021-28250 | 9.8 | TippingPoint SMS unauth RCE |
+| `trendmicro_deep_security_rce_cve_2020_15921` | CVE-2020-15921 | 9.8 | Deep Security Java deser RCE |
+
+### OpenVPN Access Server
+
+| Module | CVE | CVSS | Type |
+|--------|-----|------|------|
+| `openvpn_as_auth_bypass_cve_2023_46853` | CVE-2023-46853 | 9.8 | AS REST API auth bypass |
+| `openvpn_as_auth_bypass_cve_2022_0547` | CVE-2022-0547 | 9.8 | LDAP auth module bypass |
+
+### Arista EOS
+
+| Module | CVE | CVSS | Type |
+|--------|-----|------|------|
+| `arista_eos_rest_api_bypass_cve_2023_24512` | CVE-2023-24512 | 9.8 | EOS REST API auth bypass |
 
 ---
 

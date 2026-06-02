@@ -1466,6 +1466,7 @@
 - `exploits/embedded_os/zephyr/zephyr_cortexm_syscall_race_lpe`
 - `exploits/embedded_os/zephyr/zephyr_dns_oob_rce_cve_2020_10024`
 - `exploits/embedded_os/zephyr/zephyr_usb_oob_cve_2021_3435`
+- `exploits/firewalls/arista/arista_eos_rest_api_bypass_cve_2023_24512`
 - `exploits/firewalls/array_networks/array_networks_arrayos_rce_cve_2021_43139`
 - `exploits/firewalls/array_networks/array_networks_vxag_rce_cve_2023_28461`
 - `exploits/firewalls/checkpoint/checkpoint_gaia_portal_sqli_cve_2021_30358`
