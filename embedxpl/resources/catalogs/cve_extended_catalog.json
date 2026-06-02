@@ -1,6 +1,6 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 494,
+  "entry_count": 495,
   "last_updated": "2026-06-02",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
@@ -6005,6 +6005,17 @@
       ],
       "devices": [
         "pulsesecure appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2019-11510",
+      "vendor": "pulsesecure",
+      "modules": [
+        "exploits/firewalls/vpn/pulsesecure/pulse_connect_rce_cve_2019_11510"
+      ],
+      "devices": [
+        "Pulse Connect Secure < 9.0R3.3"
       ],
       "exploit_available": true
     }
