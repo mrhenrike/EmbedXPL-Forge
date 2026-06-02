@@ -115,9 +115,11 @@ exploits/cameras/dahua/cctv_rce_cve_2021_36260
 | CVE | CVSS | Vendor / Produto | Tipo | Módulo EmbedXPL |
 |-----|------|-----------------|------|----------------|
 | CVE-2019-19781 | 9.8 | Citrix / NetScaler | Path traversal (Shitrix) | `exploits/appliances/citrix/netscaler_path_traversal_cve_2019_19781` |
+| CVE-2019-13393 | 9.8 | Sangfor / NGFW | RCE não autenticado | `exploits/firewalls/sangfor/sangfor_ngfw_unauth_rce_cve_2019_13393` |
 | CVE-2019-3950 | 9.8 | Amcrest / Câmeras | Divulgação de info não autenticada | `exploits/cameras/amcrest/amcrest_camera_unauth_info_disclosure_cve_2019_3950` |
 | CVE-2019-1653 | 9.8 | Cisco / RV320/RV325 | Divulgação de info | `exploits/routers/cisco/rv300_rv320_information_disclosure_cve_2019_1653` |
 | CVE-2019-1652 | 9.8 | Cisco / RV320/RV325 | Injeção de comando | `exploits/routers/cisco/rv320_command_injection` |
+| CVE-2019-0028 | 9.8 | Juniper / EX series | Bypass de autenticação J-Web | `exploits/firewalls/juniper/juniper_ex_auth_bypass_cve_2019_0028` |
 
 ---
 
@@ -128,6 +130,7 @@ exploits/cameras/dahua/cctv_rce_cve_2021_36260
 | CVE-2018-14847 | 9.1 | MikroTik / RouterOS | Divulgação de credenciais Winbox | `exploits/routers/mikrotik/winbox_cred_disclosure_cve_2018_14847` |
 | CVE-2018-13379 | 9.8 | Fortinet / FortiOS SSL-VPN | Path traversal | `exploits/firewalls/fortinet/fortios_sslvpn_path_traversal_cve_2018_13379` |
 | CVE-2018-10660 | 9.8 | Axis / Câmeras | RCE via parhand | `exploits/cameras/axis/srv_parhand_rce_cve_2018_10660` |
+| CVE-2018-0296 | 7.5 | Cisco / ASA | Path traversal HTTP | `exploits/firewalls/cisco/cisco_asa_path_traversal_cve_2018_0296` |
 | CVE-2018-0171 | 9.8 | Cisco / IOS Smart Install | RCE não autenticado | `exploits/cisco/cisco_ios_smart_install_rce_cve_2018_0171` |
 
 ---
@@ -142,11 +145,13 @@ exploits/cameras/dahua/cctv_rce_cve_2021_36260
 
 ---
 
-## CVEs históricos (2013–2015)
+## CVEs históricos (2013–2016)
 
 | CVE | CVSS | Vendor / Produto | Tipo | Módulo EmbedXPL |
 |-----|------|-----------------|------|----------------|
+| CVE-2016-6366 | 9.8 | Cisco / ASA | RCE via SNMP (EXTRABACON) | `exploits/firewalls/cisco/cisco_asa_snmp_rce_cve_2016_6366` |
 | CVE-2015-2049 | 9.8 | D-Link / DCS-931L | RCE via upload de arquivo | `exploits/cameras/dlink/dcs_931l_file_upload_rce_cve_2015_2049` |
+| CVE-2014-3390 | 10.0 | Cisco / ASA | RCE via WebVPN | `exploits/firewalls/cisco/cisco_asa_webvpn_rce_cve_2014_3390` |
 | CVE-2013-6117 | 9.8 | Dahua / DVR (antigo) | Bypass de autenticação | `exploits/cameras/dahua/dvr_auth_bypass_cve_2013_6117` |
 | CVE-2013-4786 | 10.0 | Supermicro / IPMI 2.0 | Hash HMAC RAKP (sem auth) | `exploits/bmc/supermicro/ipmi_auth_bypass_cve_2013_4786` |
 
