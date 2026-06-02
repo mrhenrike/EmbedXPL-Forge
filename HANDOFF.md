@@ -452,3 +452,40 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/modules/exploits/firewalls/
+
+## [2026-06-02 02:40] -- OpenVPN AS + Arista EOS modules + wiki expansions
+
+### Estado ao encerrar
+- Criados 2 modulos OpenVPN Access Server (CVE-2023-46853, CVE-2022-0547) em embedxpl/modules/exploits/firewalls/openvpn/
+- Criado 1 modulo Arista EOS (CVE-2023-24512) em embedxpl/modules/exploits/firewalls/arista/
+- Criados __init__.py para ambas as pastas
+- Expandida pagina wiki en-US/23 (vendor firewalls): substituidas as 10 stubs compactas por secoes completas com tabelas + sessoes terminais para Array Networks, Cisco Meraki, H3C, IPFire, Radware, Symantec, Trellix, Trend Micro, OpenVPN AS, Arista
+- Atualizada pagina wiki en-US/22 (CVE reference): adicionadas 3 entradas (CVE-2023-46853, CVE-2022-0547, CVE-2023-24512)
+- Atualizada pagina wiki pt-BR/22: adicionadas mesmas 3 entradas nas secoes 2023 e 2022
+- Atualizada pagina wiki pt-BR/23: adicionadas secoes OpenVPN AS e Arista com sessoes terminais em PT-BR
+
+### Arquivos modificados
+- embedxpl/modules/exploits/firewalls/openvpn/__init__.py (novo)
+- embedxpl/modules/exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2023_46853.py (novo)
+- embedxpl/modules/exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2022_0547.py (novo)
+- embedxpl/modules/exploits/firewalls/arista/__init__.py (novo)
+- embedxpl/modules/exploits/firewalls/arista/arista_eos_rest_api_bypass_cve_2023_24512.py (novo)
+- docs/wiki/en-US/22-cve-module-reference.md (modificado)
+- docs/wiki/en-US/23-vendor-reference-firewalls.md (modificado)
+- docs/wiki/pt-BR/22-referencia-modulos-cve.md (modificado)
+- docs/wiki/pt-BR/23-referencia-vendors-firewalls.md (modificado)
+
+### Proximo passo imediato
+- Registrar modulos no dispatcher/registry central se existir (verificar embedxpl/modules/__init__.py ou similar)
+
+### Pendencias conhecidas
+- [ ] Verificar se ha um registry central de modulos que precise ser atualizado
+- [ ] Testar imports dos 3 novos modulos no shell EmbedXPL
+
+### Ambiente necessario
+- Python 3.10+
+- embedxpl package instalado (pip install -e .)
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/

