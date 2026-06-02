@@ -1482,6 +1482,9 @@
 - `exploits/firewalls/cisco/cisco_asa_webvpn_rce_cve_2014_3390`
 - `exploits/firewalls/cisco/cisco_fmc_auth_bypass_rce_cve_2026_20079`
 - `exploits/firewalls/cisco/cisco_fmc_deserialization_rce_cve_2026_20131`
+- `exploits/firewalls/cisco/cisco_fmc_rce_cve_2023_20032`
+- `exploits/firewalls/cisco/cisco_ftd_asdm_bypass_cve_2022_20713`
+- `exploits/firewalls/cisco/cisco_ftd_webvpn_xss_cve_2020_3580`
 - `exploits/firewalls/cisco/cisco_ios_xe_csrf_rce_cve_2021_1442`
 - `exploits/firewalls/cisco/cisco_sdwan_dtls_auth_bypass_cve_2026_20182`
 - `exploits/firewalls/cisco/firepower_management60_path_traversal`
@@ -1493,7 +1496,11 @@
 - `exploits/firewalls/cisco/unified_multi_path_traversal`
 - `exploits/firewalls/cisco_meraki/meraki_mx_config_api_bypass_cve_2023_20014`
 - `exploits/firewalls/cisco_meraki/meraki_mx_dashboard_rce_cve_2021_1497`
+- `exploits/firewalls/citrix/citrix_adc_auth_bypass_cve_2022_27510`
 - `exploits/firewalls/citrix/citrix_adc_gateway_rce_cve_2023_3519`
+- `exploits/firewalls/citrix/citrix_adc_path_traversal_rce_cve_2019_19781`
+- `exploits/firewalls/citrix/citrix_adc_rce_cve_2022_27518`
+- `exploits/firewalls/citrix/citrix_adc_xmlagent_rce_cve_2021_22941`
 - `exploits/firewalls/citrix/citrix_bleed_info_disclosure_cve_2023_4966`
 - `exploits/firewalls/fortinet/fortianalyzer_sql_inject_cve_2021_26103`
 - `exploits/firewalls/fortinet/forticlient_ems_preauth_rce_cve_2026_35616`
@@ -1503,6 +1510,8 @@
 - `exploits/firewalls/fortinet/fortigate_ssl_vpn_heap_overflow_cve_2023_27997`
 - `exploits/firewalls/fortinet/fortimanager_fortijump_cve_2024_47575`
 - `exploits/firewalls/fortinet/fortios_auth_bypass_cve_2022_40684`
+- `exploits/firewalls/fortinet/fortios_fgfm_preauth_rce_cve_2024_47575`
+- `exploits/firewalls/fortinet/fortios_format_string_rce_cve_2024_23113`
 - `exploits/firewalls/fortinet/fortios_fortiproxy_ssh_inject_cve_2022_40684_v2`
 - `exploits/firewalls/fortinet/fortios_heap_overflow_rce_cve_2026_25249`
 - `exploits/firewalls/fortinet/fortios_mgmt_rce_cve_2023_29183`
@@ -1513,6 +1522,7 @@
 - `exploits/firewalls/fortinet/fortios_sslvpn_rce_cve_2024_21762`
 - `exploits/firewalls/fortinet/fortios_sslvpn_session_reuse_cve_2024_50562`
 - `exploits/firewalls/fortinet/fortios_sslvpn_xsrf_ssrf_cve_2023_48789`
+- `exploits/firewalls/fortinet/fortios_stack_overflow_rce_cve_2025_32756`
 - `exploits/firewalls/fortinet/fortios_websocket_auth_bypass_cve_2024_55591`
 - `exploits/firewalls/fortinet/fortiproxy_auth_bypass_cve_2023_25610`
 - `exploits/firewalls/fortinet/fortiswitch_unauth_passwd_cve_2024_48887`
@@ -1529,6 +1539,7 @@
 - `exploits/firewalls/generic/shellshock`
 - `exploits/firewalls/generic/ssh_auth_keys`
 - `exploits/firewalls/hillstone/hillstone_stoneos_rce_cve_2023_31493`
+- `exploits/firewalls/hillstone/hillstone_stoneos_web_rce_cve_2024_5829`
 - `exploits/firewalls/hirschmann/eagle_auth_bypass_cve_2020_6994`
 - `exploits/firewalls/huawei/huawei_usg_auth_bypass_rce_cve_2021_22323`
 - `exploits/firewalls/huawei/huawei_usg_cmd_inject_cve_2019_1023`
@@ -1540,12 +1551,14 @@
 - `exploits/firewalls/juniper/juniper_srx_unauth_rce_cve_2025_21590`
 - `exploits/firewalls/juniper/jweb_oob_write_rce_cve_2024_21591`
 - `exploits/firewalls/juniper/jweb_php_rce_cve_2023_36845`
+- `exploits/firewalls/kerio/kerio_control_rce_cve_2022_24665`
 - `exploits/firewalls/kerio/kerio_control_ssrf_rce_cve_2024_52875`
 - `exploits/firewalls/lb/a10/softax_path_traversal`
 - `exploits/firewalls/lb/f5/bigip_apm_buffer_overflow_cve_2025_53521`
 - `exploits/firewalls/lb/f5/bigip_config_rce_cve_2023_46747`
 - `exploits/firewalls/lb/f5/bigip_config_sync_bypass_cve_2024_45844`
 - `exploits/firewalls/lb/f5/bigip_icontrol_auth_bypass_cve_2022_1388`
+- `exploits/firewalls/lb/f5/bigip_icontrol_rest_auth_bypass_cve_2024_21793`
 - `exploits/firewalls/lb/f5/bigip_icontrol_rest_rce_cve_2021_22986`
 - `exploits/firewalls/lb/f5/bigip_management_rce_cve_2021_22987`
 - `exploits/firewalls/lb/f5/bigip_ssrf_rce_cve_2023_22374`
@@ -1560,6 +1573,7 @@
 - `exploits/firewalls/nac/aruba/clearpass_xss_stored`
 - `exploits/firewalls/nac/cisco/secure_acs_bypass`
 - `exploits/firewalls/nac/generic/vlan_hopping_checker`
+- `exploits/firewalls/opnsense/opnsense_csrf_rce_cve_2022_0993`
 - `exploits/firewalls/opnsense/opnsense_sqli_rce_cve_2021_23239`
 - `exploits/firewalls/paloalto/globalprotect_auth_bypass_cve_2026_0257`
 - `exploits/firewalls/paloalto/globalprotect_cmd_injection_cve_2024_3400`
@@ -1582,6 +1596,7 @@
 - `exploits/firewalls/phoenix/mguard_cmd_injection_cve_2024_43386`
 - `exploits/firewalls/phoenix_contact/mguard_cmd_injection_cve_2024_43386`
 - `exploits/firewalls/sangfor/sangfor_ngfw_unauth_rce_cve_2019_13393`
+- `exploits/firewalls/sangfor/sangfor_ssl_vpn_rce_cve_2021_1782`
 - `exploits/firewalls/schneider/connexium_ssh_hardcoded_cve_2017_6026`
 - `exploits/firewalls/schneider/schneider_ecostruxure_rce_cve_2023_37196`
 - `exploits/firewalls/schneider/schneider_modicon_m340_rce_cve_2022_37300`
@@ -1596,6 +1611,7 @@
 - `exploits/firewalls/sonicwall/sonicos_vpn_buffer_overflow_cve_2020_5135`
 - `exploits/firewalls/sonicwall/sonicwall_gen6_mfa_bypass_cve_2024_12802`
 - `exploits/firewalls/sonicwall/sonicwall_nsa_buffer_overflow_cve_2020_5133`
+- `exploits/firewalls/sonicwall/sonicwall_scp_cmd_inject_cve_2020_15778`
 - `exploits/firewalls/sonicwall/sonicwall_sma_path_traversal_cve_2021_20038`
 - `exploits/firewalls/sonicwall/sonicwall_sra_rce_cve_2021_20028`
 - `exploits/firewalls/sonicwall/sonicwall_sslvpn_sqli_rce_cve_2019_7481`
@@ -1606,14 +1622,18 @@
 - `exploits/firewalls/sophos/sophos_xg_rce_cve_2020_29583`
 - `exploits/firewalls/sophos/xg_auth_bypass_cve_2022_1040`
 - `exploits/firewalls/sophos/xg_sqli_asnarok_cve_2020_12271`
+- `exploits/firewalls/stormshield/stormshield_sns_privesc_cve_2023_23770`
 - `exploits/firewalls/stormshield/stormshield_sns_rce_cve_2020_18175`
 - `exploits/firewalls/trellix/trellix_ngfw_rce_cve_2020_7270`
 - `exploits/firewalls/vpn/ivanti/ivanti_connect_secure_ssrf_rce_cve_2024_21888`
 - `exploits/firewalls/vpn/ivanti/ivanti_policy_secure_rce_cve_2024_22024`
+- `exploits/firewalls/vpn/pulsesecure/pulse_connect_rce_cve_2019_11510`
+- `exploits/firewalls/vpn/pulsesecure/pulse_connect_secure_rce_cve_2021_22893`
 - `exploits/firewalls/vyos/vyos_rce_cve_2023_31992`
 - `exploits/firewalls/waf/barracuda/barracuda_waf_rce_cve_2023_2869`
 - `exploits/firewalls/waf/barracuda/esg_cmd_injection_cve_2023_2868`
 - `exploits/firewalls/waf/barracuda/esg_spreadsheet_rce_cve_2023_7102`
+- `exploits/firewalls/waf/imperva/imperva_cloud_waf_bypass_cve_2023_28051`
 - `exploits/firewalls/waf/imperva/securesphere_sqli_cve_2013_xxxx`
 - `exploits/firewalls/watchguard/firebox_auth_bypass_cve_2022_26776`
 - `exploits/firewalls/watchguard/firebox_cyclops_blink_cve_2022_23176`
