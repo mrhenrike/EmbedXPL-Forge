@@ -39,7 +39,7 @@ EmbedXPL-Forge é um framework open-source de exploração e scanning para profi
 | **Câmeras IP / NVR / DVR** | 60+ módulos | Hikvision, Dahua, Axis, Reolink, Amcrest, Uniview, Tapo, Swann, ANNKE, Edimax, Intelbras e mais |
 | **Impressoras / MFP** | 185+ módulos | HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; IPP/PJL/LPD/WSD/CUPS |
 | **NAS (Armazenamento em Rede)** | 20+ módulos | QNAP, Synology, D-Link NAS, Zyxel |
-| **VPN / Firewall / Segurança** | 80+ módulos | Ivanti, Fortinet, SonicWall, Palo Alto, Cisco ASA, CheckPoint, Sophos, WatchGuard, Zyxel |
+| **VPN / Firewall / NGFW / Segurança de Perímetro** | **202 módulos** | Palo Alto, Fortinet, Cisco ASA/FTD/FMC, Check Point, Juniper, SonicWall, Sophos, WatchGuard, Zyxel, F5 BIG-IP, Citrix/NetScaler, Ivanti, Pulse Secure, pfSense, OPNsense, Barracuda, Imperva, MikroTik, Huawei USG, Stormshield, Hillstone, Sangfor, H3C, Radware, Symantec ProxySG, Trend Micro TippingPoint, Trellix, Arista EOS, OpenVPN AS, Phoenix Contact mGuard, Siemens SCALANCE, Moxa EDR, VyOS, IPFire, Kerio, Cisco Meraki, Array Networks + módulos de bypass de protocolo OT/ICS |
 | **Switches L2/L3** | 3 módulos | Switches gerenciados (Cisco, D-Link, NETGEAR) |
 | **SOHO Edge** | 9 módulos | Roteadores de viagem, NAS, APs wireless |
 | **ICS / OT / Industrial** | 35+ módulos | PLCs, SCADA, Modbus, S7comm, EtherNet/IP, Universal Robots PolyScope 5 |
