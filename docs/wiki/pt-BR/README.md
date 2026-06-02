@@ -53,8 +53,8 @@ Galeria PNG. Fontes Mermaid: [../../diagrams/architecture/README.md](../../diagr
 | [19-modo-infra-wizard.md](19-modo-infra-wizard.md) | Modo `--infra wizard` e `--infra <tipo> --context <ctx>` |
 | [20-modulos-ics-ot.md](20-modulos-ics-ot.md) | Módulos ICS/OT: Modbus, S7comm, BACnet, EtherNet/IP, DNP3, UR |
 | [21-engine-rtsp-camera.md](21-engine-rtsp-camera.md) | Engine RTSP, scanners de câmera, Cameradar, ONVIF |
-| [22-referencia-modulos-cve.md](22-referencia-modulos-cve.md) | Referência cruzada CVE por ano e módulo EmbedXPL |
-| [23-referencia-vendors-firewalls.md](23-referencia-vendors-firewalls.md) | Catálogo completo de vendors: firewalls, câmeras, roteadores, BMC, ICS |
+| [22-referencia-modulos-cve.md](22-referencia-modulos-cve.md) | Referência cruzada CVE por ano e módulo EmbedXPL (151+ módulos firewall/VPN/NAC — expansão Tier 3) |
+| [23-referencia-vendors-firewalls.md](23-referencia-vendors-firewalls.md) | Catálogo completo de vendors: 34 vendors de firewall/VPN/NAC incluindo Sangfor, Aruba ClearPass, Citrix/NetScaler, Ivanti |
 
 ---
 
