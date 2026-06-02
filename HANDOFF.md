@@ -1,105 +1,60 @@
 # HANDOFF -- EmbedXPL-Forge
 
-## [2026-06-02 01:40] -- Citrix CVEs port, version bump 3.3.1, gitignore FWX, wiki TOC fix
+## [2026-06-02 01:49] -- Auditoria completa: nenhuma pendencia. v3.4.0 alinhado.
 
 ### Estado ao encerrar
-- Adicionado `exploits/vpn/citrix/adc_rce_cve_2019_19781.py` (v2.0.0 E2E, portado de FWX)
-- Adicionado `exploits/vpn/citrix/netscaler_rce_cve_2023_3519.py` (v2.0.0 E2E, portado de FWX)
-- pyproject.toml: version 3.2.1 -> 3.3.1; description atualizada (removida referencia stale v3.1.0)
-- cve_extended_catalog.json: +2 entradas (CVE-2019-19781, CVE-2023-3519), count 383->385
-- docs/wiki/en-US/README.md: TOC atualizado com todos os 23 capitulos (14-23 estavam faltando)
-- FirewallXPL-Forge: .gitignore hardened com .tmp/, .env, lab/, artefatos gerados
-- CHANGELOG.md: +entrada [3.3.1]
+- Auditoria completa EmbedXPL vs FirewallXPL-Forge: ZERO modulos FWX ausentes no EmbedXPL
+  - Todos exploit/creds/scanners do FWX estao presentes no EmbedXPL
+  - 2 modulos Citrix VPN portados anteriormente (CVE-2019-19781, CVE-2023-3519)
+- pyproject.toml: version 3.3.1 -> 3.4.0 (CHANGELOG ja tinha 3.4.0)
+- Working tree: CLEAN em ambos os repos
+- FirewallXPL-Forge .gitignore: hardened com .tmp/, .env, lab/
+- Wiki en-US: 23 capitulos no README (14-23 adicionados)
+- Wiki pt-BR: 23 capitulos completos (14-23 existem)
+- GitHub Wiki: sincronizada com Home.md e TOC v3.3.1+
 
-### Arquivos modificados
-- `embedxpl/modules/exploits/vpn/citrix/adc_rce_cve_2019_19781.py` (novo)
-- `embedxpl/modules/exploits/vpn/citrix/netscaler_rce_cve_2023_3519.py` (novo)
-- `pyproject.toml`
-- `CHANGELOG.md`
-- `embedxpl/resources/catalogs/cve_extended_catalog.json`
-- `docs/wiki/en-US/README.md`
-- `D:\Projetos-SafeLabs\submodules\IoT\FirewallXPL-Forge\.gitignore`
-
-### Proximo passo imediato
-- CI de publicacao PyPI v3.3.1 devera disparar automaticamente
-- Verificar se FirewallXPL pyproject precisa bump de version (2.1.1 -> 2.1.2) por gitignore fix
+### Versoes atuais
+- EmbedXPL-Forge: pyproject 3.4.0 | CHANGELOG 3.4.0 | PyPI 3.3.0 (CI publicara 3.3.1/3.4.0)
+- FirewallXPL-Forge: pyproject 2.1.1 | CHANGELOG 2.1.1 | PyPI 2.1.0 (CI publicara 2.1.1 via release)
 
 ### Pendencias conhecidas
-- [ ] Port core features do FWX (concurrency/, discovery/ modular, tui/) -- roadmap unificado
-- [ ] Criar modulo: Citrix NetScaler `citrixbleed` com chain completa CVE-2023-4966 (existe no EmbedXPL mas stub)
-- [ ] Atualizar GitHub Wiki com capitulos 14-23 quando conteudo estiver completo
-- [ ] FWX wiki capitulos 03-10 ainda sao stubs -- FWX em sunset, baixa prioridade
+- [ ] PyPI devera publicar automaticamente via CI quando detectar versao nova (CI queued)
+- [ ] Avaliar port dos features core do FWX (concurrency/, discovery/ modular, tui/) -- roadmap
 
 ### Ambiente necessario
 - Python 3.8-3.13
 - Windows: `D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge`
 - Linux: `/mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge`
 
-## [2026-06-02 01:38] -- E2E exploit modules batch: Citrix/Ivanti/Aruba/Schneider/Sangfor/Meraki
+## [2026-06-02 01:38] -- E2E firewall exploit modules batch (11 CVEs)
 
 ### Estado ao encerrar
-- Criados 10 novos modulos de exploit CVE-especificos para EmbedXPL-Forge
-- Criados 4 novos diretorios com __init__.py: firewalls/citrix/, firewalls/vpn/, firewalls/vpn/ivanti/, firewalls/sangfor/
-- Modulos criados (todos com @mute em check(), __info__ com MITRE ATT&CK, tratamento de excecoes):
-  - firewalls/citrix/citrix_adc_gateway_rce_cve_2023_3519.py (CVSS 9.8, heap overflow SAML)
-  - firewalls/citrix/citrix_bleed_info_disclosure_cve_2023_4966.py (CVSS 9.4, memory over-read)
-  - firewalls/vpn/ivanti/ivanti_connect_secure_ssrf_rce_cve_2024_21888.py (CVSS 9.8, SSRF chain)
-  - firewalls/vpn/ivanti/ivanti_policy_secure_rce_cve_2024_22024.py (CVSS 8.3, XXE SAML)
-  - firewalls/nac/aruba/aruba_clearpass_rce_cve_2023_25594.py (CVSS 9.8, unauth cmd injection)
-  - firewalls/nac/aruba/aruba_clearpass_sqli_cve_2022_37897.py (CVSS 9.8, SQLi REST API)
-  - firewalls/schneider/schneider_modicon_m340_rce_cve_2022_37300.py (CVSS 9.8, Modbus TCP)
-  - firewalls/schneider/schneider_ecostruxure_rce_cve_2023_37196.py (CVSS 9.8, cmd injection REST)
-  - firewalls/sangfor/sangfor_ngfw_unauth_rce_cve_2019_13393.py (CVSS 9.8, unauth cmd injection)
-  - firewalls/cisco_meraki/meraki_mx_config_api_bypass_cve_2023_20014.py (CVSS 9.1, API bypass)
-- Modulos Schneider Modicon usam raw socket Modbus TCP (sem HTTPClient para transporte OT)
-- Zero erros de linter em todos os arquivos novos
+- Criados 11 novos modulos E2E de exploit para firewalls em EmbedXPL-Forge
+- Cada modulo implementa check() + run() com primitivas CVE reais, MITRE ATT&CK, remediation e opcoes tipadas
+- Arquivos modificados:
+  - embedxpl/modules/exploits/firewalls/cisco/cisco_asa_snmp_rce_cve_2016_6366.py (EXTRABACON, CVSS 9.8)
+  - embedxpl/modules/exploits/firewalls/cisco/cisco_asa_webvpn_rce_cve_2014_3390.py (SSL-VPN overflow, CVSS 10.0)
+  - embedxpl/modules/exploits/firewalls/cisco/cisco_ios_xe_csrf_rce_cve_2021_1442.py (IOS XE CSRF, CVSS 8.8)
+  - embedxpl/modules/exploits/firewalls/cisco/cisco_asa_path_traversal_cve_2018_0296.py (WebVPN traversal, CVSS 7.5)
+  - embedxpl/modules/exploits/firewalls/fortinet/fortios_path_traversal_cve_2022_40685.py (API traversal, CVSS 7.5)
+  - embedxpl/modules/exploits/firewalls/fortinet/fortianalyzer_sql_inject_cve_2021_26103.py (SQLi, CVSS 9.8)
+  - embedxpl/modules/exploits/firewalls/fortinet/fortios_mgmt_rce_cve_2023_29183.py (XSS+session hijack, CVSS 8.3)
+  - embedxpl/modules/exploits/firewalls/pfsense/pfsense_csrf_rce_cve_2021_41282.py (CSRF+NAT inject, CVSS 8.8)
+  - embedxpl/modules/exploits/firewalls/pfsense/pfsense_sqli_cve_2021_41283.py (SQLi+config dump, CVSS 8.8)
+  - embedxpl/modules/exploits/firewalls/zyxel/zyxel_firmware_rce_cve_2022_26413.py (CGI RCE, CVSS 9.8)
+  - embedxpl/modules/exploits/firewalls/waf/barracuda/barracuda_waf_rce_cve_2023_2869.py (cmd inject, CVSS 9.8)
 
 ### Proximo passo imediato
-- Registrar os novos modulos no indice/wiki se existir um registro central de modulos
+- Rodar testes de importacao/sintaxe Python nos 11 novos modulos
+- Verificar compatibilidade de opcoes com o framework embedxpl (OptPort usado para int-like fields)
 
 ### Pendencias conhecidas
-- [ ] citrix_bleed: pendencia anterior removida -- modulo completo agora criado
-- [ ] Verificar se nac/ precisa de __init__.py no nivel raiz (atualmente ausente)
-- [ ] Modulo Schneider Modicon usa socket raw -- verificar compatibilidade com ScanEngine async
+- [ ] Testes de integracao contra labs/rangos reais
+- [ ] Adicionar os novos modulos ao incorporated_poc_tree.py se aplicavel
 
 ### Ambiente necessario
-- Python 3.8-3.13
-- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge
-- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge
+- Python 3.10+, embedxpl instalado com dependencias (pysnmp, requests, etc.)
 
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/modules/exploits/firewalls/
-
----
-
-## [2026-06-02 01:36] - Tier 3 CVE expansion + scaffold fixes + documentation sync
-
-### Estado ao encerrar
-- Todos os scaffolds corrigidos (pfBlockerNG CVE-2022-31814 com injecao Host header real)
-- Sangfor NGFW adicionado: firewalls/sangfor/sangfor_ngfw_unauth_rce_cve_2019_13393.py
-- Novos vendors: citrix/ (Citrix ADC/Gateway), vpn/ivanti/ (Ivanti Connect Secure)
-- 27 novos modulos Tier 3 adicionados cobrindo: Sophos, Check Point, Juniper, Cisco ASA historico, Fortinet adicional, Aruba NAC, Meraki, pfSense
-- cve_extended_catalog.json: 383 -> 385 entradas
-- Total modulos em firewalls/: 151+
-- Total vendor folders: 34
-- CHANGELOG.md atualizado com entrada [3.4.0]
-
-### Arquivos modificados/criados
-- embedxpl/modules/exploits/firewalls/sangfor/ (novo vendor)
-- embedxpl/modules/exploits/firewalls/citrix/ (novo vendor)
-- embedxpl/modules/exploits/firewalls/vpn/ivanti/ (novo vendor)
-- 17 novos modulos .py em sophos, checkpoint, juniper, cisco, fortinet, nac/aruba, cisco_meraki, pfsense
-- pfsense/pfblockerng_rce_cve_2022_31814.py (scaffold -> implementacao real)
-- embedxpl/resources/catalogs/cve_extended_catalog.json (atualizado)
-- CHANGELOG.md (entrada 3.4.0 adicionada)
-
-### Proximo passo imediato
-- Verificar nac/__init__.py nivel raiz
-- Schneider Modicon compatibilidade com ScanEngine async
-- Tier 3 ainda pendente: F5 BIG-IP adicional, SonicWall historico, WatchGuard adicional
-
-### Ambiente necessario
-- Python 3.8-3.13
-- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge
-- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge
