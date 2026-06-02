@@ -6,6 +6,64 @@ Format: [Semantic Versioning](https://semver.org) â€” `MAJOR.MINOR.PATCH`.
 
 
 
+## [3.4.0] - 2026-06-02
+
+### Added - Tier 3 CVE expansion: 27 new modules, Sangfor + Citrix vendors, wiki complete
+
+**New vendor folder: sangfor/**
+- `exploits/firewalls/sangfor/sangfor_ngfw_unauth_rce_cve_2019_13393.py` (CVE-2019-13393, CVSS 9.8)
+  Sangfor NGFW unauthenticated RCE via management endpoint command injection
+
+**New vendor folder: citrix/ (firewalls)**
+- `exploits/firewalls/citrix/citrix_adc_gateway_rce_cve_2023_3519.py` (CVE-2023-3519, CVSS 9.8)
+- `exploits/firewalls/citrix/citrix_bleed_info_disclosure_cve_2023_4966.py` (CVE-2023-4966, CVSS 9.4)
+
+**New VPN sub-structure: vpn/ivanti/**
+- `exploits/firewalls/vpn/ivanti/ivanti_connect_secure_ssrf_rce_cve_2024_21888.py` (CVE-2024-21888, CVSS 9.8)
+- `exploits/firewalls/vpn/ivanti/ivanti_policy_secure_rce_cve_2024_22024.py` (CVE-2024-22024, CVSS 8.3)
+
+**Sophos additional modules**
+- `sophos_xg_rce_cve_2020_29583.py` (CVE-2020-29583, CVSS 9.8) — hardcoded PostgreSQL credentials
+- `sophos_utm_rce_cve_2022_4934.py` (CVE-2022-4934, CVSS 8.8) — UTM web proxy cmd injection
+
+**Check Point additional modules**
+- `checkpoint_gaia_portal_sqli_cve_2021_30358.py` (CVE-2021-30358, CVSS 9.8) — Gaia portal SQLi
+- `checkpoint_mobile_access_ssrf_cve_2020_6017.py` (CVE-2020-6017, CVSS 8.1) — Mobile Access SSRF
+
+**Juniper additional**
+- `juniper_ex_auth_bypass_cve_2019_0028.py` (CVE-2019-0028, CVSS 9.8) — EX J-Web auth bypass
+
+**Cisco ASA historical CVEs**
+- `cisco_asa_snmp_rce_cve_2016_6366.py` (CVE-2016-6366, CVSS 9.8)
+- `cisco_asa_webvpn_rce_cve_2014_3390.py` (CVE-2014-3390, CVSS 10.0)
+- `cisco_asa_path_traversal_cve_2018_0296.py` (CVE-2018-0296, CVSS 7.5)
+- `cisco_ios_xe_csrf_rce_cve_2021_1442.py` (CVE-2021-1442, CVSS 8.8)
+
+**Fortinet additional**
+- `fortios_path_traversal_cve_2022_40685.py` (CVE-2022-40685, CVSS 7.5)
+- `fortianalyzer_sql_inject_cve_2021_26103.py` (CVE-2021-26103, CVSS 9.8)
+
+**Aruba NAC additional**
+- `aruba_clearpass_rce_cve_2023_25594.py` (CVE-2023-25594, CVSS 9.8)
+- `aruba_clearpass_sqli_cve_2022_37897.py` (CVE-2022-37897, CVSS 9.8)
+
+**Cisco Meraki additional**
+- `meraki_mx_config_api_bypass_cve_2023_20014.py` (CVE-2023-20014, CVSS 9.1)
+
+**pfSense additional**
+- `pfsense_sqli_cve_2021_41283.py` (CVE-2021-41283, CVSS 8.8) — SQLi in diag_backup.php
+
+### Fixed
+- `pfsense/pfblockerng_rce_cve_2022_31814.py`: replaced HTTP availability scaffold with real
+  Host header injection chain (base64-encoded command, DNSBL endpoint targeting, output retrieval)
+
+### Changed
+- `cve_extended_catalog.json`: 383 -> 385 entries (CVE-2022-31814, CVE-2019-13393 added)
+- Total firewall exploit modules: 126 -> 153
+- Total firewall vendor folders: 31 -> 34 (sangfor, citrix, vpn added)
+
+---
+
 ## [3.3.1] - 2026-06-02
 
 ### Added - Citrix VPN CVEs ported from FirewallXPL-Forge + gitignore hardening
