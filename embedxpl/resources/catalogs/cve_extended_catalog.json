@@ -1,6 +1,6 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 408,
+  "entry_count": 411,
   "last_updated": "2026-06-02",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
@@ -4926,6 +4926,20 @@
       "devices": [
         "Sophos UTM (Unified Threat Management) 9.x prior to 9.7 MR13",
         "Sophos SG appliances running UTM firmware 9.x"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2021-35028",
+      "vendor": "zyxel",
+      "modules": [
+        "exploits/firewalls/zyxel/zyxel_usg_path_traversal_cve_2021_35028.py"
+      ],
+      "devices": [
+        "Zyxel USG FLEX 100/200/500/700 (ZLD 5.00 and earlier)",
+        "Zyxel ATP 100/200/500/700/800 (ZLD 5.10 and earlier)",
+        "Zyxel VPN50/100/300/1000 (ZLD 4.60 and earlier)",
+        "Zyxel ZyWALL 110/310/1100 (ZLD 4.70 and earlier)"
       ],
       "exploit_available": true
     },
