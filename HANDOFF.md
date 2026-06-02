@@ -416,3 +416,39 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 - Python 3.8-3.13
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge
+
+## [2026-06-02 02:30] -- New E2E exploit modules: trendmicro, symantec, radware, trellix, vyos
+
+### Estado ao encerrar
+- Created 3 new vendor directories with __init__.py: trendmicro/, symantec/, radware/
+- Created 8 new exploit modules (6 CVE-9.8, 2 CVE-8.8):
+  - trendmicro/trendmicro_tippingpoint_rce_cve_2021_28250.py (CVE-2021-28250, 9.8)
+  - trendmicro/trendmicro_deep_security_rce_cve_2020_15921.py (CVE-2020-15921, 9.8)
+  - symantec/proxysg_auth_bypass_cve_2021_30641.py (CVE-2021-30641, 9.8)
+  - symantec/symantec_edr_rce_cve_2022_25752.py (CVE-2022-25752, 9.8)
+  - radware/alteon_rce_cve_2020_27232.py (CVE-2020-27232, 9.8)
+  - radware/defensessl_auth_bypass_cve_2018_9195.py (CVE-2018-9195, 9.8)
+  - trellix/trellix_ngfw_config_rce_cve_2021_4080.py (CVE-2021-4080, 8.8)
+  - vyos/vyos_openvpn_injection_cve_2021_35278.py (CVE-2021-35278, 8.8)
+- Updated docs/wiki/en-US/22-cve-module-reference.md with 22 new CVE entries:
+  - FortiOS: CVE-2024-23113 (format string), CVE-2025-32756 (stack overflow)
+  - Citrix ADC: CVE-2019-19781, CVE-2022-27510, CVE-2022-27518
+  - Pulse Secure: CVE-2021-22893, CVE-2019-11510
+  - Cisco: CVE-2023-20032, CVE-2022-20713, CVE-2020-3580
+  - F5: CVE-2024-21793; Fortinet FortiManager: CVE-2024-47575
+  - Hillstone: CVE-2024-5829; Kerio: CVE-2022-24665
+  - All new vendor CVEs (Trend Micro, Symantec, Radware, Trellix, VyOS)
+
+### Proximo passo imediato
+- Run linter / import check on new modules to confirm no import errors
+
+### Pendencias conhecidas
+- [ ] Validate actual CVE exploit behavior against lab appliances (if available)
+- [ ] Add pt-BR wiki counterpart entries in docs/wiki/pt-BR/22-cve-modulos-referencia.md
+
+### Ambiente necessario
+- Python 3.10+ with embedxpl package installed in editable mode
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/embedxpl/modules/exploits/firewalls/
