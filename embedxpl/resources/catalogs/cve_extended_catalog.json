@@ -4783,6 +4783,287 @@
         "https://support.citrix.com/article/CTX561482"
       ],
       "note": "CISA KEV. Fixed in 13.1-48.47+, 13.0-91.13+, 12.1-55.297+."
+    },
+    {
+      "cve_id": "CVE-2014-3390",
+      "vendor": "cisco",
+      "modules": [
+        "exploits/firewalls/cisco/cisco_asa_webvpn_rce_cve_2014_3390.py"
+      ],
+      "devices": [
+        "Cisco ASA 5500 Series",
+        "Cisco ASA 5500-X Series",
+        "Cisco ASA Services Module for Cisco Catalyst 6500/7600"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2019-0028",
+      "vendor": "juniper",
+      "modules": [
+        "exploits/firewalls/juniper/juniper_ex_auth_bypass_cve_2019_0028.py"
+      ],
+      "devices": [
+        "Juniper Networks EX Series Ethernet Switches",
+        "Juniper EX2200, EX2300, EX3400, EX4200, EX4300, EX4600"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2020-6017",
+      "vendor": "checkpoint",
+      "modules": [
+        "exploits/firewalls/checkpoint/checkpoint_mobile_access_ssrf_cve_2020_6017.py"
+      ],
+      "devices": [
+        "Check Point Security Gateway with Mobile Access blade",
+        "Check Point SSL VPN / Mobile Access Portal R80.x, R77.x"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2020-29583",
+      "vendor": "sophos",
+      "modules": [
+        "exploits/firewalls/sophos/sophos_xg_rce_cve_2020_29583.py"
+      ],
+      "devices": [
+        "Sophos XG Firewall SFOS v18.0 GA and earlier",
+        "Sophos XG Firewall SFOS v17.x all builds"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2021-1442",
+      "vendor": "cisco",
+      "modules": [
+        "exploits/firewalls/cisco/cisco_ios_xe_csrf_rce_cve_2021_1442.py"
+      ],
+      "devices": [
+        "Cisco IOS XE Software Web UI",
+        "Cisco Catalyst, ASR, ISR routers and switches running IOS XE"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2021-20028",
+      "vendor": "sonicwall",
+      "modules": [
+        "exploits/firewalls/sonicwall/sonicwall_sra_rce_cve_2021_20028.py"
+      ],
+      "devices": [
+        "SonicWall Secure Remote Access (SRA) 4600",
+        "SonicWall SRA 1600, 4200, 4600 running firmware 8.x"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2021-20038",
+      "vendor": "sonicwall",
+      "modules": [
+        "exploits/firewalls/sonicwall/sonicwall_sma_path_traversal_cve_2021_20038.py"
+      ],
+      "devices": [
+        "SonicWall Secure Mobile Access (SMA) 100 Series",
+        "SonicWall SMA 200, 210, 400, 410, 500v running firmware 10.2.x and earlier"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2021-26103",
+      "vendor": "fortinet",
+      "modules": [
+        "exploits/firewalls/fortinet/fortianalyzer_sql_inject_cve_2021_26103.py"
+      ],
+      "devices": [
+        "Fortinet FortiAnalyzer 6.x, 7.0.x prior to 7.0.3",
+        "Fortinet FortiManager 6.x, 7.0.x prior to 7.0.3"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2021-30358",
+      "vendor": "checkpoint",
+      "modules": [
+        "exploits/firewalls/checkpoint/checkpoint_gaia_portal_sqli_cve_2021_30358.py"
+      ],
+      "devices": [
+        "Check Point Security Gateway Gaia Portal R80.x",
+        "Check Point Security Gateway R77.30 and R80.10-R80.40"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2021-41282",
+      "vendor": "pfsense",
+      "modules": [
+        "exploits/firewalls/pfsense/pfsense_csrf_rce_cve_2021_41282.py"
+      ],
+      "devices": [
+        "pfSense CE 2.5.0 through 2.5.2",
+        "pfSense Plus 21.05 through 21.05.1"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2021-41283",
+      "vendor": "pfsense",
+      "modules": [
+        "exploits/firewalls/pfsense/pfsense_sqli_cve_2021_41283.py"
+      ],
+      "devices": [
+        "pfSense CE 2.5.x and earlier",
+        "pfSense Plus 21.x and earlier"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-4934",
+      "vendor": "sophos",
+      "modules": [
+        "exploits/firewalls/sophos/sophos_utm_rce_cve_2022_4934.py"
+      ],
+      "devices": [
+        "Sophos UTM (Unified Threat Management) 9.x prior to 9.7 MR13",
+        "Sophos SG appliances running UTM firmware 9.x"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-26413",
+      "vendor": "zyxel",
+      "modules": [
+        "exploits/firewalls/zyxel/zyxel_firmware_rce_cve_2022_26413.py"
+      ],
+      "devices": [
+        "Zyxel VMG3312-T20A firmware V5.50(ABRY.1) and earlier",
+        "Zyxel VMG3925-B10B, NR7101, AX7501-B0 (various firmware versions)"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-37897",
+      "vendor": "aruba",
+      "modules": [
+        "exploits/firewalls/nac/aruba/aruba_clearpass_sqli_cve_2022_37897.py"
+      ],
+      "devices": [
+        "Aruba ClearPass Policy Manager 6.10.x prior to 6.10.7",
+        "Aruba ClearPass Policy Manager 6.9.x prior to 6.9.12"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-40685",
+      "vendor": "fortinet",
+      "modules": [
+        "exploits/firewalls/fortinet/fortios_path_traversal_cve_2022_40685.py"
+      ],
+      "devices": [
+        "Fortinet FortiOS 7.2.0 through 7.2.1",
+        "Fortinet FortiOS 7.0.0 through 7.0.8",
+        "Fortinet FortiProxy 7.2.0 and 7.0.0 through 7.0.7"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2023-2869",
+      "vendor": "barracuda",
+      "modules": [
+        "exploits/firewalls/waf/barracuda/barracuda_waf_rce_cve_2023_2869.py"
+      ],
+      "devices": [
+        "Barracuda Web Application Firewall (WAF) physical and virtual appliances",
+        "Barracuda WAF firmware prior to 10.1.0.x hotfix"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2023-20014",
+      "vendor": "cisco_meraki",
+      "modules": [
+        "exploits/firewalls/cisco_meraki/meraki_mx_config_api_bypass_cve_2023_20014.py"
+      ],
+      "devices": [
+        "Cisco Meraki MX Security Appliance",
+        "Cisco Meraki MX64, MX67, MX84, MX100, MX250, MX450 firmware prior to 18.211"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2023-25594",
+      "vendor": "aruba",
+      "modules": [
+        "exploits/firewalls/nac/aruba/aruba_clearpass_rce_cve_2023_25594.py"
+      ],
+      "devices": [
+        "Aruba ClearPass Policy Manager 6.11.x prior to 6.11.2",
+        "Aruba ClearPass Policy Manager 6.10.x prior to 6.10.8"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2023-26244",
+      "vendor": "watchguard",
+      "modules": [
+        "exploits/firewalls/watchguard/watchguard_fireware_rce_cve_2023_26244.py"
+      ],
+      "devices": [
+        "WatchGuard Firebox and XTM appliances running Fireware OS",
+        "WatchGuard Fireware 12.x prior to 12.8.1 Update 2"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2023-4966",
+      "vendor": "citrix",
+      "modules": [
+        "exploits/firewalls/citrix/citrix_bleed_info_disclosure_cve_2023_4966.py"
+      ],
+      "devices": [
+        "Citrix NetScaler ADC 14.1 prior to 14.1-8.50",
+        "Citrix NetScaler ADC 13.1 prior to 13.1-49.15",
+        "Citrix NetScaler Gateway 13.0 prior to 13.0-92.19"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2024-21888",
+      "vendor": "ivanti",
+      "modules": [
+        "exploits/firewalls/vpn/ivanti/ivanti_connect_secure_ssrf_rce_cve_2024_21888.py"
+      ],
+      "devices": [
+        "Ivanti Connect Secure (ICS) 9.x and 22.x prior to 9.1R18, 22.4R2.2",
+        "Ivanti Policy Secure (IPS) 9.x and 22.x prior to 9.1R17, 22.5R1.1"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2024-22024",
+      "vendor": "ivanti",
+      "modules": [
+        "exploits/firewalls/vpn/ivanti/ivanti_policy_secure_rce_cve_2024_22024.py"
+      ],
+      "devices": [
+        "Ivanti Connect Secure (ICS) 9.1R17 and earlier, 22.4R2.2 and earlier",
+        "Ivanti Policy Secure (IPS) 9.1R17 and earlier, 22.5R1.1 and earlier",
+        "ZTA gateways 22.5R1.1 and earlier"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2024-45844",
+      "vendor": "f5",
+      "modules": [
+        "exploits/firewalls/lb/f5/bigip_config_sync_bypass_cve_2024_45844.py"
+      ],
+      "devices": [
+        "F5 BIG-IP 17.1.x prior to 17.1.1",
+        "F5 BIG-IP 16.1.x prior to 16.1.4.1",
+        "F5 BIG-IP 15.1.x prior to 15.1.10.2"
+      ],
+      "exploit_available": true
     }
   ]
 }
