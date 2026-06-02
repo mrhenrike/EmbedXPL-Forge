@@ -6,6 +6,28 @@ Format: [Semantic Versioning](https://semver.org) — `MAJOR.MINOR.PATCH`.
 
 
 
+## [3.3.1] - 2026-06-02
+
+### Added - Citrix VPN CVEs ported from FirewallXPL-Forge + gitignore hardening
+
+**Citrix ADC/Gateway (ported from FirewallXPL-Forge vpn/citrix/)**
+- `exploits/vpn/citrix/adc_rce_cve_2019_19781.py` (v2.0.0)
+  - CVE-2019-19781 (CVSS 9.8, CISA KEV): directory traversal + Perl template injection RCE
+  - Full E2E: SMB config file read, template write via newbm.pl, execution, ShellStagingMixin
+- `exploits/vpn/citrix/netscaler_rce_cve_2023_3519.py` (v2.0.0)
+  - CVE-2023-3519 (CVSS 9.8, CISA KEV): unauthenticated stack overflow RCE in NSPPE
+  - Detection via OIDC endpoint (Gateway vserver required), overflow trigger, shell staging
+
+### Changed
+- `pyproject.toml`: bumped version 3.2.1 -> 3.3.0 -> 3.3.1; updated description (removed stale v3.1.0 reference)
+- `embedxpl/resources/catalogs/cve_extended_catalog.json`: +2 entries (CVE-2019-19781, CVE-2023-3519), count 383->385
+- `docs/wiki/en-US/README.md`: TOC now includes all 23 chapters (14-23 were missing)
+
+### Fixed (FirewallXPL-Forge)
+- `.gitignore`: added `.tmp/`, `.env`, `lab/`, generated artifacts patterns (aligned with EmbedXPL)
+
+---
+
 ## [3.3.0] - 2026-06-01
 
 ### Added - Firewall CVE Expansion (30+ E2E Modules), 12 New Vendor Folders, Complete Wiki Rewrite

@@ -1,7 +1,7 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 383,
-  "last_updated": "2026-06-01",
+  "entry_count": 385,
+  "last_updated": "2026-06-02",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
     {
@@ -4724,6 +4724,65 @@
         "https://nvd.nist.gov/vuln/detail/CVE-2023-31992"
       ],
       "note": "Patch: VyOS 1.3.4+. Restrict HTTP API access."
+    },
+    {
+      "cve_id": "CVE-2022-31814",
+      "vendor": "pfsense",
+      "modules": [
+        "exploits/firewalls/pfsense/pfblockerng_rce_cve_2022_31814"
+      ],
+      "devices": [
+        "pfSense CE <= 2.6.0 with pfBlockerNG <= 2.1.4_26"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2019-13393",
+      "vendor": "sangfor",
+      "modules": [
+        "exploits/firewalls/sangfor/sangfor_ngfw_unauth_rce_cve_2019_13393"
+      ],
+      "devices": [
+        "Sangfor NGFW < 8.0.65",
+        "Sangfor SSL VPN < 8.1.6"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2019-19781",
+      "vendor": "citrix",
+      "product": "netscaler_adc_gateway",
+      "affected_versions": "Citrix ADC and Gateway 10.5, 11.1, 12.0, 12.1, 13.0 (when configured as VPN gateway)",
+      "description": "Directory traversal in Citrix ADC/NetScaler allows unauthenticated RCE via Perl template injection through /vpn/../vpns/portal/scripts/newbm.pl. CVSS 9.8. CISA KEV.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/vpn/citrix/adc_rce_cve_2019_19781.py"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2019-19781",
+        "https://www.exploit-db.com/exploits/47902"
+      ],
+      "note": "CISA KEV. Fixed in 12.1.55.18+, 13.0.47.24+, 11.1.63.15+."
+    },
+    {
+      "cve_id": "CVE-2023-3519",
+      "vendor": "citrix",
+      "product": "netscaler_adc_gateway",
+      "affected_versions": "NetScaler ADC/Gateway 13.1 < 13.1-48.47, 13.0 < 13.0-91.13, 12.1-FIPS < 12.1-55.297",
+      "description": "Unauthenticated RCE via stack buffer overflow in NetScaler ADC/Citrix Gateway when configured as Gateway, ICA Proxy, CVPN, or RDP Proxy vserver. CVSS 9.8. CISA KEV.",
+      "cvss_score": 9.8,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "modules": [
+        "exploits/vpn/citrix/netscaler_rce_cve_2023_3519.py"
+      ],
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-3519",
+        "https://support.citrix.com/article/CTX561482"
+      ],
+      "note": "CISA KEV. Fixed in 13.1-48.47+, 13.0-91.13+, 12.1-55.297+."
     }
   ]
 }
