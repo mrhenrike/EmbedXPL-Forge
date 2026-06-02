@@ -1,6 +1,6 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 516,
+  "entry_count": 518,
   "last_updated": "2026-06-02",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
@@ -6247,6 +6247,28 @@
       ],
       "devices": [
         "vyos appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2022-0547",
+      "vendor": "openvpn",
+      "modules": [
+        "exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2022_0547"
+      ],
+      "devices": [
+        "openvpn appliances"
+      ],
+      "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2023-46853",
+      "vendor": "openvpn",
+      "modules": [
+        "exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2023_46853"
+      ],
+      "devices": [
+        "openvpn appliances"
       ],
       "exploit_available": true
     }

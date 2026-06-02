@@ -1580,6 +1580,8 @@
 - `exploits/firewalls/nac/aruba/clearpass_xss_stored`
 - `exploits/firewalls/nac/cisco/secure_acs_bypass`
 - `exploits/firewalls/nac/generic/vlan_hopping_checker`
+- `exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2022_0547`
+- `exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2023_46853`
 - `exploits/firewalls/opnsense/opnsense_csrf_rce_cve_2022_0993`
 - `exploits/firewalls/opnsense/opnsense_sqli_rce_cve_2021_23239`
 - `exploits/firewalls/paloalto/globalprotect_auth_bypass_cve_2026_0257`
