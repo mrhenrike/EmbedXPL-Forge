@@ -1,7 +1,7 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 519,
-  "last_updated": "2026-06-02",
+  "entry_count": 522,
+  "last_updated": "2026-06-06",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
     {
@@ -3920,7 +3920,9 @@
         "TP-Link TL-WR820N v2.80"
       ],
       "exploit_available": true,
-      "note": "Weak SSH cryptographic algorithms (CWE-327). Scanner/check module."
+      "source": "third-party-router-poc",
+      "vuln_type": "weak_crypto_ssh",
+      "note": "SSH weak algorithm support in TP-Link TL-WR820N. Allows downgrade of SSH cipher. Source: CyberVinner__TP-Link-TL-WR820N-CVE-2025-14175"
     },
     {
       "cve_id": "CVE-2023-26319",
@@ -6282,6 +6284,56 @@
         "Arista EOS network appliances"
       ],
       "exploit_available": true
+    },
+    {
+      "cve_id": "CVE-2013-0422",
+      "vendor": "oracle",
+      "product": "java",
+      "cvss": 10.0,
+      "attack_vector": "NETWORK",
+      "vuln_type": "sandbox_escape",
+      "source": "third-party-router-poc",
+      "description": "Java applet sandbox escape. Allows unauthenticated remote attacker to execute arbitrary code via a crafted applet. Referenced in evercookie persistent tracking via Java exploitation path.",
+      "modules": [],
+      "devices": [
+        "Java 7u10 and earlier"
+      ],
+      "exploit_available": true,
+      "note": "Source: samyk__evercookie/README.md in third-party-router-poc"
+    },
+    {
+      "cve_id": "CVE-2020-10749",
+      "vendor": "kubernetes",
+      "product": "kubernetes",
+      "cvss": 6.0,
+      "attack_vector": "ADJACENT_NETWORK",
+      "vuln_type": "mitm_ipv6_rogue_ra",
+      "source": "third-party-router-poc",
+      "description": "Kubernetes MitM via IPv6 rogue router advertisements. Attacker pod can send fake RA messages to redirect traffic from victim pods.",
+      "modules": [],
+      "devices": [
+        "kubelet v1.18.0-v1.18.3",
+        "kubelet v1.17.0-v1.17.6",
+        "kubelet < v1.16.11"
+      ],
+      "exploit_available": true,
+      "note": "Source: knqyf263__CVE-2020-10749 in third-party-router-poc. PoC: IPv6 RA injection via Scapy."
+    },
+    {
+      "cve_id": "CVE-2023-40028",
+      "vendor": "ghost",
+      "product": "ghost-cms",
+      "cvss": 7.2,
+      "attack_vector": "NETWORK",
+      "vuln_type": "arbitrary_file_read",
+      "source": "third-party-router-poc",
+      "description": "Ghost CMS arbitrary file read via theme uploads. Authenticated admin can read arbitrary files from the server filesystem.",
+      "modules": [],
+      "devices": [
+        "Ghost CMS < 5.59.1"
+      ],
+      "exploit_available": true,
+      "note": "Source: 0xyassine__poc-seeker search result reference in third-party-router-poc"
     }
   ]
 }
