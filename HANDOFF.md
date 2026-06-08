@@ -513,3 +513,22 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\docs\wiki\pt-BR\
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/docs/wiki/pt-BR/
+
+## [2026-06-07 02:43] -- Add perimeter auth bruteforce + WAF evasion generator
+
+### Estado ao encerrar
+- Criados 3 modulos nativos (zero dependencia dos repos fonte)
+- EmbedXPL: perimeter_auth_bruteforce.py + waf_evasion_generator.py
+- EmbedXPL: perimeter_auth_bruteforce.py
+- Sintaxe verificada com ast.parse -- todos OK
+- Commits: EmbedXPL 79a2664a, EmbedXPL 79a2664a
+
+### Proximo passo imediato
+- Abrir PR feat/bruteforce-waf-evasion -> master no EmbedXPL-Forge
+
+### Pendencias conhecidas
+- [ ] PR EmbedXPL-Forge: feat/bruteforce-waf-evasion -> master
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge\firewallxpl\modules
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge/firewallxpl/modules
