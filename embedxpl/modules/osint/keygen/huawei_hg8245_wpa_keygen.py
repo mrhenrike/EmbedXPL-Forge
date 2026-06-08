@@ -101,7 +101,7 @@ class Exploit(Exploit):
         base = (last3 >> 20) & 0xF
         key_chars = []
         for i in range(5):
-            idx = ((last3 >> (i * 4)) & 0xF + base) % len(self._CHARSET)
+            idx = (((last3 >> (i * 4)) & 0xF) + base) % len(self._CHARSET)
             key_chars.append(self._CHARSET[idx])
 
         return "".join(key_chars)
