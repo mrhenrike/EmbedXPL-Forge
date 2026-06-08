@@ -2,6 +2,18 @@
   <img src="docs/img/embedxpl-forge-banner_16x9.png" alt="EmbedXPL-Forge" width="100%">
 </p>
 
+<p align="center">
+  <a href="https://pypi.org/project/embedxpl/"><img src="https://img.shields.io/pypi/v/embedxpl?color=red&label=PyPI&logo=pypi&logoColor=white" alt="PyPI"></a>
+  <a href="https://pypi.org/project/embedxpl/"><img src="https://img.shields.io/pypi/pyversions/embedxpl?color=blue&label=Python&logo=python&logoColor=white" alt="Python"></a>
+  <a href="https://github.com/mrhenrike/EmbedXPL-Forge/actions"><img src="https://img.shields.io/github/actions/workflow/status/mrhenrike/EmbedXPL-Forge/ci.yml?branch=master&label=CI&logo=github" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg" alt="License"></a>
+  <img src="https://img.shields.io/badge/Modules-3000%2B-brightgreen" alt="Modules">
+  <img src="https://img.shields.io/badge/CVEs-700%2B-red" alt="CVEs">
+  <img src="https://img.shields.io/badge/Vendors-114%2B-orange" alt="Vendors">
+  <img src="https://img.shields.io/badge/Python-3.8--3.13-blue" alt="Python">
+  <img src="https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey" alt="Platform">
+</p>
+
 # EmbedXPL-Forge
 
 **Embedded & Perimeter Security Assessment Framework**
@@ -16,7 +28,7 @@ EmbedXPL-Forge is an open-source exploitation and scanning framework for securit
 - **625+ exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt, WPA/WPS keygen, factory password generators, heap/stack BOF chains
 - **88 credential modules** — dictionary attacks against FTP, SSH, Telnet, HTTP, SNMP, SFTP
 - **185+ printer exploit modules** — HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; PJL/IPP/LPD/WSD/CUPS; Pwn2Own 2026 chains; PrintingShellz; MS-RPRN NTLM coercion
-- **Full RTSP camera engine** — ported from [cameradar](https://github.com/ullaakut/cameradar): route brute-force (195+ routes), credential brute-force (80+ pairs), Basic/Digest auth, RTSPS/TLS, **RTSP-over-HTTP tunnel (pure Python, RFC 2326 App-C)**, nmap/masscan/direct scanner, ONVIF WS-Discovery, M3U output
+- **Full RTSP camera engine** — route brute-force (195+ routes), credential brute-force (80+ pairs), Basic/Digest auth, RTSPS/TLS, **RTSP-over-HTTP tunnel (pure Python, RFC 2326 App-C)**, nmap/masscan/direct scanner, ONVIF WS-Discovery, M3U output
 - **7 custom Nmap NSE scripts** — RTSP discovery, camera fingerprinting, Hikvision/Dahua CVE validation, default credential testing, multi-vendor CVE checks, snapshot capture (`pip install embedxpl[nse]`)
 - **Firmware exploitation suite** — format detection, backdoor injection, checksum patching, vendor flash bypass (NETGEAR, TP-Link, D-Link, ASUS)
 - **PolyExploit orchestrator** — runtime C/C++ compilation (gcc/clang/mingw/cross), execution of Ruby/Node.js/PHP/Bash/Perl exploits, msfconsole integration, ExploitDB/searchsploit integration
@@ -239,7 +251,7 @@ exf (AutoPwn) > run
 
 ## RTSP Camera Engine
 
-Full-featured RTSP attack pipeline — ported from [cameradar](https://github.com/ullaakut/cameradar) and extended with Python-native features.
+Full-featured RTSP attack pipeline with Python-native implementation covering all standard RTSP transport modes.
 
 ### Transport Modes
 
@@ -771,9 +783,9 @@ exf (Brother LDAP Passback) > run
 [+] LDAP server redirected — wait for printer authentication
 ```
 
-### Routerpwn / Backdoor / Factory Password Coverage
+### Backdoor / Factory Password Coverage
 
-27+ exploit modules ported from a complete audit of [routerpwn.com](https://github.com/hkm/routerpwn.com) and [routerPWN](https://github.com/lilloX/routerPWN), focused on factory passwords, hardcoded backdoors, default WPA keygens and DNS hijack CSRF. Key examples:
+27+ exploit modules targeting factory passwords, hardcoded backdoors, default WPA key generation algorithms, and DNS hijack CSRF vectors across legacy and modern SOHO routers. Key examples:
 
 ```
 # EasyBox (Arcadyan) — WPA2 default key from MAC (factory algorithm)
@@ -858,7 +870,7 @@ embedxpl/
 │   ├── creds/             # Credential testing (FTP, SSH, Telnet, HTTP, SNMP)
 │   ├── exploits/
 │   │   ├── cameras/       # IP camera exploits by vendor
-│   │   │   ├── multi/     # Multi-vendor (RTSP cameradar, P2P, ONVIF)
+│   │   │   ├── multi/     # Multi-vendor (RTSP attack engine, P2P, ONVIF)
 │   │   │   ├── hikvision/ # Hikvision (CVE-2021-36260, CVE-2017-7921, ...)
 │   │   │   ├── dahua/     # Dahua + OEMs (CVE-2021-33044, CVE-2020-25078, ...)
 │   │   │   ├── axis/      # Axis (CVE-2018-10660, ...)
@@ -899,15 +911,15 @@ nse/                        # Nmap NSE Lua scripts (pip install embedxpl[nse])
 └── embedxpl-camera-snapshot.nse
 ```
 
-## New Modules - BLOCO Batch v2.0
+## Extended Module Coverage
 
-This section documents the modules added in the BLOCO K, L, D, H, N, and I expansion batch.
+This section documents the ISP device modules, backdoor/factory password exploits, RTSP client framework, OSINT tools, and specialized security modules.
 
 ---
 
-### BLOCO K - ISP Brazilian Devices
+### ISP Device Security Modules
 
-Exploits and scanners targeting ISP-issued CPEs and IP cameras commonly deployed by Brazilian internet providers (Claro, Vivo, TIM, OI, Algar, Sercomm-based ONTs).
+Exploits and scanners targeting ISP-issued CPEs and IP cameras commonly deployed by internet providers (Sercomm-based ONTs, GPON CPEs, and ISP-branded devices).
 
 | Device | CVE | Module Path | Attack Type |
 |--------|-----|-------------|-------------|
@@ -966,9 +978,9 @@ embedxpl (BRISPScan) > run
 
 ---
 
-### BLOCO L - RouterPWN Ports
+### Legacy Router Backdoor and Factory Password Modules
 
-Classic and modern RouterPWN-catalog exploits ported to the EmbedXPL-Forge module format.
+Classic router backdoor and factory password exploits implemented in the EmbedXPL-Forge module format.
 
 | Device | CVE / Reference | Module Path | Attack Type |
 |--------|----------------|-------------|-------------|
@@ -1012,7 +1024,7 @@ embedxpl (HuaweiKeygen) > run
 
 ---
 
-### BLOCO D - RTSP Client Framework
+### RTSP Client Framework
 
 A pure Python RFC 2326 RTSP/1.0 client library used as the foundation for all RTSP camera attack modules.
 
@@ -1057,7 +1069,7 @@ embedxpl (RTSPBrute) > run
 
 ---
 
-### BLOCO H - FCC-ID Lookup
+### FCC-ID Lookup Module
 
 OSINT module that queries the FCC Equipment Authorization database to retrieve device details from FCC ID codes found on hardware labels.
 
@@ -1092,7 +1104,7 @@ embedxpl (FCCLookup) > run
 
 ---
 
-### BLOCO N - iSpy Camera URL Generator
+### Camera URL Generator
 
 Generates known camera stream URLs based on vendor, model, and firmware version, using the iSpy camera database format.
 
@@ -1126,7 +1138,7 @@ embedxpl (CameraURL) > run
 
 ---
 
-### BLOCO I - Traffic Enforcement Modules
+### Traffic Enforcement Security Modules
 
 Modules targeting traffic enforcement infrastructure (toll RSUs, radar systems, ANPR cameras).
 
