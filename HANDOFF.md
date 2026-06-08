@@ -532,3 +532,103 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge\firewallxpl\modules
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge/firewallxpl/modules
+
+## [2026-06-08 03:30] -- BLOCOs K/L/D/H/N/J gap-fill expansion
+
+### Estado ao encerrar
+- Implementados 31 novos modulos para EmbedXPL-Forge (EXF)
+- BLOCO K: 9 modulos (TP-Link TL-SC CVEs, D-Link DCS-932L/933L CVEs, ZTE H267N/H298A CVEs, Intelbras IWR LUCI RPC, BR ISP Scanner)
+- BLOCO L: 9 modulos (Cobham VSAT keygen, Huawei HG8245 WPA keygen, Alcatel-Lucent OmniPCX RCE, Linksys TheMoon, Netgear DGN2200, Siemens FlexiISN, Thomson BT HomeHub, 2Wire CRLF DoS, 2Wire DNS hijack)
+- BLOCO D: 4 modulos (RTSPClient RFC 2326, rtsp_route_brute, rtsp_cred_brute, cameradar_discovery)
+- BLOCO H: 1 modulo (FCC-ID lookup multi-source)
+- BLOCO N: 3 artefatos (build_camera_db.py, CameraURLGenerator, camera_db.json com 20 vendors)
+- BLOCO J: 6 modulos (HTTP DoS, RTSP DoS, RTSP MiTM proxy, DNS hijack router, snapshot steal, IoT config encryptor)
+- Todos os 31 arquivos passaram em py_compile (0 erros de sintaxe)
+- Commits: 4d99f944 (sessao anterior), 6339b9ff (esta sessao)
+- Push realizado: master -> origin
+
+### Arquivos modificados
+- embedxpl/modules/exploits/cameras/tplink/*.py (2 arquivos)
+- embedxpl/modules/exploits/cameras/dlink/ (3 novos arquivos)
+- embedxpl/modules/exploits/routers/zte/ (2 novos arquivos)
+- embedxpl/modules/exploits/routers/intelbras/iwr_luci_rpc_rce.py
+- embedxpl/modules/scanners/specialized/br_isp_scanner.py
+- embedxpl/modules/exploits/specialized/vsat/cobham_aviator_admin_reset_cve_2014_2943.py
+- embedxpl/modules/osint/keygen/huawei_hg8245_wpa_keygen.py
+- embedxpl/modules/exploits/voip/alcatel_lucent/omnipcx_enterprise_mastercgi_rce.py
+- embedxpl/modules/exploits/routers/linksys/eseries_themoon_rce_tmunblock.py
+- embedxpl/modules/exploits/routers/netgear/dgn2200_open_telnetd_rce.py
+- embedxpl/modules/exploits/routers/siemens/flexiisn_auth_bypass.py
+- embedxpl/modules/exploits/routers/thomson/bthomehub_voice_hijack.py
+- embedxpl/modules/exploits/routers/two_wire/ (2 arquivos)
+- embedxpl/modules/network/rtsp/ (4 arquivos incluindo rtsp_client.py)
+- embedxpl/modules/exploits/cameras/multi/cameradar_discovery.py
+- embedxpl/modules/osint/fcc_id_lookup.py
+- embedxpl/modules/osint/camera_url_generator.py
+- embedxpl/modules/exploits/protocols/dos/ (2 arquivos)
+- embedxpl/modules/exploits/protocols/mitm/ (2 arquivos)
+- embedxpl/modules/exploits/patterns/hit_and_run/camera_snapshot_steal.py
+- embedxpl/modules/exploits/ransomware/iot_config_encryptor.py
+- embedxpl/tools/build_camera_db.py
+- embedxpl/data/camera_db.json
+
+### Commits realizados
+- 4d99f944 feat: expand EXF - BLOCOs K/L/D/H/N/I/J - ISP devices, RouterPWN ports, RTSP client, FCC-ID, iSpy DB
+- 6339b9ff Expand EXF with gap-fill modules: RTSP client, iSpy DB, FCC-ID, J-patterns
+
+### Proximo passo imediato
+- Verificar se algum modulo precisa de ajuste no check() para integracao com o shell interativo
+- Considerar registrar os novos modulos no catalogo CVE incorporado (incorporated_poc_tree.py)
+
+### Pendencias conhecidas
+- [ ] Integrar novos modulos no catalogo CVE (core/incorporated_poc_tree.py)
+- [ ] Testar rtsp_client.py contra camera real em lab
+- [ ] Executar build_camera_db.py para popular camera_db.json completo
+- [ ] Revisar modulos de DoS com limites de rate para evitar uso acidental
+
+### Ambiente necessario
+- Python 3.11+
+- requests, rich instalados
+- git com acesso ao remote EmbedXPL-Forge
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge\embedxpl\modules
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge/embedxpl/modules
+
+## [2026-06-08 03:00] -- Auditoria BLOCO K/L/D/H/N/I - QA + Documentacao v2.0
+
+### Estado ao encerrar
+- FASE 1: Verificacao de sintaxe em todos os arquivos Python novos - sem erros encontrados
+- FASE 2: Todos os 21 modulos dos BLOCOs K/L/D/H/N/I verificados e confirmados com implementacao real
+- FASE 3: Kapsch RSU (kapsch_rsu_efi_shell_cve_2025_25734.py) complementado com check() e run() - interfaçe padrão de exploit
+- FASE 4: 2 duplicatas identicas removidas: phoenix/mguard_cmd_injection e phoenix/mguard_firmware_extract (mantidos em phoenix_contact/)
+- FASE 5: README.md e README.pt-BR.md atualizados com seccao "New Modules - BLOCO Batch v2.0"
+  - Tabelas de modulos, exemplos de uso, input/output samples, requisitos, disclaimers legais
+  - Documentado em EN-US (README.md) e PT-BR (README.pt-BR.md)
+- FASE 6: Commit e push realizados
+
+### Arquivos modificados
+- README.md (seccao "New Modules - BLOCO Batch v2.0" adicionada)
+- README.pt-BR.md (seccao "Novos Modulos - Batch BLOCO v2.0" adicionada)
+- embedxpl/modules/exploits/specialized/traffic_enforcement/kapsch_rsu_efi_shell_cve_2025_25734.py (check() e run() adicionados)
+- REMOVIDOS: exploits/firewalls/phoenix/mguard_cmd_injection_cve_2024_43386.py (duplicata)
+- REMOVIDOS: exploits/firewalls/phoenix/mguard_firmware_extract_cve_2022_22509.py (duplicata)
+
+### Proximo passo imediato
+- Integrar novos modulos no catalogo CVE (core/incorporated_poc_tree.py)
+- Executar build_camera_db.py para popular camera_db.json completo
+
+### Pendencias conhecidas
+- [ ] Integrar novos modulos no catalogo CVE (core/incorporated_poc_tree.py)
+- [ ] Testar rtsp_client.py contra camera real em lab
+- [ ] Executar build_camera_db.py para popular camera_db.json completo
+- [ ] Revisar modulos de DoS com limites de rate para evitar uso acidental
+
+### Ambiente necessario
+- Python 3.11+
+- requests, rich instalados
+- git com acesso ao remote EmbedXPL-Forge
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge

