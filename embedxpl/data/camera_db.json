@@ -1,0 +1,98 @@
+{
+  "dahua": [
+    {"model": "IPC-HDW Series", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/cam/realmonitor?channel=1&subtype=0", "default_port": 554},
+    {"model": "IPC-HFW Series", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/cam/realmonitor?channel=1&subtype=1", "default_port": 554},
+    {"model": "DHI-NVR Series", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/cam/realmonitor?channel=[CHANNEL]&subtype=0", "default_port": 554},
+    {"model": "IPC-HX Series (snapshot)", "type": "JPEG", "protocol": "http", "url_template": "http://[USERNAME]:[PASSWORD]@ip_address:80/cgi-bin/snapshot.cgi?channel=1", "default_port": 80}
+  ],
+  "hikvision": [
+    {"model": "DS-2CD Series (main)", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/Streaming/Channels/101", "default_port": 554},
+    {"model": "DS-2CD Series (sub)", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/Streaming/Channels/102", "default_port": 554},
+    {"model": "DS-2DE Series PTZ", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/h264/ch[CHANNEL]/main/av_stream", "default_port": 554},
+    {"model": "DS-7xxx NVR", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/Streaming/Channels/[CHANNEL]01", "default_port": 554},
+    {"model": "Any (snapshot)", "type": "JPEG", "protocol": "http", "url_template": "http://ip_address/ISAPI/Streaming/channels/1/picture?basicAuth=[AUTH]", "default_port": 80}
+  ],
+  "axis": [
+    {"model": "AXIS P Series", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/axis-media/media.amp", "default_port": 554},
+    {"model": "AXIS Q Series", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/axis-media/media.amp?videocodec=h264", "default_port": 554},
+    {"model": "AXIS JPEG", "type": "JPEG", "protocol": "http", "url_template": "http://ip_address/axis-cgi/jpg/image.cgi?basicAuth=[AUTH]", "default_port": 80},
+    {"model": "AXIS MJPEG", "type": "MJPEG", "protocol": "http", "url_template": "http://ip_address/axis-cgi/mjpg/video.cgi?basicAuth=[AUTH]", "default_port": 80}
+  ],
+  "foscam": [
+    {"model": "FI9821W", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:88/videoMain", "default_port": 88},
+    {"model": "FI9821P", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/videoMain", "default_port": 554},
+    {"model": "FI9800P", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/videoMain", "default_port": 554},
+    {"model": "FI9821 (snapshot)", "type": "JPEG", "protocol": "http", "url_template": "http://ip_address:88/webcapture.jpg?command=snap&channel=1&user=[USERNAME]&password=[PASSWORD]", "default_port": 88}
+  ],
+  "reolink": [
+    {"model": "RLC-410", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/h264Preview_01_main", "default_port": 554},
+    {"model": "RLC-810A", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/h264Preview_01_main", "default_port": 554},
+    {"model": "RLC Series (sub)", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/h264Preview_01_sub", "default_port": 554},
+    {"model": "Any (snapshot)", "type": "JPEG", "protocol": "http", "url_template": "http://ip_address/cgi-bin/api.cgi?cmd=Snap&channel=0&rs=1&user=[USERNAME]&password=[PASSWORD]", "default_port": 80}
+  ],
+  "amcrest": [
+    {"model": "IP2M Series", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/cam/realmonitor?channel=1&subtype=0", "default_port": 554},
+    {"model": "IP8M Series", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/cam/realmonitor?channel=1&subtype=1", "default_port": 554}
+  ],
+  "tapo": [
+    {"model": "C200", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/stream1", "default_port": 554},
+    {"model": "C310", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/stream1", "default_port": 554},
+    {"model": "C500", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/stream2", "default_port": 554}
+  ],
+  "ezviz": [
+    {"model": "C3W", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/h264/ch01/main/av_stream", "default_port": 554},
+    {"model": "CS-C6C", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/h264/ch01/main/av_stream", "default_port": 554}
+  ],
+  "intelbras": [
+    {"model": "VIP 3230 SD IR", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/cam/realmonitor?channel=1&subtype=0", "default_port": 554},
+    {"model": "VIP 1220 D G2", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/cam/realmonitor?channel=1&subtype=0", "default_port": 554},
+    {"model": "VHD 1220 D G4", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/cam/realmonitor?channel=1&subtype=0", "default_port": 554},
+    {"model": "NVD 3332", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/cam/realmonitor?channel=[CHANNEL]&subtype=0", "default_port": 554}
+  ],
+  "imou": [
+    {"model": "Bullet 2E", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/cam/realmonitor?channel=1&subtype=0", "default_port": 554},
+    {"model": "Cruiser", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/cam/realmonitor?channel=1&subtype=0", "default_port": 554}
+  ],
+  "d-link": [
+    {"model": "DCS-932L", "type": "MJPEG", "protocol": "http", "url_template": "http://ip_address:80/video/mjpg.cgi?[USERNAME]=[PASSWORD]", "default_port": 80},
+    {"model": "DCS-933L", "type": "MJPEG", "protocol": "http", "url_template": "http://ip_address:80/video/mjpg.cgi", "default_port": 80},
+    {"model": "DCS-5020L", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/live1.sdp", "default_port": 554},
+    {"model": "DCS-5222L", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/live2.sdp", "default_port": 554}
+  ],
+  "samsung": [
+    {"model": "SNV-7084R", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/profile1/media.smp", "default_port": 554},
+    {"model": "QNV-8080R", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/profile2/media.smp", "default_port": 554}
+  ],
+  "bosch": [
+    {"model": "Flexidome Series", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/rtsp_tunnel", "default_port": 554},
+    {"model": "DINION Series", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/video", "default_port": 554}
+  ],
+  "sony": [
+    {"model": "SNC-CH140", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/media/video1", "default_port": 554},
+    {"model": "SNC-DH240", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/media/video1", "default_port": 554}
+  ],
+  "panasonic": [
+    {"model": "WV-SC385", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/MediaInput/h264/stream_1", "default_port": 554},
+    {"model": "WV-S2550L", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/MediaInput/h264/stream_1", "default_port": 554}
+  ],
+  "vivotek": [
+    {"model": "FD8161", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/live.sdp", "default_port": 554},
+    {"model": "IP8360-EH", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/live2.sdp", "default_port": 554}
+  ],
+  "geovision": [
+    {"model": "GV-IP Cam", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:8554/CH001.sdp", "default_port": 8554},
+    {"model": "GV-EBL2702", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:8554/CH001.sdp", "default_port": 8554}
+  ],
+  "grandstream": [
+    {"model": "GXV3610_HD", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/0", "default_port": 554},
+    {"model": "GXV3615WP_HD", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/0", "default_port": 554}
+  ],
+  "uniview": [
+    {"model": "IPC3614SB-ADF28KM", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/media/video1", "default_port": 554},
+    {"model": "IPC352E-ADU", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/media/video2", "default_port": 554}
+  ],
+  "annke": [
+    {"model": "C800", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/Streaming/Channels/101", "default_port": 554},
+    {"model": "C500", "type": "FFMPEG", "protocol": "rtsp", "url_template": "rtsp://[USERNAME]:[PASSWORD]@ip_address:554/Streaming/Channels/101", "default_port": 554}
+  ]
+}
