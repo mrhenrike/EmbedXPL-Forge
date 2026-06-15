@@ -2,7 +2,7 @@
 -- EmbedXPL-Forge NSE Script -- XPL-Forge Suite Quick Reference
 --
 -- Author : Andre Henrique (@mrhenrike) | Uniao Geek -- https://github.com/Uniao-Geek
--- Version: 1.0.0
+-- Version: 1.1.0
 -- License: Same as Nmap -- See https://nmap.org/book/man-legal.html
 --
 -- DESCRIPTION:
@@ -58,8 +58,8 @@ local SUITE = {
     cli     = "embedxpl",
     pip     = "pip install embedxpl",
     repo    = "https://github.com/mrhenrike/EmbedXPL-Forge",
-    scope   = "IoT broad: routers, cameras, NAS, firewalls, printers, GPON, ICS",
-    nse     = "embedxpl-camera-identify, embedxpl-router-vuln, embedxpl-iot-cve-check",
+    scope   = "IoT broad: routers, cameras, NAS, firewalls, printers, GPON, ICS, switches, UPS/PDU, drones",
+    nse     = "embedxpl-camera-identify, embedxpl-router-vuln, embedxpl-iot-cve-check, embedxpl-unifi-vuln, embedxpl-switch-vuln, embedxpl-drone-vuln, embedxpl-ups-pdu-vuln",
   },
   {
     name    = "FirewallXPL-Forge",
@@ -93,6 +93,25 @@ local SUITE = {
     scope   = "MikroTik RouterOS: 100+ CVE/EDB exploits, MAC-layer, 8-phase audit, credential BF",
     nse     = "embedxpl-router-vuln (MikroTik section)",
   },
+}
+
+-- ── EmbedXPL NSE script index (v3.7.0) ───────────────────────────────────
+
+local NSE_SCRIPTS = {
+  { name = "embedxpl-perimeter-vuln",   scope = "Firewalls, VPN gateways, SD-WAN (Fortinet/Cisco/PAN-OS/SonicWall)",
+    note = "CVE-2018-13379 ... CVE-2026-20245 (22 CVEs)" },
+  { name = "embedxpl-iot-cve-check",    scope = "IoT: cameras, NAS, routers, printers, smart TV",
+    note = "CVE-2021-36260 ... CVE-2026-25205 (19 CVEs)" },
+  { name = "embedxpl-unifi-vuln",       scope = "Ubiquiti UniFi OS / UniFi Network Application",
+    note = "CVE-2026-34908/34909/34910, 22557, 47368" },
+  { name = "embedxpl-switch-vuln",      scope = "TP-Link Omada, Hikvision PoE, Atop EHG2408, Arista EOS",
+    note = "CVE-2026-1668, 3828, 3823, 7473" },
+  { name = "embedxpl-drone-vuln",       scope = "DJI drones (Mavic/Mini series, FlightHub, v2 SDK)",
+    note = "CVE-2026-1743, 26673, 2023-51454" },
+  { name = "embedxpl-ups-pdu-vuln",     scope = "Vertiv Liebert, Dataprobe iBoot, PDUExperts Smart PDU",
+    note = "CVE-2025-46412, 41426; Dataprobe 7-CVE chain; ICSR-2026-02-001" },
+  { name = "embedxpl-suite-ref",        scope = "Reference only -- no active probes",
+    note = "Suite install guide + GTFOBins post-exploitation tips" },
 }
 
 -- ── GTFOBins quick reference for embedded Linux ───────────────────────────
@@ -137,6 +156,12 @@ action = function(host, port)
   end
 
   output["Full cheatsheet"] = "Run: embedxpl > shell_type=auto; after session: GTFOBins tips printed automatically"
+
+  -- NSE scripts index
+  output["NSE Scripts (v3.7.0)"] = "EmbedXPL-Forge NSE specializations:"
+  for _, nse in ipairs(NSE_SCRIPTS) do
+    output["  nse." .. nse.name] = ("%s | %s"):format(nse.scope, nse.note)
+  end
 
   return output
 end
