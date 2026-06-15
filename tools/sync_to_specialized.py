@@ -57,6 +57,9 @@ SYNC_MAP: dict[str, dict[str, Any]] = {
             ("embedxpl/modules/exploits/sdwan",        "firewallxpl/modules/exploits/perimeter/sdwan"),
             ("embedxpl/modules/exploits/ngfw",         "firewallxpl/modules/exploits/perimeter/ngfw"),
         ],
+        # subdirs of firewalls/ that already exist in FirewallXPL at different top-level paths
+        # and would create duplicates if synced under perimeter/
+        "skip_src_subdirs": {"lb", "nac", "waf", "vpn"},
     },
     "industrialxpl": {
         "repo_dir": REPOS_ROOT / "IndustrialXPL-Forge",
@@ -71,6 +74,11 @@ SYNC_MAP: dict[str, dict[str, Any]] = {
             ("embedxpl/modules/exploits/specialized/elevator",    "industrialxpl/modules/exploits/specialized/elevator"),
             ("embedxpl/modules/exploits/specialized/vehicles",    "industrialxpl/modules/exploits/specialized/vehicles"),
         ],
+        # ics/ subdirs whose content already exists in IndustrialXPL under plc/, rtos/, scada/, protocols/modbus/
+        "skip_src_subdirs": {
+            "modbus", "rockwell", "siemens", "schneider", "qnx", "freertos",
+            "vxworks", "scada", "generic", "osprey", "scadaflex", "advantech",
+        },
     },
     "wirelessxpl": {
         "repo_dir": REPOS_ROOT / "WirelessXPL-Forge",
@@ -314,6 +322,8 @@ def sync_target(
         print(f"  [SKIP] {target_name}: repo not found at {repo_dir}")
         return results
 
+    skip_src_subdirs: set[str] = set(config.get("skip_src_subdirs", []))
+
     for src_rel, dst_rel in config["mappings"]:
         src_dir = EMBEDXPL_ROOT / src_rel
         if not src_dir.exists():
@@ -326,6 +336,14 @@ def sync_target(
                 continue
             if "__pycache__" in src_file.parts:
                 continue
+            # Skip excluded top-level subdirs (avoid creating duplicates with existing paths)
+            if skip_src_subdirs:
+                try:
+                    rel_parts = src_file.relative_to(src_dir).parts
+                    if rel_parts and rel_parts[0] in skip_src_subdirs:
+                        continue
+                except ValueError:
+                    pass
 
             # Compute destination path
             relative = src_file.relative_to(src_dir)
