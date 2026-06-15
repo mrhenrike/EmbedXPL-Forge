@@ -1,7 +1,7 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 522,
-  "last_updated": "2026-06-06",
+  "entry_count": 536,
+  "last_updated": "2026-06-15",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
     {
@@ -6334,6 +6334,274 @@
       ],
       "exploit_available": true,
       "note": "Source: 0xyassine__poc-seeker search result reference in third-party-router-poc"
+    },
+    {
+      "vendor": "wazuh",
+      "cve_id": "GHSA-ff9g-85jq-r3g3",
+      "affected_versions": [
+        "5.0.0-beta1"
+      ],
+      "fixed_versions": [
+        "5.0.0-beta3"
+      ],
+      "description": "NDJSON injection in inventory_sync pipeline - CVSS 10.0 unauthenticated",
+      "module_path": "exploits/siem/wazuh/wazuh_inventory_sync_ndjson_injection.py",
+      "cvss": "10.0",
+      "product": "Wazuh Manager 5.0.0-beta1",
+      "exploitation": "PoC public",
+      "references": [
+        "https://github.com/wazuh/wazuh/security/advisories/GHSA-ff9g-85jq-r3g3"
+      ]
+    },
+    {
+      "vendor": "splunk",
+      "cve_id": "CVE-2026-20253",
+      "affected_versions": [
+        "10.0.0-10.0.6",
+        "10.2.0-10.2.3"
+      ],
+      "fixed_versions": [
+        "10.0.7",
+        "10.2.4"
+      ],
+      "description": "Pre-auth RCE via unauthenticated PostgreSQL sidecar endpoints",
+      "module_path": "exploits/siem/splunk/splunk_postgres_sidecar_preauth_rce_cve_2026_20253.py",
+      "cvss": "9.8",
+      "product": "Splunk Enterprise",
+      "exploitation": "Technical details public (watchTowr)",
+      "references": [
+        "https://www.cybersecbrazil.com.br/post/falha-critica-no-splunk-enterprise-permite-execucao-remota-de-codigo-sem-autenticacao"
+      ]
+    },
+    {
+      "vendor": "paloalto",
+      "cve_id": "CVE-2026-0273",
+      "affected_versions": [
+        "12.1",
+        "11.2",
+        "11.1",
+        "10.2"
+      ],
+      "fixed_versions": [
+        "See Palo Alto security advisory"
+      ],
+      "description": "Authenticated cmd injection as root via CLI/WebUI - PA-Series, VM-Series, Panorama",
+      "module_path": "exploits/firewalls/paloalto/panos_root_cmd_injection_cve_2026_0273.py",
+      "cvss": "HIGH",
+      "product": "PAN-OS",
+      "exploitation": "No known active exploitation",
+      "references": [
+        "https://security.paloaltonetworks.com/CVE-2026-0273"
+      ]
+    },
+    {
+      "vendor": "ivanti",
+      "cve_id": "Ivanti-Sentry-2026",
+      "affected_versions": [
+        "Ivanti Sentry all recent versions"
+      ],
+      "fixed_versions": [
+        "See Ivanti advisory"
+      ],
+      "description": "Critical pre-auth RCE in Ivanti Sentry MICS administrative interface",
+      "module_path": "exploits/vpn/ivanti/ivanti_sentry_rce.py",
+      "cvss": "10.0 (estimated)",
+      "product": "Ivanti Sentry",
+      "exploitation": "Actively exploited",
+      "references": [
+        "https://boletimsec.com/ataques-exploram-falha-critica-no-ivanti-sentry/"
+      ]
+    },
+    {
+      "vendor": "veeam",
+      "cve_id": "CVE-2026-44963",
+      "affected_versions": [
+        "12",
+        "12.1",
+        "12.2",
+        "12.3",
+        "12.3.1",
+        "12.3.2 (build < 4854)"
+      ],
+      "fixed_versions": [
+        "12.3.2.4854"
+      ],
+      "description": "Domain-joined RCE - any authenticated domain user can execute code on Veeam server",
+      "module_path": "exploits/infrastructure/veeam/veeam_backup_domain_rce_cve_2026_44963.py",
+      "cvss": "9.4",
+      "product": "Veeam Backup & Replication",
+      "exploitation": "No confirmed active exploitation (ransomware risk)",
+      "references": [
+        "https://boletimsec.com/servidores-de-backup-veeam-entram-em-alerta-apos-falha-de-rce/"
+      ]
+    },
+    {
+      "vendor": "linux",
+      "cve_id": "CVE-2026-46316",
+      "affected_versions": [
+        "Linux kernel KVM arm64 - see advisory"
+      ],
+      "fixed_versions": [
+        "See kernel.org"
+      ],
+      "description": "Race condition in vGIC-ITS emulation - guest-to-host kernel escape on arm64 KVM",
+      "module_path": "exploits/linux/kernel/kvm_arm64_itscape_guest_host_escape_cve_2026_46316.py",
+      "cvss": "CRITICAL",
+      "product": "Linux Kernel KVM arm64",
+      "exploitation": "PoC released (ITScape by V4bel/Hyunwoo Kim)",
+      "references": [
+        "https://cybersecuritynews.com/poc-exploit-released-for-guest-to-host-escape-linux-kernel/"
+      ]
+    },
+    {
+      "vendor": "litellm",
+      "cve_id": "CVE-2026-42271",
+      "affected_versions": [
+        "1.74.2-1.83.6"
+      ],
+      "fixed_versions": [
+        "1.83.7"
+      ],
+      "description": "Pre-auth command injection in MCP server config endpoints - exfils AI provider API keys",
+      "module_path": "exploits/ai_infra/litellm/litellm_mcp_cmd_injection_cve_2026_42271.py",
+      "cvss": "HIGH (CISA KEV)",
+      "product": "LiteLLM",
+      "exploitation": "Actively exploited (CISA KEV)",
+      "references": [
+        "https://boletimsec.com/cisa-alerta-para-exploracao-ativa-de-falha-no-litellm/"
+      ]
+    },
+    {
+      "vendor": "jenkins",
+      "cve_id": "CVE-2026-53435",
+      "affected_versions": [
+        "Jenkins LTS pre-June 2026 security advisory"
+      ],
+      "fixed_versions": [
+        "See Jenkins security advisory"
+      ],
+      "description": "Deserialization allows user impersonation and Groovy RCE via Script Console",
+      "module_path": "exploits/ci_cd/jenkins/jenkins_deserialization_rce_cve_2026_53435.py",
+      "cvss": "8.8",
+      "product": "Jenkins",
+      "exploitation": "No confirmed active exploitation",
+      "references": [
+        "https://www.jenkins.io/security/advisories/"
+      ]
+    },
+    {
+      "vendor": "mariadb",
+      "cve_id": "CVE-2026-49261",
+      "affected_versions": [
+        "< 11.8.8",
+        "< 11.4.12",
+        "< 10.11.18",
+        "< 10.6.27"
+      ],
+      "fixed_versions": [
+        "11.8.8",
+        "11.4.12",
+        "10.11.18",
+        "10.6.27"
+      ],
+      "description": "Critical RCE in MariaDB - CVSS 10.0",
+      "module_path": "exploits/databases/mariadb/mariadb_rce_cve_2026_49261.py",
+      "cvss": "10.0",
+      "product": "MariaDB",
+      "exploitation": "No confirmed active exploitation",
+      "references": [
+        "https://mariadb.com/kb/en/security/"
+      ]
+    },
+    {
+      "vendor": "oracle",
+      "cve_id": "Oracle-PeopleSoft-2026",
+      "affected_versions": [
+        "Oracle PeopleSoft (cloud and on-prem)"
+      ],
+      "fixed_versions": [
+        "Oracle patch pending"
+      ],
+      "description": "Gadget chain RCE exploited by ShinyHunters in data theft attacks",
+      "module_path": "exploits/erp/oracle/oracle_peoplesoft_gadget_chain_rce.py",
+      "cvss": "CRITICAL (zero-day, active)",
+      "product": "Oracle PeopleSoft",
+      "exploitation": "Actively exploited by ShinyHunters - 300+ instances",
+      "references": [
+        "https://www.bleepingcomputer.com/news/security/oracle-peoplesoft-servers-hacked-in-shinyhunters-data-theft-attacks/"
+      ]
+    },
+    {
+      "vendor": "servicenow",
+      "cve_id": "ServiceNow-2026",
+      "affected_versions": [
+        "ServiceNow - see advisory"
+      ],
+      "fixed_versions": [
+        "See ServiceNow advisory"
+      ],
+      "description": "Unauthorized access to ServiceNow customer instances - data exfiltration",
+      "module_path": "exploits/cloud_saas/servicenow/servicenow_instance_access.py",
+      "cvss": "HIGH (active)",
+      "product": "ServiceNow",
+      "exploitation": "Actively exploited",
+      "references": [
+        "https://boletimsec.com/falha-no-servicenow-e-explorada-para-acessar-instancias-de-clientes/"
+      ]
+    },
+    {
+      "vendor": "openssl",
+      "cve_id": "CVE-2025-15467",
+      "affected_versions": [
+        "OpenSSL < patched version - affects Siemens Scalance/Simatic/Sinamics/Sinec"
+      ],
+      "fixed_versions": [
+        "See OpenSSL security advisory"
+      ],
+      "description": "RCE in OpenSSL affecting ICS/OT products - Siemens patched in ICS Patch Tuesday Jun 2026",
+      "module_path": "exploits/crypto/openssl/openssl_rce_cve_2025_15467.py",
+      "cvss": "HIGH-CRITICAL",
+      "product": "OpenSSL",
+      "exploitation": "No confirmed active exploitation",
+      "references": [
+        "https://www.securityweek.com/ics-patch-tuesday-vulnerabilities-fixed-by-siemens-schneider-phoenix-contact/"
+      ]
+    },
+    {
+      "vendor": "microsoft",
+      "cve_id": "Windows-RDP-2026",
+      "affected_versions": [
+        "Pre-June 2026 Patch Tuesday"
+      ],
+      "fixed_versions": [
+        "June 2026 Patch Tuesday"
+      ],
+      "description": "Sensitive data exposure via Windows RDP CredSSP/NTLM negotiation",
+      "module_path": "exploits/windows/rdp/rdp_sensitive_data_exposure.py",
+      "cvss": "MEDIUM-HIGH",
+      "product": "Windows RDP",
+      "exploitation": "No confirmed active exploitation",
+      "references": [
+        "https://boletimsec.com/falhas-no-windows-rdp-podem-expor-dados-sensiveis-de-sistemas-afetados/"
+      ]
+    },
+    {
+      "vendor": "oracle",
+      "cve_id": "Oracle-ORDS-2026",
+      "affected_versions": [
+        "Oracle ORDS - see advisory"
+      ],
+      "fixed_versions": [
+        "See Oracle advisory"
+      ],
+      "description": "Critical vulnerability in ORDS requiring urgent patching",
+      "module_path": "exploits/databases/oracle/oracle_ords_rce.py",
+      "cvss": "CRITICAL",
+      "product": "Oracle REST Data Services",
+      "exploitation": "No confirmed active exploitation",
+      "references": [
+        "https://boletimsec.com/falha-no-oracle-rest-data-services-exige-atualizacao-urgente/"
+      ]
     }
   ]
 }
