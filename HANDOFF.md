@@ -632,3 +632,32 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge
+
+## [2026-06-08 08:45] - README badges, limpeza de referencias internas e wiki completa
+
+### Estado ao encerrar
+- Adicionado bloco de badges (PyPI, Python, CI, License, Modules, CVEs, Vendors, Platform) ao README.md apos a imagem do banner
+- Removidas todas as referencias a "BLOCO K/L/D/H/N/I", "BLOCO Batch v2.0" - substituidas por titulos tecnicos profissionais
+- Removida atribuicao "ported from cameradar" da descricao do RTSP engine (README e wiki)
+- Removida referencia a routerpwn.com da secao de backdoor modules
+- Limpas referencias a "Cameradar-style" em arquivos da wiki (RTSP-Camera-Engine.md, 21-rtsp-camera-engine.md, 21-engine-rtsp-camera.md, Exploit-Modules.md)
+- Atualizados: README.md, .tmp/exf_wiki/Home.md, Quick-Start.md, RTSP-Camera-Engine.md
+- Criados: CLI-Reference.md, ISP-Device-Modules.md, Hardware-Hacking.md, OSINT-Modules.md na wiki
+- Commits: 3ef2a98b (README), c9e4fac (wiki)
+- Push realizado para master e para wiki (github.com/mrhenrike/EmbedXPL-Forge.wiki)
+
+### Proximo passo imediato
+- Verificar se a wiki do GitHub renderiza corretamente as novas paginas no browser
+
+### Pendencias conhecidas
+- [ ] Sidebar da wiki (.tmp/exf_wiki/_Sidebar.md) pode precisar de atualizacao para incluir links para CLI-Reference, ISP-Device-Modules, Hardware-Hacking, OSINT-Modules
+- [ ] Versao PT-BR das novas paginas wiki (ISP-Device-Modules, CLI-Reference, Hardware-Hacking, OSINT-Modules) ainda nao criadas
+
+### Ambiente necessario
+- Python 3.8+
+- git com acesso a github.com/mrhenrike/EmbedXPL-Forge
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge
+- Wiki local: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge\.tmp\exf_wiki
