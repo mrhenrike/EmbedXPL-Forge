@@ -6,6 +6,90 @@ Format: [Semantic Versioning](https://semver.org) -- `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [3.7.0] - 2026-06-15
+
+### Added - CVE Wave May-Jun 2026: ~30 new modules across 8 device categories
+
+**Ubiquiti UniFi OS (new vendor modernization):**
+- `routers/ubiquiti/unifi_os_rce_chain_cve_2026_34908.py` (CVE-2026-34908/34909/34910, CVSS 10.0, CISA KEV)
+  Full three-stage unauthenticated root RCE chain on all UniFi OS appliances < 4.0.21.
+  Stage 1: path traversal reads JWT secret; Stage 2: forges HS256 token; Stage 3: exec endpoint RCE.
+- `routers/ubiquiti/unifi_os_path_traversal_cve_2026_34908.py` (Stage 1 individual module)
+- `routers/ubiquiti/unifi_os_jwt_bypass_cve_2026_34909.py` (Stage 2 individual module)
+- `routers/ubiquiti/unifi_os_rce_cve_2026_34910.py` (Stage 3 individual module)
+- `routers/ubiquiti/unifi_network_path_traversal_cve_2026_22557.py` (CVE-2026-22557, CVSS 8.1)
+  UniFi Network Application config-export path traversal.
+- `routers/ubiquiti/unifi_os_path_traversal_cve_2026_47368.py` (CVE-2026-47368, CVSS 8.6)
+  UniFi OS filemanager double-encoded traversal.
+
+**Cisco SD-WAN (new 2026 modules):**
+- `firewalls/cisco/cisco_sdwan_auth_bypass_cve_2026_20127.py` (CVE-2026-20127, CVSS 10.0)
+  vManage REST API auth bypass via alg:none JWT. Full config R/W and CLI backdoor.
+- `firewalls/cisco/cisco_sdwan_privesc_cve_2026_20245.py` (CVE-2026-20245, CVSS 7.8, CISA KEV)
+  SD-WAN CLI shell injection for privilege escalation to root. SSH access required.
+
+**Routers and Firewalls (new 2026):**
+- `routers/dlink/di8400_unauth_rce_cve_2026_10206.py` (CVE-2026-10206, CVSS 9.8)
+  D-Link DI-8400 unauthenticated command injection via wan.asp.
+- `routers/kangda/dr300_hardcoded_telnet_cve_2026_10045.py` (CVE-2026-10045, CVSS 9.8)
+  Kangda DR300 hardcoded Telnet credentials, no patch.
+- `routers/acer/connect_m6e_5g_multi_cve_2026_49185.py` (CVE-2026-49185/49187/50213, CVSS 9.8)
+  Acer Connect M6E auth bypass + info disclosure + ping injection RCE.
+- `firewalls/fortinet/fortios_missing_auth_rce_cve_2025_53847.py` (CVE-2025-53847, CVSS 8.8)
+  FortiOS secondary fgfmd socket missing auth RCE (complements CVE-2025-53844).
+
+**Switches (new vendor folders + modules):**
+- `switches/tplink/omada_unauth_rce_cve_2026_1668.py` (CVE-2026-1668, CVSS 9.8)
+  TP-Link Omada auth bypass via model-string header + exec endpoint RCE.
+- `switches/hikvision/poe_switch_auth_rce_cve_2026_3828.py` (CVE-2026-3828, CVSS 7.2, EOL)
+  Hikvision DS-3E0318P-E/DS-3E0326P-E/DS-3E1318P-E ISAPI command injection.
+- `switches/atop/ehg2408_stack_bof_cve_2026_3823.py` (CVE-2026-3823, CVSS 9.3)
+  Atop EHG2408 industrial switch unauthenticated stack BOF.
+- `switches/arista/eos_privesc_detection_cve_2026_7473.py` (CVE-2026-7473, CVSS 6.9, CISA KEV)
+  Arista EOS privilege escalation detection + mitigation. No vendor patch available.
+
+**UPS and PDU (new vendor folders: ups/vertiv, ups/dataprobe, ups/pduexperts):**
+- `ups/vertiv/liebert_auth_bypass_cve_2025_46412.py` (CVE-2025-46412, CVSS 9.8)
+  Vertiv Liebert NMC predictable session token auth bypass.
+- `ups/vertiv/liebert_stack_bof_cve_2025_41426.py` (CVE-2025-41426, CVSS 9.8)
+  Vertiv Liebert NMC HTTP Basic Auth decoder stack BOF.
+- `ups/dataprobe/iboot_multi_cve_unauth_rce.py` (Claroty research, CVSS 9.8)
+  Dataprobe iBoot PDU multi-CVE: XFF auth bypass + command injection RCE.
+- `ups/pduexperts/smart_pdu_unauth_rce_icsr_2026_02_001.py` (ICSR-2026-02-001, CVSS 9.8)
+  PDUExperts Smart PDU unauthenticated Python exec endpoint.
+
+**Drones (new category: drones/dji/):**
+- `drones/dji/mavic_auth_bypass_cve_2026_1743.py` (CVE-2026-1743, CVSS 8.1)
+  DJI Mavic Mini/Air/Spark FlightHub API auth bypass via null-byte token.
+- `drones/dji/wifi_dos_cve_2026_26673.py` (CVE-2026-26673, CVSS 6.5)
+  DJI Wi-Fi RC mode 802.11 deauth DoS. Detection + mitigation module.
+- `drones/dji/v2_sdk_oob_write_cve_2023_51454.py` (CVE-2023-51454, CVSS 9.8)
+  DJI v2 SDK TCP/10000 out-of-bounds write. Ported from ByteMe1001/DJI-CatNect.
+
+**Cameras:**
+- `cameras/dahua/ipc_nvr_dvr_multi_cve_2026_29116.py` (CVE-2026-29116/29115/29114, CVSS 8.7)
+  Dahua chain: unauth snapshot, session ID brute-force, recording IDOR.
+
+**Printers:**
+- `printers/hplip_unauth_rce_cve_2026_8631.py` (CVE-2026-8631, CVSS 9.3)
+  HPLIP hpiod command injection via Device URI on TCP/2208.
+
+**Smart TV:**
+- `smart_tv/samsung_tizen/escargot_js_engine_bof_cve_2026_25205.py` (CVE-2026-25205/25207/47311/8915)
+  Samsung Tizen Escargot JS engine multiple memory corruption bugs. Detection module.
+
+**NSE Scripts (4 new):**
+- `nse/embedxpl-unifi-vuln.nse` -- UniFi OS/Network App CVE fingerprint + traversal probes
+- `nse/embedxpl-switch-vuln.nse` -- Omada/Hikvision/Atop/Arista CVE detection
+- `nse/embedxpl-drone-vuln.nse` -- DJI drone AP CVE fingerprint (authorized use only)
+- `nse/embedxpl-ups-pdu-vuln.nse` -- Vertiv/Dataprobe/PDUExperts CVE detection
+
+### Changed
+- `pyproject.toml`: synchronized version to 3.7.0 (was desynchronized at 3.4.1)
+- `pyproject.toml`: updated description to reflect expanded scope (drones, switches, UPS/PDU)
+
+---
+
 ## [3.6.0] - 2026-06-02
 
 ### Added - Critical historical CVEs, Pulse Secure coverage, 178 total modules
