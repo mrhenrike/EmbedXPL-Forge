@@ -1,0 +1,232 @@
+{
+  "generated_at": "2026-06-15T17:34:34Z",
+  "embedxpl_version": "3.7.0",
+  "targets": {
+    "wirelessxpl": {
+      "total": 27,
+      "copied": 0,
+      "skipped": 27,
+      "conflict": 0,
+      "error": 0,
+      "dry_run": 0,
+      "files": [
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\wifi\\wifi_dragonblood_cve_2019_9494.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\wifi\\wifi_dragonblood_cve_2019_9494.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "43e5d070410484ade15e7660683ffaff71e668a54035813fe8bbb8ecd1537ac2",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\wifi\\wifi_krack_ptk_reinstall_cve_2017_13077.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\wifi\\wifi_krack_ptk_reinstall_cve_2017_13077.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "c39f40754a0ba9f5e8ae731d461e566d41149166cc3c2fae4ad8bbe310d5b60c",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\wifi\\wifi_pmkid_capture.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\wifi\\wifi_pmkid_capture.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "f3cc9c69dc9c2bde0a30b1b46466ab14a47dd48d5c731a0f52573b024a244a3b",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\wifi\\wlan_packet_inject.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\wifi\\wlan_packet_inject.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "7776833913fba5cc34f38505f7b2e4c331e90e84a979216100646f81a4531f4f",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\ble\\ble_gatt_enum_unauth.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\ble\\ble_gatt_enum_unauth.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "40f6e88b782b9655bf0b35cca669110d83f69914275fe8256146decdb3a8759a",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\ble\\ble_knob_downgrade_cve_2019_9506.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\ble\\ble_knob_downgrade_cve_2019_9506.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "8eb26da2dd2d562ed792f8ed95d81cba78d07db9d9a536f772eaed79bfd808cc",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\ble\\ble_spoofing_impersonation.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\ble\\ble_spoofing_impersonation.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "50b9f765343a0f69fc1cb8beb6bac925446846df63640c438b9b1c828d34ba31",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\zigbee\\zigbee_network_key_extract.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\zigbee\\zigbee_network_key_extract.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "b1e6be7f1d55f49eb0c9b4ff759d053416caca6e00f257a5fc70c12b89523bf3",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\zigbee\\zigbee_rejoin_hijack.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\zigbee\\zigbee_rejoin_hijack.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "08c0ae1abb54e878ed20e118e4ea387d637bb9e115c7bade97bbae05ee6146ce",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\zigbee\\zigbee_touchlink_factory_reset.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\zigbee\\zigbee_touchlink_factory_reset.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "2b14165137ee55646ea07cacd8a07b2fc2125ca0607e79c2e204f34812acbc1c",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\zwave\\zwave_replay_attack.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\zwave\\zwave_replay_attack.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "3678d2242026ab28983f55d7e6135c17a3881bc106aabc71c4143b9a3453260d",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\zwave\\zwave_s0_key_extract.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\zwave\\zwave_s0_key_extract.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "fd177e5c97357ec98ef559e97919eb3e834ee660214305f3ac36375a6ad98d54",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\lorawan\\lorawan_bit_flip_adr_cve_2022_39274.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\lorawan\\lorawan_bit_flip_adr_cve_2022_39274.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "8f65000b9d6a82f6ffa41a08ab999e18088a99f874c6e14d8505063b70dceaff",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\lorawan\\lorawan_replay_join_accept.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\lorawan\\lorawan_replay_join_accept.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "f7c6d95fcbcae5eadd24addc1170ca6ed3e3f3f6b4d4d09ff201687794c39b65",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\mdns\\mdns_amplification.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\mdns\\mdns_amplification.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "ca6c54cc212e1ba44af9ff6396353f717d151cb318ca6d3e287c7f2f00cc3ce3",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\protocols\\iot\\mdns\\mdns_poisoning.py",
+          "dst": "wirelessxpl\\modules\\generic\\iot_proto\\mdns\\mdns_poisoning.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "6ba04edf4b756a2231d50cbc1d197d81e8850edf967b40f00ecc68bddfecde9c",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\drones\\dji\\mavic_auth_bypass_cve_2026_1743.py",
+          "dst": "wirelessxpl\\modules\\generic\\drones\\dji\\mavic_auth_bypass_cve_2026_1743.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "84a00e5aa7f13148666dbf387f42ff89516b932b071c8344bb2aebcbe0b08e8d",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\drones\\dji\\v2_sdk_oob_write_cve_2023_51454.py",
+          "dst": "wirelessxpl\\modules\\generic\\drones\\dji\\v2_sdk_oob_write_cve_2023_51454.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "6d827a9fa9b8d1b6fcbb8d6d614d65c50d18d82b9b7d66eebd9123cd2dfa170b",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\drones\\dji\\wifi_dos_cve_2026_26673.py",
+          "dst": "wirelessxpl\\modules\\generic\\drones\\dji\\wifi_dos_cve_2026_26673.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "1a76073546afedba799ea6b746c2c3f1699d1c1df60338335dfc88278f6e5767",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\aps\\mediatek\\mt7622_heap_overflow_postauth.py",
+          "dst": "wirelessxpl\\modules\\generic\\access_points\\mediatek\\mt7622_heap_overflow_postauth.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "ff3264b120fc48284f72c74aeb78761f473362623d6ed8c05f9b3a93afa4f566",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\aps\\mediatek\\mt7622_heap_overflow_preauth.py",
+          "dst": "wirelessxpl\\modules\\generic\\access_points\\mediatek\\mt7622_heap_overflow_preauth.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "549d25147c03818f77536794cba9baa0c502d1bcb3c2f6064e11a59edfd92400",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\aps\\mediatek\\mt7622_stack_overflow_postauth.py",
+          "dst": "wirelessxpl\\modules\\generic\\access_points\\mediatek\\mt7622_stack_overflow_postauth.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "3a5c72ee30858858b663fb1edf35ce80859ee7386ecb3b214792b8e6922dc097",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\aps\\mediatek\\mt7622_stack_overflow_preauth.py",
+          "dst": "wirelessxpl\\modules\\generic\\access_points\\mediatek\\mt7622_stack_overflow_preauth.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "5ea5a53ecff690f4cd37869235c7c56459fbc34598812581a0c08d12ac57f411",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\wearables\\fitbit\\fitbit_ble_exfil.py",
+          "dst": "wirelessxpl\\modules\\generic\\wearables\\fitbit\\fitbit_ble_exfil.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "f8abd6735bb773028e2ac9dd632f327f284140ed255a558595337e4f5b0886d2",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\wearables\\garmin\\garmin_ciq_bof_cve_2023_23300.py",
+          "dst": "wirelessxpl\\modules\\generic\\wearables\\garmin\\garmin_ciq_bof_cve_2023_23300.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "383e9b8e4fe6156d64155e08fab0f64d7b042c7958f5f09e72b550e063ed36db",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\wearables\\samsung_gear\\samsung_tizen_gear_rce.py",
+          "dst": "wirelessxpl\\modules\\generic\\wearables\\samsung_gear\\samsung_tizen_gear_rce.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "a8315fd100f223fb69d4df97e82edb32880208751a461d49d24d906f81ebd516",
+          "warnings": []
+        },
+        {
+          "src": "embedxpl\\modules\\exploits\\wearables\\xiaomi\\xiaomi_miband_breakmi_ble.py",
+          "dst": "wirelessxpl\\modules\\generic\\wearables\\xiaomi\\xiaomi_miband_breakmi_ble.py",
+          "status": "skipped",
+          "reason": "identical",
+          "sha256": "5c2b589a49e4656466b9b5192c53424bc4bc45f9ef75a56934fe2fa7b1312d56",
+          "warnings": []
+        }
+      ]
+    }
+  }
+}
