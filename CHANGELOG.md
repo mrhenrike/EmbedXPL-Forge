@@ -978,3 +978,16 @@ pip install embedxpl[all]              # Everything
 - Coverage matrix
 - Bilingual documentation (en-US + pt-BR)
 
+## [3.7.1] - 2026-06-15
+
+### Added - Printer modules (missed in v3.7.0 wave)
+- printers/samba_print_cmd_inject_cve_2026_4480.py: Samba smbd MS-RPRN print command injection (CVE-2026-4480, CVSS 8.8)
+- printers/hp/deskjet_wsd_scan_rce_cve_2026_4682.py: HP DeskJet/OfficeJet WSD scan service stack buffer overflow RCE (CVE-2026-4682, CVSS 9.3)
+
+### Updated - NSE scripts (v3.7.0 additions)
+- 
+se/embedxpl-perimeter-vuln.nse (v1.1.0): Added CVE-2025-53847 (FortiOS fgfmd missing auth), CVE-2026-20127 (Cisco SD-WAN JWT bypass), CVE-2026-20245 (Cisco SD-WAN CLI privesc KEV)
+- 
+se/embedxpl-iot-cve-check.nse (v2.1.0): Added CVE-2026-29114/29116 (Dahua), CVE-2026-8631 (HPLIP), CVE-2026-25205 (Samsung Tizen Escargot JS engine)
+- 
+se/embedxpl-suite-ref.nse (v1.1.0): Registered 4 new v3.7.0 NSE scripts (unifi-vuln, switch-vuln, drone-vuln, ups-pdu-vuln); added NSE scripts index section

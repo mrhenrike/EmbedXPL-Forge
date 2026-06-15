@@ -3,7 +3,7 @@
 -- Perimeter Device CVE Fingerprinting and Vulnerability Check
 --
 -- Author : Andre Henrique (@mrhenrike) | Uniao Geek -- https://github.com/Uniao-Geek
--- Version: 1.0.0
+-- Version: 1.1.0
 -- License: Same as Nmap -- See https://nmap.org/book/man-legal.html
 --
 -- DESCRIPTION:
@@ -36,6 +36,9 @@
 --     CVE-2023-3519   -- Citrix ADC/Gateway RCE (CVSS 9.8, CISA KEV)
 --     CVE-2025-0282   -- Ivanti Connect Secure stack overflow RCE (CVSS 9.0, CISA KEV)
 --     CVE-2024-24919  -- Check Point Information Disclosure (CVSS 8.6, CISA KEV)
+--     CVE-2025-53847  -- FortiOS fgfmd Missing Auth Pre-Auth RCE (CVSS 8.8)
+--     CVE-2026-20127  -- Cisco SD-WAN vManage REST API auth bypass alg:none JWT (CVSS 10.0)
+--     CVE-2026-20245  -- Cisco SD-WAN CLI local privesc shell injection (CISA KEV Jun/2026)
 --
 -- USAGE:
 --   nmap -p 443,8443,8080 --script embedxpl-perimeter-vuln <target>
@@ -312,6 +315,47 @@ local CVE_PROBES = {
     embedxpl_mod = "exploits/firewalls/fortinet/fortimanager_fortijump_cve_2024_47575",
     firewallxpl_mod = "exploits/perimeter/fortinet/fortimanager_fortijump_cve_2024_47575",
     notes        = "Missing authentication in fgfmsd daemon allows pre-auth code execution",
+  },
+
+  -- ── FortiOS - Missing Auth RCE (2026 addition) ──────────────────────
+  {
+    cve          = "CVE-2025-53847",
+    vendors      = { "Fortinet FortiGate / FortiOS" },
+    probe_path   = "/fgfm",
+    probe_method = "GET",
+    vuln_status  = { 200, 400, 403 },
+    cvss         = "8.8",
+    cve_type     = "Missing Authentication on Secondary fgfmd Socket (Pre-Auth RCE)",
+    embedxpl_mod = "exploits/firewalls/fortinet/fortios_missing_auth_rce_cve_2025_53847",
+    firewallxpl_mod = "exploits/perimeter/fortinet/fortios_missing_auth_rce_cve_2025_53847",
+    notes        = "fgfmd management socket exposed without auth. Complements CVE-2025-53844. Active exploitation in the wild.",
+  },
+
+  -- ── Cisco SD-WAN / vManage (2026 additions) ──────────────────────────
+  {
+    cve          = "CVE-2026-20127",
+    vendors      = { "Cisco SD-WAN / vManage" },
+    probe_path   = "/dataservice/client/token",
+    probe_method = "GET",
+    vuln_pat     = "j_sessionid",
+    vuln_status  = { 200 },
+    cvss         = "10.0",
+    cve_type     = "REST API Authentication Bypass via alg:none JWT (CVSS 10.0)",
+    embedxpl_mod = "exploits/firewalls/cisco/cisco_sdwan_auth_bypass_cve_2026_20127",
+    firewallxpl_mod = "exploits/perimeter/cisco/cisco_sdwan_auth_bypass_cve_2026_20127",
+    notes        = "vManage accepts unsigned alg:none JWT tokens. Grants admin REST API access without credentials. Complements CVE-2026-20182.",
+  },
+  {
+    cve          = "CVE-2026-20245",
+    vendors      = { "Cisco SD-WAN / vManage" },
+    probe_path   = "/dataservice/system/device/vedges",
+    probe_method = "GET",
+    vuln_status  = { 200, 401 },
+    cvss         = "7.8",
+    cve_type     = "Local CLI Privilege Escalation via Shell Injection (CISA KEV Jun/2026)",
+    embedxpl_mod = "exploits/firewalls/cisco/cisco_sdwan_privesc_cve_2026_20245",
+    firewallxpl_mod = "exploits/perimeter/cisco/cisco_sdwan_privesc_cve_2026_20245",
+    notes        = "Local privesc via shell injection in Cisco SD-WAN vManage CLI. CISA KEV active exploitation. Requires SSH access.",
   },
 
   -- ── Cisco ASA / FTD ──────────────────────────────────────────────────
