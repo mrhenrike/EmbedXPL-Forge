@@ -715,3 +715,36 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge
+
+## [2026-06-15 14:30] - XPL-Forge Multi-Repo One-Way Sync
+
+### Estado ao encerrar
+- Criado tools/sync_to_specialized.py: script one-way sync com SYNC_MAP completo, reescrita de imports, py_compile por arquivo, manifest .sync_manifest.json, flags --dry-run/--target/--force/--verbose
+- Corrigido bug de line-endings (CRLF vs LF) no calculo de hash do manifest para idempotencia correta
+- FirewallXPL-Forge: 179 novos modulos sincronizados (firewalls/vpn/network_os/sdwan/ngfw), 43 conflitos preservados (versoes mais novas no destino), commit realizado
+- IndustrialXPL-Forge: 85 novos modulos sincronizados (ics/ot/iiot/bms/hvac/medical/elevator/vehicles), commit realizado
+- WirelessXPL-Forge: 27 novos modulos sincronizados (wifi/ble/zigbee/zwave/lorawan/mdns/drones/aps/wearables), commit realizado
+- PrinterXPL-Forge: 193 modulos copiados para xpl/embedxpl_compat/ (bridge mode, sem reescrita de imports), 191 carregados com sucesso pelo bridge
+- Criado PrinterXPL-Forge/src/embedxpl_bridge.py: loader dinamico que converte class Exploit para formato METADATA+check()+run() do PrinterXPL
+- Integrado bridge em PrinterXPL-Forge/src/utils/exploit_manager.py: funcao _load_embedxpl_compat() adicionada ao load_all_exploits()
+- Total apos integracao: 383 exploits no PrinterXPL (191 compat + 192 nativos)
+- Validacao cruzada: 589 arquivos novos, zero falhas py_compile, zero imports residuais de embedxpl nos repos destino
+
+### Proximo passo imediato
+- Bump dos gitlinks no superprojeto (git add submodules/Uniao-Geek/<repos> + commit)
+
+### Pendencias conhecidas
+- [ ] Adicionar suporte a "source": "embedxpl-compat" nos filtros --xpl-source do PrinterXPL CLI (atualmente choices fixas)
+- [ ] Refinar o detector AST check-calls-run para ignorar subprocess.run() (falsos positivos detectados)
+- [ ] O SYNC_MAP nao cobre: routers/, cameras/, smart_tv/, switches/, nas/ (permanece exclusivo no EmbedXPL)
+- [ ] IndustrialXPL ainda nao tem core/ics/ (modulos que dependem de CIP/Modbus clients teriam deps nao resolvidas)
+
+### Ambiente necessario
+- Python 3.8+ em qualquer maquina
+- Nenhuma dependencia externa para o sync script (stdlib apenas)
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge\tools\sync_to_specialized.py
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge/tools/sync_to_specialized.py
+- Bridge: D:\Projetos-SafeLabs\submodules\Uniao-Geek\PrinterXPL-Forge\src\embedxpl_bridge.py
+- Manifest: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge\tools\.sync_manifest.json
