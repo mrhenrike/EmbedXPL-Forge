@@ -661,3 +661,57 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 - Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge
 - Wiki local: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge\.tmp\exf_wiki
+
+## [2026-06-15 13:00] - CVE Wave May-Jun 2026: 26 modulos novos, v3.7.0
+
+### Estado ao encerrar
+- Implementados 26 novos modulos de exploit/check/PoC E2E em 4 ondas:
+  - Onda 1 (8 modulos): UniFi OS chain CVE-2026-34908/34909/34910 (CVSS 10.0 CISA KEV), UniFi 22557/47368, Cisco SD-WAN 20127/20245
+  - Onda 2 (4 modulos): D-Link DI-8400, Kangda DR300, Acer M6E, FortiOS 53847
+  - Onda 3 (8 modulos): TP-Link Omada, Hikvision PoE, Atop EHG2408, Arista detection, Vertiv Liebert, Dataprobe iBoot, PDUExperts
+  - Onda 4 (6 modulos): Drones DJI (nova categoria), Dahua NVR/IPC, HPLIP, Samsung Tizen Escargot
+- 4 novos NSE scripts: embedxpl-unifi-vuln, embedxpl-switch-vuln, embedxpl-drone-vuln, embedxpl-ups-pdu-vuln
+- pyproject.toml sincronizado: 3.4.1 -> 3.7.0
+- CHANGELOG.md atualizado com entrada [3.7.0]
+- Todos os 26 modulos passaram em py_compile
+- Commit e7b7da04 (submodulo), tag v3.7.0 pushed
+- Superprojeto gitlink bumped: commit 986e1ae
+
+### Arquivos modificados
+- embedxpl/modules/exploits/routers/ubiquiti/ (6 novos arquivos)
+- embedxpl/modules/exploits/firewalls/cisco/ (2 novos arquivos)
+- embedxpl/modules/exploits/routers/dlink/ (1 novo)
+- embedxpl/modules/exploits/routers/kangda/ (novo vendor)
+- embedxpl/modules/exploits/routers/acer/ (novo vendor)
+- embedxpl/modules/exploits/firewalls/fortinet/ (1 novo)
+- embedxpl/modules/exploits/switches/tplink/, hikvision/, atop/, arista/ (novos vendors)
+- embedxpl/modules/exploits/ups/vertiv/, dataprobe/, pduexperts/ (novos vendors)
+- embedxpl/modules/exploits/drones/ (nova categoria)
+- embedxpl/modules/exploits/cameras/dahua/ (1 novo)
+- embedxpl/modules/exploits/printers/ (1 novo)
+- embedxpl/modules/exploits/smart_tv/samsung_tizen/ (1 novo)
+- nse/ (4 novos NSE scripts)
+- CHANGELOG.md, pyproject.toml
+
+### Commits realizados
+- e7b7da04 -- Add CVE Wave May-Jun 2026: 26 new exploit modules (v3.7.0) [EmbedXPL-Forge]
+- 986e1ae  -- Bump EmbedXPL-Forge gitlink to v3.7.0 [Projetos-SafeLabs superprojeto]
+- Tag v3.7.0 pushed para github.com/mrhenrike/EmbedXPL-Forge
+
+### Proximo passo imediato
+- Publicar no PyPI: cd submodules/Uniao-Geek/EmbedXPL-Forge && python -m build && twine upload dist/*
+  (requer token PyPI em .env ou TWINE_PASSWORD)
+
+### Pendencias conhecidas
+- [ ] Publicacao no PyPI (token necessario)
+- [ ] refresh_cve_extended_catalog.py com entradas curated para as ~26 novas CVEs
+- [ ] COVERAGE_MATRIX.md: atualizar contagem pos-implementacao (switches: 13 -> ~17, novas categorias drones, ups/vertiv etc)
+- [ ] Wiki PT-BR: pages para novos modulos UniFi/Drone/UPS
+
+### Ambiente necessario
+- Python 3.8+
+- git com acesso a github.com/mrhenrike/EmbedXPL-Forge
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge
