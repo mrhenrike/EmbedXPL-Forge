@@ -748,3 +748,33 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge/tools/sync_to_specialized.py
 - Bridge: D:\Projetos-SafeLabs\submodules\Uniao-Geek\PrinterXPL-Forge\src\embedxpl_bridge.py
 - Manifest: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge\tools\.sync_manifest.json
+
+## [2026-06-15 23:20] -- Deduplicacao e fix de modulos XPL-Forge
+
+### Estado ao encerrar
+- Varredura completa de duplicatas em todos os repos XPL-Forge (EmbedXPL, FirewallXPL, IndustrialXPL, WirelessXPL, PrinterXPL)
+- FirewallXPL-Forge: 14 modulos removidos de perimeter/lb, perimeter/waf, perimeter/nac (cópias do sync que duplicavam originais em lb/, waf/, nac/)
+- FirewallXPL-Forge: diretório perimeter/phoenix/ removido (nome errado; canonical é phoenix_contact/)
+- FirewallXPL-Forge: fortimanager_fortijump movido para perimeter/fortinet/ (removido do routing/fortinet/)
+- IndustrialXPL-Forge: 31 módulos removidos de protocols/ics/ (duplicavam plc/, rtos/, scada/, protocols/modbus/)
+- IndustrialXPL-Forge: ur_polyscope5 consolidado em protocols/ics/ (removido de plc/generic/)
+- PrinterXPL-Forge: ms_rprn_ntlm_coerce.py renomeado para ms_rprn_spooler_coerce_rfc.py (linux/) para resolver colisao de nome
+- EmbedXPL-Forge: check() adicionado a 11 modulos sem o método: firmware_crypto_key_extract, 5 BLE/WiFi lab modules, 5 router exploits (dsl_2640b, wdr5620, wr849n, tew_651br, vmg8825)
+- sync_to_specialized.py: skip_src_subdirs adicionado para firewallxpl (lb,nac,waf,vpn) e industrialxpl (12 subdirs) para prevenir recriacao de duplicatas em syncs futuros
+- Commits: EmbedXPL 50390b90, FirewallXPL d997e93, IndustrialXPL c820954, PrinterXPL 61b395f
+- Superproject: 52e5d36b90
+
+### Próximo passo imediato
+- Nenhum pendente -- todos os repos estão limpos e sem duplicatas
+
+### Pendências conhecidas
+- FirewallXPL tem 32 conflicts reportados pelo sync (versões divergentes entre EmbedXPL e FW originais) -- comportamento esperado, sem ação necessária
+- cosmicenergy_iec104.py em IndustrialXPL existe em cve/malware/ e cve/malware/_native/ com conteúdo diferente -- intencional (módulo wrapper + implementação nativa)
+
+### Ambiente necessário
+- Python 3.x
+- Git com safe.directory configurado para os repos Uniao-Geek
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/
