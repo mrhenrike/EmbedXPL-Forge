@@ -6,6 +6,39 @@ Format: [Semantic Versioning](https://semver.org) -- `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [3.8.1] - 2026-06-16
+
+### Added - Rockwell Automation ICS Wave (ICSA-26-167-01 through 05)
+
+**ICS / Rockwell Automation - June 2026 CISA Advisories:**
+- `ics/rockwell/factorytalk_analytics_pavilionx_icsa_26_167_01.py` (CVE-2025-9364, CVE-2024-6435, CVE-2024-7961)
+  Three-vector module: (1) unauthenticated Redis INFO/KEYS access in FactoryTalk Analytics
+  LogixAI 3.00/3.01 (CVE-2025-9364 CVSS AV:A); (2) privilege escalation via incorrect
+  privilege matrix in PavilionX 5.15-5.20 to create admin accounts (CVE-2024-6435 CVSS 8.8);
+  (3) path traversal upload for RCE in PavilionX < 5.20 (CVE-2024-7961 CVSS 7.2).
+- `ics/rockwell/rslinx_classic_dos_icsa_26_167_02.py` (CVE-2020-13573, CVSS 7.5)
+  EtherNet/IP DoS against RSLinx Classic <= 4.50.00 via malformed packets (oversized,
+  list_identity fuzz, register_fuzz variants). Crashes the RSLinx service disrupting
+  SCADA/HMI to PLC communications.
+- `ics/rockwell/logix_5370_5570_cip_dos_icsa_26_167_03.py` (CVE-2022-3157, CVE-2025-11743, CVE-2020-6998)
+  Unified CIP ForwardOpen MNRF module for CompactLogix 5370 (fw <= 36.011) and
+  ControlLogix 5570 (fw <= 33). Malformed ForwardOpen with invalid slot segment and
+  multi-service fuzz trigger Major NonRecoverable Fault requiring controller restart.
+- `ics/rockwell/compactlogix_icsa_26_167_04.py` (ICSA-26-167-04)
+  CompactLogix 2026 multi-surface: (1) unauthenticated CIP tag write to alter process
+  values; (2) embedded web server recon - firmware version, task list, tag names without
+  auth; (3) FTP project exfiltration - extracts .ACD/.L5X controller project files.
+- `ics/rockwell/flex_io_ethernetip_dos_icsa_26_167_05.py` (CVE-2026-0646, CVE-2026-0647)
+  Two-vector DoS for Rockwell 1794-AENTR FLEX I/O EtherNet/IP Adapter V2.012:
+  CVE-2026-0646 malformed ForwardOpen slot path triggers improper input validation
+  (power cycle required); CVE-2026-0647 parallel connection flood exhausts adapter
+  connection table causing I/O communication loss (power cycle required).
+
+### Changed
+- CVE catalog updated: 536 -> 545 entries (9 new Rockwell ICSA-26-167 records)
+
+---
+
 ## [3.8.0] - 2026-06-15
 
 ### Added - CVE Wave 4 Jun 2026: 14 new modules across SIEM, backup, AI-infra, CI/CD, databases, ERP, cloud-SaaS, OS
