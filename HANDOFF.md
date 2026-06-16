@@ -778,3 +778,53 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/
+
+## [2026-06-15 20:30] - Wave 4: 14 novos modulos CVE Jun 2026 + dedup + check() em massa
+
+### Estado ao encerrar
+- 14 novos modulos implementados e validados (py_compile 100% OK):
+  - siem/wazuh/wazuh_inventory_sync_ndjson_injection.py (GHSA-ff9g-85jq-r3g3, CVSS 10.0)
+  - siem/splunk/splunk_postgres_sidecar_preauth_rce_cve_2026_20253.py (CVE-2026-20253, CVSS 9.8)
+  - firewalls/paloalto/panos_root_cmd_injection_cve_2026_0273.py (CVE-2026-0273)
+  - vpn/ivanti/ivanti_sentry_rce.py (Ivanti Sentry, ativo)
+  - infrastructure/veeam/veeam_backup_domain_rce_cve_2026_44963.py (CVE-2026-44963, CVSS 9.4)
+  - linux/kernel/kvm_arm64_itscape_guest_host_escape_cve_2026_46316.py (CVE-2026-46316)
+  - ai_infra/litellm/litellm_mcp_cmd_injection_cve_2026_42271.py (CISA KEV)
+  - ci_cd/jenkins/jenkins_deserialization_rce_cve_2026_53435.py (CVSS 8.8)
+  - databases/mariadb/mariadb_rce_cve_2026_49261.py (CVSS 10.0)
+  - erp/oracle/oracle_peoplesoft_gadget_chain_rce.py (ShinyHunters ativo)
+  - cloud_saas/servicenow/servicenow_instance_access.py
+  - crypto/openssl/openssl_rce_cve_2025_15467.py
+  - windows/rdp/rdp_sensitive_data_exposure.py
+  - databases/oracle/oracle_ords_rce.py
+- 8 duplicatas removidas de generic/, network_os/, misc/, appliances/
+- 126 modulos WirelessXPL receberam check() via script automatizado
+- 1 dup FirewallXPL removida (fortimanager routing/ -> perimeter/ canonical)
+- cve_extended_catalog.json: 522 -> 536 entradas
+- pyproject.toml: versao 3.7.0 -> 3.8.0
+- CHANGELOG.md atualizado com 3.8.0
+- PAN-OS CVE-2026-0273 e Ivanti Sentry sincronizados para FirewallXPL
+
+### Commits realizados
+- EmbedXPL-Forge: c6028839 (Wave 4 Jun 2026: 14 new modules, dedup cleanup)
+- FirewallXPL-Forge: f66cfe8 (Add PAN-OS CVE-2026-0273 and Ivanti Sentry RCE)
+- WirelessXPL-Forge: 15ab576 (Add check() to 126 modules) + 6b5d414 (gitignore)
+- Superprojeto: 516a357c02 (Update gitlinks)
+
+### Proximo passo imediato
+- Verificar cobertura para Splunk AWD (Splunk expondo AWS - artigo separado do CVE-2026-20253)
+- NSE script wave4 ainda nao implementado (catalog atualizado, script .nse nao criado)
+
+### Pendencias conhecidas
+- [ ] NSE script embedxpl-wave4-cve-check.nse (baixa prioridade)
+- [ ] Verificar Splunk AWS exposure (diferente do CVE-2026-20253 PostgreSQL sidecar)
+- [ ] Ivanti Sentry: aguardar CVE ID oficial (modulo usa advisory generica por ora)
+- [ ] Oracle PeopleSoft: aguardar CVE ID oficial da Oracle
+
+### Ambiente necessario
+- Python >= 3.8
+- Git com safe.directory configurado para todos os repos Uniao-Geek
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge
