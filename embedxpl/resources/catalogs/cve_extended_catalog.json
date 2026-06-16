@@ -6602,6 +6602,132 @@
       "references": [
         "https://boletimsec.com/falha-no-oracle-rest-data-services-exige-atualizacao-urgente/"
       ]
+    },
+    {
+      "id": "CVE-2025-9364",
+      "advisory": "ICSA-26-167-01",
+      "title": "FactoryTalk Analytics LogixAI Over-Permissive Redis Instance",
+      "product": "Rockwell Automation FactoryTalk Analytics LogixAI 3.00.00, 3.01.00",
+      "cvss": "AV:A/AC:L/PR:N/UI:N (CVSS 4.0)",
+      "impact": "Unauthenticated intranet access to sensitive data and configuration alteration via exposed Redis",
+      "module": "embedxpl/modules/exploits/ics/rockwell/factorytalk_analytics_pavilionx_icsa_26_167_01.py",
+      "date": "2026-06",
+      "references": [
+        "ICSA-26-167-01",
+        "https://nvd.nist.gov/vuln/detail/cve-2025-9364"
+      ]
+    },
+    {
+      "id": "CVE-2024-6435",
+      "advisory": "ICSA-26-167-01",
+      "title": "FactoryTalk PavilionX Privilege Escalation via Incorrect Privilege Matrix",
+      "product": "Rockwell Automation Pavilion8/PavilionX 5.15.00-5.20.00",
+      "cvss": "8.8 (AV:N/AC:L/PR:L/UI:N)",
+      "impact": "Low-privilege user can create admin accounts and read sensitive data",
+      "module": "embedxpl/modules/exploits/ics/rockwell/factorytalk_analytics_pavilionx_icsa_26_167_01.py",
+      "date": "2026-06",
+      "references": [
+        "ICSA-26-167-01",
+        "https://www.cisa.gov/news-events/ics-advisories/icsa-24-198-01"
+      ]
+    },
+    {
+      "id": "CVE-2024-7961",
+      "advisory": "ICSA-26-167-01",
+      "title": "FactoryTalk PavilionX Path Traversal Remote Code Execution",
+      "product": "Rockwell Automation Pavilion8/PavilionX < 5.20.00",
+      "cvss": "7.2 (AV:N/AC:L/PR:H/UI:N)",
+      "impact": "Admin-level user can upload arbitrary files for RCE via path traversal",
+      "module": "embedxpl/modules/exploits/ics/rockwell/factorytalk_analytics_pavilionx_icsa_26_167_01.py",
+      "date": "2026-06",
+      "references": [
+        "ICSA-26-167-01",
+        "https://www.cisa.gov/news-events/ics-advisories/icsa-24-256-24"
+      ]
+    },
+    {
+      "id": "CVE-2020-13573",
+      "advisory": "ICSA-26-167-02",
+      "title": "RSLinx Classic EtherNet/IP Denial of Service",
+      "product": "Rockwell Automation RSLinx Classic <= 4.50.00",
+      "cvss": "7.5 (AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H)",
+      "impact": "Malformed EtherNet/IP packet crashes RSLinx Classic service disrupting SCADA/HMI communications",
+      "module": "embedxpl/modules/exploits/ics/rockwell/rslinx_classic_dos_icsa_26_167_02.py",
+      "date": "2026-06",
+      "references": [
+        "ICSA-26-167-02",
+        "https://www.cisa.gov/ics-advisories/icsa-20-261-02"
+      ]
+    },
+    {
+      "id": "CVE-2022-3157",
+      "advisory": "ICSA-26-167-03",
+      "title": "Logix 5370/5570 CIP Malformed Request Major Nonrecoverable Fault",
+      "product": "Rockwell Automation CompactLogix 5370 / ControlLogix 5570 (firmware 20-33)",
+      "cvss": "8.6 (AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:N/A:H)",
+      "impact": "Malformed CIP request triggers MNRF halting PLC execution - requires restart",
+      "module": "embedxpl/modules/exploits/ics/rockwell/logix_5370_5570_cip_dos_icsa_26_167_03.py",
+      "date": "2026-06",
+      "references": [
+        "ICSA-26-167-03",
+        "https://www.cisa.gov/news-events/ics-advisories/icsa-22-354-02"
+      ]
+    },
+    {
+      "id": "CVE-2025-11743",
+      "advisory": "ICSA-26-167-03",
+      "title": "CompactLogix 5370 CIP ForwardOpen MNRF (Republished Jun 2026)",
+      "product": "Rockwell Automation CompactLogix 5370 (<= fw 36.011)",
+      "cvss": "6.5 (AV:A/AC:L)",
+      "impact": "Malformed CIP ForwardOpen message causes MNRF requiring controller restart",
+      "module": "embedxpl/modules/exploits/ics/rockwell/logix_5370_5570_cip_dos_icsa_26_167_03.py",
+      "date": "2026-06",
+      "references": [
+        "ICSA-26-167-03",
+        "https://www.cisa.gov/news-events/ics-advisories/icsa-26-022-03"
+      ]
+    },
+    {
+      "id": "ICSA-26-167-04",
+      "advisory": "ICSA-26-167-04",
+      "title": "CompactLogix Multi-Surface: Unauth CIP Write, Web Info Disclosure, FTP Exfil",
+      "product": "Rockwell Automation CompactLogix 5370/5380/5480 (unpatched Jun 2026)",
+      "cvss": "8.1 (estimated)",
+      "impact": "Process value manipulation via unauth CIP tag write; firmware/config disclosure; project file exfil via FTP",
+      "module": "embedxpl/modules/exploits/ics/rockwell/compactlogix_icsa_26_167_04.py",
+      "date": "2026-06",
+      "references": [
+        "ICSA-26-167-04",
+        "https://www.cisa.gov/ics-advisories/"
+      ]
+    },
+    {
+      "id": "CVE-2026-0646",
+      "advisory": "ICSA-26-167-05",
+      "title": "FLEX I/O 1794-AENTR EtherNet/IP Adapter Improper Input Validation DoS",
+      "product": "Rockwell Automation 1794-AENTR FLEX I/O EtherNet/IP Adapter V2.012",
+      "cvss": "7.5 (estimated)",
+      "impact": "Malformed EtherNet/IP request causes I/O adapter failure requiring power cycle",
+      "module": "embedxpl/modules/exploits/ics/rockwell/flex_io_ethernetip_dos_icsa_26_167_05.py",
+      "date": "2026-06",
+      "references": [
+        "ICSA-26-167-05",
+        "https://www.cisa.gov/ics-advisories/"
+      ]
+    },
+    {
+      "id": "CVE-2026-0647",
+      "advisory": "ICSA-26-167-05",
+      "title": "FLEX I/O 1794-AENTR Resource Exhaustion via Connection Flooding",
+      "product": "Rockwell Automation 1794-AENTR FLEX I/O EtherNet/IP Adapter V2.012",
+      "cvss": "7.5 (estimated)",
+      "impact": "Connection table exhaustion via rapid requests causes I/O communication loss requiring power cycle",
+      "module": "embedxpl/modules/exploits/ics/rockwell/flex_io_ethernetip_dos_icsa_26_167_05.py",
+      "date": "2026-06",
+      "references": [
+        "ICSA-26-167-05",
+        "https://www.cisa.gov/ics-advisories/"
+      ]
     }
   ]
 }
