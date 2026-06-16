@@ -828,3 +828,25 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge
+
+## [2026-06-16 16:10] - Rockwell Automation ICS - ICSA-26-167 Wave
+
+### Estado ao encerrar
+- Verificada cobertura existente para os 5 advisories ICSA-26-167-01 a 05
+- Implementados 5 novos modulos Rockwell Automation em EmbedXPL-Forge e IndustrialXPL-Forge
+- CVE catalog atualizado: 536 -> 545 entradas (9 novos registros Rockwell)
+- Commits realizados: EmbedXPL (2e7fb79b), IndustrialXPL (0b185fc), superproject (78f3dece54)
+
+### Modulos criados
+- factorytalk_analytics_pavilionx_icsa_26_167_01.py (CVE-2025-9364, CVE-2024-6435, CVE-2024-7961)
+- rslinx_classic_dos_icsa_26_167_02.py (CVE-2020-13573, CVSS 7.5)
+- logix_5370_5570_cip_dos_icsa_26_167_03.py (CVE-2022-3157, CVE-2025-11743)
+- compactlogix_icsa_26_167_04.py (ICSA-26-167-04 multi-surface)
+- flex_io_ethernetip_dos_icsa_26_167_05.py (CVE-2026-0646, CVE-2026-0647)
+
+### Proximos passos
+- Nenhum pendente desta sessao - advisories Rockwell cobertos
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge\embedxpl\modules\exploits\ics\rockwell\
+- Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\IndustrialXPL-Forge\industrialxpl\modules\cve\rockwell\

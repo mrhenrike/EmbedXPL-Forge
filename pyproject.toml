@@ -1,4 +1,4 @@
-﻿# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 
 [build-system]
 requires = ["setuptools>=68", "wheel"]
@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "3.8.0"
+version = "3.8.1"
 description = "Embedded & Perimeter Security Assessment Framework -- 2800+ modules, 900+ CVEs, 114+ vendors. Covers routers, IP cameras, GPON ONTs, ISP CPEs, IoT/embedded edge, firewalls (Fortinet/Cisco/PAN-OS/SonicWall), VPN appliances, printers, drones, switches, UPS/PDU, ICS/OT."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
@@ -151,3 +151,4 @@ include = ["embedxpl*"]
     "*.yaml",
     "**/*.yaml",
 ]
+
