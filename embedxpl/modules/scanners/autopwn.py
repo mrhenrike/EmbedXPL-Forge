@@ -68,33 +68,55 @@ class Exploit(Exploit):
     check_exploits = OptBool(True, "Check exploits against target: true/false", advanced=True)
     check_creds = OptBool(True, "Check factory credentials against target: true/false", advanced=True)
 
-    http_use = OptBool(True, "Check HTTP[s] service: true/false")
-    http_port = OptPort(80, "Target Web Interface Port", advanced=True)
-    http_ssl = OptBool(False, "HTTPS enabled: true/false")
+    http_use = OptBool(True, "Check HTTP service: true/false")
+    http_port = OptPort(80, "Primary HTTP port (used when http_ports is empty)")
+    http_ports = OptString(
+        "",
+        "HTTP port list, comma-separated (e.g. 80,8080,9080). Overrides http_port when set",
+    )
+    http_ssl = OptBool(False, "Use HTTPS instead of HTTP for HTTP-protocol modules: true/false")
 
-    ftp_use = OptBool(True, "Check FTP[s] service: true/false")
-    ftp_port = OptPort(21, "Target FTP port (default: 21)", advanced=True)
-    ftp_ssl = OptBool(False, "FTPS enabled: true/false")
+    https_use = OptBool(True, "Check HTTPS service: true/false")
+    https_port = OptPort(443, "Primary HTTPS port (used when https_ports is empty)")
+    https_ports = OptString(
+        "",
+        "HTTPS port list, comma-separated (e.g. 443,8443). Overrides https_port when set",
+    )
 
-    ssh_use = OptBool(True, "Check SSH service: true/false")
-    ssh_port = OptPort(22, "Target SSH port (default: 22)", advanced=True)
+    ftp_use = OptBool(False, "Check FTP service: true/false")
+    ftp_port = OptPort(21, "Primary FTP port (used when ftp_ports is empty)")
+    ftp_ports = OptString("", "FTP port list, comma-separated (e.g. 21,2121)")
+    ftp_ssl = OptBool(False, "Use FTPS instead of FTP: true/false")
 
-    sftp_use = OptBool(True, "Check SFTP service: true/false")
-    sftp_port = OptPort(22, "Target SFTP port (default: 22)", advanced=True)
+    ssh_use = OptBool(False, "Check SSH service: true/false")
+    ssh_port = OptPort(22, "Primary SSH port (used when ssh_ports is empty)")
+    ssh_ports = OptString("", "SSH port list, comma-separated (e.g. 22,2222)")
 
-    telnet_use = OptBool(True, "Check Telnet service: true/false")
-    telnet_port = OptPort(23, "Target Telnet port (default: 23)", advanced=True)
+    sftp_use = OptBool(False, "Check SFTP service: true/false")
+    sftp_port = OptPort(22, "Primary SFTP port (used when sftp_ports is empty)")
+    sftp_ports = OptString("", "SFTP port list, comma-separated (e.g. 22,2222)")
 
-    snmp_use = OptBool(True, "Check SNMP service: true/false")
+    telnet_use = OptBool(False, "Check Telnet service: true/false")
+    telnet_port = OptPort(23, "Primary Telnet port (used when telnet_ports is empty)")
+    telnet_ports = OptString("", "Telnet port list, comma-separated (e.g. 23,2323)")
+
+    snmp_use = OptBool(False, "Check SNMP service: true/false")
+    snmp_port = OptPort(161, "Primary SNMP port (used when snmp_ports is empty)")
+    snmp_ports = OptString("", "SNMP port list, comma-separated (e.g. 161,1161)")
     snmp_community = OptString("public", "Target SNMP community name (default: public)", advanced=True)
     snmp_version = OptInteger(1, "SNMP version for v1/v2 modules (0:v1, 1:v2c)", advanced=True)
-    snmp_port = OptPort(161, "Target SNMP port (default: 161)", advanced=True)
 
-    tcp_use = OptBool(True, "Check custom TCP services", advanced=True)
-    # tcp_port = OptPort(None, "Restrict TCP custom service tests to specific port (default: None)")
+    tcp_use = OptBool(True, "Check custom TCP services: true/false")
+    tcp_ports = OptString(
+        "",
+        "Custom TCP port list for custom/tcp modules (comma-separated, e.g. 554,8555,2870)",
+    )
 
-    udp_use = OptBool(True, "Check custom UDP services", advanced=True)
-    # udp_port = OptPort(None, "Restrict UDP custom service tests to specific port (default: None)")
+    udp_use = OptBool(True, "Check custom UDP services: true/false")
+    udp_ports = OptString(
+        "",
+        "Custom UDP port list for custom/udp modules (comma-separated, e.g. 161,1900)",
+    )
 
     threads = OptInteger(8, "Number of threads (min: 1, max: 300)")
     verify_positive_twice = OptBool(True, "Re-check positive exploit result to reduce false positives", advanced=True)
@@ -129,6 +151,254 @@ class Exploit(Exploit):
         self._timeout_pool = None
         self._exploits_directories = [os.path.join(utils.MODULES_DIR, "exploits", module) for module in self.modules]
         self._creds_directories = [os.path.join(utils.MODULES_DIR, "creds", module) for module in self.modules]
+
+    @staticmethod
+    def _parse_ports_list(raw_ports, fallback_port=None):
+        """Return deduplicated port list from comma/semicolon string or single fallback."""
+        raw = str(raw_ports or "").strip()
+        if raw:
+            seen = set()
+            ports = []
+            for part in raw.replace(";", ",").split(","):
+                part = part.strip()
+                if not part:
+                    continue
+                try:
+                    port = int(part)
+                except ValueError:
+                    print_warning("AutoPwn: ignoring invalid port {!r}".format(part))
+                    continue
+                if port not in seen:
+                    seen.add(port)
+                    ports.append(port)
+            if ports:
+                return ports
+        if fallback_port is not None:
+            return [int(fallback_port)]
+        return []
+
+    def _print_service_ports(self):
+        print_status(
+            "AutoPwn services — HTTP:{} HTTPS:{} FTP:{} SSH:{} SFTP:{} Telnet:{} SNMP:{} TCP:{} UDP:{}".format(
+                self.http_use,
+                self.https_use,
+                self.ftp_use,
+                self.ssh_use,
+                self.sftp_use,
+                self.telnet_use,
+                self.snmp_use,
+                self.tcp_use,
+                self.udp_use,
+            )
+        )
+        print_status(
+            "AutoPwn service ports — HTTP: {} | HTTPS: {} | FTP: {} | SSH: {} | SFTP: {} | Telnet: {} | SNMP: {} | TCP: {} | UDP: {}".format(
+                self._parse_ports_list(self.http_ports, self.http_port),
+                self._parse_ports_list(self.https_ports, self.https_port),
+                self._parse_ports_list(self.ftp_ports, self.ftp_port),
+                self._parse_ports_list(self.ssh_ports, self.ssh_port),
+                self._parse_ports_list(self.sftp_ports, self.sftp_port),
+                self._parse_ports_list(self.telnet_ports, self.telnet_port),
+                self._parse_ports_list(self.snmp_ports, self.snmp_port),
+                self._parse_ports_list(self.tcp_ports, None) or ["(module default)"],
+                self._parse_ports_list(self.udp_ports, None) or ["(module default)"],
+            )
+        )
+
+    @staticmethod
+    def _get_exploit_protocol(exploit):
+        """Resolve target_protocol from instance or class without raising."""
+        protocol = getattr(exploit, "target_protocol", None)
+        if protocol is None:
+            protocol = getattr(type(exploit), "target_protocol", Protocol.CUSTOM)
+        return protocol
+
+    @staticmethod
+    def _exploit_default_port(exploit):
+        port_meta = getattr(type(exploit), "exploit_attributes", {}).get("port")
+        if not port_meta:
+            return None
+        try:
+            return int(port_meta[0])
+        except (TypeError, ValueError):
+            return None
+
+    _PORT_SERVICE_HINTS = {
+        21: Protocol.FTP,
+        22: Protocol.SSH,
+        23: Protocol.TELNET,
+        161: Protocol.SNMP,
+    }
+
+    _PATH_SERVICE_HINTS = (
+        (Protocol.SFTP, ("sftp",)),
+        (Protocol.SSH, ("ssh",)),
+        (Protocol.FTP, ("ftp", "ftps")),
+        (Protocol.TELNET, ("telnet",)),
+        (Protocol.SNMP, ("snmp",)),
+    )
+
+    def _infer_service_family(self, exploit, protocol):
+        """Map custom/tcp/udp modules to a service family when possible."""
+        if protocol not in (Protocol.CUSTOM, Protocol.TCP, Protocol.UDP):
+            return protocol
+
+        path = exploit.__module__.lower()
+        tail = path.rsplit(".", 1)[-1]
+        for family, keys in self._PATH_SERVICE_HINTS:
+            for key in keys:
+                if key in tail or "/{}/".format(key) in path:
+                    return family
+
+        default_port = self._exploit_default_port(exploit)
+        if default_port is not None:
+            return self._PORT_SERVICE_HINTS.get(default_port)
+        return None
+
+    def _service_enabled(self, protocol):
+        if protocol in (Protocol.HTTP,):
+            return bool(self.http_use)
+        if protocol in (Protocol.HTTPS,):
+            return bool(self.https_use)
+        if protocol in (Protocol.FTP, Protocol.FTPS):
+            return bool(self.ftp_use)
+        if protocol is Protocol.SSH:
+            return bool(self.ssh_use)
+        if protocol is Protocol.SFTP:
+            return bool(self.sftp_use)
+        if protocol is Protocol.TELNET:
+            return bool(self.telnet_use)
+        if protocol is Protocol.SNMP:
+            return bool(self.snmp_use)
+        if protocol is Protocol.TCP:
+            return bool(self.tcp_use)
+        if protocol is Protocol.UDP:
+            return bool(self.udp_use)
+        return True
+
+    def _ports_for_protocol(self, protocol, *, http_ssl_override=None):
+        """Resolve configured port list for a protocol enum/string."""
+        use_https = bool(self.http_ssl) if http_ssl_override is None else bool(http_ssl_override)
+
+        if protocol in (Protocol.HTTP, "http"):
+            if use_https:
+                return self._parse_ports_list(self.https_ports, self.https_port)
+            return self._parse_ports_list(self.http_ports, self.http_port)
+        if protocol in (Protocol.HTTPS, "https"):
+            return self._parse_ports_list(self.https_ports, self.https_port)
+        if protocol in (Protocol.FTP, "ftp"):
+            return self._parse_ports_list(self.ftp_ports, self.ftp_port)
+        if protocol in (Protocol.FTPS, "ftps"):
+            return self._parse_ports_list(self.ftp_ports, self.ftp_port)
+        if protocol in (Protocol.SSH, "ssh"):
+            return self._parse_ports_list(self.ssh_ports, self.ssh_port)
+        if protocol in (Protocol.SFTP, "sftp"):
+            return self._parse_ports_list(self.sftp_ports, self.sftp_port)
+        if protocol in (Protocol.TELNET, "telnet"):
+            return self._parse_ports_list(self.telnet_ports, self.telnet_port)
+        if protocol in (Protocol.SNMP, "snmp"):
+            return self._parse_ports_list(self.snmp_ports, self.snmp_port)
+        if protocol in (Protocol.TCP, "custom/tcp", Protocol.CUSTOM):
+            return self._parse_ports_list(self.tcp_ports, None)
+        if protocol in (Protocol.UDP, "custom/udp"):
+            return self._parse_ports_list(self.udp_ports, None)
+        return []
+
+    def _prepare_exploit_for_protocol(self, exploit):
+        """Return (skip, runs) where runs is a list of (port, use_ssl) tuples."""
+        protocol = self._get_exploit_protocol(exploit)
+        family = self._infer_service_family(exploit, protocol) or protocol
+
+        if not self._service_enabled(family):
+            return True, []
+
+        if protocol in (Protocol.HTTP, Protocol.HTTPS):
+            runs = []
+            if protocol is Protocol.HTTPS:
+                if self.https_use:
+                    for port in self._ports_for_protocol(Protocol.HTTPS):
+                        runs.append((port, True))
+            else:
+                if self.http_use:
+                    if self.http_ssl:
+                        for port in self._ports_for_protocol(Protocol.HTTPS):
+                            runs.append((port, True))
+                    else:
+                        for port in self._ports_for_protocol(Protocol.HTTP, http_ssl_override=False):
+                            runs.append((port, False))
+                if self.https_use and not self.http_ssl:
+                    seen = {port for port, _ in runs}
+                    for port in self._ports_for_protocol(Protocol.HTTPS):
+                        if port not in seen:
+                            runs.append((port, True))
+            return (not runs), runs
+
+        if protocol in (Protocol.FTP, Protocol.FTPS):
+            use_ssl = protocol is Protocol.FTPS or bool(self.ftp_ssl)
+            ports = self._ports_for_protocol(Protocol.FTPS if use_ssl else Protocol.FTP)
+            return (not ports), [(port, use_ssl) for port in ports]
+
+        if protocol is Protocol.TELNET:
+            ports = self._ports_for_protocol(Protocol.TELNET)
+            return (not ports), [(port, False) for port in ports]
+
+        if protocol is Protocol.SSH:
+            ports = self._ports_for_protocol(Protocol.SSH)
+            return (not ports), [(port, False) for port in ports]
+
+        if protocol is Protocol.SFTP:
+            ports = self._ports_for_protocol(Protocol.SFTP)
+            return (not ports), [(port, False) for port in ports]
+
+        if protocol is Protocol.SNMP:
+            ports = self._ports_for_protocol(Protocol.SNMP)
+            return (not ports), [(port, False) for port in ports]
+
+        if protocol is Protocol.TCP:
+            ports = self._ports_for_protocol(Protocol.TCP)
+            return False, [(port, False) for port in (ports or [None])]
+
+        if protocol is Protocol.UDP:
+            ports = self._ports_for_protocol(Protocol.UDP)
+            return False, [(port, False) for port in (ports or [None])]
+
+        return True, []
+
+    @staticmethod
+    def _snapshot_network(exploit):
+        protocol = getattr(exploit, "target_protocol", None)
+        if protocol is None:
+            protocol = getattr(type(exploit), "target_protocol", Protocol.CUSTOM)
+        return {
+            "protocol": protocol,
+            "ssl": getattr(exploit, "ssl", None) if hasattr(exploit, "ssl") else None,
+        }
+
+    @staticmethod
+    def _restore_network(exploit, snapshot):
+        setattr(exploit, "target_protocol", snapshot["protocol"])
+        ssl_val = snapshot.get("ssl")
+        if ssl_val is not None and hasattr(exploit, "ssl"):
+            if str(ssl_val).lower() in ("true", "false"):
+                exploit.ssl = str(ssl_val).lower()
+
+    def _apply_exploit_network(self, exploit, port, use_ssl=False):
+        protocol = self._get_exploit_protocol(exploit)
+        if port is not None:
+            exploit.port = port
+        if use_ssl and protocol in (Protocol.HTTP, Protocol.FTP):
+            exploit.ssl = "true"
+            if protocol is Protocol.HTTP:
+                exploit.target_protocol = Protocol.HTTPS
+            elif protocol is Protocol.FTP:
+                exploit.target_protocol = Protocol.FTPS
+        if self._get_exploit_protocol(exploit) is Protocol.SNMP:
+            if hasattr(exploit, "snmp_community"):
+                exploit.snmp_community = self.snmp_community
+            if hasattr(exploit, "community_string"):
+                exploit.community_string = self.snmp_community
+            if hasattr(exploit, "version"):
+                exploit.version = self.snmp_version
 
     def _resolve_timing_template(self) -> dict:
         template = str(self.timing_template).strip().lower()
@@ -268,6 +538,7 @@ class Exploit(Exploit):
         self._scope_skipped = 0
         self._print_timing_help()
         self._configure_runtime_profile()
+        self._print_service_ports()
 
         # Initialize ML advisor if enabled
         advisor = None
@@ -372,6 +643,91 @@ class Exploit(Exploit):
                 "Skipped {} module(s) not permitted for target_device_class={}".format(self._scope_skipped, tcls),
             )
 
+    def _evaluate_exploit(self, exploit):
+        skip, runs = self._prepare_exploit_for_protocol(exploit)
+        if skip or not runs:
+            return
+
+        for port, use_ssl in runs:
+            snapshot = self._snapshot_network(exploit)
+            self._apply_exploit_network(exploit, port, use_ssl=use_ssl)
+            protocol = self._get_exploit_protocol(exploit)
+            try:
+                response = self._profiled_check(exploit)
+            except Exception as err:
+                print_error(
+                    "{}:{} {} {} check failed with exception".format(
+                        exploit.target, exploit.port, protocol, exploit
+                    ),
+                    err,
+                )
+                self.not_verified.append((exploit.target, exploit.port, protocol, str(exploit)))
+                self._restore_network(exploit, snapshot)
+                continue
+
+            if response is True and self.verify_positive_twice:
+                confirmed = True
+                for _ in range(max(0, self._active_profile["confirm_passes"] - 1)):
+                    if self._profiled_check(exploit) is not True:
+                        print_status(
+                            "{}:{} {} {} positive result was not confirmed under profile checks".format(
+                                exploit.target, exploit.port, protocol, exploit
+                            ),
+                        )
+                        self.not_verified.append((exploit.target, exploit.port, protocol, str(exploit)))
+                        confirmed = False
+                        break
+                if not confirmed:
+                    self._restore_network(exploit, snapshot)
+                    continue
+
+            if response is True:
+                print_success("{}:{} {} {} is vulnerable".format(
+                    exploit.target, exploit.port, protocol, exploit))
+                self.vulnerabilities.append((exploit.target, exploit.port, protocol, str(exploit)))
+            elif response is False:
+                print_error("{}:{} {} {} is not vulnerable".format(
+                    exploit.target, exploit.port, protocol, exploit))
+            else:
+                print_status("{}:{} {} {} Could not be verified".format(
+                    exploit.target, exploit.port, protocol, exploit))
+                self.not_verified.append((exploit.target, exploit.port, protocol, str(exploit)))
+
+            self._restore_network(exploit, snapshot)
+
+    def _evaluate_creds(self, exploit, generic=False):
+        skip, runs = self._prepare_exploit_for_protocol(exploit)
+        if skip or not runs:
+            return
+
+        for port, use_ssl in runs:
+            snapshot = self._snapshot_network(exploit)
+            self._apply_exploit_network(exploit, port, use_ssl=use_ssl)
+            protocol = self._get_exploit_protocol(exploit)
+            try:
+                response = self._run_with_timeout(exploit.check_default)
+            except Exception as err:
+                print_error(
+                    "{}:{} {} {} check_default failed with exception".format(
+                        exploit.target, exploit.port, protocol, exploit
+                    ),
+                    err,
+                )
+                self.not_verified.append((exploit.target, exploit.port, protocol, str(exploit)))
+                self._restore_network(exploit, snapshot)
+                continue
+
+            if response:
+                print_success("{}:{} {} {} is vulnerable".format(
+                    exploit.target, exploit.port, protocol, exploit))
+                for creds in response:
+                    self.creds.append(creds)
+            else:
+                print_error("{}:{} {} {} is not vulnerable".format(
+                    exploit.target, exploit.port, protocol, exploit))
+
+            self._restore_network(exploit, snapshot)
+
     def exploits_target_function(self, running, data):
         tcls = normalize_target_class(str(self.target_device_class))
         while running.is_set():
@@ -390,93 +746,7 @@ class Exploit(Exploit):
                     self._scope_skipped += 1
                     continue
 
-                # Avoid checking specific protocol - reduce network impact
-                if exploit.target_protocol == Protocol.HTTP:
-                    if not self.http_use:
-                        continue
-                    exploit.port = self.http_port
-                    if self.http_ssl:
-                        exploit.ssl = "true"
-                        exploit.target_protocol = Protocol.HTTPS
-
-                elif exploit.target_protocol is Protocol.FTP:
-                    if not self.ftp_use:
-                        continue
-                    exploit.port = self.ftp_port
-                    if self.ftp_ssl:
-                        exploit.ssl = "true"
-                        exploit.target_protocol = Protocol.FTPS
-
-                elif exploit.target_protocol is Protocol.TELNET:
-                    if not self.telnet_use:
-                        continue
-                    exploit.port = self.telnet_port
-
-                elif exploit.target_protocol is Protocol.SSH:
-                    if not self.ssh_use:
-                        continue
-                    exploit.port = self.ssh_port
-
-                elif exploit.target_protocol is Protocol.SFTP:
-                    if not self.sftp_use:
-                        continue
-                    exploit.port = self.sftp_port
-
-                elif exploit.target_protocol is Protocol.SNMP:
-                    if not self.snmp_use:
-                        continue
-                    exploit.port = self.snmp_port
-                    if hasattr(exploit, "snmp_community"):
-                        exploit.snmp_community = self.snmp_community
-
-                elif exploit.target_protocol is Protocol.TCP:
-                    if not self.tcp_use:
-                        continue
-
-                elif exploit.target_protocol is Protocol.UDP:
-                    if not self.udp_use:
-                        continue
-
-        #        elif exploit.target_protocol not in ["tcp", "udp"]:
-        #            exploit.target_protocol = "custom"
-
-                try:
-                    response = self._profiled_check(exploit)
-                except Exception as err:
-                    print_error(
-                        "{}:{} {} {} check failed with exception".format(
-                            exploit.target, exploit.port, exploit.target_protocol, exploit
-                        ),
-                        err,
-                    )
-                    self.not_verified.append((exploit.target, exploit.port, exploit.target_protocol, str(exploit)))
-                    continue
-                if response is True and self.verify_positive_twice:
-                    confirmed = True
-                    for _ in range(max(0, self._active_profile["confirm_passes"] - 1)):
-                        if self._profiled_check(exploit) is not True:
-                            print_status(
-                                "{}:{} {} {} positive result was not confirmed under profile checks".format(
-                                    exploit.target, exploit.port, exploit.target_protocol, exploit
-                                ),
-                            )
-                            self.not_verified.append((exploit.target, exploit.port, exploit.target_protocol, str(exploit)))
-                            confirmed = False
-                            break
-                    if not confirmed:
-                        continue
-
-                if response is True:
-                    print_success("{}:{} {} {} is vulnerable".format(
-                               exploit.target, exploit.port, exploit.target_protocol, exploit))
-                    self.vulnerabilities.append((exploit.target, exploit.port, exploit.target_protocol, str(exploit)))
-                elif response is False:
-                    print_error("{}:{} {} {} is not vulnerable".format(
-                               exploit.target, exploit.port, exploit.target_protocol, exploit))
-                else:
-                    print_status("{}:{} {} {} Could not be verified".format(
-                               exploit.target, exploit.port, exploit.target_protocol, exploit))
-                    self.not_verified.append((exploit.target, exploit.port, exploit.target_protocol, str(exploit)))
+                self._evaluate_exploit(exploit)
 
     def creds_target_function(self, running, data):
         tcls = normalize_target_class(str(self.target_device_class))
@@ -507,56 +777,7 @@ class Exploit(Exploit):
                 exploit.stop_on_success = "false"
                 exploit.threads = self.threads
 
-                if exploit.target_protocol == Protocol.HTTP:
-                    exploit.port = self.http_port
-                    if self.http_ssl:
-                        exploit.ssl = "true"
-                        exploit.target_protocol = Protocol.HTTPS
-
-                elif generic:
-                    if exploit.target_protocol is Protocol.HTTP:
-                        exploit.port = self.http_port
-                        if self.http_ssl:
-                            exploit.ssl = "true"
-                            exploit.target_protocol = Protocol.HTTPS
-                    elif exploit.target_protocol == Protocol.SSH:
-                        exploit.port = self.ssh_port
-                    elif exploit.target_protocol == Protocol.SFTP:
-                        exploit.port = self.sftp_port
-                    elif exploit.target_protocol == Protocol.FTP:
-                        exploit.port = self.ftp_port
-                        if self.ftp_ssl:
-                            exploit.ssl = "true"
-                            exploit.target_protocol = Protocol.FTPS
-
-                    elif exploit.target_protocol == Protocol.TELNET:
-                        exploit.port = self.telnet_port
-                    elif exploit.target_protocol == Protocol.SNMP:
-                        exploit.port = self.snmp_port
-                        if hasattr(exploit, "version"):
-                            exploit.version = self.snmp_version
-                        if hasattr(exploit, "community_string"):
-                            exploit.community_string = self.snmp_community
+                if generic or self._get_exploit_protocol(exploit) in (Protocol.HTTP, Protocol.HTTPS):
+                    self._evaluate_creds(exploit, generic=generic)
                 else:
                     continue
-
-                try:
-                    response = self._run_with_timeout(exploit.check_default)
-                except Exception as err:
-                    print_error(
-                        "{}:{} {} {} check_default failed with exception".format(
-                            exploit.target, exploit.port, exploit.target_protocol, exploit
-                        ),
-                        err,
-                    )
-                    self.not_verified.append((exploit.target, exploit.port, exploit.target_protocol, str(exploit)))
-                    continue
-                if response:
-                    print_success("{}:{} {} {} is vulnerable".format(
-                               exploit.target, exploit.port, exploit.target_protocol, exploit))
-
-                    for creds in response:
-                        self.creds.append(creds)
-                else:
-                    print_error("{}:{} {} {} is not vulnerable".format(
-                               exploit.target, exploit.port, exploit.target_protocol, exploit))
