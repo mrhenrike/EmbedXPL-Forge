@@ -1,3 +1,6 @@
+# IDE / editor local
+.cursor/
+
 # === Python ===
 __pycache__/
 *.py[cod]
