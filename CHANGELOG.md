@@ -6,6 +6,26 @@ Format: [Semantic Versioning](https://semver.org) -- `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [3.8.2] - 2026-06-24
+
+### Added
+- Virtual environment bootstrap: `setup_venv.sh`, `setup_venv.ps1`, `run.sh`, `run.ps1`, and `tools/venv_bootstrap.py` ? `python exf.py` auto-reexecutes with `.venv` (PEP 668 safe).
+- AutoPwn `https_use` option ? HTTP modules can probe both plain HTTP and HTTPS ports independently.
+
+### Changed
+- AutoPwn default service toggles: only HTTP, HTTPS, TCP, and UDP enabled; FTP, SSH, SFTP, Telnet, and SNMP disabled by default (default ports preserved).
+- AutoPwn: configurable multi-port lists per protocol (`http_ports`, `https_ports`, `ftp_ports`, etc.) visible in `show options`.
+- AutoPwn: custom/tcp modules infer service family (SSH, FTP, Telnet, SNMP) from module path and default port to respect service toggles.
+- README / README.pt-BR: document venv setup and run scripts.
+
+### Fixed
+- AutoPwn threading: `DummyFile` missing `flush()` caused Rich console crashes in worker threads (`@mute` decorator).
+- AutoPwn: safe `target_protocol` resolution prevents `AttributeError` during parallel checks.
+- `uniview_nvr_unauth_rce_cve_2024_37630`: inherit `HTTPClient`, use `http_request()` API, lab port 8080.
+- `upnp_unauth_volume_control` (Sony Bravia): minor compatibility fix.
+
+---
+
 ## [3.8.1] - 2026-06-16
 
 ### Added - Rockwell Automation ICS Wave (ICSA-26-167-01 through 05)

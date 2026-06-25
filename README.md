@@ -107,11 +107,12 @@ python -m embedxpl.nse list
 ```bash
 git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
 cd EmbedXPL-Forge
-pip install -r requirements.txt
+chmod +x setup_venv.sh run.sh
+./setup_venv.sh          # creates .venv (PEP 668 safe)
+./run.sh                 # recommended launcher
+# or: python exf.py      # auto-detects .venv
 # Optional: also install NSE scripts
-pip install -e ".[nse]"
-python -m embedxpl.nse install
-python exf.py
+.venv/bin/python -m embedxpl.nse install
 ```
 
 ### Option 4 — Python module

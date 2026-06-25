@@ -79,8 +79,10 @@ embedxpl-nse list
 ```bash
 git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
 cd EmbedXPL-Forge
-pip install -r requirements.txt
-python exf.py
+chmod +x setup_venv.sh run.sh
+./setup_venv.sh          # cria .venv e instala deps (PEP 668 safe)
+./run.sh                 # launcher recomendado
+# ou: python exf.py      # detecta .venv automaticamente
 ```
 
 ## Uso Rápido

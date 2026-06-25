@@ -6,6 +6,15 @@ Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-
 import logging.handlers
 import platform
 import sys
+from pathlib import Path
+
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
+from tools.venv_bootstrap import ensure_runtime
+
+ensure_runtime(_ROOT / "exf.py")
 
 
 def main() -> None:
@@ -34,7 +43,8 @@ def main() -> None:
         from embedxpl.interpreter import EmbedXPLInterpreter
     except ModuleNotFoundError as err:
         print("EmbedXPL bootstrap error — missing dependency: {}".format(err))
-        print("Run: python -m pip install embedxpl[ml]")
+        print("Run: ./setup_venv.sh   or   .\\setup_venv.ps1")
+        print("Or:  ./run.sh")
         print("Optional diagnostics: python tools/env_doctor.py")
         raise SystemExit(1)
 
