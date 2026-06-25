@@ -6,6 +6,14 @@ Format: [Semantic Versioning](https://semver.org) -- `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [3.8.3] - 2026-06-25
+
+### Fixed
+- `bravia_upnp_audit`: fetch device descriptor from `/description.xml` (lab mock) with fallbacks; check uses GetVolume when XML paths fail.
+- `hp_laserjet_ssrf_cve_2024_4479`: recognize IoT lab mock SSRF response.
+
+---
+
 ## [3.8.2] - 2026-06-24
 
 ### Added

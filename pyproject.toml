@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "3.8.2"
+version = "3.8.3"
 description = "Embedded & Perimeter Security Assessment Framework -- 2800+ modules, 900+ CVEs, 114+ vendors. Covers routers, IP cameras, GPON ONTs, ISP CPEs, IoT/embedded edge, firewalls (Fortinet/Cisco/PAN-OS/SonicWall), VPN appliances, printers, drones, switches, UPS/PDU, ICS/OT."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
