@@ -213,17 +213,19 @@ class Exploit(HTTPClient):
 
     def _fetch_descriptor(self) -> Optional[str]:
         """Fetch the UPnP device descriptor XML."""
-        body = self._soap_post(_CM_SVC, "GetCurrentConnectionIDs", "", "control/ConnectionManager")
-        # Just try to GET the dmr.xml
         import urllib.request
-        try:
-            with urllib.request.urlopen(
-                "http://{}:{}/dmr.xml".format(self.target, int(self.port)),
-                timeout=int(self.timeout)
-            ) as r:
-                return r.read(256).decode("utf-8", errors="replace")
-        except Exception:
-            return None
+        for path in ("/description.xml", "/dmr.xml", "/rootDesc.xml", "/"):
+            try:
+                with urllib.request.urlopen(
+                    "http://{}:{}{}".format(self.target, int(self.port), path),
+                    timeout=int(self.timeout),
+                ) as r:
+                    snippet = r.read(512).decode("utf-8", errors="replace")
+                    if "MediaRenderer" in snippet or "deviceType" in snippet:
+                        return snippet[:256]
+            except Exception:
+                continue
+        return None
 
     def _get_protocol_info(self) -> Optional[str]:
         resp = self._soap_post(
@@ -300,12 +302,15 @@ class Exploit(HTTPClient):
     def check(self) -> bool:
         """Check if UPnP MediaRenderer is accessible on the target."""
         import urllib.request
-        try:
-            with urllib.request.urlopen(
-                "http://{}:{}/dmr.xml".format(self.target, int(self.port)),
-                timeout=5
-            ) as r:
-                content = r.read(128).decode("utf-8", errors="replace")
-                return "MediaRenderer" in content or "sony" in content.lower()
-        except Exception:
-            return False
+        for path in ("/description.xml", "/dmr.xml", "/"):
+            try:
+                with urllib.request.urlopen(
+                    "http://{}:{}{}".format(self.target, int(self.port), path),
+                    timeout=5,
+                ) as r:
+                    content = r.read(256).decode("utf-8", errors="replace")
+                    if "MediaRenderer" in content or "sony" in content.lower():
+                        return True
+            except Exception:
+                continue
+        return self._get_volume() is not None
