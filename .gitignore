@@ -104,7 +104,16 @@ docs/_build/
 # === PyBuilder ===
 target/
 
-# Local-only: packaging, CI/CD and contributor metadata kept out of the public tree
+# === Local runtime / lab artifacts (never commit) ===
+temp/
+temps/
+tmp/
+examples/
+labs/
+samples/
+HANDOFF-AUDIT.md
+
+# === Local-only packaging (keep out of public tree unless force-added for CI) ===
 .github/workflows/
 .github/dependabot.yml
 .github/CODEOWNERS

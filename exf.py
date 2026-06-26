@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import logging.handlers
 import platform
 import sys
 from pathlib import Path
@@ -11,8 +12,6 @@ if str(_ROOT) not in sys.path:
 from tools.venv_bootstrap import ensure_runtime
 
 ensure_runtime(__file__)
-
-import logging.handlers
 
 if sys.version_info.major < 3:
     print("EmbedXPL supports only Python3. Rerun application in Python3 environment.")
@@ -29,14 +28,14 @@ LOGGER.setLevel(logging.DEBUG)
 LOGGER.addHandler(log_handler)
 
 
-def embedxpl(argv):
+def _launcher(argv):
     try:
         from embedxpl.interpreter import EmbedXPLInterpreter
     except ModuleNotFoundError as err:
         print("EmbedXPL bootstrap error: missing Python dependency: {}".format(err))
         print("Run: ./setup_venv.sh   (Linux/macOS)  or  .\\setup_venv.ps1   (Windows)")
         print("Or:  ./run.sh")
-        print("Optional diagnostics: python tools/env_doctor.py")
+        print("Check: exf --doctor   or   python tools/env_doctor.py")
         raise SystemExit(1)
 
     exf = EmbedXPLInterpreter()
@@ -44,6 +43,28 @@ def embedxpl(argv):
         exf.nonInteractive(argv)
     else:
         exf.start()
+
+
+def embedxpl(argv):
+    from tools.xpl_cli import ProductInfo, bootstrap
+
+    try:
+        import tomllib
+        _ver = tomllib.loads((_ROOT / "pyproject.toml").read_text())["project"]["version"]
+    except Exception:
+        _ver = "3.8.4"
+
+    product = ProductInfo(
+        name="EmbedXPL-Forge",
+        slug="embedxpl",
+        version=_ver,
+        cli_name="exf",
+        min_python=(3, 8),
+        pip_package="embedxpl",
+        setup_hint="./setup_venv.sh  or  ./run.sh",
+    )
+    bootstrap(argv, product, _launcher)
+
 
 if __name__ == "__main__":
     try:

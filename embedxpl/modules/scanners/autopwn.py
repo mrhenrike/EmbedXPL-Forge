@@ -68,7 +68,7 @@ class Exploit(Exploit):
     check_exploits = OptBool(True, "Check exploits against target: true/false", advanced=True)
     check_creds = OptBool(True, "Check factory credentials against target: true/false", advanced=True)
 
-    http_use = OptBool(True, "Check HTTP service: true/false")
+    http_use = OptBool(False, "Check HTTP service: true/false")
     http_port = OptPort(80, "Primary HTTP port (used when http_ports is empty)")
     http_ports = OptString(
         "",
@@ -76,7 +76,7 @@ class Exploit(Exploit):
     )
     http_ssl = OptBool(False, "Use HTTPS instead of HTTP for HTTP-protocol modules: true/false")
 
-    https_use = OptBool(True, "Check HTTPS service: true/false")
+    https_use = OptBool(False, "Check HTTPS service: true/false")
     https_port = OptPort(443, "Primary HTTPS port (used when https_ports is empty)")
     https_ports = OptString(
         "",
@@ -106,13 +106,15 @@ class Exploit(Exploit):
     snmp_community = OptString("public", "Target SNMP community name (default: public)", advanced=True)
     snmp_version = OptInteger(1, "SNMP version for v1/v2 modules (0:v1, 1:v2c)", advanced=True)
 
-    tcp_use = OptBool(True, "Check custom TCP services: true/false")
+    tcp_use = OptBool(False, "Check custom TCP services: true/false")
+    tcp_port = OptString("", "Single TCP port override (used when tcp_ports is empty)")
     tcp_ports = OptString(
         "",
         "Custom TCP port list for custom/tcp modules (comma-separated, e.g. 554,8555,2870)",
     )
 
-    udp_use = OptBool(True, "Check custom UDP services: true/false")
+    udp_use = OptBool(False, "Check custom UDP services: true/false")
+    udp_port = OptString("", "Single UDP port override (used when udp_ports is empty)")
     udp_ports = OptString(
         "",
         "Custom UDP port list for custom/udp modules (comma-separated, e.g. 161,1900)",
@@ -200,10 +202,28 @@ class Exploit(Exploit):
                 self._parse_ports_list(self.sftp_ports, self.sftp_port),
                 self._parse_ports_list(self.telnet_ports, self.telnet_port),
                 self._parse_ports_list(self.snmp_ports, self.snmp_port),
-                self._parse_ports_list(self.tcp_ports, None) or ["(module default)"],
-                self._parse_ports_list(self.udp_ports, None) or ["(module default)"],
+                self._tcp_ports_resolved(),
+                self._udp_ports_resolved(),
             )
         )
+
+    def _resolve_tcp_ports(self):
+        ports = self._parse_ports_list(self.tcp_ports, None)
+        if ports:
+            return ports
+        return self._parse_ports_list(self.tcp_port, None)
+
+    def _resolve_udp_ports(self):
+        ports = self._parse_ports_list(self.udp_ports, None)
+        if ports:
+            return ports
+        return self._parse_ports_list(self.udp_port, None)
+
+    def _tcp_ports_resolved(self):
+        return self._resolve_tcp_ports() or ["(module default)"]
+
+    def _udp_ports_resolved(self):
+        return self._resolve_udp_ports() or ["(module default)"]
 
     @staticmethod
     def _get_exploit_protocol(exploit):
@@ -227,10 +247,16 @@ class Exploit(Exploit):
         21: Protocol.FTP,
         22: Protocol.SSH,
         23: Protocol.TELNET,
+        80: Protocol.HTTP,
+        443: Protocol.HTTPS,
         161: Protocol.SNMP,
+        8080: Protocol.HTTP,
+        8443: Protocol.HTTPS,
     }
 
     _PATH_SERVICE_HINTS = (
+        (Protocol.HTTPS, ("https",)),
+        (Protocol.HTTP, ("http", "webinterface", "ews", "upnp")),
         (Protocol.SFTP, ("sftp",)),
         (Protocol.SSH, ("ssh",)),
         (Protocol.FTP, ("ftp", "ftps")),
@@ -274,7 +300,7 @@ class Exploit(Exploit):
             return bool(self.tcp_use)
         if protocol is Protocol.UDP:
             return bool(self.udp_use)
-        return True
+        return False
 
     def _ports_for_protocol(self, protocol, *, http_ssl_override=None):
         """Resolve configured port list for a protocol enum/string."""
@@ -298,23 +324,28 @@ class Exploit(Exploit):
             return self._parse_ports_list(self.telnet_ports, self.telnet_port)
         if protocol in (Protocol.SNMP, "snmp"):
             return self._parse_ports_list(self.snmp_ports, self.snmp_port)
-        if protocol in (Protocol.TCP, "custom/tcp", Protocol.CUSTOM):
-            return self._parse_ports_list(self.tcp_ports, None)
+        if protocol in (Protocol.TCP, "custom/tcp"):
+            return self._resolve_tcp_ports()
         if protocol in (Protocol.UDP, "custom/udp"):
-            return self._parse_ports_list(self.udp_ports, None)
+            return self._resolve_udp_ports()
         return []
 
     def _prepare_exploit_for_protocol(self, exploit):
         """Return (skip, runs) where runs is a list of (port, use_ssl) tuples."""
         protocol = self._get_exploit_protocol(exploit)
-        family = self._infer_service_family(exploit, protocol) or protocol
+        inferred = self._infer_service_family(exploit, protocol)
+        family = inferred or protocol
 
         if not self._service_enabled(family):
             return True, []
 
-        if protocol in (Protocol.HTTP, Protocol.HTTPS):
+        effective = protocol
+        if protocol is Protocol.CUSTOM and inferred is not None:
+            effective = inferred
+
+        if effective in (Protocol.HTTP, Protocol.HTTPS):
             runs = []
-            if protocol is Protocol.HTTPS:
+            if effective is Protocol.HTTPS:
                 if self.https_use:
                     for port in self._ports_for_protocol(Protocol.HTTPS):
                         runs.append((port, True))
@@ -333,33 +364,37 @@ class Exploit(Exploit):
                             runs.append((port, True))
             return (not runs), runs
 
-        if protocol in (Protocol.FTP, Protocol.FTPS):
-            use_ssl = protocol is Protocol.FTPS or bool(self.ftp_ssl)
+        if effective in (Protocol.FTP, Protocol.FTPS):
+            use_ssl = effective is Protocol.FTPS or bool(self.ftp_ssl)
             ports = self._ports_for_protocol(Protocol.FTPS if use_ssl else Protocol.FTP)
             return (not ports), [(port, use_ssl) for port in ports]
 
-        if protocol is Protocol.TELNET:
+        if effective is Protocol.TELNET:
             ports = self._ports_for_protocol(Protocol.TELNET)
             return (not ports), [(port, False) for port in ports]
 
-        if protocol is Protocol.SSH:
+        if effective is Protocol.SSH:
             ports = self._ports_for_protocol(Protocol.SSH)
             return (not ports), [(port, False) for port in ports]
 
-        if protocol is Protocol.SFTP:
+        if effective is Protocol.SFTP:
             ports = self._ports_for_protocol(Protocol.SFTP)
             return (not ports), [(port, False) for port in ports]
 
-        if protocol is Protocol.SNMP:
+        if effective is Protocol.SNMP:
             ports = self._ports_for_protocol(Protocol.SNMP)
             return (not ports), [(port, False) for port in ports]
 
-        if protocol is Protocol.TCP:
-            ports = self._ports_for_protocol(Protocol.TCP)
+        if effective is Protocol.TCP or (protocol is Protocol.CUSTOM and family is Protocol.CUSTOM):
+            if not self.tcp_use:
+                return True, []
+            ports = self._resolve_tcp_ports()
             return False, [(port, False) for port in (ports or [None])]
 
-        if protocol is Protocol.UDP:
-            ports = self._ports_for_protocol(Protocol.UDP)
+        if effective is Protocol.UDP:
+            if not self.udp_use:
+                return True, []
+            ports = self._resolve_udp_ports()
             return False, [(port, False) for port in (ports or [None])]
 
         return True, []
@@ -777,7 +812,8 @@ class Exploit(Exploit):
                 exploit.stop_on_success = "false"
                 exploit.threads = self.threads
 
-                if generic or self._get_exploit_protocol(exploit) in (Protocol.HTTP, Protocol.HTTPS):
-                    self._evaluate_creds(exploit, generic=generic)
-                else:
+                skip, _runs = self._prepare_exploit_for_protocol(exploit)
+                if skip:
                     continue
+
+                self._evaluate_creds(exploit, generic=generic)

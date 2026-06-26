@@ -98,6 +98,31 @@ def _telnet_ok() -> Tuple[bool, str]:
 
 def main() -> int:
     """Run all environment checks and report status."""
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        prog="env_doctor",
+        description="EmbedXPL-Forge environment diagnostics",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument("-q", "--quiet", action="store_true", help="Minimal output (exit code only)")
+    args = parser.parse_args()
+
+    if args.quiet:
+        code = 0
+        for _, import_name in REQUIRED_DEPS:
+            ok, _ = _check_import(import_name)
+            if not ok:
+                code = 2
+        tel_ok, _ = _telnet_ok()
+        if not tel_ok:
+            code = 2
+        sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+        for module_path, _ in CORE_SUBSYSTEMS:
+            ok, _ = _check_import(module_path)
+            if not ok:
+                code = 2
+        return code
 
     _W = "\033[33m"   # yellow
     _E = "\033[31m"   # red
