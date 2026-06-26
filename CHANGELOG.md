@@ -6,6 +6,18 @@ Format: [Semantic Versioning](https://semver.org) -- `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [3.8.4] - 2026-06-25
+
+### Added
+- Global CLI flags: `-h`/`--help`, `-V`/`--version`, `-i`/`--interactive`, `--doctor`/`--check`
+- Colorized help banner via `tools/xpl_cli.py`
+- `env_doctor.py` supports `-q`/`--quiet` for headless checks
+
+### Fixed
+- AutoPwn: all protocol `*_use` default to `false`; custom ports for TCP/UDP; cred modules respect service flags
+
+---
+
 ## [3.8.3] - 2026-06-25
 
 ### Fixed
@@ -308,7 +320,7 @@ ac/__init__.py: created missing package init file
 **Tier 3 additional modules (from parallel agents):**
 - sophos x2, checkpoint x2, juniper x1, cisco x4, fortinet x2, aruba x2, meraki x1,
   pfSense x2, f5 x1, zyxel x1, sonicwall x1, watchguard x1, barracuda x1, citrix x2,
-  ivanti x2, sangfor x1 ó all with real exploitation chains
+  ivanti x2, sangfor x1 ù all with real exploitation chains
 
 **CVE catalog:** 385 -> 411 entries (+26 from Tier 3)
 
@@ -321,7 +333,7 @@ ac/__init__.py: created missing package init file
 
 All notable changes to EmbedXPL-Forge are documented here.
 
-Format: [Semantic Versioning](https://semver.org) ó `MAJOR.MINOR.PATCH`.
+Format: [Semantic Versioning](https://semver.org) ù `MAJOR.MINOR.PATCH`.
 
 
 
@@ -534,7 +546,7 @@ Replaced HTTP-only check() stubs with CVE-specific network probes in:
 
 ## [3.1.0] -- 2026-05-12
 
-### Added ó CVE 2026/2025/2024 Integration + PrinterXPL Port + Domain Enable
+### Added ù CVE 2026/2025/2024 Integration + PrinterXPL Port + Domain Enable
 
 #### Core: Printer domain enabled
 
@@ -623,7 +635,7 @@ Each gate verifies: imports, class Exploit, `__info__` completeness, references 
 no prohibited strings, flake8/bandit clean, module indexing.
 
 
-## [3.0.0] ó 2026-05-01
+## [3.0.0] ù 2026-05-01
 
 ### Added - Embedded OS/OT/IoT/AT Arsenal Expansion (170+ new modules)
 
@@ -654,9 +666,9 @@ no prohibited strings, flake8/bandit clean, module indexing.
 - PyPI optional-dependencies with 17 install categories
 
 
-## [2.15.0] ó 2026-04-25
+## [2.15.0] ù 2026-04-25
 
-### Added ó Full Submodule Audit + Mass Integration
+### Added ù Full Submodule Audit + Mass Integration
 
 #### Audit scope
 Complete audit of all submodules (`submodules/IoT`, `submodules/OT`, `submodules/Daryus`) and sibling frameworks (`FirewallXPL-Forge`, `PrinterXPL-Forge`, `WirelessXPL-Forge`) to identify and incorporate everything within EmbedXPL's device scope.
@@ -698,27 +710,27 @@ New vendors: `linux/` (CUPS), `hp/`, `lexmark/`, `kyocera/`, `brother/`, `ricoh/
 |--------|-----|-------------|
 | blueborne_attack | CVE-2017-0781, CVE-2017-0785, CVE-2017-1000251 | BlueBorne BT/BLE RCE (Android/Linux IoT) |
 | wifi_fragattacks | CVE-2020-24586/24587/24588/26140/26143/26144/26145/26146 | WiFi 802.11 fragmentation attacks |
-| wifi_krack_attack | CVE-2017-13077..13088 | KRACK ó WPA2 key reinstallation (IoT APs/clients) |
-| wifi_kr00k_attack | CVE-2019-15126 | KR00K ó Broadcom/Cypress WiFi chip decryption |
+| wifi_krack_attack | CVE-2017-13077..13088 | KRACK ù WPA2 key reinstallation (IoT APs/clients) |
+| wifi_kr00k_attack | CVE-2019-15126 | KR00K ù Broadcom/Cypress WiFi chip decryption |
 | ble_sweyntooth_bridge | SweynTooth CVEs (multiple) | BLE SweynTooth deadlock/overflow attacks |
 
 **1 new OT/ICS scenario module** (`embedxpl/modules/exploits/ics/modbus/`):
 
 | Module | Description |
 |--------|-------------|
-| modbus_ot_attack_scenarios | 6 OT attack scenarios (oil plant disruption, plant shutdown, fill line flood) via unauthenticated Modbus TCP register writes ó ported from Daryus IoT Security Research lab |
+| modbus_ot_attack_scenarios | 6 OT attack scenarios (oil plant disruption, plant shutdown, fill line flood) via unauthenticated Modbus TCP register writes ù ported from Daryus IoT Security Research lab |
 
 
-## [2.14.0] ó 2026-04-24
+## [2.14.0] ù 2026-04-24
 
-### Added ó CVE Integration + Vendor Cleanup
+### Added ù CVE Integration + Vendor Cleanup
 
 **2 new CVE exploit modules:**
 
 | Module | CVE | CVSS | Technique |
 |--------|-----|------|-----------|
-| `vpn/ivanti/connect_secure_ssrf_rce_cve_2024_21893.py` | CVE-2024-21893 + CVE-2024-21887 | 9.1 CRITICAL | Ivanti Connect Secure ó unauthenticated SSRF via SAML SOAP envelope at `/dana-ws/saml20.ws`, chained with command injection in internal license API for pre-auth RCE (CISA KEV 2024-01-31). Actions: check \| ssrf \| rce \| shell |
-| `routers/netgear/r6100_cgimain_bof_cve_2025_29044.py` | CVE-2025-29044 | 9.8 CRITICAL | Netgear R6100 cgiMain ó QUERY_STRING `sprintf` stack overflow (offset 0x274), unauthenticated RCE via MIPS payload. Actions: check \| dos \| rce |
+| `vpn/ivanti/connect_secure_ssrf_rce_cve_2024_21893.py` | CVE-2024-21893 + CVE-2024-21887 | 9.1 CRITICAL | Ivanti Connect Secure ù unauthenticated SSRF via SAML SOAP envelope at `/dana-ws/saml20.ws`, chained with command injection in internal license API for pre-auth RCE (CISA KEV 2024-01-31). Actions: check \| ssrf \| rce \| shell |
+| `routers/netgear/r6100_cgimain_bof_cve_2025_29044.py` | CVE-2025-29044 | 9.8 CRITICAL | Netgear R6100 cgiMain ù QUERY_STRING `sprintf` stack overflow (offset 0x274), unauthenticated RCE via MIPS payload. Actions: check \| dos \| rce |
 
 **4 new vendor modules (previously placeholder-only):**
 
@@ -730,19 +742,19 @@ New vendors: `linux/` (CUPS), `hp/`, `lexmark/`, `kyocera/`, `brother/`, `ricoh/
 | `routers/xavi/xavi_csrf_dns_change.py` | Xavi Technologies (7868r, X7968) | CSRF DNS hijack via unauthenticated POST to DNS config endpoint + CSRF HTML PoC generator |
 
 ### Removed
-- `routers/belkin_ext/` ó empty duplicate of `routers/belkin/`; removed
+- `routers/belkin_ext/` ù empty duplicate of `routers/belkin/`; removed
 
 ### Fixed
 - CVE-2025-30401 was an invalid/non-existent CVE ID in the pending list; replaced with CVE-2025-29044 (Netgear R6100, same device scope, CVSS 9.8, public PoC)
 
 
-## [2.13.0] ó 2026-04-22
+## [2.13.0] ù 2026-04-22
 
-### Added ó routerpwn.com + routerPWN Gap Analysis: 27 New Exploit Modules
+### Added ù routerpwn.com + routerPWN Gap Analysis: 27 New Exploit Modules
 
 **Gap analysis performed against:**
-- [`hkm/routerpwn.com`](https://github.com/hkm/routerpwn.com) ó 44 vendor folders, 100+ HTML/JS exploits
-- [`lilloX/routerPWN`](https://github.com/lilloX/routerPWN) ó Netgear CVE-2017-5521, CVE-2016-5649, BID-72640 (all previously covered)
+- [`hkm/routerpwn.com`](https://github.com/hkm/routerpwn.com) ù 44 vendor folders, 100+ HTML/JS exploits
+- [`lilloX/routerPWN`](https://github.com/lilloX/routerPWN) ù Netgear CVE-2017-5521, CVE-2016-5649, BID-72640 (all previously covered)
 
 Both repositories cloned as `submodules/IoT/routerpwn.com` and `submodules/IoT/routerPWN`.
 
@@ -750,13 +762,13 @@ Both repositories cloned as `submodules/IoT/routerpwn.com` and `submodules/IoT/r
 
 | Vendor | Module | Technique |
 |--------|--------|-----------|
-| `alcatel_lucent` | `omnipcx_masterCGI_rce.py` | OmniPCX Enterprise ó `/cgi-bin/masterCGI` command injection |
-| `alcatel_lucent` | `omniswitch_add_admin_csrf.py` | OmniSwitch ó CSRF add admin account |
+| `alcatel_lucent` | `omnipcx_masterCGI_rce.py` | OmniPCX Enterprise ù `/cgi-bin/masterCGI` command injection |
+| `alcatel_lucent` | `omniswitch_add_admin_csrf.py` | OmniSwitch ù CSRF add admin account |
 | `alpha_networks` | `web_shell_cmd_rce.py` | `/web_shell_cmd.gch` backdoor RCE (Alpha Networks / ZTE OEM) |
 | `alpha_networks` | `config_download.py` | `/manager_dev_config_t.gch` config download (no auth) |
 | `astoria` | `astoria_password_reset.py` | `/cgi-bin/setup_pass.cgi` admin password reset (no auth) |
 | `binatone` | `dt850w_change_admin.py` | DT850W `/Forms/tools_admin_1` CSRF password change |
-| `ddwrt` | `ddwrt_info_disclosure.py` | `/Info.live.htm` (BID-35742) ó WiFi PSK/PPPoE disclosure |
+| `ddwrt` | `ddwrt_info_disclosure.py` | `/Info.live.htm` (BID-35742) ù WiFi PSK/PPPoE disclosure |
 | `ddwrt` | `ddwrt_command_exec.py` | Diagnostics ping field command injection |
 | `easybox` | `easybox_wpa_keygen.py` | WPA2 default key generator (MAC ? MD5 algorithm, Arcadyan EasyBox 802/803/804) |
 | `ee` | `brightbox_config_disclosure.py` | `/cgi/cgi_status.js` EE BrightBox config disclosure |
@@ -765,7 +777,7 @@ Both repositories cloned as `submodules/IoT/routerpwn.com` and `submodules/IoT/r
 | `motorola` | `sbg6580_info_disclosure.py` | SBG6580 DNS CSRF + admin password change + reboot |
 | `observa` | `observa_telecom_cred_disclosure.py` | JSON credential disclosure + DNS CSRF + FTP enable |
 | `ruggedcom` | `ruggedcom_factory_password.py` | Factory "backdoor" account password generator (FD 2012/Apr/277) |
-| `seagate` | `seagate_nas_php_backdoor.py` | "Ghost PHP" RCE backdoor ó `d41d8cd98f...php` (CVE-2014-8684) |
+| `seagate` | `seagate_nas_php_backdoor.py` | "Ghost PHP" RCE backdoor ù `d41d8cd98f...php` (CVE-2014-8684) |
 | `sitecom` | `dc227_backdoor_password.py` | DC-227 hardcoded backdoor + WLR-4004 WPA key generator (eMaze 2014) |
 | `starbridge` | `lynx526_password_reset.py` | Lynx 526 `/password.cgi?sysPassword=` (no auth) |
 | `ubee` | `ubee_cablemas_bypass.py` | Cable modem operator credential bypass (Cablemas ISP) |
@@ -786,59 +798,59 @@ Both repositories cloned as `submodules/IoT/routerpwn.com` and `submodules/IoT/r
 **Validation:** All 27 modules pass `py_compile` validation (0 syntax errors).
 
 
-## [2.8.0] ó 2026-04-21
+## [2.8.0] ù 2026-04-21
 
-### Added ó Dahua CCTV Security Research Suite
+### Added ù Dahua CCTV Security Research Suite
 
 **3 new scanners** (`scanners/cameras/dahua/`):
-- `cctv_discover` ó Multi-model discovery via HTTP, ONVIF, Dahua binary protocol (37777)
-- `firmware_version_fingerprint` ó Firmware version, platform (Hertz/Molec/Euler/Kant/Edison), SoC identification
-- `p2p_pppp_scan` ó PPPP/iLnkP2P cloud relay detection (CVE-2019-11219/11220)
+- `cctv_discover` ù Multi-model discovery via HTTP, ONVIF, Dahua binary protocol (37777)
+- `firmware_version_fingerprint` ù Firmware version, platform (Hertz/Molec/Euler/Kant/Edison), SoC identification
+- `p2p_pppp_scan` ù PPPP/iLnkP2P cloud relay detection (CVE-2019-11219/11220)
 
 **6 new exploit modules** (`exploits/cameras/dahua/`):
-- `cctv_pem_key_extraction` ó DAHUA-2026-001: PEM key material in firmware bootloaders (CVSS 7.5)
-- `cctv_firmware_upload_no_verify` ó DAHUA-2026-002: Firmware signature not enforced, 13/14 models (CVSS 8.1)
-- `cctv_auth_bypass_cve_2021_33044` ó DAHUA-2026-005: Auth bypass via RPC2_Login (CVSS 9.8)
-- `cctv_rce_cve_2021_36260` ó DAHUA-2026-006: RCE via configManager.cgi (CVSS 9.8)
-- `cctv_username_disclosure_cve_2020_25078` ó DAHUA-2026-007: Username leak via /current_config/passwd (CVSS 7.5)
-- `cctv_37777_credential_extraction` ó DAHUA-2026-008: TCP/37777 protocol credential extraction (CVSS 9.8)
+- `cctv_pem_key_extraction` ù DAHUA-2026-001: PEM key material in firmware bootloaders (CVSS 7.5)
+- `cctv_firmware_upload_no_verify` ù DAHUA-2026-002: Firmware signature not enforced, 13/14 models (CVSS 8.1)
+- `cctv_auth_bypass_cve_2021_33044` ù DAHUA-2026-005: Auth bypass via RPC2_Login (CVSS 9.8)
+- `cctv_rce_cve_2021_36260` ù DAHUA-2026-006: RCE via configManager.cgi (CVSS 9.8)
+- `cctv_username_disclosure_cve_2020_25078` ù DAHUA-2026-007: Username leak via /current_config/passwd (CVSS 7.5)
+- `cctv_37777_credential_extraction` ù DAHUA-2026-008: TCP/37777 protocol credential extraction (CVSS 9.8)
 
 ### Research Coverage
-- 14 Dahua firmware images analyzed (IP cameras, NVRs, PTZ ó 2020 to 2025)
+- 14 Dahua firmware images analyzed (IP cameras, NVRs, PTZ ù 2020 to 2025)
 - Platforms: Hertz, Molec, Euler, Kant, Edison (HiSilicon, SigmaStar, Ingenic SoCs)
 - 8 vulnerability findings documented with CVSSv3.1 scores and CWE classifications
 - 32 PEM key extractions confirmed across 8/14 firmwares
 - 13/14 firmwares lack signature verification in Install script
 
 
-## [2.7.0] ó 2026-04-18
+## [2.7.0] ù 2026-04-18
 
-### Added ó Intelbras CCTV Security Research Suite
+### Added ù Intelbras CCTV Security Research Suite
 
 **4 new scanners** (`scanners/cameras/`):
-- `intelbras_cctv_discover` ó Multi-model discovery via HTTP, RTSP, Dahua protocol (37777)
-- `intelbras_boa_detect` ó Boa HTTP server (EOL 2005) detection via banner fingerprinting
-- `intelbras_onvif_scan` ó ONVIF endpoint discovery and SOAP GetDeviceInformation probe
-- `intelbras_p2p_uid_scan` ó P2P/iSIC cloud UID enumeration and predictability analysis
+- `intelbras_cctv_discover` ù Multi-model discovery via HTTP, RTSP, Dahua protocol (37777)
+- `intelbras_boa_detect` ù Boa HTTP server (EOL 2005) detection via banner fingerprinting
+- `intelbras_onvif_scan` ù ONVIF endpoint discovery and SOAP GetDeviceInformation probe
+- `intelbras_p2p_uid_scan` ù P2P/iSIC cloud UID enumeration and predictability analysis
 
 **8 new exploit modules** (`exploits/cameras/intelbras/`):
-- `cctv_rsa_key_extraction` ó INTELBRAS-2026-001: RSA key reuse across product lines (CVSS 9.8)
-- `cctv_firmware_upload_no_verify` ó INTELBRAS-2026-002: Firmware without integrity check (CVSS 8.1)
-- `cctv_config_disclosure` ó INTELBRAS-2026-005: Unauthenticated config dump, multi-model (CVSS 7.5)
-- `cctv_onvif_auth_bypass` ó INTELBRAS-2026-004: ONVIF auth bypass on NVR/DVR (CVSS 7.5)
-- `cctv_telnet_default_creds` ó INTELBRAS-2026-007: HiSilicon default creds via telnet (CVSS 6.5)
-- `cctv_dahua_auth_bypass` ó INTELBRAS-2026-008: Dahua CVE-2017-7921 on OEM models (CVSS 10.0)
-- `cctv_dahua_rce_cve_2021_36260` ó INTELBRAS-2026-008: Dahua command injection on OEM (CVSS 9.8)
-- `cctv_dahua_username_disclosure_cve_2020_25078` ó INTELBRAS-2026-008: Username leak (CVSS 7.5)
+- `cctv_rsa_key_extraction` ù INTELBRAS-2026-001: RSA key reuse across product lines (CVSS 9.8)
+- `cctv_firmware_upload_no_verify` ù INTELBRAS-2026-002: Firmware without integrity check (CVSS 8.1)
+- `cctv_config_disclosure` ù INTELBRAS-2026-005: Unauthenticated config dump, multi-model (CVSS 7.5)
+- `cctv_onvif_auth_bypass` ù INTELBRAS-2026-004: ONVIF auth bypass on NVR/DVR (CVSS 7.5)
+- `cctv_telnet_default_creds` ù INTELBRAS-2026-007: HiSilicon default creds via telnet (CVSS 6.5)
+- `cctv_dahua_auth_bypass` ù INTELBRAS-2026-008: Dahua CVE-2017-7921 on OEM models (CVSS 10.0)
+- `cctv_dahua_rce_cve_2021_36260` ù INTELBRAS-2026-008: Dahua command injection on OEM (CVSS 9.8)
+- `cctv_dahua_username_disclosure_cve_2020_25078` ù INTELBRAS-2026-008: Username leak (CVSS 7.5)
 
 ### Research Coverage
 - 10 Intelbras firmware images analyzed (3 IP cameras, 4 DVRs, 3 NVRs)
-- Models spanning 2019ñ2026: VIP 1130 D, VIP 3230 B SD, VIP S3020 G2, MHDX 1004-C, MHDX 1108-C, MHDX 3108, MHDX 1108 G3, NVD 1208 P, NVD 3316-P, NVD 1432-P
+- Models spanning 2019ù2026: VIP 1130 D, VIP 3230 B SD, VIP S3020 G2, MHDX 1004-C, MHDX 1108-C, MHDX 3108, MHDX 1108 G3, NVD 1208 P, NVD 3316-P, NVD 1432-P
 - 8 vulnerability findings documented with CVSSv3.1 scores and CWE classifications
 - Forensic cross-analysis confirmed Dahua OEM heritage across all product lines
 
 
-## [1.0.0] ó 2026-04-17
+## [1.0.0] ù 2026-04-17
 
 ### Changed (Breaking - Rebranding)
 - **Project renamed**: RouterXPL-Forge -> **EmbedXPL-Forge**
@@ -924,16 +936,16 @@ pip install embedxpl[all]              # Everything
 - Hardware install notice CLI (`embedxpl/tools/hw_install_notice.py`)
 
 
-## [0.7.0] ó 2026-04-08
+## [0.7.0] ù 2026-04-08
 
 ### Added
-- **Full RouterSploit parity** ó 9 modules (4 new, 5 stubs upgraded with real exploit logic):
-  - `cisco/secure_acs_5_x_unauthorized_password_change` ó SOAP auth bypass
-  - `cisco/ucm_tftp_info_disclosure_cve_2013_7030` ó TFTP credential leak
-  - `cisco/unified_multi_path_traversal_cve_2011_3315` ó unauthenticated LFI
-  - `zyxel/zywall_usg_config_hash_extraction` ó config + hash download
+- **Full RouterSploit parity** ù 9 modules (4 new, 5 stubs upgraded with real exploit logic):
+  - `cisco/secure_acs_5_x_unauthorized_password_change` ù SOAP auth bypass
+  - `cisco/ucm_tftp_info_disclosure_cve_2013_7030` ù TFTP credential leak
+  - `cisco/unified_multi_path_traversal_cve_2011_3315` ù unauthenticated LFI
+  - `zyxel/zywall_usg_config_hash_extraction` ù config + hash download
   - Upgraded stubs: Firepower LFI/RCE (CVE-2016-6435/6433), UCS Shellshock (CVE-2014-6278), DGS-1510 (CVE-2017-6206), FortiGate SSH backdoor (CVE-2016-1909)
-- **RouterPwn integration** ó 13 high-value modules converted from routerpwn.com JS corpus:
+- **RouterPwn integration** ù 13 high-value modules converted from routerpwn.com JS corpus:
   - D-Link: DIR-300/615 RCE, DSL-2750U auth bypass, DSL-320B config disclosure
   - Linksys: WRT54GL RCE, X2000 RCE
   - Netgear: DGN1000B RCE, WNDR3400 password disclosure
@@ -942,10 +954,10 @@ pip install embedxpl[all]              # Everything
   - Ubiquiti: AirOS pre-auth RCE
   - Huawei: SmartAX MT880 admin add
   - TP-Link: TD-8840T password reset
-- **Third-party CVE incorporation** ó 3 priority modules:
-  - `tplink/tl_wr820n_ssh_weak_crypto_cve_2025_14175` ó SSH weak algo scanner
-  - `xiaomi/mi_router_command_injection_cve_2023_26319` ó post-auth smartcontroller RCE
-  - `intelbras/nvd_9032_mfa_bypass_cve_2025_67070` ó client-side MFA bypass
+- **Third-party CVE incorporation** ù 3 priority modules:
+  - `tplink/tl_wr820n_ssh_weak_crypto_cve_2025_14175` ù SSH weak algo scanner
+  - `xiaomi/mi_router_command_injection_cve_2023_26319` ù post-auth smartcontroller RCE
+  - `intelbras/nvd_9032_mfa_bypass_cve_2025_67070` ù client-side MFA bypass
 - **New vendor**: `xiaomi` (Mi Router family)
 - CVE catalog: 338 ? 343 entries (+5)
 
@@ -953,7 +965,7 @@ pip install embedxpl[all]              # Everything
 - Module counts: 670 ? 690 total, 520 ? 540 exploits, 51 ? 53 vendors
 - `pyproject.toml` version bump to 0.7.0
 
-## [0.6.3] ó 2026-04-08
+## [0.6.3] ù 2026-04-08
 
 ### Changed
 - Removed generated artifacts from git tracking (COVERAGE_MATRIX.md/.txt, arsenal_index.json)
@@ -962,31 +974,31 @@ pip install embedxpl[all]              # Everything
 - .gitignore: comprehensive exclusion of all generated and dev-only artifacts
 - Package sdist now contains ONLY: embedxpl/ package + runtime resources + README/LICENSE/CHANGELOG
 
-## [0.6.2] ó 2026-04-08
+## [0.6.2] ù 2026-04-08
 
 ### Added
 - **2 new vendor families**: `dlink_dsl` (D-Link DSL modems), `juniper` (enterprise)
 - **Exploit modules**:
-  - `dlink_dsl/dsl_2750b_remote_code_execution_cve_2016_20017` ó unauthenticated RCE (no auth)
-  - `dlink_dsl/dsl_2640b_wps_rce_cve_2013_5223` ó WPS PIN command injection
-  - `juniper/junos_backdoor_cve_2015_7755` ó NSA/GCHQ backdoor password (CVSS 10.0)
-  - `juniper/junos_web_auth_bypass_cve_2023_36845` ó J-Web PHP env RCE (CVSS 9.8)
-  - `netgear/dgn1000_unauthenticated_rce` ó setup.cgi syscmd no auth
-  - `multi/netusb_kernel_stack_overflow_cve_2021_45388` ó KCodes NetUSB crash/DoS (20+ brands)
+  - `dlink_dsl/dsl_2750b_remote_code_execution_cve_2016_20017` ù unauthenticated RCE (no auth)
+  - `dlink_dsl/dsl_2640b_wps_rce_cve_2013_5223` ù WPS PIN command injection
+  - `juniper/junos_backdoor_cve_2015_7755` ù NSA/GCHQ backdoor password (CVSS 10.0)
+  - `juniper/junos_web_auth_bypass_cve_2023_36845` ù J-Web PHP env RCE (CVSS 9.8)
+  - `netgear/dgn1000_unauthenticated_rce` ù setup.cgi syscmd no auth
+  - `multi/netusb_kernel_stack_overflow_cve_2021_45388` ù KCodes NetUSB crash/DoS (20+ brands)
 - **Generic modules** (RouterSploit gaps):
-  - `generic/snmp/snmp_bruteforce` ó SNMP community string bruteforce
-  - `generic/tcp_xmas` ó TCP Xmas scan for firewall evasion testing
-  - `generic/udp_amplification` ó UDP amplification factor tester (DNS/NTP/SSDP/SNMP/CharGen)
+  - `generic/snmp/snmp_bruteforce` ù SNMP community string bruteforce
+  - `generic/tcp_xmas` ù TCP Xmas scan for firewall evasion testing
+  - `generic/udp_amplification` ù UDP amplification factor tester (DNS/NTP/SSDP/SNMP/CharGen)
 - **CI scripts** (5 missing tools created):
-  - `tools/run_scoped_tests.py` ó module syntax + __info__ key validation gate
-  - `tools/validate_market_priority_minimums.py` ó coverage threshold checks
-  - `tools/validate_governance.py` ó governance file baseline check
-  - `tools/deep_intel_backlog.py` ó catalog enrichment report (non-gating)
-  - `tools/phase6b_honeypot_validation.py` ó honeypot ref snapshot (non-gating)
-- `CONTRIBUTING.md` ó governance baseline file
+  - `tools/run_scoped_tests.py` ù module syntax + __info__ key validation gate
+  - `tools/validate_market_priority_minimums.py` ù coverage threshold checks
+  - `tools/validate_governance.py` ù governance file baseline check
+  - `tools/deep_intel_backlog.py` ù catalog enrichment report (non-gating)
+  - `tools/phase6b_honeypot_validation.py` ù honeypot ref snapshot (non-gating)
+- `CONTRIBUTING.md` ù governance baseline file
 
 ### Fixed
-- `publish-pypi.yml` ó added `PYPI_API_TOKEN` secret fallback for OIDC Trusted Publisher
+- `publish-pypi.yml` ù added `PYPI_API_TOKEN` secret fallback for OIDC Trusted Publisher
   (configure on PyPI at https://pypi.org/manage/account/publishing/)
 
 ### Changed
@@ -1004,27 +1016,27 @@ pip install embedxpl[all]              # Everything
 | Vendors | 49 | **51** |
 
 
-## [0.6.1] ó 2026-04-08
+## [0.6.1] ù 2026-04-08
 
 ### Added
 - **4 new vendor families**: `actiontec`, `arcadyan`, `netis`, `pfsense`
 - **10 new exploit modules** from third-party-router-poc analysis:
-  - `actiontec/mi424wr_rce_cve_2014_9583` ó Verizon FIOS traceroute cmd injection
-  - `arcadyan/o2_box_6431_password_disclosure_cve_2015_7288` ó pre-auth config/cred disclosure
-  - `netis/mw5360_mw5370_rce_cve_2014_8572` ó hardcoded UDP 53413 backdoor (no auth)
-  - `pfsense/pfsense_2_2_6_command_injection_cve_2016_10709` ó rrd_graph cmd injection
+  - `actiontec/mi424wr_rce_cve_2014_9583` ù Verizon FIOS traceroute cmd injection
+  - `arcadyan/o2_box_6431_password_disclosure_cve_2015_7288` ù pre-auth config/cred disclosure
+  - `netis/mw5360_mw5370_rce_cve_2014_8572` ù hardcoded UDP 53413 backdoor (no auth)
+  - `pfsense/pfsense_2_2_6_command_injection_cve_2016_10709` ù rrd_graph cmd injection
   - `trendnet/tew_827dru_ping_command_injection_cve_2019_13150`
   - `trendnet/tew_651br_tew_652brp_rce_cve_2019_13276`
-  - `zte/f660_config_download_decrypt` ó pre-auth ZTE F660 config download
+  - `zte/f660_config_download_decrypt` ù pre-auth ZTE F660 config download
   - `zyxel/vmg8825_ping_command_injection_cve_2019_9955`
   - `tplink/tl_wr841nd_password_disclosure_cve_2020_35575`
-  - `multi/openwrt_luci_rce_cve_2021_22161` ó CRLF injection + empty-password login
-- **GitHub Wiki** ó 19 pages (en-US complete + pt-BR core), sidebar, footer
+  - `multi/openwrt_luci_rce_cve_2021_22161` ù CRLF injection + empty-password login
+- **GitHub Wiki** ù 19 pages (en-US complete + pt-BR core), sidebar, footer
 
 ### Fixed
-- `tools/refresh_cve_extended_catalog.py` ó `Optional` not imported (F821 flake8 error)
-- `publish-pypi.yml` ó auto-tag now checks for existing tag before creating
-- Removed exclusive EG8145X6 wiki pages (12) ó Huawei treated as regular vendor
+- `tools/refresh_cve_extended_catalog.py` ù `Optional` not imported (F821 flake8 error)
+- `publish-pypi.yml` ù auto-tag now checks for existing tag before creating
+- Removed exclusive EG8145X6 wiki pages (12) ù Huawei treated as regular vendor
 - Removed NGFW/UTM and TAP architecture diagrams (no dedicated modules)
 
 ### Changed
@@ -1041,32 +1053,32 @@ pip install embedxpl[all]              # Everything
 | **Total** | **647** | **657** |
 
 
-## [0.6.0] ó 2026-04-08
+## [0.6.0] ù 2026-04-08
 
 ### Added
-- **11 Huawei EG8145X6-10 exploit modules** ó info disclosure, brute-force (rate-limit bypass), CSRF static token, pre-auth user enum, config AES decrypt, Epuser firewall bypass (CVE-2025-49599), MitM credential intercept, Telnet enable, CSRF payload generator, DNS poison via CSRF, WiFi credential extractor
-- **`eg8145x6_autopwn`** ó 9-phase chained exploitation: fingerprint ? info disclosure ? CSRF ? user enum ? brute-force ? config decrypt ? JS capture ? port scan ? report + generic fallback (v1.1.0)
-- **`generic/upnp/igd_exploit`** ó UPnP IGD full exploitation: SSDP discovery, GetExternalIPAddress, AddPortMapping (firewall bypass without auth), GetGenericPortMappingEntry, traffic stats, ForceTermination DoS check, event SUBSCRIBE
-- **`core/oui.py`** ó IEEE OUI database with online-first lookup and local fallback
-- **`core/session.py`** ó Persistent scan history per host (SHA-256 of IP+MAC), `~/.exf_sessions/`
-- **`core/discovery.py`** ó T0ñT5 timing profiles, multi-method host discovery, wireless detection, WirelessXPL-Forge recommendations, session integration
-- **`embedxpl/data/oui.txt`** ó Full IEEE OUI database (39k+ entries)
-- **`embedxpl/__main__.py`** ó `python -m embedxpl` and `exf` / `embedxpl` console scripts
-- **`pyproject.toml`** ó PEP 517/518 packaging (replaces legacy setup.py)
-- **GitHub Actions** ó `publish-pypi.yml` for Trusted Publishing (OIDC, no API tokens)
-- Wiki pages 01ñ12 (en-US + pt-BR)
+- **11 Huawei EG8145X6-10 exploit modules** ù info disclosure, brute-force (rate-limit bypass), CSRF static token, pre-auth user enum, config AES decrypt, Epuser firewall bypass (CVE-2025-49599), MitM credential intercept, Telnet enable, CSRF payload generator, DNS poison via CSRF, WiFi credential extractor
+- **`eg8145x6_autopwn`** ù 9-phase chained exploitation: fingerprint ? info disclosure ? CSRF ? user enum ? brute-force ? config decrypt ? JS capture ? port scan ? report + generic fallback (v1.1.0)
+- **`generic/upnp/igd_exploit`** ù UPnP IGD full exploitation: SSDP discovery, GetExternalIPAddress, AddPortMapping (firewall bypass without auth), GetGenericPortMappingEntry, traffic stats, ForceTermination DoS check, event SUBSCRIBE
+- **`core/oui.py`** ù IEEE OUI database with online-first lookup and local fallback
+- **`core/session.py`** ù Persistent scan history per host (SHA-256 of IP+MAC), `~/.exf_sessions/`
+- **`core/discovery.py`** ù T0ùT5 timing profiles, multi-method host discovery, wireless detection, WirelessXPL-Forge recommendations, session integration
+- **`embedxpl/data/oui.txt`** ù Full IEEE OUI database (39k+ entries)
+- **`embedxpl/__main__.py`** ù `python -m embedxpl` and `exf` / `embedxpl` console scripts
+- **`pyproject.toml`** ù PEP 517/518 packaging (replaces legacy setup.py)
+- **GitHub Actions** ù `publish-pypi.yml` for Trusted Publishing (OIDC, no API tokens)
+- Wiki pages 01ù12 (en-US + pt-BR)
 - GPON ONT attack surface diagram (`07-gpon-ont-attack.mmd` + PNG)
 
 ### Changed
-- `interpreter.py` ó Added `discover` and `sessions` commands, WiFi recommendation panel
-- `cve_extended_catalog.json` ó 338 total CVEs (+8: RXPL-2026-HW-001..008, CVE-2025-49599 expanded)
-- `huawei_defaults.txt` ó 50+ credentials including ISP-specific Brazil (Sumicity, Loga, Vivo, Claro, Oi)
-- `setup.py` ó Reduced to a PEP 517 shim; all metadata in `pyproject.toml`
+- `interpreter.py` ù Added `discover` and `sessions` commands, WiFi recommendation panel
+- `cve_extended_catalog.json` ù 338 total CVEs (+8: RXPL-2026-HW-001..008, CVE-2025-49599 expanded)
+- `huawei_defaults.txt` ù 50+ credentials including ISP-specific Brazil (Sumicity, Loga, Vivo, Claro, Oi)
+- `setup.py` ù Reduced to a PEP 517 shim; all metadata in `pyproject.toml`
 - README, diagrams, and wiki updated: removed NGFW/UTM and TAP (no dedicated modules), corrected module counts
 
 ### Removed
-- `docs/diagrams/architecture/03-ngfw-utm.mmd` ó no dedicated NGFW modules
-- `docs/diagrams/architecture/06-network-tap.mmd` ó TAP support was planned only
+- `docs/diagrams/architecture/03-ngfw-utm.mmd` ù no dedicated NGFW modules
+- `docs/diagrams/architecture/06-network-tap.mmd` ù TAP support was planned only
 - `docs/img/architecture/exf_arch_ngfw_utm.png`
 
 ### Module Counts
@@ -1083,7 +1095,7 @@ pip install embedxpl[all]              # Everything
 | CVEs | 330 | **338** |
 
 
-## [0.5.0] ó 2026-04-04
+## [0.5.0] ù 2026-04-04
 
 ### Added
 - Machine Learning advisor (CVSS scoring, module prioritization)
@@ -1093,7 +1105,7 @@ pip install embedxpl[all]              # Everything
 - GPU multi-backend: CUDA, AMD ROCm, OpenCL, CPU fallback
 - SmartPool adaptive thread/process pool
 - AsyncScanEngine with async HTTP client
-- Rich-based TUI ó all console output migrated from ANSI to Rich
+- Rich-based TUI ù all console output migrated from ANSI to Rich
 - Network discovery engine (Nmap + Scapy + ARP + TCP fallback)
 
 ### Changed
@@ -1101,7 +1113,7 @@ pip install embedxpl[all]              # Everything
 - Module audit and enrichment across all 575 modules
 
 
-## [0.4.0-beta] ó 2026-04-03
+## [0.4.0-beta] ù 2026-04-03
 
 ### Added
 - Major exploit incorporation: 575 modules, 330 CVEs, 49 vendors
