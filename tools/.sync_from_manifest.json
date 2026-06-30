@@ -1,0 +1,15 @@
+{
+  "generated_at": "2026-06-28T21:05:04Z",
+  "embedxpl_version": "3.8.4",
+  "direction": "specialized_to_embed",
+  "targets": {
+    "wirelessxpl": {
+      "total": 60,
+      "copied": 14,
+      "skipped": 46,
+      "conflict": 0,
+      "error": 0,
+      "dry_run": 0
+    }
+  }
+}

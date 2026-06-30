@@ -206,18 +206,25 @@ def _check_check_calls_run(content: str) -> bool:
     return False
 
 
-def _ensure_init_py(directory: Path) -> None:
-    """Create __init__.py in directory and all parents up to a known boundary."""
+def _ensure_init_py(directory: Path, boundary: Path | None = None) -> None:
+    """Create __init__.py in directory and parents up to package boundary."""
+    if boundary is None:
+        boundary = EMBEDXPL_ROOT
     current = directory
-    boundary = current
-    # Walk up until we hit an existing __init__.py or known package root
-    while current != current.parent:
+    while True:
+        if current != boundary and boundary not in current.parents:
+            break
         init = current / "__init__.py"
         if not init.exists():
             init.touch()
+        if current == boundary:
+            break
         if current.name in ("modules", "exploits", "generic", "protocols"):
             break
-        current = current.parent
+        parent = current.parent
+        if parent == current:
+            break
+        current = parent
 
 
 def _py_compile_file(path: Path) -> tuple[bool, str]:

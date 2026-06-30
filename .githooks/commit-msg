@@ -7,6 +7,7 @@ or manually:
     cp .githooks/commit-msg .git/hooks/commit-msg
     chmod +x .git/hooks/commit-msg
 """
+import re
 import sys
 from pathlib import Path
 
@@ -15,8 +16,13 @@ original = msg_file.read_text(encoding="utf-8", errors="replace")
 
 cleaned_lines = [
     line for line in original.splitlines()
-    if not line.startswith("Co-authored-by: Cursor")
-    and not line.startswith("Co-authored-by: cursoragent")
+    if not re.search(
+        r'^\s*Co-authored-by:\s*.*(cursor|cursoragent|copilot|chatgpt|claude|gemini|\bAI\b|LLM)',
+        line,
+        re.I,
+    )
+    and not re.search(r'^\s*Made-with:\s*.*cursor', line, re.I)
+    and not re.search(r'^\s*Generated with Cursor', line, re.I)
 ]
 
 # Strip trailing blank lines introduced by removal
