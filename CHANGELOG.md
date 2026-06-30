@@ -6,15 +6,23 @@ Format: [Semantic Versioning](https://semver.org) -- `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [3.8.8] - 2026-06-30
+
+### Added
+- **CopyFail** AF_ALG page-cache write LPE (`linux_copyfail_pagecache_lpe`) ó vendored PoC from [rafaeldtinoco/security](https://github.com/rafaeldtinoco/security/tree/main/exploits/copyfail)
+- **DirtyFrag** xfrm-ESP / RxRPC page-cache chain LPE (`linux_dirtyfrag_lpe`) ó vendored PoC from [rafaeldtinoco/security](https://github.com/rafaeldtinoco/security/tree/main/exploits/dirtyfrag)
+
+---
+
 ## [3.8.7] - 2026-06-30
 
 ### Added
-- **CVE-2026-43503** DirtyClone kernel LPE (`linux_dirtyclone_lpe_cve_2026_43503`) ó vendored PoC from [rafaeldtinoco/security](https://github.com/rafaeldtinoco/security/tree/main/exploits/dirtyclone)
-- **CVE-2026-46331** pedit COW kernel LPE (`linux_peditcow_lpe_cve_2026_46331`) ó vendored PoC from [rafaeldtinoco/security](https://github.com/rafaeldtinoco/security/tree/main/exploits/peditcow)
+- **CVE-2026-43503** DirtyClone kernel LPE (`linux_dirtyclone_lpe_cve_2026_43503`) ù vendored PoC from [rafaeldtinoco/security](https://github.com/rafaeldtinoco/security/tree/main/exploits/dirtyclone)
+- **CVE-2026-46331** pedit COW kernel LPE (`linux_peditcow_lpe_cve_2026_46331`) ù vendored PoC from [rafaeldtinoco/security](https://github.com/rafaeldtinoco/security/tree/main/exploits/peditcow)
 - **CVE-2026-47729** Squidbleed FTP gateway memory disclosure (`squid_ftp_memory_disclosure_cve_2026_47729`)
 - **CVE-2026-55200** libssh2 `packet_length` OOB write RCE scaffold (`libssh2_packet_length_rce_cve_2026_55200`)
-- `kernel_native_util.py` ó shared gcc build + kernel prereq checks for native PoCs
-- `page_cache_lpe_hunter` scanner ó DirtyPipe family correlation (Tracee-inspired heuristics)
+- `kernel_native_util.py` ù shared gcc build + kernel prereq checks for native PoCs
+- `page_cache_lpe_hunter` scanner ù DirtyPipe family correlation (Tracee-inspired heuristics)
 - Ref stub `ref_rafaeldtinoco_security.py`
 
 ---
