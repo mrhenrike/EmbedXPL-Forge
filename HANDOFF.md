@@ -850,3 +850,19 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge\embedxpl\modules\exploits\ics\rockwell\
 - Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\IndustrialXPL-Forge\industrialxpl\modules\cve\rockwell\
+
+---
+
+## [2026-08-13 16:20] -- Authorship cleanup + sync
+
+### Estado ao encerrar
+- Trailers Cursor/Copilot removidos do historico da default branch (onde aplicavel)
+- Hook `.githooks/commit-msg` ativo via `core.hooksPath=.githooks`
+- Remoto alinhado apos force-with-lease / push
+
+### Proximo passo imediato
+- Em clones antigos: fetch + reset da default branch
+
+### Paths importantes
+- Windows: `D:\Projetos-SafeLabs\submodules\Uniao-Geek\`
+- Linux: `/mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/`
