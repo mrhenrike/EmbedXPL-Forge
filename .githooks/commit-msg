@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
-"""commit-msg hook: strip any Co-authored-by: Cursor attribution injected by the IDE.
+"""commit-msg hook: strip tool/AI Co-authored-by trailers from commit messages.
 
-Install (once per clone):
-    python tools/install_hooks.py
-or manually:
-    cp .githooks/commit-msg .git/hooks/commit-msg
-    chmod +x .git/hooks/commit-msg
+Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
 import re
 import sys
@@ -17,7 +13,7 @@ original = msg_file.read_text(encoding="utf-8", errors="replace")
 cleaned_lines = [
     line for line in original.splitlines()
     if not re.search(
-        r'^\s*Co-authored-by:\s*.*(cursor|cursoragent|copilot|chatgpt|claude|gemini|\bAI\b|LLM)',
+        r'^\s*Co-authored-by:\s*.*(cursor|cursoragent|copilot|chatgpt|claude|gemini|\bAI\b|LLM|assistant)',
         line,
         re.I,
     )
@@ -25,13 +21,10 @@ cleaned_lines = [
     and not re.search(r'^\s*Generated with Cursor', line, re.I)
 ]
 
-# Strip trailing blank lines introduced by removal
 while cleaned_lines and cleaned_lines[-1].strip() == "":
     cleaned_lines.pop()
 
 cleaned = "\n".join(cleaned_lines) + "\n"
-
 if cleaned != original:
     msg_file.write_text(cleaned, encoding="utf-8")
-
 sys.exit(0)
