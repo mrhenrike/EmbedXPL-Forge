@@ -6,6 +6,30 @@ Format: [Semantic Versioning](https://semver.org) -- `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [3.9.0] - 2026-09-13
+
+### Added
+- **Wave 1 Printers**: 16 new printer modules: Lexmark 2025 wave (CVE-2025-4044, 65077, 65078, 1127, 65081, 65080, 9269), Brother EDB-51979/51981/51982, Canon CVE-2026-1789, HP CVE-2025-26507, CUPS CVE-2025-58060/58364, ACL protocol enum, LPD fuzzer
+- **Wave 2 Wireless**: 15 new wireless modules (DJI BLE DUML CVE-2026-77812/78306, MAVLink SERIAL_CONTROL CVE-2026-1579, PX4 CVE-2026-32743, RKES/EV1527 sub-GHz, 5Ghoul cellular, AIS/NMEA maritime, WhisperPair CVE-2025-36911, LoRaWAN CVE-2026-12363, Zigbee CVE-2025-8414, FragAttacks CVE-2025-27558, MT7622 AP heap BOF); WirelessXPL bridge
+- **Wave 3 Firewall**: FortiGate/pfSense syslog parsers, Sigma perimeter validator, WAF evasion generator, RIPv1 poison, VRRP hijack, TR-069 MiTM proxy, SSL strip embedded
+- **Wave 4 Industrial**: UR Polyscope 5 CVE-2026-8153, safety-gated Modbus/S7 destructive writers, IEC 62443/NIST SP 800-82/MITRE ICS assessment stubs
+- **Wave 5 Web CVEs**: Netis BOF CVE-2026-76070/71, Totolink/Tenda BOF, nginx rift+PoolSlip CVE-2026-42945, Langflow CVE-2026-9198, DataEase 4-chain CVE-2026-40901, Conductor GraalVM CVE-2026-58138, Next.js Windows CVE-2026-75604, DJI WEP CVE-2025-10250
+- **Wave 6 Bridges**: WirelessXPL-Forge bridge
+- **Wave 8 KEV**: IPv6 frag_escape CVE-2026-53362, SonicWall SMA1000 chain CVE-2026-15409/15410, Kestra CVE-2026-49869, Metabase CVE-2026-72898, LoadMaster CVE-2026-8037, TeamCity CVE-2026-63077, Zimbra CVE-2026-73570, RouterOS KEV CVE-2026-86060
+- **Wave 9 Native infra**: `native_src/` directory, multi_lang_module.py, native_compiler_bridge.py, Tenda FH451 C source (EDB-52374), SonicSessionLeak Ruby (CVE-2024-53704), Intelbras CSRF HTML (EDB-49969)
+- **Wave 10 Cameras**: Fullhan FH8626V100 chain CVE-2026-51402-51407, Lorex Pwn2Own chain CVE-2024-52544, Vivotek FD8136 CVE-2026-30649
+- **Wave 10 Routers**: D-Link DIR-882 CVE-2026-51401, TP-Link Archer AX21 CVE-2026-56479, Aztech DSL EDB-47575, Sagemcom FAST5280 CVE-2022-25229, Buffalo AirStation CVE-2019-19639
+- **Wave 10 NAS/IoT**: Microchip TimeProvider 4100 CVE-2024-47909, WiFiMouse RCE CVE-2021-45003
+- **Wave 11 Intel**: CVE2PoC (nomi-sec + trickest + BugBountyHunt), POC-Hunter multi-source, Vulhub Docker bridge
+- **Wave 12 Data**: trickest/cve reference, Android OpenAPV CVE-2026-0006, Barrier LPE EDB-49126
+- **Wave 13 Fortinet/SonicWall**: GoTigate/Fortiscan Go bridge, VisualDoor SonicWall RCE, SonicWall SSLVPN auth bypass CVE-2024-53704
+- **Wave 14 AI**: local_llm_bridge.py (Ollama ? dolphin3/qwen2.5-coder/deepseek-r1, unrestricted offline security AI)
+- **Wave 15**: SonicWall SSLVPN auth bypass CVE-2024-53704 module
+- **Wave 16 Labs/OT**: OpenPLC Editor RCE CVE-2021-31630, Forescout eyeControl CVE-2025-4660, 9 lab submodule pointers
+- New module categories: `protocols/`, `parsers/`, `assessment/`, `routers/mediatek/`, `smart_home/`, `mobile/android/`, `generic/ai/`, `generic/refs/labs/`
+
+---
+
 ## [3.8.8] - 2026-06-30
 
 ### Added
