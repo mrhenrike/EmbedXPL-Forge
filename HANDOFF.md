@@ -931,3 +931,63 @@ Path: offsecforge/intel/embedxpl_bridge.py
 - [ ] Revisar interface publica e docstrings
 - [ ] Adicionar testes unitarios com mock do motor local
 - [ ] Abrir issue: "feat(intel): add local analysis engine bridge"
+
+## [2026-09-14 17:50] -- Batch repo integration: cameras/smart_tv/network/mobile/routers
+
+### Estado ao encerrar
+- Adicionados 13 novos modulos de exploit nativos baseados em estudo de ~100 repos GitHub
+- EmbedXPL-Forge: 21 novos arquivos em cameras/hikvision, cameras/goahead, smart_tv/*, mobile/android/samsung, network/tcp_attacks, network/usb_attacks, routers/xiaomi, routers/zte
+- PrinterXPL-Forge: 3 novos modulos em xpl/exploits/epson, windows_spooler, lpd
+- IndustrialXPL-Forge: 1 modulo FrostyGoop OT malware detector + simulator
+- Commits e push realizados em todos os 3 repos
+
+### Novos modulos EmbedXPL-Forge
+- hikvision_cve_2021_36260_rce_chain.py (CVE-2021-36260 unauth RCE chain)
+- hikvision_cve_2017_7921_auth_bypass.py (CVE-2017-7921 improper auth + cred extraction)
+- goahead/goahead_ipcam_xss_rce.py (GoAhead webserver camera XSS+RCE)
+- smart_tv/samsung/samsung_tizen9_v8_rce_cve_chromium120.py (V8 type confusion RCE)
+- smart_tv/panasonic/panasonic_viera_upnp_unauth_control.py (UPnP unauthenticated control)
+- smart_tv/sony/sony_bravia_upnp_unauth_control.py (UPnP + IRCC unauthenticated)
+- smart_tv/roku/roku_ecp_unauth_control.py (ECP unauth + SSDP discovery + sideload)
+- mobile/android/samsung/samsung_mtp_bypass_sve_2017_10086.py (MTP bypass + AT cmd ADB)
+- network/tcp_attacks/tcp_off_path_wifi_injection.py (WiFi timing side-channel TCP injection)
+- network/usb_attacks/poisontap_usb_network_hijack.py (PoisonTap detection + simulation)
+- routers/xiaomi/xiaomi_openwrt_invasion_rce.py (OpenWRTInvasion stok+cmd inject)
+- routers/zte/zte_zxv10_h108l_rce.py (ZTExploit brute+cmd inject)
+
+### Novos modulos PrinterXPL-Forge
+- xpl/exploits/epson/epson_l14150_raw_bof_cve_2026_39047.py
+- xpl/exploits/windows_spooler/print_nightmare_cve_2021_1675_34527.py
+- xpl/exploits/lpd/lpd_shell_injection_rfc1179.py
+
+### Novos modulos IndustrialXPL-Forge
+- ixf/modules/malware/frostygoop/frostygoop_ot_malware_detector_simulator.py
+
+### Commits realizados
+- EmbedXPL: 27355791 "Add network/USB/SmartTV/Camera/Router exploit modules"
+- PrinterXPL: d95a505 "Add Epson CVE-2026-39047, PrintNightmare, LPD shell injection modules"
+- IndustrialXPL: 22a39e52a "Add FrostyGoop OT malware analysis and detection module"
+
+### Repos estudados mas nao incorporados (baixo valor/irrelevantes)
+- Repos de jailbreak iOS muito antigos (iPhone 3GS, iPhone OS 2.x)
+- DiscordSelfbot, IPTV, findwaydigital, 141OS, cpanel_CPSP (nao relacionados)
+- JavaPOS, 3d-printer-journal (nao offensivos)
+- tropicalblast, Ioncannon (qualidade baixa)
+
+### Proximo passo imediato
+- Adicionar PaperCut exploit (waffl3ss repo) ao PrinterXPL-Forge
+- Adicionar HP JetDirect path traversal
+- Considerar novo modulo android/mobile para Samsung TrustZone RE tools
+
+### Pendencias conhecidas
+- [ ] PaperCut RCE module (PrinterXPL-Forge)
+- [ ] HP JetDirect path traversal (PrinterXPL-Forge)
+- [ ] Chromecast GTV futex exploit (CVE-2026-43499) - EmbedXPL smart_tv/chromecast
+- [ ] Samsung TrustZone RE tools integration (IndustrialXPL ou novo modulo)
+- [ ] Roku sideload channel zip payload generation
+
+### Ambiente necessario
+- Python 3.10+
+- requests, impacket (opcional para printer exploits)
+- libmtp-dev (Linux, para samsung MTP bypass)
+- raw socket: root/CAP_NET_RAW (para TCP injection)
