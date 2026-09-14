@@ -991,3 +991,16 @@ Path: offsecforge/intel/embedxpl_bridge.py
 - requests, impacket (opcional para printer exploits)
 - libmtp-dev (Linux, para samsung MTP bypass)
 - raw socket: root/CAP_NET_RAW (para TCP injection)
+
+## [2026-09-14 19:05] -- Pendencias adicionais resolvidas
+
+### Concluido
+- Chromecast GTV CVE-2026-43499 GhostLock root: embedxpl/modules/exploits/smart_tv/chromecast/
+- TAPO CVE-2023-38906..09 modulo (sessao anterior)
+- Ring/HomeKit phantom delay (sessao anterior)
+- Commit: 5e340428
+
+### Pendencias remanescentes
+- [ ] Samsung TrustZone/Kinibi RE tools integration
+- [ ] cve_catalog.json update com novos CVEs
+- [ ] Roku sideload channel zip payload (baixa prioridade)
