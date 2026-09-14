@@ -866,3 +866,48 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 ### Paths importantes
 - Windows: `D:\Projetos-SafeLabs\submodules\Uniao-Geek\`
 - Linux: `/mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/`
+
+## [2026-09-13 23:58] -- EmbedXPL-Forge v3.9.0 -- Expansao completa 16 waves
+
+### Estado ao encerrar
+- 19 waves do plano embedxpl_full_sync executadas e comitadas
+- Versao bumped: 3.8.8 -> 3.9.0
+- Tag v3.9.0 criada e GitHub Release publicado
+- 80+ novos modulos criados nas categorias:
+  - Printers: 16 modulos (Lexmark 2025, Brother EDB-51979/81/82, Canon, HP, CUPS)
+  - Wireless: 15 modulos (DJI, MAVLink/PX4, sub-GHz, cellular 5G, maritimo, BT, LoRaWAN, Zigbee, FragAttacks)
+  - Firewall: parsers FortiGate/pfSense, Sigma validator, WAF evasion, RIPv1, VRRP, TR-069, SSL strip
+  - ICS/OT: UR Polyscope 5 CVE-2026-8153, Modbus/S7 writers com safety gates, assessment stubs
+  - Web CVEs: Netis, Totolink, Tenda, nginx rift+PoolSlip, Langflow, DataEase, Conductor, Next.js, DJI WEP
+  - KEV: IPv6 frag_escape, SonicWall SMA1000 chain, Kestra, Metabase, LoadMaster, TeamCity, Zimbra, RouterOS
+  - Native infra: native_src/ + multi_lang_module.py + native_compiler_bridge.py
+  - Cameras: Fullhan FH8626V100, Lorex Pwn2Own, Vivotek
+  - Routers: D-Link DIR-882, TP-Link AX21, Aztech, Sagemcom, Buffalo
+  - Intel: CVE2PoC, POC-Hunter, Vulhub Docker bridge
+  - AI: local_llm_bridge.py (Ollama, dolphin3/qwen2.5-coder)
+  - Labs: 9 pointers, OpenPLC CVE-2021-31630, Forescout CVE-2025-4660
+- OffSecForge submodulo criado localmente (primeira estrutura v0.1.0)
+- Commits realizados: 18 commits entre b47a6828 e b06fa4e0
+
+### Proximo passo imediato
+- Criar repositorio GitHub para OffSecForge: gh repo create mrhenrike/OffSecForge --private
+- Adicionar OffSecForge como submodulo do superprojeto
+- Continuar desenvolvimento do OffSecForge (CLI + orchestrator + reporter)
+
+### Pendencias conhecidas
+- [ ] OffSecForge: criar repo GitHub e submodulo pointer
+- [ ] OffSecForge: implementar __main__.py, orchestrator.py, reporter.py, ai_assist.py
+- [ ] EmbedXPL: adicionar labs-specific gitignore fix para refs/labs/
+- [ ] EmbedXPL: cve_catalog.json update com novos CVEs da expansao 3.9.0
+- [ ] EmbedXPL: testes de smoke nos novos modulos de protocolos/ e assessment/
+
+### Ambiente necessario
+- Python 3.11+
+- git + gh CLI
+- Ollama (para wave 14 funcionalidade)
+- Go 1.21+ (para wave 13 gotigate)
+
+### Paths importantes
+- Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge
+- Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge
+- OffSecForge: D:\Projetos-SafeLabs\submodules\Uniao-Geek\OffSecForge
