@@ -911,3 +911,23 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 - Windows: D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge
 - OffSecForge: D:\Projetos-SafeLabs\submodules\Uniao-Geek\OffSecForge
+
+## [2026-09-14] TupaXPL-Forge - Sugestao de evolucao upstream
+
+### Origem
+TupaXPL-Forge agora usa EmbedXPL-Forge como dependencia principal de modulos de exploit.
+Path: offsecforge/intel/embedxpl_bridge.py
+
+### O que TupaXPL adicionou
+- mbedxpl/modules/intel/local_llm_bridge.py: bridge para analise via motor local (7 metodos ofensivos)
+- mbedxpl_bridge.py: executor E2E real de qualquer modulo EmbedXPL (check+run sem dry-run)
+
+### Como contribuir upstream
+- local_llm_bridge.py pode ser proposto como PR para mbedxpl/modules/intel/
+- Destino: mbedxpl/modules/intel/llm_assisted_analysis.py
+- Testar: python -c "from embedxpl.modules.intel.local_llm_bridge import LocalLLMBridge; print(LocalLLMBridge().is_available())"
+
+### Pendencias para PR
+- [ ] Revisar interface publica e docstrings
+- [ ] Adicionar testes unitarios com mock do motor local
+- [ ] Abrir issue: "feat(intel): add local analysis engine bridge"
