@@ -256,10 +256,10 @@
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge
 
-## [2026-06-02 02:20] -- Novos módulos E2E exploit para firewalls (7 módulos)
+## [2026-06-02 02:20] -- Novos mï¿½dulos E2E exploit para firewalls (7 mï¿½dulos)
 
 ### Estado ao encerrar
-- Criados 7 novos módulos de exploit E2E em embedxpl/modules/exploits/firewalls/
+- Criados 7 novos mï¿½dulos de exploit E2E em embedxpl/modules/exploits/firewalls/
 - Arquivos modificados:
   - fortinet/fortios_format_string_rce_cve_2024_23113.py (novo)
   - fortinet/fortios_stack_overflow_rce_cve_2025_32756.py (novo)
@@ -271,18 +271,18 @@
 - Zero erros de lint
 - Sem commits realizados
 
-### Próximo passo imediato
-- Revisar os módulos em ambiente controlado e validar comportamento de check()/run() contra instâncias de teste
+### Prï¿½ximo passo imediato
+- Revisar os mï¿½dulos em ambiente controlado e validar comportamento de check()/run() contra instï¿½ncias de teste
 
-### Pendências conhecidas
+### Pendï¿½ncias conhecidas
 - [ ] Teste funcional em lab com appliances FortiOS/Citrix/Cisco simulados
-- [ ] Adição de suporte a shell staging via embedxpl.core.shells quando confirmado RCE
-- [ ] Atualizar __init__.py dos diretórios se necessário para registro automático dos módulos
+- [ ] Adiï¿½ï¿½o de suporte a shell staging via embedxpl.core.shells quando confirmado RCE
+- [ ] Atualizar __init__.py dos diretï¿½rios se necessï¿½rio para registro automï¿½tico dos mï¿½dulos
 
-### Ambiente necessário
+### Ambiente necessï¿½rio
 - Python 3.10+
 - embedxpl instalado (pip install -e . na raiz do EmbedXPL-Forge)
-- Acesso de rede aos appliances-alvo em ambiente de laboratório isolado
+- Acesso de rede aos appliances-alvo em ambiente de laboratï¿½rio isolado
 
 ### Paths importantes
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\embedxpl\modules\exploits\firewalls\
@@ -312,7 +312,7 @@
 - Executar suite de testes do projeto para validar imports dos novos modulos
 
 ### Pendencias conhecidas
-- [ ] fortimanager_fortijump_cve_2024_47575.py (existente) ainda e stub basico -- pode ser expandido com lógica da nova versao
+- [ ] fortimanager_fortijump_cve_2024_47575.py (existente) ainda e stub basico -- pode ser expandido com lï¿½gica da nova versao
 
 ### Ambiente necessario
 - Python 3.8+ com embedxpl instalado (pip install -e .)
@@ -490,7 +490,7 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 - Windows: D:\Projetos-SafeLabs\submodules\IoT\EmbedXPL-Forge\
 - Linux: /mnt/predator/Projetos-SafeLabs/submodules/IoT/EmbedXPL-Forge/
 
-## [2026-06-02 02:50] — Expansao wiki PT-BR: vendors e CVEs
+## [2026-06-02 02:50] ï¿½ Expansao wiki PT-BR: vendors e CVEs
 
 ### Estado ao encerrar
 - Adicionados 26 vendors ausentes em docs/wiki/pt-BR/23-referencia-vendors-firewalls.md (arista, array_networks, checkpoint, cisco_meraki, h3c, hillstone, hirschmann, ipfire, kerio, moxa, openvpn, opnsense, pfsense, phoenix/phoenix_contact, radware, schneider, siemens, sophos, stormshield, symantec, trellix, trendmicro, vyos, watchguard, zyxel)
@@ -600,7 +600,7 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 ### Estado ao encerrar
 - FASE 1: Verificacao de sintaxe em todos os arquivos Python novos - sem erros encontrados
 - FASE 2: Todos os 21 modulos dos BLOCOs K/L/D/H/N/I verificados e confirmados com implementacao real
-- FASE 3: Kapsch RSU (kapsch_rsu_efi_shell_cve_2025_25734.py) complementado com check() e run() - interfaçe padrão de exploit
+- FASE 3: Kapsch RSU (kapsch_rsu_efi_shell_cve_2025_25734.py) complementado com check() e run() - interfaï¿½e padrï¿½o de exploit
 - FASE 4: 2 duplicatas identicas removidas: phoenix/mguard_cmd_injection e phoenix/mguard_firmware_extract (mantidos em phoenix_contact/)
 - FASE 5: README.md e README.pt-BR.md atualizados com seccao "New Modules - BLOCO Batch v2.0"
   - Tabelas de modulos, exemplos de uso, input/output samples, requisitos, disclaimers legais
@@ -753,25 +753,25 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 
 ### Estado ao encerrar
 - Varredura completa de duplicatas em todos os repos XPL-Forge (EmbedXPL, FirewallXPL, IndustrialXPL, WirelessXPL, PrinterXPL)
-- FirewallXPL-Forge: 14 modulos removidos de perimeter/lb, perimeter/waf, perimeter/nac (cópias do sync que duplicavam originais em lb/, waf/, nac/)
-- FirewallXPL-Forge: diretório perimeter/phoenix/ removido (nome errado; canonical é phoenix_contact/)
+- FirewallXPL-Forge: 14 modulos removidos de perimeter/lb, perimeter/waf, perimeter/nac (cï¿½pias do sync que duplicavam originais em lb/, waf/, nac/)
+- FirewallXPL-Forge: diretï¿½rio perimeter/phoenix/ removido (nome errado; canonical ï¿½ phoenix_contact/)
 - FirewallXPL-Forge: fortimanager_fortijump movido para perimeter/fortinet/ (removido do routing/fortinet/)
-- IndustrialXPL-Forge: 31 módulos removidos de protocols/ics/ (duplicavam plc/, rtos/, scada/, protocols/modbus/)
+- IndustrialXPL-Forge: 31 mï¿½dulos removidos de protocols/ics/ (duplicavam plc/, rtos/, scada/, protocols/modbus/)
 - IndustrialXPL-Forge: ur_polyscope5 consolidado em protocols/ics/ (removido de plc/generic/)
 - PrinterXPL-Forge: ms_rprn_ntlm_coerce.py renomeado para ms_rprn_spooler_coerce_rfc.py (linux/) para resolver colisao de nome
-- EmbedXPL-Forge: check() adicionado a 11 modulos sem o método: firmware_crypto_key_extract, 5 BLE/WiFi lab modules, 5 router exploits (dsl_2640b, wdr5620, wr849n, tew_651br, vmg8825)
+- EmbedXPL-Forge: check() adicionado a 11 modulos sem o mï¿½todo: firmware_crypto_key_extract, 5 BLE/WiFi lab modules, 5 router exploits (dsl_2640b, wdr5620, wr849n, tew_651br, vmg8825)
 - sync_to_specialized.py: skip_src_subdirs adicionado para firewallxpl (lb,nac,waf,vpn) e industrialxpl (12 subdirs) para prevenir recriacao de duplicatas em syncs futuros
 - Commits: EmbedXPL 50390b90, FirewallXPL d997e93, IndustrialXPL c820954, PrinterXPL 61b395f
 - Superproject: 52e5d36b90
 
-### Próximo passo imediato
-- Nenhum pendente -- todos os repos estão limpos e sem duplicatas
+### Prï¿½ximo passo imediato
+- Nenhum pendente -- todos os repos estï¿½o limpos e sem duplicatas
 
-### Pendências conhecidas
-- FirewallXPL tem 32 conflicts reportados pelo sync (versões divergentes entre EmbedXPL e FW originais) -- comportamento esperado, sem ação necessária
-- cosmicenergy_iec104.py em IndustrialXPL existe em cve/malware/ e cve/malware/_native/ com conteúdo diferente -- intencional (módulo wrapper + implementação nativa)
+### Pendï¿½ncias conhecidas
+- FirewallXPL tem 32 conflicts reportados pelo sync (versï¿½es divergentes entre EmbedXPL e FW originais) -- comportamento esperado, sem aï¿½ï¿½o necessï¿½ria
+- cosmicenergy_iec104.py em IndustrialXPL existe em cve/malware/ e cve/malware/_native/ com conteï¿½do diferente -- intencional (mï¿½dulo wrapper + implementaï¿½ï¿½o nativa)
 
-### Ambiente necessário
+### Ambiente necessï¿½rio
 - Python 3.x
 - Git com safe.directory configurado para os repos Uniao-Geek
 
