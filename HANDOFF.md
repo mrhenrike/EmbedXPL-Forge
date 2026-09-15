@@ -1004,3 +1004,92 @@ Path: offsecforge/intel/embedxpl_bridge.py
 - [ ] Samsung TrustZone/Kinibi RE tools integration
 - [ ] cve_catalog.json update com novos CVEs
 - [ ] Roku sideload channel zip payload (baixa prioridade)
+
+## [2026-09-14 22:10] -- MSF Modules Mining offline (sem WSL)
+
+### Concluido
+7 modulos MSF baixados diretamente do GitHub e salvos em msf_modules/:
+
+| Arquivo | CVEs | Alvo |
+|---|---|---|
+| `firewalls/panos_management_unauth_rce.rb` | CVE-2024-0012, CVE-2024-9474 | PAN-OS 10.2-11.2 |
+| `firewalls/paloalto_expedition_rce.rb` | CVE-2024-5910, CVE-2024-9464 | Expedition <= 1.2.91 |
+| `routers/cisco_ios_xe_rce.rb` | CVE-2023-20198, CVE-2023-20273 | IOS XE Web UI (CVSS 10.0) |
+| `routers/netis_unauth_rce_cve_2024_48456_48457.rb` | CVE-2024-48455/56/57 | Netis NC/NX/MW series |
+| `routers/zyxel_lfi_unauth_ssh_rce.rb` | CVE-2023-28770 | Zyxel VMG + 40 CPE |
+| `cameras/hikvision_cve_2021_36260_blind.rb` | CVE-2021-36260 | Hikvision (blind variant) |
+| `cameras/axis_srv_parhand_rce.rb` | CVE-2018-10660/61/62 | Axis cameras pre-2018 |
+
+Registry updater criado: `.tmp/update_msf_registry.py` (27 modulos MSF catalogados)
+
+### Pendencia urgente - sistema travado
+Matar processos zombies antes de continuar:
+```
+# No Task Manager ou cmd.exe (Win+R):
+taskkill /F /IM python3.exe /T
+taskkill /F /IM python.exe /T
+wsl --shutdown
+```
+
+Depois rodar:
+```powershell
+cd D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge
+$env:PYTHONIOENCODING = "utf-8"
+python3 .tmp\update_msf_registry.py   # adiciona 27 modulos MSF ao registry
+git add -A && git commit -m "Add MSF bridge modules: PAN-OS, Cisco IOS XE, Zyxel, Netis, Axis, Hikvision"
+```
+
+### Modulos restantes para buscar (Sprint 1 continuacao)
+Repos que precisam ser clonados localmente (aguardando sistema saudavel):
+- `sfewer-r7/LorexExploit` → `.tmp/LorexExploit/` → compilar C binario
+- `sfewer-r7/BrotherVulnerabilities` → `.tmp/BrotherVulnerabilities/` → importar .rb para PrinterXPL MSF bridge
+- Metasploit harvest via WSL (quando MSF estiver instalado): +300 Ruby modules
+
+
+### Estado ao encerrar
+
+#### Diagnostico de duplicados - resultado:
+- **Sem duplicatas de filename**: convencoes distintas (edb_XXXXX.py, rsf_vendor/, descritivo)
+- **Sem duplicatas de conteudo**: modulos para mesmo CVE sao COMPLEMENTARES (abordagens diferentes)
+- **Bug encontrado e corrigido**: harvest_all.py criava diretorios `rsf_shellshock.py/` com extensao .py no nome
+  - Fix: modules RSF planos (2 niveis) -> `device_type/rsf/` em vez de `device_type/rsf_filename.py/`
+  - Arquivo corrigido: `tools/harvest_all.py` linhas 358-375
+
+#### Estado dos arquivos RSF bugados:
+- `generic/rsf/shellshock.py` - CORRIGIDO (movido para rsf/)
+- `generic/rsf/heartbleed.py` - CORRIGIDO (movido para rsf/)
+- `generic/rsf/ssh_auth_keys.py` - CORRIGIDO (movido para rsf/)
+- Diretorios antigos `rsf_*.py/` - limpeza em progresso (processo background)
+
+#### Novos arquivos criados:
+- `embedxpl/modules/exploits/generic/rsf/__init__.py`
+- `.tmp/dedup_cleanup.py` - script completo de dedup/audit
+
+#### Registry stats (session anterior):
+- Total entries: 3,173
+- ExploitDB Python: 441 | Ruby: 213 | C: 122 | Shell: 69
+- RouterSploit: 143 exploits + 171 creds + 4 scanners
+- Metasploit: install em progresso no WSL Ubuntu (demorado)
+
+### Proximo passo imediato
+1. Aguardar finalizacao do apt install metasploit no WSL (pode levar mais 1-2h)
+2. Quando concluir: `wsl -d Ubuntu -e bash -c "cd /mnt/d/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge && python3 tools/harvest_all.py --source metasploit"`
+3. Rodar dedup_cleanup.py com --fix para limpar residuos:
+   `python3 .tmp/dedup_cleanup.py --fix`
+4. Commitar: git add -A && git commit -m "Fix RSF flat module directory naming in harvester"
+
+### Pendencias conhecidas
+- [ ] MSF install no WSL + harvest metasploit modules (+300 Ruby modules via bridge)
+- [ ] dedup_cleanup.py --fix (limpar residuos de diretorios rsf_*.py/)
+- [ ] Samsung TrustZone/Kinibi RE tools integration
+- [ ] cve_catalog.json update com novos CVEs
+- [ ] Roku sideload channel zip payload (baixa prioridade)
+
+### Ambiente necessario
+- Python 3.10+
+- WSL Ubuntu com Metasploit (instalando)
+- `searchsploit` (instalando)
+
+### Paths importantes
+- Windows: `D:\Projetos-SafeLabs\submodules\Uniao-Geek\EmbedXPL-Forge`
+- Linux: `/mnt/predator/Projetos-SafeLabs/submodules/Uniao-Geek/EmbedXPL-Forge`
