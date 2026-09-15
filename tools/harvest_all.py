@@ -358,11 +358,21 @@ def harvest_routersploit(dry_run: bool = False) -> dict:
         # Determine EmbedXPL destination
         if module_type == "exploits" and len(parts) >= 3:
             device_type = parts[1]  # routers, cameras, misc
-            vendor = parts[2] if len(parts) > 2 else "generic"
-            dest_dir = (
-                BASE / "embedxpl" / "modules" / "exploits" /
-                f"{device_type}" / f"rsf_{vendor}"
-            )
+            if len(parts) == 3:
+                # Flat module: exploits/generic/shellshock.py
+                # parts[2] is the filename itself — no vendor subdir
+                dest_dir = (
+                    BASE / "embedxpl" / "modules" / "exploits" /
+                    f"{device_type}" / "rsf"
+                )
+            else:
+                # Nested module: exploits/routers/dlink/dir_300_rce.py
+                # parts[2] is the vendor directory name (never has .py extension)
+                vendor = parts[2]
+                dest_dir = (
+                    BASE / "embedxpl" / "modules" / "exploits" /
+                    f"{device_type}" / f"rsf_{vendor}"
+                )
         elif module_type == "creds":
             dest_dir = BASE / "embedxpl" / "modules" / "creds" / "rsf"
         elif module_type == "scanners":
