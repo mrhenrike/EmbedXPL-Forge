@@ -24,7 +24,10 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek
 from __future__ import annotations
 
 import os
+import shutil
 import struct
+import subprocess
+import sys
 from pathlib import Path
 from typing import Optional
 
@@ -102,28 +105,73 @@ class HookChainAnalyzer:
         if ntdll_bytes is None:
             ntdll_bytes = self.read_ntdll()
 
-        # Find function name string in PE export table
-        name_bytes = function_name.encode("ascii") + b"\x00"
-        idx = ntdll_bytes.find(name_bytes)
-        if idx == -1:
+        rva = self._export_rva(function_name, ntdll_bytes)
+        if rva is None:
             return None
-
-        # Search for syscall stub pattern near the export
-        # Look in a window around the export name
-        window = ntdll_bytes[max(0, idx - 512):idx + 512]
-        stub_idx = window.find(SYSCALL_STUB_PATTERN)
-        if stub_idx == -1:
+        offset = self._rva_to_offset(ntdll_bytes, rva)
+        if offset is None:
             return None
-
-        # SSN is 4 bytes after B8
-        ssn_offset = stub_idx + len(SYSCALL_STUB_PATTERN)
-        if ssn_offset + 4 > len(window):
-            return None
-        ssn = struct.unpack_from("<I", window, ssn_offset)[0]
-        # Sanity: SSN should be < 1000
+        stub = ntdll_bytes[offset:offset + 16]
+        # 4C 8B D1 B8 XX XX XX XX  (mov r10, rcx; mov eax, SSN)
+        if stub[:4] != SYSCALL_STUB_PATTERN:
+            # hooked or patched: still try B8 after a JMP
+            b8 = stub.find(b"\xb8")
+            if b8 == -1 or b8 + 5 > len(stub):
+                return None
+            ssn = struct.unpack_from("<I", stub, b8 + 1)[0]
+        else:
+            ssn = struct.unpack_from("<I", stub, 4)[0]
         if ssn > 1000:
             return None
         return ssn
+
+    def _export_rva(self, function_name: str, data: bytes) -> Optional[int]:
+        """Resolve export RVA from the PE export directory (not a string scan)."""
+        if data[:2] != b"MZ":
+            return None
+        e_lfanew = struct.unpack_from("<I", data, 0x3C)[0]
+        if data[e_lfanew:e_lfanew + 4] != b"PE\x00\x00":
+            return None
+        magic = struct.unpack_from("<H", data, e_lfanew + 24)[0]
+        dd_off = e_lfanew + 24 + (112 if magic == 0x20B else 96)
+        export_rva, _export_size = struct.unpack_from("<II", data, dd_off)
+        exp = self._rva_to_offset(data, export_rva)
+        if exp is None:
+            return None
+        nnames = struct.unpack_from("<I", data, exp + 24)[0]
+        names_rva = struct.unpack_from("<I", data, exp + 32)[0]
+        ords_rva = struct.unpack_from("<I", data, exp + 36)[0]
+        funcs_rva = struct.unpack_from("<I", data, exp + 28)[0]
+        names = self._rva_to_offset(data, names_rva)
+        ords = self._rva_to_offset(data, ords_rva)
+        funcs = self._rva_to_offset(data, funcs_rva)
+        if None in (names, ords, funcs):
+            return None
+        want = function_name.encode("ascii")
+        for i in range(min(nnames, 4096)):
+            name_rva = struct.unpack_from("<I", data, names + i * 4)[0]
+            name_off = self._rva_to_offset(data, name_rva)
+            if name_off is None:
+                continue
+            end = data.find(b"\x00", name_off, name_off + 128)
+            if end == -1:
+                continue
+            if data[name_off:end] == want:
+                ordinal = struct.unpack_from("<H", data, ords + i * 2)[0]
+                return struct.unpack_from("<I", data, funcs + ordinal * 4)[0]
+        return None
+
+    def _rva_to_offset(self, data: bytes, rva: int) -> Optional[int]:
+        e_lfanew = struct.unpack_from("<I", data, 0x3C)[0]
+        nsections = struct.unpack_from("<H", data, e_lfanew + 6)[0]
+        opt_size = struct.unpack_from("<H", data, e_lfanew + 20)[0]
+        sec = e_lfanew + 24 + opt_size
+        for _ in range(min(nsections, 96)):
+            vsize, va, raw_size, raw_ptr = struct.unpack_from("<IIII", data, sec + 8)
+            if va <= rva < va + max(vsize, raw_size):
+                return raw_ptr + (rva - va)
+            sec += 40
+        return None
 
     def detect_hook(self, function_name: str, ntdll_bytes: Optional[bytes] = None) -> dict:
         """Detect if an NT API function is hooked by an EDR.
@@ -307,3 +355,88 @@ class HookChainLoaderGen:
                 else "No hooks detected - direct syscalls safe"
             ),
         }
+
+
+_HOOKCHAIN_HINTS = (
+    Path(__file__).resolve().parents[5] / "Hacking" / "hookchain",
+    Path(r"D:\Projetos-SafeLabs\submodules\Hacking\hookchain"),
+    Path("/mnt/predator/Projetos-SafeLabs/submodules/Hacking/hookchain"),
+)
+
+
+def hookchain_source_dir() -> Optional[Path]:
+    for candidate in _HOOKCHAIN_HINTS:
+        if (candidate / "enum" / "hookchain_finder64.c").is_file():
+            return candidate
+    return None
+
+
+def try_compile_hookchain(timeout: int = 90) -> dict:
+    """Compile hookchain_finder64.c when a C toolchain is present.
+
+    The full HookChain implant is MSVC + MASM. The finder is gcc-friendly
+    (see enum/hookchain_finder64.c header). Python PE/SSN work stays primary.
+    """
+    src_root = hookchain_source_dir()
+    if src_root is None:
+        return {"ok": False, "error": "hookchain source not found"}
+    src = src_root / "enum" / "hookchain_finder64.c"
+    out_dir = src_root / "enum"
+    out_exe = out_dir / ("hookchain_finder64.exe" if sys.platform == "win32" else "hookchain_finder64")
+    if out_exe.is_file():
+        return {"ok": True, "binary": str(out_exe), "built": False}
+
+    gcc = shutil.which("gcc") or shutil.which("x86_64-w64-mingw32-gcc")
+    if gcc:
+        cmd = [gcc, str(src), "-o", str(out_exe), "-ldbghelp"]
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+        except (FileNotFoundError, subprocess.TimeoutExpired) as exc:
+            return {"ok": False, "error": str(exc), "source": str(src)}
+        return {
+            "ok": result.returncode == 0 and out_exe.is_file(),
+            "binary": str(out_exe) if out_exe.is_file() else None,
+            "built": result.returncode == 0,
+            "stderr_tail": (result.stderr or "")[-300:],
+        }
+
+    if sys.platform == "win32":
+        try:
+            probe = subprocess.run(
+                ["wsl", "-d", "Ubuntu", "--", "bash", "-lc", "command -v x86_64-w64-mingw32-gcc || command -v gcc"],
+                capture_output=True, text=True, timeout=8,
+            )
+        except (FileNotFoundError, subprocess.TimeoutExpired) as exc:
+            return {
+                "ok": False,
+                "error": f"no gcc/mingw: {exc}",
+                "recipe": f"gcc {src} -o hookchain_finder64.exe -ldbghelp",
+                "note": "full implant needs MSVC + hookchain.asm",
+            }
+        if probe.returncode != 0 or not probe.stdout.strip():
+            return {
+                "ok": False,
+                "error": "gcc not found (host or WSL)",
+                "recipe": f"gcc {src} -o hookchain_finder64.exe -ldbghelp",
+                "note": "Python SSN map in HookChainAnalyzer remains native",
+            }
+        linux_src = "/mnt/d/Projetos-SafeLabs/submodules/Hacking/hookchain/enum/hookchain_finder64.c"
+        linux_out = "/mnt/d/Projetos-SafeLabs/submodules/Hacking/hookchain/enum/hookchain_finder64.exe"
+        cc = probe.stdout.strip().splitlines()[0]
+        result = subprocess.run(
+            ["wsl", "-d", "Ubuntu", "--", "bash", "-lc", f"{cc} {linux_src} -o {linux_out} -ldbghelp"],
+            capture_output=True, text=True, timeout=timeout,
+        )
+        return {
+            "ok": result.returncode == 0 and out_exe.is_file(),
+            "binary": str(out_exe) if out_exe.is_file() else None,
+            "built": result.returncode == 0,
+            "stderr_tail": (result.stderr or "")[-300:],
+            "compiler": cc,
+        }
+
+    return {
+        "ok": False,
+        "error": "no C compiler",
+        "recipe": f"gcc {src} -o hookchain_finder64 -ldbghelp",
+    }
