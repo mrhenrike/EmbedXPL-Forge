@@ -2,14 +2,12 @@
   <img src="docs/img/embedxpl-forge-banner_16x9.png" alt="EmbedXPL-Forge" width="100%">
 </p>
 
-<p align="center">
-  [![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://python.org)
-  [![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-informational?style=flat-square)](README.md#compatibility)
-  [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
-  [![XPL Suite](https://img.shields.io/badge/XPL--Forge-Suite-red?style=flat-square)](https://github.com/mrhenrike)
-  [![Issues](https://img.shields.io/github/issues/mrhenrike/EmbedXPL-Forge?style=flat-square)](https://github.com/mrhenrike/EmbedXPL-Forge/issues)
-  [![Last Commit](https://img.shields.io/github/last-commit/mrhenrike/EmbedXPL-Forge?style=flat-square)](https://github.com/mrhenrike/EmbedXPL-Forge/commits)
-</p>
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)
+[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-informational?style=flat-square)](README.md#compatibility)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+[![XPL Suite](https://img.shields.io/badge/XPL--Forge-Suite-red?style=flat-square)](https://github.com/mrhenrike)
+[![Issues](https://img.shields.io/github/issues/mrhenrike/EmbedXPL-Forge?style=flat-square)](https://github.com/mrhenrike/EmbedXPL-Forge/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/mrhenrike/EmbedXPL-Forge?style=flat-square)](https://github.com/mrhenrike/EmbedXPL-Forge/commits)
 
 ---
 
