@@ -29,7 +29,7 @@
 
 | component | origin_repo | origin_author | origin_license | integration_type | tier | date_integrated | security_risk |
 |-----------|------------|--------------|---------------|-----------------|------|----------------|---------------|
-| (to be populated during Wave 3-4 analysis) | | | | | | | |
+| android_contacts_sqli_cve_2026_28576.py | https://github.com/mobilehackinglab/CVE-2026-28576-poc | MobileHackingLab | none (rewrite) | rewritten | TIER2 | 2026-09-18 | LOW |
 
 ---
 
