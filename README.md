@@ -3,16 +3,19 @@
 </p>
 
 <p align="center">
-  <a href="https://pypi.org/project/embedxpl/"><img src="https://img.shields.io/pypi/v/embedxpl?color=red&label=PyPI&logo=pypi&logoColor=white" alt="PyPI"></a>
-  <a href="https://pypi.org/project/embedxpl/"><img src="https://img.shields.io/pypi/pyversions/embedxpl?color=blue&label=Python&logo=python&logoColor=white" alt="Python"></a>
-  <a href="https://github.com/mrhenrike/EmbedXPL-Forge/actions"><img src="https://img.shields.io/github/actions/workflow/status/mrhenrike/EmbedXPL-Forge/ci.yml?branch=master&label=CI&logo=github" alt="CI"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg" alt="License"></a>
-  <img src="https://img.shields.io/badge/Modules-3000%2B-brightgreen" alt="Modules">
-  <img src="https://img.shields.io/badge/CVEs-700%2B-red" alt="CVEs">
-  <img src="https://img.shields.io/badge/Vendors-114%2B-orange" alt="Vendors">
-  <img src="https://img.shields.io/badge/Python-3.8--3.13-blue" alt="Python">
-  <img src="https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey" alt="Platform">
+  [![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)](https://python.org)
+  [![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-informational?style=flat-square)](README.md#compatibility)
+  [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+  [![XPL Suite](https://img.shields.io/badge/XPL--Forge-Suite-red?style=flat-square)](https://github.com/mrhenrike)
+  [![Issues](https://img.shields.io/github/issues/mrhenrike/EmbedXPL-Forge?style=flat-square)](https://github.com/mrhenrike/EmbedXPL-Forge/issues)
+  [![Last Commit](https://img.shields.io/github/last-commit/mrhenrike/EmbedXPL-Forge?style=flat-square)](https://github.com/mrhenrike/EmbedXPL-Forge/commits)
 </p>
+
+---
+
+> **Platform Note:** This framework is designed and tested primarily on **Linux** (Debian/Ubuntu/Kali). Most hardware-dependent modules (wireless adapters, USB devices, raw socket access, firmware tools) require Linux. Running on Windows or macOS may cause errors or limited functionality in many modules. Linux is strongly recommended for maximum compatibility.
+
+---
 
 # EmbedXPL-Forge
 
