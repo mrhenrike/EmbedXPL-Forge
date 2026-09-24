@@ -1,7 +1,0 @@
-admin:admin
-anonymous:anonymous
-aparker@geometrixx.info:aparker
-author:author
-jdoe@geometrixx.info:jdoe
-replication-receiver:replication-receiver
-vgnadmin:vgnadmin

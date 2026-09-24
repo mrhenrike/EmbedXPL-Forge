@@ -1,3 +1,0 @@
-admin:admin
-supervisor:supervisor
-service:service

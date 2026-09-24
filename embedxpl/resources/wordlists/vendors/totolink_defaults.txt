@@ -1,4 +1,0 @@
-admin:123456
-admin:admin
-onlime_r:12345
-root:12345

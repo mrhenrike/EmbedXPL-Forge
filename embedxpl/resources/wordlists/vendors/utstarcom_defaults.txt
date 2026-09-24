@@ -1,6 +1,0 @@
-admin:admin
-admin:utstar
-dbase:dbase
-field:field
-guru:*3noguru
-snmp:snmp

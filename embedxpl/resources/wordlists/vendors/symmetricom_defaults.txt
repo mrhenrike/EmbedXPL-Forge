@@ -1,2 +1,0 @@
-guest:truetime
-operator:mercury

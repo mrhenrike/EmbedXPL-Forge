@@ -1,4 +1,0 @@
-demo:demo
-jasperadmin:jasperadmin
-joeuser:joeuser
-superuser:superuser

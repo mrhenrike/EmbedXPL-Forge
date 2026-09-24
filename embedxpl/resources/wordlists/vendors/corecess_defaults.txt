@@ -1,3 +1,0 @@
-Administrator:admin
-admin:
-corecess:corecess

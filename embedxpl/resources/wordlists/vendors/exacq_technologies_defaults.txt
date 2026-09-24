@@ -1,2 +1,0 @@
-admin:admin256
-user:user5710

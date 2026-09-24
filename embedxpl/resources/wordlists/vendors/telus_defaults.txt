@@ -1,3 +1,0 @@
-admin:telus
-(created):telus00
-(created):telus99

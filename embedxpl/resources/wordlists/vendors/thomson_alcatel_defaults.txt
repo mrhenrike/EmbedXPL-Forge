@@ -1,4 +1,0 @@
-Administrator:Administrator
-Administrator:admin
-admin:Administrator
-admin:admin

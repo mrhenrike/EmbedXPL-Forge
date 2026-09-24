@@ -1,9 +1,0 @@
-TELMEX:admin
-TELMEX:conf
-TELMEX:user
-admin:admin
-admin:conf
-admin:user
-user:admin
-user:conf
-user:user

@@ -1,4 +1,0 @@
-admin:lightweight
-admin:sky
-sky:lightweight
-sky:sky

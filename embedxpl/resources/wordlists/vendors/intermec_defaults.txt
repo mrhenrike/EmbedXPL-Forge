@@ -1,2 +1,0 @@
-:intermec
-intermec:intermec

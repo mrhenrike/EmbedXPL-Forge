@@ -1,2 +1,0 @@
-admin:NEMONTadmin
-admin:admin

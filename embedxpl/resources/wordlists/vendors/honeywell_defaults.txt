@@ -1,2 +1,0 @@
-LocalComServer:LCS pwd 03
-TPSLocalServer:TLS pwd 03

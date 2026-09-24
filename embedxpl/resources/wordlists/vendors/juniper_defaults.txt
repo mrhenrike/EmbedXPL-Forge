@@ -1,7 +1,0 @@
-admin:abc123
-admin:netscreen
-admin:peribit
-netscreen:netscreen
-redline:redline
-serial#:serial#
-super:juniper123

@@ -1,4 +1,0 @@
-admin:admin
-davox:davox
-root:davox
-sa:

@@ -1,9 +1,0 @@
-admin:admin
-admin:draadloos
-admin:user
-user:admin
-user:draadloos
-user:user
-ziggo:admin
-ziggo:draadloos
-ziggo:user

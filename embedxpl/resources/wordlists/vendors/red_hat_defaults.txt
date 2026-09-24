@@ -1,5 +1,0 @@
-:AMIAMI
-:AMIDECOD
-admin:admin
-piranha:piranha
-piranha:q

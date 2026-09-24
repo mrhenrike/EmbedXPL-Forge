@@ -1,3 +1,0 @@
-WEBADM:password
-admin:admin
-dev:dev
