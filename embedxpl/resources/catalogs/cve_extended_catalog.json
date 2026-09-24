@@ -1,7 +1,7 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 536,
-  "last_updated": "2026-06-15",
+  "entry_count": 550,
+  "last_updated": "2026-09-23",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
     {
@@ -6727,6 +6727,68 @@
       "references": [
         "ICSA-26-167-05",
         "https://www.cisa.gov/ics-advisories/"
+      ]
+    },
+    {
+      "id": "CVE-2026-35616",
+      "title": "FortiClient EMS Pre-Auth API Bypass via X-SSL Header Spoofing",
+      "product": "Fortinet FortiClient EMS 7.4.5-7.4.6",
+      "cvss": "9.1 (AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N)",
+      "impact": "Django middleware accepts arbitrary X-SSL-CLIENT-VERIFY headers without crypto validation -> admin access",
+      "module": "embedxpl/modules/exploits/firewalls/fortinet/forticlient_ems_preauth_rce_cve_2026_35616.py",
+      "date": "2026-06",
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-35616"
+      ]
+    },
+    {
+      "id": "CVE-2025-20333",
+      "title": "Cisco ASA/FTD FMC Missing Authorization (FIRESTARTER)",
+      "product": "Cisco Firepower Management Center / FTD",
+      "cvss": "9.8",
+      "impact": "Pre-auth access to all privileged FMC endpoints — full device takeover (CISA AR26-113A)",
+      "module": "embedxpl/modules/exploits/firewalls/cisco/cisco_asa_ftd_missing_authz_cve_2025_20333.py",
+      "date": "2025-04",
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-20333",
+        "https://www.cisa.gov/news-events/cybersecurity-advisories/ar26-113a"
+      ]
+    },
+    {
+      "id": "CVE-2025-20362",
+      "title": "Cisco ASA/FTD VPN Buffer Overflow RCE (FIRESTARTER)",
+      "product": "Cisco ASA / FTD VPN",
+      "cvss": "10.0",
+      "impact": "Malformed VPN packet triggers stack overflow — unauthenticated RCE (CISA AR26-113A)",
+      "module": "embedxpl/modules/exploits/firewalls/cisco/cisco_asa_ftd_bof_rce_cve_2025_20362.py",
+      "date": "2025-04",
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-20362",
+        "https://www.cisa.gov/news-events/cybersecurity-advisories/ar26-113a"
+      ]
+    },
+    {
+      "id": "CVE-2024-50562",
+      "title": "Fortinet FortiOS SSL-VPN Session Token Reuse",
+      "product": "Fortinet FortiOS 7.4.x / 7.2.x SSL-VPN",
+      "cvss": "7.5",
+      "impact": "SSL-VPN session tokens not invalidated on logout — reusable for persistent access",
+      "module": "embedxpl/modules/exploits/firewalls/fortinet/fortios_sslvpn_session_reuse_cve_2024_50562.py",
+      "date": "2024-11",
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-50562"
+      ]
+    },
+    {
+      "id": "CVE-2026-24858",
+      "title": "FortiCloud SSO Authentication Bypass",
+      "product": "Fortinet FortiCloud SSO",
+      "cvss": "9.1",
+      "impact": "SAML assertion validation flaw bypasses FortiCloud SSO — no credentials required",
+      "module": "embedxpl/modules/exploits/firewalls/fortinet/forticloud_sso_auth_bypass_cve_2026_24858.py",
+      "date": "2026-03",
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-24858"
       ]
     }
   ]
