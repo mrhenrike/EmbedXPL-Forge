@@ -1,4 +1,0 @@
-admin:admin
-:jannie
-admin:epicrouter
-vikram:singh

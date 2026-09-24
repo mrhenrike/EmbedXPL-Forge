@@ -1,2 +1,0 @@
-admin:0000
-admin:admin

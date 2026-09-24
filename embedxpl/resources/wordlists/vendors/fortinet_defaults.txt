@@ -1,6 +1,0 @@
-:bcpb(serial number of the firewall)
-admin:
-maintainer:admin
-maintainer:bcpb[SERIAL NO.]
-maintainer:pbcpbn(add-serial-number)
-maintainer:bcpb+SERIAL

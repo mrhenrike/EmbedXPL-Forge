@@ -1,6 +1,0 @@
-admin:cableroot
-admin:user
-user:cableroot
-user:user
-root:
-root:root
