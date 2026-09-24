@@ -1,3 +1,0 @@
-admin:raritan
-epiq_api:raritan
-web_api:sl33p30F00dumass!

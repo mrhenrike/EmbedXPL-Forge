@@ -1,4 +1,0 @@
-3play:3play
-3play:admin
-admin:3play
-admin:admin

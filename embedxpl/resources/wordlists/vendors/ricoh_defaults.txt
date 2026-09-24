@@ -1,8 +1,0 @@
-:password
-:sysadm
-admin:
-admin:no password
-admin:password
-sysadm:sysadm
-sysadmin:password
-supervisor:supervisor

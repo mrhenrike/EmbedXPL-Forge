@@ -1,2 +1,0 @@
-admin:admin
-root:1234

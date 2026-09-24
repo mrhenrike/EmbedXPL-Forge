@@ -1,2 +1,0 @@
-root:logapp
-toor:logapp

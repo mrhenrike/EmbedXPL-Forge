@@ -1,4 +1,0 @@
-:console
-:gandalf
-:system
-:xmux
