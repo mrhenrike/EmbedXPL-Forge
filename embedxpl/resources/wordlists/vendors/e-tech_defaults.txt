@@ -1,4 +1,0 @@
-:admin
-admin:epicrouter
-admin:password
-none:admin

@@ -1,3 +1,0 @@
-User:admin
-User:password
-User:unknown

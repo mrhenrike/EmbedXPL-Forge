@@ -1,2 +1,0 @@
-cusadmin:highspeed
-cusadmin:CantTouchThis
