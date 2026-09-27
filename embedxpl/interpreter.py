@@ -252,16 +252,22 @@ class BaseInterpreter:
 class EmbedXPLInterpreter(BaseInterpreter):
     history_file = os.path.expanduser("~/.exf_history")
     global_help = """Global commands:
-    help                        Print this help menu
-    use <module>                Select a module for usage
-    exec <shell command> <args> Execute a command in a shell
-    search <search term>        Search for appropriate module
-    sysinfo                     Show detected hardware (CPU, RAM, GPU)
-    compute <cpu|gpu|hybrid|auto>  Set compute mode for ML/GPU operations
-    discover <subnet/CIDR>      Scan network and match targets to exploit catalog
-    discover -T <targets.txt>   Scan multiple IPs/CIDRs listed in a file (one per line)
-    sessions [list|show|delete|purge|export]  Manage scan session history
-    exit                        Exit EmbedXPL"""
+    help                            Print this help menu
+    use <module>                    Select a module for usage
+    exec <shell command> <args>     Execute a command in a shell
+    search <keyword>                Search modules by keyword (CVE, vendor, product, type)
+    search cve-2018-14847           Search by CVE ID
+    search type:router              Search by category (router/camera/firewall/ics/printer/wireless)
+    search vendor:hikvision         Search by vendor name
+    autopwn <segment> <target>      Run all modules for a segment against a target
+    sysinfo                         Show detected hardware (CPU, RAM, GPU)
+    discover <subnet/CIDR>          Scan network and match targets to exploit catalog
+    workspace [list|<name>]         Manage workspaces
+    hosts                           List discovered hosts in current workspace
+    vulns                           List found vulnerabilities
+    creds                           List captured credentials
+    sessions [list|show|delete]     Manage scan session history
+    exit                            Exit EmbedXPL"""
 
     module_help = """Module commands:
     run                                 Run the selected module with the given options
@@ -998,68 +1004,52 @@ class EmbedXPLInterpreter(BaseInterpreter):
         os.system(args[0])
 
     def command_search(self, *args, **kwargs):
-        mod_type = ''
-        mod_detail = ''
-        mod_vendor = ''
-        existing_modules = [name for _, name, _ in pkgutil.iter_modules([MODULES_DIR])]
-        devices = [name for _, name, _ in pkgutil.iter_modules([os.path.join(MODULES_DIR, 'exploits')])]
-        languages = [name for _, name, _ in pkgutil.iter_modules([os.path.join(MODULES_DIR, 'encoders')])]
-        payloads = [name for _, name, _ in pkgutil.iter_modules([os.path.join(MODULES_DIR, 'payloads')])]
-
+        """Rich search: keyword, CVE, vendor, type — integrates tools/search.py engine."""
         try:
-            keyword = args[0].strip("'\"").lower()
-        except IndexError:
-            keyword = ''
+            query = " ".join(args).strip("'\"") if args else ""
+        except Exception:
+            query = ""
 
-        if not (len(keyword) or len(kwargs.keys())):
-            print_error("Please specify at least search keyword. e.g. 'search cisco'")
-            print_error("You can specify options. e.g. 'search type=exploits device=routers vendor=linksys WRT100 rce'")
+        if not query and not kwargs:
+            print_error("Usage: search <keyword>  |  search cve-2024-54085  |  search type:router  |  search vendor:cisco")
             return
 
-        for (key, value) in kwargs.items():
-            if key == 'type':
-                if value not in existing_modules:
-                    print_error("Unknown module type.")
-                    return
-                # print_info(' - Type  :\t{}'.format(value))
-                mod_type = "{}.".format(value)
-            elif key in ['device', 'language', 'payload']:
-                if key == 'device' and (value not in devices):
-                    print_error("Unknown exploit type.")
-                    return
-                elif key == 'language' and (value not in languages):
-                    print_error("Unknown encoder language.")
-                    return
-                elif key == 'payload' and (value not in payloads):
-                    print_error("Unknown payload type.")
-                    return
-                # print_info(' - {}:\t{}'.format(key.capitalize(), value))
-                mod_detail = ".{}.".format(value)
-            elif key == 'vendor':
-                # print_info(' - Vendor:\t{}'.format(value))
-                mod_vendor = ".{}.".format(value)
+        # Build full query string (include any key=value kwargs)
+        for k, v in kwargs.items():
+            query = f"{query} {k}:{v}".strip()
 
+        print_info(f"Searching: {query!r}")
+
+        # --- Use rich search engine from tools/search.py ---
+        try:
+            from embedxpl.tools.search import search as _xpl_search, print_results
+            results = _xpl_search(query, limit=60)
+            if results:
+                print_results(results, query)
+                print_info(f"Tip: use <module_path> to load a module")
+                return
+        except Exception:
+            pass
+
+        # --- Fallback: legacy path-based search ---
+        keyword = query.lower()
+        found_any = False
         for module in self.modules:
-            if mod_type not in str(module):
-                continue
-            if mod_detail not in str(module):
-                continue
-            if mod_vendor not in str(module):
-                continue
             if not all(word in str(module) for word in keyword.split()):
                 continue
-
-            found = humanize_path(module)
-
-            if len(keyword):
+            found_any = True
+            path = humanize_path(module)
+            try:
                 from embedxpl.core.exploit.printer import console as _con
                 from rich.text import Text
-                text_obj = Text(found)
+                text_obj = Text(path)
                 for word in keyword.split():
                     text_obj.highlight_words([word], style="bold red")
                 _con.print(text_obj)
-            else:
-                print_info(found)
+            except Exception:
+                print_info(path)
+        if not found_any:
+            print_error(f"No modules found for: {query!r}")
 
     @stop_after(2)
     def complete_search(self, text, *args, **kwargs):
@@ -1833,6 +1823,116 @@ class EmbedXPLInterpreter(BaseInterpreter):
             return
 
         print_error("Unknown subcommand: {}. Use 'apt', 'apt list', 'apt show', 'apt search', 'apt run'".format(sub))
+
+    # ------------------------------------------------------------------
+    # AutoPwn command
+    # ------------------------------------------------------------------
+
+    def command_autopwn(self, *args, **kwargs):
+        """autopwn <segment> <target> — run all modules for a segment against a target.
+
+        Examples:
+          autopwn router 192.168.1.1
+          autopwn camera 10.0.0.50
+          autopwn firewall 172.16.0.1
+        """
+        if len(args) < 2:
+            print_error("Usage: autopwn <segment> <target>")
+            print_info("Segments: router, camera, firewall, ics, printer, wireless, nas, smart_tv, mikrotik")
+            return
+
+        segment = args[0].lower()
+        target  = args[1]
+
+        print_info(f"AutoPwn {segment.upper()} against {target} (check_only=True by default)")
+        print_info("Tip: Pass 'exploit' as 3rd arg to run in exploit mode instead of check-only")
+
+        check_only = True if (len(args) < 3 or args[2] != "exploit") else False
+        mode = "check" if check_only else "exploit"
+        print_info(f"Mode: {mode}")
+
+        try:
+            from embedxpl.modules.autopwn.segment import SegmentAutoPwn
+            # Attach DB if available
+            db = getattr(self, "_exf_db", None)
+            ap = SegmentAutoPwn(segment=segment, targets=target,
+                                check_only=check_only, verbose=True, db=db)
+            report = ap.run()
+            print_success(f"AutoPwn complete: {report.modules_run} modules, {report.modules_vulnerable} vulnerable")
+        except Exception as exc:
+            print_error(f"AutoPwn error: {exc}")
+
+    # ------------------------------------------------------------------
+    # DB commands: workspace, hosts, vulns, creds
+    # ------------------------------------------------------------------
+
+    def _get_db(self):
+        """Return or lazily create the EXFDatabase instance."""
+        if not hasattr(self, "_exf_db") or self._exf_db is None:
+            try:
+                from embedxpl.core.database import EXFDatabase
+                self._exf_db = EXFDatabase()
+                self._exf_db.workspace("default")
+            except Exception:
+                self._exf_db = None
+        return self._exf_db
+
+    def command_workspace(self, *args, **kwargs):
+        """workspace [list | <name>] — create/select workspaces."""
+        db = self._get_db()
+        if db is None:
+            print_error("EXFDatabase not available")
+            return
+        if not args or args[0] == "list":
+            ws_list = db.list_workspaces()
+            if ws_list:
+                rows = [[w["id"], w["name"], w["created_at"]] for w in ws_list]
+                print_table(["ID", "Name", "Created"], *rows)
+            else:
+                print_info("No workspaces yet. Use: workspace <name>")
+            return
+        name = args[0]
+        db.workspace(name)
+        print_success(f"Workspace: {name}")
+
+    def command_hosts(self, *args, **kwargs):
+        """hosts — list discovered hosts in current workspace."""
+        db = self._get_db()
+        if db is None:
+            print_error("EXFDatabase not available")
+            return
+        hosts = db.hosts()
+        if not hosts:
+            print_info("No hosts yet. Run modules with set rhost / run to discover.")
+            return
+        rows = [[h["address"], h.get("os",""), h.get("status",""), h["svc_count"], h["vuln_count"], h["cred_count"]] for h in hosts]
+        print_table(["Address", "OS", "Status", "Services", "Vulns", "Creds"], *rows)
+
+    def command_vulns(self, *args, **kwargs):
+        """vulns — list all found vulnerabilities in current workspace."""
+        db = self._get_db()
+        if db is None:
+            print_error("EXFDatabase not available")
+            return
+        vulns = db.vulns()
+        if not vulns:
+            print_info("No vulnerabilities recorded yet.")
+            return
+        rows = [[v.get("address",""), v.get("severity","").upper(), ",".join(v.get("cve_ids",[])), v.get("module_path","").split(".")[-1], v.get("found_at","")[:16]] for v in vulns]
+        print_table(["Host", "Severity", "CVEs", "Module", "Found At"], *rows)
+
+    def command_creds(self, *args, **kwargs):
+        """creds — list all captured credentials in current workspace."""
+        db = self._get_db()
+        if db is None:
+            print_error("EXFDatabase not available")
+            return
+        creds = db.creds()
+        if not creds:
+            print_info("No credentials captured yet.")
+            return
+        rows = [[c.get("address",""), c.get("username",""), c.get("password",""), c.get("cred_type",""), c.get("found_at","")[:16]] for c in creds]
+        print_table(["Host", "Username", "Password", "Type", "Found At"], *rows)
 
     def command_exit(self, *args, **kwargs):
         raise EOFError
