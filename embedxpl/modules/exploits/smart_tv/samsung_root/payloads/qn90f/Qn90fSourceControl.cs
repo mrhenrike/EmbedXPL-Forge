@@ -1,0 +1,772 @@
+using System;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.RegularExpressions;
+
+internal static class Qn90fSourceControl
+{
+    private const string SourceApi = "/usr/lib/libsource-api.so";
+    private const string VconfApi = "/usr/lib/libvconf.so.0";
+    private const string AulApi = "/usr/lib/libaul.so.0";
+    private const string GioApi = "/usr/lib/libgio-2.0.so.0";
+    private const string GlibApi = "/usr/lib/libglib-2.0.so.0";
+    private const string Libc = "libc";
+    private const string TvViewerAppId = "org.tizen.tv-viewer";
+    private const string CurrentSourceTypeKey = "memory/system/source_type";
+    private const string CurrentSourceJsonKey = "memory/eden/source/current_source";
+    private const string AvocService = "org.tizen.tv.avoc";
+    private const string AvocPath = "/org/tizen/tv/avoc";
+    private const string AvocInterface =
+        "org.tizen.tv.avoc.AvOutputControl";
+    private const int SystemBus = 1;
+    private const int AvocSaveType = 0;
+    private const uint PcDeviceType = 9;
+    private const int Enabled = 1;
+    private const int DbusTimeoutMilliseconds = 5000;
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct GError
+    {
+        public uint Domain;
+        public int Code;
+        public IntPtr Message;
+    }
+
+    private sealed class HdmiPolicySettings
+    {
+        public uint DeviceType;
+        public string EditName = "";
+        public int GameMode;
+        public int InputSignalPlus;
+
+        public bool Compliant
+        {
+            get
+            {
+                return DeviceType == PcDeviceType &&
+                    EditName == "PC" &&
+                    GameMode == Enabled &&
+                    InputSignalPlus == Enabled;
+            }
+        }
+    }
+
+    [DllImport(SourceApi, EntryPoint = "get_source_list")]
+    private static extern IntPtr GetSourceList();
+
+    [DllImport(SourceApi, EntryPoint = "connect_source")]
+    private static extern int ConnectSource(int sourceType);
+
+    [DllImport(SourceApi, EntryPoint = "get_device_type")]
+    private static extern uint GetDeviceType(int sourceType, int mbrActivityIndex);
+
+    [DllImport(SourceApi, EntryPoint = "get_edit_name")]
+    private static extern IntPtr GetEditName(int sourceType, int mbrActivityIndex);
+
+    [DllImport(SourceApi, EntryPoint = "set_device_type")]
+    private static extern int SetDeviceType(
+        int sourceType,
+        uint deviceType,
+        int mbrActivityIndex);
+
+    [DllImport(SourceApi, EntryPoint = "set_edit_name")]
+    private static extern int SetEditName(
+        int sourceType,
+        string editName,
+        int mbrActivityIndex);
+
+    [DllImport(VconfApi, EntryPoint = "vconf_get_int")]
+    private static extern int VconfGetInt(string key, out int value);
+
+    [DllImport(VconfApi, EntryPoint = "vconf_get_str")]
+    private static extern IntPtr VconfGetString(string key);
+
+    [DllImport(AulApi, EntryPoint = "aul_app_get_pid")]
+    private static extern int AulAppGetPid(string appId);
+
+    [DllImport(AulApi, EntryPoint = "aul_terminate_app")]
+    private static extern int AulTerminateApp(string appId);
+
+    [DllImport(AulApi, EntryPoint = "aul_launch_app")]
+    private static extern int AulLaunchApp(string appId, IntPtr bundle);
+
+    [DllImport(Libc)]
+    private static extern void free(IntPtr pointer);
+
+    [DllImport(GioApi, EntryPoint = "g_bus_get_sync")]
+    private static extern IntPtr GBusGetSync(
+        int busType,
+        IntPtr cancellable,
+        out IntPtr error);
+
+    [DllImport(GioApi, EntryPoint = "g_dbus_connection_call_sync")]
+    private static extern IntPtr GDbusConnectionCallSync(
+        IntPtr connection,
+        string busName,
+        string objectPath,
+        string interfaceName,
+        string methodName,
+        IntPtr parameters,
+        IntPtr replyType,
+        int flags,
+        int timeoutMilliseconds,
+        IntPtr cancellable,
+        out IntPtr error);
+
+    [DllImport(GlibApi, EntryPoint = "g_variant_new_int32")]
+    private static extern IntPtr GVariantNewInt32(int value);
+
+    [DllImport(GlibApi, EntryPoint = "g_variant_new_tuple")]
+    private static extern IntPtr GVariantNewTuple(
+        [In] IntPtr[] children,
+        UIntPtr childCount);
+
+    [DllImport(GlibApi, EntryPoint = "g_variant_n_children")]
+    private static extern UIntPtr GVariantChildCount(IntPtr value);
+
+    [DllImport(GlibApi, EntryPoint = "g_variant_get_child_value")]
+    private static extern IntPtr GVariantGetChildValue(
+        IntPtr value,
+        UIntPtr index);
+
+    [DllImport(GlibApi, EntryPoint = "g_variant_get_int32")]
+    private static extern int GVariantGetInt32(IntPtr value);
+
+    [DllImport(GlibApi, EntryPoint = "g_variant_unref")]
+    private static extern void GVariantUnref(IntPtr value);
+
+    [DllImport(GlibApi, EntryPoint = "g_error_free")]
+    private static extern void GErrorFree(IntPtr error);
+
+    private static int Main(string[] arguments)
+    {
+        if (arguments.Length == 1 && arguments[0] == "list")
+        {
+            string sourceList = Marshal.PtrToStringAnsi(GetSourceList());
+            if (string.IsNullOrWhiteSpace(sourceList))
+            {
+                Console.Error.WriteLine("source-service returned an empty source list");
+                return 1;
+            }
+            Console.WriteLine(sourceList);
+            return 0;
+        }
+
+        if (arguments.Length == 1 && arguments[0] == "current")
+        {
+            return PrintCurrentSource();
+        }
+
+        if (arguments.Length == 1 && arguments[0] == "recover")
+        {
+            return RecoverCurrentHdmiPresentation();
+        }
+
+        if (arguments.Length == 3 && arguments[0] == "metadata")
+        {
+            int sourceType;
+            int mbrActivityIndex;
+            try
+            {
+                sourceType = ParseSource(arguments[1]);
+                mbrActivityIndex = int.Parse(arguments[2]);
+            }
+            catch (Exception error)
+            {
+                Console.Error.WriteLine(error.Message);
+                return 2;
+            }
+            return PrintSourceMetadata(sourceType, mbrActivityIndex);
+        }
+
+        if (arguments.Length == 3 && arguments[0] == "enforce-pc-game-plus")
+        {
+            int sourceType;
+            int mbrActivityIndex;
+            try
+            {
+                sourceType = ParseSource(arguments[1]);
+                mbrActivityIndex = int.Parse(arguments[2]);
+            }
+            catch (Exception error)
+            {
+                Console.Error.WriteLine(error.Message);
+                return 2;
+            }
+            return EnforceHdmiPolicy(sourceType, mbrActivityIndex);
+        }
+
+        if (arguments.Length == 3 && arguments[0] == "policy-status")
+        {
+            int sourceType;
+            int mbrActivityIndex;
+            try
+            {
+                sourceType = ParseSource(arguments[1]);
+                mbrActivityIndex = int.Parse(arguments[2]);
+            }
+            catch (Exception error)
+            {
+                Console.Error.WriteLine(error.Message);
+                return 2;
+            }
+            return PrintHdmiPolicy(sourceType, mbrActivityIndex);
+        }
+
+        if (arguments.Length == 1 && arguments[0] == "active-video-status")
+        {
+            return PrintActiveVideoStatus();
+        }
+
+        if (arguments.Length == 2 && arguments[0] == "connect")
+        {
+            int sourceType;
+            try
+            {
+                sourceType = ParseSource(arguments[1]);
+            }
+            catch (ArgumentException error)
+            {
+                Console.Error.WriteLine(error.Message);
+                return 2;
+            }
+
+            int result = ConnectSource(sourceType);
+            Console.WriteLine(
+                "{\"source\":\""
+                + SourceName(sourceType)
+                + "\",\"source_type\":"
+                + sourceType
+                + ",\"connect_result\":"
+                + result
+                + "}");
+            return result != 0 ? 0 : 1;
+        }
+
+        Console.Error.WriteLine(
+            "usage: Qn90fSourceControl.dll list|current|recover|"
+            + "metadata HDMI1|HDMI2|HDMI3|HDMI4 MBR_ACTIVITY_INDEX|"
+            + "enforce-pc-game-plus HDMI1|HDMI2|HDMI3|HDMI4 "
+            + "MBR_ACTIVITY_INDEX|policy-status "
+            + "HDMI1|HDMI2|HDMI3|HDMI4 MBR_ACTIVITY_INDEX|"
+            + "active-video-status|"
+            + "connect HDMI1|HDMI2|HDMI3|HDMI4");
+        return 2;
+    }
+
+    private static int PrintSourceMetadata(int sourceType, int mbrActivityIndex)
+    {
+        uint deviceType = GetDeviceType(sourceType, mbrActivityIndex);
+        IntPtr editNamePointer = GetEditName(sourceType, mbrActivityIndex);
+        string editName = editNamePointer == IntPtr.Zero
+            ? ""
+            : Marshal.PtrToStringAnsi(editNamePointer) ?? "";
+        if (editNamePointer != IntPtr.Zero)
+        {
+            free(editNamePointer);
+        }
+        Console.WriteLine(
+            "{\"source\":\""
+            + SourceName(sourceType)
+            + "\",\"source_type\":"
+            + sourceType
+            + ",\"mbr_activity_index\":"
+            + mbrActivityIndex
+            + ",\"device_type\":"
+            + deviceType
+            + ",\"edit_name\":\""
+            + EscapeJson(editName)
+            + "\"}");
+        return 0;
+    }
+
+    private static int EnforceHdmiPolicy(
+        int sourceType,
+        int mbrActivityIndex)
+    {
+        int avocSource = AvocSource(sourceType);
+        HdmiPolicySettings before = ReadHdmiPolicy(
+            sourceType,
+            mbrActivityIndex,
+            avocSource);
+        int? deviceTypeResult = null;
+        int? editNameResult = null;
+        int? gameModeResult = null;
+        int? inputSignalPlusResult = null;
+
+        if (before.DeviceType != PcDeviceType)
+        {
+            deviceTypeResult = SetDeviceType(
+                sourceType,
+                PcDeviceType,
+                mbrActivityIndex);
+        }
+        if (before.EditName != "PC")
+        {
+            editNameResult = SetEditName(sourceType, "PC", mbrActivityIndex);
+        }
+        if (before.GameMode != Enabled)
+        {
+            gameModeResult = CallAvocSetter(
+                "SetGameModeBySource",
+                avocSource,
+                Enabled,
+                AvocSaveType);
+        }
+        if (before.InputSignalPlus != Enabled)
+        {
+            inputSignalPlusResult = CallAvocSetter(
+                "SetUhdColorMode",
+                avocSource,
+                Enabled,
+                AvocSaveType);
+        }
+
+        HdmiPolicySettings after = ReadHdmiPolicy(
+            sourceType,
+            mbrActivityIndex,
+            avocSource);
+        Console.WriteLine(
+            "{\"source\":\""
+            + SourceName(sourceType)
+            + "\",\"source_type\":"
+            + sourceType
+            + ",\"avoc_source\":"
+            + avocSource
+            + ",\"mbr_activity_index\":"
+            + mbrActivityIndex
+            + ",\"before\":"
+            + PolicySettingsJson(before)
+            + ",\"writes\":{\"device_type\":"
+            + NullableIntJson(deviceTypeResult)
+            + ",\"edit_name\":"
+            + NullableIntJson(editNameResult)
+            + ",\"game_mode\":"
+            + NullableIntJson(gameModeResult)
+            + ",\"input_signal_plus\":"
+            + NullableIntJson(inputSignalPlusResult)
+            + "},\"after\":"
+            + PolicySettingsJson(after)
+            + ",\"changed\":"
+            + ((deviceTypeResult.HasValue ||
+                editNameResult.HasValue ||
+                gameModeResult.HasValue ||
+                inputSignalPlusResult.HasValue) ? "true" : "false")
+            + ",\"compliant\":"
+            + (after.Compliant ? "true" : "false")
+            + "}");
+        return after.Compliant ? 0 : 1;
+    }
+
+    private static int PrintHdmiPolicy(
+        int sourceType,
+        int mbrActivityIndex)
+    {
+        int avocSource = AvocSource(sourceType);
+        HdmiPolicySettings settings = ReadHdmiPolicy(
+            sourceType,
+            mbrActivityIndex,
+            avocSource);
+        Console.WriteLine(
+            "{\"source\":\""
+            + SourceName(sourceType)
+            + "\",\"source_type\":"
+            + sourceType
+            + ",\"avoc_source\":"
+            + avocSource
+            + ",\"mbr_activity_index\":"
+            + mbrActivityIndex
+            + ",\"settings\":"
+            + PolicySettingsJson(settings)
+            + ",\"compliant\":"
+            + (settings.Compliant ? "true" : "false")
+            + "}");
+        return 0;
+    }
+
+    private static int PrintActiveVideoStatus()
+    {
+        int sourceType;
+        if (VconfGetInt(CurrentSourceTypeKey, out sourceType) != 0)
+        {
+            Console.Error.WriteLine("failed to read " + CurrentSourceTypeKey);
+            return 1;
+        }
+        bool hdmi = sourceType >= 13 && sourceType <= 16;
+        int gameMode = CallAvocGetter("GetGameMode", AvocSaveType);
+        int realGameMode = CallAvocGetter("GetRealGameMode", AvocSaveType);
+        int pcMode = CallAvocGetter("GetPcMode");
+        int lowInputLagStatus = CallAvocGetter("GetLowInputLagStatus");
+        Console.WriteLine(
+            "{\"source\":\""
+            + SourceName(sourceType)
+            + "\",\"source_type\":"
+            + sourceType
+            + ",\"hdmi\":"
+            + (hdmi ? "true" : "false")
+            + ",\"game_mode\":"
+            + gameMode
+            + ",\"real_game_mode\":"
+            + realGameMode
+            + ",\"pc_mode\":"
+            + pcMode
+            + ",\"low_input_lag_status\":"
+            + lowInputLagStatus
+            + "}");
+        return 0;
+    }
+
+    private static HdmiPolicySettings ReadHdmiPolicy(
+        int sourceType,
+        int mbrActivityIndex,
+        int avocSource)
+    {
+        return new HdmiPolicySettings
+        {
+            DeviceType = GetDeviceType(sourceType, mbrActivityIndex),
+            EditName = ReadEditName(sourceType, mbrActivityIndex),
+            GameMode = CallAvocGetter(
+                "GetGameModeBySource",
+                avocSource,
+                AvocSaveType),
+            InputSignalPlus = CallAvocGetter(
+                "GetUhdColorMode",
+                avocSource,
+                AvocSaveType),
+        };
+    }
+
+    private static string ReadEditName(
+        int sourceType,
+        int mbrActivityIndex)
+    {
+        IntPtr pointer = GetEditName(sourceType, mbrActivityIndex);
+        if (pointer == IntPtr.Zero)
+        {
+            return "";
+        }
+        try
+        {
+            return Marshal.PtrToStringAnsi(pointer) ?? "";
+        }
+        finally
+        {
+            free(pointer);
+        }
+    }
+
+    private static int CallAvocGetter(
+        string method,
+        params int[] arguments)
+    {
+        int[] values = CallAvoc(method, arguments);
+        if (values.Length != 2)
+        {
+            throw new InvalidOperationException(
+                method + " returned " + values.Length + " values, expected 2");
+        }
+        if (values[1] != 0)
+        {
+            throw new InvalidOperationException(
+                method + " returned status " + values[1]);
+        }
+        return values[0];
+    }
+
+    private static int CallAvocSetter(
+        string method,
+        params int[] arguments)
+    {
+        int[] values = CallAvoc(method, arguments);
+        if (values.Length != 1)
+        {
+            throw new InvalidOperationException(
+                method + " returned " + values.Length + " values, expected 1");
+        }
+        if (values[0] != 0)
+        {
+            throw new InvalidOperationException(
+                method + " returned status " + values[0]);
+        }
+        return values[0];
+    }
+
+    private static int[] CallAvoc(string method, int[] arguments)
+    {
+        IntPtr error;
+        IntPtr connection = GBusGetSync(SystemBus, IntPtr.Zero, out error);
+        if (connection == IntPtr.Zero)
+        {
+            throw GlibError("connect to the system D-Bus", error);
+        }
+        IntPtr[] children = new IntPtr[arguments.Length];
+        for (int index = 0; index < arguments.Length; index++)
+        {
+            children[index] = GVariantNewInt32(arguments[index]);
+        }
+        IntPtr parameters = GVariantNewTuple(
+            children,
+            new UIntPtr((uint)children.Length));
+        IntPtr reply = GDbusConnectionCallSync(
+            connection,
+            AvocService,
+            AvocPath,
+            AvocInterface,
+            method,
+            parameters,
+            IntPtr.Zero,
+            0,
+            DbusTimeoutMilliseconds,
+            IntPtr.Zero,
+            out error);
+        if (reply == IntPtr.Zero)
+        {
+            throw GlibError("call AVOC " + method, error);
+        }
+        try
+        {
+            ulong childCount = GVariantChildCount(reply).ToUInt64();
+            int[] values = new int[childCount];
+            for (uint index = 0; index < childCount; index++)
+            {
+                IntPtr child = GVariantGetChildValue(
+                    reply,
+                    new UIntPtr(index));
+                if (child == IntPtr.Zero)
+                {
+                    throw new InvalidOperationException(
+                        method + " returned an invalid GVariant child");
+                }
+                try
+                {
+                    values[index] = GVariantGetInt32(child);
+                }
+                finally
+                {
+                    GVariantUnref(child);
+                }
+            }
+            return values;
+        }
+        finally
+        {
+            GVariantUnref(reply);
+        }
+    }
+
+    private static Exception GlibError(string operation, IntPtr error)
+    {
+        string detail = "unknown GLib error";
+        if (error != IntPtr.Zero)
+        {
+            try
+            {
+                GError value = Marshal.PtrToStructure<GError>(error);
+                detail = Marshal.PtrToStringAnsi(value.Message) ?? detail;
+            }
+            finally
+            {
+                GErrorFree(error);
+            }
+        }
+        return new InvalidOperationException(operation + " failed: " + detail);
+    }
+
+    private static string PolicySettingsJson(HdmiPolicySettings settings)
+    {
+        return "{\"device_type\":"
+            + settings.DeviceType
+            + ",\"edit_name\":\""
+            + EscapeJson(settings.EditName)
+            + "\",\"game_mode\":"
+            + settings.GameMode
+            + ",\"input_signal_plus\":"
+            + settings.InputSignalPlus
+            + ",\"compliant\":"
+            + (settings.Compliant ? "true" : "false")
+            + "}";
+    }
+
+    private static string NullableIntJson(int? value)
+    {
+        return value.HasValue ? value.Value.ToString() : "null";
+    }
+
+    private static int AvocSource(int sourceType)
+    {
+        if (sourceType < 13 || sourceType > 16)
+        {
+            throw new ArgumentException(
+                "AVOC source mapping only supports HDMI1 through HDMI4");
+        }
+        return 0x80001 + (sourceType - 13);
+    }
+
+    private static int RecoverCurrentHdmiPresentation()
+    {
+        int sourceType;
+        if (VconfGetInt(CurrentSourceTypeKey, out sourceType) != 0 ||
+            sourceType < 13 || sourceType > 16)
+        {
+            Console.Error.WriteLine(
+                "HDMI presentation recovery requires HDMI1 through HDMI4");
+            return 1;
+        }
+
+        int beforePid = AulAppGetPid(TvViewerAppId);
+        if (beforePid <= 0)
+        {
+            Console.Error.WriteLine("tv-viewer is not running");
+            return 1;
+        }
+
+        int terminateResult = AulTerminateApp(TvViewerAppId);
+        int launchPid = terminateResult == 0
+            ? AulLaunchApp(TvViewerAppId, IntPtr.Zero)
+            : -1;
+        int connectResult = ConnectSource(sourceType);
+        int afterPid = AulAppGetPid(TvViewerAppId);
+        bool confirmed = terminateResult == 0 &&
+            launchPid > 0 &&
+            connectResult != 0 &&
+            afterPid > 0 &&
+            afterPid != beforePid;
+
+        Console.WriteLine(
+            "{\"operation\":\"recover\",\"source\":\""
+            + SourceName(sourceType)
+            + "\",\"source_type\":"
+            + sourceType
+            + ",\"before_pid\":"
+            + beforePid
+            + ",\"terminate_result\":"
+            + terminateResult
+            + ",\"launch_pid\":"
+            + launchPid
+            + ",\"connect_result\":"
+            + connectResult
+            + ",\"after_pid\":"
+            + afterPid
+            + ",\"confirmed\":"
+            + (confirmed ? "true" : "false")
+            + "}");
+        if (!confirmed)
+        {
+            Console.Error.WriteLine(
+                "tv-viewer did not reacquire the current HDMI source");
+            return 1;
+        }
+        return 0;
+    }
+
+    private static int PrintCurrentSource()
+    {
+        int sourceType;
+        if (VconfGetInt(CurrentSourceTypeKey, out sourceType) != 0)
+        {
+            Console.Error.WriteLine("failed to read " + CurrentSourceTypeKey);
+            return 1;
+        }
+        string sourceJson = ReadVconfString(CurrentSourceJsonKey);
+        string sourceUuid = "";
+        if (!string.IsNullOrEmpty(sourceJson))
+        {
+            Match match = Regex.Match(
+                sourceJson,
+                "\\\"uuid\\\"\\s*:\\s*\\\"([^\\\"]*)\\\"");
+            if (match.Success)
+            {
+                sourceUuid = match.Groups[1].Value;
+            }
+        }
+        Console.WriteLine(
+            "{\"source\":\""
+            + SourceName(sourceType)
+            + "\",\"source_type\":"
+            + sourceType
+            + ",\"source_uuid\":\""
+            + EscapeJson(sourceUuid)
+            + "\"}");
+        return 0;
+    }
+
+    private static string ReadVconfString(string key)
+    {
+        IntPtr pointer = VconfGetString(key);
+        if (pointer == IntPtr.Zero)
+        {
+            return "";
+        }
+        try
+        {
+            return Marshal.PtrToStringAnsi(pointer) ?? "";
+        }
+        finally
+        {
+            free(pointer);
+        }
+    }
+
+    private static string SourceName(int sourceType)
+    {
+        switch (sourceType)
+        {
+            case 13:
+                return "HDMI1";
+            case 14:
+                return "HDMI2";
+            case 15:
+                return "HDMI3";
+            case 16:
+                return "HDMI4";
+            default:
+                return "TV";
+        }
+    }
+
+    private static string EscapeJson(string value)
+    {
+        StringBuilder builder = new StringBuilder();
+        foreach (char character in value ?? "")
+        {
+            if (character == '"' || character == '\\')
+            {
+                builder.Append('\\').Append(character);
+            }
+            else if (character == '\n')
+            {
+                builder.Append("\\n");
+            }
+            else if (character == '\r')
+            {
+                builder.Append("\\r");
+            }
+            else if (character == '\t')
+            {
+                builder.Append("\\t");
+            }
+            else
+            {
+                builder.Append(character);
+            }
+        }
+        return builder.ToString();
+    }
+
+    private static int ParseSource(string value)
+    {
+        switch (value.ToUpperInvariant())
+        {
+            case "HDMI1":
+                return 13;
+            case "HDMI2":
+                return 14;
+            case "HDMI3":
+                return 15;
+            case "HDMI4":
+                return 16;
+            default:
+                throw new ArgumentException("unsupported QN90F source: " + value);
+        }
+    }
+}

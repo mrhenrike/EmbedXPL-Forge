@@ -1,0 +1,51 @@
+from samsung_tv_root.capabilities import CapabilityState, TelevisionCapabilities
+from samsung_tv_root.config import RemoteConfiguration, TelevisionConfiguration
+
+
+def television(model: str) -> TelevisionConfiguration:
+    return TelevisionConfiguration(
+        name=model,
+        model=model,
+        host="192.0.2.1",
+        device_id=None,
+        root_on_presence=True,
+        disable_native_execution_policy=False,
+        remote=RemoteConfiguration(),
+    )
+
+
+def test_qn90b_inventory_distinguishes_implementation_gaps() -> None:
+    inventory = TelevisionCapabilities(television("qn90b")).inventory()
+    states = {item["name"]: item["state"] for item in inventory}
+    assert states["source.select"] == "implemented"
+    assert states["local_dimming.toggle"] == "implemented"
+    assert states["hdmi_policy.enforce"] == "not_investigated"
+    assert states["display.picture_off"] == "implemented"
+    assert states["screenshot.hdmi_960x540"] == "not_investigated"
+    assert states["volume.status"] == "implemented"
+    assert all(state != "unavailable" for state in states.values())
+    assert all(
+        state in {capability_state.value for capability_state in CapabilityState}
+        for state in states.values()
+    )
+
+
+def test_qn90f_inventory_reports_known_non_packaged_capabilities() -> None:
+    inventory = TelevisionCapabilities(television("qn90f")).inventory()
+    states = {item["name"]: item["state"] for item in inventory}
+    assert states["hdmi_policy.enforce"] == "implemented"
+    assert states["screenshot.hdmi_960x540"] == "implemented"
+    assert states["overlay.graphics"] == "implemented"
+    assert states["volume.status"] == "implemented"
+    assert all(state != "unavailable" for state in states.values())
+
+
+def test_inventory_includes_daemon_and_remote_capabilities() -> None:
+    inventory = TelevisionCapabilities(television("qn90f")).inventory()
+    states = {item["name"]: item["state"] for item in inventory}
+    assert states["root.acquire"] == "implemented"
+    assert states["uep.disable"] == "implemented"
+    assert states["remote.observe"] == "implemented"
+    assert states["remote.filter"] == "implemented"
+    assert states["volume.events"] == "implemented"
+    assert states["events.tv_state"] == "implemented"

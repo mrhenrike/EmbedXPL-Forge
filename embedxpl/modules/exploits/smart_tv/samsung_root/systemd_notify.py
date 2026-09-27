@@ -1,0 +1,34 @@
+from __future__ import annotations
+
+import os
+import socket
+
+
+def notify(message: str) -> bool:
+    notify_socket = os.environ.get("NOTIFY_SOCKET")
+    if not notify_socket:
+        return False
+    address = (
+        "\0" + notify_socket[1:] if notify_socket.startswith("@") else notify_socket
+    )
+    try:
+        with socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM) as client:
+            client.connect(address)
+            client.sendall(message.encode())
+    except OSError:
+        return False
+    return True
+
+
+def status(text: str) -> bool:
+    return notify("STATUS=" + str(text).replace("\n", " ")[:900])
+
+
+def ready(text: str) -> bool:
+    clean = str(text).replace("\n", " ")[:900]
+    return notify("READY=1\nSTATUS=" + clean)
+
+
+def stopping(text: str) -> bool:
+    clean = str(text).replace("\n", " ")[:900]
+    return notify("STOPPING=1\nSTATUS=" + clean)

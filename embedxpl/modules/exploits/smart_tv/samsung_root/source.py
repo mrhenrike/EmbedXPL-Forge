@@ -1,0 +1,578 @@
+from __future__ import annotations
+
+import json
+import shlex
+from dataclasses import asdict, dataclass
+from enum import Enum, IntEnum
+from typing import Any, Protocol
+from urllib.parse import unquote
+
+
+QN90F_SOURCE_CONTROL_ASSEMBLY = (
+    "/home/owner/share/tmp/sdk_tools/qn90f-probe/Qn90fSourceControl.dll"
+)
+QN90B_SOURCE_CONTROL_ASSEMBLY = (
+    "/home/owner/share/tmp/sdk_tools/samsung-tv-root/qn90b/Qn90bSourceControl.dll"
+)
+DEFAULT_SOURCE_COMMAND_TIMEOUT = 5.0
+
+
+class SourceControlError(RuntimeError):
+    pass
+
+
+class RootCommandResult(Protocol):
+    exit_code: int
+    timed_out: bool
+    stdout: str
+    stderr: str
+
+
+class RootCommandConnection(Protocol):
+    async def execute(self, command: str, timeout: float) -> RootCommandResult: ...
+
+
+class HdmiInput(str, Enum):
+    HDMI1 = "HDMI1"
+    HDMI2 = "HDMI2"
+    HDMI3 = "HDMI3"
+    HDMI4 = "HDMI4"
+
+    @property
+    def source_type(self) -> int:
+        return 13 + tuple(type(self)).index(self)
+
+    @classmethod
+    def parse(cls, value: str) -> HdmiInput:
+        try:
+            return cls(value.upper())
+        except ValueError as error:
+            supported = ", ".join(source.value for source in cls)
+            raise SourceControlError(
+                f"unsupported HDMI source {value!r}; expected {supported}"
+            ) from error
+
+    @classmethod
+    def from_source_type(cls, source_type: int) -> HdmiInput | None:
+        return next(
+            (source for source in cls if source.source_type == source_type),
+            None,
+        )
+
+
+class SourcePowerState(IntEnum):
+    UNKNOWN = 0
+    ON = 1
+    STANDBY = 2
+
+    @classmethod
+    def label_for(cls, value: int) -> str:
+        try:
+            return cls(value).name.lower()
+        except ValueError:
+            return f"unknown ({value})"
+
+
+@dataclass(frozen=True)
+class SourceDevice:
+    source: str
+    source_type: int
+    mbr_activity_index: int
+    connected: bool
+    power_state: int
+    power_state_label: str
+    powered: bool
+    detected_name: str
+    edit_name: str
+    unique_key: str
+    raw: dict[str, Any]
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class CurrentSource:
+    source: str
+    source_type: int
+    source_uuid: str | None
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class SourceSelection:
+    source: str
+    source_type: int
+    connect_result: int
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class SourceRecovery:
+    source: str
+    source_type: int
+    before_pid: int
+    terminate_result: int
+    launch_pid: int
+    connect_result: int
+    after_pid: int
+    confirmed: bool
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class HdmiPolicySettings:
+    device_type: int
+    edit_name: str
+    game_mode: int
+    input_signal_plus: int
+    compliant: bool
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class HdmiPolicyEnforcement:
+    source: str
+    source_type: int
+    avoc_source: int
+    mbr_activity_index: int
+    before: HdmiPolicySettings
+    writes: dict[str, int | None]
+    after: HdmiPolicySettings
+    changed: bool
+    compliant: bool
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class HdmiPolicyStatus:
+    source: str
+    source_type: int
+    avoc_source: int
+    mbr_activity_index: int
+    settings: HdmiPolicySettings
+    compliant: bool
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class ActiveVideoStatus:
+    source: str
+    source_type: int
+    hdmi: bool
+    game_mode: int
+    real_game_mode: int
+    pc_mode: int
+    low_input_lag_status: int
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+class Qn90fSourceControl:
+    model_name = "QN90F"
+    assembly_path = QN90F_SOURCE_CONTROL_ASSEMBLY
+
+    async def list_sources(
+        self,
+        connection: RootCommandConnection,
+        timeout: float = DEFAULT_SOURCE_COMMAND_TIMEOUT,
+    ) -> list[SourceDevice]:
+        result = await connection.execute(self._dotnet_command("list"), timeout)
+        self._require_success(result, f"list {self.model_name} sources")
+        try:
+            payload = json.loads(result.stdout)
+        except json.JSONDecodeError as error:
+            raise SourceControlError(
+                f"source-service returned invalid JSON: {error}"
+            ) from error
+        if not isinstance(payload, list):
+            raise SourceControlError("source-service source list is not an array")
+        return [self._source_device(item) for item in payload]
+
+    async def current_source(
+        self,
+        connection: RootCommandConnection,
+        timeout: float = DEFAULT_SOURCE_COMMAND_TIMEOUT,
+    ) -> CurrentSource:
+        result = await connection.execute(self._dotnet_command("current"), timeout)
+        self._require_success(result, f"read the current {self.model_name} source")
+        payload = self._json_object(result.stdout, "current source")
+        source_type = self._required_int(payload, "source_type")
+        hdmi = HdmiInput.from_source_type(source_type)
+        return CurrentSource(
+            source=hdmi.value
+            if hdmi is not None
+            else str(payload.get("source") or "TV"),
+            source_type=source_type,
+            source_uuid=(
+                str(payload["source_uuid"])
+                if payload.get("source_uuid") is not None
+                else None
+            ),
+        )
+
+    async def select_source(
+        self,
+        connection: RootCommandConnection,
+        source: str | HdmiInput,
+        timeout: float = DEFAULT_SOURCE_COMMAND_TIMEOUT,
+    ) -> SourceSelection:
+        hdmi = source if isinstance(source, HdmiInput) else HdmiInput.parse(source)
+        result = await connection.execute(
+            self._dotnet_command("connect", hdmi.value),
+            timeout,
+        )
+        self._require_success(result, f"select {hdmi.value}")
+        payload = self._json_object(result.stdout, "source selection")
+        selection = SourceSelection(
+            source=str(payload.get("source") or hdmi.value),
+            source_type=self._required_int(payload, "source_type"),
+            connect_result=self._required_int(payload, "connect_result"),
+        )
+        if selection.source_type != hdmi.source_type:
+            raise SourceControlError(
+                f"source-service selected type {selection.source_type}, "
+                f"expected {hdmi.source_type} for {hdmi.value}"
+            )
+        if selection.connect_result == 0:
+            raise SourceControlError(f"source-service rejected {hdmi.value}")
+        return selection
+
+    async def recover_current_source(
+        self,
+        connection: RootCommandConnection,
+        timeout: float = DEFAULT_SOURCE_COMMAND_TIMEOUT,
+    ) -> SourceRecovery:
+        result = await connection.execute(self._dotnet_command("recover"), timeout)
+        self._require_success(result, "recover the current HDMI presentation")
+        payload = self._json_object(result.stdout, "HDMI presentation recovery")
+        source_type = self._required_int(payload, "source_type")
+        hdmi = HdmiInput.from_source_type(source_type)
+        recovery = SourceRecovery(
+            source=str(payload.get("source") or ""),
+            source_type=source_type,
+            before_pid=self._required_int(payload, "before_pid"),
+            terminate_result=self._required_int(payload, "terminate_result"),
+            launch_pid=self._required_int(payload, "launch_pid"),
+            connect_result=self._required_int(payload, "connect_result"),
+            after_pid=self._required_int(payload, "after_pid"),
+            confirmed=self._required_bool(payload, "confirmed"),
+        )
+        if hdmi is None or recovery.source != hdmi.value:
+            raise SourceControlError(
+                "HDMI presentation recovery returned an invalid source"
+            )
+        if (
+            recovery.terminate_result != 0
+            or recovery.launch_pid <= 0
+            or recovery.connect_result == 0
+            or recovery.before_pid <= 0
+            or recovery.after_pid <= 0
+            or recovery.after_pid == recovery.before_pid
+            or not recovery.confirmed
+        ):
+            raise SourceControlError("HDMI presentation recovery was not confirmed")
+        return recovery
+
+    async def enforce_pc_game_input_signal(
+        self,
+        connection: RootCommandConnection,
+        source: str | HdmiInput,
+        mbr_activity_index: int,
+        timeout: float = DEFAULT_SOURCE_COMMAND_TIMEOUT,
+    ) -> HdmiPolicyEnforcement:
+        hdmi = source if isinstance(source, HdmiInput) else HdmiInput.parse(source)
+        result = await connection.execute(
+            self._dotnet_command(
+                "enforce-pc-game-plus",
+                hdmi.value,
+                str(mbr_activity_index),
+            ),
+            timeout,
+        )
+        self._require_success(result, f"enforce HDMI policy for {hdmi.value}")
+        payload = self._json_object(result.stdout, f"{hdmi.value} HDMI policy")
+        enforcement = HdmiPolicyEnforcement(
+            source=str(payload.get("source") or ""),
+            source_type=self._required_int(payload, "source_type"),
+            avoc_source=self._required_int(payload, "avoc_source"),
+            mbr_activity_index=self._required_int(
+                payload,
+                "mbr_activity_index",
+            ),
+            before=self._policy_settings(payload.get("before"), "before"),
+            writes=self._policy_writes(payload.get("writes")),
+            after=self._policy_settings(payload.get("after"), "after"),
+            changed=self._required_bool(payload, "changed"),
+            compliant=self._required_bool(payload, "compliant"),
+        )
+        if enforcement.source != hdmi.value:
+            raise SourceControlError(
+                f"HDMI policy returned source {enforcement.source!r}, "
+                f"expected {hdmi.value}"
+            )
+        if enforcement.source_type != hdmi.source_type:
+            raise SourceControlError(
+                f"HDMI policy returned type {enforcement.source_type}, "
+                f"expected {hdmi.source_type}"
+            )
+        if enforcement.mbr_activity_index != mbr_activity_index:
+            raise SourceControlError(
+                "HDMI policy returned a different MBR activity index"
+            )
+        if not enforcement.compliant or not enforcement.after.compliant:
+            raise SourceControlError(
+                f"HDMI policy readback did not confirm {hdmi.value}"
+            )
+        return enforcement
+
+    async def hdmi_policy_status(
+        self,
+        connection: RootCommandConnection,
+        source: str | HdmiInput,
+        mbr_activity_index: int,
+        timeout: float = DEFAULT_SOURCE_COMMAND_TIMEOUT,
+    ) -> HdmiPolicyStatus:
+        hdmi = source if isinstance(source, HdmiInput) else HdmiInput.parse(source)
+        result = await connection.execute(
+            self._dotnet_command(
+                "policy-status",
+                hdmi.value,
+                str(mbr_activity_index),
+            ),
+            timeout,
+        )
+        self._require_success(result, f"read HDMI policy for {hdmi.value}")
+        payload = self._json_object(result.stdout, f"{hdmi.value} HDMI policy")
+        status = HdmiPolicyStatus(
+            source=str(payload.get("source") or ""),
+            source_type=self._required_int(payload, "source_type"),
+            avoc_source=self._required_int(payload, "avoc_source"),
+            mbr_activity_index=self._required_int(payload, "mbr_activity_index"),
+            settings=self._policy_settings(payload.get("settings"), "settings"),
+            compliant=self._required_bool(payload, "compliant"),
+        )
+        if (
+            status.source != hdmi.value
+            or status.source_type != hdmi.source_type
+            or status.mbr_activity_index != mbr_activity_index
+        ):
+            raise SourceControlError("HDMI policy status returned a different source")
+        return status
+
+    async def active_video_status(
+        self,
+        connection: RootCommandConnection,
+        timeout: float = DEFAULT_SOURCE_COMMAND_TIMEOUT,
+    ) -> ActiveVideoStatus:
+        result = await connection.execute(
+            self._dotnet_command("active-video-status"),
+            timeout,
+        )
+        self._require_success(result, "read active QN90F video policy state")
+        payload = self._json_object(result.stdout, "active video policy state")
+        return ActiveVideoStatus(
+            source=str(payload.get("source") or ""),
+            source_type=self._required_int(payload, "source_type"),
+            hdmi=self._required_bool(payload, "hdmi"),
+            game_mode=self._required_int(payload, "game_mode"),
+            real_game_mode=self._required_int(payload, "real_game_mode"),
+            pc_mode=self._required_int(payload, "pc_mode"),
+            low_input_lag_status=self._required_int(
+                payload,
+                "low_input_lag_status",
+            ),
+        )
+
+    @classmethod
+    def _dotnet_command(cls, *arguments: str) -> str:
+        return shlex.join(
+            [
+                "/usr/bin/dotnet",
+                cls.assembly_path,
+                *arguments,
+            ]
+        )
+
+    @staticmethod
+    def _source_device(payload: Any) -> SourceDevice:
+        if not isinstance(payload, dict):
+            raise SourceControlError("source-service source entry is not an object")
+        source_type = Qn90fSourceControl._required_int(payload, "sourceType")
+        power_state = Qn90fSourceControl._required_int(payload, "powerState")
+        hdmi = HdmiInput.from_source_type(source_type)
+        return SourceDevice(
+            source=hdmi.value if hdmi is not None else "TV",
+            source_type=source_type,
+            mbr_activity_index=Qn90fSourceControl._optional_int(
+                payload,
+                "mbrActivityIndex",
+                -2,
+            ),
+            connected=bool(payload.get("connectionState")),
+            power_state=power_state,
+            power_state_label=SourcePowerState.label_for(power_state),
+            powered=power_state == SourcePowerState.ON,
+            detected_name=unquote(str(payload.get("detectedName") or "")),
+            edit_name=unquote(str(payload.get("editName") or "")),
+            unique_key=str(payload.get("uniqueKey") or ""),
+            raw=dict(payload),
+        )
+
+    @staticmethod
+    def _policy_settings(payload: Any, name: str) -> HdmiPolicySettings:
+        if not isinstance(payload, dict):
+            raise SourceControlError(
+                f"HDMI policy result field {name!r} is not an object"
+            )
+        return HdmiPolicySettings(
+            device_type=Qn90fSourceControl._required_int(
+                payload,
+                "device_type",
+            ),
+            edit_name=str(payload.get("edit_name") or ""),
+            game_mode=Qn90fSourceControl._required_int(payload, "game_mode"),
+            input_signal_plus=Qn90fSourceControl._required_int(
+                payload,
+                "input_signal_plus",
+            ),
+            compliant=Qn90fSourceControl._required_bool(payload, "compliant"),
+        )
+
+    @staticmethod
+    def _policy_writes(payload: Any) -> dict[str, int | None]:
+        if not isinstance(payload, dict):
+            raise SourceControlError(
+                "HDMI policy result field 'writes' is not an object"
+            )
+        writes: dict[str, int | None] = {}
+        for name in (
+            "device_type",
+            "edit_name",
+            "game_mode",
+            "input_signal_plus",
+        ):
+            value = payload.get(name)
+            if value is None:
+                writes[name] = None
+                continue
+            if isinstance(value, bool):
+                raise SourceControlError(
+                    f"HDMI policy write result {name!r} is not an integer"
+                )
+            try:
+                writes[name] = int(value)
+            except (TypeError, ValueError) as error:
+                raise SourceControlError(
+                    f"HDMI policy write result {name!r} is not an integer"
+                ) from error
+        return writes
+
+    @staticmethod
+    def _json_object(text: str, operation: str) -> dict[str, Any]:
+        try:
+            payload = json.loads(text)
+        except json.JSONDecodeError as error:
+            raise SourceControlError(
+                f"{operation} returned invalid JSON: {error}"
+            ) from error
+        if not isinstance(payload, dict):
+            raise SourceControlError(f"{operation} result is not an object")
+        return payload
+
+    @staticmethod
+    def _required_int(payload: dict[str, Any], name: str) -> int:
+        value = payload.get(name)
+        if isinstance(value, bool):
+            raise SourceControlError(f"source result field {name!r} is not an integer")
+        try:
+            return int(value)
+        except (TypeError, ValueError) as error:
+            raise SourceControlError(
+                f"source result omitted integer field {name!r}"
+            ) from error
+
+    @staticmethod
+    def _optional_int(
+        payload: dict[str, Any],
+        name: str,
+        default: int,
+    ) -> int:
+        if payload.get(name) is None:
+            return default
+        return Qn90fSourceControl._required_int(payload, name)
+
+    @staticmethod
+    def _required_bool(payload: dict[str, Any], name: str) -> bool:
+        value = payload.get(name)
+        if not isinstance(value, bool):
+            raise SourceControlError(f"source result omitted boolean field {name!r}")
+        return value
+
+    @staticmethod
+    def _require_success(result: RootCommandResult, operation: str) -> None:
+        if result.timed_out:
+            raise SourceControlError(f"{operation} timed out")
+        if result.exit_code != 0:
+            detail = result.stderr.strip() or result.stdout.strip() or "no output"
+            raise SourceControlError(
+                f"{operation} failed with exit {result.exit_code}: {detail}"
+            )
+
+
+class Qn90bSourceControl(Qn90fSourceControl):
+    model_name = "QN90B"
+    assembly_path = QN90B_SOURCE_CONTROL_ASSEMBLY
+
+    async def recover_current_source(
+        self,
+        connection: RootCommandConnection,
+        timeout: float = DEFAULT_SOURCE_COMMAND_TIMEOUT,
+    ) -> SourceRecovery:
+        raise SourceControlError(
+            "HDMI presentation recovery is not implemented for QN90B"
+        )
+
+    async def enforce_pc_game_input_signal(
+        self,
+        connection: RootCommandConnection,
+        source: str | HdmiInput,
+        mbr_activity_index: int,
+        timeout: float = DEFAULT_SOURCE_COMMAND_TIMEOUT,
+    ) -> HdmiPolicyEnforcement:
+        raise SourceControlError(
+            "PC/Game/Input Signal Plus control is not implemented for QN90B"
+        )
+
+    async def hdmi_policy_status(
+        self,
+        connection: RootCommandConnection,
+        source: str | HdmiInput,
+        mbr_activity_index: int,
+        timeout: float = DEFAULT_SOURCE_COMMAND_TIMEOUT,
+    ) -> HdmiPolicyStatus:
+        raise SourceControlError(
+            "PC/Game/Input Signal Plus status is not implemented for QN90B"
+        )
+
+    async def active_video_status(
+        self,
+        connection: RootCommandConnection,
+        timeout: float = DEFAULT_SOURCE_COMMAND_TIMEOUT,
+    ) -> ActiveVideoStatus:
+        raise SourceControlError(
+            "active video policy status is not implemented for QN90B"
+        )

@@ -1,0 +1,65 @@
+import os
+from types import SimpleNamespace
+
+from samsung_tv_root.terminal import TerminalResizer, _windows_console_mode
+
+
+def test_terminal_resizer_reports_only_size_changes(monkeypatch) -> None:
+    sizes = iter(
+        (
+            os.terminal_size((80, 24)),
+            os.terminal_size((80, 24)),
+            os.terminal_size((100, 40)),
+        )
+    )
+    observed: list[tuple[int, int]] = []
+    monkeypatch.setattr(
+        "samsung_tv_root.terminal.sys.stdin",
+        type("Input", (), {"fileno": lambda self: 0})(),
+    )
+    monkeypatch.setattr(os, "get_terminal_size", lambda _: next(sizes))
+
+    resizer = TerminalResizer(lambda rows, columns: observed.append((rows, columns)))
+    resizer.poll()
+    resizer.poll()
+    resizer.poll()
+
+    assert observed == [(24, 80), (40, 100)]
+
+
+def test_windows_console_mode_configures_and_restores(monkeypatch) -> None:
+    import ctypes
+
+    class Function:
+        def __init__(self, implementation) -> None:
+            self.implementation = implementation
+            self.argtypes = None
+            self.restype = None
+
+        def __call__(self, *args):
+            return self.implementation(*args)
+
+    set_calls: list[tuple[int, int]] = []
+
+    def get_mode(handle: int, pointer) -> bool:
+        pointer._obj.value = 0x0007 if handle == -10 else 0
+        return True
+
+    kernel32 = SimpleNamespace(
+        GetStdHandle=Function(lambda identifier: identifier),
+        GetConsoleMode=Function(get_mode),
+        SetConsoleMode=Function(
+            lambda handle, mode: set_calls.append((handle, mode)) or True
+        ),
+    )
+    monkeypatch.setattr(
+        ctypes,
+        "windll",
+        SimpleNamespace(kernel32=kernel32),
+        raising=False,
+    )
+
+    with _windows_console_mode():
+        assert set_calls == [(-10, 0x0200), (-11, 0x0004)]
+
+    assert set_calls[-2:] == [(-10, 0x0007), (-11, 0)]

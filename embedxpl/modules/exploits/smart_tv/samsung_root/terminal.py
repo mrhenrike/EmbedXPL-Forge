@@ -1,0 +1,198 @@
+from __future__ import annotations
+
+import os
+import socket
+import sys
+import threading
+from collections.abc import Callable
+from contextlib import contextmanager
+
+
+ResizeCallback = Callable[[int, int], None]
+
+
+class TerminalResizer:
+    def __init__(self, callback: ResizeCallback | None) -> None:
+        self.callback = callback
+        self.last_size: tuple[int, int] | None = None
+
+    def poll(self) -> None:
+        if self.callback is None:
+            return
+        try:
+            dimensions = os.get_terminal_size(sys.stdin.fileno())
+        except (OSError, ValueError):
+            return
+        size = dimensions.lines, dimensions.columns
+        if size == self.last_size:
+            return
+        self.callback(*size)
+        self.last_size = size
+
+
+def relay_socket(
+    connection: socket.socket,
+    resize_callback: ResizeCallback | None = None,
+) -> None:
+    if os.name == "nt":
+        _relay_windows(connection, resize_callback)
+    else:
+        _relay_posix(connection, resize_callback)
+
+
+def _relay_posix(
+    connection: socket.socket,
+    resize_callback: ResizeCallback | None,
+) -> None:
+    import select
+    import termios
+    import tty
+
+    input_descriptor = sys.stdin.fileno()
+    output_descriptor = sys.stdout.fileno()
+    original = termios.tcgetattr(input_descriptor) if os.isatty(input_descriptor) else None
+    resizer = TerminalResizer(resize_callback if original is not None else None)
+    input_open = True
+    try:
+        if original is not None:
+            tty.setraw(input_descriptor)
+        resizer.poll()
+        while True:
+            readers: list[int | socket.socket] = [connection]
+            if input_open:
+                readers.append(input_descriptor)
+            timeout = 0.25 if resize_callback is not None else None
+            readable, _, _ = select.select(readers, (), (), timeout)
+            if not readable:
+                resizer.poll()
+                continue
+            if connection in readable:
+                payload = connection.recv(65536)
+                if not payload:
+                    return
+                _write_all(output_descriptor, payload)
+            if input_open and input_descriptor in readable:
+                payload = os.read(input_descriptor, 65536)
+                if not payload:
+                    input_open = False
+                    try:
+                        connection.shutdown(socket.SHUT_WR)
+                    except OSError:
+                        pass
+                else:
+                    connection.sendall(payload)
+            resizer.poll()
+    finally:
+        if original is not None:
+            termios.tcsetattr(input_descriptor, termios.TCSADRAIN, original)
+
+
+def _relay_windows(
+    connection: socket.socket,
+    resize_callback: ResizeCallback | None,
+) -> None:
+    import msvcrt
+
+    special_keys = {
+        "H": b"\x1b[A",
+        "P": b"\x1b[B",
+        "K": b"\x1b[D",
+        "M": b"\x1b[C",
+        "G": b"\x1b[H",
+        "O": b"\x1b[F",
+        "S": b"\x1b[3~",
+    }
+    stopped = threading.Event()
+    resizer = TerminalResizer(resize_callback if sys.stdin.isatty() else None)
+
+    def send_input() -> None:
+        try:
+            while not stopped.is_set():
+                if not msvcrt.kbhit():
+                    stopped.wait(0.01)
+                    continue
+                character = msvcrt.getwch()
+                if character in ("\x00", "\xe0"):
+                    payload = special_keys.get(msvcrt.getwch())
+                    if payload is None:
+                        continue
+                else:
+                    payload = character.encode("utf-8", errors="replace")
+                connection.sendall(payload)
+        except (OSError, UnicodeError):
+            stopped.set()
+
+    input_thread = threading.Thread(
+        target=send_input,
+        name="root-shell-input",
+        daemon=True,
+    )
+    output = getattr(sys.stdout, "buffer", sys.stdout)
+
+    def monitor_size() -> None:
+        while not stopped.wait(0.25):
+            resizer.poll()
+
+    resize_thread = threading.Thread(
+        target=monitor_size,
+        name="root-shell-resize",
+        daemon=True,
+    )
+    with _windows_console_mode():
+        input_thread.start()
+        resizer.poll()
+        if resize_callback is not None:
+            resize_thread.start()
+        try:
+            while not stopped.is_set():
+                payload = connection.recv(65536)
+                if not payload:
+                    return
+                output.write(payload)
+                output.flush()
+        finally:
+            stopped.set()
+            input_thread.join(timeout=0.5)
+            if resize_thread.is_alive():
+                resize_thread.join(timeout=0.5)
+
+
+@contextmanager
+def _windows_console_mode():
+    import ctypes
+    from ctypes import wintypes
+
+    kernel32 = ctypes.windll.kernel32
+    kernel32.GetStdHandle.argtypes = (wintypes.DWORD,)
+    kernel32.GetStdHandle.restype = wintypes.HANDLE
+    kernel32.GetConsoleMode.argtypes = (
+        wintypes.HANDLE,
+        ctypes.POINTER(wintypes.DWORD),
+    )
+    kernel32.GetConsoleMode.restype = wintypes.BOOL
+    kernel32.SetConsoleMode.argtypes = (wintypes.HANDLE, wintypes.DWORD)
+    kernel32.SetConsoleMode.restype = wintypes.BOOL
+    input_handle = kernel32.GetStdHandle(-10)
+    output_handle = kernel32.GetStdHandle(-11)
+    input_mode = wintypes.DWORD()
+    output_mode = wintypes.DWORD()
+    have_input = bool(kernel32.GetConsoleMode(input_handle, ctypes.byref(input_mode)))
+    have_output = bool(kernel32.GetConsoleMode(output_handle, ctypes.byref(output_mode)))
+    try:
+        if have_input:
+            raw_input = (input_mode.value | 0x0200) & ~(0x0001 | 0x0002 | 0x0004)
+            kernel32.SetConsoleMode(input_handle, raw_input)
+        if have_output:
+            kernel32.SetConsoleMode(output_handle, output_mode.value | 0x0004)
+        yield
+    finally:
+        if have_input:
+            kernel32.SetConsoleMode(input_handle, input_mode.value)
+        if have_output:
+            kernel32.SetConsoleMode(output_handle, output_mode.value)
+
+
+def _write_all(descriptor: int, payload: bytes) -> None:
+    offset = 0
+    while offset < len(payload):
+        offset += os.write(descriptor, payload[offset:])

@@ -1,0 +1,86 @@
+from __future__ import annotations
+
+import json
+import platform
+import sys
+from dataclasses import asdict, dataclass
+
+from . import __version__
+from .resources import PAYLOAD_FILES, is_frozen, missing_payloads, payload_directory
+from .sdb import discover_sdb, sdb_candidates
+
+
+@dataclass(frozen=True)
+class PayloadCheck:
+    model: str
+    directory: str
+    required: tuple[str, ...]
+    missing: tuple[str, ...]
+
+    @property
+    def ready(self) -> bool:
+        return not self.missing
+
+
+@dataclass(frozen=True)
+class DoctorReport:
+    version: str
+    operating_system: str
+    architecture: str
+    standalone: bool
+    sdb_path: str | None
+    sdb_candidates: tuple[str, ...]
+    payloads: tuple[PayloadCheck, ...]
+
+    @property
+    def ready(self) -> bool:
+        return self.sdb_path is not None and all(check.ready for check in self.payloads)
+
+    def to_dict(self) -> dict[str, object]:
+        report = asdict(self)
+        report["ready"] = self.ready
+        for payload in report["payloads"]:
+            payload["ready"] = not payload["missing"]
+        return report
+
+
+def inspect_installation() -> DoctorReport:
+    payload_checks = tuple(
+        PayloadCheck(
+            model=model,
+            directory=str(directory := payload_directory(model)),
+            required=files,
+            missing=missing_payloads(model, directory),
+        )
+        for model, files in PAYLOAD_FILES.items()
+    )
+    sdb = discover_sdb()
+    return DoctorReport(
+        version=__version__,
+        operating_system=platform.system(),
+        architecture=platform.machine(),
+        standalone=is_frozen(),
+        sdb_path=str(sdb) if sdb else None,
+        sdb_candidates=tuple(str(path) for path in sdb_candidates()),
+        payloads=payload_checks,
+    )
+
+
+def print_report(report: DoctorReport, *, json_output: bool) -> None:
+    if json_output:
+        print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
+        return
+
+    package_kind = "standalone release" if report.standalone else "source/Python"
+    print(f"Samsung TV Root {report.version}")
+    print(f"Host: {report.operating_system} {report.architecture} ({package_kind})")
+    print(f"SDB: {report.sdb_path or 'not found'}")
+    for payload in report.payloads:
+        state = "ready" if payload.ready else "missing " + ", ".join(payload.missing)
+        print(f"Payload {payload.model}: {state}")
+    print(f"Ready: {'yes' if report.ready else 'no'}")
+    if report.sdb_path is None:
+        print(
+            "Install Tizen Studio or pass --sdb /path/to/sdb before the command.",
+            file=sys.stderr,
+        )

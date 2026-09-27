@@ -1,0 +1,15 @@
+from pathlib import Path
+
+from samsung_tv_root.service import render_user_unit
+
+
+def test_systemd_service_is_a_notify_daemon_without_restart_loop() -> None:
+    unit = render_user_unit(
+        Path("/opt/samsung-tv-root/samsung-tv-root"),
+        Path("/home/user/.config/samsung-tv-root/config.toml"),
+    )
+    assert "Type=notify" in unit
+    assert "daemon run" in unit
+    assert "Restart=" not in unit
+    assert "RemainAfterExit=" not in unit
+    assert "ExecStart=" in unit

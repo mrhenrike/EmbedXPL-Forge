@@ -1,0 +1,85 @@
+using System;
+using System.Runtime.InteropServices;
+using System.Threading;
+
+internal sealed class MaliPatternProbe
+{
+    private const int Pages = 32;
+    private const int ExpectedOffset = (17 * MaliNative.PageSize) + 0x234;
+    private const uint Needle0 = 0x2d663971;
+    private const uint Needle1 = 0x746f6f72;
+    private const uint Needle2 = 0x6e616373;
+    private const uint Needle3 = 0x21656d2d;
+
+    private readonly int fileDescriptor;
+
+    internal MaliPatternProbe(int fileDescriptor)
+    {
+        this.fileDescriptor = fileDescriptor;
+    }
+
+    internal bool Run(EglComputeContext compute)
+    {
+        MaliNative.MemAlloc allocation = new MaliNative.MemAlloc
+        {
+            VaPagesOrFlags = Pages,
+            CommitPagesOrGpuVa = Pages,
+            Extension = 0,
+            Flags = MaliNative.BaseMemProtCpuRead
+                | MaliNative.BaseMemProtCpuWrite
+                | MaliNative.BaseMemProtGpuRead
+                | MaliNative.BaseMemProtGpuWrite
+                | MaliNative.BaseMemSameVa,
+        };
+        MaliNative.RequireSuccess(
+            "pattern_probe_mem_alloc",
+            MaliNative.IoctlMemAlloc(
+                fileDescriptor,
+                MaliNative.KbaseIoctlMemAlloc,
+                ref allocation));
+
+        UIntPtr length = new UIntPtr(Pages * MaliNative.PageSize);
+        IntPtr mapping = MaliNative.Mmap(
+            IntPtr.Zero,
+            length,
+            MaliNative.ProtectRead | MaliNative.ProtectWrite,
+            MaliNative.MapShared,
+            fileDescriptor,
+            unchecked((long)allocation.CommitPagesOrGpuVa));
+        if (mapping == new IntPtr(-1))
+        {
+            throw new InvalidOperationException(
+                "pattern probe mmap failed errno=" + Marshal.GetLastWin32Error());
+        }
+
+        try
+        {
+            Marshal.WriteInt32(mapping, ExpectedOffset, unchecked((int)Needle0));
+            Marshal.WriteInt32(mapping, ExpectedOffset + 4, unchecked((int)Needle1));
+            Marshal.WriteInt32(mapping, ExpectedOffset + 8, unchecked((int)Needle2));
+            Marshal.WriteInt32(mapping, ExpectedOffset + 12, unchecked((int)Needle3));
+            Thread.MemoryBarrier();
+
+            ulong gpuAddress = MaliNative.PointerValue(mapping);
+            uint found = compute.FindPattern(
+                gpuAddress,
+                Pages * MaliNative.PageSize,
+                Needle0,
+                Needle1,
+                Needle2,
+                Needle3);
+            Console.WriteLine("pattern_probe_gpu_address=0x{0:x}", gpuAddress);
+            Console.WriteLine("pattern_probe_expected_offset=0x{0:x}", ExpectedOffset);
+            Console.WriteLine("pattern_probe_found_offset=0x{0:x}", found);
+            bool passed = found == ExpectedOffset;
+            Console.WriteLine("pattern_scan={0}", passed ? "pass" : "fail");
+            return passed;
+        }
+        finally
+        {
+            MaliNative.RequireSuccess(
+                "pattern_probe_munmap",
+                MaliNative.Munmap(mapping, length));
+        }
+    }
+}

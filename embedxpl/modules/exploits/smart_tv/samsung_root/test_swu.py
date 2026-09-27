@@ -1,0 +1,60 @@
+from pathlib import Path
+
+import pytest
+
+from swu.swu_formatted_passphrase_recover import build_format_options
+from swu.swu_padding_oracle import (
+    CANDIDATE_SIZE,
+    decode_results,
+    encode_batch,
+)
+from swu.teec import (
+    TEEC_PROFILES,
+    TeecError,
+    detect_profile,
+    parameter_types,
+    select_profile,
+)
+
+
+def test_oracle_batch_round_trip_metadata() -> None:
+    candidates = [bytes(CANDIDATE_SIZE), bytes([1]) * CANDIDATE_SIZE]
+    encoded = encode_batch(candidates)
+    result = encoded[:8] + b"\x02\x00\x00\x00\xa0\x01\x00\x00" + b"\x01\x00"
+    result = b"SWUORR1\0" + result[8:]
+    assert decode_results(result, 2) == [True, False]
+
+
+def test_formatted_passphrase_contract_is_416_bytes() -> None:
+    options = build_format_options()
+    assert len(options) == CANDIDATE_SIZE
+    assert options[-10:] == [b"\n"] * 10
+
+
+def test_teec_parameter_types_match_verified_command_three_frame() -> None:
+    assert parameter_types(0x0D, 0x0E, 0x03, 0x00) == 0x00030E0D
+
+
+@pytest.mark.parametrize(
+    ("version", "profile"),
+    (("6.5", "legacy"), ("9.0", "modern")),
+)
+def test_teec_profile_detection(
+    tmp_path: Path,
+    version: str,
+    profile: str,
+) -> None:
+    os_release = tmp_path / "os-release"
+    os_release.write_text(f'NAME=Tizen\nVERSION_ID="{version}"\n')
+    assert detect_profile(os_release) is TEEC_PROFILES[profile]
+
+
+def test_teec_profile_detection_rejects_unverified_release(tmp_path: Path) -> None:
+    os_release = tmp_path / "os-release"
+    os_release.write_text('VERSION_ID="8.0"\n')
+    with pytest.raises(TeecError, match="unverified Tizen"):
+        detect_profile(os_release)
+
+
+def test_explicit_teec_profile_does_not_claim_runtime_verification() -> None:
+    assert select_profile("legacy") is TEEC_PROFILES["legacy"]

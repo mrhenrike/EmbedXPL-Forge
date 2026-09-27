@@ -1,0 +1,450 @@
+#!/usr/bin/env python3
+"""Recover one QN90F SWU passphrase block through the command-0 oracle."""
+
+from __future__ import annotations
+
+import argparse
+import asyncio
+import hashlib
+import json
+import os
+import shlex
+import struct
+import sys
+import tempfile
+from collections.abc import Callable
+from pathlib import Path
+
+from samsung_tv_root.controller import (
+    ControllerError,
+    default_control_file,
+    send_control_request,
+)
+from samsung_tv_root.sdb import (
+    SdbClient,
+    SdbError,
+    find_sdb,
+)
+
+
+BLOCK_SIZE = 16
+CANDIDATE_SIZE = 416
+MAX_CANDIDATES = 256
+BATCH_MAGIC = b"SWUORB1\0"
+RESULT_MAGIC = b"SWUORR1\0"
+HEADER = struct.Struct("<8sII")
+REMOTE_DIRECTORY = Path("/home/owner/share/tmp/sdk_tools/swu-passphrase")
+REMOTE_PRELOAD = REMOTE_DIRECTORY / "libswu-init-oracle-batch-v1.so"
+REMOTE_BATCH = REMOTE_DIRECTORY / "oracle-recovery-batch.bin"
+REMOTE_RESULT = REMOTE_DIRECTORY / "oracle-recovery-result.bin"
+REMOTE_STATUS = REMOTE_DIRECTORY / "oracle-recovery-status.txt"
+REMOTE_SALT = REMOTE_DIRECTORY / "firmware-salt.bin"
+
+
+class OracleError(RuntimeError):
+    """Raised when the bounded oracle cannot produce an unambiguous result."""
+
+
+def encode_batch(candidates: list[bytes]) -> bytes:
+    if not candidates or len(candidates) > MAX_CANDIDATES:
+        raise ValueError("candidate count must be between 1 and 256")
+    if any(len(candidate) != CANDIDATE_SIZE for candidate in candidates):
+        raise ValueError("every candidate must contain exactly 416 bytes")
+    return HEADER.pack(BATCH_MAGIC, len(candidates), CANDIDATE_SIZE) + b"".join(
+        candidates
+    )
+
+
+def decode_results(payload: bytes, expected_count: int) -> list[bool]:
+    if len(payload) < HEADER.size:
+        raise OracleError("oracle result is shorter than its header")
+    magic, count, candidate_size = HEADER.unpack_from(payload)
+    if magic != RESULT_MAGIC:
+        raise OracleError("oracle result has invalid magic")
+    if count != expected_count or candidate_size != CANDIDATE_SIZE:
+        raise OracleError("oracle result metadata does not match the request")
+    encoded = payload[HEADER.size:]
+    if len(encoded) != count:
+        raise OracleError("oracle result has an invalid result count")
+    if any(value not in (0, 1) for value in encoded):
+        raise OracleError("oracle reported a client-open failure")
+    return [value == 1 for value in encoded]
+
+
+def parse_decimal_bytes(text: str) -> bytes:
+    try:
+        values = [int(value, 10) for value in text.split()]
+    except ValueError as error:
+        raise OracleError("cannot parse remote oracle result") from error
+    if any(value < 0 or value > 255 for value in values):
+        raise OracleError("remote oracle result contains a non-byte value")
+    return bytes(values)
+
+
+def valid_pkcs7(block: bytes) -> bool:
+    if len(block) != BLOCK_SIZE:
+        return False
+    padding = block[-1]
+    return 1 <= padding <= BLOCK_SIZE and block[-padding:] == bytes([padding]) * padding
+
+
+def recover_last_block(
+    encrypted: bytes,
+    evaluate: Callable[[list[bytes]], list[bool]],
+    *,
+    intermediate: list[int | None] | None = None,
+    plaintext_options: list[bytes | None] | None = None,
+    maximum_padding: int = BLOCK_SIZE,
+    progress: Callable[[list[int | None], list[int | None], int], None] | None = None,
+) -> tuple[list[int | None], list[int | None]]:
+    if len(encrypted) != CANDIDATE_SIZE or len(encrypted) % BLOCK_SIZE:
+        raise ValueError("encrypted passphrase must contain exactly 416 bytes")
+    if maximum_padding < 1 or maximum_padding > BLOCK_SIZE:
+        raise ValueError("maximum padding must be between 1 and 16")
+
+    recovered = list(intermediate or [None] * BLOCK_SIZE)
+    if len(recovered) != BLOCK_SIZE:
+        raise ValueError("intermediate state must contain exactly 16 entries")
+    completed = 0
+    for value in reversed(recovered):
+        if value is None:
+            break
+        completed += 1
+    if any(value is not None for value in recovered[: BLOCK_SIZE - completed]):
+        raise ValueError("intermediate state must be a contiguous recovered suffix")
+    if plaintext_options is not None and len(plaintext_options) != BLOCK_SIZE:
+        raise ValueError("plaintext options must contain exactly 16 entries")
+
+    original_previous = encrypted[-2 * BLOCK_SIZE : -BLOCK_SIZE]
+    previous_offset = len(encrypted) - 2 * BLOCK_SIZE
+    plaintext: list[int | None] = [None] * BLOCK_SIZE
+    for index, value in enumerate(recovered):
+        if value is not None:
+            plaintext[index] = value ^ original_previous[index]
+
+    for padding in range(completed + 1, maximum_padding + 1):
+        index = BLOCK_SIZE - padding
+        options = (
+            bytes(range(MAX_CANDIDATES))
+            if plaintext_options is None or plaintext_options[index] is None
+            else plaintext_options[index]
+        )
+        if not options or len(set(options)) != len(options):
+            raise ValueError(f"plaintext options for position {index} are invalid")
+        if len(options) == 1:
+            plaintext[index] = options[0]
+            recovered[index] = options[0] ^ original_previous[index]
+            if progress is not None:
+                progress(list(recovered), list(plaintext), padding)
+            continue
+
+        candidates: list[bytes] = []
+        for plaintext_guess in options:
+            candidate = bytearray(encrypted)
+            for suffix_index in range(index + 1, BLOCK_SIZE):
+                suffix_value = recovered[suffix_index]
+                if suffix_value is None:
+                    raise OracleError("oracle state has an unrecovered suffix byte")
+                candidate[previous_offset + suffix_index] = suffix_value ^ padding
+            candidate[previous_offset + index] = (
+                plaintext_guess ^ original_previous[index] ^ padding
+            )
+            candidates.append(bytes(candidate))
+
+        accepted_indices = [
+            option_index
+            for option_index, valid in enumerate(evaluate(candidates))
+            if valid
+        ]
+        if not accepted_indices:
+            raise OracleError(f"padding {padding} produced no accepted candidate")
+
+        if index > 0 and len(options) == MAX_CANDIDATES:
+            confirmations = []
+            for option_index in accepted_indices:
+                candidate = bytearray(candidates[option_index])
+                candidate[previous_offset + index - 1] ^= 1
+                confirmations.append(bytes(candidate))
+            confirmation_results = evaluate(confirmations)
+            accepted_indices = [
+                option_index
+                for option_index, valid in zip(
+                    accepted_indices,
+                    confirmation_results,
+                    strict=True,
+                )
+                if valid
+            ]
+        if len(accepted_indices) != 1:
+            raise OracleError(
+                f"padding {padding} produced "
+                f"{len(accepted_indices)} confirmed candidates"
+            )
+
+        plaintext[index] = options[accepted_indices[0]]
+        recovered[index] = plaintext[index] ^ original_previous[index]
+        if progress is not None:
+            progress(list(recovered), list(plaintext), padding)
+
+    return recovered, plaintext
+
+
+def validation_candidates(encrypted: bytes, intermediate: list[int | None]) -> list[bytes]:
+    if any(value is None for value in intermediate):
+        raise ValueError("all intermediate bytes must be recovered before validation")
+    previous_offset = len(encrypted) - 2 * BLOCK_SIZE
+    valid = bytearray(encrypted)
+    for index, value in enumerate(intermediate):
+        valid[previous_offset + index] = int(value) ^ BLOCK_SIZE
+    invalid = bytearray(valid)
+    invalid[previous_offset + BLOCK_SIZE - 1] ^= 1
+    return [bytes(valid), bytes(invalid)]
+
+
+def write_private_json(path: Path, payload: dict[str, object]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.partial-{os.getpid()}")
+    try:
+        descriptor = os.open(
+            temporary,
+            os.O_WRONLY | os.O_CREAT | os.O_EXCL,
+            0o600,
+        )
+        with os.fdopen(descriptor, "w", encoding="utf-8") as output:
+            json.dump(payload, output, sort_keys=True)
+            output.write("\n")
+            output.flush()
+            os.fsync(output.fileno())
+        os.replace(temporary, path)
+        os.chmod(path, 0o600)
+    except BaseException:
+        temporary.unlink(missing_ok=True)
+        raise
+
+
+class LiveOracle:
+    def __init__(
+        self,
+        host: str,
+        preload: Path,
+        salt: Path,
+        command_timeout: float,
+        control_file: Path | None = None,
+    ) -> None:
+        self.host = host
+        self.preload = preload
+        self.salt = salt
+        self.command_timeout = command_timeout
+        self.control_file = control_file or default_control_file()
+        self.sdb = SdbClient(find_sdb(), host, timeout=10.0)
+        self.query_count = 0
+        self.batch_count = 0
+
+    def stage(self) -> None:
+        if len(self.salt.read_bytes()) != 8:
+            raise OracleError("firmware salt must contain exactly 8 bytes")
+        self.sdb.connect()
+        self.sdb.push(self.preload, REMOTE_PRELOAD)
+        self.sdb.push(self.salt, REMOTE_SALT)
+
+    def execute(self, command: str, timeout: float | None = None) -> dict[str, object]:
+        deadline = timeout or self.command_timeout
+        response = asyncio.run(
+            send_control_request(
+                self.control_file,
+                {
+                    "action": "execute",
+                    "command": command,
+                    "timeout": deadline,
+                },
+                deadline + 3.0,
+            )
+        )
+        if response.get("timed_out"):
+            raise OracleError(f"remote command timed out after {deadline:g}s")
+        return response
+
+    def health(self) -> str:
+        response = self.execute(
+            "/usr/bin/systemctl show security-tzdaemon.service "
+            "-p MainPID -p NRestarts -p ActiveState -p SubState --no-pager",
+            5.0,
+        )
+        if int(response["exit_code"]) != 0:
+            raise OracleError("cannot read security-tzdaemon health")
+        return str(response.get("stdout", "")).strip()
+
+    def evaluate(self, candidates: list[bytes]) -> list[bool]:
+        encoded = encode_batch(candidates)
+        with tempfile.NamedTemporaryFile(prefix="qn90f-oracle-", delete=False) as output:
+            local_batch = Path(output.name)
+            output.write(encoded)
+        try:
+            os.chmod(local_batch, 0o600)
+            self.sdb.push(local_batch, REMOTE_BATCH)
+        finally:
+            local_batch.unlink(missing_ok=True)
+
+        environment = {
+            "LD_PRELOAD": str(REMOTE_PRELOAD),
+            "SWU_ORACLE_BATCH_PATH": str(REMOTE_BATCH),
+            "SWU_ORACLE_SALT_PATH": str(REMOTE_SALT),
+            "SWU_ORACLE_RESULT_PATH": str(REMOTE_RESULT),
+            "SWU_ORACLE_STATUS_PATH": str(REMOTE_STATUS),
+        }
+        command = "/usr/bin/env " + " ".join(
+            f"{name}={shlex.quote(value)}" for name, value in environment.items()
+        ) + " /usr/apps/org.tizen.tv.swu/bin/SWUMainApp"
+        response = self.execute(command)
+        if int(response["exit_code"]) != 0:
+            detail = str(response.get("stderr") or response.get("stdout") or "").strip()
+            raise OracleError(
+                "oracle batch failed" + (f": {detail}" if detail else "")
+            )
+
+        result = self.execute(
+            f"/usr/bin/od -An -tu1 -v {shlex.quote(str(REMOTE_RESULT))}",
+            5.0,
+        )
+        if int(result["exit_code"]) != 0:
+            raise OracleError("cannot read oracle batch result")
+        self.query_count += len(candidates)
+        self.batch_count += 1
+        return decode_results(
+            parse_decimal_bytes(str(result.get("stdout", ""))),
+            len(candidates),
+        )
+
+
+def load_state(path: Path, input_sha256: str) -> list[int | None]:
+    try:
+        state = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return [None] * BLOCK_SIZE
+    if state.get("input_sha256") != input_sha256:
+        raise OracleError("state file belongs to a different encrypted input")
+    values = state.get("intermediate")
+    if not isinstance(values, list) or len(values) != BLOCK_SIZE:
+        raise OracleError("state file has invalid intermediate data")
+    if any(value is not None and (not isinstance(value, int) or not 0 <= value <= 255) for value in values):
+        raise OracleError("state file contains an invalid intermediate byte")
+    return values
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("input", type=Path, help="416-byte encrypted passphrase blob")
+    parser.add_argument("output", type=Path, help="mode-0600 recovery state")
+    parser.add_argument(
+        "--preload",
+        type=Path,
+        default=Path(__file__).resolve().parent
+        / "out"
+        / "libswu-init-oracle-batch-preload.so",
+    )
+    parser.add_argument("--host", required=True)
+    parser.add_argument("--salt", type=Path, required=True)
+    parser.add_argument("--control-file", type=Path, default=default_control_file())
+    parser.add_argument("--maximum-padding", type=int, default=BLOCK_SIZE)
+    parser.add_argument("--command-timeout", type=float, default=30.0)
+    return parser.parse_args()
+
+
+def main() -> int:
+    arguments = parse_args()
+    try:
+        encrypted = arguments.input.read_bytes()
+        if len(encrypted) != CANDIDATE_SIZE:
+            raise OracleError("encrypted input must contain exactly 416 bytes")
+        host = arguments.host
+        digest = hashlib.sha256(encrypted).hexdigest()
+        intermediate = load_state(arguments.output, digest)
+        oracle = LiveOracle(
+            host,
+            arguments.preload,
+            arguments.salt,
+            arguments.command_timeout,
+            arguments.control_file,
+        )
+        oracle.stage()
+        health_before = oracle.health()
+
+        def save_progress(
+            current_intermediate: list[int | None],
+            plaintext: list[int | None],
+            completed_padding: int,
+        ) -> None:
+            write_private_json(
+                arguments.output,
+                {
+                    "input_sha256": digest,
+                    "intermediate": current_intermediate,
+                    "plaintext": plaintext,
+                    "completed_padding": completed_padding,
+                    "query_count_this_run": oracle.query_count,
+                    "batch_count_this_run": oracle.batch_count,
+                    "complete": completed_padding == BLOCK_SIZE,
+                },
+            )
+            print(
+                f"recovered position={BLOCK_SIZE - completed_padding} "
+                f"padding={completed_padding} queries={oracle.query_count}",
+                flush=True,
+            )
+
+        intermediate, plaintext = recover_last_block(
+            encrypted,
+            oracle.evaluate,
+            intermediate=intermediate,
+            maximum_padding=arguments.maximum_padding,
+            progress=save_progress,
+        )
+        if all(value is not None for value in intermediate):
+            validation = oracle.evaluate(validation_candidates(encrypted, intermediate))
+            if validation != [True, False]:
+                raise OracleError(
+                    f"final-block validation returned {validation!r}; expected [True, False]"
+                )
+            plaintext_bytes = bytes(int(value) for value in plaintext)
+            if not valid_pkcs7(plaintext_bytes):
+                raise OracleError("recovered final block does not have valid PKCS#7 padding")
+            write_private_json(
+                arguments.output,
+                {
+                    "input_sha256": digest,
+                    "intermediate": intermediate,
+                    "plaintext": plaintext,
+                    "plaintext_hex": plaintext_bytes.hex(),
+                    "completed_padding": BLOCK_SIZE,
+                    "query_count_this_run": oracle.query_count,
+                    "batch_count_this_run": oracle.batch_count,
+                    "validation": [True, False],
+                    "complete": True,
+                },
+            )
+        health_after = oracle.health()
+        if health_after != health_before:
+            raise OracleError(
+                "security-tzdaemon health changed during recovery:\n"
+                f"before:\n{health_before}\nafter:\n{health_after}"
+            )
+        print(
+            f"recovery_checkpoint output={arguments.output} "
+            f"queries={oracle.query_count} batches={oracle.batch_count} ",
+            end="",
+        )
+        print("tzdaemon=unchanged")
+        return 0
+    except (
+        OSError,
+        ValueError,
+        OracleError,
+        ControllerError,
+        SdbError,
+    ) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

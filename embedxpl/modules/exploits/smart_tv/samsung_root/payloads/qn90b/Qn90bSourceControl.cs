@@ -1,0 +1,189 @@
+using System;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.RegularExpressions;
+
+internal static class Qn90bSourceControl
+{
+    private const string SourceApi = "/usr/lib/libsource-api.so";
+    private const string VconfApi = "/usr/lib/libvconf.so.0";
+    private const string Libc = "libc";
+    private const string CurrentSourceTypeKey = "memory/system/source_type";
+    private const string CurrentSourceJsonKey = "memory/eden/source/current_source";
+
+    [DllImport(SourceApi, EntryPoint = "get_source_list")]
+    private static extern IntPtr GetSourceList();
+
+    [DllImport(SourceApi, EntryPoint = "connect_source")]
+    private static extern int ConnectSource(int sourceType);
+
+    [DllImport(VconfApi, EntryPoint = "vconf_get_int")]
+    private static extern int VconfGetInt(string key, out int value);
+
+    [DllImport(VconfApi, EntryPoint = "vconf_get_str")]
+    private static extern IntPtr VconfGetString(string key);
+
+    [DllImport(Libc)]
+    private static extern void free(IntPtr pointer);
+
+    private static int Main(string[] arguments)
+    {
+        if (arguments.Length == 1 && arguments[0] == "list")
+        {
+            string sourceList = Marshal.PtrToStringAnsi(GetSourceList());
+            if (string.IsNullOrWhiteSpace(sourceList))
+            {
+                Console.Error.WriteLine("source-service returned an empty source list");
+                return 1;
+            }
+            Console.WriteLine(sourceList);
+            return 0;
+        }
+
+        if (arguments.Length == 1 && arguments[0] == "current")
+        {
+            return PrintCurrentSource();
+        }
+
+        if (arguments.Length == 2 && arguments[0] == "connect")
+        {
+            int sourceType;
+            try
+            {
+                sourceType = ParseSource(arguments[1]);
+            }
+            catch (ArgumentException error)
+            {
+                Console.Error.WriteLine(error.Message);
+                return 2;
+            }
+
+            int result = ConnectSource(sourceType);
+            Console.WriteLine(
+                "{\"source\":\""
+                + SourceName(sourceType)
+                + "\",\"source_type\":"
+                + sourceType
+                + ",\"connect_result\":"
+                + result
+                + "}");
+            return 0;
+        }
+
+        Console.Error.WriteLine(
+            "usage: Qn90bSourceControl.dll list|current|"
+            + "connect HDMI1|HDMI2|HDMI3|HDMI4");
+        return 2;
+    }
+
+    private static int PrintCurrentSource()
+    {
+        int sourceType;
+        if (VconfGetInt(CurrentSourceTypeKey, out sourceType) != 0)
+        {
+            Console.Error.WriteLine("failed to read " + CurrentSourceTypeKey);
+            return 1;
+        }
+        string sourceJson = ReadVconfString(CurrentSourceJsonKey);
+        string sourceUuid = "";
+        if (!string.IsNullOrEmpty(sourceJson))
+        {
+            Match match = Regex.Match(
+                sourceJson,
+                "\\\"uuid\\\"\\s*:\\s*\\\"([^\\\"]*)\\\"");
+            if (match.Success)
+            {
+                sourceUuid = match.Groups[1].Value;
+            }
+        }
+        Console.WriteLine(
+            "{\"source\":\""
+            + SourceName(sourceType)
+            + "\",\"source_type\":"
+            + sourceType
+            + ",\"source_uuid\":\""
+            + EscapeJson(sourceUuid)
+            + "\"}");
+        return 0;
+    }
+
+    private static string ReadVconfString(string key)
+    {
+        IntPtr pointer = VconfGetString(key);
+        if (pointer == IntPtr.Zero)
+        {
+            return "";
+        }
+        try
+        {
+            return Marshal.PtrToStringAnsi(pointer) ?? "";
+        }
+        finally
+        {
+            free(pointer);
+        }
+    }
+
+    private static string SourceName(int sourceType)
+    {
+        switch (sourceType)
+        {
+            case 13:
+                return "HDMI1";
+            case 14:
+                return "HDMI2";
+            case 15:
+                return "HDMI3";
+            case 16:
+                return "HDMI4";
+            default:
+                return "TV";
+        }
+    }
+
+    private static string EscapeJson(string value)
+    {
+        StringBuilder builder = new StringBuilder();
+        foreach (char character in value ?? "")
+        {
+            if (character == '"' || character == '\\')
+            {
+                builder.Append('\\').Append(character);
+            }
+            else if (character == '\n')
+            {
+                builder.Append("\\n");
+            }
+            else if (character == '\r')
+            {
+                builder.Append("\\r");
+            }
+            else if (character == '\t')
+            {
+                builder.Append("\\t");
+            }
+            else
+            {
+                builder.Append(character);
+            }
+        }
+        return builder.ToString();
+    }
+
+    private static int ParseSource(string value)
+    {
+        switch (value.ToUpperInvariant())
+        {
+            case "HDMI1":
+                return 13;
+            case "HDMI2":
+                return 14;
+            case "HDMI3":
+                return 15;
+            case "HDMI4":
+                return 16;
+            default:
+                throw new ArgumentException("unsupported QN90B source: " + value);
+        }
+    }
+}

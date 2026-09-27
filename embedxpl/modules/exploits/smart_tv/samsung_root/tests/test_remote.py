@@ -1,0 +1,63 @@
+import base64
+
+from samsung_tv_root.config import RemoteRuleConfiguration
+from samsung_tv_root.remote import (
+    _blocked_tokens,
+    _capability_request,
+    _matches,
+    _parse_identity,
+    parse_input_devices,
+)
+
+
+def test_remote_identity_preserves_device_metadata() -> None:
+    encoded = [
+        base64.b64encode(value.encode()).decode()
+        for value in ("Smart Control", "/dev/input/event4", "bluetooth", "VG-TM2560")
+    ]
+    identity = _parse_identity(
+        "\t".join(("AUTH", "123", "0", "0", *encoded, "observe"))
+    )
+    assert identity.device == "Smart Control"
+    assert identity.transport == "bluetooth"
+    assert identity.model == "VG-TM2560"
+    assert identity.mode == "observe"
+
+
+def test_remote_filter_blocks_only_explicit_rule_tokens() -> None:
+    rules = (
+        RemoteRuleConfiguration(action="suppress", key="XF86Caption"),
+        RemoteRuleConfiguration(action="source.select", code=59, source="HDMI1"),
+    )
+    assert _blocked_tokens(rules) == ("59", "XF86Caption")
+    assert _matches(
+        rules[0],
+        {"action": "down", "key": "XF86Caption", "code": 213},
+    )
+    assert not _matches(
+        rules[0],
+        {"action": "up", "key": "XF86Caption", "code": 213},
+    )
+
+
+def test_remote_local_dimming_action_maps_to_packaged_capability() -> None:
+    action, request = _capability_request(
+        RemoteRuleConfiguration(action="local_dimming.enable", key="XF86Guide")
+    )
+    assert action == "local_dimming.set"
+    assert request == {"enabled": True}
+
+
+def test_input_device_inventory_keeps_kernel_device_strings() -> None:
+    devices = parse_input_devices(
+        "I: Bus=0005 Vendor=04e8 Product=0001 Version=0001\n"
+        'N: Name="Smart Control"\n'
+        "H: Handlers=kbd event4\n\n"
+        'N: Name="No Event Node"\n'
+        "H: Handlers=sysrq\n"
+    )
+    assert len(devices) == 1
+    assert devices[0].name == "Smart Control"
+    assert devices[0].node == "/dev/input/event4"
+    assert devices[0].bus == "0005"
+    assert devices[0].vendor == "04e8"

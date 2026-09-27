@@ -1,0 +1,90 @@
+import asyncio
+from dataclasses import dataclass
+
+import pytest
+
+from samsung_tv_root.overlay import OverlayError, Qn90fOverlayControl
+
+
+@dataclass
+class Result:
+    stdout: str = ""
+    stderr: str = ""
+    exit_code: int = 0
+    timed_out: bool = False
+
+
+class Connection:
+    def __init__(self) -> None:
+        self.commands: list[tuple[str, float]] = []
+        self.files: list[tuple[object, bytes, float]] = []
+
+    async def execute(self, command: str, timeout: float) -> Result:
+        self.commands.append((command, timeout))
+        if command.startswith("/bin/rm"):
+            return Result()
+        return Result(
+            stdout=(
+                "overlay_ready duration_s=7 geometry=0,0 1920x1080 objects=2 "
+                "effect_hint_id=4 notification_result=0 efl_log=/tmp/efl.log\n"
+                "overlay_done reason=timer\n"
+            )
+        )
+
+    async def write_file(self, path, data: bytes, timeout: float) -> object:
+        self.files.append((path, data, timeout))
+        return object()
+
+
+def test_overlay_message_is_bounded_and_returns_evidence() -> None:
+    connection = Connection()
+
+    result = asyncio.run(
+        Qn90fOverlayControl().show(
+            connection,
+            seconds=7,
+            message="hello world",
+        )
+    )
+
+    assert result["objects"] == 2
+    assert result["completion_reason"] == "timer"
+    assert "--message 'hello world'" in connection.commands[0][0]
+    assert connection.commands[0][1] == 17.0
+
+
+def test_overlay_scene_is_staged_then_removed() -> None:
+    connection = Connection()
+
+    asyncio.run(
+        Qn90fOverlayControl().show(
+            connection,
+            seconds=7,
+            scene={"objects": [{"type": "rectangle"}]},
+        )
+    )
+
+    assert len(connection.files) == 1
+    assert connection.files[0][1] == b'{"objects":[{"type":"rectangle"}]}\n'
+    assert connection.commands[-1][0].startswith("/bin/rm -f ")
+
+
+def test_overlay_requires_exactly_one_content_source() -> None:
+    with pytest.raises(OverlayError, match="exactly one"):
+        asyncio.run(Qn90fOverlayControl().show(Connection(), seconds=5))
+
+    with pytest.raises(OverlayError, match="exactly one"):
+        asyncio.run(
+            Qn90fOverlayControl().show(
+                Connection(),
+                seconds=5,
+                message="message",
+                scene={"objects": []},
+            )
+        )
+
+
+def test_overlay_duration_leaves_root_agent_completion_allowance() -> None:
+    assert Qn90fOverlayControl.validate_seconds(290) == 290
+    with pytest.raises(OverlayError, match="1 through 290"):
+        Qn90fOverlayControl.validate_seconds(291)

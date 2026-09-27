@@ -1,0 +1,259 @@
+from __future__ import annotations
+
+import asyncio
+import contextlib
+import hmac
+import json
+import os
+import secrets
+from collections.abc import Awaitable, Callable
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+from .controller import (
+    CONTROL_HOST,
+    MAXIMUM_REQUEST_BYTES,
+    MAXIMUM_RESPONSE_BYTES,
+    ControlEndpoint,
+    write_control_endpoint,
+)
+
+
+ControlHandler = Callable[[dict[str, Any]], Awaitable[dict[str, Any]]]
+
+
+@dataclass(frozen=True)
+class EventEnvelope:
+    sequence: int
+    time: str
+    topic: str
+    data: dict[str, Any]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "event": True,
+            "sequence": self.sequence,
+            "time": self.time,
+            "topic": self.topic,
+            "data": self.data,
+        }
+
+
+@dataclass(eq=False)
+class EventSubscriber:
+    topics: frozenset[str]
+    queue: asyncio.Queue[EventEnvelope | dict[str, Any]]
+    active: bool = True
+
+
+class EventBroker:
+    def __init__(self) -> None:
+        self._sequence = 0
+        self._subscribers: set[EventSubscriber] = set()
+
+    def subscribe(self, topics: frozenset[str]) -> EventSubscriber:
+        subscriber = EventSubscriber(topics=topics, queue=asyncio.Queue(maxsize=1025))
+        self._subscribers.add(subscriber)
+        return subscriber
+
+    def unsubscribe(self, subscriber: EventSubscriber) -> None:
+        subscriber.active = False
+        self._subscribers.discard(subscriber)
+
+    def publish(self, topic: str, data: dict[str, Any]) -> EventEnvelope:
+        self._sequence += 1
+        envelope = EventEnvelope(
+            sequence=self._sequence,
+            time=datetime.now(timezone.utc).isoformat(),
+            topic=topic,
+            data=data,
+        )
+        for subscriber in tuple(self._subscribers):
+            if subscriber.topics and topic not in subscriber.topics:
+                continue
+            if subscriber.queue.qsize() >= 1024:
+                subscriber.queue.put_nowait(
+                    {
+                        "ok": False,
+                        "error": "event subscriber exceeded its 1024-event delivery limit",
+                    }
+                )
+                self.unsubscribe(subscriber)
+                continue
+            subscriber.queue.put_nowait(envelope)
+        return envelope
+
+
+class ControlInstanceLock:
+    def __init__(self, path: Path) -> None:
+        self.path = path
+        self._stream: Any = None
+
+    @property
+    def held(self) -> bool:
+        return self._stream is not None
+
+    def acquire(self) -> None:
+        if self._stream is not None:
+            raise RuntimeError("control instance lock is already held")
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        descriptor = os.open(self.path, os.O_RDWR | os.O_CREAT, 0o600)
+        stream = os.fdopen(descriptor, "r+b", buffering=0)
+        try:
+            if os.name == "nt":
+                import msvcrt
+
+                if self.path.stat().st_size == 0:
+                    stream.write(b"\0")
+                stream.seek(0)
+                msvcrt.locking(stream.fileno(), msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+
+                fcntl.flock(stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except (ImportError, OSError) as error:
+            stream.close()
+            raise RuntimeError(
+                f"another root controller owns {self.path}"
+            ) from error
+        self._stream = stream
+
+    def release(self) -> None:
+        stream = self._stream
+        self._stream = None
+        if stream is None:
+            return
+        try:
+            if os.name == "nt":
+                import msvcrt
+
+                stream.seek(0)
+                msvcrt.locking(stream.fileno(), msvcrt.LK_UNLCK, 1)
+            else:
+                import fcntl
+
+                fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
+        finally:
+            stream.close()
+
+
+class ControlApiServer:
+    def __init__(
+        self,
+        control_file: Path,
+        handler: ControlHandler,
+        events: EventBroker,
+    ) -> None:
+        self.control_file = control_file
+        self.handler = handler
+        self.events = events
+        self.token = secrets.token_urlsafe(32)
+        self.server: asyncio.Server | None = None
+        self.instance_lock = ControlInstanceLock(
+            control_file.with_name(f"{control_file.name}.lock")
+        )
+
+    async def start(self) -> None:
+        self.instance_lock.acquire()
+        try:
+            self.control_file.unlink(missing_ok=True)
+            self.server = await asyncio.start_server(
+                self._handle,
+                host=CONTROL_HOST,
+                port=0,
+                limit=MAXIMUM_REQUEST_BYTES,
+            )
+            if not self.server.sockets:
+                raise RuntimeError("control API did not open a local listener")
+            port = int(self.server.sockets[0].getsockname()[1])
+            write_control_endpoint(
+                self.control_file,
+                ControlEndpoint(CONTROL_HOST, port, self.token),
+            )
+        except BaseException:
+            server = self.server
+            self.server = None
+            if server is not None:
+                server.close()
+                await server.wait_closed()
+            self.control_file.unlink(missing_ok=True)
+            self.instance_lock.release()
+            raise
+
+    async def close(self) -> None:
+        if self.server is not None:
+            self.server.close()
+            await self.server.wait_closed()
+            self.server = None
+        if self.instance_lock.held:
+            self.control_file.unlink(missing_ok=True)
+            self.instance_lock.release()
+
+    async def _handle(
+        self,
+        reader: asyncio.StreamReader,
+        writer: asyncio.StreamWriter,
+    ) -> None:
+        try:
+            request = await self._read_request(reader)
+            if request.get("action") == "events.subscribe":
+                await self._stream_events(request, writer)
+                return
+            response = await self.handler(request)
+            if "ok" not in response:
+                response = {"ok": True, **response}
+        except Exception as error:
+            response = {"ok": False, "error": f"{type(error).__name__}: {error}"}
+        await self._write(writer, response)
+        writer.close()
+        with contextlib.suppress(ConnectionError, OSError):
+            await writer.wait_closed()
+
+    async def _read_request(self, reader: asyncio.StreamReader) -> dict[str, Any]:
+        line = await reader.readline()
+        if not line or len(line) > MAXIMUM_REQUEST_BYTES:
+            raise RuntimeError("invalid control request size")
+        request = json.loads(line)
+        if not isinstance(request, dict):
+            raise RuntimeError("control request must be a JSON object")
+        token = request.pop("token", None)
+        if not isinstance(token, str) or not hmac.compare_digest(token, self.token):
+            raise RuntimeError("control request authentication failed")
+        return request
+
+    async def _stream_events(
+        self,
+        request: dict[str, Any],
+        writer: asyncio.StreamWriter,
+    ) -> None:
+        raw_topics = request.get("topics", [])
+        if not isinstance(raw_topics, list) or not all(
+            isinstance(topic, str) and topic for topic in raw_topics
+        ):
+            raise RuntimeError("events.subscribe topics must be an array of strings")
+        subscriber = self.events.subscribe(frozenset(raw_topics))
+        try:
+            await self._write(writer, {"ok": True, "subscribed": sorted(raw_topics)})
+            while subscriber.active or not subscriber.queue.empty():
+                item = await subscriber.queue.get()
+                value = item.to_dict() if isinstance(item, EventEnvelope) else item
+                await self._write(writer, value)
+                if value.get("ok") is False:
+                    break
+        except (ConnectionError, OSError):
+            pass
+        finally:
+            self.events.unsubscribe(subscriber)
+            writer.close()
+            with contextlib.suppress(ConnectionError, OSError):
+                await writer.wait_closed()
+
+    @staticmethod
+    async def _write(writer: asyncio.StreamWriter, value: dict[str, Any]) -> None:
+        encoded = (json.dumps(value, separators=(",", ":")) + "\n").encode()
+        if len(encoded) > MAXIMUM_RESPONSE_BYTES:
+            encoded = b'{"ok":false,"error":"response exceeds size limit"}\n'
+        writer.write(encoded)
+        await writer.drain()

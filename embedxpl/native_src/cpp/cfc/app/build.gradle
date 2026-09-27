@@ -1,0 +1,65 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'org.cimbar.camerafilecopy'
+    compileSdkVersion 34
+    buildToolsVersion "35.0.1"
+    ndkVersion "29.0.14206865"
+    defaultConfig {
+        applicationId "org.cimbar.camerafilecopy"
+        minSdkVersion 21
+        targetSdkVersion 36
+        versionCode 27
+        versionName "0.6.8"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "arm64-v8a"
+        }
+        externalNativeBuild {
+            cmake {
+                arguments "-DCMAKE_BUILD_TYPE=Release"
+                cppFlags "-frtti -fexceptions -std=c++17"
+                abiFilters 'arm64-v8a'
+                arguments "-DANDROID_STL=c++_shared"
+                arguments "-DOpenCV_DIR=" + opencvsdk + "/sdk/native"
+            }
+        }
+        setProperty("archivesBaseName", "CameraFileCopy")
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "src/cpp/CMakeLists.txt"
+            version "3.16.3+"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.webkit:webkit:1.12.1'
+    implementation project(path: ':opencv')
+}
+
+preBuild.doFirst {
+    def indexHtml = file("src/main/assets/index.html")
+    if (!indexHtml.exists()) {
+        throw new GradleException("Missing cimbar-js-bits submodule? (index.html)")
+    }
+    def cimbarJs = fileTree("src/main/assets").include("cimbar_js.*.wasm").singleFile
+    def digest = java.security.MessageDigest.getInstance("SHA-256")
+    def actual = digest.digest(cimbarJs.bytes).collect { String.format("%02x", it) }.join("")
+	def expected = "019a0d79419bdee0b918f409cdcfff919c172b75131dac5a36a44385151ca5af" // v0.6.8
+    if (actual != expected) {
+        throw new GradleException("cimbar-js-bits SHA-256 mismatch :(\n  expected: ${expected}\n  actual:   ${actual}")
+    }
+}
+

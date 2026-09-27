@@ -1,0 +1,130 @@
+from __future__ import annotations
+
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+IGNORED_DIRECTORIES = {
+    ".git",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".venv",
+    "__pycache__",
+    "bin",
+    "build",
+    "dist",
+    "obj",
+    "out",
+}
+FORBIDDEN_SUFFIXES = {
+    ".7z",
+    ".bin",
+    ".deb",
+    ".dll",
+    ".elf",
+    ".gz",
+    ".img",
+    ".key",
+    ".msd",
+    ".rpm",
+    ".so",
+    ".tar",
+    ".tpk",
+    ".wgt",
+    ".xz",
+    ".zip",
+}
+FORBIDDEN_MAGIC = {
+    b"\x7fELF": "ELF",
+    b"MZ": "PE",
+    b"PK\x03\x04": "ZIP",
+    b"\x1f\x8b": "gzip",
+    b"\xfd7zXZ\x00": "XZ",
+    b"SQLite format 3\x00": "SQLite",
+}
+FORBIDDEN_TEXT = {
+    "personal path": re.compile(r"/home/" + r"chris(?:/|\b)"),
+    "private IPv4": re.compile(
+        r"\b(?:10\.\d{1,3}\.\d{1,3}\.\d{1,3}|"
+        r"192\.168\.\d{1,3}\.\d{1,3}|"
+        r"172\.(?:1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3})\b"
+    ),
+    "private key": re.compile(r"BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY"),
+    "fleet hostname": re.compile(r"\b(?:www|workstation|steamdeck|macbook)\.local\b"),
+}
+
+
+def candidate_files() -> tuple[Path, ...]:
+    git = subprocess.run(
+        (
+            "git",
+            "-C",
+            str(ROOT),
+            "ls-files",
+            "-z",
+            "--cached",
+            "--others",
+            "--exclude-standard",
+        ),
+        capture_output=True,
+        check=False,
+    )
+    if git.returncode == 0 and git.stdout:
+        return tuple(
+            path
+            for path in (
+                ROOT / name.decode("utf-8")
+                for name in git.stdout.split(b"\0")
+                if name
+            )
+            if path.is_file() or path.is_symlink()
+        )
+    return tuple(
+        path
+        for path in ROOT.rglob("*")
+        if path.is_file()
+        and not any(
+            part in IGNORED_DIRECTORIES for part in path.relative_to(ROOT).parts
+        )
+    )
+
+
+def audit() -> list[str]:
+    failures: list[str] = []
+    for path in candidate_files():
+        relative = path.relative_to(ROOT)
+        if path.is_symlink():
+            failures.append(f"symlink is not allowed: {relative}")
+            continue
+        if path.suffix.lower() in FORBIDDEN_SUFFIXES:
+            failures.append(f"generated or proprietary suffix: {relative}")
+        data = path.read_bytes()
+        for magic, description in FORBIDDEN_MAGIC.items():
+            if data.startswith(magic):
+                failures.append(f"{description} content is not allowed: {relative}")
+        try:
+            text = data.decode("utf-8")
+        except UnicodeDecodeError:
+            failures.append(f"non-UTF-8 file is not allowed: {relative}")
+            continue
+        for description, pattern in FORBIDDEN_TEXT.items():
+            if pattern.search(text):
+                failures.append(f"{description} found in {relative}")
+    return failures
+
+
+def main() -> int:
+    failures = audit()
+    if failures:
+        for failure in failures:
+            print(f"error: {failure}", file=sys.stderr)
+        return 1
+    print(f"release audit passed: {len(candidate_files())} source files")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

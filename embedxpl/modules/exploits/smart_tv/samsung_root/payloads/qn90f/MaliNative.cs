@@ -1,0 +1,245 @@
+using System;
+using System.Runtime.InteropServices;
+
+internal static class MaliNative
+{
+    internal const uint KbaseIoctlMemAlloc = 0xc0208005;
+    internal const uint KbaseIoctlMemFree = 0x40088007;
+    internal const uint KbaseIoctlMemCommit = 0x40108014;
+    internal const uint KbaseIoctlMemFlagsChange = 0x40188017;
+    internal const uint KbaseIoctlCsQueueRegister = 0x40108024;
+    internal const uint KbaseIoctlCsQueueBind = 0xc0108027;
+    internal const uint KbaseIoctlCsQueueGroupTerminate = 0x4008802b;
+    internal const uint KbaseIoctlCsQueueGroupCreate = 0xc028803a;
+
+    internal const ulong BaseMemProtCpuRead = 1UL << 0;
+    internal const ulong BaseMemProtCpuWrite = 1UL << 1;
+    internal const ulong BaseMemProtGpuRead = 1UL << 2;
+    internal const ulong BaseMemProtGpuWrite = 1UL << 3;
+    internal const ulong BaseMemSameVa = 1UL << 13;
+    internal const ulong BaseMemCoherentSystem = 1UL << 10;
+    internal const ulong BaseMemCoherentLocal = 1UL << 11;
+
+    internal const int ProtectRead = 1;
+    internal const int ProtectWrite = 2;
+    internal const int ArmSetresuid32Syscall = 208;
+    internal const int MapShared = 1;
+    internal const int MsSync = 4;
+    internal const int PageSize = 0x1000;
+    internal const int UserIoMappingSize = 0x3000;
+    internal const int PrSetName = 15;
+    internal const int PrGetDumpable = 3;
+    internal const int PrSetDumpable = 4;
+    internal const int RLimitCore = 4;
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct RLimit
+    {
+        internal UIntPtr Current;
+        internal UIntPtr Maximum;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct MemAlloc
+    {
+        internal ulong VaPagesOrFlags;
+        internal ulong CommitPagesOrGpuVa;
+        internal ulong Extension;
+        internal ulong Flags;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct MemFree
+    {
+        internal ulong GpuAddress;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct MemCommit
+    {
+        internal ulong GpuAddress;
+        internal ulong Pages;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct MemFlagsChange
+    {
+        internal ulong GpuAddress;
+        internal ulong Flags;
+        internal ulong Mask;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct QueueRegister
+    {
+        internal ulong BufferGpuAddress;
+        internal uint BufferSize;
+        internal uint PriorityAndPadding;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct QueueBind
+    {
+        internal ulong BufferGpuAddressOrMmapHandle;
+        internal ulong GroupHandleAndCsiIndex;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct QueueGroupCreate
+    {
+        internal ulong TilerMaskOrOutput;
+        internal ulong FragmentMask;
+        internal ulong ComputeMask;
+        internal ulong Limits;
+        internal ulong Reserved;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct QueueGroupTerminate
+    {
+        internal ulong GroupHandle;
+    }
+
+    [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
+    internal static extern int IoctlMemAlloc(
+        int fileDescriptor,
+        uint request,
+        ref MemAlloc argument);
+
+    [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
+    internal static extern int IoctlMemFree(
+        int fileDescriptor,
+        uint request,
+        ref MemFree argument);
+
+    [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
+    internal static extern int IoctlMemCommit(
+        int fileDescriptor,
+        uint request,
+        ref MemCommit argument);
+
+    [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
+    internal static extern int IoctlMemFlagsChange(
+        int fileDescriptor,
+        uint request,
+        ref MemFlagsChange argument);
+
+    [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
+    internal static extern int IoctlQueueRegister(
+        int fileDescriptor,
+        uint request,
+        ref QueueRegister argument);
+
+    [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
+    internal static extern int IoctlQueueBind(
+        int fileDescriptor,
+        uint request,
+        ref QueueBind argument);
+
+    [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
+    internal static extern int IoctlQueueGroupCreate(
+        int fileDescriptor,
+        uint request,
+        ref QueueGroupCreate argument);
+
+    [DllImport("libc", EntryPoint = "ioctl", SetLastError = true)]
+    internal static extern int IoctlQueueGroupTerminate(
+        int fileDescriptor,
+        uint request,
+        ref QueueGroupTerminate argument);
+
+    [DllImport("libc", EntryPoint = "mmap64", SetLastError = true)]
+    internal static extern IntPtr Mmap(
+        IntPtr address,
+        UIntPtr length,
+        int protection,
+        int flags,
+        int fileDescriptor,
+        long offset);
+
+    [DllImport("libc", EntryPoint = "munmap", SetLastError = true)]
+    internal static extern int Munmap(IntPtr address, UIntPtr length);
+
+    [DllImport("libc", EntryPoint = "msync", SetLastError = true)]
+    internal static extern int Msync(IntPtr address, UIntPtr length, int flags);
+
+    [DllImport("libc", SetLastError = true)]
+    internal static extern int readlink(string path, byte[] buffer, int bufferSize);
+
+    [DllImport("libc", SetLastError = true)]
+    internal static extern int prctl(
+        int option,
+        IntPtr argument,
+        UIntPtr argument3,
+        UIntPtr argument4,
+        UIntPtr argument5);
+
+    [DllImport("libc")]
+    internal static extern int getpid();
+
+    [DllImport("libc")]
+    internal static extern int gettid();
+
+    [DllImport("libc")]
+    internal static extern uint getuid();
+
+    [DllImport("libc")]
+    internal static extern uint geteuid();
+
+    [DllImport("libc")]
+    internal static extern uint getgid();
+
+    [DllImport("libc")]
+    internal static extern uint getegid();
+
+    [DllImport("libc", EntryPoint = "syscall", SetLastError = true)]
+    internal static extern int syscall3(
+        int number,
+        uint argument1,
+        uint argument2,
+        uint argument3);
+
+    [DllImport("libc", SetLastError = true)]
+    internal static extern int system(string command);
+
+    [DllImport("libc", SetLastError = true)]
+    internal static extern int fork();
+
+    [DllImport("libc", SetLastError = true)]
+    internal static extern int waitpid(int pid, out int status, int options);
+
+    [DllImport("libc", SetLastError = true)]
+    internal static extern int kill(int pid, int signalNumber);
+
+    [DllImport("libc", SetLastError = true)]
+    internal static extern int getrlimit(int resource, out RLimit limit);
+
+    [DllImport("libc", SetLastError = true)]
+    internal static extern int setrlimit(int resource, ref RLimit limit);
+
+    [DllImport("libc")]
+    internal static extern IntPtr signal(int signalNumber, IntPtr handler);
+
+    [DllImport("libc", EntryPoint = "_exit")]
+    internal static extern void _exit(int status);
+
+    internal static ulong PointerValue(IntPtr pointer)
+    {
+        return IntPtr.Size == 4
+            ? unchecked((uint)pointer.ToInt32())
+            : unchecked((ulong)pointer.ToInt64());
+    }
+
+    internal static void RequireSuccess(string operation, int result)
+    {
+        Console.WriteLine(
+            "{0} result={1} errno={2}",
+            operation,
+            result,
+            result < 0 ? Marshal.GetLastWin32Error() : 0);
+        if (result != 0)
+        {
+            throw new InvalidOperationException(operation + " failed");
+        }
+    }
+}
