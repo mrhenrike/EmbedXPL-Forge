@@ -1,0 +1,159 @@
+using System;
+
+internal static class Qn90fDisplayControl
+{
+    private static int Main(string[] arguments)
+    {
+        if (arguments.Length != 1)
+        {
+            Console.Error.WriteLine(
+                "usage: Qn90fDisplayControl.dll status|pictureoff|wake");
+            return 2;
+        }
+
+        string operation = arguments[0].ToLowerInvariant();
+        try
+        {
+            if (operation == "status")
+            {
+                return Status();
+            }
+            if (operation == "pictureoff")
+            {
+                return Apply(Qn90fDisplayNative.PictureOff());
+            }
+            if (operation == "wake")
+            {
+                return Apply(Qn90fDisplayNative.Wake());
+            }
+        }
+        catch (Exception exception)
+        {
+            Console.Error.WriteLine(
+                "display operation " + operation + " failed: " + exception.Message);
+            return 1;
+        }
+
+        Console.Error.WriteLine("unsupported display operation: " + operation);
+        return 2;
+    }
+
+    private static int Status()
+    {
+        Qn90fDisplayNativeSnapshot state = Qn90fDisplayNative.Read();
+        Console.WriteLine(
+            "{\"operation\":\"status\",\"state\":"
+            + state.PowerState
+            + ",\"state_name\":\""
+            + PowerStateName(state.PowerState)
+            + "\",\"screen_state\":"
+            + state.ScreenState
+            + ",\"screen_state_name\":\""
+            + ScreenStateName(state.ScreenState)
+            + "\"}");
+        return 0;
+    }
+
+    private static int Apply(Qn90fDisplayNativeTransition transition)
+    {
+        Console.WriteLine(
+            "{\"operation\":\""
+            + transition.Operation
+            + "\",\"before_state\":"
+            + transition.Before.PowerState
+            + ",\"before_state_name\":\""
+            + PowerStateName(transition.Before.PowerState)
+            + "\",\"before_screen_state\":"
+            + transition.Before.ScreenState
+            + ",\"before_screen_state_name\":\""
+            + ScreenStateName(transition.Before.ScreenState)
+            + "\",\"requested_state\":"
+            + transition.Requested.PowerState
+            + ",\"requested_state_name\":\""
+            + PowerStateName(transition.Requested.PowerState)
+            + "\",\"requested_screen_state\":"
+            + transition.Requested.ScreenState
+            + ",\"requested_screen_state_name\":\""
+            + ScreenStateName(transition.Requested.ScreenState)
+            + "\",\"after_state\":"
+            + transition.After.PowerState
+            + ",\"after_state_name\":\""
+            + PowerStateName(transition.After.PowerState)
+            + "\",\"after_screen_state\":"
+            + transition.After.ScreenState
+            + ",\"after_screen_state_name\":\""
+            + ScreenStateName(transition.After.ScreenState)
+            + "\",\"set_attempted\":"
+            + BooleanJson(transition.SetAttempted)
+            + ",\"set_status\":"
+            + transition.SetStatus
+            + ",\"changed\":"
+            + BooleanJson(transition.Changed)
+            + ",\"confirmed\":"
+            + BooleanJson(transition.Confirmed)
+            + ",\"wakeup_reason_set_attempted\":"
+            + BooleanJson(transition.WakeupReasonSetAttempted)
+            + ",\"wakeup_reason_set_status\":"
+            + transition.WakeupReasonSetStatus
+            + ",\"power_set_attempted\":"
+            + BooleanJson(transition.PowerSetAttempted)
+            + ",\"power_set_status\":"
+            + transition.PowerSetStatus
+            + ",\"screen_set_attempted\":"
+            + BooleanJson(transition.ScreenSetAttempted)
+            + ",\"screen_set_status\":"
+            + transition.ScreenSetStatus
+            + "}");
+        if (transition.SetStatus != 0)
+        {
+            Console.Error.WriteLine(
+                "display operation failed: " + transition.SetStatus);
+            return 1;
+        }
+        if (!transition.Confirmed)
+        {
+            Console.Error.WriteLine(
+                "display operation did not reach "
+                + PowerStateName(transition.Requested.PowerState)
+                + "/"
+                + ScreenStateName(transition.Requested.ScreenState));
+            return 1;
+        }
+        return 0;
+    }
+
+    private static string PowerStateName(int state)
+    {
+        switch (state)
+        {
+            case 0:
+                return "normal";
+            case 1:
+                return "pictureoff";
+            case 2:
+                return "standby";
+            case 4:
+                return "suspend";
+            default:
+                return "unknown (" + state + ")";
+        }
+    }
+
+    private static string ScreenStateName(int state)
+    {
+        switch (state)
+        {
+            case 0:
+                return "off";
+            case 1:
+                return "on";
+            default:
+                return "unknown (" + state + ")";
+        }
+    }
+
+    private static string BooleanJson(bool value)
+    {
+        return value ? "true" : "false";
+    }
+}

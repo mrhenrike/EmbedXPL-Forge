@@ -1,0 +1,227 @@
+using System;
+using System.Runtime.InteropServices;
+using System.Text;
+
+internal static class Qn90bDisplayControl
+{
+    private const int NormalPowerState = 0;
+    private const int PictureOffPowerState = 1;
+    private const int ForcePowerStateTransition = 1;
+    private const int RemoteControllerWakeupReason = 1;
+    private const string DisplayWakeKey = "XF86Wakeup";
+
+    [DllImport(
+        "libdeviced.so.1",
+        EntryPoint = "device_power_set_state",
+        CallingConvention = CallingConvention.Cdecl)]
+    private static extern int DevicePowerSetState(int state, int force);
+
+    [DllImport(
+        "libdeviced.so.1",
+        EntryPoint = "device_power_get_state",
+        CallingConvention = CallingConvention.Cdecl)]
+    private static extern int DevicePowerGetState();
+
+    [DllImport(
+        "libdeviced.so.1",
+        EntryPoint = "device_power_set_wakeup_reason",
+        CallingConvention = CallingConvention.Cdecl)]
+    private static extern int DevicePowerSetWakeupReason(int reason);
+
+    [DllImport("libc", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int system(string command);
+
+    public static int Main(string[] arguments)
+    {
+        if (arguments.Length != 1)
+        {
+            Console.Error.WriteLine(
+                "usage: Qn90bDisplayControl.dll status|pictureoff|wake");
+            return 2;
+        }
+
+        try
+        {
+            switch (arguments[0])
+            {
+                case "status":
+                    return Status();
+                case "pictureoff":
+                    return PictureOff();
+                case "wake":
+                    return Wake();
+                default:
+                    Console.Error.WriteLine(
+                        "usage: Qn90bDisplayControl.dll status|pictureoff|wake");
+                    return 2;
+            }
+        }
+        catch (Exception error)
+        {
+            Console.Error.WriteLine(
+                "qn90b_display_error={0}: {1}",
+                error.GetType().Name,
+                error.Message);
+            return 1;
+        }
+    }
+
+    private static int Status()
+    {
+        int state = DevicePowerGetState();
+        StringBuilder output = new StringBuilder();
+        output.Append("{\"event\":\"tv-display-state-read\"");
+        AppendState(output, state, "display_state");
+        output.Append(",\"display_state_status\":0}");
+        Console.WriteLine(output.ToString());
+        return 0;
+    }
+
+    private static int PictureOff()
+    {
+        int before = ReadState(out int beforeStatus);
+        int status = CallPowerState(PictureOffPowerState);
+        int afterStatus = -1;
+        int after = status == 0 ? ReadState(out afterStatus) : -1;
+        bool confirmed = status == 0
+            && afterStatus == 0
+            && after == PictureOffPowerState;
+
+        StringBuilder output = new StringBuilder();
+        output.Append("{\"event\":\"tv-display-picture-off\"");
+        output.Append(",\"display_picture_off_attempted\":true");
+        output.Append(",\"display_picture_off_status\":").Append(status);
+        output.Append(",\"native_display_picture_off_confirmed\":")
+            .Append(confirmed ? "true" : "false");
+        output.Append(",\"display_state_before\":").Append(before);
+        output.Append(",\"display_state_before_status\":").Append(beforeStatus);
+        output.Append(",\"display_state_after\":").Append(after);
+        output.Append(",\"display_state_status\":").Append(afterStatus);
+        output.Append("}");
+        Console.WriteLine(output.ToString());
+        return confirmed ? 0 : 1;
+    }
+
+    private static int Wake()
+    {
+        int before = ReadState(out int beforeStatus);
+        int wakeupReasonStatus = CallWakeupReason();
+        int status = CallPowerState(NormalPowerState);
+        int signalDownStatus = -1;
+        int signalUpStatus = -1;
+        if (status == 0)
+        {
+            signalDownStatus = ForwardKey(DisplayWakeKey, "down");
+            signalUpStatus = ForwardKey(DisplayWakeKey, "up");
+        }
+        int afterStatus = -1;
+        int after = status == 0 ? ReadState(out afterStatus) : -1;
+        bool signalSent = signalDownStatus == 0 && signalUpStatus == 0;
+
+        StringBuilder output = new StringBuilder();
+        output.Append("{\"event\":\"tv-display-wake\"");
+        output.Append(",\"display_wake_attempted\":true");
+        output.Append(",\"display_wakeup_reason\":")
+            .Append(RemoteControllerWakeupReason);
+        output.Append(",\"display_wakeup_reason_status\":")
+            .Append(wakeupReasonStatus);
+        output.Append(",\"display_wake_status\":").Append(status);
+        output.Append(",\"display_wake_signal_key\":\"XF86Wakeup\"");
+        output.Append(",\"display_wake_signal_down_status\":")
+            .Append(signalDownStatus);
+        output.Append(",\"display_wake_signal_up_status\":")
+            .Append(signalUpStatus);
+        output.Append(",\"display_wake_signal_sent\":")
+            .Append(signalSent ? "true" : "false");
+        output.Append(",\"display_state_before\":").Append(before);
+        output.Append(",\"display_state_before_status\":").Append(beforeStatus);
+        output.Append(",\"display_state_after\":").Append(after);
+        output.Append(",\"display_state_status\":").Append(afterStatus);
+        output.Append("}");
+        Console.WriteLine(output.ToString());
+        return wakeupReasonStatus == 0 && status == 0 && signalSent ? 0 : 1;
+    }
+
+    private static int ReadState(out int status)
+    {
+        try
+        {
+            int state = DevicePowerGetState();
+            status = 0;
+            return state;
+        }
+        catch (Exception error)
+        {
+            Console.Error.WriteLine("display state read failed: {0}", error.Message);
+            status = -1;
+            return -1;
+        }
+    }
+
+    private static int CallPowerState(int state)
+    {
+        try
+        {
+            return DevicePowerSetState(state, ForcePowerStateTransition);
+        }
+        catch (Exception error)
+        {
+            Console.Error.WriteLine(
+                "display power state {0} failed: {1}",
+                state,
+                error.Message);
+            return -1;
+        }
+    }
+
+    private static int CallWakeupReason()
+    {
+        try
+        {
+            return DevicePowerSetWakeupReason(RemoteControllerWakeupReason);
+        }
+        catch (Exception error)
+        {
+            Console.Error.WriteLine(
+                "display wakeup reason failed: {0}", error.Message);
+            return -1;
+        }
+    }
+
+    private static int ForwardKey(string key, string direction)
+    {
+        return system(
+            "/usr/bin/input_keyevent '"
+            + key.Replace("'", "'\\''")
+            + "' "
+            + direction
+            + " >/dev/null 2>&1");
+    }
+
+    private static void AppendState(
+        StringBuilder output,
+        int state,
+        string name)
+    {
+        output.Append(",\"").Append(name).Append("\":").Append(state);
+        output.Append(",\"").Append(name).Append("_name\":\"")
+            .Append(StateName(state)).Append("\"");
+    }
+
+    private static string StateName(int state)
+    {
+        switch (state)
+        {
+            case NormalPowerState:
+                return "normal";
+            case PictureOffPowerState:
+                return "pictureoff";
+            case 2:
+                return "standby";
+            case 4:
+                return "suspend";
+            default:
+                return "unknown";
+        }
+    }
+}

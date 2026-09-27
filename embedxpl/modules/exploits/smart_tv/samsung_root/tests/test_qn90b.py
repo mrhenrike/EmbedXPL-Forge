@@ -1,0 +1,30 @@
+import pytest
+
+from samsung_tv_root.qn90b import Qn90bError, Qn90bRootEvidence
+
+
+def test_qn90b_root_evidence_accepts_complete_root_identity() -> None:
+    Qn90bRootEvidence(
+        "uid_after=0\n"
+        "euid_after=0\n"
+        "gid_after=0\n"
+        "egid_after=0\n"
+        "exec_begin\n"
+    ).validate()
+
+
+def test_qn90b_root_evidence_rejects_incomplete_identity() -> None:
+    with pytest.raises(Qn90bError, match="complete root identity"):
+        Qn90bRootEvidence("uid_after=0\neuid_after=0\nexec_begin\n").validate()
+
+
+def test_qn90b_root_evidence_requires_exact_identity_markers() -> None:
+    output = (
+        "uid_after=00\n"
+        "euid_after=0\n"
+        "gid_after=0\n"
+        "egid_after=0\n"
+        "exec_begin\n"
+    )
+    with pytest.raises(Qn90bError, match="uid_after=0"):
+        Qn90bRootEvidence(output).validate()

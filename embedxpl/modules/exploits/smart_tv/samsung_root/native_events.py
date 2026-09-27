@@ -1,0 +1,682 @@
+from __future__ import annotations
+
+import asyncio
+import base64
+import contextlib
+import json
+import logging
+import re
+import secrets
+import shlex
+import socket
+from dataclasses import dataclass
+from pathlib import PurePosixPath
+from typing import Any, Callable
+
+from .config import TelevisionConfiguration
+from .root_agent import (
+    RootAgentConnection,
+    RootAgentProtocolError,
+    encode_secret,
+    generate_secret,
+    verify_authenticated_frame,
+)
+from .sdb import route_callback_host
+
+
+PROTOCOL_VERSION = "SAMSUNG-TV-EVENTS/1"
+MAXIMUM_FRAME_BYTES = 64 * 1024
+EVENT_AGENT_NAME = "SamsungTvEventAgent.dll"
+REMOTE_DIRECTORIES = {
+    "qn90b": PurePosixPath("/home/owner/share/tmp/sdk_tools/samsung-tv-root/qn90b"),
+    "qn90f": PurePosixPath("/home/owner/share/tmp/sdk_tools/qn90f-probe"),
+}
+STATE_KEYS = (
+    "memory/appfw/current_fullscreen_appid",
+    "memory/appfw/current_partial_appid",
+    "memory/appfw/previous_fullscreen_appid",
+    "memory/eden/source/current_source",
+    "memory/system/source_type",
+    "memory/eden/display_current_source",
+)
+
+
+class NativeEventError(RuntimeError):
+    pass
+
+
+@dataclass(frozen=True)
+class NativeEventIdentity:
+    process_id: int
+    user_id: int
+    group_id: int
+    model: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "process_id": self.process_id,
+            "user_id": self.user_id,
+            "group_id": self.group_id,
+            "model": self.model,
+        }
+
+
+class NativeEventConnection:
+    def __init__(
+        self,
+        reader: asyncio.StreamReader,
+        writer: asyncio.StreamWriter,
+        secret: bytes,
+        nonce: bytes,
+        identity: NativeEventIdentity,
+    ) -> None:
+        self.reader = reader
+        self.writer = writer
+        self.secret = secret
+        self.nonce = nonce
+        self.identity = identity
+        self.sequence = 0
+
+    async def read_event(self) -> dict[str, Any]:
+        line = await _read_frame(self.reader)
+        payload = verify_authenticated_frame(self.secret, self.nonce, line)
+        fields = payload.split("\t")
+        if len(fields) != 3 or fields[0] != "EVENT":
+            raise RootAgentProtocolError("invalid native-event frame")
+        try:
+            sequence = int(fields[1])
+            event = json.loads(base64.b64decode(fields[2], validate=True))
+        except (ValueError, json.JSONDecodeError) as error:
+            raise RootAgentProtocolError("invalid native-event payload") from error
+        if sequence <= self.sequence:
+            raise RootAgentProtocolError(
+                "native-event sequence is not strictly increasing"
+            )
+        if not isinstance(event, dict) or event.get("sequence") != sequence:
+            raise RootAgentProtocolError(
+                "native-event sequence does not match its frame"
+            )
+        self.sequence = sequence
+        return event
+
+    async def close(self) -> None:
+        self.writer.close()
+        with contextlib.suppress(ConnectionError, OSError, TimeoutError):
+            await asyncio.wait_for(self.writer.wait_closed(), 1.0)
+
+
+class NativeEventServer:
+    def __init__(
+        self,
+        bind_host: str,
+        expected_peers: frozenset[str],
+        secret: bytes,
+    ) -> None:
+        self.bind_host = bind_host
+        self.expected_peers = expected_peers
+        self.secret = secret
+        self.server: asyncio.Server | None = None
+        self.accepted: asyncio.Future[NativeEventConnection] | None = None
+
+    @property
+    def port(self) -> int:
+        if self.server is None or not self.server.sockets:
+            raise NativeEventError("native-event server is not listening")
+        return int(self.server.sockets[0].getsockname()[1])
+
+    async def start(self) -> None:
+        self.accepted = asyncio.get_running_loop().create_future()
+        self.server = await asyncio.start_server(
+            self._accept,
+            self.bind_host,
+            0,
+            limit=MAXIMUM_FRAME_BYTES,
+        )
+
+    async def wait(self, timeout: float) -> NativeEventConnection:
+        if self.accepted is None:
+            raise NativeEventError("native-event server is not running")
+        try:
+            return await asyncio.wait_for(asyncio.shield(self.accepted), timeout)
+        except TimeoutError as error:
+            raise NativeEventError(
+                f"native-event agent did not connect within {timeout:g} seconds"
+            ) from error
+
+    async def close(self) -> None:
+        server = self.server
+        self.server = None
+        if server is not None:
+            server.close()
+            await server.wait_closed()
+        accepted = self.accepted
+        self.accepted = None
+        if accepted is None:
+            return
+        if not accepted.done():
+            accepted.cancel()
+        elif not accepted.cancelled():
+            with contextlib.suppress(Exception):
+                await accepted.result().close()
+
+    async def _accept(
+        self,
+        reader: asyncio.StreamReader,
+        writer: asyncio.StreamWriter,
+    ) -> None:
+        peer = writer.get_extra_info("peername")
+        peer_host = str(peer[0]) if peer else ""
+        accepted = self.accepted
+        if accepted is None or accepted.done() or peer_host not in self.expected_peers:
+            await _close_writer(writer)
+            return
+        nonce = secrets.token_bytes(32)
+        try:
+            writer.write(f"{PROTOCOL_VERSION}\t{nonce.hex()}\n".encode("ascii"))
+            await writer.drain()
+            payload = verify_authenticated_frame(
+                self.secret,
+                nonce,
+                await asyncio.wait_for(_read_frame(reader), 10.0),
+            )
+            identity = _parse_identity(payload)
+            if identity.user_id != 0 or identity.group_id != 0:
+                raise RootAgentProtocolError(
+                    "native-event agent does not have a root identity"
+                )
+            connection = NativeEventConnection(
+                reader,
+                writer,
+                self.secret,
+                nonce,
+                identity,
+            )
+        except Exception as error:
+            if not accepted.done():
+                accepted.set_exception(error)
+            await _close_writer(writer)
+            return
+        if accepted.done():
+            await connection.close()
+            return
+        accepted.set_result(connection)
+        if self.server is not None:
+            self.server.close()
+
+
+@dataclass
+class NativeEventSession:
+    connection: NativeEventConnection
+    server: NativeEventServer
+    reader_task: asyncio.Task[None]
+
+    async def close(self) -> None:
+        self.reader_task.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await self.reader_task
+        await self.connection.close()
+        await self.server.close()
+
+
+EventPublisher = Callable[[str, dict[str, Any]], None]
+
+
+class NativeEventCoordinator:
+    def __init__(
+        self,
+        television: TelevisionConfiguration,
+        publisher: EventPublisher,
+    ) -> None:
+        self.television = television
+        self.publisher = publisher
+        self.root_connection: RootAgentConnection | None = None
+        self.host = television.host
+        self.session: NativeEventSession | None = None
+        self.error: str | None = None
+        self._lock = asyncio.Lock()
+        self._closed = False
+        self._assembler = DbusMonitorSignalAssembler()
+        self._logger = logging.getLogger(
+            f"samsung_tv_root.native_events.{television.name}"
+        )
+
+    async def reconcile(
+        self,
+        root_connection: RootAgentConnection | None,
+        host: str,
+    ) -> None:
+        async with self._lock:
+            if self._closed:
+                return
+            self.host = host
+            if not self.television.events.enabled:
+                await self._close_session()
+                self.root_connection = None
+                self.error = None
+                return
+            if (
+                root_connection is self.root_connection
+                and self.session is not None
+                and root_connection is not None
+                and not root_connection.closed
+            ):
+                return
+            await self._close_session()
+            self.root_connection = root_connection
+            if root_connection is None:
+                return
+            try:
+                self.session = await self._launch(root_connection, host)
+            except Exception as error:
+                self.error = f"{type(error).__name__}: {error}"
+                self._logger.error(
+                    "native-event activation failed television=%s error=%s",
+                    self.television.name,
+                    self.error,
+                )
+                self._publish(
+                    {
+                        "event": "activation-failed",
+                        "error": self.error,
+                    }
+                )
+            else:
+                self.error = None
+
+    async def close(self) -> None:
+        self._closed = True
+        async with self._lock:
+            await self._close_session()
+            self.root_connection = None
+
+    def snapshot(self) -> dict[str, Any]:
+        return {
+            "enabled": self.television.events.enabled,
+            "hdmi_receiver": self.television.events.hdmi_receiver,
+            "active": self.session is not None,
+            "error": self.error,
+            "identity": (
+                self.session.connection.identity.to_dict()
+                if self.session is not None
+                else None
+            ),
+        }
+
+    async def _launch(
+        self,
+        root_connection: RootAgentConnection,
+        host: str,
+    ) -> NativeEventSession:
+        callback_host = route_callback_host(host)
+        server = NativeEventServer(
+            callback_host,
+            await _resolve_ipv4(host),
+            generate_secret(),
+        )
+        await server.start()
+        remote_directory = REMOTE_DIRECTORIES[self.television.model]
+        remote_token = remote_directory / f"et-{secrets.token_hex(8)}"
+        remote_log = remote_directory / f"el-{secrets.token_hex(8)}.log"
+        try:
+            await root_connection.write_file(
+                remote_token,
+                (encode_secret(server.secret) + "\n").encode("ascii"),
+                5.0,
+            )
+            command = shlex.join(
+                (
+                    "/usr/bin/dotnet",
+                    str(remote_directory / EVENT_AGENT_NAME),
+                    callback_host,
+                    str(server.port),
+                    str(remote_token),
+                    self.television.model,
+                    "1" if self.television.events.hdmi_receiver else "0",
+                )
+            )
+            launch = await root_connection.execute(
+                f"{command} </dev/null >{shlex.quote(str(remote_log))} 2>&1 &",
+                5.0,
+            )
+            if launch.timed_out or launch.exit_code != 0:
+                detail = launch.stderr.strip() or launch.stdout.strip()
+                raise NativeEventError(
+                    f"native-event launch failed with exit {launch.exit_code}"
+                    + (f": {detail}" if detail else "")
+                )
+            connection = await server.wait(10.0)
+            if connection.identity.model != self.television.model:
+                raise NativeEventError(
+                    "native-event agent connected with the wrong model profile"
+                )
+            reader_task = asyncio.create_task(self._read_events(connection))
+            return NativeEventSession(connection, server, reader_task)
+        except BaseException:
+            await server.close()
+            raise
+        finally:
+            with contextlib.suppress(Exception):
+                await root_connection.execute(
+                    shlex.join(
+                        ("/bin/rm", "-f", str(remote_token), str(remote_log))
+                    ),
+                    5.0,
+                )
+
+    async def _read_events(self, connection: NativeEventConnection) -> None:
+        try:
+            while True:
+                event = await connection.read_event()
+                await self._handle_event(event)
+        except asyncio.CancelledError:
+            raise
+        except Exception as error:
+            detail = f"{type(error).__name__}: {error}"
+            self.error = detail
+            self._logger.error(
+                "native-event connection failed television=%s error=%s",
+                self.television.name,
+                detail,
+            )
+            self._publish({"event": "disconnected", "error": detail})
+        finally:
+            await connection.close()
+            session = self.session
+            if session is not None and session.connection is connection:
+                self.session = None
+                await session.server.close()
+
+    async def _handle_event(self, event: dict[str, Any]) -> None:
+        event_name = event.get("event")
+        monitor = event.get("monitor")
+        line = event.get("line")
+        if event_name != "monitor-line" or not isinstance(line, str):
+            self._publish(event)
+            if event_name == "active" and monitor == "agent":
+                await self._publish_state_snapshot("event-agent-active")
+            return
+        if monitor == "dbus":
+            header = parse_dbus_monitor_signal_header(line)
+            if (
+                header is not None
+                and header.get("interface") == "org.tizen.tv.appfw.appctxmgr"
+            ):
+                await self._publish_state_snapshot("appctx-dbus-signal")
+            for parsed in self._assembler.feed(line):
+                self._publish({"event": "dbus-signal", "signal": parsed})
+                if parsed.get("event") == "speaker-volume-changed":
+                    self.publisher(self._volume_topic(), self._event(parsed))
+                if parsed.get("event") == "aul-app-status":
+                    await self._publish_state_snapshot(parsed["event"])
+            return
+        if monitor == "lifecycle":
+            if not _ignore_lifecycle_line(line):
+                self._publish({"event": "app-lifecycle", "line": line})
+                await self._publish_state_snapshot("app-lifecycle")
+            return
+        if monitor == "hdmi-receiver":
+            self._publish({"event": "hdmi-receiver", "line": line})
+            return
+        self._publish(event)
+
+    async def _publish_state_snapshot(self, trigger: str) -> None:
+        connection = self.root_connection
+        if connection is None or connection.closed:
+            return
+        command = "; ".join(
+            f"/usr/bin/vconftool get {shlex.quote(key)} 2>/dev/null || true"
+            for key in STATE_KEYS
+        )
+        result = await connection.execute(command, 5.0)
+        if result.timed_out or result.exit_code != 0:
+            detail = result.stderr.strip() or result.stdout.strip() or "no output"
+            self._publish(
+                {
+                    "event": "state-snapshot-failed",
+                    "trigger": trigger,
+                    "error": detail,
+                }
+            )
+            return
+        state = parse_vconf_snapshot(result.stdout)
+        payload = self._event(
+            {
+                "event": "state-snapshot",
+                "trigger": trigger,
+                "state": state,
+            }
+        )
+        self.publisher(self._topic(), payload)
+        self.publisher(self._state_topic(), payload)
+
+    def _publish(self, event: dict[str, Any]) -> None:
+        self.publisher(self._topic(), self._event(event))
+
+    def _event(self, event: dict[str, Any]) -> dict[str, Any]:
+        return {
+            **event,
+            "television": self.television.name,
+            "television_model": self.television.model,
+        }
+
+    def _topic(self) -> str:
+        return f"television.{self.television.name}.native"
+
+    def _volume_topic(self) -> str:
+        return f"television.{self.television.name}.volume"
+
+    def _state_topic(self) -> str:
+        return f"television.{self.television.name}.state"
+
+    async def _close_session(self) -> None:
+        session = self.session
+        self.session = None
+        if session is not None:
+            await session.close()
+
+
+def parse_dbus_monitor_signal_header(line: str) -> dict[str, Any] | None:
+    stripped = line.strip()
+    if not stripped.startswith("signal "):
+        return None
+    fields: dict[str, Any] = {}
+    for key in ("sender", "destination", "serial", "path", "interface", "member"):
+        match = re.search(rf"\b{key}=((?:\([^)]*\))|[^; \t\r\n]+)", stripped)
+        if match:
+            fields[key] = match.group(1)
+    match = re.search(r"\btime=([0-9.]+)", stripped)
+    if match:
+        fields["time"] = float(match.group(1))
+    return fields
+
+
+def parse_dbus_monitor_payload_line(line: str) -> dict[str, Any] | None:
+    stripped = line.strip()
+    for value_type in ("int32", "uint32"):
+        match = re.fullmatch(rf"{value_type} (-?\d+)", stripped)
+        if match:
+            return {"type": value_type, "value": int(match.group(1))}
+    match = re.fullmatch(r'string "(.*)"', stripped)
+    if match:
+        return {"type": "string", "value": match.group(1)}
+    return None
+
+
+def parse_dbus_monitor_signal(lines: list[str]) -> dict[str, Any] | None:
+    if not lines:
+        return None
+    fields = parse_dbus_monitor_signal_header(lines[0])
+    if fields is None:
+        return None
+    payload = [
+        item
+        for line in lines[1:]
+        if (item := parse_dbus_monitor_payload_line(line)) is not None
+    ]
+    event: dict[str, Any] = {
+        "event": "dbus-signal",
+        "interface": fields.get("interface"),
+        "member": fields.get("member"),
+        "path": fields.get("path"),
+        "sender": fields.get("sender"),
+        "destination": fields.get("destination"),
+        "time": fields.get("time"),
+        "payload": payload,
+    }
+    if fields.get("interface") == "org.tizen.aul.AppStatus":
+        integers = [item["value"] for item in payload if "int" in item["type"]]
+        strings = [item["value"] for item in payload if item["type"] == "string"]
+        event.update(
+            {
+                "event": "aul-app-status",
+                "status": fields.get("member"),
+                "pid": integers[0] if integers else None,
+                "appid": strings[0] if strings else None,
+                "package": strings[1] if len(strings) >= 2 else None,
+                "app_type": strings[2] if len(strings) >= 3 else None,
+            }
+        )
+        event.pop("payload", None)
+    elif fields.get("interface") == "org.tizen.tv.appfw.appctxmgr":
+        event.update(
+            {
+                "event": "appctx-dbus-signal",
+                "strings": [
+                    item["value"] for item in payload if item["type"] == "string"
+                ],
+            }
+        )
+    elif (
+        fields.get("interface") == "org.tizen.speakermanager"
+        and fields.get("member") == "SpeakerVolumeChanged"
+    ):
+        integers = [item["value"] for item in payload if "int" in item["type"]]
+        if len(integers) >= 2:
+            event.update(
+                {
+                    "event": "speaker-volume-changed",
+                    "support_type": integers[0],
+                    "volume": integers[1],
+                }
+            )
+    return event
+
+
+class DbusMonitorSignalAssembler:
+    def __init__(self) -> None:
+        self.lines: list[str] = []
+
+    def feed(self, line: str) -> list[dict[str, Any]]:
+        events = []
+        if parse_dbus_monitor_signal_header(line) is not None:
+            flushed = self.flush()
+            if flushed is not None:
+                events.append(flushed)
+            self.lines = [line]
+            return events
+        if self.lines:
+            self.lines.append(line)
+            if self._complete():
+                flushed = self.flush()
+                if flushed is not None:
+                    events.append(flushed)
+        return events
+
+    def flush(self) -> dict[str, Any] | None:
+        event = parse_dbus_monitor_signal(self.lines)
+        self.lines = []
+        return event
+
+    def _complete(self) -> bool:
+        fields = parse_dbus_monitor_signal_header(self.lines[0])
+        if fields is None:
+            return False
+        count = sum(
+            parse_dbus_monitor_payload_line(line) is not None for line in self.lines[1:]
+        )
+        if fields.get("interface") == "org.tizen.aul.AppStatus":
+            return count >= 4
+        if fields.get("interface") == "org.tizen.speakermanager":
+            return count >= 2
+        return False
+
+
+def parse_vconf_snapshot(output: str) -> dict[str, Any]:
+    values: dict[str, Any] = {}
+    value_types: dict[str, str] = {}
+    for line in output.splitlines():
+        match = re.fullmatch(r"([^,]+), value = (.*) \(([^()]*)\)", line.strip())
+        if match is None:
+            continue
+        key, raw_value, value_type = match.groups()
+        value: Any = raw_value
+        if value_type in {"Int32", "Int64"}:
+            with contextlib.suppress(ValueError):
+                value = int(raw_value)
+        values[key] = value
+        value_types[key] = value_type
+    source: Any = values.get("memory/eden/source/current_source")
+    if isinstance(source, str) and source:
+        with contextlib.suppress(json.JSONDecodeError):
+            source = json.loads(source)
+    return {
+        "fullscreen_appid": values.get("memory/appfw/current_fullscreen_appid")
+        or None,
+        "partial_appid": values.get("memory/appfw/current_partial_appid") or None,
+        "previous_fullscreen_appid": values.get(
+            "memory/appfw/previous_fullscreen_appid"
+        )
+        or None,
+        "source": source,
+        "source_uuid": source.get("uuid") if isinstance(source, dict) else None,
+        "source_type": values.get("memory/system/source_type"),
+        "display_current_source": values.get("memory/eden/display_current_source"),
+        "vconf": values,
+        "vconf_types": value_types,
+    }
+
+
+def _ignore_lifecycle_line(line: str) -> bool:
+    value = line.strip()
+    return not value or value.startswith("[aul_app_lifecycle_register") or value.startswith(
+        "... test successful"
+    )
+
+
+def _parse_identity(payload: str) -> NativeEventIdentity:
+    fields = payload.split("\t")
+    if len(fields) != 5 or fields[0] != "AUTH":
+        raise RootAgentProtocolError("invalid native-event identity frame")
+    try:
+        return NativeEventIdentity(
+            process_id=int(fields[1]),
+            user_id=int(fields[2]),
+            group_id=int(fields[3]),
+            model=base64.b64decode(fields[4], validate=True).decode("utf-8"),
+        )
+    except (ValueError, UnicodeDecodeError) as error:
+        raise RootAgentProtocolError("invalid native-event identity") from error
+
+
+async def _read_frame(reader: asyncio.StreamReader) -> bytes:
+    line = await reader.readline()
+    if not line or len(line) > MAXIMUM_FRAME_BYTES:
+        raise RootAgentProtocolError("invalid native-event frame size")
+    return line
+
+
+async def _close_writer(writer: asyncio.StreamWriter) -> None:
+    writer.close()
+    with contextlib.suppress(ConnectionError, OSError, TimeoutError):
+        await asyncio.wait_for(writer.wait_closed(), 1.0)
+
+
+async def _resolve_ipv4(host: str) -> frozenset[str]:
+    loop = asyncio.get_running_loop()
+    records = await loop.getaddrinfo(
+        host,
+        None,
+        family=socket.AF_INET,
+        type=socket.SOCK_STREAM,
+    )
+    return frozenset(str(record[4][0]) for record in records)

@@ -1,0 +1,7 @@
+/target
+/oboromi.log
+/third_party/boost_1_89_0
+.vscode/
+rad/
+research/
+build/
