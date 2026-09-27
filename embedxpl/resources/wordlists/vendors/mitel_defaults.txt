@@ -1,0 +1,6 @@
+installer:1000
+system:mnet
+system:password
+maint:maint
+admin:admin
+sysadmin:sysadmin

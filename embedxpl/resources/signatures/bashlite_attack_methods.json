@@ -1,0 +1,77 @@
+{
+  "device_fingerprinting": {
+    "description": "Detects architecture via ELF header analysis",
+    "method": "download and execute arch-specific ELF binary",
+    "architectures": [
+      "arm",
+      "mips",
+      "mipsel",
+      "x86",
+      "ppc",
+      "m68k",
+      "sh4",
+      "sparc"
+    ],
+    "source_file": "Arch-Device Detection/"
+  },
+  "attack_vectors": [
+    {
+      "source_file": "Methods/UDP.c",
+      "name": "UDP Flood",
+      "characteristics": [
+        "random source port",
+        "payload length variable 0-1024",
+        "packet size 0-65535",
+        "fragmented possible"
+      ],
+      "detection_signature": "high volume UDP with randomized payload, no response expected",
+      "exf_module": "embedxpl/modules/assessment/mirai_ddos_resilience.py",
+      "protocol": "UDP"
+    },
+    {
+      "source_file": "Methods/TCP.c",
+      "name": "TCP SYN Flood",
+      "characteristics": [
+        "SYN flag only",
+        "random source IP",
+        "window=65535",
+        "no TCP options"
+      ],
+      "detection_signature": "SYN flood with randomized source IPs, RST/ACK not expected",
+      "exf_module": "embedxpl/modules/assessment/mirai_ddos_resilience.py",
+      "protocol": "TCP"
+    },
+    {
+      "source_file": "Methods/HTTP.c",
+      "name": "HTTP GET Flood",
+      "characteristics": [
+        "GET / HTTP/1.1",
+        "Host: target",
+        "User-Agent: Mozilla/5.0 (compatible; MSIE 7.0)"
+      ],
+      "detection_signature": "high rate HTTP GET from multiple IPs, no POST, no cookies",
+      "exf_module": "embedxpl/modules/assessment/mirai_ddos_resilience.py",
+      "protocol": "HTTP/1.1"
+    },
+    {
+      "detection_signature": "large UDP responses to small queries, amplification factor > 10x",
+      "characteristics": [
+        "DNS reflection",
+        "NTP reflection",
+        "SSDP reflection"
+      ],
+      "name": "UDP Amplification (IPHM)",
+      "source_file": "IPHM-Amplifications/",
+      "protocol": "UDP"
+    }
+  ],
+  "meta": {
+    "source": "d:/Projects/Labs/malware-samples/Bashlite-ELF/Code/",
+    "family": "BASHLITE/Qbot",
+    "mitre": [
+      "T1498.001 (Direct Network Flood)",
+      "T1498.002 (Reflection Amplification)"
+    ],
+    "reference": "docs/malware-research/by-tool/EmbedXPL.md"
+  }
+}

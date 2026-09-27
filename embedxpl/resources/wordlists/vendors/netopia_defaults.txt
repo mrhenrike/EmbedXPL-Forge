@@ -1,0 +1,9 @@
+admin:1234
+admin:admin
+admin:admin1
+admin:password
+admin:unknown
+admin:
+admin:noway
+factory:(see note)
+netopia:netopia

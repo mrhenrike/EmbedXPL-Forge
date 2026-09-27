@@ -1,0 +1,12 @@
+NOLOGIN:NOLOGIN
+NOLOGIN:admin
+NOLOGIN:password
+NOLOGIN:unknown
+admin:NOLOGIN
+admin:admin
+admin:password
+admin:unknown
+CSG:SESAME
+admin:
+admin:password1
+admin:sysAdmin

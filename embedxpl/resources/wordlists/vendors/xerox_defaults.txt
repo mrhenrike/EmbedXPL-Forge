@@ -1,0 +1,13 @@
+11111:x-admin
+:11111
+:0
+Administrator:Fiery.1
+NSA:nsa
+admin:1111
+admin:2222
+admin:22222
+admin:
+admin:admin
+admin:x-admin
+savelogs:crash
+:admin

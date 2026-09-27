@@ -1,0 +1,4 @@
+admin:
+admin:admin
+admin:linga
+oper:oper

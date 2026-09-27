@@ -1,0 +1,2 @@
+mediator:mediator
+root:Mua'dib

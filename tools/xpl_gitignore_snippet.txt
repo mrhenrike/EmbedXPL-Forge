@@ -1,0 +1,12 @@
+# === Local runtime / lab artifacts (never commit) ===
+.venv/
+venv/
+env/
+temp/
+temps/
+tmp/
+examples/
+labs/
+samples/
+HANDOFF-AUDIT.md
+*.log

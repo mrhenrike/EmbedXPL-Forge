@@ -1,0 +1,2 @@
+admin:admin
+admin:1234

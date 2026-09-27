@@ -1,0 +1,4 @@
+admin:12345
+admin:admin
+admin:
+root:12345

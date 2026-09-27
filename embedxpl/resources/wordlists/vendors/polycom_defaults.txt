@@ -1,0 +1,9 @@
+:ACCORD
+:admin
+:x6zynd56
+Polycom:456
+Polycom:SpIp
+administrator:* * #
+administrator:456
+admin:
+admin:admin

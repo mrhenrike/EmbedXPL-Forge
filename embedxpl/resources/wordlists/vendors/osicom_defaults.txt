@@ -1,0 +1,11 @@
+Manager:Admin
+Manager:Manager
+d.e.b.u.g:User
+debug:d.e.b.u.g
+echo:User
+echo:echo
+guest:User
+guest:guest
+sysadm:Admin
+sysadm:sysadm
+write:private

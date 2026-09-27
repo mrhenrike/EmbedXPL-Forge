@@ -1,0 +1,4 @@
+gonzo:
+root:uClinux
+satan:
+snake:

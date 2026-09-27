@@ -1,0 +1,1830 @@
+{
+  "abb": [
+    {
+      "user": "service",
+      "pass": "ABB800xA",
+      "protocol": "multi",
+      "device": "AC 800M",
+      "device_type": "controller",
+      "port": "",
+      "source": "https://library.e.abb.com/public/f355a67551218ae7c1257dc0003298c5/3BDS021515-600_-_en_AC_800M_6.0_PROFINET_IO_Configuration.pdf"
+    },
+    {
+      "user": "admin",
+      "pass": "admin",
+      "protocol": "http",
+      "device": "SREA-01",
+      "device_type": "ethernet adapter module",
+      "port": "80/tcp",
+      "source": "https://www.inverterdrive.com/file/ABB-SREA-01-Manual"
+    }
+  ],
+  "bb_electronics": [
+    {
+      "user": "root",
+      "pass": "root",
+      "protocol": "http",
+      "device": "CR10 v2",
+      "device_type": "industrial router",
+      "port": "80/tcp",
+      "source": "http://tekniska.pl/downloadfile/1400014902-1208342584-pdf"
+    }
+  ],
+  "beck_ipc": [
+    {
+      "user": "PPPSERVER",
+      "pass": "",
+      "protocol": "pap/chap",
+      "device": "IPC@CHIP",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://www.beck-ipc.com/files/api/scxxx/config.htm"
+    },
+    {
+      "user": "ppps",
+      "pass": "ppps",
+      "protocol": "pap/chap",
+      "device": "IPC@CHIP",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://www.beck-ipc.com/files/api/scxxx/config.htm"
+    }
+  ],
+  "bintec": [
+    {
+      "user": "admin",
+      "pass": "bintec",
+      "protocol": "multi",
+      "device": "BinTec X1200 II",
+      "device_type": "router",
+      "port": "",
+      "source": "http://www.router-defaults.com/Router/BinTec--x1200-ip-password-username"
+    },
+    {
+      "user": "",
+      "pass": "",
+      "protocol": "multi",
+      "device": "BinTec X1200 II",
+      "device_type": "router",
+      "port": "",
+      "source": "http://www.router-defaults.com/Router/BinTec--x1200-ip-password-username"
+    },
+    {
+      "user": "(##unknown - means not known or any char)",
+      "pass": "",
+      "protocol": "multi",
+      "device": "any routers",
+      "device_type": "router",
+      "port": "",
+      "source": "http://www.router-defaults.com/Router/BinTec--x1200-ip-password-username"
+    },
+    {
+      "user": "##unknown",
+      "pass": "snmp-Trap",
+      "protocol": "multi",
+      "device": "any routers",
+      "device_type": "router",
+      "port": "",
+      "source": "http://www.router-defaults.com/Router/BinTec--x1200-ip-password-username"
+    },
+    {
+      "user": "suggested",
+      "pass": "",
+      "protocol": "multi",
+      "device": "any routers",
+      "device_type": "router",
+      "port": "",
+      "source": "http://www.router-defaults.com/Router/BinTec--x1200-ip-password-username"
+    },
+    {
+      "user": "admin",
+      "pass": "1234",
+      "protocol": "multi",
+      "device": "any routers",
+      "device_type": "router",
+      "port": "",
+      "source": "http://www.router-defaults.com/Router/BinTec--x1200-ip-password-username"
+    },
+    {
+      "user": "admin",
+      "pass": "password",
+      "protocol": "multi",
+      "device": "any routers",
+      "device_type": "router",
+      "port": "",
+      "source": "http://www.router-defaults.com/Router/BinTec--x1200-ip-password-username"
+    },
+    {
+      "user": "admin",
+      "pass": "admin",
+      "protocol": "multi",
+      "device": "any routers",
+      "device_type": "router",
+      "port": "",
+      "source": "http://www.router-defaults.com/Router/BinTec--x1200-ip-password-username"
+    },
+    {
+      "user": "admin",
+      "pass": "funwerk",
+      "protocol": "multi",
+      "device": "BinTec R230aw",
+      "device_type": "router",
+      "port": "",
+      "source": "http://www.tomshw.it/forum/banda-larga/154194-router-bintec.html"
+    }
+  ],
+  "contemporary_control_systems": [
+    {
+      "user": "admin",
+      "pass": "admin",
+      "protocol": "http",
+      "device": "BASRT-B",
+      "device_type": "router",
+      "port": "80/tcp",
+      "source": "http://www.ccontrols.com/pdf/TD0712000I2.pdf"
+    }
+  ],
+  "datasensor": [
+    {
+      "user": "root",
+      "pass": "root",
+      "protocol": "http",
+      "device": "UR5i/UR5i SL",
+      "device_type": "router",
+      "port": "80/tcp",
+      "source": "http://datasensor.de/sites/datasensor.de/files/datasheets/UR5i_m_e.pdf"
+    }
+  ],
+  "digi": [
+    {
+      "user": "user",
+      "pass": "passwd",
+      "protocol": "multi",
+      "device": "DC-ME-01T-S",
+      "device_type": "networking modules",
+      "port": "",
+      "source": "http://www.digi.com/support/forum/13553/digi-connect-me-default-password"
+    },
+    {
+      "user": "root",
+      "pass": "dbps",
+      "protocol": "multi",
+      "device": "DC-ME-01T-S",
+      "device_type": "networking modules",
+      "port": "",
+      "source": "http://www.digi.com/support/forum/13553/digi-connect-me-default-password"
+    },
+    {
+      "user": "root",
+      "pass": "dbps",
+      "protocol": "http",
+      "device": "Digi Connect SP, Digi Connect Wi-SP,  Digi Connect ME,  Digi Connect ME 4 MB, Digi Connect Wi-ME, Digi Connect EM,  Digi Connect Wi-EM",
+      "device_type": "network device server module",
+      "port": "80/tcp",
+      "source": "http://ftp1.digi.com/support/documentation/90000565_P1.pdf"
+    },
+    {
+      "user": "username",
+      "pass": "password",
+      "protocol": "http",
+      "device": "Digi TransPort WR21/WR44",
+      "device_type": "industrial router",
+      "port": "80/tcp",
+      "source": "http://ftp1.digi.com/support/documentation/transport/assets/guides/IG_Digi_WR21.pdf"
+    }
+  ],
+  "echelon": [
+    {
+      "user": "for ftp and lns servers",
+      "pass": "",
+      "protocol": "ftp, l2tp",
+      "device": "i.LON® SmartServer",
+      "device_type": "router",
+      "port": "",
+      "source": "http://www.unicom-bg.com/pdf/systemintegration/iLONproducts/i.LON_SmartServer_Freely_Programmable_Modules_User_Guide.pdf"
+    },
+    {
+      "user": "ilon",
+      "pass": "ilon",
+      "protocol": "ftp, l2tp",
+      "device": "i.LON® SmartServer",
+      "device_type": "router",
+      "port": "",
+      "source": "http://www.unicom-bg.com/pdf/systemintegration/iLONproducts/i.LON_SmartServer_Freely_Programmable_Modules_User_Guide.pdf"
+    }
+  ],
+  "emerson": [
+    {
+      "user": "Administrator",
+      "pass": "deltav",
+      "protocol": "multi",
+      "device": "DeltaV™ Digital Automation System",
+      "device_type": "automation system",
+      "port": "",
+      "source": "http://www.chem.mtu.edu/chem_eng/current/new_courses/CM4120/2009/Getting%20Started.pdf"
+    },
+    {
+      "user": "Liebert",
+      "pass": "Liebert",
+      "protocol": "telnet",
+      "device": "Liebert IntelliSlot Web Card",
+      "device_type": "web card",
+      "port": "23/tcp",
+      "source": "http://www.emersonnetworkpower.com/documentation/en-us/products/monitoring/documents/sl-52615.pdf"
+    },
+    {
+      "user": "User",
+      "pass": "User",
+      "protocol": "telnet",
+      "device": "Liebert IntelliSlot Web Card",
+      "device_type": "web card",
+      "port": "23/tcp",
+      "source": "http://www.emersonnetworkpower.com/documentation/en-us/products/monitoring/documents/sl-52615.pdf"
+    },
+    {
+      "user": "admin",
+      "pass": "default",
+      "protocol": "http",
+      "device": "Smart Wireless Gateway 1420",
+      "device_type": "wireless gateway",
+      "port": "80/tcp",
+      "source": "http://www2.emersonprocess.com/siteadmincenter/PM%20Rosemount%20Documents/00809-0200-4420.pdf"
+    },
+    {
+      "user": "admin",
+      "pass": "admin",
+      "protocol": "http",
+      "device": "Network Power® MPH2™ Rack PDU",
+      "device_type": "rack pdus",
+      "port": "80/tcp",
+      "source": "https://community.emerson.com/networkpower/support/avocent/power/mph2/m/mediagallery/3093"
+    },
+    {
+      "user": "",
+      "pass": "123456",
+      "protocol": "multi",
+      "device": "UL33 UPS",
+      "device_type": "ups",
+      "port": "",
+      "source": "Emerson UL33 UPS.doc"
+    },
+    {
+      "user": "",
+      "pass": "0",
+      "protocol": "multi",
+      "device": "Control Link Refrigeration System Controller",
+      "device_type": "controller",
+      "port": "",
+      "source": "http://foodservice.structuralconcepts.com/media/com_sccmanager/temp-controller-info/emerson-control-link-cpc-controller.pdf"
+    },
+    {
+      "user": "User 01",
+      "pass": "100",
+      "protocol": "multi",
+      "device": "UltraSite",
+      "device_type": "software",
+      "port": "",
+      "source": "http://www.emersonclimate.com/Documents/Retail%20Solutions/Manuals/0261004Rev1.pdf"
+    },
+    {
+      "user": "User 05",
+      "pass": "200",
+      "protocol": "multi",
+      "device": "UltraSite",
+      "device_type": "software",
+      "port": "",
+      "source": "http://www.emersonclimate.com/Documents/Retail%20Solutions/Manuals/0261004Rev1.pdf"
+    },
+    {
+      "user": "User 09",
+      "pass": "300",
+      "protocol": "multi",
+      "device": "UltraSite",
+      "device_type": "software",
+      "port": "",
+      "source": "http://www.emersonclimate.com/Documents/Retail%20Solutions/Manuals/0261004Rev1.pdf"
+    },
+    {
+      "user": "Engineer",
+      "pass": "400",
+      "protocol": "multi",
+      "device": "UltraSite",
+      "device_type": "software",
+      "port": "",
+      "source": "http://www.emersonclimate.com/Documents/Retail%20Solutions/Manuals/0261004Rev1.pdf"
+    },
+    {
+      "user": "admin",
+      "pass": "avocent",
+      "protocol": "console port, with telnet, ssh",
+      "device": "Avocent® ACS 6000 Advanced Console Server",
+      "device_type": "console server",
+      "port": "",
+      "source": "Emerson Avocent ACS 6000.pdf"
+    },
+    {
+      "user": "root",
+      "pass": "linux",
+      "protocol": "console port, with telnet, ssh",
+      "device": "Avocent® ACS 6000 Advanced Console Server",
+      "device_type": "console server",
+      "port": "",
+      "source": "Emerson Avocent ACS 6000.pdf"
+    },
+    {
+      "user": "LOI",
+      "pass": "1000",
+      "protocol": "multi",
+      "device": "ROCLINK™ 800",
+      "device_type": "software",
+      "port": "",
+      "source": "http://www.documentation.emersonprocess.com/groups/public/documents/instruction_manuals/d301159x012.pdf"
+    },
+    {
+      "user": "for download project",
+      "pass": "",
+      "protocol": "multi",
+      "device": "ControlWave® Micro Quick",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.documentation.emersonprocess.com/groups/public/documents/users_guide/d301425x012.pdf"
+    },
+    {
+      "user": "SYSTEM",
+      "pass": "666666",
+      "protocol": "multi",
+      "device": "ControlWave® Micro Quick",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.documentation.emersonprocess.com/groups/public/documents/users_guide/d301425x012.pdf"
+    },
+    {
+      "user": "Admin",
+      "pass": "blank",
+      "protocol": "multi",
+      "device": "IP-KVM Avocent MergePoint Unity",
+      "device_type": "switch",
+      "port": "",
+      "source": "http://community.emerson.com/networkpower/support/avocent/kvmip/mpunity/w/wiki-mergepoint-unity/363.default-user-name-and-password-for-the-mergepoint-unity-kvm-over-ip-appliance"
+    }
+  ],
+  "entes": [
+    {
+      "user": "",
+      "pass": "emg12 (for EMG12)",
+      "protocol": "http",
+      "device": "EMG-10, EMG-02 , EMG-12",
+      "device_type": "modbus gateway",
+      "port": "80/tcp",
+      "source": "http://www.entes.com.tr/dosyalar/EMG_Series_EN-ver_2_2.pdf"
+    },
+    {
+      "user": "",
+      "pass": "emg10 (for EMG10)",
+      "protocol": "http",
+      "device": "EMG-10, EMG-02 , EMG-12",
+      "device_type": "modbus gateway",
+      "port": "80/tcp",
+      "source": "http://www.entes.com.tr/dosyalar/EMG_Series_EN-ver_2_2.pdf"
+    },
+    {
+      "user": "",
+      "pass": "emg02 (for EMG02)",
+      "protocol": "http",
+      "device": "EMG-10, EMG-02 , EMG-12",
+      "device_type": "modbus gateway",
+      "port": "80/tcp",
+      "source": "http://www.entes.com.tr/dosyalar/EMG_Series_EN-ver_2_2.pdf"
+    }
+  ],
+  "ewon": [
+    {
+      "user": "adm",
+      "pass": "adm",
+      "protocol": "http",
+      "device": "all",
+      "device_type": "router",
+      "port": "80/tcp",
+      "source": "http://ewon.biz/sites/default/files/aug-004-0-en-ewon_getting_started.pdf"
+    }
+  ],
+  "helmholz_systeme": [
+    {
+      "user": "",
+      "pass": "admin",
+      "protocol": "multi",
+      "device": "NETLink PRO HW 1-1a-1 and FW 1. 54 and higher",
+      "device_type": "ethernet gateway for mpi/profibus",
+      "port": "",
+      "source": "Helmholtz Systeme.pdf"
+    }
+  ],
+  "hirschmann": [
+    {
+      "user": "admin",
+      "pass": "private",
+      "protocol": "http",
+      "device": "RS20/RS30, MICE",
+      "device_type": "switch",
+      "port": "80/tcp",
+      "source": "http://www.wwsinternational.com.au/Hirschmann/pdf/quickstart.pdf;, Hirschmann MICE.pdf"
+    },
+    {
+      "user": "user",
+      "pass": "public",
+      "protocol": "http",
+      "device": "RS20/RS30, MICE",
+      "device_type": "switch",
+      "port": "80/tcp",
+      "source": "http://www.wwsinternational.com.au/Hirschmann/pdf/quickstart.pdf;, Hirschmann MICE.pdf"
+    },
+    {
+      "user": "user",
+      "pass": "public",
+      "protocol": "telnet",
+      "device": "RSP 20/25/30/35",
+      "device_type": "industrial router",
+      "port": "23/tcp (telnet)",
+      "source": "Hirschmann RSP20_25_30_35.pdf"
+    },
+    {
+      "user": "admin",
+      "pass": "private",
+      "protocol": "telnet",
+      "device": "RSP 20/25/30/35",
+      "device_type": "industrial router",
+      "port": "23/tcp (telnet)",
+      "source": "Hirschmann RSP20_25_30_35.pdf"
+    },
+    {
+      "user": "user",
+      "pass": "public",
+      "protocol": "multi",
+      "device": "MACH 4000 Family/MACH 1000 Family/MACH 100 Family/MACH 4002 Family/MACH104 Family Full Gigabit/MACH 1040 Family Full Gigabit",
+      "device_type": "industrial router",
+      "port": "",
+      "source": "Hirschmann MACH1040 Full Gigabit.pdf, Hirschmann MACH4002 Family.pdf, Hirschmann MACH1000 Family.pdf, Hirschmann MACH4000 Family.pdf, http://www.industrialcomms.co.uk/images/pdf/IG_MACH104_02_1210_en.pdf, http://www.industrialcomms.co.uk/images/pdf/IG_MACH100_03_0709_en.pdf"
+    },
+    {
+      "user": "admin",
+      "pass": "private",
+      "protocol": "multi",
+      "device": "MACH 4000 Family/MACH 1000 Family/MACH 100 Family/MACH 4002 Family/MACH104 Family Full Gigabit/MACH 1040 Family Full Gigabit",
+      "device_type": "industrial router",
+      "port": "",
+      "source": "Hirschmann MACH1040 Full Gigabit.pdf, Hirschmann MACH4002 Family.pdf, Hirschmann MACH1000 Family.pdf, Hirschmann MACH4000 Family.pdf, http://www.industrialcomms.co.uk/images/pdf/IG_MACH104_02_1210_en.pdf, http://www.industrialcomms.co.uk/images/pdf/IG_MACH100_03_0709_en.pdf"
+    }
+  ],
+  "ibm": [
+    {
+      "user": "def",
+      "pass": "trade",
+      "protocol": "multi",
+      "device": "2210",
+      "device_type": "multiprotocol router",
+      "port": "",
+      "source": "http://www.governmentsecurity.org/_/articles/default-logins-and-passwords-for-networked-devices.html"
+    }
+  ],
+  "moxa": [
+    {
+      "user": "admin",
+      "pass": "root",
+      "protocol": "http",
+      "device": "AWK-5232-RCC Series",
+      "device_type": "industrial 802.11n wireless ap/bridge/client",
+      "port": "80/tcp",
+      "source": "http://www.moxa.com/doc/man/AWK-3131-RCC_UM_1e.pdf"
+    },
+    {
+      "user": "Http on Port 9020",
+      "pass": "",
+      "protocol": "http",
+      "device": "Railway Remote I/O (ioLogik E12xx ,  ioLogik E15xx )",
+      "device_type": "remote ethernet i/o",
+      "port": "9020/tcp",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "1)none",
+      "pass": "root",
+      "protocol": "http",
+      "device": "Railway Remote I/O (ioLogik E12xx ,  ioLogik E15xx )",
+      "device_type": "remote ethernet i/o",
+      "port": "9020/tcp",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "2)none",
+      "pass": "none",
+      "protocol": "http",
+      "device": "Railway Remote I/O (ioLogik E12xx ,  ioLogik E15xx )",
+      "device_type": "remote ethernet i/o",
+      "port": "9020/tcp",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "administrator",
+      "pass": "blank",
+      "protocol": "telnet or serial console",
+      "device": "Cellular Micro RTU Controller (ioLogik W53xx, ioLogik)",
+      "device_type": "micro rtu controller",
+      "port": "9900/9000/tcp",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "Telnet on port 9900 / 9000",
+      "pass": "",
+      "protocol": "telnet or serial console",
+      "device": "Cellular Micro RTU Controller (ioLogik W53xx, ioLogik)",
+      "device_type": "micro rtu controller",
+      "port": "9900/9000/tcp",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "root",
+      "pass": "root",
+      "protocol": "telnet or serial console",
+      "device": "Cellular Micro RTU Controller (ioLogik W53xx, ioLogik)",
+      "device_type": "micro rtu controller",
+      "port": "9900/9000/tcp",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "admin",
+      "pass": "admin",
+      "protocol": "telnet",
+      "device": "VPort 461 Industrial Video Encoder",
+      "device_type": "industrial video encoder",
+      "port": "",
+      "source": "http://www.moxa.com/doc/man/VPort_461_UM_2e.pdf"
+    },
+    {
+      "user": "",
+      "pass": "",
+      "protocol": "telnet",
+      "device": "VPort 461 Industrial Video Encoder",
+      "device_type": "industrial video encoder",
+      "port": "",
+      "source": "http://www.moxa.com/doc/man/VPort_461_UM_2e.pdf"
+    },
+    {
+      "user": "telnet root",
+      "pass": "root",
+      "protocol": "telnet, ftp, ppp, serial console",
+      "device": "IA240/241 Embedded computer",
+      "device_type": "embedded computers are designed for industrial, automation applications",
+      "port": "",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "ftp  root",
+      "pass": "blank",
+      "protocol": "telnet, ftp, ppp, serial console",
+      "device": "IA240/241 Embedded computer",
+      "device_type": "embedded computers are designed for industrial, automation applications",
+      "port": "",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "ppp root",
+      "pass": "blank",
+      "protocol": "telnet, ftp, ppp, serial console",
+      "device": "IA240/241 Embedded computer",
+      "device_type": "embedded computers are designed for industrial, automation applications",
+      "port": "",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "serial console root",
+      "pass": "root",
+      "protocol": "telnet, ftp, ppp, serial console",
+      "device": "IA240/241 Embedded computer",
+      "device_type": "embedded computers are designed for industrial, automation applications",
+      "port": "",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "admin",
+      "pass": "admin",
+      "protocol": "http",
+      "device": "OnCell Central Manager",
+      "device_type": "software",
+      "port": "8080/tcp",
+      "source": "http://www.moxa.ru/files/manuals_modems/oncell_central_manager_users_manual_v1.pdf"
+    },
+    {
+      "user": "admin",
+      "pass": "",
+      "protocol": "telnet or serial console",
+      "device": "EDS-508A/505A Series",
+      "device_type": "switch",
+      "port": "",
+      "source": "http://www.moxa.com/doc/man/eds-508a_505a_um_4e.pdf"
+    },
+    {
+      "user": "Admin",
+      "pass": "Keep <blank>",
+      "protocol": "telnet",
+      "device": "OnCell G3100",
+      "device_type": "cellular ip gateways",
+      "port": "23/tcp",
+      "source": "http://www.moxa.com/doc/man/OnCell_G3100_Series_Users_Manual_v7.pdf"
+    },
+    {
+      "user": "admin",
+      "pass": "moxa",
+      "protocol": "http",
+      "device_type": "ics",
+      "notes": "NPort serial-to-Ethernet"
+    },
+    {
+      "user": "admin",
+      "pass": "moxa",
+      "protocol": "telnet",
+      "device_type": "ics",
+      "notes": "Telnet management"
+    },
+    {
+      "user": "admin",
+      "pass": "root",
+      "protocol": "ssh",
+      "device_type": "ics",
+      "notes": "AWK wireless APs"
+    }
+  ],
+  "netcomm": [
+    {
+      "user": "admin",
+      "pass": "admin",
+      "protocol": "multi",
+      "device": "3G21WB (BigPond Firmware), 3G9WB (BigPond Firmware), N3G001W (Netcomm Firmware), NB14WN (Netcomm Firmware), NB5 (Netcomm Firmware), NB5Plus4 (Netcomm Firmware), NB6Plus4 (Netcomm Firmware), NB6Plus4W (Netcomm Firmware), NNB7 (Netcomm Firmware), NB9WMAXX (Netcomm Firmware), NP804N (Netcomm Firmware)",
+      "device_type": "router",
+      "port": "",
+      "source": "http://www.pcwintech.com/default-router-modem-passwords2"
+    },
+    {
+      "user": "admin",
+      "pass": "password",
+      "protocol": "multi",
+      "device": "NB1300 Plus 4 (Netcomm Firmware), NP803N (Netcomm Firmware)",
+      "device_type": "router",
+      "port": "",
+      "source": "http://www.pcwintech.com/default-router-modem-passwords2"
+    }
+  ],
+  "novus_automation": [
+    {
+      "user": "superview",
+      "pass": "superview",
+      "protocol": "multi",
+      "device": "Superview",
+      "device_type": "scada",
+      "port": "",
+      "source": "http://www.scigiene.com/pdfs/Superview%20Manual.pdf"
+    }
+  ],
+  "omron_ia": [
+    {
+      "user": "for http",
+      "pass": "ETHERNET",
+      "protocol": "http, ftp",
+      "device": "CJ1M CPU Units with Ethernet Functions",
+      "device_type": "plc",
+      "port": "80/tcp (http), 21/tcp (ftp)",
+      "source": "http://omronkft.hu/nostree/pdfs/plc/cs1_cj1/w441-e1-03+cj-series-ethernetfunc+opermanual.pdf"
+    },
+    {
+      "user": "for ftp",
+      "pass": "CONFIDENTIAL",
+      "protocol": "http, ftp",
+      "device": "CJ1M CPU Units with Ethernet Functions",
+      "device_type": "plc",
+      "port": "80/tcp (http), 21/tcp (ftp)",
+      "source": "http://omronkft.hu/nostree/pdfs/plc/cs1_cj1/w441-e1-03+cj-series-ethernetfunc+opermanual.pdf"
+    }
+  ],
+  "ouman": [
+    {
+      "user": "admin",
+      "pass": "admin",
+      "protocol": "multi",
+      "device": "EH-net server",
+      "device_type": "hmi software",
+      "port": "",
+      "source": "http://docplayer.fi/509891-Palvelin-eh-net-kayttoonotto-ja-yllapito-www-ouman-fi.html"
+    }
+  ],
+  "phoenix_contact": [
+    {
+      "user": "admin",
+      "pass": "admin",
+      "protocol": "http",
+      "device": "Logic+",
+      "device_type": "software",
+      "port": "80/tcp",
+      "source": "https://www.phoenixcontact.com/assets/downloads_ed/global/web_dwl_technical_info/52005213_EN.pdf"
+    },
+    {
+      "user": "admin",
+      "pass": "private",
+      "protocol": "http",
+      "device_type": "ics",
+      "notes": "FL SWITCH managed series"
+    },
+    {
+      "user": "root",
+      "pass": "root",
+      "protocol": "http",
+      "device_type": "ics",
+      "notes": "Some older models"
+    }
+  ],
+  "prosoft_technology": [
+    {
+      "user": "admin",
+      "pass": "password",
+      "protocol": "http",
+      "device": "ICX30-HWC",
+      "device_type": "industrial cellular gateway",
+      "port": "80/tcp",
+      "source": "http://www.prosoft-technology.com/content/download/8772/168219/version/9/file/ICX30_HWC_User_Manual.pdf"
+    }
+  ],
+  "rockwell": [
+    {
+      "user": "Administrator",
+      "pass": "admin",
+      "protocol": "http",
+      "device": "1756-EN2TSC",
+      "device_type": "ethernet/ip communication module",
+      "port": "80/tcp",
+      "source": "http://literature.rockwellautomation.com/idc/groups/literature/documents/um/enet-um003_-en-p.pdf"
+    },
+    {
+      "user": "admin",
+      "pass": "password",
+      "protocol": "http",
+      "device": "1734-AENT",
+      "device_type": "i/o adapter",
+      "port": "80/tcp",
+      "source": "http://literature.rockwellautomation.com/idc/groups/literature/documents/um/1734-um011_-en-p.pdf"
+    },
+    {
+      "user": "Administrator",
+      "pass": "",
+      "protocol": "http",
+      "device": "1756-EWEB",
+      "device_type": "web server module",
+      "port": "80/tcp",
+      "source": "https://www.jlab.org/Hall-D/Documents/manuals/Allen-Bradley%20stuff/1756-EWEB%20Web%20Server%20Module.pdf"
+    },
+    {
+      "user": "administrator",
+      "pass": "ml1400",
+      "protocol": "http",
+      "device": "MicroLogix 1400 Embedded Web Server",
+      "device_type": "web server",
+      "port": "80/tcp",
+      "source": "http://literature.rockwellautomation.com/idc/groups/literature/documents/um/1766-um002_-en-p.pdf"
+    },
+    {
+      "user": "guest",
+      "pass": "guest",
+      "protocol": "http",
+      "device": "MicroLogix 1400 Embedded Web Server",
+      "device_type": "web server",
+      "port": "80/tcp",
+      "source": "http://literature.rockwellautomation.com/idc/groups/literature/documents/um/1766-um002_-en-p.pdf"
+    },
+    {
+      "user": "administrator",
+      "pass": "ml1100",
+      "protocol": "http",
+      "device": "MicroLogix 1100 Embedded Web Server",
+      "device_type": "web server",
+      "port": "80/tcp",
+      "source": "http://literature.rockwellautomation.com/idc/groups/literature/documents/um/1763-um002_-en-p.pdf"
+    },
+    {
+      "user": "",
+      "pass": "password",
+      "protocol": "multi",
+      "device": "PanelView Plus 6 Graphic Terminals, Firmware 6.10 or later/ , PVPlus 6",
+      "device_type": "scada",
+      "port": "",
+      "source": "http://www.manualsdir.com/manuals/580848/rockwell-automation-2711p-xxxx-panelview-plus-6-terminals-user-manual.html?page=54"
+    },
+    {
+      "user": "",
+      "pass": "",
+      "protocol": "ethernet/ip",
+      "device_type": "ics",
+      "notes": "ControlLogix/MicroLogix — no auth by default"
+    },
+    {
+      "user": "Administrator",
+      "pass": "",
+      "protocol": "windows",
+      "device_type": "ics",
+      "notes": "FactoryTalk View"
+    }
+  ],
+  "samsung": [
+    {
+      "user": "root",
+      "pass": "rkwjsdusrnth",
+      "protocol": "multi",
+      "device": "Integrated Management System DMS",
+      "device_type": "data management server",
+      "port": "",
+      "source": "http://www.tenable.com/plugins/index.php?view=single&id=53878"
+    },
+    {
+      "user": "",
+      "pass": "0",
+      "protocol": "multi",
+      "device": "Integrated Management System S-NET mini",
+      "device_type": "built-in web server",
+      "port": "",
+      "source": "http://dvmdownload.com/controls/central-control-options/mst-s3w/technical-tip/SNET%20MINI%20MST-S3W%20SETUP_1%2017%202012.pdf"
+    }
+  ],
+  "schneider": [
+    {
+      "user": "",
+      "pass": "0",
+      "protocol": "multi",
+      "device": "PowerLogic™ Series 800 Power Meter",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.powerlogic.com/literature/63230-500-282A1_PM8_Install_Guide.pdf"
+    },
+    {
+      "user": "Administrator",
+      "pass": "Gateway",
+      "protocol": "http",
+      "device": "PowerLogicTM Ethernet Gateway EGX300/EGX100",
+      "device_type": "integrated gateway-server",
+      "port": "80/tcp",
+      "source": "http://azzo.com.au/wp-content/uploads/2015/05/PowerLogic-EGX300-Users-Guide.pdf"
+    },
+    {
+      "user": "Administrator",
+      "pass": "admin",
+      "protocol": "http",
+      "device": "POWERLOGIC® EGX200 or EGX400 with firmware version 5.5 or higher",
+      "device_type": "gateway-server",
+      "port": "80/tcp",
+      "source": "http://www.powerlogic.com/literature/63230-314-208A3.pdf"
+    },
+    {
+      "user": "User 1",
+      "pass": "master",
+      "protocol": "http",
+      "device": "POWERLOGIC® EGX200 or EGX400 with firmware version 5.5 or higher",
+      "device_type": "gateway-server",
+      "port": "80/tcp",
+      "source": "http://www.powerlogic.com/literature/63230-314-208A3.pdf"
+    },
+    {
+      "user": "User 2",
+      "pass": "engineer",
+      "protocol": "http",
+      "device": "POWERLOGIC® EGX200 or EGX400 with firmware version 5.5 or higher",
+      "device_type": "gateway-server",
+      "port": "80/tcp",
+      "source": "http://www.powerlogic.com/literature/63230-314-208A3.pdf"
+    },
+    {
+      "user": "User 3",
+      "pass": "operator",
+      "protocol": "http",
+      "device": "POWERLOGIC® EGX200 or EGX400 with firmware version 5.5 or higher",
+      "device_type": "gateway-server",
+      "port": "80/tcp",
+      "source": "http://www.powerlogic.com/literature/63230-314-208A3.pdf"
+    },
+    {
+      "user": "",
+      "pass": "ftpuser/password",
+      "protocol": "http",
+      "device": "Modicon Quantum",
+      "device_type": "plc",
+      "port": "80/tcp",
+      "source": "http://www.digitalbond.com/tools/basecamp/schneider-modicon-quantum/, http://www.schneider-electric.cn/downloads//85257689000007EE/All/01507367599A9DC985257871005F4B3D/$File/EIO0000000121EN.pdf"
+    },
+    {
+      "user": "",
+      "pass": "qbf77101/hexakisoctahedron",
+      "protocol": "http",
+      "device": "Modicon Quantum",
+      "device_type": "plc",
+      "port": "80/tcp",
+      "source": "http://www.digitalbond.com/tools/basecamp/schneider-modicon-quantum/, http://www.schneider-electric.cn/downloads//85257689000007EE/All/01507367599A9DC985257871005F4B3D/$File/EIO0000000121EN.pdf"
+    },
+    {
+      "user": "USER",
+      "pass": "USERUSER",
+      "protocol": "http",
+      "device": "Modicon Quantum",
+      "device_type": "plc",
+      "port": "80/tcp",
+      "source": "http://www.digitalbond.com/tools/basecamp/schneider-modicon-quantum/, http://www.schneider-electric.cn/downloads//85257689000007EE/All/01507367599A9DC985257871005F4B3D/$File/EIO0000000121EN.pdf"
+    },
+    {
+      "user": "ntpupdate",
+      "pass": "ntpupdate (Using an FTP client",
+      "protocol": "ftp, http",
+      "device": "Modicon M340 for Ethernet",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://dariusfreamon.wordpress.com/2013/12/08/schneider-modicon-m340-for-ethernet-multiple-default-credentials/"
+    },
+    {
+      "user": "store your rules in the file",
+      "pass": "",
+      "protocol": "ftp, http",
+      "device": "Modicon M340 for Ethernet",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://dariusfreamon.wordpress.com/2013/12/08/schneider-modicon-m340-for-ethernet-multiple-default-credentials/"
+    },
+    {
+      "user": "",
+      "pass": "/FLASH0/wwwroot/conf/NTP/customrules)",
+      "protocol": "ftp, http",
+      "device": "Modicon M340 for Ethernet",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://dariusfreamon.wordpress.com/2013/12/08/schneider-modicon-m340-for-ethernet-multiple-default-credentials/"
+    },
+    {
+      "user": "USER",
+      "pass": "USER (FTP Setup page via HTTP",
+      "protocol": "ftp, http",
+      "device": "Modicon M340 for Ethernet",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://dariusfreamon.wordpress.com/2013/12/08/schneider-modicon-m340-for-ethernet-multiple-default-credentials/"
+    },
+    {
+      "user": "",
+      "pass": "HTTP credentials)",
+      "protocol": "ftp, http",
+      "device": "Modicon M340 for Ethernet",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://dariusfreamon.wordpress.com/2013/12/08/schneider-modicon-m340-for-ethernet-multiple-default-credentials/"
+    },
+    {
+      "user": "8000",
+      "pass": "00:00",
+      "protocol": "http",
+      "device": "PM8000, PM8240, PM8243, PM8244",
+      "device_type": "plc",
+      "port": "80/tcp",
+      "source": "http://www2.schneider-electric.com/sites/corporate/en/support/faq/faq_main.page?page=content&country=APS_GLOBAL&lang=en&locale=en_US&id=FA243275&redirect=true"
+    },
+    {
+      "user": "",
+      "pass": "HTTP server",
+      "protocol": "ftp, pap, http",
+      "device": "TSX ETG 1000",
+      "device_type": "plc",
+      "port": "21 TCP",
+      "source": "http://www.is-com.ru/files/net_tsxetg1000.pdf"
+    },
+    {
+      "user": "pap",
+      "pass": "USER:USER",
+      "protocol": "ftp, pap, http",
+      "device": "TSX ETG 1000",
+      "device_type": "plc",
+      "port": "21 TCP",
+      "source": "http://www.is-com.ru/files/net_tsxetg1000.pdf"
+    },
+    {
+      "user": "FTP",
+      "pass": "",
+      "protocol": "ftp, pap, http",
+      "device": "TSX ETG 1000",
+      "device_type": "plc",
+      "port": "21 TCP",
+      "source": "http://www.is-com.ru/files/net_tsxetg1000.pdf"
+    },
+    {
+      "user": "wsupgrade",
+      "pass": "wsupgrade",
+      "protocol": "ftp, pap, http",
+      "device": "TSX ETG 1000",
+      "device_type": "plc",
+      "port": "21 TCP",
+      "source": "http://www.is-com.ru/files/net_tsxetg1000.pdf"
+    },
+    {
+      "user": "Administrator",
+      "pass": "Gateway",
+      "protocol": "multi",
+      "device": "ETG100",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.schneider-electric.co.in/sites/india/en/support/faq/main_faq.page?page=content&country=IN&lang=en&id=FA138738&locale=en_US&redirect=true"
+    },
+    {
+      "user": "adm",
+      "pass": "adm",
+      "protocol": "http",
+      "device": "M258",
+      "device_type": "plc",
+      "port": "80/tcp",
+      "source": "http://ewon.biz/sites/default/files/aug-054-0-en-remote_access_for_schneider_m258_plcs.pdf"
+    },
+    {
+      "user": "",
+      "pass": "ftp",
+      "protocol": "ftp, http",
+      "device": "Quantum NOE 771 xx",
+      "device_type": "ethernet modules",
+      "port": "",
+      "source": "https://igate.alamedaelectric.com/Modicon%20Documents/PLC%20Quantum%20PLC%20NOE771xx%20User%20Manual%20v5.0.pdf"
+    },
+    {
+      "user": "http",
+      "pass": "",
+      "protocol": "ftp, http",
+      "device": "Quantum NOE 771 xx",
+      "device_type": "ethernet modules",
+      "port": "",
+      "source": "https://igate.alamedaelectric.com/Modicon%20Documents/PLC%20Quantum%20PLC%20NOE771xx%20User%20Manual%20v5.0.pdf"
+    },
+    {
+      "user": "USER",
+      "pass": "USER",
+      "protocol": "ftp, http",
+      "device": "Quantum NOE 771 xx",
+      "device_type": "ethernet modules",
+      "port": "",
+      "source": "https://igate.alamedaelectric.com/Modicon%20Documents/PLC%20Quantum%20PLC%20NOE771xx%20User%20Manual%20v5.0.pdf"
+    },
+    {
+      "user": "",
+      "pass": "admin",
+      "protocol": "multi",
+      "device_type": "ics",
+      "notes": ""
+    },
+    {
+      "user": "USER",
+      "pass": "USER",
+      "protocol": "multi",
+      "device_type": "ics",
+      "notes": ""
+    },
+    {
+      "user": "ntpupdate",
+      "pass": "ntpupdate",
+      "protocol": "multi",
+      "device_type": "ics",
+      "notes": ""
+    }
+  ],
+  "siemens": [
+    {
+      "user": "Hardcoded password",
+      "pass": "",
+      "protocol": "telnet. http",
+      "device": "Simatic S7-300 (pre-2009 versions)",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.wired.com/2011/08/siemens-hardcoded-password/"
+    },
+    {
+      "user": "Basisk",
+      "pass": "Basisk",
+      "protocol": "telnet. http",
+      "device": "Simatic S7-300 (pre-2009 versions)",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.wired.com/2011/08/siemens-hardcoded-password/"
+    },
+    {
+      "user": "admin",
+      "pass": "admin",
+      "protocol": "multi",
+      "device": "Scalance",
+      "device_type": "industrial ethernet switche",
+      "port": "",
+      "source": "https://www.acunetix.com/vulnerabilities/network/vulnerability/siemens-scalance-default-credentials/"
+    },
+    {
+      "user": "user",
+      "pass": "user",
+      "protocol": "multi",
+      "device": "Scalance",
+      "device_type": "industrial ethernet switche",
+      "port": "",
+      "source": "https://www.acunetix.com/vulnerabilities/network/vulnerability/siemens-scalance-default-credentials/"
+    },
+    {
+      "user": "Admin",
+      "pass": "admin",
+      "protocol": "ftp, http",
+      "device": "Scalance (x 200, W788-1PRO,   W788-2PRO, etc.)",
+      "device_type": "industrial wireless lan, industrial ethernet switches",
+      "port": "80/tcp",
+      "source": "https://cache.industry.siemens.com/dl/files/728/25508728/att_4008/v1/BA_SCALANCE-X-200_76.pdf, https://www.acunetix.com/vulnerabilities/network/vulnerability/siemens-scalance-default-credentials/"
+    },
+    {
+      "user": "User",
+      "pass": "user",
+      "protocol": "ftp, http",
+      "device": "Scalance (x 200, W788-1PRO,   W788-2PRO, etc.)",
+      "device_type": "industrial wireless lan, industrial ethernet switches",
+      "port": "80/tcp",
+      "source": "https://cache.industry.siemens.com/dl/files/728/25508728/att_4008/v1/BA_SCALANCE-X-200_76.pdf, https://www.acunetix.com/vulnerabilities/network/vulnerability/siemens-scalance-default-credentials/"
+    },
+    {
+      "user": "for FTP access",
+      "pass": "",
+      "protocol": "ftp, http",
+      "device": "Scalance (x 200, W788-1PRO,   W788-2PRO, etc.)",
+      "device_type": "industrial wireless lan, industrial ethernet switches",
+      "port": "80/tcp",
+      "source": "https://cache.industry.siemens.com/dl/files/728/25508728/att_4008/v1/BA_SCALANCE-X-200_76.pdf, https://www.acunetix.com/vulnerabilities/network/vulnerability/siemens-scalance-default-credentials/"
+    },
+    {
+      "user": "siemens",
+      "pass": "siemens",
+      "protocol": "ftp, http",
+      "device": "Scalance (x 200, W788-1PRO,   W788-2PRO, etc.)",
+      "device_type": "industrial wireless lan, industrial ethernet switches",
+      "port": "80/tcp",
+      "source": "https://cache.industry.siemens.com/dl/files/728/25508728/att_4008/v1/BA_SCALANCE-X-200_76.pdf, https://www.acunetix.com/vulnerabilities/network/vulnerability/siemens-scalance-default-credentials/"
+    },
+    {
+      "user": "Administrator",
+      "pass": "Password",
+      "protocol": "multi",
+      "device": "SyncoTM living Web server OZW772  V2.0",
+      "device_type": "web-server",
+      "port": "",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "winccd",
+      "pass": "winccpass",
+      "protocol": "multi",
+      "device": "Siemens WinCC 7.x",
+      "device_type": "hmi software",
+      "port": "",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "wincce",
+      "pass": "winccpass",
+      "protocol": "multi",
+      "device": "Siemens WinCC 7.x",
+      "device_type": "hmi software",
+      "port": "",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "DMUser",
+      "pass": "Data&Pass",
+      "protocol": "multi",
+      "device": "Siemens WinCC 7.x",
+      "device_type": "hmi software",
+      "port": "",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "Administrator",
+      "pass": "Administrator",
+      "protocol": "multi",
+      "device": "Siemens WinCC 7.x",
+      "device_type": "hmi software",
+      "port": "",
+      "source": "http://www.toolswatch.org/2013/02/new-scada-default-passwords-added-to-dpe-xml-database/"
+    },
+    {
+      "user": "admin",
+      "pass": "admin",
+      "protocol": "http",
+      "device": "Ruggedcom RMC30",
+      "device_type": "industrial router",
+      "port": "80/tcp",
+      "source": "Siemens Ruggedcom RMC30.pdf"
+    },
+    {
+      "user": "",
+      "pass": "admin",
+      "protocol": "multi",
+      "device": "RuggedSwitch, RS8000 / RS1600 / RS900",
+      "device_type": "industrial router",
+      "port": "",
+      "source": "http://www.techsalesnw.com/oldwebsite/products/ethernet/rc_files/RuggedSwitch%20User%20Guide%20v1.5.1.pdf"
+    },
+    {
+      "user": "Level 6 End users",
+      "pass": "",
+      "protocol": "multi",
+      "device": "Siemens Climatix",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.ivprodukt.se/documents/ivprodukt/documents/styr%20climatix/basis%20document%20climatix%20control%20system%20bdcx.100820.01.gb.pdf"
+    },
+    {
+      "user": "",
+      "pass": "1000",
+      "protocol": "multi",
+      "device": "Siemens Climatix",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.ivprodukt.se/documents/ivprodukt/documents/styr%20climatix/basis%20document%20climatix%20control%20system%20bdcx.100820.01.gb.pdf"
+    },
+    {
+      "user": "Level 4 Service operator",
+      "pass": "",
+      "protocol": "multi",
+      "device": "Siemens Climatix",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.ivprodukt.se/documents/ivprodukt/documents/styr%20climatix/basis%20document%20climatix%20control%20system%20bdcx.100820.01.gb.pdf"
+    },
+    {
+      "user": "",
+      "pass": "2000",
+      "protocol": "multi",
+      "device": "Siemens Climatix",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.ivprodukt.se/documents/ivprodukt/documents/styr%20climatix/basis%20document%20climatix%20control%20system%20bdcx.100820.01.gb.pdf"
+    },
+    {
+      "user": "Level 2 OEM",
+      "pass": "",
+      "protocol": "multi",
+      "device": "Siemens Climatix",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.ivprodukt.se/documents/ivprodukt/documents/styr%20climatix/basis%20document%20climatix%20control%20system%20bdcx.100820.01.gb.pdf"
+    },
+    {
+      "user": "",
+      "pass": "6000",
+      "protocol": "multi",
+      "device": "Siemens Climatix",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.ivprodukt.se/documents/ivprodukt/documents/styr%20climatix/basis%20document%20climatix%20control%20system%20bdcx.100820.01.gb.pdf"
+    }
+  ],
+  "sierra_wireless": [
+    {
+      "user": "sconsole",
+      "pass": "12345",
+      "protocol": "telnet, ssh",
+      "device": "AirLink",
+      "device_type": "3g/4g gateway",
+      "port": "12345/tcp, 2332/tcp",
+      "source": "official documentation"
+    },
+    {
+      "user": "user",
+      "pass": "12345",
+      "protocol": "http",
+      "device": "AirLink",
+      "device_type": "3g/4g gateway",
+      "port": "9191/tcp",
+      "source": "official documentation"
+    },
+    {
+      "user": "viewer",
+      "pass": "12345",
+      "protocol": "http",
+      "device": "AirLink",
+      "device_type": "3g/4g gateway",
+      "port": "9191/tcp",
+      "source": "official documentation"
+    }
+  ],
+  "stulz_gmbh": [
+    {
+      "user": "",
+      "pass": "Administrator",
+      "protocol": "multi",
+      "device": "Stulz WIB 8000",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://dariusfreamon.wordpress.com/2013/09/07/stulz-wib-8000-air-conditioning-web-interface-board-multiple-vulnerabilities/"
+    },
+    {
+      "user": "highest authorization",
+      "pass": "",
+      "protocol": "multi",
+      "device": "Stulz WIB 8000",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://dariusfreamon.wordpress.com/2013/09/07/stulz-wib-8000-air-conditioning-web-interface-board-multiple-vulnerabilities/"
+    },
+    {
+      "user": "",
+      "pass": "ganymed",
+      "protocol": "multi",
+      "device": "Stulz WIB 8000",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://dariusfreamon.wordpress.com/2013/09/07/stulz-wib-8000-air-conditioning-web-interface-board-multiple-vulnerabilities/"
+    },
+    {
+      "user": "Medium authorization",
+      "pass": "",
+      "protocol": "multi",
+      "device": "Stulz WIB 8000",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://dariusfreamon.wordpress.com/2013/09/07/stulz-wib-8000-air-conditioning-web-interface-board-multiple-vulnerabilities/"
+    },
+    {
+      "user": "",
+      "pass": "kallisto",
+      "protocol": "multi",
+      "device": "Stulz WIB 8000",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://dariusfreamon.wordpress.com/2013/09/07/stulz-wib-8000-air-conditioning-web-interface-board-multiple-vulnerabilities/"
+    },
+    {
+      "user": "Lowest authorization",
+      "pass": "",
+      "protocol": "multi",
+      "device": "Stulz WIB 8000",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://dariusfreamon.wordpress.com/2013/09/07/stulz-wib-8000-air-conditioning-web-interface-board-multiple-vulnerabilities/"
+    },
+    {
+      "user": "",
+      "pass": "europa",
+      "protocol": "multi",
+      "device": "Stulz WIB 8000",
+      "device_type": "plc",
+      "port": "",
+      "source": "https://dariusfreamon.wordpress.com/2013/09/07/stulz-wib-8000-air-conditioning-web-interface-board-multiple-vulnerabilities/"
+    }
+  ],
+  "tac_ab": [
+    {
+      "user": "root",
+      "pass": "root",
+      "protocol": "multi",
+      "device": "TAC Xenta 500/700/911/913, TAC Xenta511, TAC Xenta527,",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.xref.be/dpdf/tac_xenta911_xenta511_manuel_uk.pdf"
+    }
+  ],
+  "tecomat": [
+    {
+      "user": "0",
+      "pass": "0 (role 0)",
+      "protocol": "multi",
+      "device": "Tecomat Foxtrot",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://dsec.ru/ipm-research-center/notification-of-vulnerabilities/tecomat_plc_paroli_po_umolchaniyu/"
+    },
+    {
+      "user": "1",
+      "pass": "1 (role 1)",
+      "protocol": "multi",
+      "device": "Tecomat Foxtrot",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://dsec.ru/ipm-research-center/notification-of-vulnerabilities/tecomat_plc_paroli_po_umolchaniyu/"
+    },
+    {
+      "user": "2",
+      "pass": "2 (role 2)",
+      "protocol": "multi",
+      "device": "Tecomat Foxtrot",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://dsec.ru/ipm-research-center/notification-of-vulnerabilities/tecomat_plc_paroli_po_umolchaniyu/"
+    },
+    {
+      "user": "3",
+      "pass": "3 (role 3)",
+      "protocol": "multi",
+      "device": "Tecomat Foxtrot",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://dsec.ru/ipm-research-center/notification-of-vulnerabilities/tecomat_plc_paroli_po_umolchaniyu/"
+    },
+    {
+      "user": "4",
+      "pass": "4 (role 4)",
+      "protocol": "multi",
+      "device": "Tecomat Foxtrot",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://dsec.ru/ipm-research-center/notification-of-vulnerabilities/tecomat_plc_paroli_po_umolchaniyu/"
+    },
+    {
+      "user": "5",
+      "pass": "5 (role 5)",
+      "protocol": "multi",
+      "device": "Tecomat Foxtrot",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://dsec.ru/ipm-research-center/notification-of-vulnerabilities/tecomat_plc_paroli_po_umolchaniyu/"
+    },
+    {
+      "user": "6",
+      "pass": "6 (role 6)",
+      "protocol": "multi",
+      "device": "Tecomat Foxtrot",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://dsec.ru/ipm-research-center/notification-of-vulnerabilities/tecomat_plc_paroli_po_umolchaniyu/"
+    },
+    {
+      "user": "7",
+      "pass": "7 (role 7)",
+      "protocol": "multi",
+      "device": "Tecomat Foxtrot",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://dsec.ru/ipm-research-center/notification-of-vulnerabilities/tecomat_plc_paroli_po_umolchaniyu/"
+    },
+    {
+      "user": "8",
+      "pass": "8 (role 8)",
+      "protocol": "multi",
+      "device": "Tecomat Foxtrot",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://dsec.ru/ipm-research-center/notification-of-vulnerabilities/tecomat_plc_paroli_po_umolchaniyu/"
+    },
+    {
+      "user": "9",
+      "pass": "9 (role 9)",
+      "protocol": "multi",
+      "device": "Tecomat Foxtrot",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://dsec.ru/ipm-research-center/notification-of-vulnerabilities/tecomat_plc_paroli_po_umolchaniyu/"
+    }
+  ],
+  "tridium": [
+    {
+      "user": "tridium",
+      "pass": "niagara",
+      "protocol": "multi",
+      "device": "NiagaraAX",
+      "device_type": "software for jace-2, jace-403 or jace-545",
+      "port": "",
+      "source": "http://www.hvacc.net/pdf/tridium/docs_3.2.16/docJaceStartup/docJaceStartup.pdf"
+    }
+  ],
+  "turck": [
+    {
+      "user": "",
+      "pass": "password",
+      "protocol": "http",
+      "device": "BL20-E-GW-EN",
+      "device_type": "plc",
+      "port": "80/tcp",
+      "source": "http://pdb.turck.de/media/_in/Anlagen/D301173.pdf"
+    }
+  ],
+  "wago": [
+    {
+      "user": "admin",
+      "pass": "wago",
+      "protocol": "http",
+      "device": "WAGO-I/O-SYSTEM 750",
+      "device_type": "controller",
+      "port": "80/tcp",
+      "source": "http://www.wago.spb.ru/upload/information_system_28/3/2/8/item_328/information_items_property_340.pdf"
+    },
+    {
+      "user": "user",
+      "pass": "user",
+      "protocol": "http",
+      "device": "WAGO-I/O-SYSTEM 750",
+      "device_type": "controller",
+      "port": "80/tcp",
+      "source": "http://www.wago.spb.ru/upload/information_system_28/3/2/8/item_328/information_items_property_340.pdf"
+    },
+    {
+      "user": "guest",
+      "pass": "guest",
+      "protocol": "http",
+      "device": "WAGO-I/O-SYSTEM 750",
+      "device_type": "controller",
+      "port": "80/tcp",
+      "source": "http://www.wago.spb.ru/upload/information_system_28/3/2/8/item_328/information_items_property_340.pdf"
+    },
+    {
+      "user": "",
+      "pass": "http",
+      "protocol": "http, ftp",
+      "device": "WAGO-I/O-IPC 758-870/000-xxx",
+      "device_type": "compact industrial pc",
+      "port": "80/tcp (http)",
+      "source": "http://www.wago.com/wagoweb/documentation/758/eng_manu/870/q07580870_00000000_2en.pdf"
+    },
+    {
+      "user": "ftp",
+      "pass": "",
+      "protocol": "http, ftp",
+      "device": "WAGO-I/O-IPC 758-870/000-xxx",
+      "device_type": "compact industrial pc",
+      "port": "80/tcp (http)",
+      "source": "http://www.wago.com/wagoweb/documentation/758/eng_manu/870/q07580870_00000000_2en.pdf"
+    },
+    {
+      "user": "user",
+      "pass": "user00",
+      "protocol": "http, ftp",
+      "device": "WAGO-I/O-IPC 758-870/000-xxx",
+      "device_type": "compact industrial pc",
+      "port": "80/tcp (http)",
+      "source": "http://www.wago.com/wagoweb/documentation/758/eng_manu/870/q07580870_00000000_2en.pdf"
+    },
+    {
+      "user": "administrator",
+      "pass": "",
+      "protocol": "http, ftp",
+      "device": "WAGO-I/O-IPC 758-870/000-xxx",
+      "device_type": "compact industrial pc",
+      "port": "80/tcp (http)",
+      "source": "http://www.wago.com/wagoweb/documentation/758/eng_manu/870/q07580870_00000000_2en.pdf"
+    },
+    {
+      "user": "su",
+      "pass": "ko2003wa",
+      "protocol": "http, ftp",
+      "device": "WAGO-I/O-IPC 758-870/000-xxx",
+      "device_type": "compact industrial pc",
+      "port": "80/tcp (http)",
+      "source": "http://www.wago.com/wagoweb/documentation/758/eng_manu/870/q07580870_00000000_2en.pdf"
+    },
+    {
+      "user": "root",
+      "pass": "wago",
+      "protocol": "multi",
+      "device": "Modular I/O-System Linux Fieldbus Coupler 750-860",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.wago.com/wagoweb/documentation/750/eng_manu/coupler_controller/m07500860_00000000_0en.pdf"
+    },
+    {
+      "user": "admin",
+      "pass": "wago",
+      "protocol": "multi",
+      "device": "Modular I/O-System Linux Fieldbus Coupler 750-860",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.wago.com/wagoweb/documentation/750/eng_manu/coupler_controller/m07500860_00000000_0en.pdf"
+    },
+    {
+      "user": "user",
+      "pass": "user",
+      "protocol": "multi",
+      "device": "Modular I/O-System Linux Fieldbus Coupler 750-860",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.wago.com/wagoweb/documentation/750/eng_manu/coupler_controller/m07500860_00000000_0en.pdf"
+    },
+    {
+      "user": "guest",
+      "pass": "guest",
+      "protocol": "multi",
+      "device": "Modular I/O-System Linux Fieldbus Coupler 750-860",
+      "device_type": "plc",
+      "port": "",
+      "source": "http://www.wago.com/wagoweb/documentation/750/eng_manu/coupler_controller/m07500860_00000000_0en.pdf"
+    }
+  ],
+  "wellintech": [
+    {
+      "user": "administrator",
+      "pass": "administrator (role KVAdministrator)",
+      "protocol": "multi",
+      "device": "KingSCADA 3.0",
+      "device_type": "software",
+      "port": "",
+      "source": "http://www.slideshare.net/DefconRussia/pavel-volobuev-alexander-minozhenko-alexander-polyakov-practical-demonstration-of-typical-attacks-and-0days-in-scada-and-plccontrollers"
+    }
+  ],
+  "westermo": [
+    {
+      "user": "",
+      "pass": "no password",
+      "protocol": "multi",
+      "device": "TDW 33",
+      "device_type": "industrial modem",
+      "port": "",
+      "source": "Westermo TDW 33.pdf"
+    },
+    {
+      "user": "",
+      "pass": "just return",
+      "protocol": "multi",
+      "device": "TDW 33",
+      "device_type": "industrial modem",
+      "port": "",
+      "source": "Westermo TDW 33.pdf"
+    },
+    {
+      "user": "Hardcoded password",
+      "pass": "",
+      "protocol": "multi",
+      "device": "TDW 33",
+      "device_type": "industrial modem",
+      "port": "",
+      "source": "Westermo TDW 33.pdf"
+    },
+    {
+      "user": "",
+      "pass": "n3Y9kA6otYZu8",
+      "protocol": "multi",
+      "device": "TDW 33",
+      "device_type": "industrial modem",
+      "port": "",
+      "source": "Westermo TDW 33.pdf"
+    },
+    {
+      "user": "",
+      "pass": "(?? TD-36)",
+      "protocol": "multi",
+      "device": "TDW 33",
+      "device_type": "industrial modem",
+      "port": "",
+      "source": "Westermo TDW 33.pdf"
+    },
+    {
+      "user": "admin",
+      "pass": "westermo",
+      "protocol": "http",
+      "device": "MRD-305-DIN/MRD-310/MRD-315/MRD-330/MRD-355/MRD-350/MRD-455",
+      "device_type": "industrial router",
+      "port": "80/tcp",
+      "source": "http://www.eternity-sales.com/westermo/files/westermo_ug_6623-2266_mrd-305-DIN_en.pdf, Westermo MRD 330.pdf"
+    }
+  ],
+  "wonderware": [
+    {
+      "user": "Administrator",
+      "pass": "Wonderware",
+      "protocol": "multi",
+      "device": "Intouch",
+      "device_type": "scada",
+      "port": "",
+      "source": "http://www.automation-talk.info/2011/01/default-intouch-login-username-password.html"
+    }
+  ],
+  "yokogawa": [
+    {
+      "user": "admin",
+      "pass": "!admin",
+      "protocol": "multi",
+      "device": "YFGW410 gateway",
+      "device_type": "wireless management station",
+      "port": "",
+      "source": "http://www.yokogawa.com/us/support/knowledgebase/i-cannot-login-to-the-yfgw410-gateway-what-is-the-default-username-and-password-of-a-yfgw410-isa100-gateway.htm"
+    },
+    {
+      "user": "Administrator 1",
+      "pass": "Admin1",
+      "protocol": "multi",
+      "device": "DX1000/DX1000N/DX2000 Advanced",
+      "device_type": "software",
+      "port": "",
+      "source": "http://web-material3.yokogawa.com/IM04L41B01-05EN_020.pdf"
+    },
+    {
+      "user": "Administrator 2",
+      "pass": "Admin2",
+      "protocol": "multi",
+      "device": "DX1000/DX1000N/DX2000 Advanced",
+      "device_type": "software",
+      "port": "",
+      "source": "http://web-material3.yokogawa.com/IM04L41B01-05EN_020.pdf"
+    },
+    {
+      "user": "",
+      "pass": "...",
+      "protocol": "multi",
+      "device": "DX1000/DX1000N/DX2000 Advanced",
+      "device_type": "software",
+      "port": "",
+      "source": "http://web-material3.yokogawa.com/IM04L41B01-05EN_020.pdf"
+    },
+    {
+      "user": "Administrator 5",
+      "pass": "Admin5",
+      "protocol": "multi",
+      "device": "DX1000/DX1000N/DX2000 Advanced",
+      "device_type": "software",
+      "port": "",
+      "source": "http://web-material3.yokogawa.com/IM04L41B01-05EN_020.pdf"
+    },
+    {
+      "user": "User 1",
+      "pass": "User01",
+      "protocol": "multi",
+      "device": "DX1000/DX1000N/DX2000 Advanced",
+      "device_type": "software",
+      "port": "",
+      "source": "http://web-material3.yokogawa.com/IM04L41B01-05EN_020.pdf"
+    },
+    {
+      "user": "User 90",
+      "pass": "User90",
+      "protocol": "multi",
+      "device": "DX1000/DX1000N/DX2000 Advanced",
+      "device_type": "software",
+      "port": "",
+      "source": "http://web-material3.yokogawa.com/IM04L41B01-05EN_020.pdf"
+    },
+    {
+      "user": "CENTUM",
+      "pass": "CENTUM",
+      "protocol": "multi",
+      "device": "CENTUM CS 3000 DCS",
+      "device_type": "distributed control system",
+      "port": "",
+      "source": "http://www.allinterview.com/showanswers/170266/having-yokogawa-centum-cs-3000-dcs-2-fcs-4-operation-download-message-appears-eq.html"
+    },
+    {
+      "user": "",
+      "pass": "YOKOGAWA. (to release the Write Protect mode)",
+      "protocol": "multi",
+      "device": "EJX910A Multivariable Transmitter HART Communication Type",
+      "device_type": "multivariable transmitter",
+      "port": "",
+      "source": "http://www.controlswarehouse.com/sheets/meriam/EJX910HARTIM01C25R02-01E_001.pdf"
+    },
+    {
+      "user": "",
+      "pass": "",
+      "protocol": "multi",
+      "device": "EJX910A Multivariable Transmitter HART Communication Type",
+      "device_type": "multivariable transmitter",
+      "port": "",
+      "source": "http://www.controlswarehouse.com/sheets/meriam/EJX910HARTIM01C25R02-01E_001.pdf"
+    },
+    {
+      "user": "anonymous",
+      "pass": "blank (Ethernet access)",
+      "protocol": "multi",
+      "device": "WT 3000 Driver",
+      "device_type": "precision power analyzer",
+      "port": "",
+      "source": "Yokagawa WT3000.doc"
+    }
+  ],
+  "apc": [
+    {
+      "user": "apc",
+      "pass": "apc",
+      "protocol": "http",
+      "device_type": "ics",
+      "notes": "APC Smart-UPS — universal default"
+    },
+    {
+      "user": "device",
+      "pass": "apc",
+      "protocol": "http",
+      "device_type": "ics",
+      "notes": "Device-level account"
+    },
+    {
+      "user": "apc",
+      "pass": "apc",
+      "protocol": "ssh",
+      "device_type": "ics",
+      "notes": "SSH management"
+    }
+  ],
+  "omron": [
+    {
+      "user": "admin",
+      "pass": "",
+      "protocol": "http",
+      "device_type": "ics",
+      "notes": "NJ/NX PLCs — no password"
+    },
+    {
+      "user": "admin",
+      "pass": "admin",
+      "protocol": "http",
+      "device_type": "ics",
+      "notes": "CX-One variant"
+    }
+  ]
+}

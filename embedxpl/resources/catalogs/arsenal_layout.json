@@ -1,0 +1,60 @@
+{
+  "name": "EmbedXPL-Forge Curated Arsenal Layout",
+  "version": "1.1.0",
+  "scope": {
+    "in_scope": ["routers", "switches", "taps", "soho_edge"],
+    "out_of_scope": ["cameras", "printers", "dvr", "dvrs", "fw", "ngfw", "wireless"]
+  },
+  "curated_subfolders": [
+    {
+      "path": "embedxpl/resources/arsenal/credentials",
+      "purpose": "Curated default credentials, protocol-specific credential packs and normalized mapping sources."
+    },
+    {
+      "path": "embedxpl/resources/arsenal/wordlists",
+      "purpose": "Wordlists curated for in-scope devices and protocol validations."
+    },
+    {
+      "path": "embedxpl/resources/arsenal/mibs",
+      "purpose": "MIB packages and vendor-focused SNMP support artifacts."
+    },
+    {
+      "path": "embedxpl/resources/arsenal/firmware",
+      "purpose": "Firmware references and curated metadata for research workflows."
+    },
+    {
+      "path": "embedxpl/resources/arsenal/binaries",
+      "purpose": "Binary/tool references used by controlled validation workflows."
+    },
+    {
+      "path": "embedxpl/resources/arsenal/pocs",
+      "purpose": "PoC/PoV research artifacts curated by source and legal scope."
+    },
+    {
+      "path": "embedxpl/resources/arsenal/intel",
+      "purpose": "External intel snapshots and ingestion outputs."
+    }
+  ],
+  "dependency_groups": {
+    "runtime": ["requirements.txt"],
+    "tools": [
+      "tools/build_arsenal_index.py",
+      "tools/validate_arsenal_architecture.py",
+      "tools/build_osi_tcpip_attack_matrix.py",
+      "tools/build_soho_catalog_js_index.py",
+      "tools/compat_smoke.py",
+      "tools/env_doctor.py",
+      "tools/gen_wiki_module_index.py",
+      "tools/generate_coverage_matrix.py",
+      "tools/generate_full_catalog.py",
+      "tools/refresh_cve_extended_catalog.py",
+      "tools/sync_mibs.py",
+      "tools/sync_scope_wordlists.py"
+    ]
+  },
+  "ingestion_policy": {
+    "integrate_core": "Assets directly consumable by modules without policy/safety conflicts.",
+    "catalog_only": "Assets requiring additional review, adaptation, or legal/operational validation.",
+    "reject": "Assets out of scope or incompatible with project safety and scope policy."
+  }
+}

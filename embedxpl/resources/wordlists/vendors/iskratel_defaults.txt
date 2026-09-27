@@ -1,0 +1,4 @@
+admin:admin
+admin:user
+user:admin
+user:user

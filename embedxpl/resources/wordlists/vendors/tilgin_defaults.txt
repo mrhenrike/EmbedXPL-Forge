@@ -1,0 +1,6 @@
+Admin:admin
+Admin:bezeqint
+Conf:admin
+Conf:bezeqint
+admin:admin
+admin:bezeqint

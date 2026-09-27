@@ -1,0 +1,6 @@
+root:123456
+root:admin
+root:vodafone
+vodafone:123456
+vodafone:admin
+vodafone:vodafone

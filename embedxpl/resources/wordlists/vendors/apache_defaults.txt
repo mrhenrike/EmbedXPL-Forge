@@ -1,0 +1,13 @@
+admin:jboss4
+admin:
+admin:admin
+admin:j5Brn9
+admin:tomcat
+both:tomcat
+role:changethis
+role1:role1
+role1:tomcat
+root:changethis
+root:root
+tomcat:changethis
+tomcat:tomcat

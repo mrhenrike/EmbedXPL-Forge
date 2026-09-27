@@ -1,0 +1,2 @@
+admin:WPA key printed on router
+vodafone:WPA key printed on router
