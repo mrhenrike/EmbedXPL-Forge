@@ -1,20 +1,22 @@
-"""LZMA2 + base64 encoder — melhor compressão."""
+"""LZMA2 + base64 encoder."""
 
 import base64
 import lzma
-from embedxpl.core.exploit.encoder import BaseEncoder
+from embedxpl.core.exploit.encoders import BaseEncoder
+from embedxpl.core.exploit.payloads import Architectures
 
 
 class Encoder(BaseEncoder):
-    name        = "compression/lzma_b64"
-    description = "LZMA2 compress + base64 — best compression ratio"
-    arch        = ["generic"]
-    platform    = ["linux", "windows", "macos", "python"]
-    evasion_score = 4
+    __info__ = {
+        "name": "LZMA2+Base64 Encoder",
+        "description": "LZMA2 compress then base64 — best compression ratio.",
+        "authors": ("André Henrike (@mrhenrike)", "União Geek"),
+        "evasion_score": 4,
+    }
 
-    options = {}
+    architecture = None
 
-    def encode(self, payload: bytes) -> bytes:
+    def encode(self, payload: bytes) -> bytes:  # type: ignore[override]
         return base64.b64encode(lzma.compress(payload, preset=9))
 
     def decode(self, encoded: bytes) -> bytes:
