@@ -111,6 +111,7 @@ class SegmentAutoPwn:
         verbose: bool = True,
         timeout: int = 30,
         max_modules: int = 0,
+        db: Optional[Any] = None,        # EXFDatabase instance for persistence
     ) -> None:
         self.segment = segment.lower()
         self.category = self.SEGMENT_MAP.get(self.segment, self.segment)
@@ -119,6 +120,7 @@ class SegmentAutoPwn:
         self.verbose = verbose
         self.timeout = timeout
         self.max_modules = max_modules
+        self._db = db  # optional EXFDatabase for persisting results
 
     def _get_modules(self) -> list[ModuleRecord]:
         """Get all modules for this segment via search engine."""
@@ -197,6 +199,14 @@ class SegmentAutoPwn:
             print(f"[*] Targets: {', '.join(self.targets)}")
             print()
 
+        # Persist hosts to DB if available
+        if self._db is not None:
+            for t in self.targets:
+                try:
+                    self._db.add_host(t)
+                except Exception:
+                    pass
+
         for target in self.targets:
             for rec in modules:
                 result = self._run_module(rec, target)
@@ -206,6 +216,20 @@ class SegmentAutoPwn:
                     report.modules_vulnerable += 1
                 elif result.status == "error":
                     report.modules_error += 1
+
+                # Persist to DB
+                if self._db is not None and result.status == "vulnerable":
+                    try:
+                        cves = getattr(rec, "cves", [])
+                        self._db.add_vuln(
+                            target, module_path=rec.path,
+                            cve_ids=cves, severity="",
+                            detail=result.detail[:300],
+                        )
+                        self._db.add_run(target=target, module_path=rec.path,
+                                         result=result.status, detail=result.detail[:200])
+                    except Exception:
+                        pass
 
                 if self.verbose:
                     icon = {
