@@ -1,0 +1,186 @@
+import asyncio
+from types import SimpleNamespace
+
+from samsung_tv_root.config import (
+    RemoteConfiguration,
+    RetryConfiguration,
+    TelevisionConfiguration,
+)
+from samsung_tv_root.lifecycle import RootLifecycle
+
+
+class FakeConnection:
+    def __init__(self) -> None:
+        self.identity = SimpleNamespace(pid=42)
+        self.closed = False
+        self.closed_event = asyncio.Event()
+
+    async def wait_closed(self) -> None:
+        await self.closed_event.wait()
+
+    async def close(self) -> None:
+        self.closed = True
+        self.closed_event.set()
+
+
+class FakeLease:
+    def __init__(self) -> None:
+        self.connection = FakeConnection()
+
+    async def shutdown(self) -> None:
+        await self.connection.close()
+
+    async def close(self) -> None:
+        await self.connection.close()
+
+
+class FakeBackend:
+    def __init__(self, outcomes: list[object]) -> None:
+        self.outcomes = outcomes
+        self.calls = 0
+
+    async def acquire(self, host: str) -> FakeLease:
+        self.calls += 1
+        outcome = self.outcomes.pop(0)
+        if isinstance(outcome, BaseException):
+            raise outcome
+        return outcome
+
+    def is_transient(self, error: BaseException) -> bool:
+        return isinstance(error, ConnectionError)
+
+
+class GenerationBackend:
+    def __init__(self, lease: FakeLease) -> None:
+        self.lease = lease
+        self.calls = 0
+        self.first_started = asyncio.Event()
+        self.first_cancelled = asyncio.Event()
+
+    async def acquire(self, host: str) -> FakeLease:
+        self.calls += 1
+        if self.calls == 1:
+            self.first_started.set()
+            try:
+                await asyncio.Event().wait()
+            except asyncio.CancelledError:
+                self.first_cancelled.set()
+                raise
+        return self.lease
+
+    def is_transient(self, error: BaseException) -> bool:
+        return isinstance(error, ConnectionError)
+
+
+def configuration() -> TelevisionConfiguration:
+    return TelevisionConfiguration(
+        name="living-room",
+        model="qn90f",
+        host="192.0.2.5",
+        device_id=None,
+        root_on_presence=True,
+        disable_native_execution_policy=False,
+        remote=RemoteConfiguration(),
+    )
+
+
+async def wait_for_state(lifecycle: RootLifecycle, expected: str) -> None:
+    revision = -1
+    while True:
+        revision, state = await asyncio.wait_for(
+            lifecycle.wait_for_change(revision),
+            1.0,
+        )
+        if state.state == expected:
+            return
+
+
+def test_presence_event_acquires_root_without_polling() -> None:
+    async def exercise() -> None:
+        lease = FakeLease()
+        backend = FakeBackend([lease])
+        lifecycle = RootLifecycle(
+            configuration(),
+            RetryConfiguration((0.01,)),
+            backend,
+        )
+        await lifecycle.observe_presence("192.0.2.5", "boot-1", True)
+        await wait_for_state(lifecycle, "rooted")
+        assert lifecycle.lease is lease
+        assert backend.calls == 1
+        await lifecycle.close()
+
+    asyncio.run(exercise())
+
+
+def test_transient_root_failure_uses_bounded_retry() -> None:
+    async def exercise() -> None:
+        lease = FakeLease()
+        backend = FakeBackend([ConnectionError("not ready"), lease])
+        lifecycle = RootLifecycle(
+            configuration(),
+            RetryConfiguration((0.01,)),
+            backend,
+        )
+        await lifecycle.observe_presence("192.0.2.5", "boot-1", True)
+        await wait_for_state(lifecycle, "rooted")
+        assert backend.calls == 2
+        await lifecycle.close()
+
+    asyncio.run(exercise())
+
+
+def test_structural_root_failure_does_not_retry() -> None:
+    async def exercise() -> None:
+        backend = FakeBackend([RuntimeError("wrong platform")])
+        lifecycle = RootLifecycle(
+            configuration(),
+            RetryConfiguration((0.01,)),
+            backend,
+        )
+        await lifecycle.observe_presence("192.0.2.5", "boot-1", True)
+        await wait_for_state(lifecycle, "failed")
+        assert backend.calls == 1
+        await lifecycle.close()
+
+    asyncio.run(exercise())
+
+
+def test_new_boot_generation_replaces_inflight_acquisition() -> None:
+    async def exercise() -> None:
+        lease = FakeLease()
+        backend = GenerationBackend(lease)
+        lifecycle = RootLifecycle(
+            configuration(),
+            RetryConfiguration((0.01,)),
+            backend,
+        )
+        await lifecycle.observe_presence("192.0.2.5", "boot-1", True)
+        await asyncio.wait_for(backend.first_started.wait(), 1.0)
+        await lifecycle.observe_presence("192.0.2.5", "boot-2", True)
+        await wait_for_state(lifecycle, "rooted")
+        assert backend.first_cancelled.is_set()
+        assert backend.calls == 2
+        assert lifecycle.lease is lease
+        await lifecycle.close()
+
+    asyncio.run(exercise())
+
+
+def test_repeated_alive_event_does_not_bypass_retry_delay() -> None:
+    async def exercise() -> None:
+        backend = FakeBackend([ConnectionError("not ready"), FakeLease()])
+        lifecycle = RootLifecycle(
+            configuration(),
+            RetryConfiguration((10.0,)),
+            backend,
+        )
+        await lifecycle.observe_presence("192.0.2.5", "boot-1", True)
+        await wait_for_state(lifecycle, "retry-wait")
+        await lifecycle.observe_presence("192.0.2.5", "boot-1", True)
+        await asyncio.sleep(0)
+        assert backend.calls == 1
+        assert lifecycle.snapshot().state == "retry-wait"
+        await lifecycle.close()
+
+    asyncio.run(exercise())

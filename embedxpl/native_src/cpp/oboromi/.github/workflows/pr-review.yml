@@ -1,0 +1,57 @@
+name: PR Safety Check
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate contributor
+        uses: actions/github-script@v7
+        id: check_contributor
+        with:
+          script: |
+            const maintainers = ['0xNikilite'];
+            const actor = context.actor;
+            const isMaintainer = maintainers.includes(actor);
+            core.setOutput('is_maintainer', isMaintainer);
+            if (!isMaintainer && !actor.endsWith('[bot]')) {
+              core.notice(`External PR from: ${actor}`);
+            }
+
+      - name: Enforce review workflow
+        if: steps.check_contributor.outputs.is_maintainer == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.issue.number;
+            try {
+              await github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number: prNumber,
+                labels: ['needs-review']
+              });
+              await github.rest.pulls.requestReviewers({
+                owner,
+                repo,
+                pull_number: prNumber,
+                reviewers: ['0xNikilite']
+              });
+            } catch (error) {
+              core.warning(`Label/reviewer update failed: ${error.message}`);
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: prNumber,
+                body: `@0xNikilite Action required: couldn't auto-tag this PR.`
+              });
+            }

@@ -1,0 +1,305 @@
+#!/usr/bin/env python3
+"""Decrypt one Samsung MSD ciphertext region through the TV's SWU TA.
+
+The production passphrase and derived AES key remain in TrustZone. This tool
+only writes the plaintext returned by SWU commands 1 and 2 after command 0 has
+initialized the secure-world cipher state.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import sys
+import zlib
+from pathlib import Path
+
+from .teec import (
+    SHARED_MEMORY_SIZE,
+    TEEC_PROFILES,
+    TEEC_MEMREF_PARTIAL_INPUT,
+    TEEC_MEMREF_PARTIAL_OUTPUT,
+    TEEC_NONE,
+    TEEC_VALUE_INPUT,
+    TEEC_VALUE_OUTPUT,
+    SwuTrustedApplicationSession,
+    TeecError,
+    TeecRuntime,
+    select_profile,
+    set_process_name,
+    verify_profile,
+)
+
+
+CMD_SWU_INIT = 0
+CMD_SWU_UPDATE_AES = 1
+CMD_SWU_FINALIZE_AES = 2
+DEFAULT_PASSPHRASE = "/usr/share/org.tizen.tv.swu/itemsAESPassphraseEncrypted.txt"
+DEFAULT_MAX_INPUT_BYTES = 16 * 1024 * 1024
+AES_BLOCK_SIZE = 16
+
+
+class SWUFirmwareDecryptClient(SwuTrustedApplicationSession):
+    def __init__(self, runtime: TeecRuntime) -> None:
+        profile = TEEC_PROFILES["modern"]
+        super().__init__(runtime, profile)
+        self.cipher_initialized = False
+
+    def initialize(self, encrypted_passphrase: bytes, salt: bytes) -> None:
+        if self.cipher_initialized:
+            raise TeecError("SWU cipher is already initialized")
+        if len(salt) != 8:
+            raise TeecError("firmware salt must contain exactly 8 bytes")
+        self.write_memory(
+            self.input_memory,
+            encrypted_passphrase,
+            "encrypted passphrase",
+        )
+        self.write_memory(self.auxiliary_memory, salt, "firmware salt")
+        operation = self.operation(
+            TEEC_MEMREF_PARTIAL_INPUT,
+            TEEC_MEMREF_PARTIAL_INPUT,
+            TEEC_VALUE_INPUT,
+            TEEC_VALUE_INPUT,
+        )
+        self.bind_memory(operation, 0, self.input_memory, len(encrypted_passphrase))
+        self.bind_memory(operation, 1, self.auxiliary_memory, len(salt))
+        operation.parameters[2].value.a = 0
+        operation.parameters[2].value.b = 1
+        operation.parameters[3].value.a = 1
+        operation.parameters[3].value.b = 1 + (2 << 8)
+        self.invoke(
+            CMD_SWU_INIT,
+            operation,
+            "TEEC_InvokeCommand(SWU initialize)",
+        )
+        self.cipher_initialized = True
+
+    def update(self, ciphertext: bytes) -> bytes:
+        if not self.cipher_initialized:
+            raise TeecError("SWU cipher is not initialized")
+        if len(ciphertext) % AES_BLOCK_SIZE:
+            raise TeecError("ciphertext chunk is not AES-block aligned")
+        self.write_memory(self.input_memory, ciphertext, "ciphertext chunk")
+        self.clear_memory(self.output_memory, "firmware output")
+        operation = self.operation(
+            TEEC_MEMREF_PARTIAL_INPUT,
+            TEEC_MEMREF_PARTIAL_OUTPUT,
+            TEEC_VALUE_OUTPUT,
+            TEEC_NONE,
+        )
+        self.bind_memory(operation, 0, self.input_memory, len(ciphertext))
+        self.bind_memory(operation, 1, self.output_memory, SHARED_MEMORY_SIZE)
+        self.invoke(
+            CMD_SWU_UPDATE_AES,
+            operation,
+            "TEEC_InvokeCommand(SWU update)",
+        )
+        return self.read_memory(
+            self.output_memory,
+            operation.parameters[2].value.a,
+            "firmware update output",
+        )
+
+    def finalize(self) -> bytes:
+        if not self.cipher_initialized:
+            raise TeecError("SWU cipher is not initialized")
+        self.clear_memory(self.output_memory, "firmware output")
+        operation = self.operation(
+            TEEC_MEMREF_PARTIAL_OUTPUT,
+            TEEC_VALUE_OUTPUT,
+            TEEC_NONE,
+            TEEC_NONE,
+        )
+        self.bind_memory(operation, 0, self.output_memory, SHARED_MEMORY_SIZE)
+        try:
+            self.invoke(
+                CMD_SWU_FINALIZE_AES,
+                operation,
+                "TEEC_InvokeCommand(SWU finalize)",
+            )
+        finally:
+            self.cipher_initialized = False
+        return self.read_memory(
+            self.output_memory,
+            operation.parameters[1].value.a,
+            "firmware finalize output",
+        )
+
+
+def strip_pkcs7(block: bytes) -> bytes:
+    if not block:
+        raise TeecError("decrypted stream is empty")
+    padding = block[-1]
+    if (
+        padding < 1
+        or padding > AES_BLOCK_SIZE
+        or block[-padding:] != bytes((padding,)) * padding
+    ):
+        raise TeecError("decrypted stream has invalid PKCS#7 padding")
+    return block[:-padding]
+
+
+def decrypt_file(
+    source: Path,
+    destination: Path,
+    encrypted_passphrase: bytes,
+    salt: bytes,
+    chunk_size: int,
+    maximum_input_bytes: int,
+    expected_crc32: int | None,
+) -> dict[str, object]:
+    source_size = source.stat().st_size
+    if source_size < AES_BLOCK_SIZE or source_size % AES_BLOCK_SIZE:
+        raise TeecError("input is empty or not AES-block aligned")
+    if source_size > maximum_input_bytes:
+        raise TeecError(
+            f"input is {source_size} bytes; configured maximum is {maximum_input_bytes}"
+        )
+
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary = destination.with_name(f".{destination.name}.partial-{os.getpid()}")
+    crc32 = 0
+    digest = hashlib.sha256()
+    plaintext_size = 0
+    pending = b""
+    try:
+        descriptor = os.open(
+            temporary,
+            os.O_WRONLY | os.O_CREAT | os.O_EXCL,
+            0o600,
+        )
+        with os.fdopen(descriptor, "wb") as output:
+            profile = TEEC_PROFILES["modern"]
+            with SWUFirmwareDecryptClient(TeecRuntime(profile)) as client:
+                client.initialize(encrypted_passphrase, salt)
+                with source.open("rb") as encrypted:
+                    while ciphertext := encrypted.read(chunk_size):
+                        decoded = client.update(ciphertext)
+                        combined = pending + decoded
+                        if len(combined) > AES_BLOCK_SIZE:
+                            emitted = combined[:-AES_BLOCK_SIZE]
+                            pending = combined[-AES_BLOCK_SIZE:]
+                            output.write(emitted)
+                            crc32 = zlib.crc32(emitted, crc32)
+                            digest.update(emitted)
+                            plaintext_size += len(emitted)
+                pending += client.finalize()
+
+            tail = strip_pkcs7(pending)
+            output.write(tail)
+            crc32 = zlib.crc32(tail, crc32) & 0xFFFFFFFF
+            digest.update(tail)
+            plaintext_size += len(tail)
+            output.flush()
+            os.fsync(output.fileno())
+
+        if expected_crc32 is not None and crc32 != expected_crc32:
+            raise TeecError(
+                f"plaintext CRC32 is 0x{crc32:08x}; expected 0x{expected_crc32:08x}"
+            )
+        os.replace(temporary, destination)
+    except BaseException:
+        try:
+            temporary.unlink()
+        except FileNotFoundError:
+            pass
+        raise
+
+    return {
+        "input": str(source),
+        "output": str(destination),
+        "ciphertext_bytes": source_size,
+        "plaintext_bytes": plaintext_size,
+        "plaintext_crc32": f"{crc32:08x}",
+        "plaintext_sha256": digest.hexdigest(),
+    }
+
+
+def integer(value: str) -> int:
+    return int(value, 0)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("input", type=Path, help="AES-CBC ciphertext region")
+    parser.add_argument("output", type=Path, help="mode-0600 plaintext output")
+    parser.add_argument(
+        "--salt-hex",
+        required=True,
+        help="8-byte MSD section salt as 16 hexadecimal digits",
+    )
+    parser.add_argument(
+        "--passphrase",
+        type=Path,
+        default=Path(DEFAULT_PASSPHRASE),
+        help="encrypted production passphrase blob",
+    )
+    parser.add_argument(
+        "--chunk-size",
+        type=integer,
+        default=SHARED_MEMORY_SIZE,
+        help="aligned TrustZone chunk size (default: 65536)",
+    )
+    parser.add_argument(
+        "--max-input-bytes",
+        type=integer,
+        default=DEFAULT_MAX_INPUT_BYTES,
+        help="refuse larger inputs unless explicitly increased",
+    )
+    parser.add_argument(
+        "--expected-crc32",
+        type=integer,
+        help="optional expected plaintext CRC32",
+    )
+    parser.add_argument(
+        "--process-name",
+        help="set the kernel task name before opening the trusted application",
+    )
+    return parser.parse_args()
+
+
+def main() -> int:
+    arguments = parse_args()
+    try:
+        profile = select_profile("auto")
+        verify_profile(profile)
+        if profile.name != "modern":
+            raise TeecError("firmware streaming is only verified on Tizen 9")
+        if (
+            arguments.chunk_size < AES_BLOCK_SIZE
+            or arguments.chunk_size > SHARED_MEMORY_SIZE
+            or arguments.chunk_size % AES_BLOCK_SIZE
+        ):
+            raise TeecError(
+                "chunk size must be an AES-aligned value from 16 through 65536"
+            )
+        if arguments.max_input_bytes < arguments.chunk_size:
+            raise TeecError("maximum input size is smaller than one chunk")
+        try:
+            salt = bytes.fromhex(arguments.salt_hex)
+        except ValueError as error:
+            raise TeecError("salt is not valid hexadecimal") from error
+        if len(salt) != 8:
+            raise TeecError("salt must contain exactly 8 bytes")
+        set_process_name(arguments.process_name)
+        result = decrypt_file(
+            arguments.input,
+            arguments.output,
+            arguments.passphrase.read_bytes(),
+            salt,
+            arguments.chunk_size,
+            arguments.max_input_bytes,
+            arguments.expected_crc32,
+        )
+        sys.stdout.write(json.dumps(result, sort_keys=True) + "\n")
+        return 0
+    except (OSError, TeecError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

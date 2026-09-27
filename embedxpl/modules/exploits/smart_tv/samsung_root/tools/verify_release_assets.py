@@ -1,0 +1,42 @@
+from __future__ import annotations
+
+import argparse
+import hashlib
+from pathlib import Path
+
+
+class VerificationError(RuntimeError):
+    pass
+
+
+def verify(directory: Path) -> tuple[Path, ...]:
+    manifests = tuple(sorted(directory.glob("*.sha256")))
+    if not manifests:
+        raise VerificationError("no release checksum files found")
+    verified: list[Path] = []
+    for manifest in manifests:
+        fields = manifest.read_text(encoding="ascii").strip().split(None, 1)
+        if len(fields) != 2:
+            raise VerificationError(f"invalid checksum file: {manifest.name}")
+        expected, name = fields
+        archive = directory / name.strip()
+        if not archive.is_file():
+            raise VerificationError(f"missing release archive: {archive.name}")
+        observed = hashlib.sha256(archive.read_bytes()).hexdigest()
+        if observed != expected:
+            raise VerificationError(f"checksum mismatch: {archive.name}")
+        verified.append(archive)
+    return tuple(verified)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("directory", type=Path)
+    arguments = parser.parse_args()
+    for archive in verify(arguments.directory):
+        print(archive.name)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

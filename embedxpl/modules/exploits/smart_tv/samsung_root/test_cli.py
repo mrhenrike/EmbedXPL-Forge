@@ -1,0 +1,527 @@
+import base64
+import json
+import os
+from pathlib import Path
+
+import pytest
+
+from samsung_tv_root import cli
+from samsung_tv_root.sdb import CaptureResult
+
+
+def qn90f_uep_output(*lines: str, mode: str = "disable-uep") -> str:
+    return "\n".join(
+        (
+            f"probe={mode}",
+            "uep_status_validation=pass",
+            *lines,
+            "physical_page_pte_state=restored",
+            "[exit:0]",
+        )
+    )
+
+
+def write_profiles(path: Path, *profiles: tuple[str, str, str]) -> None:
+    sections = ["version = 1", ""]
+    for name, model, host in profiles:
+        sections.extend(
+            (
+                f"[televisions.{name}]",
+                f'model = "{model}"',
+                f'host = "{host}"',
+                "",
+            )
+        )
+    path.write_text("\n".join(sections), encoding="utf-8")
+
+
+def test_preflight_parser_accepts_callback_overrides() -> None:
+    arguments = cli.build_parser().parse_args(
+        [
+            "preflight",
+            "qn90f",
+            "192.0.2.50",
+            "--callback-host",
+            "192.0.2.10",
+            "--bind-host",
+            "0.0.0.0",
+            "--port",
+            "49152",
+        ]
+    )
+
+    assert arguments.callback_host == "192.0.2.10"
+    assert arguments.bind_host == "0.0.0.0"
+    assert arguments.port == 49152
+
+
+def test_qn90f_root_parser_allows_configured_target() -> None:
+    arguments = cli.build_parser().parse_args(["qn90f", "root"])
+
+    assert arguments.host is None
+    assert arguments.profile is None
+
+
+def test_direct_target_infers_only_matching_model(tmp_path, capsys) -> None:
+    config = tmp_path / "config.toml"
+    write_profiles(
+        config,
+        ("bedroom", "qn90b", "192.0.2.40"),
+        ("living-room", "qn90f", "192.0.2.50"),
+    )
+    arguments = cli.build_parser().parse_args(
+        ["--config", str(config), "qn90f", "root"]
+    )
+
+    cli.resolve_direct_target(arguments, "qn90f")
+
+    assert arguments.host == "192.0.2.50"
+    assert "profile=living-room" in capsys.readouterr().err
+
+
+def test_direct_target_applies_configured_relative_sdb(tmp_path, monkeypatch) -> None:
+    config = tmp_path / "config.toml"
+    config.write_text(
+        """version = 1
+sdb = "tools/sdb"
+
+[televisions.living-room]
+model = "qn90f"
+host = "192.0.2.50"
+""",
+        encoding="utf-8",
+    )
+    arguments = cli.build_parser().parse_args(
+        ["--config", str(config), "qn90f", "root"]
+    )
+    monkeypatch.delenv("SDB", raising=False)
+
+    cli.resolve_direct_target(arguments, "qn90f")
+
+    assert Path(os.environ["SDB"]) == tmp_path / "tools" / "sdb"
+
+
+def test_direct_target_selects_named_profile(tmp_path) -> None:
+    config = tmp_path / "config.toml"
+    write_profiles(
+        config,
+        ("living-room", "qn90f", "192.0.2.50"),
+        ("office", "qn90f", "192.0.2.51"),
+    )
+    arguments = cli.build_parser().parse_args(
+        [
+            "--config",
+            str(config),
+            "qn90f",
+            "root",
+            "--profile",
+            "office",
+        ]
+    )
+
+    cli.resolve_direct_target(arguments, "qn90f")
+
+    assert arguments.host == "192.0.2.51"
+
+
+def test_direct_target_requires_profile_when_model_is_ambiguous(tmp_path) -> None:
+    config = tmp_path / "config.toml"
+    write_profiles(
+        config,
+        ("living-room", "qn90f", "192.0.2.50"),
+        ("office", "qn90f", "192.0.2.51"),
+    )
+    arguments = cli.build_parser().parse_args(
+        ["--config", str(config), "qn90f", "root"]
+    )
+
+    with pytest.raises(cli.CommandError, match="multiple qn90f profiles"):
+        cli.resolve_direct_target(arguments, "qn90f")
+
+
+def test_direct_target_rejects_wrong_model_and_explicit_host(tmp_path) -> None:
+    config = tmp_path / "config.toml"
+    write_profiles(config, ("bedroom", "qn90b", "192.0.2.40"))
+    wrong_model = cli.build_parser().parse_args(
+        [
+            "--config",
+            str(config),
+            "qn90f",
+            "root",
+            "--profile",
+            "bedroom",
+        ]
+    )
+    explicit_host = cli.build_parser().parse_args(
+        ["qn90f", "root", "192.0.2.50", "--profile", "living-room"]
+    )
+
+    with pytest.raises(cli.CommandError, match="uses model qn90b"):
+        cli.resolve_direct_target(wrong_model, "qn90f")
+    with pytest.raises(cli.CommandError, match="either HOST or --profile"):
+        cli.resolve_direct_target(explicit_host, "qn90f")
+
+
+def test_volume_set_sends_level_to_controller(monkeypatch, capsys) -> None:
+    arguments = cli.build_parser().parse_args(["volume", "set", "my-tv", "23"])
+    observed: dict[str, object] = {}
+
+    async def send(path, request, timeout):
+        observed.update({"request": request, "timeout": timeout})
+        return {"ok": True, "volume": {"target": 23}}
+
+    monkeypatch.setattr(cli, "send_control_request", send)
+
+    assert arguments.handler(arguments) == 0
+    assert observed == {
+        "request": {"action": "volume.set", "television": "my-tv", "level": 23},
+        "timeout": 20.0,
+    }
+    assert "target: 23" in capsys.readouterr().out
+
+
+def test_overlay_scene_loads_json_for_controller(monkeypatch, tmp_path) -> None:
+    scene = tmp_path / "scene.json"
+    scene.write_text('{"objects":[{"type":"rectangle"}]}', encoding="utf-8")
+    arguments = cli.build_parser().parse_args(
+        ["overlay", "scene", "my-tv", str(scene), "--seconds", "7"]
+    )
+    observed: dict[str, object] = {}
+
+    async def send(path, request, timeout):
+        observed.update({"request": request, "timeout": timeout})
+        return {"ok": True, "overlay": {"completion_reason": "timer"}}
+
+    monkeypatch.setattr(cli, "send_control_request", send)
+
+    assert arguments.handler(arguments) == 0
+    assert observed["request"] == {
+        "action": "overlay.graphics",
+        "television": "my-tv",
+        "seconds": 7,
+        "scene": {"objects": [{"type": "rectangle"}]},
+    }
+
+
+def test_screenshot_writes_png_and_omits_raw_rgb(
+    monkeypatch,
+    tmp_path,
+    capsys,
+) -> None:
+    output = tmp_path / "frame.png"
+    arguments = cli.build_parser().parse_args(
+        ["-o", "json", "screenshot", "my-tv", str(output)]
+    )
+
+    async def send(path, request, timeout):
+        return {
+            "ok": True,
+            "television": "my-tv",
+            "capture": {"width": 1, "height": 1, "sha256": "source-hash"},
+            "rgb_base64": base64.b64encode(b"\xff\x00\x00").decode("ascii"),
+        }
+
+    monkeypatch.setattr(cli, "send_control_request", send)
+
+    assert arguments.handler(arguments) == 0
+    assert output.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+    rendered = json.loads(capsys.readouterr().out)
+    assert rendered["path"] == str(output)
+    assert "rgb_base64" not in rendered
+
+
+def test_screenshot_refuses_to_replace_existing_file(monkeypatch, tmp_path) -> None:
+    output = tmp_path / "frame.png"
+    output.write_bytes(b"existing")
+    arguments = cli.build_parser().parse_args(["screenshot", "my-tv", str(output)])
+
+    async def send(path, request, timeout):
+        raise AssertionError("an existing output must be rejected before capture")
+
+    monkeypatch.setattr(cli, "send_control_request", send)
+
+    with pytest.raises(cli.CommandError, match="already exists"):
+        arguments.handler(arguments)
+
+    assert output.read_bytes() == b"existing"
+
+
+def test_events_watch_subscribes_to_native_state_and_volume(monkeypatch) -> None:
+    arguments = cli.build_parser().parse_args(["events", "watch", "my-tv"])
+    observed: dict[str, object] = {}
+
+    async def stream(path, topics, timeout):
+        observed.update({"topics": topics, "timeout": timeout})
+        yield {"event": True, "topic": topics[0]}
+
+    monkeypatch.setattr(cli, "stream_control_events", stream)
+
+    assert arguments.handler(arguments) == 0
+    assert observed == {
+        "topics": (
+            "television.my-tv.native",
+            "television.my-tv.state",
+            "television.my-tv.volume",
+        ),
+        "timeout": 10.0,
+    }
+
+
+def test_uep_action_can_be_used_without_host() -> None:
+    arguments = cli.build_parser().parse_args(["qn90f", "uep", "disable"])
+
+    cli.normalize_uep_arguments(arguments)
+
+    assert arguments.host is None
+    assert arguments.action == "disable"
+
+
+def test_qn90f_root_can_explicitly_skip_preflight(monkeypatch, capsys) -> None:
+    arguments = cli.build_parser().parse_args(
+        ["qn90f", "root", "192.0.2.50", "--skip-preflight", "--command", "id"]
+    )
+    called: dict[str, object] = {}
+
+    def reject_preflight(*args, **kwargs):
+        raise AssertionError("preflight must not run")
+
+    def run_root_session(*args, **kwargs):
+        called["host"] = args[1]
+        called["commands"] = kwargs["commands"]
+        return 0
+
+    monkeypatch.setattr(cli, "preflight_qn90f", reject_preflight)
+    monkeypatch.setattr(cli, "run_root_session", run_root_session)
+
+    assert arguments.handler(arguments) == 0
+    assert called == {"host": "192.0.2.50", "commands": ["id"]}
+    assert "Preflight: skipped" in capsys.readouterr().err
+
+
+def test_qn90f_root_runs_preflight_by_default(monkeypatch) -> None:
+    arguments = cli.build_parser().parse_args(
+        [
+            "qn90f",
+            "root",
+            "192.0.2.50",
+            "--port",
+            "49152",
+            "--command",
+            "id",
+        ]
+    )
+    assessment = object()
+    observed: dict[str, object] = {}
+
+    def preflight(*args, **kwargs):
+        observed["preflight"] = (args, kwargs)
+        return assessment
+
+    monkeypatch.setattr(cli, "preflight_qn90f", preflight)
+    monkeypatch.setattr(
+        cli,
+        "print_assessment",
+        lambda value: observed.setdefault("assessment", value),
+    )
+    monkeypatch.setattr(cli, "run_root_session", lambda *args, **kwargs: 0)
+
+    assert arguments.handler(arguments) == 0
+    assert observed["assessment"] is assessment
+    assert observed["preflight"] == (
+        ("192.0.2.50", 15.0),
+        {"callback_host": None, "bind_host": None, "port": 49152},
+    )
+
+
+def test_qn90f_root_passes_interactive_shell_options(monkeypatch) -> None:
+    arguments = cli.build_parser().parse_args(
+        [
+            "qn90f",
+            "root",
+            "192.0.2.50",
+            "--skip-preflight",
+            "--shell-port",
+            "22333",
+            "--shell-connect-timeout",
+            "12.5",
+        ]
+    )
+    observed: dict[str, object] = {}
+
+    def run_root_session(*args, **kwargs):
+        observed.update(kwargs)
+        return 0
+
+    monkeypatch.setattr(cli, "run_root_session", run_root_session)
+
+    assert arguments.handler(arguments) == 0
+    assert observed["commands"] is None
+    assert observed["shell_port"] == 22333
+    assert observed["shell_connect_timeout"] == 12.5
+
+
+def test_qn90f_root_passes_local_script_and_arguments(monkeypatch, tmp_path) -> None:
+    source = tmp_path / "http toolkit.sh"
+    source.write_bytes(b"printf '%s\\n' \"$1\"\n")
+    arguments = cli.build_parser().parse_args(
+        [
+            "qn90f",
+            "root",
+            "192.0.2.50",
+            "--skip-preflight",
+            "--script",
+            str(source),
+            "--script-argument",
+            "first value",
+            "--script-argument=--second",
+        ]
+    )
+    observed: dict[str, object] = {}
+
+    def run_root_session(*args, **kwargs):
+        observed.update(kwargs)
+        return 0
+
+    monkeypatch.setattr(cli, "run_root_session", run_root_session)
+
+    assert arguments.handler(arguments) == 0
+    script = observed["script"]
+    assert script.data == source.read_bytes()
+    assert script.arguments == ("first value", "--second")
+    assert observed["commands"] is None
+
+
+def test_qn90f_root_passes_authenticated_file_pull(monkeypatch, tmp_path) -> None:
+    destination = tmp_path / "remote-file"
+    arguments = cli.build_parser().parse_args(
+        [
+            "qn90f",
+            "root",
+            "192.0.2.50",
+            "--skip-preflight",
+            "--pull",
+            "/home/owner/share/tmp/remote-file",
+            str(destination),
+        ]
+    )
+    observed: dict[str, object] = {}
+
+    def run_root_session(*args, **kwargs):
+        observed.update(kwargs)
+        return 0
+
+    monkeypatch.setattr(cli, "run_root_session", run_root_session)
+
+    assert arguments.handler(arguments) == 0
+    pull = observed["pull"]
+    assert str(pull.remote_path) == "/home/owner/share/tmp/remote-file"
+    assert pull.local_path == destination
+    assert observed["commands"] is None
+    assert observed["script"] is None
+
+
+def test_qn90f_root_rejects_script_options_without_script() -> None:
+    arguments = cli.build_parser().parse_args(
+        [
+            "qn90f",
+            "root",
+            "192.0.2.50",
+            "--script-argument",
+            "unused",
+        ]
+    )
+
+    with pytest.raises(cli.CommandError, match="requires --script"):
+        arguments.handler(arguments)
+
+
+def test_qn90f_preflight_rejects_empty_callback_output(monkeypatch) -> None:
+    class Client:
+        def __init__(self, executable: Path, host: str, *, timeout: float) -> None:
+            pass
+
+        def connect(self) -> None:
+            pass
+
+        def require_device(self) -> None:
+            pass
+
+        def require_shell_injection(self) -> None:
+            pass
+
+        def capture(self, *args, **kwargs) -> CaptureResult:
+            return CaptureResult(output="", transport_returncode=1)
+
+    monkeypatch.setattr(cli, "find_sdb", lambda: Path("sdb"))
+    monkeypatch.setattr(cli, "SdbClient", Client)
+
+    with pytest.raises(cli.CommandError, match="connected but returned no output"):
+        cli.preflight_qn90f("192.0.2.50", 1.0)
+
+
+@pytest.mark.parametrize(
+    "output",
+    (
+        qn90f_uep_output(
+            "uep_status_before=1",
+            "uep_status_write_observed=0",
+            "uep_status_after=0",
+            "uep_status_action=disabled",
+        ),
+        qn90f_uep_output(
+            "uep_status_before=0",
+            "uep_status_action=already-disabled",
+        ),
+    ),
+)
+def test_qn90f_uep_disable_accepts_fresh_and_existing_zero(output: str) -> None:
+    cli.require_qn90f_uep_result(output, disable=True)
+
+
+@pytest.mark.parametrize(
+    "output",
+    (
+        qn90f_uep_output(
+            "uep_status_before=0",
+            "uep_status_action=inspect-only",
+        ),
+        qn90f_uep_output(
+            "uep_status_before=1",
+            "uep_status_action=already-disabled",
+        ),
+        qn90f_uep_output(
+            "uep_status_before=1",
+            "uep_status_after=0",
+            "uep_status_action=disabled",
+        ),
+        "uep_status_before=0\nuep_status_action=already-disabled",
+        qn90f_uep_output(
+            "uep_status_before=0",
+            "uep_status_before=0",
+            "uep_status_action=already-disabled",
+        ),
+        qn90f_uep_output(
+            "uep_status_before=0",
+            "uep_status_action=already-disabled",
+        ).replace("[exit:0]", "[exit:1]"),
+        qn90f_uep_output(
+            "uep_status_before=0",
+            "uep_status_action=already-disabled",
+        )
+        + "\n[exit:0]",
+    ),
+)
+def test_qn90f_uep_disable_rejects_incomplete_evidence(output: str) -> None:
+    with pytest.raises(cli.CommandError, match="UEP"):
+        cli.require_qn90f_uep_result(output, disable=True)
+
+
+def test_qn90f_uep_status_accepts_inspection_evidence() -> None:
+    cli.require_qn90f_uep_result(
+        qn90f_uep_output(
+            "uep_status_before=0",
+            "uep_status_action=inspect-only",
+            mode="inspect-uep",
+        ),
+        disable=False,
+    )
