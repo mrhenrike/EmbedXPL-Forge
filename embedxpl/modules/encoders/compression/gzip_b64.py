@@ -2,19 +2,21 @@
 
 import base64
 import gzip
-from embedxpl.core.exploit.encoder import BaseEncoder
+from embedxpl.core.exploit.encoders import BaseEncoder
+from embedxpl.core.exploit.payloads import Architectures
 
 
 class Encoder(BaseEncoder):
-    name        = "compression/gzip_b64"
-    description = "gzip compress + base64 encode"
-    arch        = ["generic"]
-    platform    = ["linux", "windows", "macos", "python", "powershell"]
-    evasion_score = 4
+    __info__ = {
+        "name": "gzip+Base64 Encoder",
+        "description": "gzip compress then base64.",
+        "authors": ("André Henrique (@mrhenrike)", "União Geek"),
+        "evasion_score": 4,
+    }
 
-    options = {}
+    architecture = None
 
-    def encode(self, payload: bytes) -> bytes:
+    def encode(self, payload: bytes) -> bytes:  # type: ignore[override]
         return base64.b64encode(gzip.compress(payload, compresslevel=9))
 
     def decode(self, encoded: bytes) -> bytes:

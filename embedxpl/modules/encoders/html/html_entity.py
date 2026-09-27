@@ -1,43 +1,29 @@
-"""HTML Entity encoder.
+"""HTML Entity encoder — &#xXX; format."""
 
-Converte payload em entidades HTML (&#xXX;).
-Bypassa WAFs que inspecionam bytes brutos mas não decodificam entidades HTML.
-Útil para XSS payloads, webshells injetados via web forms.
-"""
-
-from embedxpl.core.exploit.encoder import BaseEncoder
+import re
+from embedxpl.core.exploit.encoders import BaseEncoder
+from embedxpl.core.exploit.payloads import Architectures
 
 
 class Encoder(BaseEncoder):
-    name        = "html/html_entity"
-    description = "HTML entity encoder &#xXX; — WAF bypass for web contexts"
-    arch        = ["generic"]
-    platform    = ["webshell", "linux", "windows"]
-    evasion_score = 5
-
-    options = {
-        "FORMAT": {
-            "description": "Entity format: hex (&#xXX;) or decimal (&#DD;) or named (&amp;)",
-            "required": False,
-            "default": "hex",
-            "value": "hex",
-        },
+    __info__ = {
+        "name": "HTML Entity Encoder",
+        "description": "Encodes bytes as &#xXX; HTML entities — bypasses WAF for web contexts.",
+        "authors": ("André Henrique (@mrhenrike)", "União Geek"),
+        "evasion_score": 5,
     }
 
-    def encode(self, payload: bytes) -> bytes:
-        fmt = self.options["FORMAT"]["value"]
-        parts = []
-        for b in payload:
-            if fmt == "hex":
-                parts.append(f"&#x{b:02x};")
-            else:
-                parts.append(f"&#{b};")
-        return "".join(parts).encode()
+    architecture = None
+    use_hex: bool = True   # True = &#xXX; / False = &#DD;
+
+    def encode(self, payload: bytes) -> bytes:  # type: ignore[override]
+        if self.use_hex:
+            return "".join(f"&#x{b:02x};" for b in payload).encode()
+        return "".join(f"&#{b};" for b in payload).encode()
 
     def decode(self, encoded: bytes) -> bytes:
-        import re
         result = bytearray()
-        for m in re.finditer(r"&#x([0-9a-fA-F]+);|&#(\d+);", encoded.decode(errors="replace")):
+        for m in re.finditer(r'&#x([0-9a-fA-F]+);|&#(\d+);', encoded.decode(errors="replace")):
             if m.group(1):
                 result.append(int(m.group(1), 16))
             else:

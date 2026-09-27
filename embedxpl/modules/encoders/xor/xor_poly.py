@@ -1,36 +1,38 @@
-"""XOR Polymorphic encoder — chave diferente a cada geração.
+"""XOR Polymorphic encoder — chave aleatória por geração.
 
-Cada chamada a encode() usa uma chave aleatória de 1 byte.
-O stub de decodificação é embutido na saída (primeiro byte = chave).
+O primeiro byte do output É a chave — o stub a extrai e decifra.
 Bypassa AVs baseados em hash/assinatura estática.
 """
 
 import os
-from embedxpl.core.exploit.encoder import BaseEncoder
+from embedxpl.core.exploit.encoders import BaseEncoder
+from embedxpl.core.exploit.payloads import Architectures
 
 
 class Encoder(BaseEncoder):
-    name        = "xor/xor_poly"
-    description = "Polymorphic XOR — random key per generation, key prepended"
-    arch        = ["armle", "armbe", "arm64", "mipsbe", "mipsle", "x64", "x86", "generic"]
-    platform    = ["linux", "windows", "macos", "firmware"]
-    evasion_score = 5
+    __info__ = {
+        "name": "XOR Polymorphic Encoder",
+        "description": "Polymorphic XOR — random key per generation prepended as first byte.",
+        "authors": ("André Henrique (@mrhenrike)", "União Geek"),
+        "evasion_score": 5,
+    }
 
-    options = {}
+    architecture = None
 
-    def encode(self, payload: bytes) -> bytes:
+    def encode(self, payload: bytes) -> bytes:  # type: ignore[override]
         key = os.urandom(1)[0]
         encoded = bytes(b ^ key for b in payload)
-        # Primeiro byte é a chave — o stub extrai e usa
         return bytes([key]) + encoded
 
-    def decode_stub(self, arch: str = "x64") -> bytes:
-        stub_c = """
-// XOR poly decode stub — key é o primeiro byte do buffer
-void decode(unsigned char *buf, int len) {
-    unsigned char key = buf[0];
-    for (int i = 1; i < len; i++) buf[i] ^= key;
-    // memmove(buf, buf+1, len-1);  // shift opcional
-}
-"""
-        return stub_c.encode()
+    def decode(self, data: bytes) -> bytes:
+        key = data[0]
+        return bytes(b ^ key for b in data[1:])
+
+    def decode_stub_c(self) -> str:
+        return (
+            "// XOR poly decode stub — key is first byte\n"
+            "void decode(unsigned char *buf, int len) {\n"
+            "    unsigned char key = buf[0];\n"
+            "    for (int i = 1; i < len; i++) buf[i] ^= key;\n"
+            "}\n"
+        )
