@@ -1,0 +1,452 @@
+{
+  "_meta": {
+    "version": "3.0",
+    "description": "Corporate username prefix patterns - generic, no company-specific data. Covers MSP, MSSP, SOC, DevOps, startup, enterprise, and international environments (US, EU, LATAM, APAC, MENA).",
+    "author": "André Henrique (@mrhenrike)",
+    "privacy": "No real company names or identifiable data. All patterns are generic.",
+    "usage": "Loaded by wfh_modules/corp_prefixes.py - never hardcoded in source."
+  },
+
+  "separators": [".", "_", "-", ""],
+
+  "department_prefixes": {
+    "ti": {
+      "aliases": ["ti", "it", "tech", "tecnologia", "informatica", "tic", "dtec"],
+      "description": "Tecnologia da Informação / IT department"
+    },
+    "helpdesk": {
+      "aliases": ["helpdesk", "hd", "sd", "support", "suporte", "servicedesk", "n1", "n2", "l1", "l2", "l3"],
+      "description": "Help Desk / Service Desk / Support tiers"
+    },
+    "admin": {
+      "aliases": ["adm", "admin", "administracao", "administration", "daf", "dga"],
+      "description": "Administração / Administration"
+    },
+    "rh": {
+      "aliases": ["rh", "hr", "recursos_humanos", "people", "gp", "dp", "talent"],
+      "description": "Recursos Humanos / HR / Talent"
+    },
+    "financas": {
+      "aliases": ["fin", "financas", "financeiro", "finance", "cfo", "contabil", "fisco", "treasury"],
+      "description": "Finanças / Finance / Contabilidade"
+    },
+    "juridico": {
+      "aliases": ["jur", "juridico", "legal", "advocacia", "compliance", "cco", "grc"],
+      "description": "Jurídico / Legal / Compliance / GRC"
+    },
+    "comercial": {
+      "aliases": ["com", "comercial", "vendas", "sales", "crm", "gtm", "biz", "bizdev", "cs", "customersuccess"],
+      "description": "Comercial / Vendas / Sales / Customer Success"
+    },
+    "marketing": {
+      "aliases": ["mkt", "marketing", "mktg", "comms", "comunicacao", "growth"],
+      "description": "Marketing / Comunicação / Growth"
+    },
+    "operacoes": {
+      "aliases": ["ops", "operacoes", "operations", "oper", "logistica", "log"],
+      "description": "Operações / Logistics"
+    },
+    "soc": {
+      "aliases": ["soc", "csoc", "soc1", "soc2", "soc3", "socanalyst", "soceng", "secops", "threatops", "threatintel", "cti", "siem", "soar", "ioc", "dfir", "ir"],
+      "description": "Security Operations Center (SOC) / Threat Intelligence / DFIR / Incident Response"
+    },
+    "seguranca": {
+      "aliases": ["seg", "sec", "security", "seguranca", "ciso", "gsi", "infosec", "cybersec", "appsec", "prodsec", "netsec", "cloudsec", "ot-sec"],
+      "description": "Segurança da Informação / Cybersecurity (all specializations)"
+    },
+    "redteam": {
+      "aliases": ["redteam", "red", "rt", "offsec", "pentest", "pentester", "hacker", "adversary", "atkteam", "asm"],
+      "description": "Red Team / Offensive Security / Pentest / Attack Surface Management"
+    },
+    "blueteam": {
+      "aliases": ["blueteam", "blue", "bt", "defsec", "bluesec", "detection", "hunt", "threathunt", "monitor"],
+      "description": "Blue Team / Defensive Security / Threat Hunting / Detection Engineering"
+    },
+    "purpleteam": {
+      "aliases": ["purpleteam", "purple", "pt", "purplesec", "adversaryemu", "bas"],
+      "description": "Purple Team / Adversary Emulation / BAS (Breach & Attack Simulation)"
+    },
+    "redes": {
+      "aliases": ["net", "noc", "redes", "network", "infra", "ti-infra", "neteng", "netops"],
+      "description": "Redes / Infraestrutura / NOC / NetOps"
+    },
+    "sistemas": {
+      "aliases": ["sys", "sistemas", "erp", "corp", "sysadmin"],
+      "description": "Sistemas / ERP / SysAdmin"
+    },
+    "dev": {
+      "aliases": ["dev", "devs", "desenvolvimento", "software", "eng", "ti-dev", "swe", "backend", "frontend", "fullstack", "mobile"],
+      "description": "Desenvolvimento / Software Engineering"
+    },
+    "devops": {
+      "aliases": ["devops", "dops", "sre", "platform", "platformeng", "cicd", "infra-auto", "gitops", "iac"],
+      "description": "DevOps / SRE / Platform Engineering / GitOps / IaC"
+    },
+    "devsecops": {
+      "aliases": ["devsecops", "dsops", "secdev", "sdlc", "sast", "dast", "sca", "sbom", "shift-left"],
+      "description": "DevSecOps / Secure SDLC / SAST / DAST / SCA"
+    },
+    "cloud": {
+      "aliases": ["cloud", "cloudeng", "cloudops", "aws", "azure", "gcp", "oci", "k8s", "containerops"],
+      "description": "Cloud Engineering / CloudOps / Container Orchestration"
+    },
+    "dados": {
+      "aliases": ["dados", "data", "bi", "analytics", "dba", "etl", "dataeng", "datascience", "ml", "ai", "mlops"],
+      "description": "Dados / Analytics / BI / DBA / Data Science / MLOps"
+    },
+    "atendimento": {
+      "aliases": ["at", "atendimento", "cac", "ura", "callcenter", "cc", "csr"],
+      "description": "Atendimento / Call Center / SAC"
+    },
+    "projetos": {
+      "aliases": ["pmo", "proj", "projetos", "pm", "dpmo", "scrum", "agile", "kanban"],
+      "description": "Gerência de Projetos / PMO / Agile"
+    },
+    "qualidade": {
+      "aliases": ["qa", "qualidade", "quality", "qc", "dqa", "qe", "automation", "testing"],
+      "description": "Qualidade / QA / QC / Test Automation"
+    },
+    "saude": {
+      "aliases": ["saude", "med", "medico", "enf", "farmacia", "sst"],
+      "description": "Saúde / SESMT / Medicina do Trabalho"
+    },
+    "engenharia": {
+      "aliases": ["eng", "engenharia", "manutencao", "man", "pcm", "obras"],
+      "description": "Engenharia / Manutenção"
+    },
+    "presales": {
+      "aliases": ["presales", "presale", "prevenda", "se", "solutionseng", "solutionsarch", "sa-pre", "demo"],
+      "description": "Pre-Sales / Solutions Engineering / Solutions Architecture"
+    },
+    "profservices": {
+      "aliases": ["ps", "profserv", "professionalservices", "consulting", "consultoria", "implantacao", "deploy", "onboarding"],
+      "description": "Professional Services / Consulting / Implementation"
+    },
+    "msp": {
+      "aliases": ["msp", "mspops", "rmm", "managedservices", "noc-msp", "msp-tech", "msp-admin", "msp-support"],
+      "description": "MSP (Managed Service Provider) - operations, RMM, managed IT"
+    },
+    "mssp": {
+      "aliases": ["mssp", "msspops", "mdr", "xdr", "manageddetection", "mssp-soc", "mssp-ir", "mssp-admin", "mssp-analyst"],
+      "description": "MSSP (Managed Security Service Provider) - MDR, XDR, managed SOC"
+    },
+    "startup": {
+      "aliases": ["startup", "founder", "cofounder", "cto", "ceo", "coo", "product", "prodeng", "prodmgr"],
+      "description": "Startup / Founders / C-level / Product"
+    },
+    "iot_ot": {
+      "aliases": ["iot", "ot", "scada", "ics", "plc", "iiot", "ot-sec", "ot-eng"],
+      "description": "IoT / OT / SCADA / ICS / Industrial"
+    },
+    "research": {
+      "aliases": ["research", "pesquisa", "rnd", "labs", "lab", "innovation", "inovacao"],
+      "description": "Research / R&D / Innovation / Labs"
+    }
+  },
+
+  "role_prefixes": {
+    "service_account": {
+      "aliases": ["svc", "srv", "service", "serv", "sa", "bot", "automation", "api", "integration", "webhook"],
+      "description": "Service accounts (non-human, automated, API keys)"
+    },
+    "admin_account": {
+      "aliases": ["adm", "admin", "administrator", "root", "superuser", "sysadmin", "domainadmin", "da", "ea"],
+      "description": "Administrative / privileged accounts"
+    },
+    "manager": {
+      "aliases": ["ger", "gerente", "mgr", "manager", "coord", "coordenador", "lead", "teamlead", "tl"],
+      "description": "Gerentes / Managers / Coordenadores / Team Leads"
+    },
+    "director": {
+      "aliases": ["dir", "diretor", "director", "vp", "cxo", "head", "chief"],
+      "description": "Diretores / Directors / VP / Heads / C-level"
+    },
+    "analyst": {
+      "aliases": ["ana", "analyst", "analista", "spec", "especialista", "socanalyst", "secanalyst", "l1analyst", "l2analyst", "l3analyst"],
+      "description": "Analistas / Specialists / SOC Analysts (L1-L3)"
+    },
+    "engineer": {
+      "aliases": ["eng", "engineer", "engenheiro", "sre", "seceng", "socengineer", "platformeng", "cloudeng", "neteng", "infraeng", "swen"],
+      "description": "Engineers (Security, SRE, Platform, Cloud, Network, Infra, Software)"
+    },
+    "architect": {
+      "aliases": ["arch", "architect", "arquiteto", "secarch", "cloudarch", "solarch", "entarch"],
+      "description": "Architects (Security, Cloud, Solutions, Enterprise)"
+    },
+    "junior": {
+      "aliases": ["jr", "junior", "estagiario", "est", "trainee", "trn", "intern", "aprendiz"],
+      "description": "Estagiários / Trainees / Juniors / Interns"
+    },
+    "senior": {
+      "aliases": ["sr", "senior", "pleno", "principal", "staff", "distinguished"],
+      "description": "Senior / Staff / Principal / Distinguished"
+    },
+    "test_account": {
+      "aliases": ["test", "teste", "tst", "demo", "homolog", "hom", "sandbox", "staging", "stg", "lab", "poc"],
+      "description": "Test / homologation / demo / sandbox / staging / PoC accounts"
+    }
+  },
+
+  "contractor_prefixes": {
+    "aliases": ["ext", "externo", "terceiro", "terc", "vendor", "vend", "pj", "prestador", "prst", "contractor", "outsourced", "partner"],
+    "description": "Contractors / Third-party / PJ / Vendors / Partners"
+  },
+
+  "temp_account_prefixes": {
+    "aliases": ["temp", "tmp", "provisorio", "prov", "temporario", "guest", "visitor", "visitante"],
+    "description": "Temporary / Guest / Visitor accounts"
+  },
+
+  "generic_prefixes": {
+    "aliases": ["user", "usr", "account", "acc", "conta", "login", "operator", "agent"],
+    "description": "Generic account prefixes"
+  },
+
+  "username_patterns": {
+    "description": "Token reference: {prefix} dept/role alias, {fn} first name, {ln} last name, {fi} first initial, {li} last initial, {sep} separator",
+    "patterns": [
+      { "id": "prefix_sep_fn_sep_ln",    "fmt": "{prefix}{sep}{fn}{sep}{ln}",  "example": "soc.pessoax.corpx",   "priority": 1 },
+      { "id": "prefix_sep_fi_ln",        "fmt": "{prefix}{sep}{fi}{ln}",       "example": "mssp.pxcorpx",      "priority": 2 },
+      { "id": "prefix_sep_fn",           "fmt": "{prefix}{sep}{fn}",           "example": "svc.pessoax",         "priority": 3 },
+      { "id": "prefix_sep_ln",           "fmt": "{prefix}{sep}{ln}",           "example": "redteam.corpx",    "priority": 4 },
+      { "id": "prefix_fn_sep_ln",        "fmt": "{prefix}{fn}{sep}{ln}",       "example": "devops-pessoax-corpx","priority": 5 },
+      { "id": "prefix_fi_sep_ln",        "fmt": "{prefix}{fi}{sep}{ln}",       "example": "hd-p-corpx",       "priority": 6 },
+      { "id": "prefix_fn_ln",            "fmt": "{prefix}{fn}{ln}",            "example": "svcpessoaxcorpx",     "priority": 7 },
+      { "id": "fn_sep_ln_sep_prefix",    "fmt": "{fn}{sep}{ln}{sep}{prefix}",  "example": "pessoax.corpx.soc",   "priority": 8 },
+      { "id": "fi_ln_sep_prefix",        "fmt": "{fi}{ln}{sep}{prefix}",       "example": "pxcorpx.msp",       "priority": 9 },
+      { "id": "prefix_sep_ini",          "fmt": "{prefix}{sep}{ini}",          "example": "devops.js",        "priority": 10 }
+    ]
+  },
+
+  "sector_department_map": {
+    "description": "Maps domain sector to most probable department prefixes. No company names - sector labels only.",
+    "energia_utilities":   ["ops", "eng", "ti", "net", "seg", "ot", "scada"],
+    "judicial":            ["jur", "sec", "adm", "rh", "ti"],
+    "ministerio_publico":  ["jur", "adm", "sec", "ti"],
+    "saude":               ["saude", "adm", "ti", "rh", "med"],
+    "financas":            ["fin", "risco", "adm", "ti", "jur", "sec", "soc"],
+    "governo":             ["adm", "rh", "fin", "jur", "ti", "sec"],
+    "sistema_s":           ["rh", "adm", "ti", "ensino", "seguranca"],
+    "educacao":            ["adm", "ti", "rh", "eng", "pesquisa"],
+    "msp_provider":        ["msp", "noc", "helpdesk", "svc", "admin", "rmm", "net"],
+    "mssp_provider":       ["mssp", "soc", "ir", "mdr", "xdr", "secops", "threatintel", "admin"],
+    "startup_tech":        ["dev", "devops", "product", "eng", "cto", "qa", "sre", "cloud"],
+    "cybersec_consulting": ["soc", "redteam", "blueteam", "purpleteam", "ps", "presales", "seceng", "devsecops"],
+    "telecom":             ["noc", "oss", "bss", "net", "rf", "tower", "field", "billing", "provisioning"],
+    "manufacturing":       ["ops", "eng", "qa", "scada", "plc", "maint", "prod", "logistics", "warehouse"],
+    "retail":              ["store", "pdv", "pos", "backoffice", "ecomm", "logistics", "warehouse", "mkt", "cs"],
+    "legal_intl":          ["legal", "compliance", "paralegal", "attorney", "solicitor", "barrister", "counsel", "grc"],
+    "media_entertainment": ["creative", "content", "editorial", "prod", "broadcast", "streaming", "studio"],
+    "ngo_nonprofit":       ["program", "grant", "fundraising", "volunteer", "advocacy", "comms", "field"],
+    "generic":             ["ti", "adm", "svc", "net", "helpdesk", "sec", "dev", "devops"]
+  },
+
+  "intl_username_formats": {
+    "description": "Username construction patterns by region/culture. No real names - format templates only.",
+    "us_canada": {
+      "patterns": [
+        {"fmt": "{fn}.{ln}", "example": "pessoax.corpx", "note": "Most common in US/CA corporate"},
+        {"fmt": "{fi}{ln}", "example": "pxcorpx", "note": "Very common shorthand"},
+        {"fmt": "{fn}{li}", "example": "pessoaxc", "note": "First name + last initial"},
+        {"fmt": "{fn}_{ln}", "example": "pessoax_corpx", "note": "Underscore separator"},
+        {"fmt": "{fn}-{ln}", "example": "pessoax-corpx", "note": "Hyphen separator"},
+        {"fmt": "{fn}{ln}", "example": "pessoaxcorpx", "note": "No separator"},
+        {"fmt": "{ln}{fi}", "example": "corpxp", "note": "Last-first reversed"},
+        {"fmt": "{ln}.{fn}", "example": "corpx.pessoax", "note": "Reversed dot notation"},
+        {"fmt": "{fi}{mi}{ln}", "example": "pxpcorpx", "note": "With middle initial"}
+      ],
+      "email_domains": ["acme.example","xpto.local","ad.acme.example"]
+    },
+    "uk_ireland": {
+      "patterns": [
+        {"fmt": "{fn}.{ln}", "example": "personay.acme", "note": "Standard"},
+        {"fmt": "{fi}{ln}", "example": "pyacme", "note": "Common shorthand"},
+        {"fmt": "{fn}{ln}{emp_id}", "example": "pyacme01", "note": "With employee number"}
+      ],
+      "email_domains": ["acme.example","xpto.local"]
+    },
+    "europe_dach": {
+      "note": "Germany, Austria, Switzerland",
+      "patterns": [
+        {"fmt": "{fn}.{ln}", "example": "robotx.xpto", "note": "Standard"},
+        {"fmt": "{ln}.{fn}", "example": "xpto.robotx", "note": "Reversed in some orgs"},
+        {"fmt": "{fi}{ln}", "example": "rxpto", "note": "Initial-lastname"},
+        {"fmt": "{fn}.{ln}@{domain}.de", "example": "robotx.xpto@acme.example"}
+      ],
+      "double_surnames": true,
+      "umlaut_handling": {"ä":"ae","ö":"oe","ü":"ue","ß":"ss"}
+    },
+    "europe_france": {
+      "patterns": [
+        {"fmt": "{fn}.{ln}", "example": "pessoax.corpx"},
+        {"fmt": "{fi}{ln}", "example": "pxcorpx"},
+        {"fmt": "{fn}-{ln}", "example": "pessoax-corpx", "note": "Hyphenated double names common"}
+      ],
+      "accent_handling": {"é":"e","è":"e","ê":"e","ë":"e","à":"a","â":"a","ç":"c","î":"i","ï":"i","ô":"o","ù":"u","û":"u","ü":"u"}
+    },
+    "europe_iberia": {
+      "note": "Spain, Portugal",
+      "patterns": [
+        {"fmt": "{fn}.{ln1}", "example": "personay.acme", "note": "First paternal surname only"},
+        {"fmt": "{fn}.{ln1}{ln2}", "example": "personay.acmexpto", "note": "Both surnames concatenated"},
+        {"fmt": "{fn}.{ln1}.{ln2}", "example": "personay.acme.xpto", "note": "Both surnames with dots"},
+        {"fmt": "{fi}{ln1}", "example": "pyacme"},
+        {"fmt": "{fi}{ln1}{ln2}", "example": "pyacmexpto"}
+      ],
+      "double_surnames": true,
+      "accent_handling": {"á":"a","é":"e","í":"i","ó":"o","ú":"u","ñ":"n","ã":"a","õ":"o","ç":"c"}
+    },
+    "europe_nordics": {
+      "note": "Sweden, Norway, Denmark, Finland, Iceland",
+      "patterns": [
+        {"fmt": "{fn}.{ln}", "example": "robotx.xptoinc"},
+        {"fmt": "{fi}{ln}", "example": "rxptoinc"},
+        {"fmt": "{fn}{fi_ln4}", "example": "robotxxpto", "note": "Truncated lastname"}
+      ],
+      "char_handling": {"å":"a","ä":"a","ö":"o","æ":"ae","ø":"o"}
+    },
+    "europe_eastern": {
+      "note": "Poland, Czech, Romania, Hungary, etc.",
+      "patterns": [
+        {"fmt": "{fn}.{ln}", "example": "pessoax.corpx"},
+        {"fmt": "{fi}{ln}", "example": "pxcorpx"},
+        {"fmt": "{ln}{fn}", "example": "corpxpessoax", "note": "Some orgs use lastname-first"}
+      ],
+      "char_handling": {"ą":"a","ć":"c","ę":"e","ł":"l","ń":"n","ó":"o","ś":"s","ź":"z","ż":"z","č":"c","ř":"r","š":"s","ž":"z","ő":"o","ű":"u","ă":"a","ș":"s","ț":"t"}
+    },
+    "latam": {
+      "note": "Mexico, Colombia, Argentina, Chile, Peru, etc.",
+      "patterns": [
+        {"fmt": "{fn}.{ln1}", "example": "personay.acme"},
+        {"fmt": "{fi}{ln1}", "example": "pyacme"},
+        {"fmt": "{fn}.{ln1}.{ln2}", "example": "personay.acme.xpto"},
+        {"fmt": "{fn}{ln1}", "example": "personayacme"},
+        {"fmt": "{fi}{ln1}{ln2}", "example": "pyacmexpto"}
+      ],
+      "double_surnames": true,
+      "accent_handling": {"á":"a","é":"e","í":"i","ó":"o","ú":"u","ñ":"n"}
+    },
+    "japan": {
+      "patterns": [
+        {"fmt": "{ln}.{fn}", "example": "corpx.robotx", "note": "Family name first (Japanese convention)"},
+        {"fmt": "{fi_ln}{fn}", "example": "rcorpx"},
+        {"fmt": "{fn}.{ln}", "example": "robotx.corpx", "note": "Western-order used in some intl companies"},
+        {"fmt": "{fn}{ln}", "example": "robotxcorpx"},
+        {"fmt": "{ln}{fn}", "example": "corpxrobotx"}
+      ],
+      "romanization": "hepburn",
+      "note_naming": "Japanese names often romanized: ō→o or ou, ū→u or uu"
+    },
+    "china": {
+      "patterns": [
+        {"fmt": "{ln}{fn}", "example": "acmepessoax", "note": "Family name first, no separator"},
+        {"fmt": "{fn}.{ln}", "example": "pessoax.acme", "note": "Western-order for intl companies"},
+        {"fmt": "{fi}{ln}", "example": "racme"},
+        {"fmt": "{english_name}.{ln}", "example": "robotx.acme", "note": "English+Chinese surname common"}
+      ],
+      "romanization": "pinyin"
+    },
+    "korea": {
+      "patterns": [
+        {"fmt": "{ln}{fn}", "example": "xptopersonay", "note": "Family name first"},
+        {"fmt": "{fn}.{ln}", "example": "personay.xpto", "note": "Western-order"},
+        {"fmt": "{fi}{ln}", "example": "rxpto"},
+        {"fmt": "{english_name}.{ln}", "example": "robotx.xpto"}
+      ],
+      "romanization": "revised_romanization"
+    },
+    "india": {
+      "patterns": [
+        {"fmt": "{fn}.{ln}", "example": "pessoax.corpx"},
+        {"fmt": "{fi}{ln}", "example": "pxcorpx"},
+        {"fmt": "{fn}{ln}", "example": "pessoaxcorpx"},
+        {"fmt": "{fn}.{mi}.{ln}", "example": "pessoax.p.corpx", "note": "Middle initial common"}
+      ],
+      "note_naming": "South Indian: may have only one name; initials expand differently"
+    },
+    "middle_east_north_africa": {
+      "note": "Arabic naming: given + father + grandfather + family, but corporate often simplifies",
+      "patterns": [
+        {"fmt": "{fn}.{ln}", "example": "personay.acme"},
+        {"fmt": "{fi}{ln}", "example": "pyacme"},
+        {"fmt": "{fn}{ln}", "example": "personayacme"},
+        {"fmt": "{fn}.{father_name}.{ln}", "example": "personay.robotx.acme"}
+      ],
+      "transliteration_variants": {"محمد":["mohammed","muhammad","mohammad","mohamad"],"أحمد":["ahmed","ahmad"],"علي":["ali"],"حسن":["hassan","hasan"]}
+    },
+    "russia_cis": {
+      "patterns": [
+        {"fmt": "{fn}.{ln}", "example": "robotx.xpto"},
+        {"fmt": "{fi}{ln}", "example": "rxpto"},
+        {"fmt": "{ln}.{fi}{patronymic_i}", "example": "xpto.rx", "note": "lastname.initials (Russian corporate)"},
+        {"fmt": "{fn}{patronymic_i}{ln}", "example": "rxrobotx"}
+      ],
+      "transliteration": {"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"yo","ж":"zh","з":"z","и":"i","й":"y","к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f","х":"kh","ц":"ts","ч":"ch","ш":"sh","щ":"shch","ы":"y","э":"e","ю":"yu","я":"ya"}
+    },
+    "turkey": {
+      "patterns": [
+        {"fmt": "{fn}.{ln}", "example": "pessoax.corpx"},
+        {"fmt": "{fi}{ln}", "example": "pxcorpx"},
+        {"fmt": "{fn}{ln}", "example": "pessoaxcorpx"}
+      ],
+      "char_handling": {"ç":"c","ğ":"g","ı":"i","İ":"I","ö":"o","ş":"s","ü":"u"}
+    },
+    "southeast_asia": {
+      "note": "Indonesia, Philippines, Thailand, Vietnam, Malaysia, Singapore",
+      "patterns": [
+        {"fmt": "{fn}.{ln}", "example": "personay.acme"},
+        {"fmt": "{fi}{ln}", "example": "pyacme"},
+        {"fmt": "{fn}{ln}", "example": "personayacme"}
+      ],
+      "note_naming": "Indonesian: may have single name; Vietnamese: family name first (Nguyen Van An → an.nguyen or nguyen.an); Thai: formal first+last but nicknames common"
+    },
+    "africa": {
+      "note": "Nigeria, South Africa, Kenya, Egypt, etc.",
+      "patterns": [
+        {"fmt": "{fn}.{ln}", "example": "robotx.xpto"},
+        {"fmt": "{fi}{ln}", "example": "rxpto"},
+        {"fmt": "{fn}{ln}", "example": "robotxxpto"}
+      ],
+      "note_naming": "Some cultures use patronymics, clan names, or titles as part of the username"
+    }
+  },
+
+  "intl_password_patterns": {
+    "description": "Corporate password patterns commonly observed across regions - no company-specific data",
+    "us_patterns": [
+      "{Company}@{year}","{Company}#{year}","{Company}{season}{year}",
+      "Welcome{year}!","P@ssw0rd{year}","Changeme{n}!","{City}{year}!",
+      "{Company}1!","{Company}2024!","Summer{year}!","Winter{year}!",
+      "Welcome1!","Password1!","Temp1234!","NewHire{year}!"
+    ],
+    "eu_patterns": [
+      "{Firma}@{year}","{Société}{year}!","{Empresa}{ano}#",
+      "Willkommen{year}!","Bienvenue{year}!","Benvenuto{year}!",
+      "Bienvenido{year}!","Welkom{year}!","Välkommen{year}!"
+    ],
+    "latam_patterns": [
+      "{empresa}@{ano}","{empresa}#{ano}","{empresa}{ano}!",
+      "Mudar@{ano}","Trocar@{ano}","Cambiar@{ano}",
+      "{empresa}2024","admin@{empresa}","{empresa}Admin1",
+      "Bemvindo{ano}!","Bienvenido{ano}!"
+    ],
+    "apac_patterns": [
+      "{company}{year}!","{company}@{year}","{company}#{year}",
+      "Password{year}!","p@ssw0rd{year}","welcome{year}",
+      "{company}123!","admin@{year}"
+    ],
+    "mena_patterns": [
+      "{company}{year}","admin{year}","{company}@{year}",
+      "Welcome{year}","Marhaba{year}!","Ahlan{year}!"
+    ]
+  },
+
+  "numeric_suffix_patterns": {
+    "description": "Numeric suffix append patterns for disambiguation",
+    "formats": ["{username}{n}", "{username}0{n}", "{username}00{n}"],
+    "ranges": {
+      "common": [1, 2, 3, 4, 5, 10, 99],
+      "extended": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 99, 100]
+    }
+  }
+}
