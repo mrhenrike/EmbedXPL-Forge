@@ -3338,9 +3338,653 @@
       "dst_hash": "2f7da4c35f3049125803911acc668432c7f5ef63ce0fe74d993db12cead55d71",
       "synced_at": "2026-09-26T21:34:40.244557",
       "target": "wireless"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/__init__.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/__init__.py",
+      "src_hash": "5384bfdb2df380b6557cc7a71d16891415bccaa87699406e236f752c6415389f",
+      "dst_hash": "5384bfdb2df380b6557cc7a71d16891415bccaa87699406e236f752c6415389f",
+      "synced_at": "2026-09-26T21:47:09.653204",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/affix_engine.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/affix_engine.py",
+      "src_hash": "7678200ab8926cb61af2f4817e222b364a4d1c6c9f54cf2cb299972d661b4a00",
+      "dst_hash": "7678200ab8926cb61af2f4817e222b364a4d1c6c9f54cf2cb299972d661b4a00",
+      "synced_at": "2026-09-26T21:47:09.755730",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/analyzer.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/analyzer.py",
+      "src_hash": "2b9fc3d44d6818e0210669a3bb01eaeaff030b9ebdab260e5fbfb8bffa03c480",
+      "dst_hash": "2b9fc3d44d6818e0210669a3bb01eaeaff030b9ebdab260e5fbfb8bffa03c480",
+      "synced_at": "2026-09-26T21:47:13.542302",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/anomaly_scorer.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/anomaly_scorer.py",
+      "src_hash": "aade06b724cffd1aea44f5641e1cf71538c261684ef9250156bcf8e7667fd9dc",
+      "dst_hash": "1e083f3abf220b923d24e3eec368b2f880c1be64a93bb2df8fbfc5ae564d00d9",
+      "synced_at": "2026-09-26T21:47:13.570633",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/archive_export.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/archive_export.py",
+      "src_hash": "61d00ed19280d517259d108afa77a7a2f41252f0eee17c975d35023b0efa63b1",
+      "dst_hash": "794e2a2b518f4c208a38a85cf9e991135e0cf1f68d8023bd40ed3f9a0f10012b",
+      "synced_at": "2026-09-26T21:47:13.598396",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/benchmark_suite.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/benchmark_suite.py",
+      "src_hash": "debd251efb0d9b9f9077dbd106eac6c33d783da6e515089866a805e02711e655",
+      "dst_hash": "754c145ce0f642253428560c9de9e2a8c3e6e31518583240aa2266a4fd3c63d7",
+      "synced_at": "2026-09-26T21:47:13.628301",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/brwordlist_loader.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/brwordlist_loader.py",
+      "src_hash": "61006c879b2a9a1ed0d2f8e615f422c63ee1aa68c37c0489f247df91c97ce543",
+      "dst_hash": "61006c879b2a9a1ed0d2f8e615f422c63ee1aa68c37c0489f247df91c97ce543",
+      "synced_at": "2026-09-26T21:47:13.654696",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/charset_gen.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/charset_gen.py",
+      "src_hash": "3edb173af2d89bb5c38185f5873e5ae0f84ffce53cacb65f6d3df515955eb9aa",
+      "dst_hash": "3edb173af2d89bb5c38185f5873e5ae0f84ffce53cacb65f6d3df515955eb9aa",
+      "synced_at": "2026-09-26T21:47:13.689866",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/combiner.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/combiner.py",
+      "src_hash": "937333b0a39dd18445b463d1e2fbf310874e00cb622e085c28b5e922fef75625",
+      "dst_hash": "f36b58c93370d50866b8ed0c9edc770b2539cf057c22c0b2c154dc1000a41cc2",
+      "synced_at": "2026-09-26T21:47:13.718525",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/compute_backend.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/compute_backend.py",
+      "src_hash": "9c22191786f56a80d8870608e240fa79e4465ae7eb3b9589e5c1ee68050ee904",
+      "dst_hash": "9c22191786f56a80d8870608e240fa79e4465ae7eb3b9589e5c1ee68050ee904",
+      "synced_at": "2026-09-26T21:47:13.750241",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/corp_prefixes.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/corp_prefixes.py",
+      "src_hash": "bb8e8bca77fd419bfd99e236d936ccc9d25066fa3fd8ab1fdf53c19599873e8d",
+      "dst_hash": "b05267f13454a76a26a3e9ca07079b4ef01bc430570414dd4149df3ab8c30239",
+      "synced_at": "2026-09-26T21:47:13.776097",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/corp_profiler.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/corp_profiler.py",
+      "src_hash": "35297daed86b6034e16f59ea27b0de2767740d0ec75958f509e40ade4e664db6",
+      "dst_hash": "294221afc7dbad3297d090e8dfabdd4d146daf00f8613ffccaad332e753d80ff",
+      "synced_at": "2026-09-26T21:47:13.802856",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/country_tokens.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/country_tokens.py",
+      "src_hash": "2c3b4c50f7234b2f14b79744b462c97101d7634ef9a0bcb3564de87f9e7096be",
+      "dst_hash": "e910c1f955dd9f45d9bfba9faeb97b4fc12c412e614f328ee60628e618b5f9f7",
+      "synced_at": "2026-09-26T21:47:13.826647",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/crunch_generator.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/crunch_generator.py",
+      "src_hash": "bbff219b38aafb4796975111494cd24e739099e0b91bd67477b55821a2faa68e",
+      "dst_hash": "a0ed73916ec9b7afec37ea9fc995ee0c9350e5d9e5eff3a4a049a0ac69b95c38",
+      "synced_at": "2026-09-26T21:47:13.848028",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/cupp_engine.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/cupp_engine.py",
+      "src_hash": "6128775d71cb9ea309bfa5b71876f5e575a12ca9417dd0fb6cf08af08ab38822",
+      "dst_hash": "dd372eb556c2e0db39e9aaea76b0443e8d25c0447bf337dd35a0c429a8eb1efe",
+      "synced_at": "2026-09-26T21:47:13.870103",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/data/__init__.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/data/__init__.py",
+      "src_hash": "74b0f49c6ecc17e13adbdd8ba4af2f9aa2ddf78b74cfb4978a9225bd946e7d4e",
+      "dst_hash": "34615ff56cdf9106b18de214ead6635cf9b7b2b7e4df4949e3483f361ae8cfdf",
+      "synced_at": "2026-09-26T21:47:13.893535",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/data/behavior_patterns.json": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/data/behavior_patterns.json",
+      "src_hash": "1ffef36d56e965f12388ce3284a32a2408f3a45525e1c756a30ee99d31fd6171",
+      "dst_hash": "1ffef36d56e965f12388ce3284a32a2408f3a45525e1c756a30ee99d31fd6171",
+      "synced_at": "2026-09-26T21:47:13.959453",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/data/corp_prefix_patterns.json": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/data/corp_prefix_patterns.json",
+      "src_hash": "8450611bf920228cce5432dd66a0f474228c2d540a43b852c3cf4672680f9700",
+      "dst_hash": "8450611bf920228cce5432dd66a0f474228c2d540a43b852c3cf4672680f9700",
+      "synced_at": "2026-09-26T21:47:13.996716",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/date_profile.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/date_profile.py",
+      "src_hash": "4592ba5797afd5213b442eab3407a96a8859edaca05925b63389b133f8476549",
+      "dst_hash": "3ca405cf85bea824d2a94d79d6e4e31e65b776b473182eda5ba03864af924e46",
+      "synced_at": "2026-09-26T21:47:14.024598",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/default_creds.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/default_creds.py",
+      "src_hash": "bf5557da61fb8b8c07270807a2824bdef5ded210baf3d03cc7510c031a9d2b1b",
+      "dst_hash": "bf5557da61fb8b8c07270807a2824bdef5ded210baf3d03cc7510c031a9d2b1b",
+      "synced_at": "2026-09-26T21:47:14.050152",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/dns_wordlist.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/dns_wordlist.py",
+      "src_hash": "04d56ad7845516b9c508e37c52773884c50992959dbba486a81102cd5e6c0961",
+      "dst_hash": "04d56ad7845516b9c508e37c52773884c50992959dbba486a81102cd5e6c0961",
+      "synced_at": "2026-09-26T21:47:14.084224",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/domain_users.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/domain_users.py",
+      "src_hash": "5734e514a831f04f81a5d355206684442bd7a70602c01ebaa4338bee8449e202",
+      "dst_hash": "6f0fa10ca4ff3f9eed6f80d904f772588265798d9917cd25a05ad4f9731e2e99",
+      "synced_at": "2026-09-26T21:47:14.117373",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/entropy_strength.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/entropy_strength.py",
+      "src_hash": "0a7475893544c40d4581d123164561b8c9a0f4cef35b8b04c8cb70e45cd554c4",
+      "dst_hash": "0a7475893544c40d4581d123164561b8c9a0f4cef35b8b04c8cb70e45cd554c4",
+      "synced_at": "2026-09-26T21:47:14.142292",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/eval_harness.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/eval_harness.py",
+      "src_hash": "6bcf3f540697d59043beb70d5a9f62049b3a7253d1af957d235ce95592d19d72",
+      "dst_hash": "6bcf3f540697d59043beb70d5a9f62049b3a7253d1af957d235ce95592d19d72",
+      "synced_at": "2026-09-26T21:47:14.168965",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/file_extractor.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/file_extractor.py",
+      "src_hash": "41d744ad0f01923fdca0f0669599379070cf8833b021cdd02c9430d4adb0451f",
+      "dst_hash": "41d744ad0f01923fdca0f0669599379070cf8833b021cdd02c9430d4adb0451f",
+      "synced_at": "2026-09-26T21:47:14.192694",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/generation_engines.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/generation_engines.py",
+      "src_hash": "449215058550d669c946a324c40a8de90e04ab0ac01caf6b8c3d5d42be67da5f",
+      "dst_hash": "449215058550d669c946a324c40a8de90e04ab0ac01caf6b8c3d5d42be67da5f",
+      "synced_at": "2026-09-26T21:47:14.219207",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/hash_tools.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/hash_tools.py",
+      "src_hash": "0a03643933a7b1ef14710c5d26d7b3fb37256c5e5cfec6b7196da712d6850c12",
+      "dst_hash": "0a03643933a7b1ef14710c5d26d7b3fb37256c5e5cfec6b7196da712d6850c12",
+      "synced_at": "2026-09-26T21:47:14.244050",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/hw_profiler.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/hw_profiler.py",
+      "src_hash": "212a22df8c15d283fe9ca85742c3f2410dca70823c0aef6e2b2ae5cdc94ad42d",
+      "dst_hash": "212a22df8c15d283fe9ca85742c3f2410dca70823c0aef6e2b2ae5cdc94ad42d",
+      "synced_at": "2026-09-26T21:47:14.269758",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/i18n/__init__.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/i18n/__init__.py",
+      "src_hash": "c8c0ef5d514c9a6aab92bb2ab1b7c51dcd4251bf2b683637e48790c0288b37cf",
+      "dst_hash": "45771f56dff71851532583c43d15c7cbe63c4f0494cf463e9e578d81743a984c",
+      "synced_at": "2026-09-26T21:47:14.298241",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/i18n/locale.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/i18n/locale.py",
+      "src_hash": "52cf9966d0f47e0c3810941ef7aa6dfb187504456a12c2265661999644dfc3fe",
+      "dst_hash": "52cf9966d0f47e0c3810941ef7aa6dfb187504456a12c2265661999644dfc3fe",
+      "synced_at": "2026-09-26T21:47:14.334838",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/i18n/prompts.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/i18n/prompts.py",
+      "src_hash": "7e8c4fe34e166327eace5b353f4fe99ea434c661614a83d2bcc498666aa094f3",
+      "dst_hash": "86a7a3b601e0912fbcd9e66c4eade9bf9b0dad22caa9d69ded58f25cf1025673",
+      "synced_at": "2026-09-26T21:47:14.370807",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/isp_keygen.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/isp_keygen.py",
+      "src_hash": "92179ed15edc4b0c2a67847309b60230ac7a544440bdfe5701434b241f375e7a",
+      "dst_hash": "ccaaa0a8b7a6db28bfdb3716ff314a8334aa5c90ccd4d31873c5270cbaa15a38",
+      "synced_at": "2026-09-26T21:47:14.404047",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/iwlgen.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/iwlgen.py",
+      "src_hash": "893c820658e747e6fa2df3bf789ed0dd26b68485318806f1b902568af89e676e",
+      "dst_hash": "893c820658e747e6fa2df3bf789ed0dd26b68485318806f1b902568af89e676e",
+      "synced_at": "2026-09-26T21:47:14.432394",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/keyword_mutations.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/keyword_mutations.py",
+      "src_hash": "a18bf0cd0a5d7b01a6f359420316ab0736007073cdfed98593a7adc8acb9fd02",
+      "dst_hash": "a18bf0cd0a5d7b01a6f359420316ab0736007073cdfed98593a7adc8acb9fd02",
+      "synced_at": "2026-09-26T21:47:14.459655",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/kwalk_gen.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/kwalk_gen.py",
+      "src_hash": "3b2c5010f7f1a5fb0d6ebd786b40ccad8726aac77520fe631501acc9c283e33a",
+      "dst_hash": "3b2c5010f7f1a5fb0d6ebd786b40ccad8726aac77520fe631501acc9c283e33a",
+      "synced_at": "2026-09-26T21:47:14.487483",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/leet_permuter.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/leet_permuter.py",
+      "src_hash": "11594b454069b9abfa46053e5ed4836fa538dcbde9c7990e35aebcf0262f393c",
+      "dst_hash": "11594b454069b9abfa46053e5ed4836fa538dcbde9c7990e35aebcf0262f393c",
+      "synced_at": "2026-09-26T21:47:14.515533",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/linkedin_search.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/linkedin_search.py",
+      "src_hash": "6c67f37b1576bd43e111bef3c0602e981110016ddd90c20c20a81d87f8cbcb30",
+      "dst_hash": "6c67f37b1576bd43e111bef3c0602e981110016ddd90c20c20a81d87f8cbcb30",
+      "synced_at": "2026-09-26T21:47:14.550694",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/linkwords.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/linkwords.py",
+      "src_hash": "f288d8ae70027c7095b376aba930c3ae11c686b35fa75d49ca9729e75b9a3e7a",
+      "dst_hash": "f288d8ae70027c7095b376aba930c3ae11c686b35fa75d49ca9729e75b9a3e7a",
+      "synced_at": "2026-09-26T21:47:14.580147",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/list_ops.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/list_ops.py",
+      "src_hash": "febf0abe6c07495afca519eec999badea8156ec2e86268cfcc9acb7967bd9369",
+      "dst_hash": "febf0abe6c07495afca519eec999badea8156ec2e86268cfcc9acb7967bd9369",
+      "synced_at": "2026-09-26T21:47:14.610275",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/malware_cred_patterns.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/malware_cred_patterns.py",
+      "src_hash": "9fe76681b99ade3df9291516359b0befb2968346692d4af1144d154527e4a367",
+      "dst_hash": "5ba071136c8ed5ce00363c306de547457cc7acc447ea241e7cb7b0452cb17dda",
+      "synced_at": "2026-09-26T21:47:14.638668",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/mangler.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/mangler.py",
+      "src_hash": "4ecc71a24cd8d2654f87ac30d8bcbfbb30a0d56d968cc73c9ccf9e1f8ae87d4a",
+      "dst_hash": "4ecc71a24cd8d2654f87ac30d8bcbfbb30a0d56d968cc73c9ccf9e1f8ae87d4a",
+      "synced_at": "2026-09-26T21:47:14.665846",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/markov_engine.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/markov_engine.py",
+      "src_hash": "2f7a665881a9a6bb7f8ae572d586cb6a6762192dbb1dac31636ecee6d43e3f97",
+      "dst_hash": "2f7a665881a9a6bb7f8ae572d586cb6a6762192dbb1dac31636ecee6d43e3f97",
+      "synced_at": "2026-09-26T21:47:14.693610",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/maya_ranker.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/maya_ranker.py",
+      "src_hash": "a54d119efe3466f3b412857db631a803ee38bbab67abbae72bff9ee3dd51cc27",
+      "dst_hash": "bafb9c82071223e07e01b11b94addc5b4e19fe0fc52d3adf0433f165b3e58d03",
+      "synced_at": "2026-09-26T21:47:14.724708",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/merger.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/merger.py",
+      "src_hash": "1e4710ae7ed7088fc359123039ab31fb9f685703e948af3594d5a3b6820bcbfd",
+      "dst_hash": "1e4710ae7ed7088fc359123039ab31fb9f685703e948af3594d5a3b6820bcbfd",
+      "synced_at": "2026-09-26T21:47:14.749842",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/ml_patterns.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/ml_patterns.py",
+      "src_hash": "85d1c71ec715a8d92813c73096fd5e19a67dbc746b18d25157d4c99bee72ac16",
+      "dst_hash": "ebe4d5b95fbb849558dd9585fa03c0d13edf1963b2c88a38a2da163a50ed4cc6",
+      "synced_at": "2026-09-26T21:47:14.784675",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/neural_engine.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/neural_engine.py",
+      "src_hash": "1a8a3d6eeb3a42d9e51477134e2e3b1da9df7710ad4b3933ba858e19017bccd6",
+      "dst_hash": "1a8a3d6eeb3a42d9e51477134e2e3b1da9df7710ad4b3933ba858e19017bccd6",
+      "synced_at": "2026-09-26T21:47:14.814425",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/num2text.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/num2text.py",
+      "src_hash": "a58fe757b0bd73c2444719a2eab01a91aaba5fe5c0091c072f6f4792e24310ff",
+      "dst_hash": "a58fe757b0bd73c2444719a2eab01a91aaba5fe5c0091c072f6f4792e24310ff",
+      "synced_at": "2026-09-26T21:47:14.841004",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/ocr_extractor.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/ocr_extractor.py",
+      "src_hash": "32853313bdefbd54637dbb32cd56d3fc8160515d57d6f105bb1de199c86c9a2c",
+      "dst_hash": "32853313bdefbd54637dbb32cd56d3fc8160515d57d6f105bb1de199c86c9a2c",
+      "synced_at": "2026-09-26T21:47:14.865793",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/osint_advanced.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/osint_advanced.py",
+      "src_hash": "2d05d4da6ec5e42e7e6f7a8b4bcb9e43851007dfd5c448e642f0c27930c54836",
+      "dst_hash": "2d05d4da6ec5e42e7e6f7a8b4bcb9e43851007dfd5c448e642f0c27930c54836",
+      "synced_at": "2026-09-26T21:47:14.892288",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/osint_perm.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/osint_perm.py",
+      "src_hash": "8e03787fef139f1fafa79bcd5ce89f67b9b06eb3dba2dbe1097a4e09b442e5f5",
+      "dst_hash": "c8bcf296eb8549be526240aa54ebaa487107b8b4cdf743fb71073085baa8d7e4",
+      "synced_at": "2026-09-26T21:47:14.921423",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/passphrase_gen.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/passphrase_gen.py",
+      "src_hash": "9be0438502d4f5d5fe7834f6e3a45679bbb56222821792ff7f16ced2a5fdffe2",
+      "dst_hash": "9be0438502d4f5d5fe7834f6e3a45679bbb56222821792ff7f16ced2a5fdffe2",
+      "synced_at": "2026-09-26T21:47:14.945683",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/password_dna.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/password_dna.py",
+      "src_hash": "ac1f586423804e182cbfd6a7b7a633c2e6c70ec2d9faf51071950839166b05f6",
+      "dst_hash": "ac1f586423804e182cbfd6a7b7a633c2e6c70ec2d9faf51071950839166b05f6",
+      "synced_at": "2026-09-26T21:47:14.973189",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/pattern_engine.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/pattern_engine.py",
+      "src_hash": "4f11578d1d20d6b058a634015a7a0d1dc709fdcc623669d42a6f467632726fe8",
+      "dst_hash": "5bcf201f79c7fe975767e3abc8fcde898a3f2800241082f79ffe2bbc1d79ebe8",
+      "synced_at": "2026-09-26T21:47:14.999012",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/pattern_ranker.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/pattern_ranker.py",
+      "src_hash": "2a161ae169089a0dc88665c2edc2abdea6d07f08732227f3bc86e924ad4c23fb",
+      "dst_hash": "6db2b5a4045a95835a51f63efd71a8f9503ff70140ef77233731909f8953c988",
+      "synced_at": "2026-09-26T21:47:15.021804",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/pcfg_engine.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/pcfg_engine.py",
+      "src_hash": "e3eecc0a4b999d9eab3101ded24619b4f8039e9facea9bd9fbe67139d6057ac1",
+      "dst_hash": "e3eecc0a4b999d9eab3101ded24619b4f8039e9facea9bd9fbe67139d6057ac1",
+      "synced_at": "2026-09-26T21:47:15.048962",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/pharma_gen.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/pharma_gen.py",
+      "src_hash": "351142e7b55f153bc2be0d564b0a69cde921d2a77abf49ba8b2cc5fc0145315a",
+      "dst_hash": "351142e7b55f153bc2be0d564b0a69cde921d2a77abf49ba8b2cc5fc0145315a",
+      "synced_at": "2026-09-26T21:47:15.074521",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/phone_gen.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/phone_gen.py",
+      "src_hash": "4f59d154a88e5568df198b891b070ba9a963d7080044d9b45ead2677c4752903",
+      "dst_hash": "096cf8781fe3abefacc0a4420423e8821aab5c05a1321b0828df8dd8fdbeaaad",
+      "synced_at": "2026-09-26T21:47:15.103317",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/pipeline_engine.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/pipeline_engine.py",
+      "src_hash": "cb80912b9043c575af08c1b1c9caaeabc15e3add3718f0186dae377466865bc2",
+      "dst_hash": "71bd39f8067e525e4b2fc45b9724e4ce42fe33dfb56141e03687e7968024ba03",
+      "synced_at": "2026-09-26T21:47:15.138147",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/prince_engine.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/prince_engine.py",
+      "src_hash": "82676e7933e7744aab47eeaf3ea64a6ed18b6195addbc1639183557df7bc8d7a",
+      "dst_hash": "82676e7933e7744aab47eeaf3ea64a6ed18b6195addbc1639183557df7bc8d7a",
+      "synced_at": "2026-09-26T21:47:15.162298",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/profiler.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/profiler.py",
+      "src_hash": "96ae09e2730e891ad91ab27e9fe531f5f167c960203c416d744aff7b05106768",
+      "dst_hash": "63bbfd7ddc914086c4082441d0dec4b2c10758f90eb51a704a0746f2f3f1a57f",
+      "synced_at": "2026-09-26T21:47:15.210483",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__0day-xfinity-wordlist-generator.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__0day-xfinity-wordlist-generator.py",
+      "src_hash": "65aa177581ff0b6be9334bb2ba3f5e8481b25897083ce3d9dce674b90c46a3ac",
+      "dst_hash": "65aa177581ff0b6be9334bb2ba3f5e8481b25897083ce3d9dce674b90c46a3ac",
+      "synced_at": "2026-09-26T21:47:15.234983",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__1wordlist.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__1wordlist.py",
+      "src_hash": "950bfa601ac646e9466384c4ab4a3cbe8f9c8ef894ab9aba724101a05ba2b589",
+      "dst_hash": "950bfa601ac646e9466384c4ab4a3cbe8f9c8ef894ab9aba724101a05ba2b589",
+      "synced_at": "2026-09-26T21:47:15.255286",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__alterx.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__alterx.py",
+      "src_hash": "dd109c02071280902963693618371e5212205a729a3995b389ecdc0c7dfa3629",
+      "dst_hash": "dd109c02071280902963693618371e5212205a729a3995b389ecdc0c7dfa3629",
+      "synced_at": "2026-09-26T21:47:15.278317",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__brwordlist.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__brwordlist.py",
+      "src_hash": "747bbe67c1b1f2a93c98b19f9cea7dd32538e7013ff2a12a0a4428158ef59148",
+      "dst_hash": "747bbe67c1b1f2a93c98b19f9cea7dd32538e7013ff2a12a0a4428158ef59148",
+      "synced_at": "2026-09-26T21:47:15.298616",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__cewl.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__cewl.py",
+      "src_hash": "fd5d2c1fb5bd4a05ab7be5b78df81d6df40658467b57ac55c71fa7af347227de",
+      "dst_hash": "fd5d2c1fb5bd4a05ab7be5b78df81d6df40658467b57ac55c71fa7af347227de",
+      "synced_at": "2026-09-26T21:47:15.319493",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__cewlio.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__cewlio.py",
+      "src_hash": "148f4635471287ba1c723656a9e5ff1594f37b207de0b31fedc71f80045a5ecc",
+      "dst_hash": "148f4635471287ba1c723656a9e5ff1594f37b207de0b31fedc71f80045a5ecc",
+      "synced_at": "2026-09-26T21:47:15.339729",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__crunch.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__crunch.py",
+      "src_hash": "094428a3e6b9bf755032e8c6316b3f8da564f52bab27f2c4f23090c3f6139f4c",
+      "dst_hash": "094428a3e6b9bf755032e8c6316b3f8da564f52bab27f2c4f23090c3f6139f4c",
+      "synced_at": "2026-09-26T21:47:15.360657",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__dnscewl.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__dnscewl.py",
+      "src_hash": "a7b488db2b8f46b822ef991e25a5b2069a87d7dad4460682c9ca449e450a8f46",
+      "dst_hash": "a7b488db2b8f46b822ef991e25a5b2069a87d7dad4460682c9ca449e450a8f46",
+      "synced_at": "2026-09-26T21:47:15.382025",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__goblinwordgenerator.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__goblinwordgenerator.py",
+      "src_hash": "7d3f1ddd9a625fc090f8d98c50b1734845639cc562d481a8283e462b88ae634c",
+      "dst_hash": "7d3f1ddd9a625fc090f8d98c50b1734845639cc562d481a8283e462b88ae634c",
+      "synced_at": "2026-09-26T21:47:15.405992",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__pnwgen.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__pnwgen.py",
+      "src_hash": "902840fb4b3546a700f7d03191159c9c47c6dc0ab91bec334bbaf6b00ae33634",
+      "dst_hash": "902840fb4b3546a700f7d03191159c9c47c6dc0ab91bec334bbaf6b00ae33634",
+      "synced_at": "2026-09-26T21:47:15.431059",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__python-wordlist-generator.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__python-wordlist-generator.py",
+      "src_hash": "ceddff25ed33f11e428ce0bf12ca460da6bb31acfa4ae2457b67bd30f47fc815",
+      "dst_hash": "ceddff25ed33f11e428ce0bf12ca460da6bb31acfa4ae2457b67bd30f47fc815",
+      "synced_at": "2026-09-26T21:47:15.456567",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__seclists.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__seclists.py",
+      "src_hash": "c108b557394cce886639349a9c6f13b01efa69ba4954d4af9826cff45867ae06",
+      "dst_hash": "c108b557394cce886639349a9c6f13b01efa69ba4954d4af9826cff45867ae06",
+      "synced_at": "2026-09-26T21:47:15.492518",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__windows-crunch.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__windows-crunch.py",
+      "src_hash": "5a7f87321a5a7e41f8c81d5791270dabf8153cdad00050a8114050d87716ad37",
+      "dst_hash": "5a7f87321a5a7e41f8c81d5791270dabf8153cdad00050a8114050d87716ad37",
+      "synced_at": "2026-09-26T21:47:15.513366",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/refs/ref_submodules__wordlists__wordlist-generator.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/refs/ref_submodules__wordlists__wordlist-generator.py",
+      "src_hash": "dd7f84e9039797b8b8bd3177c3410d88491187f54cae6abc13df675b8aa8ff0d",
+      "dst_hash": "dd7f84e9039797b8b8bd3177c3410d88491187f54cae6abc13df675b8aa8ff0d",
+      "synced_at": "2026-09-26T21:47:15.541966",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/rsmangler_engine.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/rsmangler_engine.py",
+      "src_hash": "2cea084097aae048154a10d2e766e1f7f237b0d1b969af740ba7076ff340710c",
+      "dst_hash": "2cea084097aae048154a10d2e766e1f7f237b0d1b969af740ba7076ff340710c",
+      "synced_at": "2026-09-26T21:47:15.565790",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/rule_engine.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/rule_engine.py",
+      "src_hash": "02024a9155bb962508dded3575d4564e1ff533a8997106a6f407f2cd830fa006",
+      "dst_hash": "02024a9155bb962508dded3575d4564e1ff533a8997106a6f407f2cd830fa006",
+      "synced_at": "2026-09-26T21:47:15.588929",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/rulegen_engine.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/rulegen_engine.py",
+      "src_hash": "f9e53f1fbe887604fcce039a841de80eb2970fd7bee760ef0261dc91b8a8ae5e",
+      "dst_hash": "f9e53f1fbe887604fcce039a841de80eb2970fd7bee760ef0261dc91b8a8ae5e",
+      "synced_at": "2026-09-26T21:47:15.610738",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/sanitizer.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/sanitizer.py",
+      "src_hash": "e6a40106279624c3d5c29973bd508cd16adeb5f1a52561af889b3e0ea6dea03c",
+      "dst_hash": "e6a40106279624c3d5c29973bd508cd16adeb5f1a52561af889b3e0ea6dea03c",
+      "synced_at": "2026-09-26T21:47:15.633147",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/seclists_trainer.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/seclists_trainer.py",
+      "src_hash": "a12a46d3053609ec0a34d16a150f02d5e87eb83f881ad224dd96b1ca1ca22b1a",
+      "dst_hash": "0150ac8bc38b55eff37546ed74b0b654f408c88cdf1c4ca28cf1e4d9277037ef",
+      "synced_at": "2026-09-26T21:47:15.663492",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/target_spider.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/target_spider.py",
+      "src_hash": "c53042c378d40461518c410603559774b80376a9d2f72468147b6b6a05bcb24c",
+      "dst_hash": "c2d4cef705c908695f56111e8548593fbd124a4b88bbec2ec13f911dd68cdeb0",
+      "synced_at": "2026-09-26T21:47:15.686449",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/thread_pool.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/thread_pool.py",
+      "src_hash": "f42616da645cd19199c6a5c849e8ba773afdbfbd2dc734eae92e4d58bd038b70",
+      "dst_hash": "f42616da645cd19199c6a5c849e8ba773afdbfbd2dc734eae92e4d58bd038b70",
+      "synced_at": "2026-09-26T21:47:15.712806",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/web_scraper.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/web_scraper.py",
+      "src_hash": "163765e161c9c5a93943822c757fd4a4e4bd3546c8353617c259b1356e43e952",
+      "dst_hash": "163765e161c9c5a93943822c757fd4a4e4bd3546c8353617c259b1356e43e952",
+      "synced_at": "2026-09-26T21:47:15.736939",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/wordlists/xor_crypto.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/wfh_modules/xor_crypto.py",
+      "src_hash": "8238ed7bfea73a5d46ece9d08b59ba0ccea79a43b70fb387b1f0893b5de77e22",
+      "dst_hash": "8238ed7bfea73a5d46ece9d08b59ba0ccea79a43b70fb387b1f0893b5de77e22",
+      "synced_at": "2026-09-26T21:47:15.758693",
+      "target": "wordlist"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/data/wordlists/passwords/default-creds-combo.lst": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/passwords/default-creds-combo.lst",
+      "src_hash": "95e5a9ae4ba786b0d59b5bf5e38bd8953b3226f912897e427a3e0ae466236c1e",
+      "dst_hash": "95e5a9ae4ba786b0d59b5bf5e38bd8953b3226f912897e427a3e0ae466236c1e",
+      "synced_at": "2026-09-26T21:47:16.047834",
+      "target": "wordlist_data"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/data/wordlists/usernames/username_br.lst": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/usernames/username_br.lst",
+      "src_hash": "1f9204fe33bb1c4650355fde32501e3591d4ab3fe30a8eb490275001f80a6723",
+      "dst_hash": "1f9204fe33bb1c4650355fde32501e3591d4ab3fe30a8eb490275001f80a6723",
+      "synced_at": "2026-09-26T21:47:16.306622",
+      "target": "wordlist_usernames"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/data/wordlists/fuzzing/discovery_br.lst": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/WordlistXPL-Forge/fuzzing/discovery_br.lst",
+      "src_hash": "b674ee76c25adf4b941e3eed39821c042913bdebb2a4ef5c2b44fb53fd916d85",
+      "dst_hash": "b674ee76c25adf4b941e3eed39821c042913bdebb2a4ef5c2b44fb53fd916d85",
+      "synced_at": "2026-09-26T21:47:16.589398",
+      "target": "wordlist_fuzzing"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/modules/exploits/printers/exploits/brother/brother_auth_bypass_serial_cve_2024_51978.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/PrinterXPL-Forge/printerxpl/modules/exploits/brother/brother_auth_bypass_serial_cve_2024_51978.py",
+      "src_hash": "ffb7f2260d35cc0942e7338af83f561aa32a3850e988d2596e49ea15b2461503",
+      "dst_hash": "9d42469b180fef5dfcf84db292b39626d23d471f58ae7421eb95f43074febdfc",
+      "synced_at": "2026-09-26T21:47:16.906018",
+      "target": "printer"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/modules/exploits/printers/exploits/brother/brother_stack_overflow_rce_cve_2024_51979.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/PrinterXPL-Forge/printerxpl/modules/exploits/brother/brother_stack_overflow_rce_cve_2024_51979.py",
+      "src_hash": "5e0b9c06ee64a1bf9c9b6e01ce9fe0a9e5c57f46c3a0025c282b0c53b2c850e3",
+      "dst_hash": "4be3d74c35903b7f58eb1ef2df9e885dee990476ec1fb5cbe6f8224215b8e416",
+      "synced_at": "2026-09-26T21:47:16.930021",
+      "target": "printer"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/modules/exploits/printers/exploits/hp/__init__.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/PrinterXPL-Forge/printerxpl/modules/exploits/hp/__init__.py",
+      "src_hash": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "dst_hash": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "synced_at": "2026-09-26T21:47:16.955161",
+      "target": "printer"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/modules/exploits/printers/exploits/hp/hp_jetdirect_path_traversal_rce.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/PrinterXPL-Forge/printerxpl/modules/exploits/hp/hp_jetdirect_path_traversal_rce.py",
+      "src_hash": "ed5e0ef97c869d38017893d0f46226fe996f9638d907020bf991b979b7960854",
+      "dst_hash": "ce94332838ef99fc5eef76023761f952dcf75f331e6944ee084cf069ad2e3714",
+      "synced_at": "2026-09-26T21:47:16.983743",
+      "target": "printer"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/modules/exploits/printers/scanners/hplip/__init__.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/PrinterXPL-Forge/printerxpl/modules/scanners/hplip/__init__.py",
+      "src_hash": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6",
+      "dst_hash": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "synced_at": "2026-09-26T21:47:17.012413",
+      "target": "printer"
+    },
+    "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/EmbedXPL-Forge/embedxpl/modules/exploits/printers/scanners/hplip/hp_hplip_mass_cve_scanner.py": {
+      "src": "/run/media/mrhenrike/Data/Projects/UniaoGeek/XPL-Suite/PrinterXPL-Forge/printerxpl/modules/scanners/hplip/hp_hplip_mass_cve_scanner.py",
+      "src_hash": "2281ab93919e350665299a6f5c163393b2215e424f5676880bdae0349fc1227f",
+      "dst_hash": "6edb3a5299cf93f3aff3b1101f3616946c61a7c5f2a98889320114f578ab7cf5",
+      "synced_at": "2026-09-26T21:47:17.040381",
+      "target": "printer"
     }
   },
-  "last_sync": "2026-09-26T21:34:40.244758",
+  "last_sync": "2026-09-26T21:47:17.040402",
   "stats": {
     "wireless": {
       "copied": 477,
@@ -3348,6 +3992,41 @@
       "conflicts": 0,
       "errors": 0,
       "rewrites": 268
+    },
+    "wordlist": {
+      "copied": 83,
+      "skipped": 0,
+      "conflicts": 0,
+      "errors": 0,
+      "rewrites": 24
+    },
+    "wordlist_data": {
+      "copied": 1,
+      "skipped": 0,
+      "conflicts": 0,
+      "errors": 0,
+      "rewrites": 0
+    },
+    "wordlist_usernames": {
+      "copied": 1,
+      "skipped": 0,
+      "conflicts": 0,
+      "errors": 0,
+      "rewrites": 0
+    },
+    "wordlist_fuzzing": {
+      "copied": 1,
+      "skipped": 0,
+      "conflicts": 0,
+      "errors": 0,
+      "rewrites": 0
+    },
+    "printer": {
+      "copied": 6,
+      "skipped": 0,
+      "conflicts": 0,
+      "errors": 0,
+      "rewrites": 2
     }
   }
 }
