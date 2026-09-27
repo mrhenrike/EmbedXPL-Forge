@@ -173,9 +173,32 @@ def _extract_info(module_path: str) -> Optional[ModuleRecord]:
 _MODULE_CACHE: Optional[list[ModuleRecord]] = None
 
 
-def _get_cache(rebuild: bool = False) -> list[ModuleRecord]:
+def _get_cache(rebuild: bool = False, use_db_cache: bool = True) -> list[ModuleRecord]:
+    """Return module cache. Tries EXFDatabase module_cache first for instant startup."""
     global _MODULE_CACHE
     if _MODULE_CACHE is None or rebuild:
+        # Try loading from EXFDatabase module_cache (instant, no import needed)
+        if use_db_cache and not rebuild:
+            try:
+                from embedxpl.core.database import EXFDatabase
+                db = EXFDatabase()
+                if db.module_cache_count() > 100:
+                    cached = db.get_cached_modules()
+                    _MODULE_CACHE = [
+                        ModuleRecord(
+                            path=r["path"], name=r["name"],
+                            description=r["description"],
+                            cves=r.get("cves", []),
+                            vendors=r.get("vendors", []),
+                            category=r.get("category", ""),
+                        )
+                        for r in cached
+                    ]
+                    db.close()
+                    return _MODULE_CACHE
+                db.close()
+            except Exception:
+                pass
         print("[*] Indexando módulos EmbedXPL (primeira execução — aguarde)...")
         records = []
         for path in _iter_modules():

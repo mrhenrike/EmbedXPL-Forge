@@ -67,6 +67,8 @@ class XplRuntime:
         module: Any,
         args: Optional[list[str]] = None,
         timeout: int = 60,
+        _db: Optional[Any] = None,       # EXFDatabase instance for auto-logging
+        _target: str = "",               # target address for run_history
         **kwargs: Any,
     ) -> dict[str, Any]:
         """Execute a module using its declared native_language.
@@ -76,6 +78,9 @@ class XplRuntime:
 
         For native modules (C/Go/Rust/Ruby), compiles (if needed) and
         executes the binary/script pointed to by module.native_source.
+
+        If `_db` is provided (EXFDatabase instance), execution is logged
+        automatically to run_history.
         """
         lang = getattr(module, "native_language", "python") or "python"
         lang = lang.lower().strip()
@@ -94,7 +99,20 @@ class XplRuntime:
                 "lang": lang,
             }
 
-        return executor.run(module, args=args, timeout=timeout, **kwargs)
+        result = executor.run(module, args=args, timeout=timeout, **kwargs)
+
+        # Auto-log to EXFDatabase if provided
+        if _db is not None:
+            try:
+                module_path = getattr(module, "__module__", "") + "." + type(module).__name__
+                outcome = "vulnerable" if result.get("returncode") == 0 else "error"
+                detail = result.get("stdout", result.get("error", ""))[:300]
+                _db.add_run(target=_target, module_path=module_path,
+                            result=outcome, detail=detail)
+            except Exception:
+                pass
+
+        return result
 
     def check(
         self,
