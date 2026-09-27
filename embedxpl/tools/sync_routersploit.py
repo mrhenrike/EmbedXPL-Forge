@@ -181,24 +181,23 @@ def absorb_creds(dry_run: bool = False) -> int:
         if py_file.name == "__init__.py":
             continue
 
-        # Criar sub-diretório baseado no parent
+        # Preserve FULL relative path to avoid vendor collisions
+        # RSF: creds/cameras/acti/ftp_default_creds.py
+        # EXF: creds/rsf/cameras/acti/ftp_default_creds.py
         rel = py_file.relative_to(creds_dir)
-        parts = rel.parts
-        vendor_part = parts[0] if len(parts) > 1 else "generic"
-        dst_dir = _EXF_CREDS / vendor_part
-        dst_file = dst_dir / py_file.name
+        dst_file = _EXF_CREDS / rel   # preserves full path
 
         if dst_file.exists():
             continue
 
         if not dry_run:
-            dst_dir.mkdir(parents=True, exist_ok=True)
-            (dst_dir / "__init__.py").touch()
+            dst_file.parent.mkdir(parents=True, exist_ok=True)
+            (dst_file.parent / "__init__.py").touch()
             src = py_file.read_text(errors="replace")
             dst_file.write_text(_transform_source(src))
-            print(f"  [+] creds/{vendor_part}/{py_file.name}")
+            print(f"  [+] creds/{rel}")
         else:
-            print(f"  [DRY] creds/{vendor_part}/{py_file.name}")
+            print(f"  [DRY] creds/{rel}")
         absorbed += 1
 
     return absorbed
