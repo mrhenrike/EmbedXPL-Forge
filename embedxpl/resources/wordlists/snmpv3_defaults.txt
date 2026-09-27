@@ -1,0 +1,8 @@
+admin|SHA|admin123|AES|admin123|authPriv
+admin|SHA|admin|AES|admin|authPriv
+admin|SHA|password|AES|password|authPriv
+snmp|SHA|snmp12345|AES|snmp12345|authPriv
+monitor|SHA|monitor|NONE||authNoPriv
+operator|SHA|operator|NONE||authNoPriv
+readonly|SHA|readonly|NONE||authNoPriv
+admin|NONE||NONE||noAuthNoPriv

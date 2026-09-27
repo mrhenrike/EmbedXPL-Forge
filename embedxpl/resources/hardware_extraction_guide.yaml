@@ -1,0 +1,142 @@
+# Author: André Henrique (LinkedIn/X: @mrhenrike)
+# Hardware Extraction & Firmware Analysis Field Guide — EmbedXPL-Forge v2.0
+# Guidance for physical firmware extraction from common IoT/OT device hardware.
+
+overview: |
+  This guide covers common physical and logical firmware extraction techniques
+  for embedded systems. Use in conjunction with embedxpl/tools/firmware_analyzer.py
+  for automated analysis after extraction.
+
+techniques:
+  uart_console:
+    name: "UART Serial Console Access"
+    difficulty: "Low–Medium"
+    equipment:
+      - "USB-to-UART (3.3V) adapter (e.g. CP2102, CH340)"
+      - "Logic analyzer or multimeter"
+      - "Jumper wires"
+      - "minicom, screen, or PuTTY"
+    steps:
+      - "Identify UART TX/RX/GND pads using multimeter or logic analyzer."
+      - "Typical baud rates: 115200, 57600, 38400, 9600."
+      - "Connect: USB-UART TX → board RX; USB-UART RX → board TX; GND → GND."
+      - "Open terminal: screen /dev/ttyUSB0 115200"
+      - "Boot device; capture U-Boot or BusyBox shell."
+      - "From shell: cat /proc/mtd and dd if=/dev/mtdN of=/tmp/fw.bin"
+      - "Exfiltrate via TFTP, HTTP, or USB storage."
+    references:
+      - "https://embeddedbits.org/finding-uart-port-for-fun/"
+
+  jtag_debug:
+    name: "JTAG Boundary Scan / Debug Access"
+    difficulty: "Medium–High"
+    equipment:
+      - "JTAG adapter (OpenOCD-compatible: Olimex ARM-USB-OCD, J-Link)"
+      - "JTAGulator (for identifying pins)"
+      - "OpenOCD"
+    steps:
+      - "Use JTAGulator or logic analyzer to identify JTAG TDI/TDO/TCK/TMS/nTRST."
+      - "Configure OpenOCD with target chip config."
+      - "Halt CPU: openocd -f interface/jlink.cfg -f target/<chip>.cfg"
+      - "Dump flash: dump_image firmware.bin 0x0 0x1000000"
+    references:
+      - "https://openocd.org/doc/html/index.html"
+
+  spi_flash_read:
+    name: "SPI Flash Direct Read (8-pin SOIC)"
+    difficulty: "Medium"
+    equipment:
+      - "CH341A USB programmer (or Bus Pirate)"
+      - "SOIC8 clip"
+      - "flashrom"
+    steps:
+      - "Identify SPI flash chip (common: Winbond W25Q128, MX25L12835F)."
+      - "Attach SOIC8 clip to chip pins while board is powered off."
+      - "Read: flashrom -p ch341a_spi -r firmware.bin"
+      - "Verify: md5sum firmware.bin (read twice, compare)"
+    common_chips:
+      - "Winbond W25Q128FV (128Mbit)"
+      - "Macronix MX25L12835F (128Mbit)"
+      - "Spansion S25FL128S"
+    references:
+      - "https://www.flashrom.org/Flashrom"
+
+  emmc_read:
+    name: "eMMC Chip-Off or ISP Read"
+    difficulty: "High"
+    equipment:
+      - "Hot air station (chip-off) or ISP pogo pins"
+      - "eMMC adapter for SD card reader"
+      - "dd or specialized eMMC programmer"
+    steps:
+      - "ISP method: Identify CMD/CLK/DAT0/VCC/GND on eMMC ball grid."
+      - "Attach ISP wires; use eMMC programmer (e.g. Medusa Pro, JTAG Box)."
+      - "Chip-off: desolder BGA package, reball, mount on adapter, use dd."
+      - "Read: dd if=/dev/mmcblk0 of=emmc_dump.bin bs=512"
+    references:
+      - "https://reverseengineering.stackexchange.com/questions/14603/"
+
+  network_tftp_boot:
+    name: "Network TFTP Firmware Extraction via U-Boot"
+    difficulty: "Low"
+    equipment:
+      - "Ethernet cable"
+      - "TFTP server (tftpd-hpa)"
+      - "UART console access (see uart_console)"
+    steps:
+      - "Interrupt U-Boot autoboot (press any key on UART console)."
+      - "Set U-Boot env: setenv serverip 192.168.1.100; setenv ipaddr 192.168.1.200"
+      - "Read MTD to RAM: nand read 0x80000000 0x0 0x1000000"
+      - "Upload to TFTP: tftpput 0x80000000 0x1000000 firmware.bin"
+    references:
+      - "https://www.denx.de/wiki/U-Boot"
+
+  http_ota_intercept:
+    name: "OTA Firmware Intercept via HTTP Proxy"
+    difficulty: "Low"
+    equipment:
+      - "Burp Suite or mitmproxy"
+      - "Wi-Fi router (AP mode) or ARP spoofing"
+    steps:
+      - "Set up MITM proxy on the device's network path."
+      - "Trigger firmware update from device UI."
+      - "Intercept HTTP/HTTPS OTA download URL."
+      - "Download firmware directly: wget <intercepted_url>"
+    notes: |
+      Works well for Android TV, Roku, LG WebOS, Samsung Tizen OTA updates.
+      HTTPS interception requires certificate pinning bypass on the device.
+
+analysis_tools:
+  binwalk:
+    install: "pip install binwalk   (or apt-get install binwalk)"
+    usage: "binwalk --extract --directory ./extracted firmware.bin"
+    notes: "Best for squashfs, JFFS2, LZMA, gzip, and common IoT formats."
+
+  unblob:
+    install: "pip install unblob   (see https://unblob.org)"
+    usage: "unblob --extract-dir ./extracted firmware.bin"
+    notes: "Modern successor to binwalk; handles more container formats."
+
+  firmwalker:
+    install: "git clone https://github.com/craigz28/firmwalker"
+    usage: "bash firmwalker.sh ./extracted/squashfs-root/ ./report.txt"
+    notes: "Searches extracted filesystem for passwords, keys, IPs, URLs."
+
+  emba:
+    install: |
+      git clone https://github.com/e-m-b-a/emba
+      cd emba && sudo ./installer.sh -d
+    usage: "sudo ./emba.sh -f firmware.bin -l /tmp/emba_output"
+    notes: "Full automated firmware security scanner; requires sudo and Docker."
+
+  binvis:
+    install: "pip install binvis (optional)"
+    usage: "binvis firmware.bin"
+    notes: "Visual entropy analysis; useful for identifying encryption."
+
+quick_start: |
+  1. Extract with binwalk: binwalk --extract --directory ./fw_extracted firmware.bin
+  2. Scan with Firmwalker: bash firmwalker.sh ./fw_extracted/ ./firmwalker_report.txt
+  3. Review report for credentials, keys, and interesting strings.
+  4. For deep analysis: sudo ./emba.sh -f firmware.bin -l /tmp/emba_out -s
+  5. Use EmbedXPL-Forge firmware_analyzer.py for automated pipeline.

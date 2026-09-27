@@ -1,0 +1,13 @@
+Admin:1234
+Admin:Admin
+Admin:admin
+Admin:epicrouter
+admin:1234
+admin:Admin
+admin:admin
+admin:epicrouter
+root:1234
+root:Admin
+root:admin
+root:epicrouter
+admin:password

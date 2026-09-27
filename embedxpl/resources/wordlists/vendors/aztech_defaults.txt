@@ -1,0 +1,10 @@
+admin:Aztechadmin
+admin:admin
+admin:password
+admin:user
+user:Aztechadmin
+user:admin
+user:password
+user:user
+isp:isp
+root:admin

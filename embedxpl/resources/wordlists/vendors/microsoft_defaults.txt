@@ -1,0 +1,13 @@
+:admin
+:sa
+Administrator:
+Administrator:Administrator
+Guest:
+Guest:Guest
+IS_$hostname:IS_$hostname
+LDAP_Anonymous:LdapPassword_1
+LessonUser1:
+LessonUser2:
+MSHOME:MSHOME
+User:User
+sa:

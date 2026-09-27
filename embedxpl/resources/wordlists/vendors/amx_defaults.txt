@@ -1,0 +1,10 @@
+:1988
+:admin
+Admin:1988
+Administrator:vision2
+NetLinx:password
+admin:1988
+admin:admin
+administrator:password
+guest:guest
+root:mozart
