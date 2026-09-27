@@ -163,14 +163,13 @@ class BaseInterpreter:
             print_info("stdin is not a TTY. Ensure `stdin_open` and `tty` are set")
             sys.exit(1)
         
-        if hasattr(self, "_rich_banner") and self._rich_banner:
-            from embedxpl.core.exploit.printer import console as _con
-            _con.print(self._rich_banner)
-
-            # AUTHORIZED USE ONLY
-            print_warning("FOR AUTHORIZED PENETRATION TESTING ONLY. Operator assumes full responsibility.")
-        elif self.banner:
-            print_info(self.banner)
+        # Banner figlet com stats em tempo real
+        try:
+            from embedxpl.core.banner import show_banner
+            show_banner("embedxpl", version="v5.0.0")
+        except Exception:
+            pass
+        print_warning("FOR AUTHORIZED PENETRATION TESTING ONLY. Operator assumes full responsibility.")
         printer_queue.join()
         
         while True:
@@ -312,38 +311,8 @@ class EmbedXPLInterpreter(BaseInterpreter):
             self._hw_profile.compute_mode = saved_mode
         self._validate_compute_mode(silent=True)
 
-        total_modules = sum(self.modules_count.values())
-        from rich.text import Text
-        from embedxpl.core.exploit.printer import console as _con
-
-        hw_line = self._hw_profile.one_liner()
-
-        banner_lines = [
-            "",
-            " [bold cyan] ____  __  __ _____ [/bold cyan]",
-            " [bold cyan]|  _ \\\\ \\\\ \\\\/ /|  ___| [/bold cyan]  [bold]EmbedXPL-Forge[/bold] v1.0.0",
-            " [bold cyan]| |_) | \\\\  / | |_   [/bold cyan]  Network Device Security Assessment Framework",
-            " [bold cyan]|  _ <  /  \\\\ |  _|  [/bold cyan]",
-            " [bold cyan]|_| \\\\_\\\\/_/\\\\_\\\\|_|    [/bold cyan]  [dim]Author: Andre Henrique (@mrhenrike) | Uniao Geek[/dim]",
-            "",
-            " [blue]Target scope:[/blue] Routers - Switches L2/L3 - IP Cameras - GPON ONTs - ISP CPEs - IoT/Embedded Edge",
-            "",
-            " [green]\\[modules][/green] {total} total -- Exploits: {exploits} | Scanners: {scanners} | Creds: {creds} | Generic: {generic} | Payloads: {payloads} | Encoders: {encoders}",
-            " [yellow]\\[system][/yellow]  {hw_line}",
-            "",
-        ]
-        formatted = "\n".join(banner_lines).format(
-            total=total_modules,
-            exploits=self.modules_count["exploits"],
-            scanners=self.modules_count["scanners"],
-            creds=self.modules_count["creds"],
-            generic=self.modules_count["generic"],
-            payloads=self.modules_count["payloads"],
-            encoders=self.modules_count["encoders"],
-            hw_line=hw_line,
-        )
         self.banner = ""
-        self._rich_banner = formatted
+        self._rich_banner = ""   # banner novo via banner.py — exibido em start()
 
     def __parse_prompt(self):
         raw_prompt_default_template = "\001\033[4m\002{host}\001\033[0m\002 > "
