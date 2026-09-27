@@ -1,0 +1,7 @@
+admin:admin
+admin:password
+admin:password or telekomst
+user:admin
+user:password
+user:password or telekomst
+admin:adslroot

@@ -1,0 +1,9 @@
+:Compaq
+PFCUser:240653C9467E45
+administrator:administrator
+anonymous:
+operator:operator
+root:manager
+root:rootme
+user:public
+user:user

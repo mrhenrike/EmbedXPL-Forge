@@ -1,0 +1,9 @@
+:12345
+:admin
+Any:12345
+admin:
+admin:admin
+none:amber
+root:12345
+root:admin
+support:support

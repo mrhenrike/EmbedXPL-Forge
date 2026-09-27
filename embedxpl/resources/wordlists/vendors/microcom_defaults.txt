@@ -1,0 +1,4 @@
+admin:admin
+admin:epicrouter
+admin:superuser
+user:password
