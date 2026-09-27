@@ -1,0 +1,679 @@
+from __future__ import annotations
+
+import argparse
+import asyncio
+import base64
+import hashlib
+import hmac
+import os
+import secrets
+import socket
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+
+
+PROTOCOL_VERSION = "SAMSUNG-TV-ROOT/1"
+MAXIMUM_FRAME_BYTES = 4 * 1024 * 1024
+MINIMUM_SECRET_BYTES = 32
+DEFAULT_ACCEPT_TIMEOUT = 30.0
+DEFAULT_COMMAND_TIMEOUT = 10.0
+DEFAULT_CLOSE_TIMEOUT = 1.0
+
+
+class RootAgentError(RuntimeError):
+    pass
+
+
+class RootAgentUnavailableError(RootAgentError):
+    pass
+
+
+class RootAgentProtocolError(RootAgentError):
+    pass
+
+
+class RootAgentAuthenticationError(RootAgentError):
+    pass
+
+
+@dataclass(frozen=True)
+class RootAgentIdentity:
+    pid: int
+    uid: int
+    euid: int
+    gid: int
+    egid: int
+    effective_capabilities: str
+    smack_label: str
+
+
+@dataclass(frozen=True)
+class RootAgentResult:
+    sequence: int
+    exit_code: int
+    timed_out: bool
+    stdout: str
+    stderr: str
+
+
+@dataclass(frozen=True)
+class RootAgentFile:
+    sequence: int
+    data: bytes
+    sha256: str
+
+
+@dataclass(frozen=True)
+class RootAgentWrittenFile:
+    sequence: int
+    length: int
+    sha256: str
+
+
+def generate_secret() -> bytes:
+    return secrets.token_bytes(MINIMUM_SECRET_BYTES)
+
+
+def encode_secret(secret: bytes) -> str:
+    _validate_secret(secret)
+    return base64.b64encode(secret).decode("ascii")
+
+
+def decode_secret(value: str) -> bytes:
+    try:
+        secret = base64.b64decode(value.strip(), validate=True)
+    except (ValueError, base64.binascii.Error) as error:
+        raise RootAgentAuthenticationError(
+            "invalid base64 root-agent secret"
+        ) from error
+    _validate_secret(secret)
+    return secret
+
+
+def read_secret(path: Path) -> bytes:
+    return decode_secret(path.read_text())
+
+
+def write_secret(path: Path, secret: bytes) -> None:
+    _validate_secret(secret)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    file_descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    try:
+        os.write(file_descriptor, (encode_secret(secret) + "\n").encode("ascii"))
+    finally:
+        os.close(file_descriptor)
+
+
+def authenticate_payload(secret: bytes, nonce: bytes, payload: str) -> str:
+    _validate_secret(secret)
+    if len(nonce) != 32:
+        raise RootAgentProtocolError("root-agent nonce must be 32 bytes")
+    message = nonce + b"\0" + payload.encode("utf-8")
+    return hmac.new(secret, message, hashlib.sha256).hexdigest()
+
+
+def encode_authenticated_frame(secret: bytes, nonce: bytes, payload: str) -> bytes:
+    return f"{payload}\t{authenticate_payload(secret, nonce, payload)}\n".encode(
+        "utf-8"
+    )
+
+
+def verify_authenticated_frame(secret: bytes, nonce: bytes, line: bytes) -> str:
+    try:
+        text = line.decode("utf-8").rstrip("\r\n")
+    except UnicodeDecodeError as error:
+        raise RootAgentProtocolError("root-agent frame is not UTF-8") from error
+    try:
+        payload, observed = text.rsplit("\t", 1)
+    except ValueError as error:
+        raise RootAgentProtocolError("root-agent frame has no authenticator") from error
+    expected = authenticate_payload(secret, nonce, payload)
+    if not hmac.compare_digest(observed, expected):
+        raise RootAgentAuthenticationError("root-agent frame authentication failed")
+    return payload
+
+
+def _validate_secret(secret: bytes) -> None:
+    if len(secret) < MINIMUM_SECRET_BYTES:
+        raise RootAgentAuthenticationError(
+            f"root-agent secret must contain at least {MINIMUM_SECRET_BYTES} bytes"
+        )
+
+
+async def _read_frame(reader: asyncio.StreamReader, timeout: float) -> bytes:
+    try:
+        line = await asyncio.wait_for(reader.readline(), timeout)
+    except asyncio.LimitOverrunError as error:
+        raise RootAgentProtocolError("root-agent frame exceeds size limit") from error
+    if not line:
+        raise RootAgentProtocolError("root-agent disconnected")
+    if len(line) > MAXIMUM_FRAME_BYTES:
+        raise RootAgentProtocolError("root-agent frame exceeds size limit")
+    return line
+
+
+class RootAgentConnection:
+    def __init__(
+        self,
+        reader: asyncio.StreamReader,
+        writer: asyncio.StreamWriter,
+        secret: bytes,
+        nonce: bytes,
+        identity: RootAgentIdentity,
+    ) -> None:
+        self._reader = reader
+        self._writer = writer
+        self._secret = secret
+        self._nonce = nonce
+        self.identity = identity
+        self._sequence = 0
+        self._closed = False
+        self._request_lock = asyncio.Lock()
+
+    async def ping(self, timeout: float = DEFAULT_COMMAND_TIMEOUT) -> RootAgentIdentity:
+        async with self._request_lock:
+            sequence = self._next_sequence()
+            try:
+                await self._send(f"PING\t{sequence}")
+                fields = (await self._receive(timeout)).split("\t")
+                if len(fields) != 6 or fields[:2] != ["PONG", str(sequence)]:
+                    raise RootAgentProtocolError("invalid root-agent PONG")
+                try:
+                    uid = int(fields[2])
+                    euid = int(fields[3])
+                    gid = int(fields[4])
+                    egid = int(fields[5])
+                except ValueError as error:
+                    raise RootAgentProtocolError(
+                        "invalid root-agent PONG identity"
+                    ) from error
+                return RootAgentIdentity(
+                    pid=self.identity.pid,
+                    uid=uid,
+                    euid=euid,
+                    gid=gid,
+                    egid=egid,
+                    effective_capabilities=self.identity.effective_capabilities,
+                    smack_label=self.identity.smack_label,
+                )
+            except BaseException:
+                self._invalidate()
+                raise
+
+    async def execute(
+        self,
+        command: str,
+        timeout: float = DEFAULT_COMMAND_TIMEOUT,
+    ) -> RootAgentResult:
+        if not command or len(command.encode("utf-8")) > 64 * 1024:
+            raise ValueError(
+                "root-agent command must contain 1 through 65536 UTF-8 bytes"
+            )
+        timeout_milliseconds = int(timeout * 1000)
+        if timeout_milliseconds < 100 or timeout_milliseconds > 300_000:
+            raise ValueError(
+                "root-agent command timeout must be between 0.1 and 300 seconds"
+            )
+        async with self._request_lock:
+            sequence = self._next_sequence()
+            encoded_command = base64.b64encode(command.encode("utf-8")).decode("ascii")
+            try:
+                await self._send(
+                    f"EXEC\t{sequence}\t{timeout_milliseconds}\t{encoded_command}"
+                )
+                payload = await self._receive(timeout + 2.0)
+                fields = payload.split("\t")
+                if len(fields) != 6 or fields[:2] != ["RESULT", str(sequence)]:
+                    raise RootAgentProtocolError("invalid root-agent RESULT")
+                try:
+                    exit_code = int(fields[2])
+                    timed_out = fields[3] == "1"
+                    standard_output = base64.b64decode(fields[4], validate=True).decode(
+                        "utf-8", errors="replace"
+                    )
+                    standard_error = base64.b64decode(fields[5], validate=True).decode(
+                        "utf-8", errors="replace"
+                    )
+                except (ValueError, base64.binascii.Error) as error:
+                    raise RootAgentProtocolError(
+                        "invalid root-agent RESULT fields"
+                    ) from error
+                if fields[3] not in {"0", "1"}:
+                    raise RootAgentProtocolError("invalid root-agent timeout flag")
+                return RootAgentResult(
+                    sequence=sequence,
+                    exit_code=exit_code,
+                    timed_out=timed_out,
+                    stdout=standard_output,
+                    stderr=standard_error,
+                )
+            except BaseException:
+                self._invalidate()
+                raise
+
+    async def read_file(
+        self,
+        path: str | Path,
+        timeout: float = DEFAULT_COMMAND_TIMEOUT,
+    ) -> RootAgentFile:
+        encoded_path = str(path).encode("utf-8")
+        if not encoded_path or len(encoded_path) > 4096:
+            raise ValueError(
+                "root-agent file path must contain 1 through 4096 UTF-8 bytes"
+            )
+        async with self._request_lock:
+            sequence = self._next_sequence()
+            deadline = asyncio.get_running_loop().time() + timeout
+            try:
+                await self._send(
+                    f"READFILE\t{sequence}\t{base64.b64encode(encoded_path).decode('ascii')}"
+                )
+                payload = await self._receive(self._remaining_timeout(deadline))
+                fields = payload.split("\t")
+                if len(fields) != 4 or fields[:2] != ["FILE", str(sequence)]:
+                    raise RootAgentProtocolError("invalid root-agent FILE response")
+                try:
+                    length = int(fields[2])
+                except ValueError as error:
+                    raise RootAgentProtocolError(
+                        "invalid root-agent FILE length"
+                    ) from error
+                sha256 = fields[3]
+                if (
+                    length < 0
+                    or length > MAXIMUM_FRAME_BYTES
+                    or len(sha256) != hashlib.sha256().digest_size * 2
+                ):
+                    raise RootAgentProtocolError("invalid root-agent FILE metadata")
+                try:
+                    data = await asyncio.wait_for(
+                        self._reader.readexactly(length),
+                        self._remaining_timeout(deadline),
+                    )
+                except asyncio.IncompleteReadError as error:
+                    raise RootAgentProtocolError(
+                        "root-agent FILE payload was truncated"
+                    ) from error
+                observed_sha256 = hashlib.sha256(data).hexdigest()
+                if not hmac.compare_digest(observed_sha256, sha256):
+                    raise RootAgentAuthenticationError(
+                        "root-agent FILE digest verification failed"
+                    )
+                return RootAgentFile(
+                    sequence=sequence,
+                    data=data,
+                    sha256=sha256,
+                )
+            except BaseException:
+                self._invalidate()
+                raise
+
+    async def write_file(
+        self,
+        path: str | Path,
+        data: bytes,
+        timeout: float = DEFAULT_COMMAND_TIMEOUT,
+    ) -> RootAgentWrittenFile:
+        encoded_path = str(path).encode("utf-8")
+        if not encoded_path or len(encoded_path) > 4096:
+            raise ValueError(
+                "root-agent file path must contain 1 through 4096 UTF-8 bytes"
+            )
+        if len(data) > MAXIMUM_FRAME_BYTES:
+            raise ValueError(
+                f"root-agent file data cannot exceed {MAXIMUM_FRAME_BYTES} bytes"
+            )
+        async with self._request_lock:
+            sequence = self._next_sequence()
+            digest = hashlib.sha256(data).hexdigest()
+            try:
+                await self._send(
+                    "WRITEFILE\t"
+                    f"{sequence}\t"
+                    f"{base64.b64encode(encoded_path).decode('ascii')}\t"
+                    f"{len(data)}\t{digest}"
+                )
+                self._writer.write(data)
+                await self._writer.drain()
+                fields = (await self._receive(timeout)).split("\t")
+                if fields != ["WROTE", str(sequence), str(len(data)), digest]:
+                    raise RootAgentProtocolError("invalid root-agent WROTE response")
+                return RootAgentWrittenFile(sequence, len(data), digest)
+            except BaseException:
+                self._invalidate()
+                raise
+
+    async def shutdown(self, timeout: float = DEFAULT_COMMAND_TIMEOUT) -> None:
+        if self._closed:
+            return
+        async with self._request_lock:
+            sequence = self._next_sequence()
+            try:
+                await self._send(f"SHUTDOWN\t{sequence}")
+                fields = (await self._receive(timeout)).split("\t")
+                if fields != ["BYE", str(sequence)]:
+                    raise RootAgentProtocolError("invalid root-agent BYE")
+            except BaseException:
+                self._invalidate()
+                raise
+            self._invalidate()
+            await _wait_for_writer_close(self._writer)
+
+    async def close(self) -> None:
+        if self._closed:
+            return
+        self._invalidate()
+        await _wait_for_writer_close(self._writer)
+
+    async def wait_closed(self) -> None:
+        await self._writer.wait_closed()
+
+    @property
+    def closed(self) -> bool:
+        return self._closed or self._reader.at_eof() or self._writer.is_closing()
+
+    async def _send(self, payload: str) -> None:
+        if self._closed:
+            raise RootAgentProtocolError("root-agent connection is closed")
+        self._writer.write(
+            encode_authenticated_frame(self._secret, self._nonce, payload)
+        )
+        await self._writer.drain()
+
+    async def _receive(self, timeout: float) -> str:
+        line = await _read_frame(self._reader, timeout)
+        return verify_authenticated_frame(self._secret, self._nonce, line)
+
+    def _next_sequence(self) -> int:
+        self._sequence += 1
+        return self._sequence
+
+    @staticmethod
+    def _remaining_timeout(deadline: float) -> float:
+        remaining = deadline - asyncio.get_running_loop().time()
+        if remaining <= 0:
+            raise TimeoutError("root-agent request timed out")
+        return remaining
+
+    def _invalidate(self) -> None:
+        if self._closed:
+            return
+        self._closed = True
+        self._writer.close()
+
+
+class RootAgentServer:
+    def __init__(
+        self,
+        bind_host: str,
+        port: int,
+        expected_peer: str,
+        secret: bytes,
+        *,
+        require_root: bool = True,
+    ) -> None:
+        _validate_secret(secret)
+        self.bind_host = bind_host
+        self.port = port
+        self.expected_peer = expected_peer
+        self.secret = secret
+        self.require_root = require_root
+        self._accepted: asyncio.Future[RootAgentConnection] | None = None
+        self._server: asyncio.Server | None = None
+
+    @property
+    def listening_port(self) -> int:
+        if self._server is None or not self._server.sockets:
+            raise RuntimeError("root-agent server is not listening")
+        return int(self._server.sockets[0].getsockname()[1])
+
+    async def start(self) -> None:
+        if self._server is not None:
+            raise RuntimeError("root-agent server is already started")
+        self._accepted = asyncio.get_running_loop().create_future()
+        self._server = await asyncio.start_server(
+            self._handle_connection,
+            self.bind_host,
+            self.port,
+            limit=MAXIMUM_FRAME_BYTES,
+        )
+
+    async def accept(
+        self, timeout: float = DEFAULT_ACCEPT_TIMEOUT
+    ) -> RootAgentConnection:
+        if self._accepted is None:
+            raise RuntimeError("root-agent server is not started")
+        try:
+            return await asyncio.wait_for(asyncio.shield(self._accepted), timeout)
+        except TimeoutError as error:
+            raise RootAgentUnavailableError(
+                f"no authenticated root agent connected within {timeout:g}s"
+            ) from error
+
+    async def close(self) -> None:
+        server = self._server
+        accepted = self._accepted
+        self._server = None
+        self._accepted = None
+        if server is not None:
+            server.close()
+        connection = None
+        if accepted is not None:
+            if not accepted.done():
+                accepted.cancel()
+            elif not accepted.cancelled():
+                try:
+                    connection = accepted.result()
+                except Exception:
+                    pass
+        if connection is not None:
+            await connection.close()
+        if server is not None:
+            await server.wait_closed()
+
+    def detach(self, connection: RootAgentConnection) -> asyncio.Server | None:
+        accepted = self._accepted
+        server = self._server
+        if accepted is None or not accepted.done() or accepted.cancelled():
+            raise RuntimeError("root-agent server has no accepted connection")
+        if accepted.result() is not connection:
+            raise RuntimeError("root-agent connection does not belong to this server")
+        self._accepted = None
+        self._server = None
+        if server is not None:
+            server.close()
+        return server
+
+    async def _handle_connection(
+        self,
+        reader: asyncio.StreamReader,
+        writer: asyncio.StreamWriter,
+    ) -> None:
+        accepted = self._accepted
+        peer = writer.get_extra_info("peername")
+        peer_host = str(peer[0]) if peer else ""
+        if peer_host != self.expected_peer or accepted is None or accepted.done():
+            await _close_writer(writer)
+            return
+        _configure_keepalive(writer)
+        nonce = secrets.token_bytes(32)
+        writer.write(f"{PROTOCOL_VERSION}\t{nonce.hex()}\n".encode("ascii"))
+        await writer.drain()
+        try:
+            line = await _read_frame(reader, DEFAULT_COMMAND_TIMEOUT)
+            payload = verify_authenticated_frame(self.secret, nonce, line)
+            identity = _parse_auth(payload)
+            if self.require_root and any(
+                value != 0
+                for value in (identity.uid, identity.euid, identity.gid, identity.egid)
+            ):
+                raise RootAgentAuthenticationError(
+                    "agent connected without root identity: "
+                    f"uid={identity.uid} euid={identity.euid} "
+                    f"gid={identity.gid} egid={identity.egid}"
+                )
+            connection = RootAgentConnection(
+                reader,
+                writer,
+                self.secret,
+                nonce,
+                identity,
+            )
+            accepted.set_result(connection)
+        except Exception as error:
+            if not accepted.done():
+                accepted.set_exception(error)
+            await _close_writer(writer)
+
+
+def _parse_auth(payload: str) -> RootAgentIdentity:
+    fields = payload.split("\t")
+    if len(fields) != 8 or fields[0] != "AUTH":
+        raise RootAgentProtocolError("invalid root-agent AUTH")
+    try:
+        pid = int(fields[1])
+        uid = int(fields[2])
+        euid = int(fields[3])
+        gid = int(fields[4])
+        egid = int(fields[5])
+        smack_label = base64.b64decode(fields[7], validate=True).decode(
+            "utf-8", errors="replace"
+        )
+    except (ValueError, base64.binascii.Error) as error:
+        raise RootAgentProtocolError("invalid root-agent AUTH fields") from error
+    return RootAgentIdentity(
+        pid=pid,
+        uid=uid,
+        euid=euid,
+        gid=gid,
+        egid=egid,
+        effective_capabilities=fields[6],
+        smack_label=smack_label,
+    )
+
+
+async def _close_writer(writer: asyncio.StreamWriter) -> None:
+    writer.close()
+    await _wait_for_writer_close(writer)
+
+
+async def _wait_for_writer_close(writer: asyncio.StreamWriter) -> None:
+    try:
+        await asyncio.wait_for(writer.wait_closed(), DEFAULT_CLOSE_TIMEOUT)
+    except (ConnectionError, OSError, TimeoutError):
+        pass
+
+
+def _configure_keepalive(writer: asyncio.StreamWriter) -> None:
+    connection_socket = writer.get_extra_info("socket")
+    if connection_socket is None:
+        return
+    try:
+        connection_socket.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+        for option_name, value in (
+            ("TCP_KEEPIDLE", 15),
+            ("TCP_KEEPINTVL", 5),
+            ("TCP_KEEPCNT", 3),
+        ):
+            option = getattr(socket, option_name, None)
+            if option is not None:
+                connection_socket.setsockopt(socket.IPPROTO_TCP, option, value)
+    except OSError:
+        return
+
+
+async def _run_server(arguments: argparse.Namespace) -> int:
+    secret = read_secret(arguments.secret_file)
+    server = RootAgentServer(
+        arguments.bind,
+        arguments.port,
+        arguments.expected_peer,
+        secret,
+        require_root=not arguments.allow_non_root,
+    )
+    await server.start()
+    print(
+        f"listening={arguments.bind}:{server.listening_port} "
+        f"expected_peer={arguments.expected_peer}",
+        flush=True,
+    )
+    try:
+        connection = await server.accept(arguments.accept_timeout)
+        identity = connection.identity
+        print(
+            "authenticated "
+            f"pid={identity.pid} uid={identity.uid} euid={identity.euid} "
+            f"gid={identity.gid} egid={identity.egid} "
+            f"cap_eff={identity.effective_capabilities} "
+            f"smack={identity.smack_label!r}",
+            flush=True,
+        )
+        try:
+            if arguments.command:
+                for command in arguments.command:
+                    result = await connection.execute(
+                        command, arguments.command_timeout
+                    )
+                    if result.stdout:
+                        sys.stdout.write(result.stdout)
+                    if result.stderr:
+                        sys.stderr.write(result.stderr)
+                    print(
+                        f"command_exit={result.exit_code} timed_out={str(result.timed_out).lower()}",
+                        flush=True,
+                    )
+            else:
+                await _interactive(connection, arguments.command_timeout)
+            await connection.shutdown()
+        finally:
+            await connection.close()
+    finally:
+        await server.close()
+    return 0
+
+
+async def _interactive(connection: RootAgentConnection, timeout: float) -> None:
+    while True:
+        try:
+            command = await asyncio.to_thread(input, "qn90f-root> ")
+        except EOFError:
+            return
+        if not command.strip():
+            continue
+        if command.strip() in {"exit", "quit"}:
+            return
+        result = await connection.execute(command, timeout)
+        if result.stdout:
+            sys.stdout.write(result.stdout)
+        if result.stderr:
+            sys.stderr.write(result.stderr)
+        print(
+            f"[exit={result.exit_code} timed_out={str(result.timed_out).lower()}]",
+            flush=True,
+        )
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Authenticated one-session QN90F root-agent controller"
+    )
+    parser.add_argument("--bind", required=True)
+    parser.add_argument("--port", type=int, default=0)
+    parser.add_argument("--expected-peer", required=True)
+    parser.add_argument("--secret-file", type=Path, required=True)
+    parser.add_argument("--accept-timeout", type=float, default=DEFAULT_ACCEPT_TIMEOUT)
+    parser.add_argument(
+        "--command-timeout", type=float, default=DEFAULT_COMMAND_TIMEOUT
+    )
+    parser.add_argument("--command", action="append")
+    parser.add_argument("--allow-non-root", action="store_true", help=argparse.SUPPRESS)
+    return parser
+
+
+def main(argv: list[str] | None = None) -> None:
+    arguments = build_parser().parse_args(argv)
+    try:
+        raise SystemExit(asyncio.run(_run_server(arguments)))
+    except RootAgentError as error:
+        raise SystemExit(str(error)) from error

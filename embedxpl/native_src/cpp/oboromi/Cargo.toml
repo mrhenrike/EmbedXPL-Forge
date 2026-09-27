@@ -1,0 +1,8 @@
+[workspace]
+resolver = "3"
+members = [
+  "core",
+]
+
+[workspace.dependencies]
+log = "0.4"

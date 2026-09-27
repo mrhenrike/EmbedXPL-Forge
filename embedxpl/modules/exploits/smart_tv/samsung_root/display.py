@@ -1,0 +1,168 @@
+from __future__ import annotations
+
+import asyncio
+import json
+import re
+import shlex
+from pathlib import PurePosixPath
+from typing import Any, Protocol
+
+
+DEFAULT_DISPLAY_TIMEOUT = 5.0
+QN90B_PANEL_TRANSITION_TIMEOUT = 2.0
+QN90B_PANEL_READ_INTERVAL = 0.2
+QN90B_DIRECTORY = PurePosixPath(
+    "/home/owner/share/tmp/sdk_tools/samsung-tv-root/qn90b"
+)
+QN90F_DIRECTORY = PurePosixPath("/home/owner/share/tmp/sdk_tools/qn90f-probe")
+QN90B_DISPLAY_CONTROL = QN90B_DIRECTORY / "Qn90bDisplayControl.dll"
+QN90F_DISPLAY_CONTROL = QN90F_DIRECTORY / "Qn90fDisplayControl.dll"
+QN90B_PANEL_STATE_COMMAND = (
+    "/usr/bin/dbus-send --system --print-reply --reply-timeout=1000 "
+    "--dest=org.tizen.system.deviced /Org/Tizen/System/DeviceD/Display "
+    "org.tizen.system.deviced.display.GetScreenState"
+)
+
+
+class DisplayControlError(RuntimeError):
+    pass
+
+
+class RootCommandResult(Protocol):
+    exit_code: int
+    timed_out: bool
+    stdout: str
+    stderr: str
+
+
+class RootCommandConnection(Protocol):
+    async def execute(self, command: str, timeout: float) -> RootCommandResult: ...
+
+
+class Qn90fDisplayControl:
+    async def run(
+        self,
+        connection: RootCommandConnection,
+        operation: str,
+        timeout: float = DEFAULT_DISPLAY_TIMEOUT,
+    ) -> dict[str, Any]:
+        if operation not in {"status", "pictureoff", "wake"}:
+            raise DisplayControlError(f"unknown QN90F display operation: {operation}")
+        return await _run_json_helper(
+            connection,
+            QN90F_DISPLAY_CONTROL,
+            operation,
+            timeout,
+            "QN90F display",
+        )
+
+
+class Qn90bDisplayControl:
+    async def run(
+        self,
+        connection: RootCommandConnection,
+        operation: str,
+        timeout: float = DEFAULT_DISPLAY_TIMEOUT,
+    ) -> dict[str, Any]:
+        if operation not in {"status", "pictureoff", "wake"}:
+            raise DisplayControlError(f"unknown QN90B display operation: {operation}")
+        payload = await _run_json_helper(
+            connection,
+            QN90B_DISPLAY_CONTROL,
+            operation,
+            timeout,
+            "QN90B display",
+        )
+        if operation == "status":
+            panel = await self._read_panel_state(connection, timeout)
+        else:
+            expected = 0 if operation == "pictureoff" else 1
+            panel = await self._wait_for_panel_state(connection, expected, timeout)
+        payload.update(panel)
+
+        if operation == "status":
+            native_state = payload.get("display_state")
+            expected_panel = 0 if native_state == 1 else 1 if native_state == 0 else None
+            payload["panel_state_confirmed"] = (
+                expected_panel is not None and panel["panel_state"] == expected_panel
+            )
+            return payload
+
+        confirmation = (
+            "panel_picture_off_confirmed"
+            if operation == "pictureoff"
+            else "panel_wake_confirmed"
+        )
+        expected = 0 if operation == "pictureoff" else 1
+        payload[confirmation] = panel["panel_state"] == expected
+        if not payload[confirmation]:
+            verb = "darken" if operation == "pictureoff" else "light"
+            raise DisplayControlError(f"QN90B display did not {verb} the panel")
+        return payload
+
+    async def _wait_for_panel_state(
+        self,
+        connection: RootCommandConnection,
+        expected: int,
+        timeout: float,
+    ) -> dict[str, Any]:
+        loop = asyncio.get_running_loop()
+        deadline = loop.time() + min(timeout, QN90B_PANEL_TRANSITION_TIMEOUT)
+        while True:
+            state = await self._read_panel_state(connection, timeout)
+            if state["panel_state"] == expected or loop.time() >= deadline:
+                return state
+            await asyncio.sleep(
+                min(QN90B_PANEL_READ_INTERVAL, max(0.0, deadline - loop.time()))
+            )
+
+    @staticmethod
+    async def _read_panel_state(
+        connection: RootCommandConnection,
+        timeout: float,
+    ) -> dict[str, Any]:
+        result = await connection.execute(QN90B_PANEL_STATE_COMMAND, timeout)
+        _require_success(result, "read QN90B panel state")
+        values = re.findall(r"(?m)^\s*int32\s+(-?\d+)\s*$", result.stdout)
+        if not values:
+            raise DisplayControlError("QN90B deviced returned no panel state")
+        panel_state = int(values[-1])
+        if panel_state not in {0, 1}:
+            raise DisplayControlError(
+                f"QN90B deviced returned invalid panel state {panel_state}"
+            )
+        return {
+            "panel_state": panel_state,
+            "panel_state_name": "on" if panel_state else "off",
+        }
+
+
+async def _run_json_helper(
+    connection: RootCommandConnection,
+    assembly: PurePosixPath,
+    operation: str,
+    timeout: float,
+    description: str,
+) -> dict[str, Any]:
+    command = shlex.join(("/usr/bin/dotnet", str(assembly), operation))
+    result = await connection.execute(command, timeout)
+    _require_success(result, f"run {description} {operation}")
+    try:
+        payload = json.loads(result.stdout)
+    except json.JSONDecodeError as error:
+        raise DisplayControlError(
+            f"{description} {operation} returned invalid JSON"
+        ) from error
+    if not isinstance(payload, dict):
+        raise DisplayControlError(f"{description} {operation} result is not an object")
+    return payload
+
+
+def _require_success(result: RootCommandResult, operation: str) -> None:
+    if result.timed_out:
+        raise DisplayControlError(f"{operation} timed out")
+    if result.exit_code != 0:
+        detail = result.stderr.strip() or result.stdout.strip() or "no output"
+        raise DisplayControlError(
+            f"{operation} failed with exit {result.exit_code}: {detail}"
+        )

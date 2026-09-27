@@ -1,0 +1,5 @@
+from samsung_tv_root.cli import main
+
+
+if __name__ == "__main__":
+    main()

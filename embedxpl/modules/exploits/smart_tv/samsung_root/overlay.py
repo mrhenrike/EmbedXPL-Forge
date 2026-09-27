@@ -1,0 +1,140 @@
+from __future__ import annotations
+
+import json
+import re
+import secrets
+import shlex
+from pathlib import PurePosixPath
+from typing import Any, Protocol
+
+
+QN90F_OVERLAY_ASSEMBLY = PurePosixPath(
+    "/home/owner/share/tmp/sdk_tools/qn90f-probe/Qn90fEflTextOverlayProbe.dll"
+)
+QN90F_OVERLAY_DIRECTORY = QN90F_OVERLAY_ASSEMBLY.parent
+MAXIMUM_PUBLIC_SCENE_BYTES = 96 * 1024
+MAXIMUM_MESSAGE_CHARACTERS = 4096
+MAXIMUM_OVERLAY_SECONDS = 290
+
+
+class OverlayError(RuntimeError):
+    pass
+
+
+class RootCommandResult(Protocol):
+    exit_code: int
+    timed_out: bool
+    stdout: str
+    stderr: str
+
+
+class RootOverlayConnection(Protocol):
+    async def execute(self, command: str, timeout: float) -> RootCommandResult: ...
+
+    async def write_file(
+        self,
+        path: str | PurePosixPath,
+        data: bytes,
+        timeout: float,
+    ) -> object: ...
+
+
+class Qn90fOverlayControl:
+    async def show(
+        self,
+        connection: RootOverlayConnection,
+        *,
+        seconds: int,
+        message: str | None = None,
+        scene: object | None = None,
+        timeout: float | None = None,
+    ) -> dict[str, Any]:
+        duration = self.validate_seconds(seconds)
+        if (message is None) == (scene is None):
+            raise OverlayError("overlay.graphics requires exactly one of message or scene")
+
+        scene_path: PurePosixPath | None = None
+        arguments = [
+            "/usr/bin/dotnet",
+            str(QN90F_OVERLAY_ASSEMBLY),
+            "--seconds",
+            str(duration),
+        ]
+        if message is not None:
+            if not isinstance(message, str) or not message:
+                raise OverlayError("overlay message must be a nonempty string")
+            if len(message) > MAXIMUM_MESSAGE_CHARACTERS:
+                raise OverlayError(
+                    f"overlay message cannot exceed {MAXIMUM_MESSAGE_CHARACTERS} characters"
+                )
+            arguments.extend(("--message", message))
+        else:
+            encoded = self.encode_scene(scene)
+            scene_path = QN90F_OVERLAY_DIRECTORY / (
+                f"overlay-scene-{secrets.token_hex(8)}.json"
+            )
+            await connection.write_file(scene_path, encoded, 5.0)
+            arguments.extend(("--scene", str(scene_path)))
+
+        command_timeout = timeout if timeout is not None else duration + 10.0
+        try:
+            result = await connection.execute(shlex.join(arguments), command_timeout)
+        finally:
+            if scene_path is not None:
+                try:
+                    await connection.execute(
+                        shlex.join(("/bin/rm", "-f", str(scene_path))),
+                        5.0,
+                    )
+                except Exception:
+                    pass
+
+        if result.timed_out:
+            raise OverlayError("QN90F overlay timed out")
+        if result.exit_code != 0:
+            detail = result.stderr.strip() or result.stdout.strip() or "no output"
+            raise OverlayError(
+                f"QN90F overlay failed with exit {result.exit_code}: {detail}"
+            )
+        ready = re.search(
+            r"(?m)^overlay_ready duration_s=(\d+) geometry=(.+?) "
+            r"objects=(\d+) effect_hint_id=(-?\d+) notification_result=(-?\d+) "
+            r"efl_log=(.+)$",
+            result.stdout,
+        )
+        done = re.search(r"(?m)^overlay_done reason=([^\s]+)$", result.stdout)
+        if ready is None or done is None:
+            raise OverlayError("QN90F overlay omitted readiness or completion evidence")
+        if int(ready.group(1)) != duration or int(ready.group(3)) < 1:
+            raise OverlayError("QN90F overlay returned invalid readiness metadata")
+        return {
+            "duration_seconds": duration,
+            "geometry": ready.group(2),
+            "objects": int(ready.group(3)),
+            "effect_hint_id": int(ready.group(4)),
+            "notification_result": int(ready.group(5)),
+            "diagnostic_log": ready.group(6),
+            "completion_reason": done.group(1),
+        }
+
+    @staticmethod
+    def validate_seconds(value: object) -> int:
+        if type(value) is not int or not 1 <= value <= MAXIMUM_OVERLAY_SECONDS:
+            raise OverlayError(
+                f"overlay seconds must be an integer from 1 through {MAXIMUM_OVERLAY_SECONDS}"
+            )
+        return value
+
+    @staticmethod
+    def encode_scene(value: object) -> bytes:
+        if not isinstance(value, dict):
+            raise OverlayError("overlay scene must be a JSON object")
+        objects = value.get("objects")
+        if not isinstance(objects, list) or not 1 <= len(objects) <= 256:
+            raise OverlayError("overlay scene objects must contain 1 through 256 entries")
+        encoded = (json.dumps(value, separators=(",", ":")) + "\n").encode()
+        if len(encoded) > MAXIMUM_PUBLIC_SCENE_BYTES:
+            raise OverlayError(
+                f"overlay scene cannot exceed {MAXIMUM_PUBLIC_SCENE_BYTES} UTF-8 bytes"
+            )
+        return encoded
