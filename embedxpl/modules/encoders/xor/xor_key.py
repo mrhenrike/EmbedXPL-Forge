@@ -1,48 +1,37 @@
 """XOR encoder — chave estática configurável.
 
 Bypassa filtros simples de AV baseados em assinatura.
-Chave default: 0x41 ('A') — configurável via set KEY <hex>.
+Uso: encoder.key = 0x41; encoded = encoder.encode(payload_bytes)
 """
 
-from embedxpl.core.exploit.encoder import BaseEncoder
+from embedxpl.core.exploit.encoders import BaseEncoder
+from embedxpl.core.exploit.payloads import Architectures
 
 
 class Encoder(BaseEncoder):
-    name        = "xor/xor_key"
-    description = "XOR encoder with configurable single-byte key"
-    arch        = ["armle", "armbe", "arm64", "mipsbe", "mipsle", "mips64",
-                   "x64", "x86", "riscv32", "ppc", "generic"]
-    platform    = ["linux", "windows", "macos", "firmware"]
-    evasion_score = 3   # 1-10 — baixo para XOR simples
-
-    options = {
-        "KEY": {
-            "description": "XOR key byte (hex, e.g. 0x41 or 65)",
-            "required": True,
-            "default": "0x41",
-            "value": "0x41",
-        },
+    __info__ = {
+        "name": "XOR Key Encoder",
+        "description": "XOR encoder with configurable single-byte key. Set encoder.key = 0xNN before encode().",
+        "authors": ("André Henrique (@mrhenrike)", "União Geek"),
+        "evasion_score": 3,
     }
 
-    def encode(self, payload: bytes) -> bytes:
-        key_val = self.options["KEY"]["value"]
-        if isinstance(key_val, str):
-            key = int(key_val, 16) if key_val.startswith("0x") else int(key_val)
-        else:
-            key = int(key_val)
-        key &= 0xFF
-        return bytes(b ^ key for b in payload)
+    architecture = None
 
-    def decode_stub(self, arch: str = "x64") -> bytes:
-        """Retorna stub de decodificação em C (bytes) — inserido antes do shellcode."""
-        key = int(self.options["KEY"]["value"], 16) if \
-            self.options["KEY"]["value"].startswith("0x") else \
-            int(self.options["KEY"]["value"])
-        # Stub genérico (pseudo — para uso com CExecutor)
-        stub_c = f"""
-// XOR decode stub — key=0x{key:02x}
-void decode(unsigned char *buf, int len) {{
-    for (int i = 0; i < len; i++) buf[i] ^= 0x{key:02x};
-}}
-"""
-        return stub_c.encode()
+    # Configurável pelo caller: encoder.key = 0x42
+    key: int = 0x41
+
+    def encode(self, payload: bytes) -> bytes:  # type: ignore[override]
+        k = self.key & 0xFF
+        return bytes(b ^ k for b in payload)
+
+    def decode(self, encoded: bytes) -> bytes:
+        return self.encode(encoded)   # XOR é simétrico
+
+    def decode_stub_c(self) -> str:
+        return (
+            f"// XOR decode stub — key=0x{self.key:02x}\n"
+            f"void decode(unsigned char *buf, int len) {{\n"
+            f"    for (int i = 0; i < len; i++) buf[i] ^= 0x{self.key:02x};\n"
+            f"}}\n"
+        )

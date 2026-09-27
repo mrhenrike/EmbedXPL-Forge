@@ -1,41 +1,26 @@
-"""Unicode \\uXXXX encoder.
+"""Unicode \\uXXXX escape encoder."""
 
-Converte payload em sequência de escapes unicode \u00XX.
-Útil para payloads JSON, JavaScript e contextos onde unicode é aceito.
-"""
-
-from embedxpl.core.exploit.encoder import BaseEncoder
+from embedxpl.core.exploit.encoders import BaseEncoder
+from embedxpl.core.exploit.payloads import Architectures
 
 
 class Encoder(BaseEncoder):
-    name        = "unicode/unicode_escape"
-    description = "Unicode \\uXXXX escape encoder — for JS/JSON/YAML contexts"
-    arch        = ["generic"]
-    platform    = ["webshell", "linux", "windows"]
-    evasion_score = 4
-
-    options = {
-        "PREFIX": {
-            "description": "Unicode prefix style (\\u, %u, \\x)",
-            "required": False,
-            "default": "\\u",
-            "value": "\\u",
-        },
+    __info__ = {
+        "name": "Unicode Escape Encoder",
+        "description": "Encodes bytes as \\u00XX unicode escapes — for JS/JSON/YAML contexts.",
+        "authors": ("André Henrique (@mrhenrike)", "União Geek"),
+        "evasion_score": 4,
     }
 
-    def encode(self, payload: bytes) -> bytes:
-        prefix = self.options["PREFIX"]["value"]
-        return "".join(f"{prefix}00{b:02x}" for b in payload).encode()
+    architecture = None
+    prefix: str = "\\u"
+
+    def encode(self, payload: bytes) -> bytes:  # type: ignore[override]
+        return "".join(f"{self.prefix}00{b:02x}" for b in payload).encode()
 
     def decode(self, encoded: bytes) -> bytes:
-        s = encoded.decode()
-        prefix = self.options["PREFIX"]["value"]
-        parts = s.split(prefix)
+        import re
         result = bytearray()
-        for part in parts:
-            if part:
-                try:
-                    result.append(int(part[:4], 16))
-                except ValueError:
-                    pass
+        for m in re.finditer(r'\\u00([0-9a-fA-F]{2})', encoded.decode(errors="replace")):
+            result.append(int(m.group(1), 16))
         return bytes(result)
