@@ -1,0 +1,10 @@
+:0000
+:1234
+:MagiMFP
+:sysAdmin
+:0
+:sysadm
+admin:administrator
+Admin:
+User:
+admin:12345678

@@ -1,0 +1,6 @@
+admin:123456789
+admin:Cl@r0
+admin:user
+user:123456789
+user:Cl@r0
+user:user
