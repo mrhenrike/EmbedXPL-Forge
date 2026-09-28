@@ -4,8 +4,8 @@
 
 import itertools
 from embedxpl.core.exploit import *
-from embedxpl.core.exploit.ftp_client import FTPClient
-# SKIPPED: from routersploit.resources import wordlists
+from embedxpl.core.ftp.ftp_client import FTPClient
+# SKIPPED: # FIXED: from routersploit.resources import wordlists
 
 
 class Exploit(FTPClient):

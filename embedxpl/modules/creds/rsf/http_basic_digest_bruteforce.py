@@ -1,7 +1,7 @@
 import itertools
-from routersploit.core.exploit import *
-from routersploit.core.http.http_client import HTTPClient
-from routersploit.resources import wordlists
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
+# FIXED: from routersploit.resources import wordlists
 from requests.auth import HTTPDigestAuth
 
 

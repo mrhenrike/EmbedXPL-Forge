@@ -1,5 +1,5 @@
-from routersploit.core.exploit import *
-from routersploit.modules.creds.generic.http_basic_digest_default import Exploit as HTTPBasicDigestDefault
+from embedxpl.core.exploit import *
+# FIXED: from routersploit.modules.creds.generic.http_basic_digest_default import Exploit as HTTPBasicDigestDefault
 
 
 class Exploit(HTTPBasicDigestDefault):
