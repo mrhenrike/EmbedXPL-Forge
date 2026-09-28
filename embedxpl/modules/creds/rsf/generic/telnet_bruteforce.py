@@ -4,8 +4,8 @@
 
 import itertools
 from embedxpl.core.exploit import *
-from embedxpl.core.exploit.telnet_client import TelnetClient
-# SKIPPED: from routersploit.resources import wordlists
+from embedxpl.core.telnet.telnet_client import TelnetClient
+# SKIPPED: # FIXED: from routersploit.resources import wordlists
 
 
 class Exploit(TelnetClient):

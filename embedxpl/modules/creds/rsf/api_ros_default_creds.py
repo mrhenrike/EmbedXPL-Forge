@@ -1,9 +1,9 @@
 import socket
 import ssl
 
-from routersploit.core.exploit import *
-from routersploit.core.tcp.tcp_client import TCPClient
-from routersploit.libs.apiros.apiros_client import ApiRosClient, LoginError
+from embedxpl.core.exploit import *
+from embedxpl.core.tcp.tcp_client import TCPClient
+# FIXED: from routersploit.libs.apiros.apiros_client import ApiRosClient, LoginError
 
 
 class Exploit(TCPClient):
