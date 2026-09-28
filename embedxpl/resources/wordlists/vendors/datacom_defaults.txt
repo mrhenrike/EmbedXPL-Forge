@@ -1,2 +1,0 @@
-:letmein
-sysadm:sysadm

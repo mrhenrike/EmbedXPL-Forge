@@ -1,3 +1,0 @@
-admin:admin
-root:default
-support:

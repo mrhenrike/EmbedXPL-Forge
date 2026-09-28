@@ -1,2 +1,0 @@
-admin:admin
-service:ABB800xA

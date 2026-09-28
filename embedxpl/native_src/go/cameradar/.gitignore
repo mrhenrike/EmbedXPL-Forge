@@ -1,6 +1,0 @@
-# IDE config
-.idea/
-.vscode/
-
-# Builds
-dist/

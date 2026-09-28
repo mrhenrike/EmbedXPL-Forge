@@ -1,4 +1,0 @@
-:symantec
-admin:
-admin:symantec
-root:brightmail

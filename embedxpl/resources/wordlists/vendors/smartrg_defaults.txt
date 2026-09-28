@@ -1,8 +1,0 @@
-admin:admin
-admin:changeme
-admin:same as wireless, printed on router
-admin:user
-user:admin
-user:changeme
-user:same as wireless, printed on router
-user:user
