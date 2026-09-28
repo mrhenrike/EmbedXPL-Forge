@@ -1,0 +1,9 @@
+admim:admin
+admim:password
+admim:sitecom
+admin:admin
+admin:password
+admin:sitecom
+:damin
+:sitecom
+sitecom:sitecom

@@ -1,0 +1,6 @@
+admin:admin
+admin:password
+admin:zoomadsl
+user:admin
+user:password
+user:zoomadsl

@@ -1,0 +1,22 @@
+[package]
+name = "oboromi-core"
+version = "0.0.1"
+edition = "2024"
+authors = ["Nikilite", "Elizabeth"]
+license = "GPL-3.0"
+description = "Core emulator library for oboromi"
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["rlib", "staticlib"]
+
+[dependencies]
+unicorn-engine = "2.1.1"
+libc = "0.2.177"
+memmap2 = "0.9.9"
+log = { workspace = true }
+ash = "0.38.0"
+
+[features]
+default = []
+trace = []

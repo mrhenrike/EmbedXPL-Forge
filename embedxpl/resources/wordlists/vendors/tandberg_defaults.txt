@@ -1,0 +1,7 @@
+:GWrv
+:TANDBERG
+:10023
+Admin:
+admin:
+admin:TANDBERG
+root:TANDBERG

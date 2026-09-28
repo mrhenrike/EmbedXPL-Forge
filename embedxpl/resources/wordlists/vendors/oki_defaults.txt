@@ -1,0 +1,5 @@
+admin:<SEE COMMENT>
+admin:OkiLAN
+root:<SEE COMMENT>
+admin:aaaaaa
+root:aaaaaa

@@ -1,0 +1,117 @@
+import asyncio
+import hashlib
+import struct
+import zlib
+from dataclasses import dataclass
+
+import pytest
+
+from samsung_tv_root.capture import (
+    CAPTURE_BYTE_LENGTH,
+    CAPTURE_ASSEMBLY,
+    CAPTURE_OUTPUT_DIRECTORY,
+    CaptureError,
+    Qn90fCaptureControl,
+    encode_png,
+)
+from samsung_tv_root.source import CurrentSource
+
+
+def helper_output() -> str:
+    return "\n".join(
+        (
+            "profile=sa-ui",
+            "pid=22856",
+            "width=960",
+            "height=540",
+            "rgb_bytes=1555200",
+            "nonzero_bytes=1234567",
+        )
+    )
+
+
+@dataclass
+class Result:
+    stdout: str = ""
+    stderr: str = ""
+    exit_code: int = 0
+    timed_out: bool = False
+
+
+class Connection:
+    def __init__(self, data: bytes) -> None:
+        self.data = data
+        self.output = None
+        self.removed = False
+
+    async def execute(self, command: str, timeout: float) -> Result:
+        if command.startswith("/bin/rm -f "):
+            assert self.output is not None
+            assert str(self.output) in command
+            self.removed = True
+            return Result()
+        assert str(CAPTURE_ASSEMBLY) in command
+        assert " sa-ui" in command
+        self.output = command.split()[2]
+        return Result(stdout=helper_output())
+
+    async def read_file(self, path, timeout: float):
+        assert path.parent == CAPTURE_OUTPUT_DIRECTORY
+        assert str(path) == self.output
+        return type(
+            "File",
+            (),
+            {"data": self.data, "sha256": hashlib.sha256(self.data).hexdigest()},
+        )()
+
+
+class SourceControl:
+    def __init__(self, *sources: CurrentSource) -> None:
+        self.sources = iter(sources)
+
+    async def current_source(self, connection, timeout: float) -> CurrentSource:
+        return next(self.sources)
+
+
+def test_capture_validates_source_and_frame_metadata(monkeypatch) -> None:
+    data = b"\x01" * CAPTURE_BYTE_LENGTH
+    source = CurrentSource("HDMI1", 13, "source-uuid")
+    control = Qn90fCaptureControl(SourceControl(source, source))
+    monkeypatch.setattr("samsung_tv_root.capture.time.time", lambda: 1234.5)
+
+    connection = Connection(data)
+    capture = asyncio.run(control.capture(connection, 10.0))
+
+    assert capture.rgb == data
+    assert capture.metadata()["freshness"] == "retained_frame_timestamp_unknown"
+    assert capture.metadata()["observed_at"] == 1234.5
+    assert connection.removed
+
+
+def test_capture_rejects_source_change() -> None:
+    control = Qn90fCaptureControl(
+        SourceControl(
+            CurrentSource("HDMI1", 13, "source-1"),
+            CurrentSource("HDMI2", 14, "source-2"),
+        )
+    )
+
+    connection = Connection(b"\x01" * CAPTURE_BYTE_LENGTH)
+    with pytest.raises(CaptureError, match="source changed"):
+        asyncio.run(control.capture(connection, 10.0))
+
+    assert connection.removed
+
+
+def test_encode_png_writes_exact_rgb_scanlines() -> None:
+    rgb = bytes((255, 0, 0, 0, 255, 0))
+
+    png = encode_png(rgb, width=2, height=1)
+
+    assert png.startswith(b"\x89PNG\r\n\x1a\n")
+    ihdr_length = struct.unpack(">I", png[8:12])[0]
+    assert ihdr_length == 13
+    idat_offset = 8 + 12 + ihdr_length
+    idat_length = struct.unpack(">I", png[idat_offset : idat_offset + 4])[0]
+    compressed = png[idat_offset + 8 : idat_offset + 8 + idat_length]
+    assert zlib.decompress(compressed) == b"\x00" + rgb

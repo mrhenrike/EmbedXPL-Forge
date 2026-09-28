@@ -1,0 +1,27 @@
+import asyncio
+
+import pytest
+
+from samsung_tv_root.control_api import ControlApiServer, EventBroker
+
+
+async def status_handler(request: dict[str, object]) -> dict[str, object]:
+    return {"action": request.get("action")}
+
+
+def test_control_api_rejects_a_second_daemon_for_the_same_endpoint(tmp_path) -> None:
+    async def exercise() -> None:
+        endpoint = tmp_path / "controller.json"
+        first = ControlApiServer(endpoint, status_handler, EventBroker())
+        second = ControlApiServer(endpoint, status_handler, EventBroker())
+        await first.start()
+        try:
+            with pytest.raises(RuntimeError, match="another root controller owns"):
+                await second.start()
+            assert endpoint.is_file()
+            await second.close()
+            assert endpoint.is_file()
+        finally:
+            await first.close()
+
+    asyncio.run(exercise())

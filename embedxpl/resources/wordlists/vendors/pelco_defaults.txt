@@ -1,0 +1,3 @@
+admin:admin
+root:admin
+viewer:viewer

@@ -1,0 +1,67 @@
+import asyncio
+import hashlib
+
+from samsung_tv_root.root_agent import (
+    RootAgentConnection,
+    RootAgentIdentity,
+    encode_authenticated_frame,
+    verify_authenticated_frame,
+)
+
+
+class FakeWriter:
+    def __init__(self) -> None:
+        self.data = bytearray()
+        self.closing = False
+
+    def write(self, data: bytes) -> None:
+        self.data.extend(data)
+
+    async def drain(self) -> None:
+        return None
+
+    def close(self) -> None:
+        self.closing = True
+
+    async def wait_closed(self) -> None:
+        return None
+
+    def is_closing(self) -> bool:
+        return self.closing
+
+
+def test_authenticated_root_agent_file_write() -> None:
+    async def exercise() -> None:
+        secret = b"s" * 32
+        nonce = b"n" * 32
+        data = b"remote token\n"
+        digest = hashlib.sha256(data).hexdigest()
+        reader = asyncio.StreamReader()
+        reader.feed_data(
+            encode_authenticated_frame(
+                secret,
+                nonce,
+                f"WROTE\t1\t{len(data)}\t{digest}",
+            )
+        )
+        writer = FakeWriter()
+        connection = RootAgentConnection(
+            reader,
+            writer,
+            secret,
+            nonce,
+            RootAgentIdentity(1, 0, 0, 0, 0, "", ""),
+        )
+        result = await connection.write_file(
+            "/home/owner/share/tmp/sdk_tools/test/token",
+            data,
+        )
+        header, payload = bytes(writer.data).split(b"\n", 1)
+        verified = verify_authenticated_frame(secret, nonce, header + b"\n")
+        assert verified.startswith("WRITEFILE\t1\t")
+        assert verified.endswith(f"\t{len(data)}\t{digest}")
+        assert payload == data
+        assert result.length == len(data)
+        assert result.sha256 == digest
+
+    asyncio.run(exercise())

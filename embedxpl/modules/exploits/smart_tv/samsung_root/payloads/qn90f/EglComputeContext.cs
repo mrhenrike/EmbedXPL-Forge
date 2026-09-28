@@ -1,0 +1,704 @@
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
+
+internal sealed class GlOperationException : InvalidOperationException
+{
+    internal GlOperationException(string operation, uint errorCode)
+        : base(string.Format(
+            "{0} failed gl_error=0x{1:x}",
+            operation,
+            errorCode))
+    {
+        Operation = operation;
+        ErrorCode = errorCode;
+    }
+
+    internal string Operation { get; private set; }
+    internal uint ErrorCode { get; private set; }
+}
+
+internal sealed class EglComputeContext : IDisposable
+{
+    private const string MaliLibrary = "/usr/lib/driver/libmali.so";
+
+    private const int EglNone = 0x3038;
+    private const int EglSurfaceType = 0x3033;
+    private const int EglPbufferBit = 0x0001;
+    private const int EglRenderableType = 0x3040;
+    private const int EglOpenGlEs3BitKhr = 0x0040;
+    private const int EglContextClientVersion = 0x3098;
+    private const uint EglOpenGlEsApi = 0x30a0;
+
+    private const uint GlShaderStorageBuffer = 0x90d2;
+    private const uint GlDynamicCopy = 0x88ea;
+    private const uint GlComputeShader = 0x91b9;
+    private const uint GlCompileStatus = 0x8b81;
+    private const uint GlLinkStatus = 0x8b82;
+    private const uint GlInfoLogLength = 0x8b84;
+    private const uint GlMapReadBit = 0x0001;
+    private const uint GlBufferUpdateBarrierBit = 0x00000200;
+    private const uint GlShaderStorageBarrierBit = 0x00002000;
+
+    internal const uint GlOutOfMemory = 0x0505;
+    internal const uint NeedleMask0 = 0xa5c31f27;
+    internal const uint NeedleMask1 = 0x1b873593;
+    internal const uint NeedleMask2 = 0xd42e61b9;
+    internal const uint NeedleMask3 = 0x6f90c45d;
+
+    private IntPtr display;
+    private IntPtr context;
+    private uint controlBuffer;
+    private uint shader;
+    private uint program;
+    private uint writeShader;
+    private uint writeProgram;
+    private uint scanBuffer;
+    private uint scanShader;
+    private uint scanProgram;
+
+    private EglComputeContext()
+    {
+    }
+
+    internal int MaliFileDescriptor { get; private set; }
+
+    internal static EglComputeContext Create()
+    {
+        EglComputeContext result = new EglComputeContext();
+        try
+        {
+            result.Initialize();
+            return result;
+        }
+        catch
+        {
+            result.Dispose();
+            throw;
+        }
+    }
+
+    internal uint Read32(ulong gpuAddress)
+    {
+        IntPtr control = Marshal.AllocHGlobal(16);
+        try
+        {
+            Marshal.WriteInt32(control, 0, unchecked((int)(gpuAddress & 0xffffffffUL)));
+            Marshal.WriteInt32(control, 4, unchecked((int)(gpuAddress >> 32)));
+            Marshal.WriteInt32(control, 8, 0);
+            Marshal.WriteInt32(control, 12, 0);
+            glBindBuffer(GlShaderStorageBuffer, controlBuffer);
+            glBufferSubData(GlShaderStorageBuffer, IntPtr.Zero, new IntPtr(16), control);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(control);
+        }
+
+        glBindBufferBase(GlShaderStorageBuffer, 0, controlBuffer);
+        glUseProgram(program);
+        glDispatchCompute(1, 1, 1);
+        glMemoryBarrier(GlBufferUpdateBarrierBit | GlShaderStorageBarrierBit);
+        glFinish();
+        RequireGlSuccess("explicit_read_dispatch");
+
+        glBindBuffer(GlShaderStorageBuffer, controlBuffer);
+        IntPtr mapped = glMapBufferRange(
+            GlShaderStorageBuffer,
+            IntPtr.Zero,
+            new IntPtr(16),
+            GlMapReadBit);
+        if (mapped == IntPtr.Zero)
+        {
+            throw new InvalidOperationException("glMapBufferRange failed");
+        }
+        uint observed = unchecked((uint)Marshal.ReadInt32(mapped, 12));
+        if (glUnmapBuffer(GlShaderStorageBuffer) == 0)
+        {
+            throw new InvalidOperationException("glUnmapBuffer failed");
+        }
+        return observed;
+    }
+
+    internal uint Write32(ulong gpuAddress, uint value)
+    {
+        IntPtr control = Marshal.AllocHGlobal(16);
+        try
+        {
+            Marshal.WriteInt32(control, 0, unchecked((int)(gpuAddress & 0xffffffffUL)));
+            Marshal.WriteInt32(control, 4, unchecked((int)(gpuAddress >> 32)));
+            Marshal.WriteInt32(control, 8, unchecked((int)value));
+            Marshal.WriteInt32(control, 12, 0);
+            glBindBuffer(GlShaderStorageBuffer, controlBuffer);
+            glBufferSubData(GlShaderStorageBuffer, IntPtr.Zero, new IntPtr(16), control);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(control);
+        }
+
+        glBindBufferBase(GlShaderStorageBuffer, 0, controlBuffer);
+        glUseProgram(writeProgram);
+        glDispatchCompute(1, 1, 1);
+        glMemoryBarrier(GlBufferUpdateBarrierBit | GlShaderStorageBarrierBit);
+        glFinish();
+        RequireGlSuccess("explicit_write_dispatch");
+
+        glBindBuffer(GlShaderStorageBuffer, controlBuffer);
+        IntPtr mapped = glMapBufferRange(
+            GlShaderStorageBuffer,
+            IntPtr.Zero,
+            new IntPtr(16),
+            GlMapReadBit);
+        if (mapped == IntPtr.Zero)
+        {
+            throw new InvalidOperationException("write glMapBufferRange failed");
+        }
+        uint observed = unchecked((uint)Marshal.ReadInt32(mapped, 12));
+        if (glUnmapBuffer(GlShaderStorageBuffer) == 0)
+        {
+            throw new InvalidOperationException("write glUnmapBuffer failed");
+        }
+        return observed;
+    }
+
+    internal uint FindPattern(
+        ulong gpuAddress,
+        uint byteLength,
+        uint needle0,
+        uint needle1,
+        uint needle2,
+        uint needle3)
+    {
+        return FindPatternEncoded(
+            gpuAddress,
+            byteLength,
+            needle0 ^ NeedleMask0,
+            needle1 ^ NeedleMask1,
+            needle2 ^ NeedleMask2,
+            needle3 ^ NeedleMask3);
+    }
+
+    internal uint FindPatternEncoded(
+        ulong gpuAddress,
+        uint byteLength,
+        uint encodedNeedle0,
+        uint encodedNeedle1,
+        uint encodedNeedle2,
+        uint encodedNeedle3)
+    {
+        uint wordCount = byteLength / sizeof(uint);
+        if (wordCount < 4)
+        {
+            return uint.MaxValue;
+        }
+
+        IntPtr control = Marshal.AllocHGlobal(32);
+        try
+        {
+            Marshal.WriteInt32(control, 0, unchecked((int)(gpuAddress & 0xffffffffUL)));
+            Marshal.WriteInt32(control, 4, unchecked((int)(gpuAddress >> 32)));
+            Marshal.WriteInt32(control, 8, unchecked((int)wordCount));
+            Marshal.WriteInt32(control, 12, -1);
+            Marshal.WriteInt32(control, 16, unchecked((int)encodedNeedle0));
+            Marshal.WriteInt32(control, 20, unchecked((int)encodedNeedle1));
+            Marshal.WriteInt32(control, 24, unchecked((int)encodedNeedle2));
+            Marshal.WriteInt32(control, 28, unchecked((int)encodedNeedle3));
+            glBindBuffer(GlShaderStorageBuffer, scanBuffer);
+            glBufferSubData(GlShaderStorageBuffer, IntPtr.Zero, new IntPtr(32), control);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(control);
+        }
+
+        uint candidates = wordCount - 3;
+        uint groups = (candidates + 63) / 64;
+        glBindBufferBase(GlShaderStorageBuffer, 0, scanBuffer);
+        glUseProgram(scanProgram);
+        glDispatchCompute(groups, 1, 1);
+        glMemoryBarrier(GlBufferUpdateBarrierBit | GlShaderStorageBarrierBit);
+        glFinish();
+        RequireGlSuccess("explicit_pattern_dispatch", false);
+
+        glBindBuffer(GlShaderStorageBuffer, scanBuffer);
+        IntPtr mapped = glMapBufferRange(
+            GlShaderStorageBuffer,
+            IntPtr.Zero,
+            new IntPtr(32),
+            GlMapReadBit);
+        if (mapped == IntPtr.Zero)
+        {
+            throw new InvalidOperationException("scan glMapBufferRange failed");
+        }
+        uint found = unchecked((uint)Marshal.ReadInt32(mapped, 12));
+        if (glUnmapBuffer(GlShaderStorageBuffer) == 0)
+        {
+            throw new InvalidOperationException("scan glUnmapBuffer failed");
+        }
+        return found;
+    }
+
+    public void Dispose()
+    {
+        if (context != IntPtr.Zero)
+        {
+            if (program != 0)
+            {
+                glDeleteProgram(program);
+                program = 0;
+            }
+            if (shader != 0)
+            {
+                glDeleteShader(shader);
+                shader = 0;
+            }
+            if (writeProgram != 0)
+            {
+                glDeleteProgram(writeProgram);
+                writeProgram = 0;
+            }
+            if (writeShader != 0)
+            {
+                glDeleteShader(writeShader);
+                writeShader = 0;
+            }
+            if (controlBuffer != 0)
+            {
+                glDeleteBuffers(1, ref controlBuffer);
+                controlBuffer = 0;
+            }
+            if (scanProgram != 0)
+            {
+                glDeleteProgram(scanProgram);
+                scanProgram = 0;
+            }
+            if (scanShader != 0)
+            {
+                glDeleteShader(scanShader);
+                scanShader = 0;
+            }
+            if (scanBuffer != 0)
+            {
+                glDeleteBuffers(1, ref scanBuffer);
+                scanBuffer = 0;
+            }
+            eglMakeCurrent(display, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+            eglDestroyContext(display, context);
+            context = IntPtr.Zero;
+        }
+        if (display != IntPtr.Zero)
+        {
+            eglTerminate(display);
+            display = IntPtr.Zero;
+        }
+    }
+
+    private void Initialize()
+    {
+        display = eglGetDisplay(IntPtr.Zero);
+        if (display == IntPtr.Zero)
+        {
+            throw EglError("eglGetDisplay");
+        }
+        int major;
+        int minor;
+        if (eglInitialize(display, out major, out minor) == 0)
+        {
+            throw EglError("eglInitialize");
+        }
+        Console.WriteLine("egl_version={0}.{1}", major, minor);
+
+        int[] configAttributes =
+        {
+            EglSurfaceType, EglPbufferBit,
+            EglRenderableType, EglOpenGlEs3BitKhr,
+            EglNone,
+        };
+        IntPtr config;
+        int configCount;
+        if (eglChooseConfig(display, configAttributes, out config, 1, out configCount) == 0
+            || configCount < 1)
+        {
+            throw EglError("eglChooseConfig");
+        }
+        if (eglBindAPI(EglOpenGlEsApi) == 0)
+        {
+            throw EglError("eglBindAPI");
+        }
+        int[] contextAttributes =
+        {
+            EglContextClientVersion, 3,
+            EglNone,
+        };
+        context = eglCreateContext(display, config, IntPtr.Zero, contextAttributes);
+        if (context == IntPtr.Zero)
+        {
+            throw EglError("eglCreateContext");
+        }
+        if (eglMakeCurrent(display, IntPtr.Zero, IntPtr.Zero, context) == 0)
+        {
+            throw EglError("eglMakeCurrent");
+        }
+
+        MaliFileDescriptor = FindMaliFileDescriptor();
+        if (MaliFileDescriptor < 0)
+        {
+            throw new InvalidOperationException("EGL context has no /dev/mali0 descriptor");
+        }
+        CreateReader();
+        CreateWriter();
+        CreateScanner();
+    }
+
+    private void CreateReader()
+    {
+        glGenBuffers(1, out controlBuffer);
+        glBindBuffer(GlShaderStorageBuffer, controlBuffer);
+        IntPtr zeroes = Marshal.AllocHGlobal(16);
+        try
+        {
+            for (int offset = 0; offset < 16; offset += 4)
+            {
+                Marshal.WriteInt32(zeroes, offset, 0);
+            }
+            glBufferData(GlShaderStorageBuffer, new IntPtr(16), zeroes, GlDynamicCopy);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(zeroes);
+        }
+        glBindBufferBase(GlShaderStorageBuffer, 0, controlBuffer);
+
+        const string Source =
+            "#version 310 es\n"
+            + "#extension GL_ARM_explicit_memory_access : require\n"
+            + "precision highp int;\n"
+            + "layout(local_size_x = 1) in;\n"
+            + "layout(std430, binding = 0) buffer Control {\n"
+            + "  uvec2 address;\n"
+            + "  uint unused_value;\n"
+            + "  uint observed;\n"
+            + "};\n"
+            + "void main() { observed = load32ARM(address); }\n";
+
+        shader = glCreateShader(GlComputeShader);
+        SetShaderSource(shader, Source);
+        glCompileShader(shader);
+        CheckShader(shader);
+        program = glCreateProgram();
+        glAttachShader(program, shader);
+        glLinkProgram(program);
+        CheckProgram(program);
+        RequireGlSuccess("explicit_reader_setup");
+    }
+
+    private void CreateWriter()
+    {
+        const string Source =
+            "#version 310 es\n"
+            + "#extension GL_ARM_explicit_memory_access : require\n"
+            + "precision highp int;\n"
+            + "layout(local_size_x = 1) in;\n"
+            + "layout(std430, binding = 0) buffer Control {\n"
+            + "  uvec2 address;\n"
+            + "  uint write_value;\n"
+            + "  uint observed;\n"
+            + "};\n"
+            + "void main() {\n"
+            + "  store32ARM(address, write_value);\n"
+            + "  observed = load32ARM(address);\n"
+            + "}\n";
+
+        writeShader = glCreateShader(GlComputeShader);
+        SetShaderSource(writeShader, Source);
+        glCompileShader(writeShader);
+        CheckShader(writeShader);
+        writeProgram = glCreateProgram();
+        glAttachShader(writeProgram, writeShader);
+        glLinkProgram(writeProgram);
+        CheckProgram(writeProgram);
+        RequireGlSuccess("explicit_writer_setup");
+    }
+
+    private void CreateScanner()
+    {
+        glGenBuffers(1, out scanBuffer);
+        glBindBuffer(GlShaderStorageBuffer, scanBuffer);
+        IntPtr zeroes = Marshal.AllocHGlobal(32);
+        try
+        {
+            for (int offset = 0; offset < 32; offset += 4)
+            {
+                Marshal.WriteInt32(zeroes, offset, 0);
+            }
+            glBufferData(GlShaderStorageBuffer, new IntPtr(32), zeroes, GlDynamicCopy);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(zeroes);
+        }
+
+        const string Source =
+            "#version 310 es\n"
+            + "#extension GL_ARM_explicit_memory_access : require\n"
+            + "precision highp int;\n"
+            + "layout(local_size_x = 64) in;\n"
+            + "layout(std430, binding = 0) buffer Control {\n"
+            + "  uvec2 address;\n"
+            + "  uint words;\n"
+            + "  uint found;\n"
+            + "  uvec4 needle;\n"
+            + "};\n"
+            + "void main() {\n"
+            + "  uint i = gl_GlobalInvocationID.x;\n"
+            + "  if (i + 3u >= words) return;\n"
+            + "  uint offset = i * 4u;\n"
+            + "  if (load32ARM(address, offset) == (needle.x ^ 0xa5c31f27u)\n"
+            + "      && load32ARM(address, offset + 4u) == (needle.y ^ 0x1b873593u)\n"
+            + "      && load32ARM(address, offset + 8u) == (needle.z ^ 0xd42e61b9u)\n"
+            + "      && load32ARM(address, offset + 12u) == (needle.w ^ 0x6f90c45du)) {\n"
+            + "    atomicMin(found, offset);\n"
+            + "  }\n"
+            + "}\n";
+
+        scanShader = glCreateShader(GlComputeShader);
+        SetShaderSource(scanShader, Source);
+        glCompileShader(scanShader);
+        CheckShader(scanShader);
+        scanProgram = glCreateProgram();
+        glAttachShader(scanProgram, scanShader);
+        glLinkProgram(scanProgram);
+        CheckProgram(scanProgram);
+        RequireGlSuccess("explicit_scanner_setup");
+    }
+
+    private static int FindMaliFileDescriptor()
+    {
+        foreach (string path in Directory.GetFileSystemEntries("/proc/self/fd"))
+        {
+            int fileDescriptor;
+            if (!int.TryParse(Path.GetFileName(path), out fileDescriptor))
+            {
+                continue;
+            }
+            byte[] buffer = new byte[256];
+            int length = MaliNative.readlink(path, buffer, buffer.Length);
+            if (length > 0 && Encoding.UTF8.GetString(buffer, 0, length) == "/dev/mali0")
+            {
+                return fileDescriptor;
+            }
+        }
+        return -1;
+    }
+
+    private static void SetShaderSource(uint shaderId, string source)
+    {
+        IntPtr sourceBytes = Marshal.StringToHGlobalAnsi(source);
+        IntPtr sourceArray = Marshal.AllocHGlobal(IntPtr.Size);
+        try
+        {
+            Marshal.WriteIntPtr(sourceArray, sourceBytes);
+            glShaderSource(shaderId, 1, sourceArray, IntPtr.Zero);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(sourceArray);
+            Marshal.FreeHGlobal(sourceBytes);
+        }
+    }
+
+    private static void CheckShader(uint shaderId)
+    {
+        int status;
+        glGetShaderiv(shaderId, GlCompileStatus, out status);
+        if (status == 0)
+        {
+            throw new InvalidOperationException("shader compile failed: " + ShaderLog(shaderId));
+        }
+    }
+
+    private static void CheckProgram(uint programId)
+    {
+        int status;
+        glGetProgramiv(programId, GlLinkStatus, out status);
+        if (status == 0)
+        {
+            throw new InvalidOperationException("program link failed: " + ProgramLog(programId));
+        }
+    }
+
+    private static string ShaderLog(uint shaderId)
+    {
+        int length;
+        glGetShaderiv(shaderId, GlInfoLogLength, out length);
+        if (length <= 1)
+        {
+            return string.Empty;
+        }
+        StringBuilder result = new StringBuilder(length);
+        int written;
+        glGetShaderInfoLog(shaderId, length, out written, result);
+        return result.ToString();
+    }
+
+    private static string ProgramLog(uint programId)
+    {
+        int length;
+        glGetProgramiv(programId, GlInfoLogLength, out length);
+        if (length <= 1)
+        {
+            return string.Empty;
+        }
+        StringBuilder result = new StringBuilder(length);
+        int written;
+        glGetProgramInfoLog(programId, length, out written, result);
+        return result.ToString();
+    }
+
+    private static void RequireGlSuccess(string operation, bool log = true)
+    {
+        uint error = glGetError();
+        if (log || error != 0)
+        {
+            Console.WriteLine("{0} gl_error=0x{1:x}", operation, error);
+        }
+        if (error != 0)
+        {
+            throw new GlOperationException(operation, error);
+        }
+    }
+
+    internal static bool IsGlOperationFailure(
+        Exception exception,
+        string operation,
+        uint errorCode)
+    {
+        for (
+            Exception current = exception;
+            current != null;
+            current = current.InnerException)
+        {
+            GlOperationException failure = current as GlOperationException;
+            if (failure != null
+                && string.Equals(
+                    failure.Operation,
+                    operation,
+                    StringComparison.Ordinal)
+                && failure.ErrorCode == errorCode)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static Exception EglError(string operation)
+    {
+        return new InvalidOperationException(
+            string.Format("{0} failed egl_error=0x{1:x}", operation, eglGetError()));
+    }
+
+    [DllImport(MaliLibrary)]
+    private static extern IntPtr eglGetDisplay(IntPtr nativeDisplay);
+    [DllImport(MaliLibrary)]
+    private static extern int eglInitialize(IntPtr display, out int major, out int minor);
+    [DllImport(MaliLibrary)]
+    private static extern int eglChooseConfig(
+        IntPtr display,
+        int[] attributes,
+        out IntPtr config,
+        int configSize,
+        out int numberOfConfigs);
+    [DllImport(MaliLibrary)]
+    private static extern int eglBindAPI(uint api);
+    [DllImport(MaliLibrary)]
+    private static extern IntPtr eglCreateContext(
+        IntPtr display,
+        IntPtr config,
+        IntPtr sharedContext,
+        int[] attributes);
+    [DllImport(MaliLibrary)]
+    private static extern int eglMakeCurrent(
+        IntPtr display,
+        IntPtr drawSurface,
+        IntPtr readSurface,
+        IntPtr context);
+    [DllImport(MaliLibrary)]
+    private static extern int eglDestroyContext(IntPtr display, IntPtr context);
+    [DllImport(MaliLibrary)]
+    private static extern int eglTerminate(IntPtr display);
+    [DllImport(MaliLibrary)]
+    private static extern int eglGetError();
+    [DllImport(MaliLibrary)]
+    private static extern uint glGetError();
+    [DllImport(MaliLibrary)]
+    private static extern void glGenBuffers(int count, out uint buffer);
+    [DllImport(MaliLibrary)]
+    private static extern void glBindBuffer(uint target, uint buffer);
+    [DllImport(MaliLibrary)]
+    private static extern void glBufferData(uint target, IntPtr size, IntPtr data, uint usage);
+    [DllImport(MaliLibrary)]
+    private static extern void glBufferSubData(
+        uint target,
+        IntPtr offset,
+        IntPtr size,
+        IntPtr data);
+    [DllImport(MaliLibrary)]
+    private static extern void glBindBufferBase(uint target, uint index, uint buffer);
+    [DllImport(MaliLibrary)]
+    private static extern void glDeleteBuffers(int count, ref uint buffer);
+    [DllImport(MaliLibrary)]
+    private static extern uint glCreateShader(uint shaderType);
+    [DllImport(MaliLibrary)]
+    private static extern void glShaderSource(
+        uint shader,
+        int count,
+        IntPtr strings,
+        IntPtr lengths);
+    [DllImport(MaliLibrary)]
+    private static extern void glCompileShader(uint shader);
+    [DllImport(MaliLibrary)]
+    private static extern void glGetShaderiv(uint shader, uint name, out int value);
+    [DllImport(MaliLibrary)]
+    private static extern void glGetShaderInfoLog(
+        uint shader,
+        int bufferSize,
+        out int length,
+        StringBuilder informationLog);
+    [DllImport(MaliLibrary)]
+    private static extern void glDeleteShader(uint shader);
+    [DllImport(MaliLibrary)]
+    private static extern uint glCreateProgram();
+    [DllImport(MaliLibrary)]
+    private static extern void glAttachShader(uint program, uint shader);
+    [DllImport(MaliLibrary)]
+    private static extern void glLinkProgram(uint program);
+    [DllImport(MaliLibrary)]
+    private static extern void glGetProgramiv(uint program, uint name, out int value);
+    [DllImport(MaliLibrary)]
+    private static extern void glGetProgramInfoLog(
+        uint program,
+        int bufferSize,
+        out int length,
+        StringBuilder informationLog);
+    [DllImport(MaliLibrary)]
+    private static extern void glUseProgram(uint program);
+    [DllImport(MaliLibrary)]
+    private static extern void glDeleteProgram(uint program);
+    [DllImport(MaliLibrary)]
+    private static extern void glDispatchCompute(uint groupsX, uint groupsY, uint groupsZ);
+    [DllImport(MaliLibrary)]
+    private static extern void glMemoryBarrier(uint barriers);
+    [DllImport(MaliLibrary)]
+    private static extern void glFinish();
+    [DllImport(MaliLibrary)]
+    private static extern IntPtr glMapBufferRange(
+        uint target,
+        IntPtr offset,
+        IntPtr length,
+        uint access);
+    [DllImport(MaliLibrary)]
+    private static extern byte glUnmapBuffer(uint target);
+}

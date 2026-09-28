@@ -1,0 +1,127 @@
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+
+internal sealed class RootAgentLaunch
+{
+    internal const string AgentPath =
+        "/home/owner/share/tmp/sdk_tools/qn90f-probe/SamsungTvRootAgent.dll";
+    private const string StagingDirectory =
+        "/home/owner/share/tmp/sdk_tools/qn90f-probe/";
+    private const string DotnetPath = "/usr/bin/dotnet";
+
+    private readonly string callbackHost;
+    private readonly int callbackPort;
+    private readonly string tokenPath;
+
+    internal RootAgentLaunch(
+        string callbackHost,
+        int callbackPort,
+        string tokenPath)
+    {
+        IPAddress address;
+        if (!IPAddress.TryParse(callbackHost, out address)
+            || address.AddressFamily != AddressFamily.InterNetwork)
+        {
+            throw new ArgumentException(
+                "root-agent callback must be a literal IPv4 address",
+                "callbackHost");
+        }
+        if (callbackPort < 1 || callbackPort > 65535)
+        {
+            throw new ArgumentOutOfRangeException("callbackPort");
+        }
+        string fullTokenPath = Path.GetFullPath(tokenPath);
+        if (!fullTokenPath.StartsWith(
+                StagingDirectory,
+                StringComparison.Ordinal)
+            || fullTokenPath.IndexOf('\n') >= 0
+            || fullTokenPath.IndexOf('\r') >= 0)
+        {
+            throw new ArgumentException(
+                "root-agent token file must be inside the QN90F staging directory",
+                "tokenPath");
+        }
+
+        this.callbackHost = address.ToString();
+        this.callbackPort = callbackPort;
+        this.tokenPath = fullTokenPath;
+    }
+
+    internal bool LaunchOnCurrentThread()
+    {
+        uint uid = MaliNative.getuid();
+        uint euid = MaliNative.geteuid();
+        uint gid = MaliNative.getgid();
+        uint egid = MaliNative.getegid();
+        Console.WriteLine(
+            "root_agent_prelaunch tid={0} uid={1} euid={2} gid={3} egid={4}",
+            MaliNative.gettid(),
+            uid,
+            euid,
+            gid,
+            egid);
+        if (uid != 0 || euid != 0 || gid != 0 || egid != 0)
+        {
+            return false;
+        }
+        if (!File.Exists(AgentPath))
+        {
+            throw new FileNotFoundException(
+                "root-agent assembly is not staged",
+                AgentPath);
+        }
+        if (!File.Exists(tokenPath))
+        {
+            throw new FileNotFoundException(
+                "root-agent token is not staged",
+                tokenPath);
+        }
+
+        ProcessStartInfo start = new ProcessStartInfo();
+        start.FileName = DotnetPath;
+        start.Arguments = string.Format(
+            "{0} {1} {2} {3} {4}",
+            QuoteArgument(AgentPath),
+            callbackHost,
+            callbackPort,
+            QuoteArgument(tokenPath),
+            QuoteArgument(StagingDirectory));
+        start.UseShellExecute = false;
+        start.CreateNoWindow = true;
+
+        using (Process process = Process.Start(start))
+        {
+            if (process == null)
+            {
+                throw new InvalidOperationException(
+                    "dotnet did not return a root-agent process");
+            }
+            Console.WriteLine("root_agent_pid={0}", process.Id);
+            Thread.Sleep(150);
+            if (process.HasExited)
+            {
+                Console.WriteLine(
+                    "root_agent_early_exit code={0}",
+                    process.ExitCode);
+                return false;
+            }
+        }
+        Console.WriteLine("root_agent_exec=pass");
+        return true;
+    }
+
+    private static string QuoteArgument(string value)
+    {
+        if (value.IndexOf('\0') >= 0
+            || value.IndexOf('\n') >= 0
+            || value.IndexOf('\r') >= 0)
+        {
+            throw new ArgumentException("invalid process argument");
+        }
+        return "\"" + value.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"";
+    }
+}

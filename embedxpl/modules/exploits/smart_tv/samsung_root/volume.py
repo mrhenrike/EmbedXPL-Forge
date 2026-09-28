@@ -1,0 +1,185 @@
+from __future__ import annotations
+
+import re
+import shlex
+from dataclasses import asdict, dataclass
+from typing import Protocol
+
+
+SPEAKER_MANAGER_BUS = "org.tizen.speakermanager"
+SPEAKER_MANAGER_PATH = "/Org/Tizen/SpeakerManagerInternal"
+SPEAKER_MANAGER_INTERFACE = "org.tizen.speakermanager"
+DEFAULT_VOLUME_COMMAND_TIMEOUT = 5.0
+
+
+class VolumeControlError(RuntimeError):
+    pass
+
+
+class RootCommandResult(Protocol):
+    exit_code: int
+    timed_out: bool
+    stdout: str
+    stderr: str
+
+
+class RootCommandConnection(Protocol):
+    async def execute(self, command: str, timeout: float) -> RootCommandResult: ...
+
+
+@dataclass(frozen=True)
+class SpeakerVolumeState:
+    volume: int
+    muted: bool
+    support_type: int
+
+    def to_dict(self) -> dict[str, int | bool]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class SpeakerVolumeChange:
+    previous_volume: int
+    target: int
+    volume: SpeakerVolumeState
+
+    def to_dict(self) -> dict[str, int | dict[str, int | bool]]:
+        return {
+            "previous_volume": self.previous_volume,
+            "target": self.target,
+            "volume": self.volume.to_dict(),
+        }
+
+
+class SamsungTvVolumeControl:
+    async def get(
+        self,
+        connection: RootCommandConnection,
+        timeout: float = DEFAULT_VOLUME_COMMAND_TIMEOUT,
+    ) -> SpeakerVolumeState:
+        volume = await self._read_pair(connection, "GetSpeakerVolume", timeout)
+        muted = await self._read_pair(connection, "GetSpeakerMute", timeout)
+        support_type = await self._read_pair(
+            connection,
+            "GetSpeakerSupportType",
+            timeout,
+        )
+        return SpeakerVolumeState(
+            volume=volume,
+            muted=bool(muted),
+            support_type=support_type,
+        )
+
+    async def set(
+        self,
+        connection: RootCommandConnection,
+        level: int,
+        timeout: float = DEFAULT_VOLUME_COMMAND_TIMEOUT,
+    ) -> SpeakerVolumeChange:
+        target = self.validate_level(level)
+        previous = await self._read_pair(
+            connection,
+            "GetSpeakerVolume",
+            timeout,
+        )
+        await self._set_volume(connection, target, timeout)
+        confirmed = await self._read_pair(
+            connection,
+            "GetSpeakerVolume",
+            timeout,
+        )
+        if confirmed != target:
+            raise VolumeControlError(
+                f"volume verification failed: target {target}, got {confirmed}"
+            )
+        muted = await self._read_pair(connection, "GetSpeakerMute", timeout)
+        support_type = await self._read_pair(
+            connection,
+            "GetSpeakerSupportType",
+            timeout,
+        )
+        return SpeakerVolumeChange(
+            previous_volume=previous,
+            target=target,
+            volume=SpeakerVolumeState(
+                volume=confirmed,
+                muted=bool(muted),
+                support_type=support_type,
+            ),
+        )
+
+    @staticmethod
+    def validate_level(level: int) -> int:
+        if type(level) is not int or not 0 <= level <= 100:
+            raise VolumeControlError(
+                "volume.set requires integer level from 0 through 100"
+            )
+        return level
+
+    async def _read_pair(
+        self,
+        connection: RootCommandConnection,
+        method: str,
+        timeout: float,
+    ) -> int:
+        output = await self._call(connection, method, timeout)
+        match = re.fullmatch(r"ii\s+(-?\d+)\s+(-?\d+)", output)
+        if match is None:
+            raise VolumeControlError(f"unexpected {method} reply: {output}")
+        value = int(match.group(1))
+        result = int(match.group(2))
+        if result != 0:
+            raise VolumeControlError(f"{method} result {result}")
+        return value
+
+    async def _set_volume(
+        self,
+        connection: RootCommandConnection,
+        level: int,
+        timeout: float,
+    ) -> None:
+        output = await self._call(
+            connection,
+            "SetSpeakerVolume",
+            timeout,
+            "i",
+            str(level),
+        )
+        match = re.fullmatch(r"i\s+(-?\d+)", output)
+        if match is None:
+            raise VolumeControlError(
+                f"unexpected SetSpeakerVolume reply: {output}"
+            )
+        result = int(match.group(1))
+        if result != 0:
+            raise VolumeControlError(f"SetSpeakerVolume result {result}")
+
+    async def _call(
+        self,
+        connection: RootCommandConnection,
+        method: str,
+        timeout: float,
+        *arguments: str,
+    ) -> str:
+        command = shlex.join(
+            [
+                "/usr/bin/busctl",
+                "--system",
+                "--timeout=2",
+                "call",
+                SPEAKER_MANAGER_BUS,
+                SPEAKER_MANAGER_PATH,
+                SPEAKER_MANAGER_INTERFACE,
+                method,
+                *arguments,
+            ]
+        )
+        result = await connection.execute(command, timeout)
+        if result.timed_out:
+            raise VolumeControlError(f"{method} timed out")
+        if result.exit_code != 0:
+            detail = result.stderr.strip() or result.stdout.strip() or "no output"
+            raise VolumeControlError(
+                f"{method} failed with exit {result.exit_code}: {detail}"
+            )
+        return result.stdout.strip()

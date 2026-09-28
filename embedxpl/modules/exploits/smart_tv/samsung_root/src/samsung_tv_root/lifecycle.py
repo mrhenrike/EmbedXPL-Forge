@@ -1,0 +1,463 @@
+from __future__ import annotations
+
+import asyncio
+import contextlib
+import logging
+from dataclasses import dataclass
+from typing import Any, Protocol
+
+from .compatibility import QN90F_PROFILE, TargetCompatibilityError
+from .config import RetryConfiguration, TelevisionConfiguration
+from .qn90b import (
+    Qn90bRootAcquirer,
+    Qn90bRootLease,
+    Qn90bRootSessionConfig,
+)
+from .qn90f import (
+    REMOTE_PROBE_PATH,
+    Qn90fRootAcquirer,
+    Qn90fRootLease,
+    RootSessionConfig,
+    RootSessionTransientError,
+    SdbExploitClient,
+    TVDeviceProfile,
+)
+from .resources import payload_directory
+from .root_agent import RootAgentConnection, RootAgentUnavailableError
+from .sdb import SdbClient, SdbError, find_sdb, route_callback_host
+
+
+class RootLifecycleError(RuntimeError):
+    pass
+
+
+class RootLease(Protocol):
+    connection: RootAgentConnection
+
+    async def shutdown(self) -> None: ...
+
+    async def close(self) -> None: ...
+
+
+class RootBackend(Protocol):
+    async def acquire(self, host: str) -> RootLease: ...
+
+    def is_transient(self, error: BaseException) -> bool: ...
+
+
+@dataclass(frozen=True)
+class RootState:
+    television: str
+    model: str
+    host: str
+    generation: str | None
+    presence: str
+    state: str
+    attempt: int
+    process_id: int | None
+    error: str | None
+    revision: int
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "television": self.television,
+            "model": self.model,
+            "host": self.host,
+            "generation": self.generation,
+            "presence": self.presence,
+            "state": self.state,
+            "attempt": self.attempt,
+            "process_id": self.process_id,
+            "error": self.error,
+            "revision": self.revision,
+        }
+
+
+class Qn90bRootBackend:
+    def __init__(self, configuration: TelevisionConfiguration) -> None:
+        self.configuration = configuration
+
+    async def acquire(self, host: str) -> Qn90bRootLease:
+        callback_host = route_callback_host(host)
+        acquirer = Qn90bRootAcquirer(
+            Qn90bRootSessionConfig(
+                tv_host=host,
+                callback_host=callback_host,
+                bind_host=callback_host,
+                listener_port=0,
+                accept_timeout=20.0,
+                command_timeout=15.0,
+                payload_directory=payload_directory("qn90b"),
+            )
+        )
+        lease = await acquirer.acquire()
+        try:
+            if self.configuration.disable_native_execution_policy:
+                await asyncio.to_thread(acquirer.exploit.disable_uep)
+            return lease
+        except BaseException:
+            await lease.close()
+            raise
+
+    def is_transient(self, error: BaseException) -> bool:
+        return isinstance(
+            error,
+            (
+                SdbError,
+                RootAgentUnavailableError,
+                TimeoutError,
+                ConnectionError,
+                OSError,
+            ),
+        )
+
+
+class Qn90fRootBackend:
+    def __init__(self, configuration: TelevisionConfiguration) -> None:
+        self.configuration = configuration
+
+    async def acquire(self, host: str) -> Qn90fRootLease:
+        await asyncio.to_thread(self._preflight, host)
+        callback_host = route_callback_host(host)
+        payloads = payload_directory("qn90f")
+        acquirer = Qn90fRootAcquirer(
+            RootSessionConfig(
+                profile=TVDeviceProfile(),
+                tv_host=host,
+                callback_host=callback_host,
+                bind_host=callback_host,
+                listener_port=0,
+                accept_timeout=20.0,
+                command_timeout=15.0,
+                payload_directory=payloads,
+            ),
+            SdbExploitClient(find_sdb(), host),
+        )
+        lease = await acquirer.acquire()
+        if self.configuration.disable_native_execution_policy:
+            result = await lease.connection.execute(
+                self._uep_command(),
+                30.0,
+            )
+            if result.timed_out or result.exit_code != 0:
+                await lease.close()
+                detail = result.stderr.strip() or result.stdout.strip()
+                raise RootLifecycleError(
+                    "QN90F native execution policy update failed"
+                    + (f": {detail}" if detail else "")
+                )
+        return lease
+
+    def is_transient(self, error: BaseException) -> bool:
+        return isinstance(
+            error,
+            (
+                RootSessionTransientError,
+                RootAgentUnavailableError,
+                SdbError,
+                TimeoutError,
+                ConnectionError,
+                OSError,
+            ),
+        )
+
+    @staticmethod
+    def _preflight(host: str) -> None:
+        client = SdbClient(find_sdb(), host)
+        client.connect()
+        result = client.capture(QN90F_PROFILE.probe_command(), timeout=20.0)
+        try:
+            QN90F_PROFILE.assess(result.output).require_compatible()
+        except TargetCompatibilityError as error:
+            raise RootLifecycleError(str(error)) from error
+
+    @staticmethod
+    def _uep_command() -> str:
+        return f"/usr/bin/dotnet {REMOTE_PROBE_PATH} disable-uep"
+
+
+def root_backend(configuration: TelevisionConfiguration) -> RootBackend:
+    if configuration.model == "qn90b":
+        return Qn90bRootBackend(configuration)
+    if configuration.model == "qn90f":
+        return Qn90fRootBackend(configuration)
+    raise RootLifecycleError(f"unsupported model: {configuration.model}")
+
+
+class RootLifecycle:
+    def __init__(
+        self,
+        configuration: TelevisionConfiguration,
+        retry: RetryConfiguration,
+        backend: RootBackend | None = None,
+    ) -> None:
+        self.configuration = configuration
+        self.retry = retry
+        self.backend = backend or root_backend(configuration)
+        self.host = configuration.host
+        self.generation: str | None = None
+        self.presence = "unknown"
+        self.state = "idle"
+        self.attempt = 0
+        self._retry_index = 0
+        self.error: str | None = None
+        self.lease: RootLease | None = None
+        self._acquisition: asyncio.Task[None] | None = None
+        self._retry_handle: asyncio.TimerHandle | None = None
+        self._lease_monitor: asyncio.Task[None] | None = None
+        self._closed = False
+        self._revision = 0
+        self._change_waiters: set[asyncio.Future[int]] = set()
+        self._logger = logging.getLogger(
+            f"samsung_tv_root.lifecycle.{configuration.name}"
+        )
+
+    def snapshot(self) -> RootState:
+        process_id = self.lease.connection.identity.pid if self.lease else None
+        return RootState(
+            television=self.configuration.name,
+            model=self.configuration.model,
+            host=self.host,
+            generation=self.generation,
+            presence=self.presence,
+            state=self.state,
+            attempt=self.attempt,
+            process_id=process_id,
+            error=self.error,
+            revision=self._revision,
+        )
+
+    async def wait_for_change(self, after_revision: int) -> tuple[int, RootState]:
+        if self._revision != after_revision:
+            return self._revision, self.snapshot()
+        future = asyncio.get_running_loop().create_future()
+        self._change_waiters.add(future)
+        if self._revision != after_revision and not future.done():
+            future.set_result(self._revision)
+        try:
+            revision = await future
+            return revision, self.snapshot()
+        finally:
+            self._change_waiters.discard(future)
+
+    async def observe_presence(
+        self,
+        host: str,
+        generation: str,
+        available: bool,
+    ) -> None:
+        if self._closed:
+            return
+        changed_generation = generation != self.generation or host != self.host
+        self.host = host
+        if available:
+            self.presence = "online"
+            if changed_generation:
+                self.generation = generation
+                self.attempt = 0
+                self._retry_index = 0
+                self.error = None
+                self.state = "idle"
+                self._cancel_retry()
+                await self._cancel_acquisition()
+                await self._replace_lease()
+            if (
+                self.configuration.root_on_presence
+                and self.lease is None
+                and self._acquisition is None
+                and self._retry_handle is None
+                and self.state not in {"failed", "exhausted"}
+            ):
+                self._start_acquisition()
+        else:
+            self.presence = "offline"
+            self.generation = generation
+            self.state = "offline"
+            self.attempt = 0
+            self._retry_index = 0
+            self.error = None
+            self._cancel_retry()
+            await self._cancel_acquisition()
+            await self._replace_lease()
+        self._changed()
+
+    async def acquire_now(self) -> RootAgentConnection:
+        if self._closed:
+            raise RootLifecycleError("root lifecycle is closed")
+        if self.lease is not None and not self.lease.connection.closed:
+            return self.lease.connection
+        self.presence = "online"
+        self.attempt = 0
+        self._retry_index = 0
+        self.error = None
+        self._cancel_retry()
+        self._start_acquisition()
+        revision = self._revision
+        while True:
+            if self.lease is not None and not self.lease.connection.closed:
+                return self.lease.connection
+            if self.state in {"failed", "exhausted"}:
+                raise RootLifecycleError(self.error or "root acquisition failed")
+            revision, _ = await self.wait_for_change(revision)
+
+    async def close(self) -> None:
+        if self._closed:
+            return
+        self._closed = True
+        self._cancel_retry()
+        await self._cancel_acquisition()
+        monitor = self._lease_monitor
+        self._lease_monitor = None
+        if monitor is not None:
+            monitor.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await monitor
+        lease = self.lease
+        self.lease = None
+        if lease is not None:
+            with contextlib.suppress(Exception):
+                await lease.shutdown()
+            await lease.close()
+        self.state = "closed"
+        self._changed()
+
+    def _start_acquisition(self) -> None:
+        if self._closed or self._acquisition is not None or self.lease is not None:
+            return
+        self._acquisition = asyncio.create_task(self._acquire())
+
+    async def _acquire(self) -> None:
+        self.attempt += 1
+        self.state = "acquiring"
+        self.error = None
+        generation = self.generation
+        host = self.host
+        self._changed()
+        try:
+            lease = await self.backend.acquire(host)
+        except asyncio.CancelledError:
+            raise
+        except BaseException as error:
+            self.error = f"{type(error).__name__}: {error}"
+            if self.backend.is_transient(error):
+                self._schedule_retry(generation)
+            else:
+                self.state = "failed"
+                self._logger.error(
+                    "root acquisition failed television=%s model=%s host=%s error=%s",
+                    self.configuration.name,
+                    self.configuration.model,
+                    host,
+                    self.error,
+                )
+            self._changed()
+        else:
+            if self._closed or generation != self.generation or host != self.host:
+                await lease.close()
+            else:
+                self.lease = lease
+                self.state = "rooted"
+                self.error = None
+                self._retry_index = 0
+                self._cancel_retry()
+                self._lease_monitor = asyncio.create_task(
+                    self._monitor_lease(lease, generation)
+                )
+                self._logger.info(
+                    "root acquired television=%s model=%s host=%s pid=%s",
+                    self.configuration.name,
+                    self.configuration.model,
+                    host,
+                    lease.connection.identity.pid,
+                )
+                self._changed()
+        finally:
+            self._acquisition = None
+
+    def _schedule_retry(self, generation: str | None) -> None:
+        retry_index = self._retry_index
+        if retry_index >= len(self.retry.delays):
+            self.state = "exhausted"
+            self._logger.error(
+                "root acquisition exhausted television=%s model=%s host=%s attempts=%s error=%s",
+                self.configuration.name,
+                self.configuration.model,
+                self.host,
+                self.attempt,
+                self.error,
+            )
+            return
+        delay = self.retry.delays[retry_index]
+        self._retry_index += 1
+        self.state = "retry-wait"
+        self._cancel_retry()
+        loop = asyncio.get_running_loop()
+        self._retry_handle = loop.call_later(
+            delay,
+            self._retry,
+            generation,
+        )
+
+    def _retry(self, generation: str | None) -> None:
+        self._retry_handle = None
+        if (
+            self._closed
+            or self.presence != "online"
+            or generation != self.generation
+        ):
+            return
+        self._start_acquisition()
+
+    async def _monitor_lease(
+        self,
+        lease: RootLease,
+        generation: str | None,
+    ) -> None:
+        try:
+            await lease.connection.wait_closed()
+        except asyncio.CancelledError:
+            raise
+        except Exception as error:
+            self.error = f"{type(error).__name__}: {error}"
+        finally:
+            if self.lease is lease:
+                self.lease = None
+                with contextlib.suppress(Exception):
+                    await lease.close()
+                if not self._closed and self.presence == "online":
+                    self.state = "disconnected"
+                    self.attempt = 0
+                    self._retry_index = 0
+                    self._schedule_retry(generation)
+                self._changed()
+
+    async def _replace_lease(self) -> None:
+        lease = self.lease
+        self.lease = None
+        monitor = self._lease_monitor
+        self._lease_monitor = None
+        if monitor is not None and monitor is not asyncio.current_task():
+            monitor.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await monitor
+        if lease is not None:
+            await lease.close()
+
+    async def _cancel_acquisition(self) -> None:
+        acquisition = self._acquisition
+        self._acquisition = None
+        if acquisition is not None:
+            acquisition.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await acquisition
+
+    def _cancel_retry(self) -> None:
+        if self._retry_handle is not None:
+            self._retry_handle.cancel()
+            self._retry_handle = None
+
+    def _changed(self) -> None:
+        self._revision += 1
+        for waiter in tuple(self._change_waiters):
+            if not waiter.done():
+                waiter.set_result(self._revision)

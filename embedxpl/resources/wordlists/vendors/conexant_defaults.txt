@@ -1,0 +1,14 @@
+admin:epicrouter
+admin:password
+admin:root
+root:epicrouter
+root:password
+root:root
+user:epicrouter
+user:password
+user:root
+:admin
+:epicrouter
+Administrator:admin
+admin:amigosw1
+admin:conexant

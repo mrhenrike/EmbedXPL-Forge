@@ -1,0 +1,210 @@
+from __future__ import annotations
+
+import contextlib
+import secrets
+import shlex
+import struct
+import time
+import zlib
+from dataclasses import dataclass
+from pathlib import PurePosixPath
+from typing import Protocol
+
+from .source import CurrentSource, HdmiInput, Qn90fSourceControl, SourceControlError
+
+
+CAPTURE_WIDTH = 960
+CAPTURE_HEIGHT = 540
+CAPTURE_PIXEL_FORMAT = "rgb24"
+CAPTURE_BYTE_LENGTH = CAPTURE_WIDTH * CAPTURE_HEIGHT * 3
+CAPTURE_ASSEMBLY = PurePosixPath(
+    "/home/owner/share/tmp/sdk_tools/qn90f-probe/Qn90fScreenAnalysisDump.dll"
+)
+CAPTURE_OUTPUT_DIRECTORY = CAPTURE_ASSEMBLY.parent
+CAPTURE_PROFILE = "sa-ui"
+
+
+class CaptureError(RuntimeError):
+    pass
+
+
+class RootCommandResult(Protocol):
+    exit_code: int
+    timed_out: bool
+    stdout: str
+    stderr: str
+
+
+class RootFileResult(Protocol):
+    data: bytes
+    sha256: str
+
+
+class RootCaptureConnection(Protocol):
+    async def execute(self, command: str, timeout: float) -> RootCommandResult: ...
+
+    async def read_file(
+        self,
+        path: str | PurePosixPath,
+        timeout: float,
+    ) -> RootFileResult: ...
+
+
+@dataclass(frozen=True)
+class Qn90fFrameCapture:
+    source: CurrentSource
+    rgb: bytes
+    sha256: str
+    producer_pid: int
+    nonzero_bytes: int
+    observed_at: float
+
+    def metadata(self) -> dict[str, object]:
+        return {
+            "source": self.source.source,
+            "source_type": self.source.source_type,
+            "source_uuid": self.source.source_uuid,
+            "width": CAPTURE_WIDTH,
+            "height": CAPTURE_HEIGHT,
+            "pixel_format": CAPTURE_PIXEL_FORMAT,
+            "byte_length": len(self.rgb),
+            "sha256": self.sha256,
+            "producer_pid": self.producer_pid,
+            "profile": CAPTURE_PROFILE,
+            "nonzero_bytes": self.nonzero_bytes,
+            "observed_at": self.observed_at,
+            "frame_timestamp": None,
+            "freshness": "retained_frame_timestamp_unknown",
+        }
+
+
+class Qn90fCaptureControl:
+    def __init__(self, source_control: Qn90fSourceControl) -> None:
+        self.source_control = source_control
+
+    async def capture(
+        self,
+        connection: RootCaptureConnection,
+        timeout: float,
+    ) -> Qn90fFrameCapture:
+        source_before = await self.source_control.current_source(connection, timeout)
+        try:
+            HdmiInput.parse(source_before.source)
+        except SourceControlError as error:
+            raise CaptureError(
+                f"QN90F active source is not HDMI: {source_before.source}"
+            ) from error
+
+        output = CAPTURE_OUTPUT_DIRECTORY / f"frame-{secrets.token_hex(8)}.rgb"
+        command = shlex.join(
+            (
+                "/usr/bin/dotnet",
+                str(CAPTURE_ASSEMBLY),
+                str(output),
+                CAPTURE_PROFILE,
+            )
+        )
+        try:
+            result = await connection.execute(command, timeout)
+            if result.timed_out or result.exit_code != 0:
+                detail = result.stderr.strip() or result.stdout.strip()
+                raise CaptureError(
+                    f"QN90F retained-frame helper failed: {detail or 'no detail'}"
+                )
+            helper = self._parse_helper_output(result.stdout)
+            frame = await connection.read_file(output, timeout)
+            if len(frame.data) != CAPTURE_BYTE_LENGTH:
+                raise CaptureError(
+                    f"QN90F frame has {len(frame.data)} bytes, "
+                    f"expected {CAPTURE_BYTE_LENGTH}"
+                )
+
+            source_after = await self.source_control.current_source(connection, timeout)
+            if source_after != source_before:
+                raise CaptureError(
+                    "QN90F active source changed while the frame was being captured"
+                )
+            return Qn90fFrameCapture(
+                source=source_after,
+                rgb=frame.data,
+                sha256=frame.sha256,
+                producer_pid=helper["pid"],
+                nonzero_bytes=helper["nonzero_bytes"],
+                observed_at=time.time(),
+            )
+        finally:
+            with contextlib.suppress(Exception):
+                await connection.execute(
+                    shlex.join(("/bin/rm", "-f", str(output))),
+                    5.0,
+                )
+
+    @staticmethod
+    def _parse_helper_output(output: str) -> dict[str, int]:
+        values: dict[str, str] = {}
+        for line in output.splitlines():
+            key, separator, value = line.partition("=")
+            if separator and key:
+                values[key] = value
+        if values.get("profile") != CAPTURE_PROFILE:
+            raise CaptureError("QN90F retained-frame helper returned the wrong profile")
+        try:
+            parsed = {
+                "pid": int(values["pid"]),
+                "width": int(values["width"]),
+                "height": int(values["height"]),
+                "rgb_bytes": int(values["rgb_bytes"]),
+                "nonzero_bytes": int(values["nonzero_bytes"]),
+            }
+        except (KeyError, ValueError) as error:
+            raise CaptureError(
+                "QN90F retained-frame helper returned invalid metadata"
+            ) from error
+        if (
+            parsed["pid"] <= 0
+            or parsed["width"] != CAPTURE_WIDTH
+            or parsed["height"] != CAPTURE_HEIGHT
+            or parsed["rgb_bytes"] != CAPTURE_BYTE_LENGTH
+            or not 0 < parsed["nonzero_bytes"] <= CAPTURE_BYTE_LENGTH
+        ):
+            raise CaptureError(
+                "QN90F retained-frame helper metadata failed validation"
+            )
+        return parsed
+
+
+def encode_png(
+    rgb: bytes,
+    width: int = CAPTURE_WIDTH,
+    height: int = CAPTURE_HEIGHT,
+) -> bytes:
+    expected = width * height * 3
+    if width <= 0 or height <= 0 or len(rgb) != expected:
+        raise CaptureError(
+            f"RGB frame has {len(rgb)} bytes, expected {expected} for {width}x{height}"
+        )
+    stride = width * 3
+    scanlines = b"".join(
+        b"\x00" + rgb[offset : offset + stride]
+        for offset in range(0, len(rgb), stride)
+    )
+
+    def chunk(name: bytes, data: bytes) -> bytes:
+        payload = name + data
+        return (
+            struct.pack(">I", len(data))
+            + payload
+            + struct.pack(">I", zlib.crc32(payload) & 0xFFFFFFFF)
+        )
+
+    return b"".join(
+        (
+            b"\x89PNG\r\n\x1a\n",
+            chunk(
+                b"IHDR",
+                struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0),
+            ),
+            chunk(b"IDAT", zlib.compress(scanlines, level=6)),
+            chunk(b"IEND", b""),
+        )
+    )

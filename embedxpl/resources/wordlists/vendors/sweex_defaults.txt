@@ -1,0 +1,12 @@
+admin:1234
+admin:admin
+admin:epicrouter
+admin:mysweex
+sweex:1234
+sweex:admin
+sweex:epicrouter
+sweex:mysweex
+:admin
+:mysweex
+none:blank
+rdc123:rdc123

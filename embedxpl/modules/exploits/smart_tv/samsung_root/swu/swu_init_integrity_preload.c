@@ -1,0 +1,212 @@
+/*
+ * Test one encrypted-passphrase candidate through the QN90F SWU command-0
+ * initialization path. Loaded into Samsung's signed SWUMainApp as a
+ * constructor and exits before the application's main function.
+ */
+
+typedef unsigned int u32;
+typedef unsigned int size_t;
+typedef int ssize_t;
+
+extern int open(const char *path, int flags, ...);
+extern ssize_t read(int descriptor, void *buffer, size_t count);
+extern ssize_t write(int descriptor, const void *buffer, size_t count);
+extern int close(int descriptor);
+extern char *getenv(const char *name);
+extern void _exit(int status) __attribute__((noreturn));
+extern void *memset(void *destination, int value, size_t count);
+
+typedef struct {
+    unsigned char *begin;
+    unsigned char *end;
+    unsigned char *capacity;
+} ByteVector;
+
+extern void swu_client_construct(void *client)
+    __asm__("_ZN3SWU8Platform18SWUTrustZoneClientC1Ev");
+extern int swu_client_open(void *client)
+    __asm__("_ZN3SWU8Platform18SWUTrustZoneClient4openEv");
+extern int swu_client_init(
+    void *client,
+    int encrypt,
+    int passphrase_encrypted,
+    int key_derivation_method,
+    int key_size,
+    int mode,
+    const ByteVector *passphrase,
+    const ByteVector *salt,
+    u32 chunk_size)
+    __asm__("_ZN3SWU8Platform18SWUTrustZoneClient4initEbbNS_6Common2IO22AESKeyDerivationMethodENS3_10AESKeySizeENS3_11AESModeTypeERKSt6vectorIhSaIhEESB_j");
+
+#define O_RDONLY 0
+#define O_WRONLY 1
+#define O_CREAT 0100
+#define O_TRUNC 01000
+#define CLIENT_SIZE 0x78U
+#define MAX_SHARED_SIZE 0x10000U
+#define EXPECTED_ITEMS_SIZE 416U
+#define EXPECTED_SALT_SIZE 8U
+
+static const char default_items_path[] =
+    "/usr/share/org.tizen.tv.swu/itemsAESPassphraseEncrypted.txt";
+static const char default_salt_path[] =
+    "/home/owner/share/tmp/sdk_tools/swu-passphrase/firmware-salt.bin";
+static const char default_status_path[] =
+    "/home/owner/share/tmp/sdk_tools/swu-passphrase/init-integrity-status.txt";
+static const char hex_digits[] = "0123456789abcdef";
+
+static unsigned char items[EXPECTED_ITEMS_SIZE];
+static unsigned char firmware_salt[EXPECTED_SALT_SIZE];
+
+static size_t string_length(const char *text)
+{
+    size_t length = 0;
+    while (text[length] != '\0') {
+        ++length;
+    }
+    return length;
+}
+
+static int write_all(int descriptor, const void *raw_buffer, size_t count)
+{
+    const unsigned char *buffer = (const unsigned char *)raw_buffer;
+    while (count != 0U) {
+        ssize_t written = write(descriptor, buffer, count);
+        if (written <= 0) {
+            return 0;
+        }
+        buffer += (size_t)written;
+        count -= (size_t)written;
+    }
+    return 1;
+}
+
+static void write_text(int descriptor, const char *text)
+{
+    (void)write_all(descriptor, text, string_length(text));
+}
+
+static void write_u32_hex(int descriptor, u32 value)
+{
+    char encoded[10];
+    unsigned int index;
+    encoded[0] = '0';
+    encoded[1] = 'x';
+    for (index = 0; index < 8U; ++index) {
+        unsigned int shift = (7U - index) * 4U;
+        encoded[2U + index] = hex_digits[(value >> shift) & 0x0fU];
+    }
+    (void)write_all(descriptor, encoded, sizeof(encoded));
+}
+
+static void write_field(int descriptor, const char *name, u32 value)
+{
+    write_text(descriptor, name);
+    write_text(descriptor, "=");
+    write_u32_hex(descriptor, value);
+    write_text(descriptor, "\n");
+}
+
+static int read_exact(
+    const char *path,
+    unsigned char *buffer,
+    size_t expected)
+{
+    int descriptor = open(path, O_RDONLY);
+    size_t used = 0;
+    unsigned char extra;
+    ssize_t received;
+    if (descriptor < 0) {
+        return 0;
+    }
+    while (used < expected) {
+        received = read(descriptor, buffer + used, expected - used);
+        if (received <= 0) {
+            close(descriptor);
+            return 0;
+        }
+        used += (size_t)received;
+    }
+    received = read(descriptor, &extra, 1U);
+    close(descriptor);
+    return received == 0;
+}
+
+static const char *configured_path(const char *name, const char *fallback)
+{
+    const char *value = getenv(name);
+    return value != (const char *)0 && value[0] != '\0' ? value : fallback;
+}
+
+__attribute__((constructor)) static void probe_swu_init_integrity(void)
+{
+    const char *items_path = configured_path(
+        "SWU_INIT_ITEMS_PATH",
+        default_items_path);
+    const char *salt_path = configured_path(
+        "SWU_INIT_SALT_PATH",
+        default_salt_path);
+    const char *status_path = configured_path(
+        "SWU_INIT_STATUS_PATH",
+        default_status_path);
+    const char *case_name = configured_path("SWU_INIT_CASE", "unspecified");
+    u32 client_words[CLIENT_SIZE / sizeof(u32)];
+    unsigned char *client = (unsigned char *)client_words;
+    ByteVector items_vector;
+    ByteVector salt_vector;
+    int status_descriptor;
+    int open_result;
+    int init_result;
+
+    status_descriptor = open(
+        status_path,
+        O_WRONLY | O_CREAT | O_TRUNC,
+        0600);
+    if (status_descriptor < 0) {
+        _exit(1);
+    }
+    write_text(status_descriptor, "case=");
+    write_text(status_descriptor, case_name);
+    write_text(status_descriptor, "\n");
+
+    if (!read_exact(items_path, items, sizeof(items)) ||
+        !read_exact(salt_path, firmware_salt, sizeof(firmware_salt))) {
+        write_text(status_descriptor, "stage=read-input\n");
+        close(status_descriptor);
+        _exit(1);
+    }
+
+    memset(client_words, 0, sizeof(client_words));
+    swu_client_construct(client_words);
+    open_result = swu_client_open(client_words);
+    write_field(status_descriptor, "open_result", (u32)open_result);
+    if (!open_result) {
+        close(status_descriptor);
+        _exit(1);
+    }
+
+    /* Reuse the explicit session when init() calls its internal open guard. */
+    client[0x75] = 1;
+    items_vector.begin = items;
+    items_vector.end = items + sizeof(items);
+    items_vector.capacity = items + sizeof(items);
+    salt_vector.begin = firmware_salt;
+    salt_vector.end = firmware_salt + sizeof(firmware_salt);
+    salt_vector.capacity = firmware_salt + sizeof(firmware_salt);
+
+    init_result = swu_client_init(
+        client_words,
+        0,
+        1,
+        1,
+        2,
+        1,
+        &items_vector,
+        &salt_vector,
+        MAX_SHARED_SIZE);
+    write_field(status_descriptor, "init_result", (u32)init_result);
+    close(status_descriptor);
+
+    /* Process exit releases the TEEC session without entering updater main. */
+    _exit(init_result ? 0 : 1);
+}

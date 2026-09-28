@@ -1,0 +1,4 @@
+:snmp-Trap
+Admin:No
+admin:bintec
+admin:funkwerk
