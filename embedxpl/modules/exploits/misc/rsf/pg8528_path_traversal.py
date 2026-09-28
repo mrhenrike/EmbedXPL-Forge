@@ -3,7 +3,7 @@
 # EmbedXPL adaptation: André Henrique (@mrhenrike) | União Geek
 
 from embedxpl.core.exploit import *
-from embedxpl.core.exploit.http_client import HTTPClient
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
