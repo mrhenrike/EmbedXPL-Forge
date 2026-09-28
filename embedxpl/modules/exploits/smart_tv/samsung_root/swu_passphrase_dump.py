@@ -1,0 +1,196 @@
+#!/usr/bin/env python3
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+from pathlib import Path
+
+from .teec import (
+    SHARED_MEMORY_SIZE,
+    TEEC_NONE,
+    TEEC_PROFILES,
+    TEEC_VALUE_INOUT,
+    SwuTrustedApplicationSession,
+    TeecError,
+    TeecProfile,
+    TeecRuntime,
+    select_profile,
+    set_process_name,
+    verify_profile,
+)
+
+
+COMMAND_GENERATE_PASSPHRASE = 3
+ITEM_INPUTS = (
+    "/usr/share/org.tizen.tv.swu/itemsAESPassphraseEncrypted.txt",
+    "/usr/share/org.tizen.tv.swu/itemsSubModelAESPassphraseEncrypted.txt",
+)
+OPENAPI_INPUTS = (
+    "/usr/share/org.tizen.tv.swu/OpenAPIAESPassphraseEncrypted.txt",
+    "/usr/share/org.tizen.tv.swu/OpenAPISubmodelAESPassphraseEncrypted.txt",
+)
+
+
+class PassphraseClient(SwuTrustedApplicationSession):
+    def decrypt(self, encrypted: bytes) -> bytes:
+        self.write_memory(self.input_memory, encrypted, "encrypted passphrase")
+        self.clear_memory(self.output_memory, "passphrase output")
+        operation = self.operation(
+            self.profile.input_memory_type,
+            self.profile.output_memory_type,
+            TEEC_VALUE_INOUT,
+            TEEC_NONE,
+        )
+        self.bind_memory(operation, 0, self.input_memory, len(encrypted))
+        self.bind_memory(operation, 1, self.output_memory, SHARED_MEMORY_SIZE)
+        operation.parameters[2].value.a = 0
+        operation.parameters[2].value.b = 0
+        self.invoke(
+            COMMAND_GENERATE_PASSPHRASE,
+            operation,
+            "TEEC_InvokeCommand(SWU generate passphrase)",
+        )
+        size = operation.parameters[2].value.b
+        if size < 1:
+            raise TeecError("TrustZone returned an empty passphrase")
+        return self.read_memory(self.output_memory, size, "passphrase output")
+
+
+def decrypt_files(
+    paths: list[str],
+    profile: TeecProfile,
+    attempt_modern_items: bool,
+) -> tuple[list[dict[str, object]], int]:
+    verify_profile(profile)
+    records: list[dict[str, object]] = []
+    failures = 0
+    with PassphraseClient(TeecRuntime(profile), profile) as client:
+        for raw_path in paths:
+            path = Path(raw_path)
+            if (
+                profile.name == "modern"
+                and path.name.startswith("items")
+                and not attempt_modern_items
+            ):
+                failures += 1
+                records.append(
+                    {
+                        "path": str(path),
+                        "error": (
+                            "the tested Tizen 9 trusted application rejects "
+                            "command 3 for items passphrases"
+                        ),
+                    }
+                )
+                continue
+            try:
+                encrypted = path.read_bytes()
+                decrypted = client.decrypt(encrypted)
+            except (OSError, TeecError) as error:
+                failures += 1
+                records.append({"path": str(path), "error": str(error)})
+                continue
+            records.append(
+                {
+                    "path": str(path),
+                    "encrypted_size": len(encrypted),
+                    "decrypted_size": len(decrypted),
+                    "hex": decrypted.hex(),
+                    "ascii": decrypted.decode("ascii", errors="backslashreplace"),
+                }
+            )
+    return records, failures
+
+
+def parse_arguments() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Decrypt Samsung SWU passphrase blobs through the TV's trusted application"
+        )
+    )
+    parser.add_argument(
+        "paths",
+        nargs="*",
+        help=(
+            "encrypted blobs; the default is all four verified Tizen 6 blobs "
+            "or the two command-3-compatible Tizen 9 OpenAPI blobs"
+        ),
+    )
+    parser.add_argument(
+        "--abi",
+        choices=("auto", *TEEC_PROFILES),
+        default="auto",
+        help="TEEC client ABI; auto recognizes the tested Tizen 6 and 9 profiles",
+    )
+    parser.add_argument(
+        "--output",
+        help="write JSON to this mode-0600 path instead of standard output",
+    )
+    parser.add_argument(
+        "--process-name",
+        help="set the kernel task name before opening the trusted application",
+    )
+    parser.add_argument(
+        "--attempt-modern-items",
+        action="store_true",
+        help="run the known-rejected Tizen 9 command-3 items probe",
+    )
+    return parser.parse_args()
+
+
+def write_result(
+    records: list[dict[str, object]],
+    output: str | None,
+    profile: TeecProfile,
+) -> None:
+    payload = (
+        json.dumps(
+            {"teec_abi": profile.name, "passphrases": records},
+            indent=2,
+        )
+        + "\n"
+    ).encode("utf-8")
+    if output is None:
+        sys.stdout.buffer.write(payload)
+        return
+    flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    descriptor = os.open(output, flags, 0o600)
+    try:
+        os.fchmod(descriptor, 0o600)
+        with os.fdopen(descriptor, "wb", closefd=False) as stream:
+            stream.write(payload)
+            stream.flush()
+            os.fsync(stream.fileno())
+    finally:
+        os.close(descriptor)
+
+
+def main() -> int:
+    arguments = parse_arguments()
+    try:
+        set_process_name(arguments.process_name)
+        profile = select_profile(arguments.abi)
+        paths = arguments.paths or list(
+            (*ITEM_INPUTS, *OPENAPI_INPUTS)
+            if profile.name == "legacy"
+            else OPENAPI_INPUTS
+        )
+        records, failures = decrypt_files(
+            paths,
+            profile,
+            arguments.attempt_modern_items,
+        )
+        write_result(records, arguments.output, profile)
+    except (OSError, TeecError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    return 1 if failures else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

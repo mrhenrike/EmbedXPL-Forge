@@ -1,0 +1,184 @@
+# Author: André Henrique (LinkedIn/X: @mrhenrike)
+# Firmware Download Sources Registry — EmbedXPL-Forge v2.0
+# Defines vendor portals, direct download patterns, and metadata
+# for automated firmware acquisition.
+
+vendors:
+  hikvision:
+    name: "Hikvision"
+    category: "cameras"
+    base_url: "https://www.hikvision.com/en/support/download/firmware/"
+    portal_url: "https://www.hikvision.com/en/support/download/firmware/"
+    patterns:
+      - "{model}_V{version}_build{date}.zip"
+      - "{model}_{region}_V{version}.zip"
+    known_models:
+      - DS-2CD2143G2-I
+      - DS-2CD2147G2-LSU
+      - DS-2DE4A425IWG-E
+    requires_login: false
+    notes: "Direct links available without auth for public firmware."
+
+  dahua:
+    name: "Dahua Technology"
+    category: "cameras"
+    base_url: "https://www.dahuasecurity.com/support/downloadCenter/"
+    portal_url: "https://www.dahuasecurity.com/support/downloadCenter/"
+    patterns:
+      - "DHI-{model}_Eng_P_V{version}.bin"
+    known_models:
+      - IPC-HDW2831T-AS
+      - NVR4104HS-P-4KS2
+    requires_login: false
+    notes: "Some newer models require portal login."
+
+  tplink:
+    name: "TP-Link"
+    category: "routers"
+    base_url: "https://www.tp-link.com/en/support/download/"
+    portal_url: "https://www.tp-link.com/en/support/download/"
+    patterns:
+      - "{model}(EU)_V{hw_ver}_firmware_{date}.zip"
+      - "{model}_{hw_ver}_firmware_{version}.bin"
+    known_models:
+      - VN020-F3v
+      - Archer C7
+      - TL-WR840N
+    requires_login: false
+    notes: "Publicly available via TP-Link support pages."
+
+  dlink:
+    name: "D-Link"
+    category: "routers"
+    base_url: "https://tsd.dlink.com.tw/ddetail"
+    portal_url: "https://support.dlink.com/ProductInfo.aspx?m={model}"
+    patterns:
+      - "{model}_REVA_FIRMWARE_{version}.zip"
+      - "{model}_FW_REVB_{version}.bin"
+    known_models:
+      - DIR-846
+      - DIR-825
+      - DAP-1325
+      - DIR-650IN
+    requires_login: false
+    notes: "Historical firmware versions available; older models on FTP mirror."
+
+  mikrotik:
+    name: "MikroTik"
+    category: "routers"
+    base_url: "https://mikrotik.com/download"
+    portal_url: "https://mikrotik.com/download"
+    patterns:
+      - "routeros-{arch}-{version}.npk"
+      - "chr-{version}.vmdk"
+    known_models:
+      - RB951Ui-2nD
+      - hAP ac3
+      - RB4011iGS+
+    requires_login: false
+    notes: "All versions public at mikrotik.com/download."
+
+  openwrt:
+    name: "OpenWrt"
+    category: "routers"
+    base_url: "https://downloads.openwrt.org/releases/"
+    portal_url: "https://openwrt.org/toh/start"
+    patterns:
+      - "openwrt-{version}-{target}-{subtarget}-{profile}-squashfs-factory.bin"
+      - "openwrt-{version}-{target}-{subtarget}-{profile}-squashfs-sysupgrade.bin"
+    known_models:
+      - TP-Link TL-WR841N
+      - GL.iNet GL-AR750S
+      - Netgear WNDR3700
+    requires_login: false
+    notes: "Official releases at downloads.openwrt.org."
+
+  proxmox:
+    name: "Proxmox VE"
+    category: "hypervisors"
+    base_url: "https://www.proxmox.com/en/downloads"
+    portal_url: "https://enterprise.proxmox.com/iso/"
+    patterns:
+      - "proxmox-ve_{version}-1.iso"
+    known_models:
+      - "Proxmox VE 8.x"
+      - "Proxmox VE 7.x"
+    requires_login: false
+    notes: "ISO images for full hypervisor; deb packages via apt."
+
+  samsung_tizen:
+    name: "Samsung Tizen TV"
+    category: "smart_tv"
+    base_url: "https://developer.samsung.com/smarttv/develop/tools/ide/download.html"
+    portal_url: "https://developer.samsung.com/smarttv/"
+    patterns:
+      - "T-HKMDAKUC-{version}.bin"
+    known_models:
+      - "Samsung QN55Q60T"
+      - "Samsung UN75RU8000"
+    requires_login: false
+    notes: "OTA update URIs sometimes discoverable via FOTA endpoint analysis."
+
+  lg_webos:
+    name: "LG WebOS TV"
+    category: "smart_tv"
+    base_url: "https://www.lg.com/global/support"
+    portal_url: "https://www.lg.com/global/support"
+    patterns:
+      - "webOS_{version}_TV_{model}.epk"
+    known_models:
+      - "LG OLED55C1"
+      - "LG NANO90"
+    requires_login: false
+    notes: "OTA firmware served by LG update servers; EPK format is encrypted archive."
+
+  roku:
+    name: "Roku"
+    category: "smart_tv"
+    base_url: "https://channelstore.roku.com/"
+    portal_url: "https://www.roku.com/en-us/support"
+    patterns:
+      - "roku-firmware-{version}.pkg"
+    known_models:
+      - "Roku Ultra"
+      - "Roku Streaming Stick+"
+    requires_login: false
+    notes: "Roku firmware served via OTA; extraction possible via HTTP interception."
+
+  wattroutersm:
+    name: "WATTrouter"
+    category: "smart_meters"
+    base_url: "https://www.wattsonic.cz/download/"
+    portal_url: "https://www.wattsonic.cz/download/"
+    patterns:
+      - "wattrouter_{model}_fw_{version}.bin"
+    known_models:
+      - "WATTrouter Mx"
+      - "WATTrouter ECO"
+    requires_login: false
+    notes: "Public firmware available; web interface exposes version via /info.xml."
+
+  rockwell_aos:
+    name: "Rockwell Automation (Allen-Bradley)"
+    category: "ics"
+    base_url: "https://www.rockwellautomation.com/en-us/support/documentation/firmware.html"
+    portal_url: "https://compatibility.rockwellautomation.com/"
+    patterns:
+      - "{product_code}_AOS_{version}.dmk"
+    known_models:
+      - "CompactLogix 5370"
+      - "ControlLogix 5570"
+    requires_login: true
+    notes: "Requires TechConnect or Partner portal login."
+
+  sma_solar:
+    name: "SMA Solar Technology"
+    category: "smart_meters"
+    base_url: "https://www.sma.de/en/products/solarinverters/sunny-webbox.html"
+    portal_url: "https://www.sma.de/en/service/downloads.html"
+    patterns:
+      - "WebBox-{version}.swf"
+    known_models:
+      - "Sunny WebBox"
+    requires_login: false
+    notes: "Legacy product; public firmware archive."

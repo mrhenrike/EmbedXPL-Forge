@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "description": "Hand-calibrated interpretable weights for module prioritization and timing logits (not trained on live targets).",
+  "module_weights": {
+    "vendor_in_module_path": 120.0,
+    "creds_routers_when_vendor_specific": 45.0,
+    "exploits_routers_when_vendor_specific": 40.0,
+    "creds_generic_default_when_vendor_any": 15.0,
+    "exploits_generic_when_vendor_any": 12.0,
+    "protocol_enabled_boost": 22.0,
+    "misc_directory_penalty": -30.0
+  },
+  "timing": {
+    "labels": ["t0", "t1", "t2", "t3", "t4", "t5"],
+    "bias": [-2.8, -1.2, 0.4, 2.2, 0.9, 0.6],
+    "weights": [
+      [1.2, 0.4, 0.4, 0.35, 0.35, 0.2, 0.15, 0.05, 0.05, -0.3, -0.2, -1.8],
+      [0.6, 0.25, 0.25, 0.2, 0.2, 0.1, 0.1, 0.03, 0.03, -0.15, -0.1, -0.9],
+      [0.1, 0.15, 0.15, 0.12, 0.12, 0.12, 0.1, 0.02, 0.02, 0.05, 0.05, -0.35],
+      [0.0, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.0, 0.0, 0.08, 0.08, 0.15],
+      [0.4, -0.05, -0.05, 0.0, 0.0, 0.0, 0.0, 0.02, 0.02, 0.1, 0.1, 1.1],
+      [0.5, -0.15, -0.15, -0.1, -0.1, -0.08, -0.08, 0.02, 0.02, 0.12, 0.12, 1.85]
+    ]
+  }
+}

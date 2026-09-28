@@ -1,0 +1,395 @@
+from __future__ import annotations
+
+import asyncio
+import contextlib
+import ipaddress
+import re
+import secrets
+import shlex
+import socket
+import sys
+import time
+from dataclasses import dataclass
+from pathlib import PurePosixPath
+
+from .root_agent import RootAgentConnection, RootAgentError, RootAgentResult
+from .terminal import relay_socket
+
+
+DEFAULT_ROOT_SHELL_PORT = 22222
+DEFAULT_CONNECT_TIMEOUT = 10.0
+QN90F_SIGNED_SOCAT = PurePosixPath(
+    "/opt/usr/apps/com.samsung.tv.iot-hub-control/bin/socat"
+)
+REMOTE_RUNTIME_ROOT = PurePosixPath("/run/samsung-tv-root")
+REMOTE_ROOT_HOME = PurePosixPath(
+    "/home/owner/share/tmp/sdk_tools/samsung-tv-root/root-home"
+)
+ROOT_SHELL_RESIZE_MARKER = "__SAMSUNG_TV_ROOT_SHELL_RESIZE__"
+ROOT_SHELL_STOP_MARKER = "__SAMSUNG_TV_ROOT_SHELL_STOP__"
+
+
+class RootShellError(RootAgentError):
+    pass
+
+
+@dataclass(frozen=True)
+class RootShellConfig:
+    tv_host: str
+    allowed_host: str
+    port: int = DEFAULT_ROOT_SHELL_PORT
+    connect_timeout: float = DEFAULT_CONNECT_TIMEOUT
+    command_timeout: float = 45.0
+
+    def __post_init__(self) -> None:
+        if self.port < 1 or self.port > 65535:
+            raise ValueError("root-shell port must be between 1 and 65535")
+        if self.connect_timeout <= 0:
+            raise ValueError("root-shell connect timeout must be positive")
+        if self.command_timeout < 0.1 or self.command_timeout > 300:
+            raise ValueError(
+                "root-shell command timeout must be between 0.1 and 300 seconds"
+            )
+        for label, value in (
+            ("TV host", self.tv_host),
+            ("controller host", self.allowed_host),
+        ):
+            try:
+                address = ipaddress.ip_address(value)
+            except ValueError as error:
+                raise ValueError(f"root-shell {label} must be an IP address") from error
+            if address.version != 4:
+                raise ValueError(f"root-shell {label} must be IPv4")
+
+
+class Qn90fRootShell:
+    def __init__(
+        self,
+        config: RootShellConfig,
+        *,
+        runtime_token: str | None = None,
+    ) -> None:
+        self.config = config
+        self.runtime_token = runtime_token or secrets.token_hex(12)
+        if re.fullmatch(r"[0-9a-f]{8,64}", self.runtime_token) is None:
+            raise ValueError("root-shell runtime token must be lowercase hexadecimal")
+        self.runtime_directory = REMOTE_RUNTIME_ROOT / (
+            f"qn90f-shell-{self.runtime_token}"
+        )
+
+    async def run(self, agent: RootAgentConnection) -> int:
+        listener_started = False
+        shell_connection: socket.socket | None = None
+        active_error: BaseException | None = None
+        try:
+            result = await agent.execute(
+                build_remote_listener_command(
+                    port=self.config.port,
+                    allowed_host=self.config.allowed_host,
+                    runtime_directory=self.runtime_directory,
+                    accept_timeout=self.config.connect_timeout + 5.0,
+                ),
+                self.config.command_timeout,
+            )
+            self._require_success(result, "start the QN90F root shell listener")
+            listener_started = True
+            shell_connection = await asyncio.to_thread(self._connect)
+            pending_output = await asyncio.to_thread(
+                self._require_root_connection,
+                shell_connection,
+            )
+            print(
+                f"root_shell={self.config.tv_host}:{self.config.port} terminal=pty",
+                flush=True,
+            )
+            if pending_output:
+                _write_stdout(pending_output)
+
+            event_loop = asyncio.get_running_loop()
+
+            def resize(rows: int, columns: int) -> None:
+                future = asyncio.run_coroutine_threadsafe(
+                    self._resize_remote_terminal(
+                        agent,
+                        shell_connection,
+                        rows,
+                        columns,
+                    ),
+                    event_loop,
+                )
+                try:
+                    future.result(self.config.command_timeout + 2.0)
+                except TimeoutError as error:
+                    future.cancel()
+                    raise RootShellError(
+                        "timed out while resizing the QN90F root shell"
+                    ) from error
+
+            await asyncio.to_thread(relay_socket, shell_connection, resize)
+            return 0
+        except BaseException as error:
+            active_error = error
+            if listener_started and isinstance(error, RootShellError):
+                try:
+                    result = await agent.execute(
+                        build_remote_log_command(self.runtime_directory),
+                        self.config.command_timeout,
+                    )
+                    detail = (result.stdout or result.stderr).strip()
+                except BaseException:
+                    detail = ""
+                if detail:
+                    active_error = RootShellError(
+                        f"{error}; TV listener log:\n{detail}"
+                    )
+                    raise active_error from error
+            raise
+        finally:
+            if shell_connection is not None:
+                with contextlib.suppress(OSError):
+                    shell_connection.close()
+            if listener_started:
+                try:
+                    result = await agent.execute(
+                        build_remote_stop_command(self.runtime_directory),
+                        self.config.command_timeout,
+                    )
+                    self._require_success(
+                        result,
+                        "stop the QN90F root shell listener",
+                    )
+                    if f"{ROOT_SHELL_STOP_MARKER}:stopped" not in result.stdout:
+                        raise RootShellError(
+                            "QN90F root shell listener stop was not confirmed"
+                        )
+                except BaseException as cleanup_error:
+                    if active_error is None:
+                        raise
+                    active_error.add_note(
+                        "QN90F root shell cleanup also failed: "
+                        f"{type(cleanup_error).__name__}: {cleanup_error}"
+                    )
+
+    def _connect(self) -> socket.socket:
+        deadline = time.monotonic() + self.config.connect_timeout
+        last_error: OSError | None = None
+        while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise RootShellError(
+                    "QN90F root shell did not listen at "
+                    f"{self.config.tv_host}:{self.config.port}"
+                ) from last_error
+            try:
+                connection = socket.create_connection(
+                    (self.config.tv_host, self.config.port),
+                    timeout=min(remaining, 0.5),
+                )
+            except OSError as error:
+                last_error = error
+                time.sleep(min(0.05, remaining))
+                continue
+            connection.settimeout(None)
+            connection.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+            connection.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+            return connection
+
+    def _require_root_connection(self, connection: socket.socket) -> bytes:
+        marker = f"samsung_tv_root_{secrets.token_hex(12)}"
+        connection.sendall(
+            (
+                "printf '"
+                + marker
+                + ' uid=%s euid=%s\\n\' "$(id -u)" "$(id -u -r)"\n'
+            ).encode("ascii")
+        )
+        deadline = time.monotonic() + self.config.connect_timeout
+        received = bytearray()
+        expected = f"{marker} uid=0 euid=0".encode("ascii")
+        while True:
+            marker_offset = received.find(expected)
+            if marker_offset >= 0:
+                line_end = received.find(b"\n", marker_offset)
+                if line_end >= 0:
+                    return bytes(received[line_end + 1 :])
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise RootShellError("QN90F shell listener did not prove root identity")
+            connection.settimeout(remaining)
+            try:
+                payload = connection.recv(4096)
+            except TimeoutError as error:
+                raise RootShellError(
+                    "QN90F shell listener did not prove root identity"
+                ) from error
+            finally:
+                connection.settimeout(None)
+            if not payload:
+                raise RootShellError("QN90F root shell closed without a response")
+            received.extend(payload)
+            if len(received) > 64 * 1024:
+                raise RootShellError("QN90F shell identity response was too large")
+
+    async def _resize_remote_terminal(
+        self,
+        agent: RootAgentConnection,
+        connection: socket.socket,
+        rows: int,
+        columns: int,
+    ) -> None:
+        peer_port = int(connection.getsockname()[1])
+        result = await agent.execute(
+            build_remote_resize_command(
+                listener_port=self.config.port,
+                peer_port=peer_port,
+                rows=rows,
+                columns=columns,
+            ),
+            self.config.command_timeout,
+        )
+        output = result.stdout
+        if (
+            result.timed_out
+            or result.exit_code != 0
+            or f"{ROOT_SHELL_RESIZE_MARKER}:resized" not in output
+        ):
+            detail = result.stderr.strip() or output.strip()
+            raise RootShellError(
+                "could not resize the QN90F root shell"
+                + (f": {detail}" if detail else "")
+            )
+
+    @staticmethod
+    def _require_success(result: RootAgentResult, operation: str) -> None:
+        if result.timed_out or result.exit_code != 0:
+            detail = result.stderr.strip() or result.stdout.strip()
+            raise RootShellError(
+                f"could not {operation}" + (f": {detail}" if detail else "")
+            )
+
+
+def build_remote_listener_command(
+    *,
+    port: int,
+    allowed_host: str,
+    runtime_directory: PurePosixPath,
+    accept_timeout: float,
+) -> str:
+    _validate_port(port)
+    address = ipaddress.ip_address(allowed_host)
+    if address.version != 4:
+        raise ValueError("QN90F root shell requires an IPv4 controller")
+    if accept_timeout <= 0 or accept_timeout > 300:
+        raise ValueError("root-shell accept timeout must be between 0 and 300 seconds")
+    runtime = shlex.quote(str(runtime_directory))
+    socat = shlex.quote(str(QN90F_SIGNED_SOCAT))
+    listener = shlex.quote(
+        f"TCP-LISTEN:{port},reuseaddr,range={address}/32,"
+        f"accept-timeout={int(accept_timeout + 0.999)}"
+    )
+    shell_setup = (
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin;"
+        "export PATH;PS1='# ';export PS1;"
+        "exec /bin/bash --noprofile --norc -i"
+    )
+    shell_command = (
+        f"/usr/bin/env -i HOME={REMOTE_ROOT_HOME} USER=root LOGNAME=root "
+        "TERM=xterm-256color SHELL=/bin/bash "
+        f'/bin/bash -c "{shell_setup}"'
+    )
+    # EXEC only splits a simple command on spaces, so it cannot preserve the
+    # Bash -c argument. SYSTEM delegates the fixed inline command to signed sh.
+    shell = shlex.quote(
+        f"SYSTEM:{shell_command},pty,ctty,stderr,setsid,sigint,sane"
+    )
+    home = shlex.quote(str(REMOTE_ROOT_HOME))
+    return (
+        f"d={runtime};p=$d/pid;l=$d/log;"
+        f"mkdir -p \"$d\" {home}&&chmod 700 \"$d\" {home}||exit 1;"
+        f"(exec {socat} {listener} {shell}) </dev/null >\"$l\" 2>&1&"
+        'pid=$!;printf "%s\\n" "$pid">"$p";sleep 1;'
+        'if ! kill -0 "$pid" 2>/dev/null;then '
+        'cat "$l" 2>/dev/null;exit 1;fi'
+    )
+
+
+def build_remote_log_command(runtime_directory: PurePosixPath) -> str:
+    runtime = shlex.quote(str(runtime_directory))
+    return f'd={runtime};l=$d/log;if [ -r "$l" ];then cat "$l";fi'
+
+
+def build_remote_stop_command(runtime_directory: PurePosixPath) -> str:
+    runtime = shlex.quote(str(runtime_directory))
+    marker = shlex.quote(ROOT_SHELL_STOP_MARKER)
+    return (
+        f"d={runtime};p=$d/pid;"
+        'if [ -s "$p" ];then pid=$(cat "$p");'
+        'case "$pid" in ""|*[!0-9]*) '
+        f"echo {marker}:invalid-pid;exit 1;;esac;"
+        'if kill -0 "$pid" 2>/dev/null;then '
+        'comm=$(cat "/proc/$pid/comm" 2>/dev/null);'
+        f"if [ \"$comm\" != socat ];then echo {marker}:refused pid=$pid "
+        'comm="$comm";exit 1;fi;'
+        'kill "$pid" 2>/dev/null||exit 1;sleep 1;'
+        f"if kill -0 \"$pid\" 2>/dev/null;then echo {marker}:still-running "
+        'pid=$pid;exit 1;fi;fi;fi;'
+        'rm -f "$p" "$d/log";rmdir "$d" 2>/dev/null||exit 1;'
+        f"echo {marker}:stopped"
+    )
+
+
+def build_remote_resize_command(
+    *,
+    listener_port: int,
+    peer_port: int,
+    rows: int,
+    columns: int,
+) -> str:
+    _validate_port(listener_port)
+    _validate_port(peer_port)
+    if rows <= 0 or columns <= 0:
+        raise ValueError("terminal rows and columns must be positive")
+    listener_hex = f"{listener_port:04x}"
+    peer_hex = f"{peer_port:04x}"
+    marker = shlex.quote(ROOT_SHELL_RESIZE_MARKER)
+    return (
+        f"lp={listener_hex};rp={peer_hex};rows={rows};cols={columns};"
+        'inode=$(awk -v lp="$lp" -v rp="$rp" \''
+        "BEGIN { lp=tolower(lp); rp=tolower(rp) } "
+        '$4 == "01" { '
+        'split(tolower($2), local, ":"); '
+        'split(tolower($3), remote, ":"); '
+        "if (local[2] == lp && remote[2] == rp) { print $10; exit } "
+        "}' /proc/net/tcp /proc/net/tcp6 2>/dev/null);"
+        f'if [ -z "$inode" ];then echo {marker}:missing-socket;exit 1;fi;'
+        "pid=;for proc in /proc/[0-9]*;do "
+        'comm=$(cat "$proc/comm" 2>/dev/null)||continue;'
+        '[ "$comm" = socat ]||continue;'
+        'for fd in "$proc"/fd/*;do '
+        'target=$(readlink "$fd" 2>/dev/null)||continue;'
+        '[ "$target" = "socket:[$inode]" ]||continue;'
+        "pid=${proc#/proc/};break 2;done;done;"
+        f'if [ -z "$pid" ];then echo {marker}:missing-pid;exit 1;fi;'
+        "child=;tty=;for proc in /proc/[0-9]*;do "
+        "ppid=$(sed -n 's/^PPid:[[:space:]]*//p' \"$proc/status\" "
+        "2>/dev/null)||continue;"
+        '[ "$ppid" = "$pid" ]||continue;'
+        'target=$(readlink "$proc/fd/0" 2>/dev/null)||continue;'
+        'case "$target" in /dev/pts/[0-9]*) '
+        'if stty rows "$rows" cols "$cols" <"$proc/fd/0" 2>/dev/null;then '
+        "child=${proc#/proc/};tty=$target;break;fi;;esac;done;"
+        f'if [ -z "$tty" ];then echo {marker}:missing-pty pid=$pid;exit 1;fi;'
+        f"echo {marker}:resized rows=$rows cols=$cols "
+        "pid=$pid child=$child tty=$tty"
+    )
+
+
+def _validate_port(port: int) -> None:
+    if port < 1 or port > 65535:
+        raise ValueError("root-shell port must be between 1 and 65535")
+
+
+def _write_stdout(payload: bytes) -> None:
+    output = getattr(sys.stdout, "buffer", sys.stdout)
+    output.write(payload)
+    output.flush()

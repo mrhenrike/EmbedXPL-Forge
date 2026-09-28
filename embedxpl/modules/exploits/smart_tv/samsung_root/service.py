@@ -1,0 +1,163 @@
+from __future__ import annotations
+
+import os
+import shlex
+import shutil
+import subprocess
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+
+
+SERVICE_NAME = "samsung-tv-root.service"
+
+
+class ServiceError(RuntimeError):
+    pass
+
+
+@dataclass(frozen=True)
+class ServiceState:
+    path: Path
+    installed: bool
+    enabled: bool
+    active: str
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "path": str(self.path),
+            "installed": self.installed,
+            "enabled": self.enabled,
+            "active": self.active,
+        }
+
+
+def user_unit_path() -> Path:
+    configuration_root = Path(
+        os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")
+    )
+    return configuration_root / "systemd" / "user" / SERVICE_NAME
+
+
+def render_user_unit(executable: Path, configuration: Path) -> str:
+    command = shlex.join(
+        (
+            str(executable),
+            "--config",
+            str(configuration),
+            "daemon",
+            "run",
+        )
+    )
+    return "\n".join(
+        (
+            "[Unit]",
+            "Description=Samsung TV root controller",
+            "Wants=network-online.target",
+            "After=network-online.target",
+            "",
+            "[Service]",
+            "Type=notify",
+            f"ExecStart={command}",
+            "TimeoutStartSec=30",
+            "TimeoutStopSec=15",
+            "KillMode=mixed",
+            "",
+            "[Install]",
+            "WantedBy=default.target",
+            "",
+        )
+    )
+
+
+def install_user_service(
+    configuration: Path,
+    executable: Path | None = None,
+    *,
+    enable: bool = False,
+    start: bool = False,
+) -> ServiceState:
+    _require_linux_systemd()
+    if start and not enable:
+        raise ServiceError("--now requires --enable")
+    resolved_executable = (executable or Path(sys.argv[0])).expanduser().resolve()
+    if not resolved_executable.is_file():
+        raise ServiceError(
+            f"controller executable does not exist: {resolved_executable}"
+        )
+    resolved_configuration = configuration.expanduser().resolve()
+    if not resolved_configuration.is_file():
+        raise ServiceError(
+            f"controller configuration does not exist: {resolved_configuration}"
+        )
+    path = user_unit_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.new")
+    temporary.write_text(
+        render_user_unit(resolved_executable, resolved_configuration),
+        encoding="utf-8",
+    )
+    os.replace(temporary, path)
+    _systemctl("daemon-reload")
+    if enable:
+        arguments = ["enable"]
+        if start:
+            arguments.append("--now")
+        arguments.append(SERVICE_NAME)
+        _systemctl(*arguments)
+    return service_state()
+
+
+def uninstall_user_service(*, stop: bool = False) -> ServiceState:
+    _require_linux_systemd()
+    path = user_unit_path()
+    if stop:
+        _systemctl("disable", "--now", SERVICE_NAME, check=False)
+    else:
+        _systemctl("disable", SERVICE_NAME, check=False)
+    path.unlink(missing_ok=True)
+    _systemctl("daemon-reload")
+    return service_state()
+
+
+def service_state() -> ServiceState:
+    _require_linux_systemd()
+    path = user_unit_path()
+    enabled_result = _systemctl("is-enabled", SERVICE_NAME, check=False)
+    active_result = _systemctl("is-active", SERVICE_NAME, check=False)
+    return ServiceState(
+        path=path,
+        installed=path.is_file(),
+        enabled=enabled_result.returncode == 0,
+        active=active_result.stdout.strip() or "unknown",
+    )
+
+
+def _require_linux_systemd() -> None:
+    if not sys.platform.startswith("linux") or shutil.which("systemctl") is None:
+        raise ServiceError(
+            "automatic service installation is not implemented on this host; "
+            "run `samsung-tv-root daemon run` under the host service manager"
+        )
+
+
+def _systemctl(
+    *arguments: str,
+    check: bool = True,
+) -> subprocess.CompletedProcess[str]:
+    executable = shutil.which("systemctl")
+    if executable is None:
+        raise ServiceError("systemctl is not installed")
+    result = subprocess.run(
+        (executable, "--user", *arguments),
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if check and result.returncode != 0:
+        detail = result.stderr.strip() or result.stdout.strip()
+        raise ServiceError(
+            f"systemctl --user {' '.join(arguments)} failed"
+            + (f": {detail}" if detail else "")
+        )
+    return result

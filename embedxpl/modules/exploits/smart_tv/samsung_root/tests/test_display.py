@@ -1,0 +1,64 @@
+import asyncio
+from dataclasses import dataclass
+
+import pytest
+
+from samsung_tv_root.display import (
+    DisplayControlError,
+    Qn90bDisplayControl,
+    Qn90fDisplayControl,
+)
+
+
+@dataclass
+class Result:
+    stdout: str = ""
+    stderr: str = ""
+    exit_code: int = 0
+    timed_out: bool = False
+
+
+class Connection:
+    def __init__(self, *results: Result) -> None:
+        self.results = list(results)
+        self.commands: list[str] = []
+
+    async def execute(self, command: str, timeout: float) -> Result:
+        self.commands.append(command)
+        return self.results.pop(0)
+
+
+def test_qn90f_display_uses_signed_helper() -> None:
+    connection = Connection(Result(stdout='{"operation":"status","state":0}'))
+
+    payload = asyncio.run(Qn90fDisplayControl().run(connection, "status"))
+
+    assert payload["state"] == 0
+    assert connection.commands == [
+        "/usr/bin/dotnet /home/owner/share/tmp/sdk_tools/qn90f-probe/"
+        "Qn90fDisplayControl.dll status"
+    ]
+
+
+def test_qn90b_status_combines_helper_and_panel_readback() -> None:
+    connection = Connection(
+        Result(stdout='{"display_state":1,"display_state_name":"pictureoff"}'),
+        Result(stdout="method return time=1.0\n   int32 0\n"),
+    )
+
+    payload = asyncio.run(Qn90bDisplayControl().run(connection, "status"))
+
+    assert payload["panel_state_name"] == "off"
+    assert payload["panel_state_confirmed"] is True
+
+
+def test_qn90b_wake_rejects_unconfirmed_panel(monkeypatch) -> None:
+    connection = Connection(
+        Result(stdout='{"display_wake_status":0}'),
+        Result(stdout="int32 0\n"),
+        Result(stdout="int32 0\n"),
+    )
+    monkeypatch.setattr("samsung_tv_root.display.QN90B_PANEL_TRANSITION_TIMEOUT", 0.0)
+
+    with pytest.raises(DisplayControlError, match="did not light"):
+        asyncio.run(Qn90bDisplayControl().run(connection, "wake"))

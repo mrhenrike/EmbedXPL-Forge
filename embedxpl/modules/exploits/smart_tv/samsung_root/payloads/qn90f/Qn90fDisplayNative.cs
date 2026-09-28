@@ -1,0 +1,188 @@
+using System;
+using System.Runtime.InteropServices;
+
+internal sealed class Qn90fDisplayNativeSnapshot
+{
+    public int PowerState;
+    public int ScreenState;
+}
+
+internal sealed class Qn90fDisplayNativeTransition
+{
+    public string Operation;
+    public Qn90fDisplayNativeSnapshot Before;
+    public Qn90fDisplayNativeSnapshot Requested;
+    public Qn90fDisplayNativeSnapshot After;
+    public bool WakeupReasonSetAttempted;
+    public int WakeupReasonSetStatus;
+    public bool PowerSetAttempted;
+    public int PowerSetStatus;
+    public bool ScreenSetAttempted;
+    public int ScreenSetStatus;
+    public bool Confirmed;
+
+    public bool SetAttempted
+    {
+        get
+        {
+            return WakeupReasonSetAttempted || PowerSetAttempted || ScreenSetAttempted;
+        }
+    }
+
+    public int SetStatus
+    {
+        get
+        {
+            if (WakeupReasonSetStatus != 0)
+            {
+                return WakeupReasonSetStatus;
+            }
+            if (PowerSetStatus != 0)
+            {
+                return PowerSetStatus;
+            }
+            return ScreenSetStatus;
+        }
+    }
+
+    public bool Changed
+    {
+        get
+        {
+            return Before.PowerState != After.PowerState
+                || Before.ScreenState != After.ScreenState;
+        }
+    }
+}
+
+internal static class Qn90fDisplayNative
+{
+    internal const int NormalPowerState = 0;
+    internal const int PictureOffPowerState = 1;
+    internal const int ScreenOffState = 0;
+    internal const int ScreenOnState = 1;
+    private const int RemoteControllerWakeupReason = 1;
+    private const string Libdeviced = "libdeviced.so.1";
+
+    [DllImport(
+        Libdeviced,
+        EntryPoint = "device_power_set_state",
+        CallingConvention = CallingConvention.Cdecl)]
+    private static extern int DevicePowerSetState(int state);
+
+    [DllImport(
+        Libdeviced,
+        EntryPoint = "device_power_get_state",
+        CallingConvention = CallingConvention.Cdecl)]
+    private static extern int DevicePowerGetState();
+
+    [DllImport(
+        Libdeviced,
+        EntryPoint = "device_power_set_wakeup_reason",
+        CallingConvention = CallingConvention.Cdecl)]
+    private static extern int DevicePowerSetWakeupReason(int reason);
+
+    [DllImport(
+        Libdeviced,
+        EntryPoint = "device_set_screen_state",
+        CallingConvention = CallingConvention.Cdecl)]
+    private static extern int DeviceSetScreenState(int state);
+
+    [DllImport(
+        Libdeviced,
+        EntryPoint = "device_get_screen_state",
+        CallingConvention = CallingConvention.Cdecl)]
+    private static extern int DeviceGetScreenState();
+
+    internal static Qn90fDisplayNativeSnapshot Read()
+    {
+        int powerState = DevicePowerGetState();
+        if (powerState < 0)
+        {
+            throw new InvalidOperationException(
+                "device_power_get_state failed: " + powerState);
+        }
+        int screenState = DeviceGetScreenState();
+        if (screenState < 0)
+        {
+            throw new InvalidOperationException(
+                "device_get_screen_state failed: " + screenState);
+        }
+        return new Qn90fDisplayNativeSnapshot
+        {
+            PowerState = powerState,
+            ScreenState = screenState,
+        };
+    }
+
+    internal static Qn90fDisplayNativeTransition PictureOff()
+    {
+        return Apply(
+            "pictureoff",
+            new Qn90fDisplayNativeSnapshot
+            {
+                PowerState = PictureOffPowerState,
+                ScreenState = ScreenOffState,
+            },
+            false);
+    }
+
+    internal static Qn90fDisplayNativeTransition Wake()
+    {
+        return Apply(
+            "wake",
+            new Qn90fDisplayNativeSnapshot
+            {
+                PowerState = NormalPowerState,
+                ScreenState = ScreenOnState,
+            },
+            true);
+    }
+
+    private static Qn90fDisplayNativeTransition Apply(
+        string operation,
+        Qn90fDisplayNativeSnapshot requested,
+        bool setWakeupReason)
+    {
+        Qn90fDisplayNativeSnapshot before = Read();
+        Qn90fDisplayNativeTransition transition = new Qn90fDisplayNativeTransition
+        {
+            Operation = operation,
+            Before = before,
+            Requested = requested,
+            WakeupReasonSetAttempted = setWakeupReason
+                && (before.PowerState != requested.PowerState
+                    || before.ScreenState != requested.ScreenState),
+        };
+
+        if (transition.WakeupReasonSetAttempted)
+        {
+            transition.WakeupReasonSetStatus =
+                DevicePowerSetWakeupReason(RemoteControllerWakeupReason);
+        }
+
+        transition.PowerSetAttempted =
+            transition.WakeupReasonSetStatus == 0
+            && before.PowerState != requested.PowerState;
+        if (transition.PowerSetAttempted)
+        {
+            transition.PowerSetStatus = DevicePowerSetState(requested.PowerState);
+        }
+
+        Qn90fDisplayNativeSnapshot afterPower = Read();
+        transition.ScreenSetAttempted =
+            transition.WakeupReasonSetStatus == 0
+            && transition.PowerSetStatus == 0
+            && afterPower.ScreenState != requested.ScreenState;
+        if (transition.ScreenSetAttempted)
+        {
+            transition.ScreenSetStatus = DeviceSetScreenState(requested.ScreenState);
+        }
+
+        transition.After = Read();
+        transition.Confirmed = transition.SetStatus == 0
+            && transition.After.PowerState == requested.PowerState
+            && transition.After.ScreenState == requested.ScreenState;
+        return transition;
+    }
+}

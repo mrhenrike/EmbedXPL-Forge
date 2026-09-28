@@ -1,0 +1,82 @@
+import asyncio
+from dataclasses import dataclass
+
+import pytest
+
+from samsung_tv_root.volume import SamsungTvVolumeControl, VolumeControlError
+
+
+@dataclass
+class Result:
+    stdout: str = ""
+    stderr: str = ""
+    exit_code: int = 0
+    timed_out: bool = False
+
+
+class Connection:
+    def __init__(self, *results: Result) -> None:
+        self.results = list(results)
+        self.commands: list[tuple[str, float]] = []
+
+    async def execute(self, command: str, timeout: float) -> Result:
+        self.commands.append((command, timeout))
+        return self.results.pop(0)
+
+
+def method(command: str) -> str:
+    return command.split()[7]
+
+
+def test_volume_status_reads_authoritative_speaker_state() -> None:
+    connection = Connection(
+        Result(stdout="ii 17 0\n"),
+        Result(stdout="ii 0 0\n"),
+        Result(stdout="ii 65535 0\n"),
+    )
+
+    state = asyncio.run(SamsungTvVolumeControl().get(connection, timeout=3.0))
+
+    assert state.to_dict() == {
+        "volume": 17,
+        "muted": False,
+        "support_type": 65535,
+    }
+    assert [method(command) for command, _ in connection.commands] == [
+        "GetSpeakerVolume",
+        "GetSpeakerMute",
+        "GetSpeakerSupportType",
+    ]
+
+
+def test_volume_set_occurs_once_and_requires_readback() -> None:
+    connection = Connection(
+        Result(stdout="ii 17 0\n"),
+        Result(stdout="i 0\n"),
+        Result(stdout="ii 23 0\n"),
+        Result(stdout="ii 0 0\n"),
+        Result(stdout="ii 65535 0\n"),
+    )
+
+    change = asyncio.run(SamsungTvVolumeControl().set(connection, 23))
+
+    methods = [method(command) for command, _ in connection.commands]
+    assert methods.count("SetSpeakerVolume") == 1
+    assert change.previous_volume == 17
+    assert change.target == 23
+    assert change.volume.volume == 23
+
+
+@pytest.mark.parametrize("level", [None, True, 1.0, "1", -1, 101])
+def test_volume_set_rejects_invalid_level_before_io(level: object) -> None:
+    connection = Connection()
+
+    with pytest.raises(VolumeControlError, match="integer level"):
+        asyncio.run(
+            SamsungTvVolumeControl().set(
+                connection,
+                level,  # type: ignore[arg-type]
+            )
+        )
+
+    assert connection.commands == []

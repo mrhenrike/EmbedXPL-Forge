@@ -1,0 +1,4 @@
+administrator:d1scovery
+integrator:p1nacate
+monitor:monitor
+operator:col1ma

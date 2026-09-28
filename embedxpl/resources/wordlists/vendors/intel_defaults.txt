@@ -1,0 +1,12 @@
+:Intel
+:isolation
+:shiva
+Guest:
+NICONEX:NICONEX
+intel:intel
+root:
+setup:setup
+admin:hello
+admin:
+khan:kahn
+root:admin

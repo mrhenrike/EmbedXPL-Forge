@@ -1,0 +1,5 @@
+admin:OCS
+adminstat:OCS
+adminuser:OCS
+adminview:OCS
+helpdesk:OCS

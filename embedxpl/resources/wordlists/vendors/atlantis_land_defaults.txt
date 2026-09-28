@@ -1,0 +1,6 @@
+admin:admin
+admin:atlantis
+admin:password
+atlantis:admin
+atlantis:atlantis
+atlantis:password
