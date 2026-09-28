@@ -1,2 +1,0 @@
-admin:11111111
-admin:admin

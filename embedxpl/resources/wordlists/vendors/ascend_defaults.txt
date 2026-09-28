@@ -1,4 +1,0 @@
-:ascend
-readonly:lucenttech2
-readwrite:lucenttech1
-root:ascend

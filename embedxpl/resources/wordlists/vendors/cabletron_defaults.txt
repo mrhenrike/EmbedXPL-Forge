@@ -1,3 +1,0 @@
-netman:
-admin:
-admin:admin
