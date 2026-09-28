@@ -1,0 +1,2 @@
+admin:dnnadmin
+host:dnnhost

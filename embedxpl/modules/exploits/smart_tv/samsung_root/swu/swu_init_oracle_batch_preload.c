@@ -1,0 +1,327 @@
+/*
+ * Evaluate a finite batch of QN90F SWU command-0 passphrase candidates.
+ * Loaded into Samsung's signed SWUMainApp as a constructor and exits before
+ * application main. The batch format and maximum count are fixed and bounded.
+ */
+
+typedef unsigned char u8;
+typedef unsigned int u32;
+typedef unsigned int size_t;
+typedef int ssize_t;
+
+extern int open(const char *path, int flags, ...);
+extern ssize_t read(int descriptor, void *buffer, size_t count);
+extern ssize_t write(int descriptor, const void *buffer, size_t count);
+extern int close(int descriptor);
+extern char *getenv(const char *name);
+extern void _exit(int status) __attribute__((noreturn));
+extern void *memset(void *destination, int value, size_t count);
+
+typedef struct {
+    u8 *begin;
+    u8 *end;
+    u8 *capacity;
+} ByteVector;
+
+extern void swu_client_construct(void *client)
+    __asm__("_ZN3SWU8Platform18SWUTrustZoneClientC1Ev");
+extern void swu_client_destroy(void *client)
+    __asm__("_ZN3SWU8Platform18SWUTrustZoneClientD1Ev");
+extern int swu_client_open(void *client)
+    __asm__("_ZN3SWU8Platform18SWUTrustZoneClient4openEv");
+extern int swu_client_init(
+    void *client,
+    int encrypt,
+    int passphrase_encrypted,
+    int key_derivation_method,
+    int key_size,
+    int mode,
+    const ByteVector *passphrase,
+    const ByteVector *salt,
+    u32 chunk_size)
+    __asm__("_ZN3SWU8Platform18SWUTrustZoneClient4initEbbNS_6Common2IO22AESKeyDerivationMethodENS3_10AESKeySizeENS3_11AESModeTypeERKSt6vectorIhSaIhEESB_j");
+
+#define O_RDONLY 0
+#define O_WRONLY 1
+#define O_CREAT 0100
+#define O_TRUNC 01000
+#define CLIENT_SIZE 0x78U
+#define MAX_SHARED_SIZE 0x10000U
+#define CANDIDATE_SIZE 416U
+#define SALT_SIZE 8U
+#define MAX_CANDIDATES 256U
+#define HEADER_SIZE 16U
+#define RESULT_ACCEPTED 1U
+#define RESULT_REJECTED 0U
+#define RESULT_OPEN_FAILED 0xffU
+
+static const u8 batch_magic[8] = {'S', 'W', 'U', 'O', 'R', 'B', '1', 0};
+static const u8 result_magic[8] = {'S', 'W', 'U', 'O', 'R', 'R', '1', 0};
+static const char default_batch_path[] =
+    "/home/owner/share/tmp/sdk_tools/swu-passphrase/oracle-batch.bin";
+static const char default_salt_path[] =
+    "/home/owner/share/tmp/sdk_tools/swu-passphrase/firmware-salt.bin";
+static const char default_result_path[] =
+    "/home/owner/share/tmp/sdk_tools/swu-passphrase/oracle-result.bin";
+static const char default_status_path[] =
+    "/home/owner/share/tmp/sdk_tools/swu-passphrase/oracle-status.txt";
+static const char hex_digits[] = "0123456789abcdef";
+
+static u8 candidate[CANDIDATE_SIZE];
+static u8 firmware_salt[SALT_SIZE];
+static u8 results[MAX_CANDIDATES];
+
+static size_t string_length(const char *text)
+{
+    size_t length = 0;
+    while (text[length] != '\0') {
+        ++length;
+    }
+    return length;
+}
+
+static int bytes_equal(const u8 *left, const u8 *right, size_t count)
+{
+    size_t index;
+    for (index = 0; index < count; ++index) {
+        if (left[index] != right[index]) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+static int read_all(int descriptor, void *raw_buffer, size_t count)
+{
+    u8 *buffer = (u8 *)raw_buffer;
+    while (count != 0U) {
+        ssize_t received = read(descriptor, buffer, count);
+        if (received <= 0) {
+            return 0;
+        }
+        buffer += (size_t)received;
+        count -= (size_t)received;
+    }
+    return 1;
+}
+
+static int write_all(int descriptor, const void *raw_buffer, size_t count)
+{
+    const u8 *buffer = (const u8 *)raw_buffer;
+    while (count != 0U) {
+        ssize_t written = write(descriptor, buffer, count);
+        if (written <= 0) {
+            return 0;
+        }
+        buffer += (size_t)written;
+        count -= (size_t)written;
+    }
+    return 1;
+}
+
+static void write_text(int descriptor, const char *text)
+{
+    (void)write_all(descriptor, text, string_length(text));
+}
+
+static void write_u32_hex(int descriptor, u32 value)
+{
+    char encoded[10];
+    unsigned int index;
+    encoded[0] = '0';
+    encoded[1] = 'x';
+    for (index = 0; index < 8U; ++index) {
+        unsigned int shift = (7U - index) * 4U;
+        encoded[2U + index] = hex_digits[(value >> shift) & 0x0fU];
+    }
+    (void)write_all(descriptor, encoded, sizeof(encoded));
+}
+
+static void write_field(int descriptor, const char *name, u32 value)
+{
+    write_text(descriptor, name);
+    write_text(descriptor, "=");
+    write_u32_hex(descriptor, value);
+    write_text(descriptor, "\n");
+}
+
+static u32 load_u32_le(const u8 *buffer)
+{
+    return (u32)buffer[0] |
+        ((u32)buffer[1] << 8) |
+        ((u32)buffer[2] << 16) |
+        ((u32)buffer[3] << 24);
+}
+
+static void store_u32_le(u8 *buffer, u32 value)
+{
+    buffer[0] = (u8)value;
+    buffer[1] = (u8)(value >> 8);
+    buffer[2] = (u8)(value >> 16);
+    buffer[3] = (u8)(value >> 24);
+}
+
+static int read_exact_file(const char *path, u8 *buffer, size_t expected)
+{
+    int descriptor = open(path, O_RDONLY);
+    u8 extra;
+    ssize_t received;
+    int success;
+    if (descriptor < 0) {
+        return 0;
+    }
+    success = read_all(descriptor, buffer, expected);
+    received = success ? read(descriptor, &extra, 1U) : -1;
+    close(descriptor);
+    return success && received == 0;
+}
+
+static const char *configured_path(const char *name, const char *fallback)
+{
+    const char *value = getenv(name);
+    return value != (const char *)0 && value[0] != '\0' ? value : fallback;
+}
+
+static int write_results(const char *path, u32 count)
+{
+    u8 header[HEADER_SIZE];
+    int descriptor;
+    int success;
+    unsigned int index;
+    for (index = 0; index < 8U; ++index) {
+        header[index] = result_magic[index];
+    }
+    store_u32_le(header + 8, count);
+    store_u32_le(header + 12, CANDIDATE_SIZE);
+    descriptor = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+    if (descriptor < 0) {
+        return 0;
+    }
+    success = write_all(descriptor, header, sizeof(header));
+    success &= write_all(descriptor, results, count);
+    close(descriptor);
+    return success;
+}
+
+__attribute__((constructor)) static void evaluate_oracle_batch(void)
+{
+    const char *batch_path = configured_path(
+        "SWU_ORACLE_BATCH_PATH",
+        default_batch_path);
+    const char *salt_path = configured_path(
+        "SWU_ORACLE_SALT_PATH",
+        default_salt_path);
+    const char *result_path = configured_path(
+        "SWU_ORACLE_RESULT_PATH",
+        default_result_path);
+    const char *status_path = configured_path(
+        "SWU_ORACLE_STATUS_PATH",
+        default_status_path);
+    u8 header[HEADER_SIZE];
+    u32 client_words[CLIENT_SIZE / sizeof(u32)];
+    u8 *client = (u8 *)client_words;
+    ByteVector candidate_vector;
+    ByteVector salt_vector;
+    int batch_descriptor;
+    int status_descriptor;
+    u32 count;
+    u32 index;
+    u32 accepted = 0;
+    u8 extra;
+    ssize_t received;
+
+    status_descriptor = open(
+        status_path,
+        O_WRONLY | O_CREAT | O_TRUNC,
+        0600);
+    if (status_descriptor < 0) {
+        _exit(1);
+    }
+    if (!read_exact_file(salt_path, firmware_salt, sizeof(firmware_salt))) {
+        write_text(status_descriptor, "stage=read-salt\n");
+        close(status_descriptor);
+        _exit(1);
+    }
+
+    batch_descriptor = open(batch_path, O_RDONLY);
+    if (batch_descriptor < 0 ||
+        !read_all(batch_descriptor, header, sizeof(header)) ||
+        !bytes_equal(header, batch_magic, sizeof(batch_magic))) {
+        write_text(status_descriptor, "stage=read-header\n");
+        if (batch_descriptor >= 0) {
+            close(batch_descriptor);
+        }
+        close(status_descriptor);
+        _exit(1);
+    }
+    count = load_u32_le(header + 8);
+    if (count == 0U || count > MAX_CANDIDATES ||
+        load_u32_le(header + 12) != CANDIDATE_SIZE) {
+        write_text(status_descriptor, "stage=validate-header\n");
+        close(batch_descriptor);
+        close(status_descriptor);
+        _exit(1);
+    }
+    write_field(status_descriptor, "candidate_count", count);
+
+    salt_vector.begin = firmware_salt;
+    salt_vector.end = firmware_salt + sizeof(firmware_salt);
+    salt_vector.capacity = firmware_salt + sizeof(firmware_salt);
+    for (index = 0; index < count; ++index) {
+        int open_result;
+        int init_result;
+        if (!read_all(batch_descriptor, candidate, sizeof(candidate))) {
+            write_text(status_descriptor, "stage=read-candidate\n");
+            close(batch_descriptor);
+            close(status_descriptor);
+            _exit(1);
+        }
+
+        memset(client_words, 0, sizeof(client_words));
+        swu_client_construct(client_words);
+        open_result = swu_client_open(client_words);
+        if (!open_result) {
+            results[index] = RESULT_OPEN_FAILED;
+            swu_client_destroy(client_words);
+            write_field(status_descriptor, "open_failed_index", index);
+            write_results(result_path, index + 1U);
+            close(batch_descriptor);
+            close(status_descriptor);
+            _exit(1);
+        }
+        client[0x75] = 1;
+        candidate_vector.begin = candidate;
+        candidate_vector.end = candidate + sizeof(candidate);
+        candidate_vector.capacity = candidate + sizeof(candidate);
+        init_result = swu_client_init(
+            client_words,
+            0,
+            1,
+            1,
+            2,
+            1,
+            &candidate_vector,
+            &salt_vector,
+            MAX_SHARED_SIZE);
+        results[index] = init_result ? RESULT_ACCEPTED : RESULT_REJECTED;
+        accepted += init_result ? 1U : 0U;
+        swu_client_destroy(client_words);
+    }
+
+    received = read(batch_descriptor, &extra, 1U);
+    close(batch_descriptor);
+    if (received != 0) {
+        write_text(status_descriptor, "stage=trailing-data\n");
+        close(status_descriptor);
+        _exit(1);
+    }
+    write_field(status_descriptor, "accepted_count", accepted);
+    write_field(status_descriptor, "completed_count", count);
+    if (!write_results(result_path, count)) {
+        write_text(status_descriptor, "stage=write-result\n");
+        close(status_descriptor);
+        _exit(1);
+    }
+    close(status_descriptor);
+    _exit(0);
+}

@@ -1,0 +1,38 @@
+from samsung_tv_root.discovery import parse_ssdp_datagram, search_targets
+
+
+def test_ssdp_date_is_not_used_as_a_boot_generation() -> None:
+    message = parse_ssdp_datagram(
+        b"HTTP/1.1 200 OK\r\n"
+        b"USN: uuid:television::upnp:rootdevice\r\n"
+        b"DATE: Mon, 17 Aug 2026 12:00:00 GMT\r\n\r\n",
+        "192.0.2.50",
+    )
+    assert message is not None
+    assert message.boot_id == ""
+
+
+def test_ssdp_boot_id_is_preserved() -> None:
+    message = parse_ssdp_datagram(
+        b"NOTIFY * HTTP/1.1\r\n"
+        b"USN: uuid:television::upnp:rootdevice\r\n"
+        b"NTS: ssdp:alive\r\n"
+        b"BOOTID.UPNP.ORG: 42\r\n\r\n",
+        "192.0.2.50",
+    )
+    assert message is not None
+    assert message.boot_id == "42"
+
+
+def test_ssdp_search_includes_host_and_device_identity_paths() -> None:
+    assert search_targets(
+        frozenset({"192.0.2.50"}),
+        frozenset({"uuid:living-room"}),
+    ) == ("ssdp:all", "uuid:living-room")
+
+
+def test_ssdp_search_uses_only_device_identity_when_no_hosts_are_configured() -> None:
+    assert search_targets(
+        frozenset(),
+        frozenset({"uuid:living-room"}),
+    ) == ("uuid:living-room",)

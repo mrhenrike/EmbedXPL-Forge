@@ -1,0 +1,233 @@
+from __future__ import annotations
+
+import asyncio
+import socket
+from dataclasses import dataclass
+from urllib.parse import urlparse
+
+
+SSDP_MULTICAST_ADDRESS = "239.255.255.250"
+SSDP_PORT = 1900
+MAXIMUM_DATAGRAM_BYTES = 65535
+
+
+class DiscoveryError(RuntimeError):
+    pass
+
+
+@dataclass(frozen=True)
+class PresenceEvent:
+    host: str
+    device_id: str
+    boot_id: str
+    available: bool
+
+    @property
+    def generation(self) -> tuple[str, str]:
+        return self.host, self.boot_id
+
+
+@dataclass(frozen=True)
+class SsdpMessage:
+    sender_host: str
+    start_line: str
+    headers: dict[str, str]
+
+    @property
+    def device_id(self) -> str:
+        return self.headers.get("usn", "").split("::", 1)[0].lower()
+
+    @property
+    def boot_id(self) -> str:
+        return self.headers.get("bootid.upnp.org", "")
+
+    @property
+    def location_host(self) -> str:
+        value = self.headers.get("location", "")
+        return urlparse(value).hostname or ""
+
+    @property
+    def available(self) -> bool | None:
+        if self.start_line == "HTTP/1.1 200 OK":
+            return True
+        notification = self.headers.get("nts", "").lower()
+        if notification == "ssdp:alive":
+            return True
+        if notification == "ssdp:byebye":
+            return False
+        return None
+
+
+def parse_ssdp_datagram(payload: bytes, sender_host: str) -> SsdpMessage | None:
+    if not payload or len(payload) > MAXIMUM_DATAGRAM_BYTES:
+        return None
+    text = payload.decode("iso-8859-1", errors="replace").replace("\r\n", "\n")
+    lines = text.split("\n")
+    start_line = lines[0].strip()
+    if start_line not in {"HTTP/1.1 200 OK", "NOTIFY * HTTP/1.1"}:
+        return None
+    headers: dict[str, str] = {}
+    for line in lines[1:]:
+        if not line.strip():
+            continue
+        if ":" not in line:
+            return None
+        name, value = line.split(":", 1)
+        normalized_name = name.strip().lower()
+        if not normalized_name or normalized_name in headers:
+            return None
+        headers[normalized_name] = value.strip()
+    if "usn" not in headers:
+        return None
+    return SsdpMessage(sender_host=sender_host, start_line=start_line, headers=headers)
+
+
+def build_search(target: str = "ssdp:all") -> bytes:
+    normalized = target.strip().lower()
+    if not normalized or any(character.isspace() for character in normalized):
+        raise ValueError("SSDP target must not contain whitespace")
+    return "\r\n".join(
+        (
+            "M-SEARCH * HTTP/1.1",
+            f"HOST: {SSDP_MULTICAST_ADDRESS}:{SSDP_PORT}",
+            'MAN: "ssdp:discover"',
+            "MX: 1",
+            f"ST: {normalized}",
+            "",
+            "",
+        )
+    ).encode("ascii")
+
+
+def search_targets(
+    hosts: frozenset[str],
+    device_ids: frozenset[str],
+) -> tuple[str, ...]:
+    targets = set(device_ids)
+    if hosts or not targets:
+        targets.add("ssdp:all")
+    return tuple(sorted(targets))
+
+
+class _Receiver(asyncio.DatagramProtocol):
+    def __init__(self, discovery: "SsdpPresenceDiscovery") -> None:
+        self.discovery = discovery
+
+    def datagram_received(self, data: bytes, address: tuple[str, int]) -> None:
+        self.discovery.datagram_received(data, address)
+
+    def error_received(self, error: Exception) -> None:
+        self.discovery.error_received(error)
+
+    def connection_lost(self, error: Exception | None) -> None:
+        self.discovery.connection_lost(error)
+
+
+class SsdpPresenceDiscovery:
+    def __init__(
+        self,
+        hosts: tuple[str, ...],
+        device_ids: tuple[str, ...] = (),
+    ) -> None:
+        self.hosts = frozenset(host.strip().lower() for host in hosts if host.strip())
+        self.device_ids = frozenset(
+            device_id.strip().lower() for device_id in device_ids if device_id.strip()
+        )
+        if not self.hosts and not self.device_ids:
+            raise ValueError("SSDP discovery requires a host or device id")
+        self._messages: asyncio.Queue[PresenceEvent | BaseException] = asyncio.Queue()
+        self._transports: list[asyncio.DatagramTransport] = []
+        self._closing_transport_count = 0
+        self._closed = asyncio.Event()
+
+    async def start(self) -> None:
+        if self._transports:
+            raise RuntimeError("SSDP discovery is already started")
+        notification_socket = socket.socket(
+            socket.AF_INET,
+            socket.SOCK_DGRAM,
+            socket.IPPROTO_UDP,
+        )
+        search_socket = socket.socket(
+            socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP
+        )
+        try:
+            notification_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            notification_socket.bind(("", SSDP_PORT))
+            membership = socket.inet_aton(SSDP_MULTICAST_ADDRESS) + socket.inet_aton(
+                "0.0.0.0"
+            )
+            notification_socket.setsockopt(
+                socket.IPPROTO_IP,
+                socket.IP_ADD_MEMBERSHIP,
+                membership,
+            )
+            notification_socket.setblocking(False)
+            search_socket.bind(("", 0))
+            search_socket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
+            search_socket.setblocking(False)
+            loop = asyncio.get_running_loop()
+            notification_transport, _ = await loop.create_datagram_endpoint(
+                lambda: _Receiver(self),
+                sock=notification_socket,
+            )
+            self._transports.append(notification_transport)
+            search_transport, _ = await loop.create_datagram_endpoint(
+                lambda: _Receiver(self),
+                sock=search_socket,
+            )
+            self._transports.append(search_transport)
+        except BaseException:
+            notification_socket.close()
+            search_socket.close()
+            await self.close()
+            raise
+        for target in search_targets(self.hosts, self.device_ids):
+            search_transport.sendto(
+                build_search(target),
+                (SSDP_MULTICAST_ADDRESS, SSDP_PORT),
+            )
+
+    async def receive(self) -> PresenceEvent:
+        message = await self._messages.get()
+        if isinstance(message, BaseException):
+            raise DiscoveryError(str(message)) from message
+        return message
+
+    async def close(self) -> None:
+        transports = tuple(self._transports)
+        self._transports.clear()
+        if not transports:
+            return
+        self._closed.clear()
+        self._closing_transport_count = len(transports)
+        for transport in transports:
+            transport.close()
+        await self._closed.wait()
+
+    def datagram_received(self, data: bytes, address: tuple[str, int]) -> None:
+        message = parse_ssdp_datagram(data, str(address[0]))
+        if message is None or message.available is None:
+            return
+        hosts = {message.sender_host.lower(), message.location_host.lower()}
+        if message.device_id not in self.device_ids and not (hosts & self.hosts):
+            return
+        self._messages.put_nowait(
+            PresenceEvent(
+                host=message.sender_host,
+                device_id=message.device_id,
+                boot_id=message.boot_id,
+                available=message.available,
+            )
+        )
+
+    def error_received(self, error: Exception) -> None:
+        self._messages.put_nowait(error)
+
+    def connection_lost(self, error: Exception | None) -> None:
+        if error is not None:
+            self._messages.put_nowait(error)
+        if self._closing_transport_count > 0:
+            self._closing_transport_count -= 1
+            if self._closing_transport_count == 0:
+                self._closed.set()

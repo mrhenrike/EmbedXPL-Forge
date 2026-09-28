@@ -1,0 +1,4 @@
+admin:admin
+admin:guest
+guest:admin
+guest:guest

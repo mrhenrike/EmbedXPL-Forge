@@ -1,0 +1,5 @@
+Administrator:
+admin:
+admin:netscreen
+netscreen:netscreen
+operator:

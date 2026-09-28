@@ -1,0 +1,43 @@
+import asyncio
+from pathlib import Path
+
+from samsung_tv_root.config import parse_configuration
+from samsung_tv_root.daemon import SamsungTvRootDaemon
+
+
+def daemon(tmp_path: Path) -> SamsungTvRootDaemon:
+    configuration = parse_configuration(
+        {
+            "version": 1,
+            "televisions": {
+                "living-room": {
+                    "model": "qn90f",
+                    "host": "192.0.2.50",
+                }
+            },
+        }
+    )
+    return SamsungTvRootDaemon(configuration, tmp_path / "controller.json")
+
+
+def test_daemon_status_reports_default_off_native_events(tmp_path) -> None:
+    response = asyncio.run(daemon(tmp_path).handle_request({"action": "status"}))
+
+    assert response["native_events"]["living-room"] == {
+        "enabled": False,
+        "hdmi_receiver": False,
+        "active": False,
+        "error": None,
+        "identity": None,
+    }
+
+
+def test_events_status_does_not_acquire_root(tmp_path) -> None:
+    response = asyncio.run(
+        daemon(tmp_path).handle_request(
+            {"action": "events.status", "television": "living-room"}
+        )
+    )
+
+    assert response["television"] == "living-room"
+    assert response["native_events"]["enabled"] is False

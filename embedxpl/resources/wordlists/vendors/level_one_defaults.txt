@@ -1,0 +1,12 @@
+NOLOGIN:1234
+NOLOGIN:NOLOGIN
+NOLOGIN:admin
+NOLOGIN:password
+admim:1234
+admim:NOLOGIN
+admim:admin
+admim:password
+admin:1234
+admin:NOLOGIN
+admin:admin
+admin:password

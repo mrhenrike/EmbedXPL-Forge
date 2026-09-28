@@ -1,0 +1,463 @@
+from __future__ import annotations
+
+import ctypes
+from dataclasses import dataclass
+from pathlib import Path
+
+
+DEFAULT_LIBRARY_PATH = "/usr/lib/libteec.so"
+SHARED_MEMORY_SIZE = 0x10000
+TEEC_LOGIN_PUBLIC = 0
+TEEC_NONE = 0x00
+TEEC_VALUE_INPUT = 0x01
+TEEC_VALUE_OUTPUT = 0x02
+TEEC_VALUE_INOUT = 0x03
+TEEC_MEMREF_PARTIAL_INPUT = 0x0D
+TEEC_MEMREF_PARTIAL_OUTPUT = 0x0E
+TEEC_MEMREF_PARTIAL_INOUT = 0x0F
+TEEC_MEM_INPUT = 1 << 0
+TEEC_MEM_OUTPUT = 1 << 1
+
+
+class TeecError(RuntimeError):
+    pass
+
+
+class TeecUuid(ctypes.LittleEndianStructure):
+    _layout_ = "ms"
+    _pack_ = 4
+    _fields_ = (
+        ("time_low", ctypes.c_uint32),
+        ("time_mid", ctypes.c_uint16),
+        ("time_hi_and_version", ctypes.c_uint16),
+        ("clock_seq_and_node", ctypes.c_byte * 8),
+    )
+
+
+class TeecContext(ctypes.LittleEndianStructure):
+    _layout_ = "ms"
+    _pack_ = 4
+    _fields_ = (("implementation", ctypes.c_void_p),)
+
+
+class TeecSessionHandle(ctypes.LittleEndianStructure):
+    _layout_ = "ms"
+    _pack_ = 4
+    _fields_ = (("implementation", ctypes.c_void_p),)
+
+
+class TeecSharedMemoryImplementation(ctypes.LittleEndianStructure):
+    pass
+
+
+TeecSharedMemoryImplementation._layout_ = "ms"
+TeecSharedMemoryImplementation._pack_ = 4
+TeecSharedMemoryImplementation._fields_ = (
+    ("next", ctypes.POINTER(TeecSharedMemoryImplementation)),
+    ("previous", ctypes.POINTER(ctypes.POINTER(TeecSharedMemoryImplementation))),
+    ("context", ctypes.POINTER(TeecContext)),
+    ("context_implementation", ctypes.c_void_p),
+    ("flags", ctypes.c_uint32),
+    ("memory_identifier", ctypes.c_int32),
+)
+
+
+class TeecSharedMemory(ctypes.LittleEndianStructure):
+    _layout_ = "ms"
+    _pack_ = 4
+    _fields_ = (
+        ("buffer", ctypes.c_void_p),
+        ("size", ctypes.c_uint32),
+        ("flags", ctypes.c_uint32),
+        ("implementation", TeecSharedMemoryImplementation),
+    )
+
+
+class TeecTemporaryMemoryReference(ctypes.LittleEndianStructure):
+    _layout_ = "ms"
+    _pack_ = 4
+    _fields_ = (
+        ("buffer", ctypes.c_void_p),
+        ("size", ctypes.c_uint32),
+    )
+
+
+class TeecRegisteredMemoryReference(ctypes.LittleEndianStructure):
+    _layout_ = "ms"
+    _pack_ = 4
+    _fields_ = (
+        ("parent", ctypes.POINTER(TeecSharedMemory)),
+        ("size", ctypes.c_uint32),
+        ("offset", ctypes.c_uint32),
+    )
+
+
+class TeecValue(ctypes.LittleEndianStructure):
+    _layout_ = "ms"
+    _pack_ = 4
+    _fields_ = (
+        ("a", ctypes.c_uint32),
+        ("b", ctypes.c_uint32),
+    )
+
+
+class TeecParameter(ctypes.Union):
+    _layout_ = "ms"
+    _pack_ = 4
+    _fields_ = (
+        ("temporary_memory", TeecTemporaryMemoryReference),
+        ("memory", TeecRegisteredMemoryReference),
+        ("value", TeecValue),
+    )
+
+
+class ModernTeecOperation(ctypes.LittleEndianStructure):
+    _layout_ = "ms"
+    _pack_ = 4
+    _fields_ = (
+        ("started", ctypes.c_uint32),
+        ("parameter_types", ctypes.c_uint32),
+        ("parameters", TeecParameter * 4),
+    )
+
+
+class LegacyTeecOperation(ctypes.LittleEndianStructure):
+    _layout_ = "ms"
+    _pack_ = 4
+    _fields_ = ModernTeecOperation._fields_ + (("implementation", ctypes.c_void_p),)
+
+
+@dataclass(frozen=True)
+class TeecProfile:
+    name: str
+    operation_type: type[ctypes.Structure]
+    input_memory_type: int
+    output_memory_type: int
+    auxiliary_memory: bool
+
+
+TEEC_PROFILES = {
+    "legacy": TeecProfile(
+        name="legacy",
+        operation_type=LegacyTeecOperation,
+        input_memory_type=TEEC_MEMREF_PARTIAL_INOUT,
+        output_memory_type=TEEC_MEMREF_PARTIAL_INOUT,
+        auxiliary_memory=False,
+    ),
+    "modern": TeecProfile(
+        name="modern",
+        operation_type=ModernTeecOperation,
+        input_memory_type=TEEC_MEMREF_PARTIAL_INPUT,
+        output_memory_type=TEEC_MEMREF_PARTIAL_OUTPUT,
+        auxiliary_memory=True,
+    ),
+}
+
+
+SWU_TRUSTED_APPLICATION_UUID = TeecUuid(
+    0x22222221,
+    0,
+    0,
+    (ctypes.c_byte * 8)(0, 0, 0, 0, 0, 0, 0, 1),
+)
+
+
+def parameter_types(*values: int) -> int:
+    if len(values) != 4:
+        raise ValueError("exactly four TEEC parameter types are required")
+    return sum((value & 0x7F) << (index * 8) for index, value in enumerate(values))
+
+
+def detect_profile(path: Path = Path("/etc/os-release")) -> TeecProfile:
+    try:
+        fields = {
+            key: value.strip().strip('"')
+            for key, separator, value in (
+                line.partition("=")
+                for line in path.read_text(encoding="utf-8").splitlines()
+            )
+            if separator
+        }
+    except OSError as error:
+        raise TeecError(f"cannot detect Tizen release: {error}") from error
+    version = fields.get("VERSION_ID")
+    if version is None:
+        raise TeecError("cannot detect Tizen release: VERSION_ID is missing")
+    try:
+        major = int(version.partition(".")[0])
+    except ValueError as error:
+        raise TeecError(f"cannot parse Tizen VERSION_ID={version!r}") from error
+    profiles = {6: "legacy", 9: "modern"}
+    name = profiles.get(major)
+    if name is None:
+        raise TeecError(f"unverified Tizen {version} TEEC ABI; select --abi explicitly")
+    return TEEC_PROFILES[name]
+
+
+def select_profile(name: str, path: Path = Path("/etc/os-release")) -> TeecProfile:
+    if name == "auto":
+        return detect_profile(path)
+    try:
+        return TEEC_PROFILES[name]
+    except KeyError as error:
+        raise TeecError(f"unknown TEEC ABI profile: {name}") from error
+
+
+def verify_profile(profile: TeecProfile) -> None:
+    expected_operation_size = 60 if profile.name == "legacy" else 56
+    values = {
+        "pointer": (ctypes.sizeof(ctypes.c_void_p), 4),
+        "TeecUuid": (ctypes.sizeof(TeecUuid), 16),
+        "TeecContext": (ctypes.sizeof(TeecContext), 4),
+        "TeecSessionHandle": (ctypes.sizeof(TeecSessionHandle), 4),
+        "TeecSharedMemory": (ctypes.sizeof(TeecSharedMemory), 36),
+        "TeecParameter": (ctypes.sizeof(TeecParameter), 12),
+        "TeecOperation": (
+            ctypes.sizeof(profile.operation_type),
+            expected_operation_size,
+        ),
+    }
+    failures = [
+        f"{name}={actual}, expected {expected}"
+        for name, (actual, expected) in values.items()
+        if actual != expected
+    ]
+    if failures:
+        raise TeecError("incompatible TEEC ABI: " + "; ".join(failures))
+
+
+def require_success(stage: str, result: int, origin: int | None = None) -> None:
+    if result == 0:
+        return
+    detail = "" if origin is None else f", origin=0x{origin:08x}"
+    raise TeecError(f"{stage} failed: result=0x{result:08x}{detail}")
+
+
+class TeecRuntime:
+    def __init__(self, profile: TeecProfile, path: str = DEFAULT_LIBRARY_PATH) -> None:
+        self.profile = profile
+        try:
+            self.library = ctypes.CDLL(path)
+        except OSError as error:
+            raise TeecError(f"failed to load {path}: {error}") from error
+        self.initialize_context = self._function(
+            "TEEC_InitializeContext",
+            ctypes.c_uint32,
+            (ctypes.c_char_p, ctypes.POINTER(TeecContext)),
+        )
+        self.finalize_context = self._function(
+            "TEEC_FinalizeContext",
+            None,
+            (ctypes.POINTER(TeecContext),),
+        )
+        self.allocate_shared_memory = self._function(
+            "TEEC_AllocateSharedMemory",
+            ctypes.c_uint32,
+            (ctypes.POINTER(TeecContext), ctypes.POINTER(TeecSharedMemory)),
+        )
+        self.release_shared_memory = self._function(
+            "TEEC_ReleaseSharedMemory",
+            None,
+            (ctypes.POINTER(TeecSharedMemory),),
+        )
+        self.open_session = self._function(
+            "TEEC_OpenSession",
+            ctypes.c_uint32,
+            (
+                ctypes.POINTER(TeecContext),
+                ctypes.POINTER(TeecSessionHandle),
+                ctypes.POINTER(TeecUuid),
+                ctypes.c_uint32,
+                ctypes.c_void_p,
+                ctypes.POINTER(profile.operation_type),
+                ctypes.POINTER(ctypes.c_uint32),
+            ),
+        )
+        self.close_session = self._function(
+            "TEEC_CloseSession",
+            None,
+            (ctypes.POINTER(TeecSessionHandle),),
+        )
+        self.invoke_command = self._function(
+            "TEEC_InvokeCommand",
+            ctypes.c_uint32,
+            (
+                ctypes.POINTER(TeecSessionHandle),
+                ctypes.c_uint32,
+                ctypes.POINTER(profile.operation_type),
+                ctypes.POINTER(ctypes.c_uint32),
+            ),
+        )
+
+    def _function(
+        self,
+        name: str,
+        result_type: object,
+        argument_types: tuple[object, ...],
+    ) -> object:
+        try:
+            function = getattr(self.library, name)
+        except AttributeError as error:
+            raise TeecError(f"TEEC library omits {name}") from error
+        function.restype = result_type
+        function.argtypes = argument_types
+        return function
+
+
+class SwuTrustedApplicationSession:
+    def __init__(self, runtime: TeecRuntime, profile: TeecProfile) -> None:
+        self.runtime = runtime
+        self.profile = profile
+        self.context = TeecContext()
+        self.session = TeecSessionHandle()
+        self.input_memory = TeecSharedMemory()
+        self.output_memory = TeecSharedMemory()
+        self.auxiliary_memory = TeecSharedMemory()
+        self.context_initialized = False
+        self.session_opened = False
+        self.allocated_memory: list[TeecSharedMemory] = []
+
+    def __enter__(self) -> SwuTrustedApplicationSession:
+        self.open()
+        return self
+
+    def __exit__(self, _type: object, _value: object, _traceback: object) -> None:
+        self.close()
+
+    def open(self) -> None:
+        if self.context_initialized:
+            raise TeecError("TEEC session is already open")
+        try:
+            result = self.runtime.initialize_context(None, ctypes.byref(self.context))
+            require_success("TEEC_InitializeContext", result)
+            self.context_initialized = True
+            self._allocate(self.input_memory)
+            self._allocate(self.output_memory)
+            if self.profile.auxiliary_memory:
+                self._allocate(self.auxiliary_memory)
+            origin = ctypes.c_uint32()
+            result = self.runtime.open_session(
+                ctypes.byref(self.context),
+                ctypes.byref(self.session),
+                ctypes.byref(SWU_TRUSTED_APPLICATION_UUID),
+                TEEC_LOGIN_PUBLIC,
+                None,
+                None,
+                ctypes.byref(origin),
+            )
+            require_success("TEEC_OpenSession", result, origin.value)
+            self.session_opened = True
+        except BaseException:
+            self.close()
+            raise
+
+    def close(self) -> None:
+        if self.session_opened:
+            self.runtime.close_session(ctypes.byref(self.session))
+            self.session_opened = False
+        while self.allocated_memory:
+            memory = self.allocated_memory.pop()
+            self.runtime.release_shared_memory(ctypes.byref(memory))
+        if self.context_initialized:
+            self.runtime.finalize_context(ctypes.byref(self.context))
+            self.context_initialized = False
+
+    def operation(self, *types: int) -> ctypes.Structure:
+        operation = self.profile.operation_type()
+        operation.parameter_types = parameter_types(*types)
+        return operation
+
+    def bind_memory(
+        self,
+        operation: ctypes.Structure,
+        index: int,
+        memory: TeecSharedMemory,
+        size: int,
+    ) -> None:
+        if not 0 <= index < 4:
+            raise TeecError(f"invalid TEEC parameter index {index}")
+        if not 0 <= size <= memory.size:
+            raise TeecError(f"invalid TEEC memory length {size}")
+        operation.parameters[index].memory.parent = ctypes.pointer(memory)
+        operation.parameters[index].memory.size = size
+        operation.parameters[index].memory.offset = 0
+
+    def write_memory(
+        self,
+        memory: TeecSharedMemory,
+        data: bytes,
+        name: str,
+    ) -> None:
+        if not data:
+            raise TeecError(f"{name} is empty")
+        if len(data) > memory.size:
+            raise TeecError(f"{name} is {len(data)} bytes; maximum is {memory.size}")
+        if not memory.buffer:
+            raise TeecError(f"{name} shared-memory buffer is null")
+        ctypes.memmove(memory.buffer, data, len(data))
+
+    def clear_memory(self, memory: TeecSharedMemory, name: str) -> None:
+        if not memory.buffer:
+            raise TeecError(f"{name} shared-memory buffer is null")
+        ctypes.memset(memory.buffer, 0, memory.size)
+
+    def read_memory(
+        self,
+        memory: TeecSharedMemory,
+        size: int,
+        name: str,
+    ) -> bytes:
+        if not 0 <= size <= memory.size:
+            raise TeecError(f"TrustZone returned invalid {name} size {size}")
+        if not memory.buffer:
+            raise TeecError(f"{name} shared-memory buffer is null")
+        return ctypes.string_at(memory.buffer, size)
+
+    def invoke(self, command: int, operation: ctypes.Structure, stage: str) -> None:
+        if not self.session_opened:
+            raise TeecError("TEEC session is not open")
+        origin = ctypes.c_uint32()
+        result = self.runtime.invoke_command(
+            ctypes.byref(self.session),
+            command,
+            ctypes.byref(operation),
+            ctypes.byref(origin),
+        )
+        require_success(stage, result, origin.value)
+
+    def _allocate(self, memory: TeecSharedMemory) -> None:
+        memory.size = SHARED_MEMORY_SIZE
+        memory.flags = TEEC_MEM_INPUT | TEEC_MEM_OUTPUT
+        result = self.runtime.allocate_shared_memory(
+            ctypes.byref(self.context),
+            ctypes.byref(memory),
+        )
+        require_success("TEEC_AllocateSharedMemory", result)
+        if not memory.buffer:
+            self.runtime.release_shared_memory(ctypes.byref(memory))
+            raise TeecError("TEEC_AllocateSharedMemory returned a null buffer")
+        self.allocated_memory.append(memory)
+
+
+def set_process_name(name: str | None) -> None:
+    if name is None:
+        return
+    try:
+        encoded = name.encode("ascii")
+    except UnicodeEncodeError as error:
+        raise TeecError("process name must contain ASCII characters") from error
+    if not 1 <= len(encoded) <= 15:
+        raise TeecError("process name must contain 1-15 ASCII bytes")
+    libc = ctypes.CDLL(None, use_errno=True)
+    function = libc.prctl
+    function.restype = ctypes.c_int
+    function.argtypes = (
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_ulong,
+        ctypes.c_ulong,
+        ctypes.c_ulong,
+    )
+    if function(15, encoded, 0, 0, 0) != 0:
+        error = ctypes.get_errno()
+        raise TeecError(f"PR_SET_NAME failed: errno={error}")

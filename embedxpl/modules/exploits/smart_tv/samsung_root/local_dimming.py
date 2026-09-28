@@ -1,0 +1,507 @@
+from __future__ import annotations
+
+import json
+import os
+import re
+import shlex
+import tempfile
+from dataclasses import asdict, dataclass
+from pathlib import Path
+from typing import Any, Protocol
+
+from .source import CurrentSource, HdmiInput
+
+
+AVOC_BUS = "org.tizen.tv.avoc"
+AVOC_PATH = "/org/tizen/tv/avoc"
+AVOC_INTERFACE = "org.tizen.tv.avoc.AvOutputControl"
+ACTIVE_SETTING = 0
+PERSISTENT_SETTING = 1
+SMART_LED_OFF = 0
+VALID_SMART_LED_MODES = frozenset({0, 1, 2, 3, 5})
+VALID_SMART_LED_ON_MODES = VALID_SMART_LED_MODES - {SMART_LED_OFF}
+GAME_PC_PICTURE_MODE = 458754
+DEFAULT_ENABLED_SMART_LED_MODE = 3
+DEFAULT_LOCAL_DIMMING_COMMAND_TIMEOUT = 5.0
+
+
+class LocalDimmingControlError(RuntimeError):
+    pass
+
+
+class RootCommandResult(Protocol):
+    exit_code: int
+    timed_out: bool
+    stdout: str
+    stderr: str
+
+
+class RootCommandConnection(Protocol):
+    async def execute(self, command: str, timeout: float) -> RootCommandResult: ...
+
+
+def default_local_dimming_state_path(television: str = "television") -> Path:
+    state_home = os.environ.get("XDG_STATE_HOME")
+    root = Path(state_home).expanduser() if state_home else Path.home() / ".local/state"
+    return root / "samsung-tv-root" / television / "local-dimming.json"
+
+
+@dataclass(frozen=True)
+class LocalDimmingContext:
+    source: str
+    source_type: int
+    picture_mode: int
+    hdr_status: int
+
+    @property
+    def key(self) -> str:
+        return f"{self.source}:{self.picture_mode}:{self.hdr_status}"
+
+    def to_dict(self) -> dict[str, str | int]:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class LocalDimmingState:
+    context: LocalDimmingContext
+    active_mode: int
+    persistent_mode: int
+
+    @property
+    def enabled(self) -> bool:
+        return self.active_mode != SMART_LED_OFF
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "context": self.context.to_dict(),
+            "active_mode": self.active_mode,
+            "persistent_mode": self.persistent_mode,
+            "enabled": self.enabled,
+        }
+
+
+@dataclass(frozen=True)
+class LocalDimmingChange:
+    before: LocalDimmingState
+    after: LocalDimmingState
+    target_mode: int
+    target_source: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "before": self.before.to_dict(),
+            "after": self.after.to_dict(),
+            "target_mode": self.target_mode,
+            "target_source": self.target_source,
+            "confirmed": (
+                self.after.active_mode == self.target_mode
+                and self.after.persistent_mode == self.target_mode
+            ),
+        }
+
+
+class LocalDimmingModeStore:
+    def __init__(self, path: Path | None = None) -> None:
+        self.path = (
+            Path(path) if path is not None else default_local_dimming_state_path()
+        )
+
+    def get(self, context: LocalDimmingContext) -> int | None:
+        mode = self._read_modes().get(context.key)
+        if mode is None:
+            return None
+        return self._validate_on_mode(mode, f"stored mode for {context.key}")
+
+    def remember(self, context: LocalDimmingContext, mode: int) -> None:
+        validated = self._validate_on_mode(mode, f"mode for {context.key}")
+        modes = self._read_modes()
+        modes[context.key] = validated
+        self._write_modes(modes)
+
+    def _read_modes(self) -> dict[str, int]:
+        try:
+            payload = json.loads(self.path.read_text(encoding="utf-8"))
+        except FileNotFoundError:
+            return {}
+        except (OSError, json.JSONDecodeError) as error:
+            raise LocalDimmingControlError(
+                f"cannot read local-dimming state {self.path}: {error}"
+            ) from error
+        if not isinstance(payload, dict) or payload.get("version") != 1:
+            raise LocalDimmingControlError(
+                f"invalid local-dimming state envelope in {self.path}"
+            )
+        raw_modes = payload.get("modes")
+        if not isinstance(raw_modes, dict):
+            raise LocalDimmingControlError(
+                f"invalid local-dimming modes in {self.path}"
+            )
+        modes: dict[str, int] = {}
+        for key, mode in raw_modes.items():
+            modes[str(key)] = self._validate_on_mode(
+                mode,
+                f"stored mode for {key}",
+            )
+        return modes
+
+    def _write_modes(self, modes: dict[str, int]) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+        temporary_path: Path | None = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="w",
+                encoding="utf-8",
+                dir=self.path.parent,
+                prefix=f".{self.path.name}.",
+                delete=False,
+            ) as stream:
+                temporary_path = Path(stream.name)
+                os.chmod(temporary_path, 0o600)
+                json.dump(
+                    {"version": 1, "modes": dict(sorted(modes.items()))},
+                    stream,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                )
+                stream.write("\n")
+                stream.flush()
+                os.fsync(stream.fileno())
+            os.replace(temporary_path, self.path)
+            temporary_path = None
+        except OSError as error:
+            raise LocalDimmingControlError(
+                f"cannot write local-dimming state {self.path}: {error}"
+            ) from error
+        finally:
+            if temporary_path is not None:
+                try:
+                    temporary_path.unlink()
+                except FileNotFoundError:
+                    pass
+
+    @staticmethod
+    def _validate_on_mode(mode: Any, description: str) -> int:
+        if isinstance(mode, bool) or not isinstance(mode, int):
+            raise LocalDimmingControlError(f"{description} is not an integer")
+        if mode not in VALID_SMART_LED_ON_MODES:
+            supported = ", ".join(
+                str(value) for value in sorted(VALID_SMART_LED_ON_MODES)
+            )
+            raise LocalDimmingControlError(
+                f"{description} is {mode}; expected one of {supported}"
+            )
+        return mode
+
+
+class SamsungTvLocalDimmingControl:
+    enabled_policy_source = "saved-enabled-policy"
+
+    def __init__(self, store: LocalDimmingModeStore | None = None) -> None:
+        self.store = store or LocalDimmingModeStore()
+
+    async def status(
+        self,
+        connection: RootCommandConnection,
+        source: CurrentSource,
+        timeout: float = DEFAULT_LOCAL_DIMMING_COMMAND_TIMEOUT,
+    ) -> LocalDimmingState:
+        self._require_hdmi_source(source)
+        active_picture_mode = await self._read_pair(
+            connection,
+            "GetPictureMode",
+            timeout,
+            "i",
+            str(ACTIVE_SETTING),
+        )
+        persistent_picture_mode = await self._read_pair(
+            connection,
+            "GetPictureMode",
+            timeout,
+            "i",
+            str(PERSISTENT_SETTING),
+        )
+        if active_picture_mode != persistent_picture_mode:
+            raise LocalDimmingControlError(
+                "active and persistent picture modes differ: "
+                f"{active_picture_mode} != {persistent_picture_mode}"
+            )
+        hdr_status = await self._read_pair(
+            connection,
+            "GetHdrStatus",
+            timeout,
+        )
+        context = LocalDimmingContext(
+            source=source.source,
+            source_type=source.source_type,
+            picture_mode=active_picture_mode,
+            hdr_status=hdr_status,
+        )
+        active_mode = await self._read_smart_led(
+            connection,
+            ACTIVE_SETTING,
+            timeout,
+        )
+        persistent_mode = await self._read_smart_led(
+            connection,
+            PERSISTENT_SETTING,
+            timeout,
+        )
+        if active_mode != persistent_mode:
+            raise LocalDimmingControlError(
+                "active and persistent Smart LED modes differ: "
+                f"{active_mode} != {persistent_mode}"
+            )
+        return LocalDimmingState(
+            context=context,
+            active_mode=active_mode,
+            persistent_mode=persistent_mode,
+        )
+
+    async def toggle(
+        self,
+        connection: RootCommandConnection,
+        source: CurrentSource,
+        timeout: float = DEFAULT_LOCAL_DIMMING_COMMAND_TIMEOUT,
+    ) -> LocalDimmingChange:
+        before = await self.status(connection, source, timeout)
+        return await self._set_enabled_from_state(
+            connection,
+            source,
+            not before.enabled,
+            before,
+            timeout,
+        )
+
+    async def set_enabled(
+        self,
+        connection: RootCommandConnection,
+        source: CurrentSource,
+        enabled: bool,
+        timeout: float = DEFAULT_LOCAL_DIMMING_COMMAND_TIMEOUT,
+    ) -> LocalDimmingChange:
+        if not isinstance(enabled, bool):
+            raise LocalDimmingControlError("enabled must be boolean")
+        before = await self.status(connection, source, timeout)
+        return await self._set_enabled_from_state(
+            connection,
+            source,
+            enabled,
+            before,
+            timeout,
+        )
+
+    async def _set_enabled_from_state(
+        self,
+        connection: RootCommandConnection,
+        source: CurrentSource,
+        enabled: bool,
+        before: LocalDimmingState,
+        timeout: float,
+    ) -> LocalDimmingChange:
+        if before.enabled == enabled:
+            return LocalDimmingChange(
+                before=before,
+                after=before,
+                target_mode=before.active_mode,
+                target_source=("already-enabled" if enabled else "already-disabled"),
+            )
+
+        if not enabled:
+            self.store.remember(before.context, before.active_mode)
+            target_mode = SMART_LED_OFF
+            target_source = "off"
+        else:
+            stored_mode = self.store.get(before.context)
+            if stored_mode is not None:
+                target_mode = stored_mode
+                target_source = "remembered"
+            else:
+                target_mode = DEFAULT_ENABLED_SMART_LED_MODE
+                target_source = self.enabled_policy_source
+
+        await self._set_both(
+            connection,
+            target_mode,
+            before,
+            timeout,
+        )
+        after = await self.status(connection, source, timeout)
+        if (
+            after.context != before.context
+            or after.active_mode != target_mode
+            or after.persistent_mode != target_mode
+        ):
+            raise LocalDimmingControlError(
+                "Smart LED toggle did not remain in the requested context and mode"
+            )
+        return LocalDimmingChange(
+            before=before,
+            after=after,
+            target_mode=target_mode,
+            target_source=target_source,
+        )
+
+    async def _set_both(
+        self,
+        connection: RootCommandConnection,
+        target_mode: int,
+        before: LocalDimmingState,
+        timeout: float,
+    ) -> None:
+        if target_mode not in VALID_SMART_LED_MODES:
+            raise LocalDimmingControlError(
+                f"refusing unsupported Smart LED mode {target_mode}"
+            )
+        written: list[tuple[int, int]] = []
+        try:
+            for setting_type, previous_mode in (
+                (ACTIVE_SETTING, before.active_mode),
+                (PERSISTENT_SETTING, before.persistent_mode),
+            ):
+                await self._write_smart_led(
+                    connection,
+                    target_mode,
+                    setting_type,
+                    timeout,
+                )
+                written.append((setting_type, previous_mode))
+            confirmed_active = await self._read_smart_led(
+                connection,
+                ACTIVE_SETTING,
+                timeout,
+            )
+            confirmed_persistent = await self._read_smart_led(
+                connection,
+                PERSISTENT_SETTING,
+                timeout,
+            )
+            if (confirmed_active, confirmed_persistent) != (
+                target_mode,
+                target_mode,
+            ):
+                raise LocalDimmingControlError(
+                    "Smart LED verification failed: "
+                    f"active={confirmed_active} persistent={confirmed_persistent} "
+                    f"target={target_mode}"
+                )
+        except Exception as error:
+            rollback_errors = []
+            for setting_type, previous_mode in reversed(written):
+                try:
+                    await self._write_smart_led(
+                        connection,
+                        previous_mode,
+                        setting_type,
+                        timeout,
+                    )
+                except Exception as rollback_error:
+                    rollback_errors.append(f"type {setting_type}: {rollback_error}")
+            rollback_detail = (
+                "; rollback failed: " + "; ".join(rollback_errors)
+                if rollback_errors
+                else ""
+            )
+            raise LocalDimmingControlError(
+                f"Smart LED update failed: {error}{rollback_detail}"
+            ) from error
+
+    async def _read_smart_led(
+        self,
+        connection: RootCommandConnection,
+        setting_type: int,
+        timeout: float,
+    ) -> int:
+        mode = await self._read_pair(
+            connection,
+            "GetSmartLed",
+            timeout,
+            "i",
+            str(setting_type),
+        )
+        if mode not in VALID_SMART_LED_MODES:
+            raise LocalDimmingControlError(
+                f"GetSmartLed returned unsupported mode {mode}"
+            )
+        return mode
+
+    async def _write_smart_led(
+        self,
+        connection: RootCommandConnection,
+        mode: int,
+        setting_type: int,
+        timeout: float,
+    ) -> None:
+        output = await self._call(
+            connection,
+            "SetSmartLed",
+            timeout,
+            "ii",
+            str(mode),
+            str(setting_type),
+        )
+        match = re.fullmatch(r"i\s+(-?\d+)", output)
+        if match is None:
+            raise LocalDimmingControlError(f"unexpected SetSmartLed reply: {output}")
+        result = int(match.group(1))
+        if result != 0:
+            raise LocalDimmingControlError(f"SetSmartLed result {result}")
+
+    async def _read_pair(
+        self,
+        connection: RootCommandConnection,
+        method: str,
+        timeout: float,
+        *arguments: str,
+    ) -> int:
+        output = await self._call(
+            connection,
+            method,
+            timeout,
+            *arguments,
+        )
+        match = re.fullmatch(r"ii\s+(-?\d+)\s+(-?\d+)", output)
+        if match is None:
+            raise LocalDimmingControlError(f"unexpected {method} reply: {output}")
+        value = int(match.group(1))
+        result = int(match.group(2))
+        if result != 0:
+            raise LocalDimmingControlError(f"{method} result {result}")
+        return value
+
+    async def _call(
+        self,
+        connection: RootCommandConnection,
+        method: str,
+        timeout: float,
+        *arguments: str,
+    ) -> str:
+        command = shlex.join(
+            [
+                "/usr/bin/busctl",
+                "--system",
+                "--timeout=2",
+                "call",
+                AVOC_BUS,
+                AVOC_PATH,
+                AVOC_INTERFACE,
+                method,
+                *arguments,
+            ]
+        )
+        result = await connection.execute(command, timeout)
+        if result.timed_out:
+            raise LocalDimmingControlError(f"{method} timed out")
+        if result.exit_code != 0:
+            detail = result.stderr.strip() or result.stdout.strip() or "no output"
+            raise LocalDimmingControlError(
+                f"{method} failed with exit {result.exit_code}: {detail}"
+            )
+        return result.stdout.strip()
+
+    @staticmethod
+    def _require_hdmi_source(source: CurrentSource) -> None:
+        hdmi = HdmiInput.from_source_type(source.source_type)
+        if hdmi is None or hdmi.value != source.source:
+            raise LocalDimmingControlError(
+                f"local dimming toggle requires an HDMI source, got {source.source}"
+            )

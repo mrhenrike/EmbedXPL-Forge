@@ -1,0 +1,13 @@
+admin:1234
+admin:admin
+admin:password
+admin:root
+admin:unknown
+root:1234
+root:admin
+root:password
+root:root
+root:unknown
+admin:michelangelo
+user:password
+Admin:

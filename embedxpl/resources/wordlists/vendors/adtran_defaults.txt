@@ -1,0 +1,4 @@
+admin:admin
+admin:password
+:adtran
+:Password

@@ -1,0 +1,308 @@
+from __future__ import annotations
+
+import asyncio
+import contextlib
+import json
+import logging
+import signal
+import socket
+from pathlib import Path
+from typing import Any
+
+from .capabilities import TelevisionCapabilities
+from .config import ApplicationConfiguration, TelevisionConfiguration
+from .control_api import ControlApiServer, EventBroker
+from .controller import default_control_file
+from .discovery import PresenceEvent, SsdpPresenceDiscovery
+from .lifecycle import RootLifecycle
+from .native_events import NativeEventCoordinator
+from .remote import RemoteInputCoordinator, list_input_devices
+from .systemd_notify import ready, status, stopping
+
+
+class DaemonError(RuntimeError):
+    pass
+
+
+class SamsungTvRootDaemon:
+    def __init__(
+        self,
+        configuration: ApplicationConfiguration,
+        control_file: Path | None = None,
+    ) -> None:
+        self.configuration = configuration
+        self.control_file = control_file or default_control_file()
+        self.events = EventBroker()
+        self.lifecycles = {
+            television.name: RootLifecycle(television, configuration.retry)
+            for television in configuration.televisions
+        }
+        self.capabilities = {
+            television.name: TelevisionCapabilities(television)
+            for television in configuration.televisions
+        }
+        self.remotes = {
+            television.name: RemoteInputCoordinator(
+                television,
+                self._publish_event,
+                self.capabilities[television.name].handle,
+                configuration.retry.delays,
+            )
+            for television in configuration.televisions
+        }
+        self.native_events = {
+            television.name: NativeEventCoordinator(
+                television,
+                self._publish_event,
+            )
+            for television in configuration.televisions
+        }
+        self.control = ControlApiServer(
+            self.control_file,
+            self.handle_request,
+            self.events,
+        )
+        self.discovery: SsdpPresenceDiscovery | None = None
+        self._host_addresses: dict[str, frozenset[str]] = {}
+        self._stop = asyncio.Event()
+        self._logger = logging.getLogger("samsung_tv_root.daemon")
+
+    async def run(self) -> None:
+        self._host_addresses = await self._resolve_hosts()
+        self.discovery = SsdpPresenceDiscovery(
+            tuple(
+                sorted(
+                    {
+                        address
+                        for addresses in self._host_addresses.values()
+                        for address in addresses
+                    }
+                )
+            ),
+            tuple(
+                television.device_id
+                for television in self.configuration.televisions
+                if television.device_id is not None
+            ),
+        )
+        loop = asyncio.get_running_loop()
+        for signal_number in (signal.SIGINT, signal.SIGTERM):
+            with contextlib.suppress(NotImplementedError):
+                loop.add_signal_handler(signal_number, self._stop.set)
+        await self.control.start()
+        try:
+            await self.discovery.start()
+            ready(f"Watching {len(self.lifecycles)} Samsung TV configuration(s)")
+            receive_task = asyncio.create_task(self._receive_presence())
+            lifecycle_tasks = tuple(
+                asyncio.create_task(self._watch_lifecycle(name, lifecycle))
+                for name, lifecycle in self.lifecycles.items()
+            )
+            try:
+                await self._stop.wait()
+            finally:
+                receive_task.cancel()
+                with contextlib.suppress(asyncio.CancelledError):
+                    await receive_task
+                for task in lifecycle_tasks:
+                    task.cancel()
+                for task in lifecycle_tasks:
+                    with contextlib.suppress(asyncio.CancelledError):
+                        await task
+        finally:
+            stopping("Closing Samsung TV controllers")
+            if self.discovery is not None:
+                await self.discovery.close()
+            for coordinator in self.native_events.values():
+                await coordinator.close()
+            for remote in self.remotes.values():
+                await remote.close()
+            for lifecycle in self.lifecycles.values():
+                await lifecycle.close()
+            await self.control.close()
+
+    async def handle_request(self, request: dict[str, Any]) -> dict[str, Any]:
+        action = request.get("action")
+        if action == "daemon.stop":
+            self._stop.set()
+            return {"stopping": True}
+        if action == "status":
+            return {
+                "televisions": {
+                    name: lifecycle.snapshot().to_dict()
+                    for name, lifecycle in sorted(self.lifecycles.items())
+                },
+                "remote_input": {
+                    name: remote.snapshot()
+                    for name, remote in sorted(self.remotes.items())
+                },
+                "native_events": {
+                    name: coordinator.snapshot()
+                    for name, coordinator in sorted(self.native_events.items())
+                },
+            }
+        television_name = request.get("television")
+        if not isinstance(television_name, str):
+            raise DaemonError("request requires a television name")
+        lifecycle = self.lifecycles.get(television_name)
+        if lifecycle is None:
+            raise DaemonError(f"unknown television: {television_name}")
+        capability = self.capabilities[television_name]
+        if action == "capabilities":
+            return {
+                "television": television_name,
+                "capabilities": capability.inventory(),
+            }
+        if action == "remote.status":
+            return {
+                "television": television_name,
+                "remote_input": self.remotes[television_name].snapshot(),
+            }
+        if action == "events.status":
+            return {
+                "television": television_name,
+                "native_events": self.native_events[television_name].snapshot(),
+            }
+        if action == "remote.devices":
+            connection = await lifecycle.acquire_now()
+            devices = await list_input_devices(connection)
+            return {
+                "television": television_name,
+                "devices": [device.to_dict() for device in devices],
+            }
+        if action == "root.acquire":
+            connection = await lifecycle.acquire_now()
+            return {
+                "television": television_name,
+                "identity": self._identity(connection.identity),
+            }
+        if action == "execute":
+            command = request.get("command")
+            timeout = request.get("timeout", 15.0)
+            if not isinstance(command, str) or not command:
+                raise DaemonError("execute requires a nonempty command")
+            if not isinstance(timeout, (int, float)) or not 0 < timeout <= 300:
+                raise DaemonError("execute timeout must be between 0 and 300 seconds")
+            connection = await lifecycle.acquire_now()
+            result = await connection.execute(command, float(timeout))
+            return {
+                "television": television_name,
+                "exit_code": result.exit_code,
+                "timed_out": result.timed_out,
+                "stdout": result.stdout,
+                "stderr": result.stderr,
+            }
+        if not isinstance(action, str):
+            raise DaemonError("request requires an action")
+        connection = await lifecycle.acquire_now()
+        response = await capability.handle(connection, action, request)
+        return {"television": television_name, **response}
+
+    async def _receive_presence(self) -> None:
+        while True:
+            if self.discovery is None:
+                raise DaemonError("SSDP discovery is not initialized")
+            event = await self.discovery.receive()
+            matches = self._matching_televisions(event)
+            if not matches:
+                continue
+            for television in matches:
+                lifecycle = self.lifecycles[television.name]
+                generation = event.boot_id or event.device_id or event.host
+                await lifecycle.observe_presence(
+                    event.host,
+                    generation,
+                    event.available,
+                )
+
+    async def _watch_lifecycle(
+        self,
+        name: str,
+        lifecycle: RootLifecycle,
+    ) -> None:
+        revision = -1
+        while True:
+            revision, state = await lifecycle.wait_for_change(revision)
+            self._publish_event(f"television.{name}.root", state.to_dict())
+            connection = lifecycle.lease.connection if lifecycle.lease else None
+            try:
+                await self.remotes[name].reconcile(connection, lifecycle.host)
+            except Exception as error:
+                self._publish_event(
+                    f"television.{name}.remote",
+                    {
+                        "event": "activation-failed",
+                        "television": name,
+                        "error": f"{type(error).__name__}: {error}",
+                    },
+                )
+            try:
+                await self.native_events[name].reconcile(connection, lifecycle.host)
+            except Exception as error:
+                self._publish_event(
+                    f"television.{name}.native",
+                    {
+                        "event": "activation-failed",
+                        "television": name,
+                        "error": f"{type(error).__name__}: {error}",
+                    },
+                )
+            status(self._status_text())
+
+    def _publish_event(self, topic: str, data: dict[str, Any]) -> None:
+        envelope = self.events.publish(topic, data)
+        self._logger.info(
+            "%s",
+            json.dumps(envelope.to_dict(), separators=(",", ":")),
+        )
+
+    def _matching_televisions(
+        self,
+        event: PresenceEvent,
+    ) -> tuple[TelevisionConfiguration, ...]:
+        result = []
+        for television in self.configuration.televisions:
+            if television.device_id is not None:
+                if event.device_id == television.device_id:
+                    result.append(television)
+                continue
+            if event.host in self._host_addresses.get(television.name, frozenset()):
+                result.append(television)
+        return tuple(result)
+
+    async def _resolve_hosts(self) -> dict[str, frozenset[str]]:
+        result: dict[str, frozenset[str]] = {}
+        loop = asyncio.get_running_loop()
+        for television in self.configuration.televisions:
+            try:
+                records = await loop.getaddrinfo(
+                    television.host,
+                    None,
+                    family=socket.AF_INET,
+                    type=socket.SOCK_STREAM,
+                )
+            except socket.gaierror as error:
+                raise DaemonError(
+                    f"cannot resolve {television.name} host {television.host}: {error}"
+                ) from error
+            result[television.name] = frozenset(str(record[4][0]) for record in records)
+        return result
+
+    def _status_text(self) -> str:
+        values = [
+            f"{name}={lifecycle.state}"
+            for name, lifecycle in sorted(self.lifecycles.items())
+        ]
+        return " ".join(values)
+
+    @staticmethod
+    def _identity(identity: Any) -> dict[str, Any]:
+        return {
+            "pid": identity.pid,
+            "uid": identity.uid,
+            "euid": identity.euid,
+            "gid": identity.gid,
+            "egid": identity.egid,
+            "effective_capabilities": identity.effective_capabilities,
+            "smack_label": identity.smack_label,
+        }

@@ -1,0 +1,7 @@
+2800:2800
+:admin00
+:PASSWORD
+admin:
+admin:admin
+root:root
+Admin:Admin

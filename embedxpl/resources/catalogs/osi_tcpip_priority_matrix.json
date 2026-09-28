@@ -1,0 +1,301 @@
+{
+  "notes": "Audit matrix for OSI and TCP/IP coverage across routers, switches, taps, fw and ngfw. Protocols marked as inferred are detected by module path/name/description token hits.",
+  "environments": [
+    {
+      "name": "ISP",
+      "priority_order": "P1,P2,P3",
+      "focus": "CPE and provider edge management plane, service availability, routing control and subscriber provisioning."
+    },
+    {
+      "name": "Corporate",
+      "priority_order": "P1,P2,P3",
+      "focus": "Enterprise access/distribution/core, segmentation, identity-aware admin access and telemetry."
+    },
+    {
+      "name": "OT_IIoT",
+      "priority_order": "P1,P2,P3",
+      "focus": "Availability first, deterministic network behavior, IT/OT boundary control and secure remote management."
+    }
+  ],
+  "layers": [
+    {
+      "osi_layer": "L1",
+      "tcpip_layer": "Link",
+      "layer_name": "Physical",
+      "operations": [
+        "link state and capture integrity checks",
+        "duplex, speed and media mismatch evidence"
+      ],
+      "attack_matrix": [
+        "link_disruption_or_flap_induction",
+        "tap_or_span_blind_spot_abuse",
+        "physical_plane_availability_degradation"
+      ],
+      "test_matrix": [
+        "link_state_validation",
+        "duplex_speed_mismatch_detection",
+        "capture_integrity_verification"
+      ],
+      "protocols": [
+        {
+          "name": "ethernet",
+          "tokens": ["ethernet", "eth"],
+          "priority_by_env": {"ISP": "P2", "Corporate": "P2", "OT_IIoT": "P2"}
+        }
+      ]
+    },
+    {
+      "osi_layer": "L2",
+      "tcpip_layer": "Link",
+      "layer_name": "Data Link",
+      "operations": [
+        "vlan, switching and topology discovery",
+        "misconfiguration and weak-plane validation"
+      ],
+      "attack_matrix": [
+        "vlan_hopping_and_tagging_abuse",
+        "arp_spoofing_or_poisoning",
+        "stp_manipulation_or_loop_induction",
+        "mac_table_exhaustion_scenarios",
+        "wpa_wpa2_offline_handshake_crack",
+        "wireless_credential_harvest_from_pcap",
+        "rogue_ap_detection_via_pcap"
+      ],
+      "test_matrix": [
+        "vlan_segmentation_validation",
+        "arp_integrity_checks",
+        "stp_lacp_hardening_review",
+        "l2_discovery_surface_assessment",
+        "pcap_ap_station_enumeration",
+        "pcap_handshake_completeness_check",
+        "pcap_cleartext_credential_extraction"
+      ],
+      "protocols": [
+        {
+          "name": "arp",
+          "tokens": ["arp"],
+          "priority_by_env": {"ISP": "P1", "Corporate": "P1", "OT_IIoT": "P1"}
+        },
+        {
+          "name": "vlan_8021q_qinq",
+          "tokens": ["vlan", "802.1q", "qinq"],
+          "priority_by_env": {"ISP": "P1", "Corporate": "P1", "OT_IIoT": "P1"}
+        },
+        {
+          "name": "802.11_wifi",
+          "tokens": ["pcap", "802.11", "wifi", "wireless", "dot11", "beacon", "handshake", "eapol", "wpa", "wpa2", "ssid", "bssid"],
+          "attack_vectors": ["offline_wpa_crack", "handshake_capture_replay", "credential_harvest"],
+          "test_types": ["ap_enumeration", "station_mapping", "handshake_extraction", "cleartext_sniffing"],
+          "priority_by_env": {"ISP": "P2", "Corporate": "P1", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "stp_rstp_mstp",
+          "tokens": ["stp", "rstp", "mstp"],
+          "priority_by_env": {"ISP": "P2", "Corporate": "P1", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "lacp",
+          "tokens": ["lacp", "802.3ad"],
+          "priority_by_env": {"ISP": "P2", "Corporate": "P1", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "lldp",
+          "tokens": ["lldp"],
+          "priority_by_env": {"ISP": "P2", "Corporate": "P2", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "pppoe",
+          "tokens": ["pppoe"],
+          "priority_by_env": {"ISP": "P1", "Corporate": "P3", "OT_IIoT": "P3"}
+        }
+      ]
+    },
+    {
+      "osi_layer": "L3",
+      "tcpip_layer": "Internet",
+      "layer_name": "Network",
+      "operations": [
+        "network reachability and routing surface checks",
+        "dual stack behavior and control-plane exposure checks"
+      ],
+      "attack_matrix": [
+        "route_injection_or_hijack_paths",
+        "icmp_or_control_plane_abuse",
+        "ipv6_transition_misconfig_exposure"
+      ],
+      "test_matrix": [
+        "routing_surface_enumeration",
+        "dual_stack_consistency_checks",
+        "control_plane_exposure_validation"
+      ],
+      "protocols": [
+        {
+          "name": "ipv4_ipv6",
+          "tokens": ["ipv4", "ipv6"],
+          "priority_by_env": {"ISP": "P1", "Corporate": "P1", "OT_IIoT": "P1"}
+        },
+        {
+          "name": "icmp_icmpv6",
+          "tokens": ["icmp", "icmpv6"],
+          "priority_by_env": {"ISP": "P1", "Corporate": "P1", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "ospf",
+          "tokens": ["ospf"],
+          "priority_by_env": {"ISP": "P2", "Corporate": "P2", "OT_IIoT": "P3"}
+        },
+        {
+          "name": "bgp",
+          "tokens": ["bgp"],
+          "priority_by_env": {"ISP": "P2", "Corporate": "P3", "OT_IIoT": "P3"}
+        }
+      ]
+    },
+    {
+      "osi_layer": "L4",
+      "tcpip_layer": "Transport",
+      "layer_name": "Transport",
+      "operations": [
+        "tcp and udp service exposure checks",
+        "session behavior and handshake error diagnostics"
+      ],
+      "attack_matrix": [
+        "service_enumeration_and_port_abuse",
+        "session_exhaustion_or_flood_paths",
+        "transport_timeout_and_retry_abuse"
+      ],
+      "test_matrix": [
+        "tcp_udp_surface_mapping",
+        "session_stability_validation",
+        "timeout_retry_behavior_checks"
+      ],
+      "protocols": [
+        {
+          "name": "tcp",
+          "tokens": ["tcp"],
+          "priority_by_env": {"ISP": "P1", "Corporate": "P1", "OT_IIoT": "P1"}
+        },
+        {
+          "name": "udp",
+          "tokens": ["udp"],
+          "priority_by_env": {"ISP": "P1", "Corporate": "P1", "OT_IIoT": "P1"}
+        }
+      ]
+    },
+    {
+      "osi_layer": "L5-L7",
+      "tcpip_layer": "Application",
+      "layer_name": "Session/Presentation/Application",
+      "operations": [
+        "management-plane auth validation",
+        "weak/default credential checks and protocol-specific attack paths"
+      ],
+      "attack_matrix": [
+        "default_credential_and_bruteforce_paths",
+        "auth_bypass_and_session_abuse",
+        "protocol_parser_and_input_injection_paths",
+        "management_api_and_header_abuse",
+        "snmp_read_write_and_trap_plane_misuse"
+      ],
+      "test_matrix": [
+        "credential_validation_matrix",
+        "auth_method_coverage_checks",
+        "protocol_specific_exploitability_checks",
+        "snmpv2_snmpv3_trap_operational_validation",
+        "api_and_web_management_flow_validation"
+      ],
+      "protocols": [
+        {
+          "name": "dns",
+          "tokens": ["dns"],
+          "priority_by_env": {"ISP": "P1", "Corporate": "P1", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "dhcp",
+          "tokens": ["dhcp"],
+          "priority_by_env": {"ISP": "P1", "Corporate": "P1", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "ntp_ptp",
+          "tokens": ["ntp", "ptp"],
+          "priority_by_env": {"ISP": "P1", "Corporate": "P2", "OT_IIoT": "P1"}
+        },
+        {
+          "name": "snmp_snmpv3",
+          "tokens": ["snmp", "snmpv3", "snmp_trap", "snmptrap"],
+          "priority_by_env": {"ISP": "P1", "Corporate": "P1", "OT_IIoT": "P1"}
+        },
+        {
+          "name": "ssh",
+          "tokens": ["ssh", "ssh_auth_keys"],
+          "priority_by_env": {"ISP": "P1", "Corporate": "P1", "OT_IIoT": "P1"}
+        },
+        {
+          "name": "telnet",
+          "tokens": ["telnet"],
+          "priority_by_env": {"ISP": "P2", "Corporate": "P3", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "ftp_ftps_sftp",
+          "tokens": ["ftp", "ftps", "sftp"],
+          "priority_by_env": {"ISP": "P2", "Corporate": "P2", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "http_https_api",
+          "tokens": ["http", "https", "api", "webinterface", "bearer", "header"],
+          "priority_by_env": {"ISP": "P1", "Corporate": "P1", "OT_IIoT": "P1"}
+        },
+        {
+          "name": "radius_tacacs",
+          "tokens": ["radius", "tacacs"],
+          "priority_by_env": {"ISP": "P3", "Corporate": "P2", "OT_IIoT": "P3"}
+        },
+        {
+          "name": "tr069_cwmp",
+          "tokens": ["tr-069", "cwmp", "acs"],
+          "priority_by_env": {"ISP": "P2", "Corporate": "P3", "OT_IIoT": "P3"}
+        },
+        {
+          "name": "syslog",
+          "tokens": ["syslog"],
+          "priority_by_env": {"ISP": "P2", "Corporate": "P1", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "modbus_tcp",
+          "tokens": ["modbus", "modbus/tcp"],
+          "priority_by_env": {"ISP": "P3", "Corporate": "P3", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "dnp3",
+          "tokens": ["dnp3"],
+          "priority_by_env": {"ISP": "P3", "Corporate": "P3", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "opc_ua",
+          "tokens": ["opc ua", "opcua"],
+          "priority_by_env": {"ISP": "P3", "Corporate": "P3", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "mqtt",
+          "tokens": ["mqtt"],
+          "priority_by_env": {"ISP": "P3", "Corporate": "P3", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "bacnet_ip",
+          "tokens": ["bacnet"],
+          "priority_by_env": {"ISP": "P3", "Corporate": "P3", "OT_IIoT": "P2"}
+        },
+        {
+          "name": "profinet_ethernet",
+          "tokens": ["profinet"],
+          "priority_by_env": {"ISP": "P3", "Corporate": "P3", "OT_IIoT": "P2"}
+        }
+      ]
+    }
+  ],
+  "priority_definitions": {
+    "P1": "Critical first wave: management plane and service base protocols with immediate operational risk.",
+    "P2": "Second wave: control and environment-specific protocols with medium operational impact.",
+    "P3": "Third wave: legacy or lower-frequency protocols tracked until full closure."
+  }
+}

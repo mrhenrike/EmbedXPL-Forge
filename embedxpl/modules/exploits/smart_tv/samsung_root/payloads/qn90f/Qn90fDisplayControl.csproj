@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>Qn90fDisplayControl</AssemblyName>
+    <UseAppHost>false</UseAppHost>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <Deterministic>true</Deterministic>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Qn90fDisplayControl.cs" />
+    <Compile Include="Qn90fDisplayNative.cs" />
+  </ItemGroup>
+</Project>

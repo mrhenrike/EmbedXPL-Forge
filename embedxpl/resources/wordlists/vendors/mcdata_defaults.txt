@@ -1,0 +1,2 @@
+Administrator:password
+McdataSE:redips

@@ -1,0 +1,6 @@
+admin:admin
+admin:sky
+admin:unknown
+admin:epicrouter
+Menara:Menara
+root:1234

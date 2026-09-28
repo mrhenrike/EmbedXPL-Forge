@@ -1,0 +1,12 @@
+NOLOGIN:NOLOGIN
+NOLOGIN:admin
+NOLOGIN:password
+NOLOGIN:password1
+NOLOGIN:telus
+NOLOGIN:unknown
+admin:NOLOGIN
+admin:admin
+admin:password
+admin:password1
+admin:telus
+admin:unknown

@@ -1,0 +1,124 @@
+using System;
+using System.Runtime.InteropServices;
+using System.Threading;
+
+internal sealed class MaliCommitProbe
+{
+    private const int Pages = 32;
+    private const int TargetPage = 0;
+    private const uint MarkerBefore = 0x636f6d31;
+    private const uint MarkerAfter = 0x636f6d32;
+
+    private readonly int fileDescriptor;
+
+    internal MaliCommitProbe(int fileDescriptor)
+    {
+        this.fileDescriptor = fileDescriptor;
+    }
+
+    internal bool Run(EglComputeContext compute)
+    {
+        MaliNative.MemAlloc allocation = new MaliNative.MemAlloc
+        {
+            VaPagesOrFlags = Pages,
+            CommitPagesOrGpuVa = Pages,
+            Extension = 0,
+            Flags = MaliNative.BaseMemProtCpuRead
+                | MaliNative.BaseMemProtCpuWrite
+                | MaliNative.BaseMemProtGpuRead
+                | MaliNative.BaseMemProtGpuWrite
+                | MaliNative.BaseMemSameVa,
+        };
+        MaliNative.RequireSuccess(
+            "commit_probe_mem_alloc",
+            MaliNative.IoctlMemAlloc(
+                fileDescriptor,
+                MaliNative.KbaseIoctlMemAlloc,
+                ref allocation));
+
+        ulong mmapHandle = allocation.CommitPagesOrGpuVa;
+        UIntPtr length = new UIntPtr(Pages * MaliNative.PageSize);
+        IntPtr mapping = MaliNative.Mmap(
+            IntPtr.Zero,
+            length,
+            MaliNative.ProtectRead | MaliNative.ProtectWrite,
+            MaliNative.MapShared,
+            fileDescriptor,
+            unchecked((long)mmapHandle));
+        if (mapping == new IntPtr(-1))
+        {
+            throw new InvalidOperationException(
+                "commit probe mmap failed errno=" + Marshal.GetLastWin32Error());
+        }
+
+        ulong gpuAddress = MaliNative.PointerValue(mapping);
+        ulong targetGpuAddress = gpuAddress
+            + ((ulong)TargetPage * MaliNative.PageSize);
+        int targetPageOffset = TargetPage * MaliNative.PageSize;
+        IntPtr targetPageMapping = IntPtr.Add(mapping, targetPageOffset);
+        Console.WriteLine("commit_probe_gpu_address=0x{0:x}", gpuAddress);
+        Console.WriteLine("commit_probe_target_page=0x{0:x}", targetGpuAddress);
+
+        try
+        {
+            Marshal.WriteInt32(
+                mapping,
+                targetPageOffset,
+                unchecked((int)MarkerBefore));
+            Flush(targetPageMapping, "commit_probe_flush_before");
+            uint observedBefore = compute.Read32(targetGpuAddress);
+            Console.WriteLine("commit_probe_before=0x{0:x8}", observedBefore);
+
+            Commit(gpuAddress, 0, "commit_probe_shrink");
+            Commit(gpuAddress, Pages, "commit_probe_regrow");
+
+            Marshal.WriteInt32(
+                mapping,
+                targetPageOffset,
+                unchecked((int)MarkerAfter));
+            Flush(targetPageMapping, "commit_probe_flush_after");
+            uint observedAfter = compute.Read32(targetGpuAddress);
+            Console.WriteLine("commit_probe_after=0x{0:x8}", observedAfter);
+
+            bool passed = observedBefore == MarkerBefore
+                && observedAfter == MarkerAfter;
+            Console.WriteLine("mem_commit_cycle={0}", passed ? "pass" : "fail");
+            return passed;
+        }
+        finally
+        {
+            MaliNative.RequireSuccess(
+                "commit_probe_munmap",
+                MaliNative.Munmap(mapping, length));
+        }
+    }
+
+    private void Commit(ulong gpuAddress, ulong pages, string operation)
+    {
+        MaliNative.MemCommit request = new MaliNative.MemCommit
+        {
+            GpuAddress = gpuAddress,
+            Pages = pages,
+        };
+        MaliNative.RequireSuccess(
+            operation,
+            MaliNative.IoctlMemCommit(
+                fileDescriptor,
+                MaliNative.KbaseIoctlMemCommit,
+                ref request));
+    }
+
+    private static void Flush(IntPtr mapping, string operation)
+    {
+        Thread.MemoryBarrier();
+        int result = MaliNative.Msync(
+            mapping,
+            new UIntPtr(MaliNative.PageSize),
+            MaliNative.MsSync);
+        Console.WriteLine(
+            "{0} result={1} errno={2}",
+            operation,
+            result,
+            result < 0 ? Marshal.GetLastWin32Error() : 0);
+    }
+}

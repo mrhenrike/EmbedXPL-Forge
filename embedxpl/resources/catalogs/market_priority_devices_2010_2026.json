@@ -1,0 +1,2744 @@
+{
+  "notes": "Expanded with switches (SOHO/SMB/enterprise/DC), firewalls, NGFW, UTM and yearly mappings.",
+  "minimum_targets_per_year": {
+    "brazil_domestic": 10,
+    "brazil_corporate": 10,
+    "global": 5
+  },
+  "device_pool": [
+    {
+      "id": "tplink_deco_m4",
+      "vendor": "TP-Link",
+      "product": "Deco M4",
+      "segment": "router-mesh",
+      "match_keywords": [
+        "deco m4"
+      ]
+    },
+    {
+      "id": "tplink_archer_ax73",
+      "vendor": "TP-Link",
+      "product": "Archer AX73",
+      "segment": "router-home",
+      "match_keywords": [
+        "archer ax73",
+        "ax73",
+        "archerax73",
+        "ax5400",
+        "ax-5400"
+      ]
+    },
+    {
+      "id": "tplink_archer_ax12",
+      "vendor": "TP-Link",
+      "product": "Archer AX12",
+      "segment": "router-home",
+      "match_keywords": [
+        "archer ax12",
+        "ax12"
+      ]
+    },
+    {
+      "id": "tplink_archer_ax10",
+      "vendor": "TP-Link",
+      "product": "Archer AX10",
+      "segment": "router-home",
+      "match_keywords": [
+        "archer ax10",
+        "ax10"
+      ]
+    },
+    {
+      "id": "tplink_archer_c6",
+      "vendor": "TP-Link",
+      "product": "Archer C6",
+      "segment": "router-home",
+      "match_keywords": [
+        "archer c6",
+        "c6",
+        "archerc6",
+        "ac1200",
+        "ac-1200"
+      ]
+    },
+    {
+      "id": "tplink_archer_c7",
+      "vendor": "TP-Link",
+      "product": "Archer C7",
+      "segment": "router-home",
+      "match_keywords": [
+        "archer c7",
+        "c7",
+        "archerc7",
+        "ac1750",
+        "ac-1750"
+      ]
+    },
+    {
+      "id": "tplink_archer_c9",
+      "vendor": "TP-Link",
+      "product": "Archer C9",
+      "segment": "router-home",
+      "match_keywords": [
+        "archer c9",
+        "c9"
+      ]
+    },
+    {
+      "id": "tplink_archer_c20",
+      "vendor": "TP-Link",
+      "product": "Archer C20",
+      "segment": "router-home",
+      "match_keywords": [
+        "archer c20",
+        "c20"
+      ]
+    },
+    {
+      "id": "tplink_archer_c60",
+      "vendor": "TP-Link",
+      "product": "Archer C60",
+      "segment": "router-home",
+      "match_keywords": [
+        "archer c60",
+        "c60"
+      ]
+    },
+    {
+      "id": "tplink_archer_c80",
+      "vendor": "TP-Link",
+      "product": "Archer C80",
+      "segment": "router-home",
+      "match_keywords": [
+        "archer c80",
+        "c80"
+      ]
+    },
+    {
+      "id": "tplink_tl_wr940n",
+      "vendor": "TP-Link",
+      "product": "TL-WR940N",
+      "segment": "router-home",
+      "match_keywords": [
+        "tl-wr940n",
+        "wr940n",
+        "tlwr940n",
+        "wr940",
+        "tl wr940"
+      ]
+    },
+    {
+      "id": "tplink_tl_wr840n",
+      "vendor": "TP-Link",
+      "product": "TL-WR840N",
+      "segment": "router-home",
+      "match_keywords": [
+        "tl-wr840n",
+        "wr840n",
+        "tlwr840n",
+        "wr840",
+        "tl wr840"
+      ]
+    },
+    {
+      "id": "intelbras_action_rg1200",
+      "vendor": "Intelbras",
+      "product": "Action RG 1200",
+      "segment": "router-home",
+      "match_keywords": [
+        "action rg 1200",
+        "rg 1200"
+      ]
+    },
+    {
+      "id": "intelbras_ax1500",
+      "vendor": "Intelbras",
+      "product": "AX 1500",
+      "segment": "router-home",
+      "match_keywords": [
+        "intelbras ax 1500",
+        "ax 1500"
+      ]
+    },
+    {
+      "id": "intelbras_rf1200",
+      "vendor": "Intelbras",
+      "product": "RF 1200",
+      "segment": "router-home",
+      "match_keywords": [
+        "rf 1200"
+      ]
+    },
+    {
+      "id": "huawei_ax3_dual_core",
+      "vendor": "Huawei",
+      "product": "AX3 Dual Core",
+      "segment": "router-home",
+      "match_keywords": [
+        "huawei ax3",
+        "ax3 dual core"
+      ]
+    },
+    {
+      "id": "huawei_ax2s",
+      "vendor": "Huawei",
+      "product": "AX2S",
+      "segment": "router-home",
+      "match_keywords": [
+        "huawei ax2s",
+        "ax2s"
+      ]
+    },
+    {
+      "id": "mercusys_mr60x",
+      "vendor": "Mercusys",
+      "product": "MR60X",
+      "segment": "router-home",
+      "match_keywords": [
+        "mr60x"
+      ]
+    },
+    {
+      "id": "mercusys_mr80x",
+      "vendor": "Mercusys",
+      "product": "MR80X",
+      "segment": "router-home",
+      "match_keywords": [
+        "mr80x"
+      ]
+    },
+    {
+      "id": "google_nest_wifi",
+      "vendor": "Google",
+      "product": "Nest Wi-Fi",
+      "segment": "router-mesh",
+      "match_keywords": [
+        "nest wifi",
+        "google wifi"
+      ]
+    },
+    {
+      "id": "asus_rt_ac86u",
+      "vendor": "ASUS",
+      "product": "RT-AC86U",
+      "segment": "router-home",
+      "match_keywords": [
+        "rt-ac86u",
+        "ac86u"
+      ]
+    },
+    {
+      "id": "asus_rt_ax88u",
+      "vendor": "ASUS",
+      "product": "RT-AX88U",
+      "segment": "router-corporate",
+      "match_keywords": [
+        "rt-ax88u",
+        "ax88u"
+      ]
+    },
+    {
+      "id": "asus_ax5400",
+      "vendor": "ASUS",
+      "product": "AX5400",
+      "segment": "router-home",
+      "match_keywords": [
+        "asus ax5400"
+      ]
+    },
+    {
+      "id": "dlink_dir819",
+      "vendor": "D-Link",
+      "product": "DIR-819",
+      "segment": "router-home",
+      "match_keywords": [
+        "dir-819",
+        "dir819"
+      ]
+    },
+    {
+      "id": "dlink_dir822",
+      "vendor": "D-Link",
+      "product": "DIR-822",
+      "segment": "router-home",
+      "match_keywords": [
+        "dir-822",
+        "dir822"
+      ]
+    },
+    {
+      "id": "dlink_dir655",
+      "vendor": "D-Link",
+      "product": "DIR-655",
+      "segment": "router-home",
+      "match_keywords": [
+        "dir-655",
+        "dir655"
+      ]
+    },
+    {
+      "id": "unifi_udr",
+      "vendor": "Ubiquiti",
+      "product": "UniFi Dream Router",
+      "segment": "router-corporate",
+      "match_keywords": [
+        "dream router",
+        "udr",
+        "unifi"
+      ]
+    },
+    {
+      "id": "unifi_uxg_ultra",
+      "vendor": "Ubiquiti",
+      "product": "Cloud Gateway Ultra",
+      "segment": "router-corporate",
+      "match_keywords": [
+        "cloud gateway ultra",
+        "uxg"
+      ]
+    },
+    {
+      "id": "mikrotik_rb3011",
+      "vendor": "MikroTik",
+      "product": "RB3011UiAS-RM",
+      "segment": "router-corporate",
+      "match_keywords": [
+        "rb3011",
+        "mikrotik rb3011"
+      ]
+    },
+    {
+      "id": "mikrotik_rb4011",
+      "vendor": "MikroTik",
+      "product": "RB4011iGS+RM",
+      "segment": "router-corporate",
+      "match_keywords": [
+        "rb4011",
+        "mikrotik rb4011"
+      ]
+    },
+    {
+      "id": "mikrotik_hap_ac2",
+      "vendor": "MikroTik",
+      "product": "hAP ac2",
+      "segment": "router-home",
+      "match_keywords": [
+        "hap ac2",
+        "mikrotik hap"
+      ]
+    },
+    {
+      "id": "mikrotik_crs326",
+      "vendor": "MikroTik",
+      "product": "CRS326",
+      "segment": "switch-corporate",
+      "match_keywords": [
+        "crs326"
+      ]
+    },
+    {
+      "id": "cisco_isr4331",
+      "vendor": "Cisco",
+      "product": "ISR 4331",
+      "segment": "router-corporate",
+      "match_keywords": [
+        "isr 4331"
+      ]
+    },
+    {
+      "id": "cisco_c1111",
+      "vendor": "Cisco",
+      "product": "C1111-8P",
+      "segment": "router-corporate",
+      "match_keywords": [
+        "c1111"
+      ]
+    },
+    {
+      "id": "fortigate_60f",
+      "vendor": "Fortinet",
+      "product": "FortiGate 60F",
+      "segment": "ngfw-corporate",
+      "match_keywords": [
+        "fortigate 60f",
+        "fg-60f"
+      ]
+    },
+    {
+      "id": "paloalto_pa220",
+      "vendor": "Palo Alto Networks",
+      "product": "PA-220",
+      "segment": "ngfw-corporate",
+      "match_keywords": [
+        "pa-220",
+        "palo alto pa220"
+      ]
+    },
+    {
+      "id": "juniper_srx300",
+      "vendor": "Juniper",
+      "product": "SRX300",
+      "segment": "ngfw-corporate",
+      "match_keywords": [
+        "srx300"
+      ]
+    },
+    {
+      "id": "aruba_2930f",
+      "vendor": "Aruba",
+      "product": "2930F",
+      "segment": "switch-corporate",
+      "match_keywords": [
+        "2930f",
+        "aruba 2930f"
+      ]
+    },
+    {
+      "id": "netgear_xr500",
+      "vendor": "Netgear",
+      "product": "Nighthawk Pro Gaming XR500",
+      "segment": "router-home",
+      "match_keywords": [
+        "xr500"
+      ]
+    },
+    {
+      "id": "netgear_wndr3700",
+      "vendor": "Netgear",
+      "product": "WNDR3700",
+      "segment": "router-home",
+      "match_keywords": [
+        "wndr3700"
+      ]
+    },
+    {
+      "id": "netgear_wndr3800",
+      "vendor": "Netgear",
+      "product": "WNDR3800",
+      "segment": "router-home",
+      "match_keywords": [
+        "wndr3800"
+      ]
+    },
+    {
+      "id": "netgear_wndr4000",
+      "vendor": "Netgear",
+      "product": "WNDR4000",
+      "segment": "router-home",
+      "match_keywords": [
+        "wndr4000"
+      ]
+    },
+    {
+      "id": "linksys_wrt610n",
+      "vendor": "Linksys",
+      "product": "WRT610N",
+      "segment": "router-home",
+      "match_keywords": [
+        "wrt610n"
+      ]
+    },
+    {
+      "id": "linksys_e3000",
+      "vendor": "Linksys",
+      "product": "E3000",
+      "segment": "router-home",
+      "match_keywords": [
+        "e3000"
+      ]
+    },
+    {
+      "id": "linksys_e3200",
+      "vendor": "Linksys",
+      "product": "E3200",
+      "segment": "router-home",
+      "match_keywords": [
+        "e3200"
+      ]
+    },
+    {
+      "id": "linksys_e4200",
+      "vendor": "Linksys",
+      "product": "E4200",
+      "segment": "router-home",
+      "match_keywords": [
+        "e4200"
+      ]
+    },
+    {
+      "id": "trendnet_tew691gr",
+      "vendor": "Trendnet",
+      "product": "TEW-691GR",
+      "segment": "router-home",
+      "match_keywords": [
+        "tew-691gr"
+      ]
+    },
+    {
+      "id": "trendnet_tew692gr",
+      "vendor": "Trendnet",
+      "product": "TEW-692GR",
+      "segment": "router-home",
+      "match_keywords": [
+        "tew-692gr"
+      ]
+    },
+    {
+      "id": "belkin_n750_db",
+      "vendor": "Belkin",
+      "product": "N750 DB",
+      "segment": "router-home",
+      "match_keywords": [
+        "n750 db",
+        "belkin n750"
+      ]
+    },
+    {
+      "id": "airport_extreme_2010",
+      "vendor": "Apple",
+      "product": "AirPort Extreme 4th Gen",
+      "segment": "router-home",
+      "match_keywords": [
+        "airport extreme"
+      ]
+    },
+    {
+      "id": "airport_extreme_2011",
+      "vendor": "Apple",
+      "product": "AirPort Extreme 5th Gen",
+      "segment": "router-home",
+      "match_keywords": [
+        "airport extreme 5"
+      ]
+    },
+    {
+      "id": "draytek_vigor2110n",
+      "vendor": "DrayTek",
+      "product": "Vigor2110n",
+      "segment": "router-corporate",
+      "match_keywords": [
+        "vigor2110n"
+      ]
+    },
+    {
+      "id": "asus_rt_n13u",
+      "vendor": "ASUS",
+      "product": "RT-N13U",
+      "segment": "router-home",
+      "match_keywords": [
+        "rt-n13u"
+      ]
+    },
+    {
+      "id": "asus_rt_n56u",
+      "vendor": "ASUS",
+      "product": "RT-N56U",
+      "segment": "router-home",
+      "match_keywords": [
+        "rt-n56u"
+      ]
+    },
+    {
+      "id": "asus_rt_n66u",
+      "vendor": "ASUS",
+      "product": "RT-N66U",
+      "segment": "router-home",
+      "match_keywords": [
+        "rt-n66u"
+      ]
+    },
+    {
+      "id": "tplink_wr1043nd",
+      "vendor": "TP-Link",
+      "product": "TL-WR1043ND",
+      "segment": "router-home",
+      "match_keywords": [
+        "wr1043nd",
+        "tl-wr1043nd",
+        "tlwr1043nd",
+        "wr1043",
+        "tl wr1043"
+      ]
+    },
+    {
+      "id": "tenda_ac23",
+      "vendor": "Tenda",
+      "product": "AC23",
+      "segment": "router-home",
+      "match_keywords": [
+        "ac23"
+      ]
+    },
+    {
+      "id": "eero_max_7",
+      "vendor": "eero",
+      "product": "Max 7",
+      "segment": "router-mesh",
+      "match_keywords": [
+        "eero max 7"
+      ]
+    },
+    {
+      "id": "tplink_archer_be550",
+      "vendor": "TP-Link",
+      "product": "Archer BE550",
+      "segment": "router-home",
+      "match_keywords": [
+        "be550"
+      ]
+    },
+    {
+      "id": "tplink_archer_be220",
+      "vendor": "TP-Link",
+      "product": "Archer BE220",
+      "segment": "router-home",
+      "match_keywords": [
+        "be220"
+      ]
+    },
+    {
+      "id": "tplink_archer_be900",
+      "vendor": "TP-Link",
+      "product": "Archer BE900",
+      "segment": "router-home",
+      "match_keywords": [
+        "be900"
+      ]
+    },
+    {
+      "id": "tplink_archer_axe75",
+      "vendor": "TP-Link",
+      "product": "Archer AXE75",
+      "segment": "router-home",
+      "match_keywords": [
+        "axe75"
+      ]
+    },
+    {
+      "id": "tplink_deco_be85",
+      "vendor": "TP-Link",
+      "product": "Deco BE85",
+      "segment": "router-mesh",
+      "match_keywords": [
+        "deco be85"
+      ]
+    },
+    {
+      "id": "asus_rog_be98",
+      "vendor": "ASUS",
+      "product": "ROG Rapture GT-BE98 Pro",
+      "segment": "router-home",
+      "match_keywords": [
+        "gt-be98",
+        "be98 pro"
+      ]
+    },
+    {
+      "id": "glinet_flint3",
+      "vendor": "GL.iNet",
+      "product": "Flint 3 (GL-BE9300)",
+      "segment": "router-home",
+      "match_keywords": [
+        "flint 3",
+        "gl-be9300"
+      ]
+    },
+    {
+      "id": "openwrt_19_07_generic",
+      "vendor": "OpenWrt",
+      "product": "OpenWrt 19.07 Generic Targets",
+      "segment": "router-firmware",
+      "match_keywords": [
+        "openwrt 19.07",
+        "openwrt1907",
+        "openwrt 19",
+        "lede",
+        "open wrt"
+      ]
+    },
+    {
+      "id": "openwrt_21_02_generic",
+      "vendor": "OpenWrt",
+      "product": "OpenWrt 21.02 Generic Targets",
+      "segment": "router-firmware",
+      "match_keywords": [
+        "openwrt 21.02",
+        "openwrt2102",
+        "openwrt 21",
+        "open wrt"
+      ]
+    },
+    {
+      "id": "openwrt_22_03_generic",
+      "vendor": "OpenWrt",
+      "product": "OpenWrt 22.03 Generic Targets",
+      "segment": "router-firmware",
+      "match_keywords": [
+        "openwrt 22.03",
+        "openwrt2203",
+        "openwrt 22",
+        "open wrt"
+      ]
+    },
+    {
+      "id": "openwrt_23_05_generic",
+      "vendor": "OpenWrt",
+      "product": "OpenWrt 23.05 Generic Targets",
+      "segment": "router-firmware",
+      "match_keywords": [
+        "openwrt 23.05",
+        "openwrt2305",
+        "openwrt 23",
+        "open wrt"
+      ]
+    },
+    {
+      "id": "openwrt_x86_64",
+      "vendor": "OpenWrt",
+      "product": "OpenWrt x86_64 Virtual Router",
+      "segment": "router-virtual",
+      "match_keywords": [
+        "openwrt x86",
+        "openwrt x86_64",
+        "openwrt vm",
+        "open wrt x86"
+      ]
+    },
+    {
+      "id": "tplink_ls1005g",
+      "vendor": "TP-Link",
+      "product": "LS1005G",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "ls1005g",
+        "ls1005"
+      ]
+    },
+    {
+      "id": "tplink_tl_sg108",
+      "vendor": "TP-Link",
+      "product": "TL-SG108",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "tl-sg108",
+        "tlsg108",
+        "sg108"
+      ]
+    },
+    {
+      "id": "tplink_ls1008g",
+      "vendor": "TP-Link",
+      "product": "LS1008G",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "ls1008g"
+      ]
+    },
+    {
+      "id": "tplink_tl_sg1016d",
+      "vendor": "TP-Link",
+      "product": "TL-SG1016D",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "tl-sg1016d",
+        "sg1016d",
+        "sg1016"
+      ]
+    },
+    {
+      "id": "tplink_tl_sg1024d",
+      "vendor": "TP-Link",
+      "product": "TL-SG1024D",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "tl-sg1024d",
+        "sg1024d",
+        "sg1024"
+      ]
+    },
+    {
+      "id": "tplink_tl_sg105e",
+      "vendor": "TP-Link",
+      "product": "TL-SG105E",
+      "segment": "switch-smart",
+      "match_keywords": [
+        "tl-sg105e",
+        "sg105e"
+      ]
+    },
+    {
+      "id": "tplink_tl_sg108e",
+      "vendor": "TP-Link",
+      "product": "TL-SG108E",
+      "segment": "switch-smart",
+      "match_keywords": [
+        "tl-sg108e",
+        "sg108e"
+      ]
+    },
+    {
+      "id": "tplink_tl_sg116e",
+      "vendor": "TP-Link",
+      "product": "TL-SG116E",
+      "segment": "switch-smart",
+      "match_keywords": [
+        "tl-sg116e",
+        "sg116e"
+      ]
+    },
+    {
+      "id": "tplink_tl_sg2008",
+      "vendor": "TP-Link",
+      "product": "TL-SG2008",
+      "segment": "switch-smart",
+      "match_keywords": [
+        "tl-sg2008",
+        "sg2008"
+      ]
+    },
+    {
+      "id": "tplink_tl_sg1016de",
+      "vendor": "TP-Link",
+      "product": "TL-SG1016DE",
+      "segment": "switch-smart",
+      "match_keywords": [
+        "tl-sg1016de",
+        "sg1016de"
+      ]
+    },
+    {
+      "id": "tplink_tl_sg3428",
+      "vendor": "TP-Link",
+      "product": "TL-SG3428 JetStream",
+      "segment": "switch-corporate",
+      "match_keywords": [
+        "tl-sg3428",
+        "sg3428",
+        "jetstream"
+      ]
+    },
+    {
+      "id": "tplink_ls108gp",
+      "vendor": "TP-Link",
+      "product": "LS108GP PoE+",
+      "segment": "switch-poe",
+      "match_keywords": [
+        "ls108gp"
+      ]
+    },
+    {
+      "id": "tplink_tl_sg105mpe",
+      "vendor": "TP-Link",
+      "product": "TL-SG105MPE PoE+",
+      "segment": "switch-poe",
+      "match_keywords": [
+        "tl-sg105mpe",
+        "sg105mpe"
+      ]
+    },
+    {
+      "id": "tplink_safestream",
+      "vendor": "TP-Link",
+      "product": "SafeStream TL-R600VPN",
+      "segment": "fw-soho",
+      "match_keywords": [
+        "safestream",
+        "tl-r600vpn"
+      ]
+    },
+    {
+      "id": "intelbras_sg800q",
+      "vendor": "Intelbras",
+      "product": "SG 800 Q+",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "sg 800 q",
+        "sg800q",
+        "sg 800"
+      ]
+    },
+    {
+      "id": "intelbras_sf800q",
+      "vendor": "Intelbras",
+      "product": "SF 800 Q+",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "sf 800 q",
+        "sf800q",
+        "sf 800"
+      ]
+    },
+    {
+      "id": "intelbras_sg1024mr",
+      "vendor": "Intelbras",
+      "product": "SG 1024 MR",
+      "segment": "switch-corporate",
+      "match_keywords": [
+        "sg 1024 mr",
+        "sg1024mr"
+      ]
+    },
+    {
+      "id": "intelbras_sg2404poe",
+      "vendor": "Intelbras",
+      "product": "SG 2404 PoE",
+      "segment": "switch-poe",
+      "match_keywords": [
+        "sg 2404",
+        "sg2404"
+      ]
+    },
+    {
+      "id": "mercusys_ms105g",
+      "vendor": "Mercusys",
+      "product": "MS105G",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "ms105g"
+      ]
+    },
+    {
+      "id": "dlink_des1005c",
+      "vendor": "D-Link",
+      "product": "DES-1005C",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "des-1005c",
+        "des1005c"
+      ]
+    },
+    {
+      "id": "dlink_dgs108",
+      "vendor": "D-Link",
+      "product": "DGS-108",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "dgs-108",
+        "dgs108"
+      ]
+    },
+    {
+      "id": "dlink_dgs1100_05",
+      "vendor": "D-Link",
+      "product": "DGS-1100-05",
+      "segment": "switch-smart",
+      "match_keywords": [
+        "dgs-1100-05",
+        "dgs1100"
+      ]
+    },
+    {
+      "id": "dlink_netdefend",
+      "vendor": "D-Link",
+      "product": "NetDefend",
+      "segment": "fw-soho",
+      "match_keywords": [
+        "netdefend"
+      ]
+    },
+    {
+      "id": "netgear_gs108",
+      "vendor": "Netgear",
+      "product": "ProSafe GS108",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "gs108",
+        "prosafe gs108"
+      ]
+    },
+    {
+      "id": "netgear_gs305",
+      "vendor": "Netgear",
+      "product": "GS305",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "gs305"
+      ]
+    },
+    {
+      "id": "netgear_gs308",
+      "vendor": "Netgear",
+      "product": "GS308",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "gs308"
+      ]
+    },
+    {
+      "id": "netgear_gs305e",
+      "vendor": "Netgear",
+      "product": "GS305E",
+      "segment": "switch-smart",
+      "match_keywords": [
+        "gs305e"
+      ]
+    },
+    {
+      "id": "netgear_gs308e",
+      "vendor": "Netgear",
+      "product": "GS308E",
+      "segment": "switch-smart",
+      "match_keywords": [
+        "gs308e"
+      ]
+    },
+    {
+      "id": "netgear_gs108t",
+      "vendor": "Netgear",
+      "product": "GS108T",
+      "segment": "switch-smart",
+      "match_keywords": [
+        "gs108t"
+      ]
+    },
+    {
+      "id": "netgear_gs308ep",
+      "vendor": "Netgear",
+      "product": "GS308EP PoE+",
+      "segment": "switch-poe",
+      "match_keywords": [
+        "gs308ep"
+      ]
+    },
+    {
+      "id": "netgear_gs116",
+      "vendor": "Netgear",
+      "product": "ProSafe GS116",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "gs116"
+      ]
+    },
+    {
+      "id": "netgear_gs724tp",
+      "vendor": "Netgear",
+      "product": "GS724TP",
+      "segment": "switch-smart",
+      "match_keywords": [
+        "gs724tp"
+      ]
+    },
+    {
+      "id": "trendnet_tegs82g",
+      "vendor": "TRENDnet",
+      "product": "TEG-S82g",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "teg-s82g",
+        "tegs82g"
+      ]
+    },
+    {
+      "id": "trendnet_tpetg327",
+      "vendor": "TRENDnet",
+      "product": "TPE-TG327 PoE+",
+      "segment": "switch-poe",
+      "match_keywords": [
+        "tpe-tg327"
+      ]
+    },
+    {
+      "id": "trendnet_tpetg83",
+      "vendor": "TRENDnet",
+      "product": "TPE-TG83 PoE+",
+      "segment": "switch-poe",
+      "match_keywords": [
+        "tpe-tg83"
+      ]
+    },
+    {
+      "id": "zyxel_gs1200_8",
+      "vendor": "Zyxel",
+      "product": "GS1200-8",
+      "segment": "switch-smart",
+      "match_keywords": [
+        "gs1200-8",
+        "gs12008"
+      ]
+    },
+    {
+      "id": "zyxel_gs1200_5hp",
+      "vendor": "Zyxel",
+      "product": "GS1200-5HP v2 PoE+",
+      "segment": "switch-poe",
+      "match_keywords": [
+        "gs1200-5hp"
+      ]
+    },
+    {
+      "id": "zyxel_gs1200_8hp",
+      "vendor": "Zyxel",
+      "product": "GS1200-8HP v2 PoE+",
+      "segment": "switch-poe",
+      "match_keywords": [
+        "gs1200-8hp"
+      ]
+    },
+    {
+      "id": "zyxel_atp",
+      "vendor": "Zyxel",
+      "product": "ATP/USG Firewall",
+      "segment": "fw-smb",
+      "match_keywords": [
+        "zyxel atp",
+        "zyxel usg"
+      ]
+    },
+    {
+      "id": "ubiquiti_usw",
+      "vendor": "Ubiquiti",
+      "product": "UniFi Switch 8/16/24/48 PoE",
+      "segment": "switch-corporate",
+      "match_keywords": [
+        "unifi switch",
+        "usw",
+        "usw-8",
+        "usw-24",
+        "usw-48"
+      ]
+    },
+    {
+      "id": "linksys_lgs",
+      "vendor": "Linksys",
+      "product": "LGS Series",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "lgs308",
+        "lgs116",
+        "linksys lgs"
+      ]
+    },
+    {
+      "id": "cisco_cat_2960x",
+      "vendor": "Cisco",
+      "product": "Catalyst 2960-X",
+      "segment": "switch-enterprise",
+      "match_keywords": [
+        "catalyst 2960",
+        "2960-x",
+        "2960x",
+        "cat2960"
+      ]
+    },
+    {
+      "id": "cisco_cat_3850",
+      "vendor": "Cisco",
+      "product": "Catalyst 3850",
+      "segment": "switch-enterprise",
+      "match_keywords": [
+        "catalyst 3850",
+        "3850",
+        "cat3850"
+      ]
+    },
+    {
+      "id": "cisco_cat_9200",
+      "vendor": "Cisco",
+      "product": "Catalyst 9200",
+      "segment": "switch-enterprise",
+      "match_keywords": [
+        "catalyst 9200",
+        "9200",
+        "cat9200"
+      ]
+    },
+    {
+      "id": "cisco_cat_9300",
+      "vendor": "Cisco",
+      "product": "Catalyst 9300",
+      "segment": "switch-enterprise",
+      "match_keywords": [
+        "catalyst 9300",
+        "9300",
+        "cat9300"
+      ]
+    },
+    {
+      "id": "cisco_cat_9400",
+      "vendor": "Cisco",
+      "product": "Catalyst 9400",
+      "segment": "switch-enterprise",
+      "match_keywords": [
+        "catalyst 9400",
+        "9400",
+        "cat9400"
+      ]
+    },
+    {
+      "id": "cisco_nexus_9000",
+      "vendor": "Cisco",
+      "product": "Nexus 9000",
+      "segment": "switch-datacenter",
+      "match_keywords": [
+        "nexus 9000",
+        "nexus9000",
+        "n9k"
+      ]
+    },
+    {
+      "id": "cisco_nexus_7000",
+      "vendor": "Cisco",
+      "product": "Nexus 7000",
+      "segment": "switch-datacenter",
+      "match_keywords": [
+        "nexus 7000",
+        "nexus7000",
+        "n7k"
+      ]
+    },
+    {
+      "id": "cisco_cbs110",
+      "vendor": "Cisco",
+      "product": "Business CBS110",
+      "segment": "switch-soho",
+      "match_keywords": [
+        "cbs110"
+      ]
+    },
+    {
+      "id": "cisco_cbs220",
+      "vendor": "Cisco",
+      "product": "Business CBS220",
+      "segment": "switch-smart",
+      "match_keywords": [
+        "cbs220"
+      ]
+    },
+    {
+      "id": "cisco_cbs250",
+      "vendor": "Cisco",
+      "product": "Business CBS250",
+      "segment": "switch-corporate",
+      "match_keywords": [
+        "cbs250"
+      ]
+    },
+    {
+      "id": "cisco_cbs350",
+      "vendor": "Cisco",
+      "product": "Business CBS350",
+      "segment": "switch-corporate",
+      "match_keywords": [
+        "cbs350"
+      ]
+    },
+    {
+      "id": "aruba_2530",
+      "vendor": "Aruba",
+      "product": "2530",
+      "segment": "switch-enterprise",
+      "match_keywords": [
+        "aruba 2530",
+        "2530"
+      ]
+    },
+    {
+      "id": "aruba_5400r",
+      "vendor": "Aruba",
+      "product": "5400R zl2",
+      "segment": "switch-enterprise",
+      "match_keywords": [
+        "5400r",
+        "aruba 5400"
+      ]
+    },
+    {
+      "id": "aruba_instant_on_1930",
+      "vendor": "Aruba",
+      "product": "Instant On 1930",
+      "segment": "switch-corporate",
+      "match_keywords": [
+        "instant on 1930",
+        "jl682a",
+        "jl684b",
+        "jl685a"
+      ]
+    },
+    {
+      "id": "juniper_ex2300",
+      "vendor": "Juniper",
+      "product": "EX2300",
+      "segment": "switch-enterprise",
+      "match_keywords": [
+        "ex2300"
+      ]
+    },
+    {
+      "id": "juniper_ex3400",
+      "vendor": "Juniper",
+      "product": "EX3400",
+      "segment": "switch-enterprise",
+      "match_keywords": [
+        "ex3400"
+      ]
+    },
+    {
+      "id": "juniper_qfx",
+      "vendor": "Juniper",
+      "product": "QFX Series",
+      "segment": "switch-datacenter",
+      "match_keywords": [
+        "qfx5100",
+        "qfx5200",
+        "qfx"
+      ]
+    },
+    {
+      "id": "arista_7000",
+      "vendor": "Arista",
+      "product": "7000 Series",
+      "segment": "switch-datacenter",
+      "match_keywords": [
+        "arista 7000",
+        "7050",
+        "7060"
+      ]
+    },
+    {
+      "id": "extreme_x465",
+      "vendor": "Extreme Networks",
+      "product": "X465",
+      "segment": "switch-enterprise",
+      "match_keywords": [
+        "x465",
+        "extreme x465"
+      ]
+    },
+    {
+      "id": "extreme_slx",
+      "vendor": "Extreme Networks",
+      "product": "SLX Series",
+      "segment": "switch-datacenter",
+      "match_keywords": [
+        "slx",
+        "extreme slx"
+      ]
+    },
+    {
+      "id": "huawei_s5700",
+      "vendor": "Huawei",
+      "product": "S5700",
+      "segment": "switch-enterprise",
+      "match_keywords": [
+        "s5700",
+        "huawei s5700"
+      ]
+    },
+    {
+      "id": "huawei_s5735l",
+      "vendor": "Huawei",
+      "product": "S5735-L",
+      "segment": "switch-enterprise",
+      "match_keywords": [
+        "s5735",
+        "huawei s5735"
+      ]
+    },
+    {
+      "id": "huawei_cloudengine",
+      "vendor": "Huawei",
+      "product": "CloudEngine",
+      "segment": "switch-datacenter",
+      "match_keywords": [
+        "cloudengine",
+        "ce6800",
+        "ce8800"
+      ]
+    },
+    {
+      "id": "dell_n1524p",
+      "vendor": "Dell",
+      "product": "Networking N1524P",
+      "segment": "switch-corporate",
+      "match_keywords": [
+        "n1524p",
+        "dell n1524"
+      ]
+    },
+    {
+      "id": "fortinet_fortigate_100f",
+      "vendor": "Fortinet",
+      "product": "FortiGate 100F",
+      "segment": "ngfw-corporate",
+      "match_keywords": [
+        "fortigate 100f",
+        "fg-100f"
+      ]
+    },
+    {
+      "id": "fortinet_fortigate_200f",
+      "vendor": "Fortinet",
+      "product": "FortiGate 200F",
+      "segment": "ngfw-corporate",
+      "match_keywords": [
+        "fortigate 200f",
+        "fg-200f"
+      ]
+    },
+    {
+      "id": "fortinet_fortigate_40f",
+      "vendor": "Fortinet",
+      "product": "FortiGate 40F",
+      "segment": "ngfw-smb",
+      "match_keywords": [
+        "fortigate 40f",
+        "fg-40f"
+      ]
+    },
+    {
+      "id": "paloalto_pa450",
+      "vendor": "Palo Alto Networks",
+      "product": "PA-450",
+      "segment": "ngfw-corporate",
+      "match_keywords": [
+        "pa-450",
+        "pa450"
+      ]
+    },
+    {
+      "id": "paloalto_pa3200",
+      "vendor": "Palo Alto Networks",
+      "product": "PA-3200",
+      "segment": "ngfw-enterprise",
+      "match_keywords": [
+        "pa-3200",
+        "pa3200"
+      ]
+    },
+    {
+      "id": "checkpoint_quantum",
+      "vendor": "Check Point",
+      "product": "Quantum Security Gateway",
+      "segment": "ngfw-enterprise",
+      "match_keywords": [
+        "checkpoint quantum",
+        "quantum gateway",
+        "check point"
+      ]
+    },
+    {
+      "id": "cisco_firepower",
+      "vendor": "Cisco",
+      "product": "Firepower/Secure Firewall",
+      "segment": "ngfw-enterprise",
+      "match_keywords": [
+        "firepower",
+        "secure firewall",
+        "fmc"
+      ]
+    },
+    {
+      "id": "cisco_asa",
+      "vendor": "Cisco",
+      "product": "ASA 5500-X",
+      "segment": "fw-corporate",
+      "match_keywords": [
+        "asa 5500",
+        "asa5500",
+        "cisco asa"
+      ]
+    },
+    {
+      "id": "cisco_meraki_mx",
+      "vendor": "Cisco",
+      "product": "Meraki MX",
+      "segment": "fw-cloud",
+      "match_keywords": [
+        "meraki mx",
+        "meraki"
+      ]
+    },
+    {
+      "id": "sophos_xgs",
+      "vendor": "Sophos",
+      "product": "XGS Firewall",
+      "segment": "ngfw-smb",
+      "match_keywords": [
+        "sophos xgs",
+        "xgs firewall",
+        "sophos xg"
+      ]
+    },
+    {
+      "id": "sonicwall_tz",
+      "vendor": "SonicWall",
+      "product": "TZ Series",
+      "segment": "fw-smb",
+      "match_keywords": [
+        "sonicwall tz",
+        "tz270",
+        "tz370",
+        "tz470"
+      ]
+    },
+    {
+      "id": "sonicwall_nsa",
+      "vendor": "SonicWall",
+      "product": "NSa Series",
+      "segment": "ngfw-corporate",
+      "match_keywords": [
+        "sonicwall nsa",
+        "nsa2700",
+        "nsa3700"
+      ]
+    },
+    {
+      "id": "watchguard_firebox",
+      "vendor": "WatchGuard",
+      "product": "Firebox",
+      "segment": "fw-smb",
+      "match_keywords": [
+        "watchguard firebox",
+        "firebox",
+        "watchguard"
+      ]
+    },
+    {
+      "id": "huawei_hisecengine",
+      "vendor": "Huawei",
+      "product": "HiSecEngine",
+      "segment": "ngfw-enterprise",
+      "match_keywords": [
+        "hisecengine",
+        "huawei ngfw"
+      ]
+    },
+    {
+      "id": "forcepoint_ngfw",
+      "vendor": "Forcepoint",
+      "product": "NGFW",
+      "segment": "ngfw-enterprise",
+      "match_keywords": [
+        "forcepoint ngfw",
+        "forcepoint"
+      ]
+    },
+    {
+      "id": "netgate_pfsense",
+      "vendor": "Netgate",
+      "product": "pfSense",
+      "segment": "fw-opensource",
+      "match_keywords": [
+        "pfsense",
+        "netgate",
+        "pf sense"
+      ]
+    },
+    {
+      "id": "opnsense",
+      "vendor": "OPNsense",
+      "product": "OPNsense",
+      "segment": "fw-opensource",
+      "match_keywords": [
+        "opnsense",
+        "opn sense"
+      ]
+    },
+    {
+      "id": "barracuda_cloudgen",
+      "vendor": "Barracuda",
+      "product": "CloudGen Firewall",
+      "segment": "fw-cloud",
+      "match_keywords": [
+        "barracuda cloudgen",
+        "barracuda firewall"
+      ]
+    },
+    {
+      "id": "a10_thunder",
+      "vendor": "A10 Networks",
+      "product": "Thunder CFW",
+      "segment": "fw-enterprise",
+      "match_keywords": [
+        "a10 thunder",
+        "a10 networks"
+      ]
+    },
+    {
+      "id": "untangle_etm",
+      "vendor": "Arista Edge",
+      "product": "Untangle/Edge Threat Management",
+      "segment": "fw-smb",
+      "match_keywords": [
+        "untangle",
+        "edge threat",
+        "arista edge"
+      ]
+    },
+    {
+      "id": "kerio_control",
+      "vendor": "Kerio",
+      "product": "Kerio Control",
+      "segment": "fw-smb",
+      "match_keywords": [
+        "kerio control",
+        "kerio"
+      ]
+    },
+    {
+      "id": "endian_firewall",
+      "vendor": "Endian",
+      "product": "Endian Firewall",
+      "segment": "fw-smb",
+      "match_keywords": [
+        "endian firewall",
+        "endian"
+      ]
+    },
+    {
+      "id": "hillstone_ngfw",
+      "vendor": "Hillstone",
+      "product": "Hillstone NGFW",
+      "segment": "ngfw-datacenter",
+      "match_keywords": [
+        "hillstone"
+      ]
+    },
+    {
+      "id": "sangfor_ngaf",
+      "vendor": "Sangfor",
+      "product": "NGAF",
+      "segment": "ngfw-enterprise",
+      "match_keywords": [
+        "sangfor",
+        "ngaf"
+      ]
+    },
+    {
+      "id": "fortinet_fortiweb",
+      "vendor": "Fortinet",
+      "product": "FortiWeb WAF",
+      "segment": "waf",
+      "match_keywords": [
+        "fortiweb",
+        "forti web"
+      ]
+    },
+    {
+      "id": "brazilfw",
+      "vendor": "BrazilFW",
+      "product": "BrazilFW Firewall Router",
+      "segment": "fw-opensource",
+      "match_keywords": [
+        "brazilfw",
+        "brazil fw",
+        "brazilfw firewall"
+      ]
+    },
+    {
+      "id": "starti_edge_protect",
+      "vendor": "Starti",
+      "product": "Edge Protect NGFW",
+      "segment": "ngfw-smb",
+      "match_keywords": [
+        "starti",
+        "edge protect",
+        "starti edge"
+      ]
+    },
+    {
+      "id": "blockbit_ngfw",
+      "vendor": "Blockbit",
+      "product": "Blockbit NGFW/UTM",
+      "segment": "ngfw-corporate",
+      "match_keywords": [
+        "blockbit"
+      ]
+    },
+    {
+      "id": "algar_telecom_ngfw",
+      "vendor": "Algar Telecom",
+      "product": "Algar NGFW",
+      "segment": "ngfw-isp",
+      "match_keywords": [
+        "algar telecom",
+        "algar ngfw"
+      ]
+    },
+    {
+      "id": "azion_fw",
+      "vendor": "Azion",
+      "product": "Azion Edge Firewall/WAF",
+      "segment": "fw-cloud-edge",
+      "match_keywords": [
+        "azion",
+        "azion edge firewall",
+        "azion waf"
+      ]
+    },
+    {
+      "id": "draytek_vigor2960",
+      "vendor": "DrayTek",
+      "product": "Vigor2960 Firewall VPN",
+      "segment": "fw-smb",
+      "match_keywords": [
+        "vigor2960",
+        "draytek firewall",
+        "draytek vigor"
+      ]
+    },
+    {
+      "id": "att_pace_5268ac",
+      "vendor": "AT&T / Pace",
+      "product": "5268AC U-Verse Gateway",
+      "segment": "isp-cpe/gateway",
+      "match_keywords": [
+        "5268ac",
+        "pace 5268",
+        "pace5268",
+        "att 5268",
+        "at&t 5268",
+        "u-verse",
+        "uverse",
+        "att gateway",
+        "at&t gateway"
+      ]
+    },
+    {
+      "id": "att_arris_bgw210",
+      "vendor": "AT&T / Arris",
+      "product": "BGW210-700 Fiber Gateway",
+      "segment": "isp-cpe/gateway",
+      "match_keywords": [
+        "bgw210",
+        "bgw210-700",
+        "arris bgw",
+        "att fiber gateway",
+        "at&t bgw210"
+      ]
+    },
+    {
+      "id": "att_arris_nvg589",
+      "vendor": "AT&T / Arris",
+      "product": "NVG589 VDSL Gateway",
+      "segment": "isp-cpe/modem-router",
+      "match_keywords": [
+        "nvg589",
+        "arris nvg589",
+        "att nvg589",
+        "at&t nvg589"
+      ]
+    },
+    {
+      "id": "att_arris_nvg599",
+      "vendor": "AT&T / Arris",
+      "product": "NVG599 VDSL Gateway",
+      "segment": "isp-cpe/modem-router",
+      "match_keywords": [
+        "nvg599",
+        "arris nvg599",
+        "att nvg599",
+        "at&t nvg599"
+      ]
+    },
+    {
+      "id": "att_nokia_bgw320",
+      "vendor": "AT&T / Nokia",
+      "product": "BGW320-505 XGS-PON Gateway",
+      "segment": "isp-cpe/gateway",
+      "match_keywords": [
+        "bgw320",
+        "bgw320-505",
+        "nokia bgw320",
+        "att xgspon",
+        "at&t xgs-pon"
+      ]
+    }
+  ],
+  "yearly_brazil": [
+    {
+      "year": 2010,
+      "domestic": [
+        "netgear_wndr3700",
+        "linksys_wrt610n",
+        "dlink_dir655",
+        "tplink_wr1043nd",
+        "asus_rt_n13u",
+        "netgear_wndr3800",
+        "linksys_e3000",
+        "trendnet_tew691gr",
+        "airport_extreme_2010",
+        "belkin_n750_db",
+        "brazilfw"
+      ],
+      "corporate": [
+        "draytek_vigor2110n",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "juniper_srx300",
+        "fortigate_60f",
+        "paloalto_pa220",
+        "aruba_2930f",
+        "mikrotik_rb3011",
+        "mikrotik_crs326",
+        "unifi_udr",
+        "cisco_cat_2960x",
+        "intelbras_sg800q",
+        "brazilfw"
+      ]
+    },
+    {
+      "year": 2011,
+      "domestic": [
+        "linksys_e4200",
+        "asus_rt_n56u",
+        "netgear_wndr4000",
+        "trendnet_tew692gr",
+        "belkin_n750_db",
+        "asus_rt_n66u",
+        "dlink_dir819",
+        "linksys_e3200",
+        "netgear_wndr3700",
+        "airport_extreme_2011",
+        "brazilfw"
+      ],
+      "corporate": [
+        "draytek_vigor2110n",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "juniper_srx300",
+        "fortigate_60f",
+        "paloalto_pa220",
+        "aruba_2930f",
+        "mikrotik_rb3011",
+        "mikrotik_crs326",
+        "unifi_udr",
+        "cisco_cat_2960x",
+        "intelbras_sg800q",
+        "brazilfw"
+      ]
+    },
+    {
+      "year": 2012,
+      "domestic": [
+        "tplink_archer_c20",
+        "tplink_archer_c6",
+        "tplink_archer_c7",
+        "dlink_dir819",
+        "dlink_dir822",
+        "asus_rt_ac86u",
+        "google_nest_wifi",
+        "intelbras_action_rg1200",
+        "tplink_tl_wr940n",
+        "tplink_tl_wr840n",
+        "brazilfw"
+      ],
+      "corporate": [
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "juniper_srx300",
+        "fortigate_60f",
+        "paloalto_pa220",
+        "aruba_2930f",
+        "unifi_udr",
+        "cisco_cat_2960x",
+        "intelbras_sg800q",
+        "intelbras_sg1024mr",
+        "brazilfw",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2013,
+      "domestic": [
+        "tplink_archer_c7",
+        "tplink_archer_c9",
+        "netgear_xr500",
+        "asus_rt_ac86u",
+        "google_nest_wifi",
+        "tplink_archer_c6",
+        "tplink_tl_wr940n",
+        "intelbras_action_rg1200",
+        "huawei_ax3_dual_core",
+        "mercusys_mr60x",
+        "brazilfw"
+      ],
+      "corporate": [
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "juniper_srx300",
+        "fortigate_60f",
+        "paloalto_pa220",
+        "aruba_2930f",
+        "unifi_udr",
+        "cisco_cat_3850",
+        "intelbras_sg800q",
+        "intelbras_sg1024mr",
+        "brazilfw",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2014,
+      "domestic": [
+        "tplink_archer_c20",
+        "tplink_archer_c6",
+        "tplink_archer_c7",
+        "tplink_tl_wr940n",
+        "intelbras_action_rg1200",
+        "asus_rt_ac86u",
+        "google_nest_wifi",
+        "dlink_dir819",
+        "dlink_dir822",
+        "mercusys_mr60x",
+        "brazilfw"
+      ],
+      "corporate": [
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "juniper_srx300",
+        "fortigate_60f",
+        "paloalto_pa220",
+        "aruba_2930f",
+        "unifi_udr",
+        "cisco_cat_3850",
+        "intelbras_sg1024mr",
+        "fortinet_fortigate_100f",
+        "brazilfw",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2015,
+      "domestic": [
+        "tplink_archer_c20",
+        "tplink_archer_c6",
+        "tplink_archer_c7",
+        "tplink_archer_c9",
+        "google_nest_wifi",
+        "asus_rt_ac86u",
+        "dlink_dir819",
+        "intelbras_action_rg1200",
+        "tplink_tl_wr840n",
+        "tplink_tl_wr940n",
+        "brazilfw"
+      ],
+      "corporate": [
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "juniper_srx300",
+        "fortigate_60f",
+        "paloalto_pa220",
+        "aruba_2930f",
+        "unifi_udr",
+        "cisco_cat_3850",
+        "intelbras_sg1024mr",
+        "fortinet_fortigate_100f",
+        "brazilfw",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2016,
+      "domestic": [
+        "tplink_archer_c6",
+        "tplink_archer_c7",
+        "tplink_archer_c9",
+        "google_nest_wifi",
+        "huawei_ax3_dual_core",
+        "intelbras_action_rg1200",
+        "dlink_dir822",
+        "asus_rt_ac86u",
+        "mercusys_mr60x",
+        "tplink_deco_m4",
+        "tplink_tl_sg108",
+        "intelbras_sg800q"
+      ],
+      "corporate": [
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "juniper_srx300",
+        "fortigate_60f",
+        "paloalto_pa220",
+        "aruba_2930f",
+        "unifi_udr",
+        "cisco_cat_9300",
+        "intelbras_sg1024mr",
+        "fortinet_fortigate_100f",
+        "sophos_xgs",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2017,
+      "domestic": [
+        "tplink_deco_m4",
+        "tplink_archer_c6",
+        "tplink_archer_c7",
+        "tplink_archer_c9",
+        "intelbras_action_rg1200",
+        "huawei_ax3_dual_core",
+        "mercusys_mr60x",
+        "google_nest_wifi",
+        "asus_rt_ac86u",
+        "tenda_ac23",
+        "tplink_tl_sg108",
+        "intelbras_sg800q",
+        "mercusys_ms105g"
+      ],
+      "corporate": [
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "juniper_srx300",
+        "fortigate_60f",
+        "paloalto_pa220",
+        "aruba_2930f",
+        "unifi_udr",
+        "cisco_cat_9300",
+        "intelbras_sg1024mr",
+        "fortinet_fortigate_100f",
+        "sophos_xgs",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2018,
+      "domestic": [
+        "tplink_deco_m4",
+        "tplink_archer_c6",
+        "tplink_archer_c7",
+        "tplink_archer_c9",
+        "intelbras_action_rg1200",
+        "huawei_ax3_dual_core",
+        "mercusys_mr60x",
+        "google_nest_wifi",
+        "asus_rt_ac86u",
+        "tenda_ac23",
+        "tplink_tl_sg108",
+        "intelbras_sg800q",
+        "mercusys_ms105g"
+      ],
+      "corporate": [
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "juniper_srx300",
+        "fortigate_60f",
+        "paloalto_pa220",
+        "aruba_2930f",
+        "unifi_udr",
+        "cisco_cat_9300",
+        "aruba_instant_on_1930",
+        "intelbras_sg2404poe",
+        "fortinet_fortigate_100f",
+        "sonicwall_tz",
+        "blockbit_ngfw",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2019,
+      "domestic": [
+        "asus_rt_ac86u",
+        "tplink_archer_c7",
+        "netgear_xr500",
+        "google_nest_wifi",
+        "tplink_deco_m4",
+        "dlink_dir822",
+        "tplink_archer_c9",
+        "tplink_archer_c6",
+        "mercusys_mr60x",
+        "intelbras_action_rg1200",
+        "tplink_tl_sg108",
+        "intelbras_sg800q",
+        "mercusys_ms105g"
+      ],
+      "corporate": [
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "juniper_srx300",
+        "fortigate_60f",
+        "paloalto_pa220",
+        "aruba_2930f",
+        "unifi_udr",
+        "openwrt_19_07_generic",
+        "cisco_cat_9300",
+        "aruba_instant_on_1930",
+        "intelbras_sg2404poe",
+        "fortinet_fortigate_100f",
+        "sonicwall_tz",
+        "netgate_pfsense",
+        "starti_edge_protect",
+        "blockbit_ngfw",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2020,
+      "domestic": [
+        "tplink_archer_c6",
+        "intelbras_action_rg1200",
+        "tplink_archer_c7",
+        "asus_rt_ac86u",
+        "dlink_dir819",
+        "tplink_archer_c20",
+        "tplink_deco_m4",
+        "tplink_archer_ax10",
+        "dlink_dir822",
+        "tplink_tl_wr840n",
+        "tplink_tl_sg108",
+        "intelbras_sg800q",
+        "tplink_ls1005g"
+      ],
+      "corporate": [
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "juniper_srx300",
+        "fortigate_60f",
+        "paloalto_pa220",
+        "aruba_2930f",
+        "unifi_udr",
+        "cisco_cat_9300",
+        "aruba_instant_on_1930",
+        "intelbras_sg2404poe",
+        "fortinet_fortigate_100f",
+        "sonicwall_tz",
+        "netgate_pfsense",
+        "starti_edge_protect",
+        "blockbit_ngfw",
+        "algar_telecom_ngfw",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2021,
+      "domestic": [
+        "tplink_archer_ax73",
+        "tplink_archer_ax10",
+        "asus_rt_ax88u",
+        "tplink_deco_m4",
+        "google_nest_wifi",
+        "tplink_archer_c6",
+        "intelbras_action_rg1200",
+        "tplink_tl_wr940n",
+        "mercusys_mr60x",
+        "huawei_ax3_dual_core",
+        "openwrt_21_02_generic",
+        "tplink_tl_sg108",
+        "intelbras_sg800q",
+        "tplink_ls1005g"
+      ],
+      "corporate": [
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "juniper_srx300",
+        "fortigate_60f",
+        "paloalto_pa220",
+        "aruba_2930f",
+        "unifi_udr",
+        "openwrt_21_02_generic",
+        "cisco_cat_9300",
+        "aruba_instant_on_1930",
+        "intelbras_sg2404poe",
+        "fortinet_fortigate_100f",
+        "sophos_xgs",
+        "netgate_pfsense",
+        "starti_edge_protect",
+        "blockbit_ngfw",
+        "algar_telecom_ngfw",
+        "azion_fw",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2022,
+      "domestic": [
+        "tplink_archer_ax73",
+        "tplink_archer_ax12",
+        "huawei_ax3_dual_core",
+        "mercusys_mr60x",
+        "asus_rt_ax88u",
+        "tplink_archer_c6",
+        "intelbras_action_rg1200",
+        "tplink_deco_m4",
+        "huawei_ax2s",
+        "mercusys_mr80x",
+        "tplink_tl_sg108",
+        "intelbras_sg800q",
+        "tplink_ls1005g",
+        "netgear_gs305"
+      ],
+      "corporate": [
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "juniper_srx300",
+        "fortigate_60f",
+        "paloalto_pa220",
+        "aruba_2930f",
+        "unifi_udr",
+        "openwrt_22_03_generic",
+        "cisco_cat_9300",
+        "aruba_instant_on_1930",
+        "intelbras_sg2404poe",
+        "fortinet_fortigate_200f",
+        "sophos_xgs",
+        "netgate_pfsense",
+        "cisco_cbs250",
+        "starti_edge_protect",
+        "blockbit_ngfw",
+        "algar_telecom_ngfw",
+        "azion_fw",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2023,
+      "domestic": [
+        "tplink_deco_m4",
+        "tplink_archer_ax73",
+        "intelbras_action_rg1200",
+        "huawei_ax3_dual_core",
+        "mercusys_mr60x",
+        "google_nest_wifi",
+        "asus_rt_ac86u",
+        "tplink_archer_ax12",
+        "intelbras_ax1500",
+        "tplink_archer_c6",
+        "openwrt_22_03_generic",
+        "tplink_tl_sg108",
+        "intelbras_sg800q",
+        "tplink_ls1005g",
+        "netgear_gs305"
+      ],
+      "corporate": [
+        "unifi_udr",
+        "unifi_uxg_ultra",
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "fortigate_60f",
+        "juniper_srx300",
+        "aruba_2930f",
+        "cisco_cat_9300",
+        "aruba_instant_on_1930",
+        "intelbras_sg2404poe",
+        "fortinet_fortigate_200f",
+        "sophos_xgs",
+        "cisco_cbs350",
+        "ubiquiti_usw",
+        "starti_edge_protect",
+        "blockbit_ngfw",
+        "algar_telecom_ngfw",
+        "azion_fw",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2024,
+      "domestic": [
+        "tplink_archer_ax73",
+        "huawei_ax2s",
+        "asus_ax5400",
+        "mercusys_mr60x",
+        "tplink_deco_m4",
+        "intelbras_action_rg1200",
+        "google_nest_wifi",
+        "tplink_archer_ax12",
+        "tplink_archer_c80",
+        "tplink_deco_be85",
+        "tplink_tl_sg108",
+        "intelbras_sg800q",
+        "tplink_ls1005g",
+        "netgear_gs305"
+      ],
+      "corporate": [
+        "unifi_udr",
+        "unifi_uxg_ultra",
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "fortigate_60f",
+        "juniper_srx300",
+        "aruba_2930f",
+        "openwrt_23_05_generic",
+        "cisco_cat_9300",
+        "aruba_instant_on_1930",
+        "intelbras_sg2404poe",
+        "fortinet_fortigate_200f",
+        "sophos_xgs",
+        "cisco_cbs350",
+        "ubiquiti_usw",
+        "paloalto_pa450",
+        "starti_edge_protect",
+        "blockbit_ngfw",
+        "algar_telecom_ngfw",
+        "azion_fw",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2025,
+      "domestic": [
+        "mercusys_mr60x",
+        "tplink_archer_axe75",
+        "asus_rog_be98",
+        "tplink_deco_be85",
+        "huawei_ax3_dual_core",
+        "tplink_archer_ax10",
+        "tplink_deco_m4",
+        "tplink_archer_ax12",
+        "google_nest_wifi",
+        "tplink_archer_be550",
+        "openwrt_23_05_generic",
+        "tplink_tl_sg108",
+        "intelbras_sg800q",
+        "tplink_ls1005g",
+        "netgear_gs305",
+        "tplink_tl_sg108e"
+      ],
+      "corporate": [
+        "unifi_udr",
+        "unifi_uxg_ultra",
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "fortigate_60f",
+        "juniper_srx300",
+        "aruba_2930f",
+        "openwrt_23_05_generic",
+        "cisco_cat_9300",
+        "aruba_instant_on_1930",
+        "intelbras_sg2404poe",
+        "fortinet_fortigate_200f",
+        "sophos_xgs",
+        "cisco_cbs350",
+        "ubiquiti_usw",
+        "paloalto_pa450",
+        "starti_edge_protect",
+        "blockbit_ngfw",
+        "algar_telecom_ngfw",
+        "azion_fw",
+        "draytek_vigor2960"
+      ]
+    },
+    {
+      "year": 2026,
+      "domestic": [
+        "tplink_archer_be900",
+        "tplink_archer_be550",
+        "tplink_archer_be220",
+        "eero_max_7",
+        "glinet_flint3",
+        "mercusys_mr80x",
+        "tplink_deco_m4",
+        "huawei_ax2s",
+        "intelbras_action_rg1200",
+        "tplink_archer_c80",
+        "tplink_tl_sg108",
+        "intelbras_sg800q",
+        "tplink_ls1005g",
+        "netgear_gs305",
+        "tplink_tl_sg108e"
+      ],
+      "corporate": [
+        "unifi_udr",
+        "unifi_uxg_ultra",
+        "mikrotik_rb3011",
+        "mikrotik_rb4011",
+        "mikrotik_crs326",
+        "cisco_isr4331",
+        "cisco_c1111",
+        "fortigate_60f",
+        "juniper_srx300",
+        "aruba_2930f",
+        "openwrt_23_05_generic",
+        "cisco_cat_9300",
+        "aruba_instant_on_1930",
+        "intelbras_sg2404poe",
+        "fortinet_fortigate_200f",
+        "sophos_xgs",
+        "cisco_cbs350",
+        "ubiquiti_usw",
+        "paloalto_pa450",
+        "starti_edge_protect",
+        "blockbit_ngfw",
+        "algar_telecom_ngfw",
+        "azion_fw",
+        "draytek_vigor2960"
+      ]
+    }
+  ],
+  "yearly_global": [
+    {
+      "year": 2010,
+      "top": [
+        "netgear_wndr3700",
+        "linksys_wrt610n",
+        "dlink_dir655",
+        "tplink_wr1043nd",
+        "airport_extreme_2010",
+        "cisco_cat_2960x"
+      ]
+    },
+    {
+      "year": 2011,
+      "top": [
+        "linksys_e4200",
+        "asus_rt_n56u",
+        "netgear_wndr4000",
+        "trendnet_tew692gr",
+        "airport_extreme_2011",
+        "cisco_cat_2960x"
+      ]
+    },
+    {
+      "year": 2012,
+      "top": [
+        "tplink_archer_c20",
+        "linksys_e3200",
+        "netgear_wndr3700",
+        "dlink_dir819",
+        "asus_rt_n66u",
+        "cisco_cat_2960x",
+        "juniper_ex2300"
+      ]
+    },
+    {
+      "year": 2013,
+      "top": [
+        "tplink_archer_c7",
+        "netgear_xr500",
+        "asus_rt_ac86u",
+        "linksys_e4200",
+        "google_nest_wifi",
+        "att_arris_nvg589",
+        "cisco_cat_3850",
+        "juniper_ex2300"
+      ]
+    },
+    {
+      "year": 2014,
+      "top": [
+        "tplink_archer_c7",
+        "dlink_dir822",
+        "asus_rt_ac86u",
+        "netgear_xr500",
+        "google_nest_wifi",
+        "att_arris_nvg599",
+        "cisco_cat_3850",
+        "arista_7000"
+      ]
+    },
+    {
+      "year": 2015,
+      "top": [
+        "tplink_archer_c9",
+        "asus_rt_ac86u",
+        "netgear_xr500",
+        "google_nest_wifi",
+        "tplink_archer_c6",
+        "cisco_cat_3850",
+        "arista_7000"
+      ]
+    },
+    {
+      "year": 2016,
+      "top": [
+        "tplink_archer_c9",
+        "asus_rt_ac86u",
+        "google_nest_wifi",
+        "tplink_archer_c7",
+        "dlink_dir822",
+        "att_pace_5268ac",
+        "cisco_cat_9300",
+        "arista_7000",
+        "fortinet_fortigate_100f"
+      ]
+    },
+    {
+      "year": 2017,
+      "top": [
+        "tplink_deco_m4",
+        "asus_rt_ac86u",
+        "google_nest_wifi",
+        "tplink_archer_c7",
+        "netgear_xr500",
+        "att_pace_5268ac",
+        "cisco_cat_9300",
+        "arista_7000",
+        "fortinet_fortigate_100f"
+      ]
+    },
+    {
+      "year": 2018,
+      "top": [
+        "tplink_deco_m4",
+        "asus_rt_ac86u",
+        "google_nest_wifi",
+        "tplink_archer_c7",
+        "netgear_xr500",
+        "openwrt_x86_64",
+        "att_pace_5268ac",
+        "att_arris_bgw210",
+        "cisco_cat_9300",
+        "arista_7000",
+        "cisco_nexus_9000",
+        "fortinet_fortigate_100f"
+      ]
+    },
+    {
+      "year": 2019,
+      "top": [
+        "asus_rt_ac86u",
+        "tplink_archer_c7",
+        "netgear_xr500",
+        "google_nest_wifi",
+        "tplink_deco_m4",
+        "openwrt_x86_64",
+        "att_pace_5268ac",
+        "att_arris_bgw210",
+        "cisco_cat_9300",
+        "arista_7000",
+        "cisco_nexus_9000",
+        "paloalto_pa450"
+      ]
+    },
+    {
+      "year": 2020,
+      "top": [
+        "tplink_archer_c6",
+        "tplink_deco_m4",
+        "tplink_archer_ax10",
+        "asus_rt_ac86u",
+        "dlink_dir822",
+        "openwrt_x86_64",
+        "cisco_cat_9300",
+        "arista_7000",
+        "cisco_nexus_9000",
+        "paloalto_pa450",
+        "checkpoint_quantum"
+      ]
+    },
+    {
+      "year": 2021,
+      "top": [
+        "tplink_archer_ax73",
+        "asus_rt_ax88u",
+        "tplink_archer_ax10",
+        "tplink_deco_m4",
+        "google_nest_wifi",
+        "openwrt_x86_64",
+        "att_arris_bgw210",
+        "cisco_cat_9300",
+        "arista_7000",
+        "cisco_nexus_9000",
+        "paloalto_pa450",
+        "checkpoint_quantum"
+      ]
+    },
+    {
+      "year": 2022,
+      "top": [
+        "tplink_archer_ax73",
+        "huawei_ax3_dual_core",
+        "asus_rt_ax88u",
+        "tplink_deco_m4",
+        "mercusys_mr60x",
+        "openwrt_x86_64",
+        "att_arris_bgw210",
+        "cisco_cat_9300",
+        "arista_7000",
+        "cisco_nexus_9000",
+        "fortinet_fortigate_200f",
+        "paloalto_pa450"
+      ]
+    },
+    {
+      "year": 2023,
+      "top": [
+        "tplink_archer_ax73",
+        "tplink_deco_m4",
+        "asus_rt_ac86u",
+        "huawei_ax3_dual_core",
+        "mercusys_mr60x",
+        "openwrt_x86_64",
+        "att_arris_bgw210",
+        "att_nokia_bgw320",
+        "cisco_cat_9300",
+        "arista_7000",
+        "cisco_nexus_9000",
+        "fortinet_fortigate_200f",
+        "paloalto_pa450"
+      ]
+    },
+    {
+      "year": 2024,
+      "top": [
+        "tplink_archer_ax73",
+        "asus_ax5400",
+        "tplink_deco_be85",
+        "mercusys_mr60x",
+        "huawei_ax2s",
+        "openwrt_x86_64",
+        "att_arris_bgw210",
+        "att_nokia_bgw320",
+        "cisco_cat_9300",
+        "arista_7000",
+        "cisco_nexus_9000",
+        "fortinet_fortigate_200f",
+        "paloalto_pa450"
+      ]
+    },
+    {
+      "year": 2025,
+      "top": [
+        "tplink_archer_axe75",
+        "asus_rog_be98",
+        "tplink_deco_be85",
+        "eero_max_7",
+        "tplink_archer_be550",
+        "openwrt_x86_64",
+        "att_arris_bgw210",
+        "att_nokia_bgw320",
+        "cisco_cat_9300",
+        "arista_7000",
+        "cisco_nexus_9000",
+        "fortinet_fortigate_200f",
+        "paloalto_pa3200"
+      ]
+    },
+    {
+      "year": 2026,
+      "top": [
+        "tplink_archer_be900",
+        "tplink_archer_be550",
+        "eero_max_7",
+        "glinet_flint3",
+        "mercusys_mr80x",
+        "openwrt_x86_64",
+        "att_arris_bgw210",
+        "att_nokia_bgw320",
+        "cisco_cat_9300",
+        "arista_7000",
+        "cisco_nexus_9000",
+        "fortinet_fortigate_200f",
+        "paloalto_pa3200"
+      ]
+    }
+  ],
+  "yearly_reference_2010_2026": [
+    {
+      "year": 2010,
+      "vendor": "Netgear",
+      "product": "WNDR3700"
+    },
+    {
+      "year": 2011,
+      "vendor": "Linksys",
+      "product": "E4200"
+    },
+    {
+      "year": 2012,
+      "vendor": "TP-Link",
+      "product": "Archer C20"
+    },
+    {
+      "year": 2013,
+      "vendor": "TP-Link",
+      "product": "Archer C7"
+    },
+    {
+      "year": 2014,
+      "vendor": "ASUS",
+      "product": "RT-AC86U"
+    },
+    {
+      "year": 2015,
+      "vendor": "TP-Link",
+      "product": "Archer C9"
+    },
+    {
+      "year": 2016,
+      "vendor": "Google",
+      "product": "Nest Wi-Fi"
+    },
+    {
+      "year": 2017,
+      "vendor": "TP-Link",
+      "product": "Deco M4"
+    },
+    {
+      "year": 2018,
+      "vendor": "TP-Link",
+      "product": "Deco M4"
+    },
+    {
+      "year": 2019,
+      "vendor": "Netgear",
+      "product": "XR500"
+    },
+    {
+      "year": 2020,
+      "vendor": "TP-Link",
+      "product": "Archer AX10"
+    },
+    {
+      "year": 2021,
+      "vendor": "TP-Link",
+      "product": "Archer AX73"
+    },
+    {
+      "year": 2022,
+      "vendor": "Huawei",
+      "product": "AX3 Dual Core"
+    },
+    {
+      "year": 2023,
+      "vendor": "Intelbras",
+      "product": "Action RG 1200"
+    },
+    {
+      "year": 2024,
+      "vendor": "Ubiquiti",
+      "product": "Cloud Gateway Ultra"
+    },
+    {
+      "year": 2025,
+      "vendor": "ASUS",
+      "product": "ROG Rapture GT-BE98 Pro"
+    },
+    {
+      "year": 2026,
+      "vendor": "TP-Link",
+      "product": "Archer BE900"
+    }
+  ]
+}

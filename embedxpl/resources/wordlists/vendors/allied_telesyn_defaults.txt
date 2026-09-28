@@ -1,0 +1,9 @@
+:manager
+:admin
+admin:
+manager:admin
+manager:friend
+manager:manager
+root:
+secoff:secoff
+admin:admin

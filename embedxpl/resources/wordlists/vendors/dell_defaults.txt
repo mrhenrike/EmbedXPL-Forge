@@ -1,0 +1,13 @@
+admin:admin
+:Dell
+:Fireport
+:nz0u4bbe
+:1RRWTTOOI
+:admin
+Admin:
+Administrator:storageserver
+VNC:winterm
+admin:password
+rapport:r@p8p0r+
+root:calvin
+root:wyse

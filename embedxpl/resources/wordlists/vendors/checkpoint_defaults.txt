@@ -1,0 +1,5 @@
+admin:admin
+admin:adminadmin
+admin:abc123
+cpconfig:cpconfig
+monitor:monitor

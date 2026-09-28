@@ -1,0 +1,15 @@
+admin:admin
+admin:unknown
+:9999
+:Telecom
+:nokai
+:nokia
+Security Code:12345
+Telecom:Telecom
+client:client
+m1122:m1122
+nop:12345
+nop:123454
+root:nokia
+root:rootme
+telecom:telecom

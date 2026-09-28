@@ -1,0 +1,119 @@
+# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# EmbedXPL-Forge — Infrastructure Context Taxonomy
+# Maps infrastructure types and operational contexts to module path prefixes
+# Version: 1.0.0
+---
+profiles:
+  ot:
+    label: "OT — Operational Technology"
+    description: "ICS/SCADA/IIoT/AT environments"
+    contexts:
+      ics:
+        label: "ICS / SCADA"
+        module_paths:
+          - exploits/ics/
+          - scanners/ics/
+          - creds/ics/
+          - exploits/firewalls/siemens/
+          - exploits/firewalls/moxa/
+          - exploits/firewalls/hirschmann/
+          - exploits/firewalls/schneider/
+          - exploits/firewalls/phoenix/
+      energy:
+        label: "Energy / Smart Meters"
+        module_paths:
+          - exploits/smart_meters/
+          - scanners/smart_meters/
+      building:
+        label: "Building Automation (BACnet/HVAC)"
+        module_paths:
+          - scanners/ics/
+          - creds/ics/
+          - exploits/bms/
+
+  it:
+    label: "IT — Information Technology"
+    description: "Enterprise networks, servers, and virtualization"
+    contexts:
+      enterprise_network:
+        label: "Enterprise Network Perimeter"
+        module_paths:
+          - exploits/firewalls/
+          - exploits/switches/
+          - exploits/vpn/
+          - exploits/appliances/
+          - exploits/ngfw/
+          - exploits/network_os/
+          - scanners/firewalls/
+          - creds/firewalls/
+      hypervisor:
+        label: "Hypervisors / Virtualization"
+        module_paths:
+          - exploits/hypervisors/
+          - creds/hypervisors/
+          - scanners/hypervisors/
+      windows_server:
+        label: "Windows Server / Active Directory"
+        module_paths:
+          - exploits/windows/
+      bmc_ipmi:
+        label: "BMC / IPMI / Out-of-Band Management"
+        module_paths:
+          - exploits/bmc/
+          - scanners/bmc/
+          - creds/bmc/
+      ups_power:
+        label: "UPS / Power Management"
+        module_paths:
+          - exploits/ups/
+          - scanners/ups/
+          - creds/ups/
+
+  iot:
+    label: "IoT — Internet of Things"
+    description: "Consumer and corporate connected devices"
+    contexts:
+      home:
+        label: "Home / SOHO"
+        module_paths:
+          - exploits/routers/
+          - exploits/soho_edge/
+          - exploits/cameras/
+          - exploits/misc/
+          - creds/routers/
+          - creds/cameras/
+          - scanners/routers/
+      corporate:
+        label: "Corporate IoT"
+        module_paths:
+          - exploits/cameras/
+          - exploits/nas/
+          - exploits/switches/
+          - exploits/voip/
+          - creds/cameras/
+          - creds/nas/
+          - creds/voip/
+          - scanners/nas/
+      smart_tv:
+        label: "Smart TV"
+        module_paths:
+          - exploits/smart_tv/
+          - scanners/smart_tv/
+          - creds/smart_tv/
+      aps:
+        label: "Access Points / Wireless"
+        module_paths:
+          - exploits/aps/
+          - scanners/aruba/
+      printers:
+        label: "Printers / MFP"
+        module_paths:
+          - exploits/printers/
+          - scanners/printers/
+          - creds/printers/
+      servers:
+        label: "Embedded Servers / Media"
+        module_paths:
+          - exploits/servers/
+          - exploits/ispcpes/
+          - exploits/taps/

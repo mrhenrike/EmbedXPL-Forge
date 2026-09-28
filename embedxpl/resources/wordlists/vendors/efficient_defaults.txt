@@ -1,0 +1,4 @@
+:admin
+login:admin
+login:password
+superuser:admin

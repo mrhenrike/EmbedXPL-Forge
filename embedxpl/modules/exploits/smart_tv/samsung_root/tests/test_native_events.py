@@ -1,0 +1,243 @@
+import asyncio
+from dataclasses import dataclass
+from types import SimpleNamespace
+
+from samsung_tv_root.config import (
+    NativeEventsConfiguration,
+    RemoteConfiguration,
+    TelevisionConfiguration,
+)
+from samsung_tv_root.native_events import (
+    DbusMonitorSignalAssembler,
+    NativeEventCoordinator,
+    NativeEventServer,
+    parse_dbus_monitor_signal,
+    parse_vconf_snapshot,
+)
+
+
+def television(*, enabled: bool = True) -> TelevisionConfiguration:
+    return TelevisionConfiguration(
+        name="living-room",
+        model="qn90f",
+        host="192.0.2.50",
+        device_id=None,
+        root_on_presence=True,
+        disable_native_execution_policy=False,
+        remote=RemoteConfiguration(),
+        events=NativeEventsConfiguration(enabled=enabled),
+    )
+
+
+def test_parse_speaker_volume_signal_preserves_native_values() -> None:
+    event = parse_dbus_monitor_signal(
+        [
+            "signal time=123.5 sender=:1.2 path=/Org/Tizen/SpeakerManagerInternal; "
+            "interface=org.tizen.speakermanager; member=SpeakerVolumeChanged",
+            "   int32 65535",
+            "   int32 23",
+        ]
+    )
+
+    assert event is not None
+    assert event["event"] == "speaker-volume-changed"
+    assert event["support_type"] == 65535
+    assert event["volume"] == 23
+
+
+def test_dbus_assembler_emits_complete_aul_signal() -> None:
+    assembler = DbusMonitorSignalAssembler()
+    lines = [
+        "signal sender=:1.1 interface=org.tizen.aul.AppStatus; member=launch",
+        "   int32 1234",
+        '   string "org.example.app"',
+        '   string "org.example.package"',
+        '   string "uiapp"',
+    ]
+
+    events = [event for line in lines for event in assembler.feed(line)]
+
+    assert events == [
+        {
+            "event": "aul-app-status",
+            "interface": "org.tizen.aul.AppStatus",
+            "member": "launch",
+            "path": None,
+            "sender": ":1.1",
+            "destination": None,
+            "time": None,
+            "status": "launch",
+            "pid": 1234,
+            "appid": "org.example.app",
+            "package": "org.example.package",
+            "app_type": "uiapp",
+        }
+    ]
+
+
+def test_parse_vconf_snapshot_keeps_raw_values_and_source_identity() -> None:
+    state = parse_vconf_snapshot(
+        "memory/appfw/current_fullscreen_appid, value = tv-viewer (String)\n"
+        'memory/eden/source/current_source, value = {"uuid":"source-1"} (String)\n'
+        "memory/system/source_type, value = 13 (Int32)\n"
+    )
+
+    assert state["fullscreen_appid"] == "tv-viewer"
+    assert state["source"] == {"uuid": "source-1"}
+    assert state["source_uuid"] == "source-1"
+    assert state["source_type"] == 13
+    assert state["vconf_types"]["memory/system/source_type"] == "Int32"
+
+
+@dataclass
+class Result:
+    stdout: str
+    stderr: str = ""
+    exit_code: int = 0
+    timed_out: bool = False
+
+
+class RootConnection:
+    closed = False
+
+    async def execute(self, command: str, timeout: float) -> Result:
+        assert "/usr/bin/vconftool get" in command
+        return Result(
+            "memory/appfw/current_fullscreen_appid, value = tv-viewer (String)\n"
+        )
+
+
+def test_agent_active_event_publishes_initial_state_snapshot() -> None:
+    published: list[tuple[str, dict[str, object]]] = []
+    coordinator = NativeEventCoordinator(
+        television(),
+        lambda topic, data: published.append((topic, data)),
+    )
+    coordinator.root_connection = RootConnection()  # type: ignore[assignment]
+
+    asyncio.run(
+        coordinator._handle_event(
+            {"event": "active", "monitor": "agent", "line": "qn90f"}
+        )
+    )
+
+    assert published[0][0] == "television.living-room.native"
+    assert published[0][1]["event"] == "active"
+    assert published[1][0] == "television.living-room.native"
+    assert published[1][1]["event"] == "state-snapshot"
+    assert published[2][0] == "television.living-room.state"
+
+
+def test_appctx_header_publishes_state_without_waiting_for_next_signal() -> None:
+    published: list[tuple[str, dict[str, object]]] = []
+    coordinator = NativeEventCoordinator(
+        television(),
+        lambda topic, data: published.append((topic, data)),
+    )
+    coordinator.root_connection = RootConnection()  # type: ignore[assignment]
+
+    asyncio.run(
+        coordinator._handle_event(
+            {
+                "event": "monitor-line",
+                "monitor": "dbus",
+                "line": (
+                    "signal sender=:1.1 "
+                    "interface=org.tizen.tv.appfw.appctxmgr; member=Changed"
+                ),
+            }
+        )
+    )
+
+    assert [topic for topic, _ in published] == [
+        "television.living-room.native",
+        "television.living-room.state",
+    ]
+    assert published[0][1]["trigger"] == "appctx-dbus-signal"
+
+
+def test_event_reader_closes_disconnected_session_without_restart() -> None:
+    published: list[tuple[str, dict[str, object]]] = []
+    coordinator = NativeEventCoordinator(
+        television(),
+        lambda topic, data: published.append((topic, data)),
+    )
+
+    class Connection:
+        closed = False
+
+        async def read_event(self):
+            raise RuntimeError("disconnected")
+
+        async def close(self) -> None:
+            self.closed = True
+
+    class Server:
+        closed = False
+
+        async def close(self) -> None:
+            self.closed = True
+
+    connection = Connection()
+    server = Server()
+    coordinator.session = SimpleNamespace(connection=connection, server=server)
+
+    asyncio.run(coordinator._read_events(connection))  # type: ignore[arg-type]
+
+    assert coordinator.session is None
+    assert connection.closed
+    assert server.closed
+    assert published[-1][1]["event"] == "disconnected"
+
+
+def test_disabled_coordinator_never_launches(monkeypatch) -> None:
+    coordinator = NativeEventCoordinator(television(enabled=False), lambda *_: None)
+
+    async def fail_launch(*args, **kwargs):
+        raise AssertionError("disabled coordinator must not launch")
+
+    monkeypatch.setattr(coordinator, "_launch", fail_launch)
+
+    asyncio.run(coordinator.reconcile(RootConnection(), "192.0.2.50"))
+
+    assert coordinator.snapshot()["enabled"] is False
+    assert coordinator.snapshot()["active"] is False
+
+
+def test_server_close_during_handshake_closes_peer_cleanly() -> None:
+    class Writer:
+        def __init__(self) -> None:
+            self.started = asyncio.Event()
+            self.release = asyncio.Event()
+            self.closed = False
+
+        def get_extra_info(self, name: str):
+            assert name == "peername"
+            return ("192.0.2.50", 12345)
+
+        def write(self, data: bytes) -> None:
+            assert data.startswith(b"SAMSUNG-TV-EVENTS/1\t")
+
+        async def drain(self) -> None:
+            self.started.set()
+            await self.release.wait()
+            raise ConnectionError("closed during handshake")
+
+        def close(self) -> None:
+            self.closed = True
+
+        async def wait_closed(self) -> None:
+            pass
+
+    async def exercise() -> None:
+        server = NativeEventServer("127.0.0.1", frozenset({"192.0.2.50"}), b"x" * 32)
+        server.accepted = asyncio.get_running_loop().create_future()
+        writer = Writer()
+        task = asyncio.create_task(server._accept(asyncio.StreamReader(), writer))
+        await writer.started.wait()
+        server.accepted.cancel()
+        writer.release.set()
+        await task
+        assert writer.closed
+
+    asyncio.run(exercise())

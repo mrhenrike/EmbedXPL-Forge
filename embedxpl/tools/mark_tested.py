@@ -5,14 +5,19 @@ has been tested/confirmed in a real environment, and writes the result to
 embedxpl/data/module_test_status.json.
 
 Decision logic (in priority order):
-  1. kev              — Any CVE referenced by the module is in the CISA KEV list.
-  2. rsf_public_framework  — Module path contains /rsf_  (RouterSploit-absorbed).
-  3. hatsploit_public_framework — Module path contains /hatsploit (HatSploit-absorbed).
-  4. isf_public_framework  — Module path contains /isf_  (ISF-absorbed).
-  5. known_real_target  — Module lives under cameras/hikvision/, cameras/dahua/,
-                          cameras/intelbras/ AND has at least one CVE reference.
-  6. public_poc        — Any CVE is in embedxpl/data/cve_catalog.db with covered=1.
-  7. False / None       — Everything else: tested=False (stub/theoretical).
+  1.  kev                      — Any CVE referenced by the module is in the CISA KEV list.
+  2.  rsf_public_framework     — Module path contains /rsf_  (RouterSploit-absorbed).
+  3.  hatsploit_public_framework — Module path contains /hatsploit (HatSploit-absorbed).
+  4.  isf_public_framework     — Module path contains /isf_  (ISF-absorbed).
+  5.  known_real_target        — Module lives under cameras/hikvision/, cameras/dahua/,
+                                 cameras/intelbras/ AND has at least one CVE reference.
+  6.  exploitdb                — Filename starts with edb_  (ExploitDB-sourced exploit).
+  7.  metasploit_equivalent    — Any CVE is present in the Metasploit Framework modules.
+  8.  tenable_check            — Module path contains 'tenable' (Tenable-sourced check).
+  9.  lab_poc                  — Any CVE matches a verified PoC dir in the local Labs arsenal.
+  10. public_poc               — Any CVE has a public PoC (poc_github) in TupaXPL cve_catalog.
+  11. covered_cve              — Any CVE is in embedxpl/data/cve_catalog.db with covered=1.
+  12. False / None             — Everything else: tested=False (stub/theoretical).
 
 Output:
   embedxpl/data/module_test_status.json
@@ -46,6 +51,15 @@ _DATA_DIR = _ROOT / "data"
 _OUT_FILE = _DATA_DIR / "module_test_status.json"
 _KEV_FILE = _DATA_DIR / "cisa_kev.json"
 _CVE_DB = _DATA_DIR / "cve_catalog.db"
+
+# External source paths
+_MSF_MODULES_DIR = _ROOT.parent / ".tmp" / "metasploit-framework" / "modules"
+_MSF_CVE_CACHE   = Path("/tmp/msf_cves.txt")
+_TUPA_CVE_DB     = (
+    Path(__file__).resolve().parents[3]          # XPL-Suite/
+    / "TupaXPL-Forge" / "offsecforge" / "intel" / "cve_db" / "cve_catalog.db"
+)
+_LABS_ARSENAL_DIR = Path("/run/media/mrhenrike/Data/Projects/Labs/new-arsenal-2026-09")
 
 # CISA KEV feed URL
 _KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
@@ -104,6 +118,99 @@ def _load_covered_cves() -> set[str]:
 
 
 # ---------------------------------------------------------------------------
+# Metasploit CVE loader
+# ---------------------------------------------------------------------------
+
+def _load_msf_cves() -> set[str]:
+    """Return the set of CVE IDs covered by Metasploit Framework modules.
+
+    Strategy (fastest first):
+      1. Use pre-built cache at /tmp/msf_cves.txt (generated externally or by this run).
+      2. Scan _MSF_MODULES_DIR with grep if cache is absent.
+      3. Return empty set if MSF is not available.
+    """
+    # 1. Fast path: pre-built cache file
+    if _MSF_CVE_CACHE.exists() and _MSF_CVE_CACHE.stat().st_size > 0:
+        try:
+            lines = _MSF_CVE_CACHE.read_text(encoding="utf-8").splitlines()
+            cves = {ln.strip().upper() for ln in lines if ln.strip()}
+            print(f"[*] MSF CVEs loaded from cache : {len(cves):,} ({_MSF_CVE_CACHE})")
+            return cves
+        except Exception as e:
+            print(f"[!] Could not read MSF cache: {e}", file=sys.stderr)
+
+    # 2. Scan MSF modules directory
+    if not _MSF_MODULES_DIR.exists():
+        print(f"[!] MSF modules dir not found: {_MSF_MODULES_DIR}", file=sys.stderr)
+        return set()
+
+    print(f"[*] Scanning MSF modules for CVEs (this may take a minute) …")
+    import subprocess
+    try:
+        result = subprocess.run(
+            ["grep", "-roh", r"CVE-[0-9]\{4\}-[0-9]\+", str(_MSF_MODULES_DIR)],
+            capture_output=True, text=True, timeout=300,
+        )
+        cves = {ln.strip().upper() for ln in result.stdout.splitlines() if ln.strip()}
+        # Cache result for future runs
+        try:
+            _MSF_CVE_CACHE.write_text("\n".join(sorted(cves)), encoding="utf-8")
+        except Exception:
+            pass
+        print(f"[*] MSF CVEs extracted via scan  : {len(cves):,}")
+        return cves
+    except Exception as e:
+        print(f"[!] MSF CVE scan failed: {e}", file=sys.stderr)
+        return set()
+
+
+# ---------------------------------------------------------------------------
+# Lab PoC CVE loader
+# ---------------------------------------------------------------------------
+
+def _load_lab_cves() -> set[str]:
+    """Return CVE IDs from verified PoC directories in the local Labs arsenal."""
+    if not _LABS_ARSENAL_DIR.exists():
+        print(f"[!] Labs arsenal dir not found: {_LABS_ARSENAL_DIR}", file=sys.stderr)
+        return set()
+    try:
+        cves: set[str] = set()
+        for entry in _LABS_ARSENAL_DIR.iterdir():
+            hits = _CVE_RE.findall(entry.name)
+            for h in hits:
+                cves.add(h.upper())
+        print(f"[*] Lab PoC CVEs loaded          : {len(cves):,} ({_LABS_ARSENAL_DIR.name})")
+        return cves
+    except Exception as e:
+        print(f"[!] Labs arsenal scan failed: {e}", file=sys.stderr)
+        return set()
+
+
+# ---------------------------------------------------------------------------
+# TupaXPL public PoC CVE loader
+# ---------------------------------------------------------------------------
+
+def _load_tupa_poc_cves() -> set[str]:
+    """Return CVEs that have at least one public PoC entry in TupaXPL cve_catalog."""
+    if not _TUPA_CVE_DB.exists():
+        print(f"[!] TupaXPL cve_catalog not found: {_TUPA_CVE_DB}", file=sys.stderr)
+        return set()
+    try:
+        conn = sqlite3.connect(str(_TUPA_CVE_DB))
+        # poc_github is a JSON array — non-empty means at least one GitHub PoC exists
+        rows = conn.execute(
+            "SELECT cve_id FROM cves WHERE poc_github IS NOT NULL AND poc_github != '[]'"
+        ).fetchall()
+        conn.close()
+        cves = {r[0].upper() for r in rows}
+        print(f"[*] TupaXPL public PoC CVEs      : {len(cves):,}")
+        return cves
+    except Exception as e:
+        print(f"[!] Could not read TupaXPL cve_catalog: {e}", file=sys.stderr)
+        return set()
+
+
+# ---------------------------------------------------------------------------
 # Module scanner
 # ---------------------------------------------------------------------------
 
@@ -121,6 +228,9 @@ def _classify(
     cves: list[str],
     kev_set: set[str],
     covered_cves: set[str],
+    msf_cves: set[str],
+    lab_cves: set[str],
+    tupa_poc_cves: set[str],
 ) -> tuple[bool | None, str]:
     """Return (tested, evidence) for a single module.
 
@@ -129,6 +239,7 @@ def _classify(
         (False, '')            — untested / stub
     """
     lower = rel_path.lower()
+    filename = lower.split("/")[-1]
 
     # 1. KEV
     kev_hits = [c for c in cves if c in kev_set]
@@ -164,12 +275,38 @@ def _classify(
     if is_known_target and cves:
         return True, "known_real_target"
 
-    # 6. CVE in local catalog with covered=1 → covered CVE (public PoC exists)
-    poc_hits = [c for c in cves if c in covered_cves]
-    if poc_hits:
+    # 6. ExploitDB — filename starts with edb_ (e.g. edb_38514.py)
+    if filename.startswith("edb_") or "/edb_" in lower:
+        return True, "exploitdb"
+
+    # 7. Metasploit cross-reference — CVE present in MSF modules
+    if msf_cves:
+        msf_hits = [c for c in cves if c in msf_cves]
+        if msf_hits:
+            return True, "metasploit_equivalent"
+
+    # 8. Tenable-sourced checks (path contains tenable directory)
+    if "tenable" in lower:
+        return True, "tenable_check"
+
+    # 9. Lab PoC — CVE matches a verified PoC repo in local Labs arsenal
+    if lab_cves:
+        lab_hits = [c for c in cves if c in lab_cves]
+        if lab_hits:
+            return True, "lab_poc"
+
+    # 10. TupaXPL public PoC — CVE has a GitHub PoC in the pocindex catalog
+    if tupa_poc_cves:
+        poc_hits = [c for c in cves if c in tupa_poc_cves]
+        if poc_hits:
+            return True, "public_poc"
+
+    # 11. CVE in local catalog with covered=1
+    cov_hits = [c for c in cves if c in covered_cves]
+    if cov_hits:
         return True, "covered_cve"
 
-    # 7. Untested
+    # 12. Untested
     return False, ""
 
 
@@ -179,8 +316,12 @@ def _classify(
 
 def run(update_db: bool = False, verbose: bool = False) -> dict:
     """Run the full marking pass and return a summary dict."""
-    kev_set = _load_kev_set()
-    covered_cves = _load_covered_cves()
+    print("[*] Loading evidence sources …")
+    kev_set       = _load_kev_set()
+    covered_cves  = _load_covered_cves()
+    msf_cves      = _load_msf_cves()
+    lab_cves      = _load_lab_cves()
+    tupa_poc_cves = _load_tupa_poc_cves()
 
     print(f"[*] KEV entries loaded  : {len(kev_set):,}")
     print(f"[*] Covered CVEs loaded : {len(covered_cves):,}")
@@ -192,23 +333,37 @@ def run(update_db: bool = False, verbose: bool = False) -> dict:
         "hatsploit_public_framework": 0,
         "isf_public_framework": 0,
         "known_real_target": 0,
+        "exploitdb": 0,
+        "metasploit_equivalent": 0,
+        "tenable_check": 0,
+        "lab_poc": 0,
+        "public_poc": 0,
         "covered_cve": 0,
         "untested": 0,
         "total": 0,
     }
 
     py_files = sorted(_MODULES_DIR.rglob("*.py"))
+    total_files = len(py_files)
+    print(f"[*] Scanning {total_files:,} Python files …")
 
-    for fpath in py_files:
+    for i, fpath in enumerate(py_files, 1):
         if fpath.name in ("__init__.py",):
             continue
+        if i % 1000 == 0:
+            pct = i * 100 // total_files
+            print(f"    … {i:,}/{total_files:,} ({pct}%) processed", flush=True)
+
         rel = str(fpath.relative_to(_ROOT.parent))  # relative to repo root
         cves = _extract_cves(fpath)
 
         # relative path for classification (use the part under modules/)
         rel_mod = str(fpath.relative_to(_ROOT)).replace("\\", "/")
 
-        tested, evidence = _classify(rel_mod, cves, kev_set, covered_cves)
+        tested, evidence = _classify(
+            rel_mod, cves, kev_set, covered_cves,
+            msf_cves, lab_cves, tupa_poc_cves,
+        )
         status[rel] = {
             "tested": tested,
             "evidence": evidence,

@@ -1,0 +1,4 @@
+admin:admin
+admin:password
+support:admin
+support:password

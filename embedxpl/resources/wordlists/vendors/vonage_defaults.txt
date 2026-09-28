@@ -1,0 +1,9 @@
+admin:admin
+admin:router
+admin:user
+router:admin
+router:router
+router:user
+user:admin
+user:router
+user:user

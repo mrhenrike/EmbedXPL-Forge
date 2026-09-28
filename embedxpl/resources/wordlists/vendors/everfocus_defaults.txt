@@ -1,0 +1,5 @@
+admin:admin
+operator:operator
+supervisor:supervisor
+admin:11111111
+user:11111111
