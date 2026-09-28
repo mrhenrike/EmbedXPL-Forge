@@ -3,8 +3,8 @@
 # EmbedXPL adaptation: André Henrique (@mrhenrike) | União Geek
 
 from embedxpl.core.exploit import *
-from embedxpl.core.exploit.ssh_client import SSHClient
-# SKIPPED: from routersploit.resources import wordlists
+from embedxpl.core.ssh.ssh_client import SSHClient
+# SKIPPED: # FIXED: from routersploit.resources import wordlists
 
 
 class Exploit(SSHClient):

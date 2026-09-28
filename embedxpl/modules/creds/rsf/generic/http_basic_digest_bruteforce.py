@@ -4,8 +4,8 @@
 
 import itertools
 from embedxpl.core.exploit import *
-from embedxpl.core.exploit.http_client import HTTPClient
-# SKIPPED: from routersploit.resources import wordlists
+from embedxpl.core.http.http_client import HTTPClient
+# SKIPPED: # FIXED: from routersploit.resources import wordlists
 from requests.auth import HTTPDigestAuth
 
 

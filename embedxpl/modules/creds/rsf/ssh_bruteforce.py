@@ -1,7 +1,7 @@
 import itertools
-from routersploit.core.exploit import *
-from routersploit.core.ssh.ssh_client import SSHClient
-from routersploit.resources import wordlists
+from embedxpl.core.exploit import *
+from embedxpl.core.ssh.ssh_client import SSHClient
+# FIXED: from routersploit.resources import wordlists
 
 
 class Exploit(SSHClient):

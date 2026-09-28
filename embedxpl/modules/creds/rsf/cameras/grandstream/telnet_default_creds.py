@@ -3,7 +3,7 @@
 # EmbedXPL adaptation: André Henrique (@mrhenrike) | União Geek
 
 from embedxpl.core.exploit import *
-# SKIPPED: from routersploit.modules.creds.generic.telnet_default import Exploit as TelnetDefault
+# SKIPPED: # FIXED: from routersploit.modules.creds.generic.telnet_default import Exploit as TelnetDefault
 
 
 class Exploit(TelnetDefault):

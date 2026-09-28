@@ -1,6 +1,6 @@
-from routersploit.core.exploit import *
-from routersploit.core.snmp.snmp_client import SNMPClient
-from routersploit.resources import wordlists
+from embedxpl.core.exploit import *
+# FIXED: from routersploit.core.snmp.snmp_client import SNMPClient
+# FIXED: from routersploit.resources import wordlists
 
 
 class Exploit(SNMPClient):

@@ -1,5 +1,5 @@
-from routersploit.core.exploit import *
-from routersploit.core.http.http_client import HTTPClient
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):

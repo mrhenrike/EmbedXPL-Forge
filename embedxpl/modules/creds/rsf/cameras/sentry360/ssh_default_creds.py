@@ -3,7 +3,7 @@
 # EmbedXPL adaptation: André Henrique (@mrhenrike) | União Geek
 
 from embedxpl.core.exploit import *
-# SKIPPED: from routersploit.modules.creds.generic.ssh_default import Exploit as SSHDefault
+# SKIPPED: # FIXED: from routersploit.modules.creds.generic.ssh_default import Exploit as SSHDefault
 
 
 class Exploit(SSHDefault):

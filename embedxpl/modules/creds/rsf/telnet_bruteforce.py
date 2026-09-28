@@ -1,7 +1,7 @@
 import itertools
-from routersploit.core.exploit import *
-from routersploit.core.telnet.telnet_client import TelnetClient
-from routersploit.resources import wordlists
+from embedxpl.core.exploit import *
+from embedxpl.core.telnet.telnet_client import TelnetClient
+# FIXED: from routersploit.resources import wordlists
 
 
 class Exploit(TelnetClient):
