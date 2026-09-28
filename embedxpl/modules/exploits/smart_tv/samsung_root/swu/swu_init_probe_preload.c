@@ -1,0 +1,305 @@
+/*
+ * Inspect the shared buffers used by the QN90F SWU command-0 initialization.
+ * Loaded only as a constructor; always exits before the updater's main.
+ */
+
+typedef unsigned int u32;
+typedef unsigned int size_t;
+typedef int ssize_t;
+
+extern int open(const char *path, int flags, ...);
+extern ssize_t read(int descriptor, void *buffer, size_t count);
+extern ssize_t write(int descriptor, const void *buffer, size_t count);
+extern int close(int descriptor);
+extern void _exit(int status) __attribute__((noreturn));
+extern void *memset(void *destination, int value, size_t count);
+
+typedef struct {
+    unsigned char *begin;
+    unsigned char *end;
+    unsigned char *capacity;
+} ByteVector;
+
+extern void swu_client_construct(void *client)
+    __asm__("_ZN3SWU8Platform18SWUTrustZoneClientC1Ev");
+extern void swu_client_destroy(void *client)
+    __asm__("_ZN3SWU8Platform18SWUTrustZoneClientD1Ev");
+extern int swu_client_open(void *client)
+    __asm__("_ZN3SWU8Platform18SWUTrustZoneClient4openEv");
+extern int swu_client_init(
+    void *client,
+    int encrypt,
+    int passphrase_encrypted,
+    int key_derivation_method,
+    int key_size,
+    int mode,
+    const ByteVector *passphrase,
+    const ByteVector *salt,
+    u32 chunk_size)
+    __asm__("_ZN3SWU8Platform18SWUTrustZoneClient4initEbbNS_6Common2IO22AESKeyDerivationMethodENS3_10AESKeySizeENS3_11AESModeTypeERKSt6vectorIhSaIhEESB_j");
+
+#define O_RDONLY 0
+#define O_WRONLY 1
+#define O_CREAT 0100
+#define O_TRUNC 01000
+#define MAX_SHARED_SIZE 0x10000U
+#define CLIENT_SIZE 0x78U
+#define CANARY 0xa5
+
+static const char items_path[] =
+    "/usr/share/org.tizen.tv.swu/itemsAESPassphraseEncrypted.txt";
+static const char salt_path[] =
+    "/home/owner/share/tmp/sdk_tools/swu-passphrase/firmware-salt.bin";
+static const char status_path[] =
+    "/home/owner/share/tmp/sdk_tools/swu-passphrase/init-probe-status.txt";
+static const char input_path[] =
+    "/home/owner/share/tmp/sdk_tools/swu-passphrase/init-probe-input.bin";
+static const char output_path[] =
+    "/home/owner/share/tmp/sdk_tools/swu-passphrase/init-probe-output.bin";
+static const char salt_output_path[] =
+    "/home/owner/share/tmp/sdk_tools/swu-passphrase/init-probe-salt.bin";
+static const char object_path[] =
+    "/home/owner/share/tmp/sdk_tools/swu-passphrase/init-probe-object.bin";
+static const char hex_digits[] = "0123456789abcdef";
+
+static unsigned char items[MAX_SHARED_SIZE];
+static unsigned char firmware_salt[64];
+
+static size_t string_length(const char *text)
+{
+    size_t length = 0;
+    while (text[length] != '\0') {
+        ++length;
+    }
+    return length;
+}
+
+static int write_all(int descriptor, const void *raw_buffer, size_t count)
+{
+    const unsigned char *buffer = (const unsigned char *)raw_buffer;
+    while (count != 0U) {
+        ssize_t written = write(descriptor, buffer, count);
+        if (written <= 0) {
+            return 0;
+        }
+        buffer += (size_t)written;
+        count -= (size_t)written;
+    }
+    return 1;
+}
+
+static void write_text(int descriptor, const char *text)
+{
+    (void)write_all(descriptor, text, string_length(text));
+}
+
+static void write_u32_hex(int descriptor, u32 value)
+{
+    char encoded[10];
+    unsigned int index;
+    encoded[0] = '0';
+    encoded[1] = 'x';
+    for (index = 0; index < 8U; ++index) {
+        unsigned int shift = (7U - index) * 4U;
+        encoded[2U + index] = hex_digits[(value >> shift) & 0x0fU];
+    }
+    (void)write_all(descriptor, encoded, sizeof(encoded));
+}
+
+static void write_field(int descriptor, const char *name, u32 value)
+{
+    write_text(descriptor, name);
+    write_text(descriptor, "=");
+    write_u32_hex(descriptor, value);
+    write_text(descriptor, "\n");
+}
+
+static int read_bounded(
+    const char *path,
+    unsigned char *buffer,
+    size_t capacity,
+    u32 *length)
+{
+    int descriptor = open(path, O_RDONLY);
+    size_t used = 0;
+    if (descriptor < 0) {
+        return 0;
+    }
+    while (used < capacity) {
+        ssize_t received = read(descriptor, buffer + used, capacity - used);
+        if (received < 0) {
+            close(descriptor);
+            return 0;
+        }
+        if (received == 0) {
+            close(descriptor);
+            *length = (u32)used;
+            return used != 0U;
+        }
+        used += (size_t)received;
+    }
+    close(descriptor);
+    return 0;
+}
+
+static int write_private_file(
+    const char *path,
+    const void *buffer,
+    size_t length)
+{
+    int descriptor = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+    int success;
+    if (descriptor < 0) {
+        return 0;
+    }
+    success = write_all(descriptor, buffer, length);
+    close(descriptor);
+    return success;
+}
+
+static u32 changed_bytes(const unsigned char *buffer, size_t length)
+{
+    u32 changed = 0;
+    size_t index;
+    for (index = 0; index < length; ++index) {
+        if (buffer[index] != CANARY) {
+            ++changed;
+        }
+    }
+    return changed;
+}
+
+static int valid_shared_buffer(const void *buffer, u32 size)
+{
+    return buffer != (const void *)0 && size != 0U && size <= MAX_SHARED_SIZE;
+}
+
+__attribute__((constructor)) static void inspect_swu_init(void)
+{
+    u32 client_words[CLIENT_SIZE / sizeof(u32)];
+    unsigned char *client = (unsigned char *)client_words;
+    unsigned char *input_buffer;
+    unsigned char *output_buffer;
+    unsigned char *salt_buffer;
+    u32 input_capacity;
+    u32 output_capacity;
+    u32 salt_capacity;
+    u32 items_length = 0;
+    u32 salt_length = 0;
+    ByteVector items_vector;
+    ByteVector salt_vector;
+    int status_descriptor;
+    int open_result;
+    int init_result;
+    int files_ok = 1;
+
+    status_descriptor = open(
+        status_path,
+        O_WRONLY | O_CREAT | O_TRUNC,
+        0600);
+    if (status_descriptor < 0) {
+        _exit(1);
+    }
+    if (!read_bounded(items_path, items, sizeof(items), &items_length) ||
+        !read_bounded(
+            salt_path,
+            firmware_salt,
+            sizeof(firmware_salt),
+            &salt_length)) {
+        write_text(status_descriptor, "stage=read-input failed=1\n");
+        close(status_descriptor);
+        _exit(1);
+    }
+
+    memset(client_words, 0, sizeof(client_words));
+    swu_client_construct(client_words);
+    open_result = swu_client_open(client_words);
+    write_field(status_descriptor, "open_result", (u32)open_result);
+    if (!open_result) {
+        swu_client_destroy(client_words);
+        close(status_descriptor);
+        _exit(1);
+    }
+
+    /*
+     * Samsung's init() calls open(), whose guard checks the initialized byte
+     * rather than the opened byte. Preserve this explicitly opened session so
+     * command 0 uses the canary-filled buffers below instead of allocating a
+     * second set.
+     */
+    client[0x75] = 1;
+
+    input_buffer = *(unsigned char **)(client + 0x08);
+    input_capacity = *(u32 *)(client + 0x0c);
+    output_buffer = *(unsigned char **)(client + 0x2c);
+    output_capacity = *(u32 *)(client + 0x30);
+    salt_buffer = *(unsigned char **)(client + 0x50);
+    salt_capacity = *(u32 *)(client + 0x54);
+
+    write_field(status_descriptor, "input_capacity", input_capacity);
+    write_field(status_descriptor, "output_capacity", output_capacity);
+    write_field(status_descriptor, "salt_capacity", salt_capacity);
+    write_field(status_descriptor, "items_length", items_length);
+    write_field(status_descriptor, "salt_length", salt_length);
+    if (!valid_shared_buffer(input_buffer, input_capacity) ||
+        !valid_shared_buffer(output_buffer, output_capacity) ||
+        !valid_shared_buffer(salt_buffer, salt_capacity)) {
+        write_text(status_descriptor, "stage=validate-shared failed=1\n");
+        swu_client_destroy(client_words);
+        close(status_descriptor);
+        _exit(1);
+    }
+
+    memset(input_buffer, CANARY, input_capacity);
+    memset(output_buffer, CANARY, output_capacity);
+    memset(salt_buffer, CANARY, salt_capacity);
+
+    items_vector.begin = items;
+    items_vector.end = items + items_length;
+    items_vector.capacity = items + items_length;
+    salt_vector.begin = firmware_salt;
+    salt_vector.end = firmware_salt + salt_length;
+    salt_vector.capacity = firmware_salt + salt_length;
+
+    init_result = swu_client_init(
+        client_words,
+        0,
+        1,
+        1,
+        2,
+        1,
+        &items_vector,
+        &salt_vector,
+        MAX_SHARED_SIZE);
+
+    input_buffer = *(unsigned char **)(client + 0x08);
+    input_capacity = *(u32 *)(client + 0x0c);
+    output_buffer = *(unsigned char **)(client + 0x2c);
+    output_capacity = *(u32 *)(client + 0x30);
+    salt_buffer = *(unsigned char **)(client + 0x50);
+    salt_capacity = *(u32 *)(client + 0x54);
+
+    write_field(status_descriptor, "init_result", (u32)init_result);
+    write_field(
+        status_descriptor,
+        "input_changed_bytes",
+        changed_bytes(input_buffer, input_capacity));
+    write_field(
+        status_descriptor,
+        "output_changed_bytes",
+        changed_bytes(output_buffer, output_capacity));
+    write_field(
+        status_descriptor,
+        "salt_changed_bytes",
+        changed_bytes(salt_buffer, salt_capacity));
+
+    files_ok &= write_private_file(input_path, input_buffer, input_capacity);
+    files_ok &= write_private_file(output_path, output_buffer, output_capacity);
+    files_ok &= write_private_file(salt_output_path, salt_buffer, salt_capacity);
+    files_ok &= write_private_file(object_path, client, CLIENT_SIZE);
+    write_field(status_descriptor, "files_ok", (u32)files_ok);
+
+    swu_client_destroy(client_words);
+    close(status_descriptor);
+    _exit(init_result && files_ok ? 0 : 1);
+}

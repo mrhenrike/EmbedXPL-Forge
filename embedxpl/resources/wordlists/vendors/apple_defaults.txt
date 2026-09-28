@@ -1,0 +1,8 @@
+:public
+:xyzzy
+:admin
+:password
+admin:public
+mobile:dottie
+root:admin
+root:alpine

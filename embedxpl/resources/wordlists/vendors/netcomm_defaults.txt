@@ -1,0 +1,12 @@
+admin:admin
+admin:default
+admin:password
+admin:root
+admin:trustpower
+root:admin
+root:default
+root:password
+root:root
+root:trustpower
+:admin
+user:password

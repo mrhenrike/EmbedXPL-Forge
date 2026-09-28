@@ -1,0 +1,2 @@
+admin:NetCache
+admin:admin123

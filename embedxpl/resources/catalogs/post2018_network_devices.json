@@ -1,0 +1,40 @@
+{
+  "notes": "Curated market sample of network devices released from 2018 onward for coverage-gap tracking.",
+  "entries": [
+    {"year": 2018, "vendor": "TP-Link", "product": "Archer AX6000", "segment": "router"},
+    {"year": 2018, "vendor": "ASUS", "product": "RT-AX88U", "segment": "router"},
+    {"year": 2018, "vendor": "Netgear", "product": "Nighthawk RAX80", "segment": "router"},
+
+    {"year": 2019, "vendor": "D-Link", "product": "DIR-X1560", "segment": "router"},
+    {"year": 2019, "vendor": "Netgear", "product": "Nighthawk RAX40", "segment": "router"},
+    {"year": 2019, "vendor": "TP-Link", "product": "Archer AX50", "segment": "router"},
+
+    {"year": 2020, "vendor": "Comcast", "product": "XB7 xFi Gateway (Gen2 class)", "segment": "modem-router"},
+    {"year": 2020, "vendor": "Rogers/Shaw", "product": "XB7 Gateway", "segment": "modem-router"},
+    {"year": 2020, "vendor": "TP-Link", "product": "Archer AX73", "segment": "router"},
+    {"year": 2020, "vendor": "MikroTik", "product": "hAP ax3", "segment": "router"},
+
+    {"year": 2021, "vendor": "Netgear", "product": "Nighthawk RAXE500", "segment": "router"},
+    {"year": 2021, "vendor": "ASUS", "product": "ROG Rapture GT-AXE11000", "segment": "router"},
+    {"year": 2021, "vendor": "Linksys", "product": "Atlas Max 6E", "segment": "mesh-router"},
+    {"year": 2021, "vendor": "Ubiquiti", "product": "Dream Router", "segment": "router"},
+
+    {"year": 2022, "vendor": "TP-Link", "product": "Deco XE75", "segment": "mesh-router"},
+    {"year": 2022, "vendor": "Huawei", "product": "WiFi Mesh 7", "segment": "mesh-router"},
+    {"year": 2022, "vendor": "ZTE", "product": "ZXHN H3601P", "segment": "isp-cpe"},
+    {"year": 2022, "vendor": "Nokia", "product": "Beacon 6", "segment": "mesh-router"},
+
+    {"year": 2023, "vendor": "TP-Link", "product": "Archer BE800", "segment": "router"},
+    {"year": 2023, "vendor": "Netgear", "product": "Nighthawk RS700", "segment": "router"},
+    {"year": 2023, "vendor": "ASUS", "product": "ROG Rapture GT-BE98", "segment": "router"},
+    {"year": 2023, "vendor": "eero", "product": "eero Max 7", "segment": "mesh-router"},
+
+    {"year": 2024, "vendor": "AVM", "product": "FRITZ!Box 5690 Pro", "segment": "modem-router"},
+    {"year": 2024, "vendor": "Ubiquiti", "product": "Cloud Gateway Ultra", "segment": "router"},
+    {"year": 2024, "vendor": "TP-Link", "product": "Archer BE550", "segment": "router"},
+    {"year": 2024, "vendor": "MikroTik", "product": "L009 series refresh", "segment": "router"},
+
+    {"year": 2025, "vendor": "ISP Multi-vendor", "product": "Wi-Fi 7 CPE rollout class", "segment": "isp-cpe"},
+    {"year": 2026, "vendor": "ISP Multi-vendor", "product": "Wi-Fi 7/8 transition CPE class", "segment": "isp-cpe"}
+  ]
+}

@@ -1,0 +1,401 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
+
+internal static class Qn90fScreenAnalysisDump
+{
+    private const int ExpectedWidth = 960;
+    private const int ExpectedHeight = 540;
+    private const int CaptureWaitMilliseconds = 5000;
+    private const int CaptureSampleMilliseconds = 2;
+
+    private sealed class CaptureProfile
+    {
+        public string Name;
+        public string Executable;
+        public string ExecutableInApps;
+        public uint ManagerPointerOffset;
+        public uint InitializedOffset;
+        public uint RgbBufferOffset;
+        public uint WidthOffset;
+        public uint HeightOffset;
+        public uint? CaptureSequenceOffset;
+    }
+
+    private static readonly CaptureProfile ScreenAnalysisProfile =
+        new CaptureProfile
+        {
+            Name = "screen-analysis",
+            Executable = "/usr/bin/screen-analysis-discovery-service",
+            ExecutableInApps =
+                "/usr/apps/com.samsung.tv.screen-analysis-discovery-service/" +
+                "bin/screen-analysis-discovery-service",
+            ManagerPointerOffset = 0x49700,
+            InitializedOffset = 0x08,
+            RgbBufferOffset = 0x0c,
+            WidthOffset = 0x1c,
+            HeightOffset = 0x20,
+            CaptureSequenceOffset = 0x84,
+        };
+
+    private static readonly CaptureProfile SaUiProfile =
+        new CaptureProfile
+        {
+            Name = "sa-ui",
+            Executable = "/usr/bin/sa-ui-detector",
+            ExecutableInApps =
+                "/usr/apps/com.samsung.tv.screen-analysis-ui-detector/" +
+                "bin/sa-ui-detector",
+            ManagerPointerOffset = 0x1d2e4,
+            InitializedOffset = 0x04,
+            RgbBufferOffset = 0x00,
+            WidthOffset = 0x10,
+            HeightOffset = 0x14,
+            CaptureSequenceOffset = null,
+        };
+
+    public static int Main(string[] arguments)
+    {
+        if (arguments.Length < 1 || arguments.Length > 2)
+        {
+            Console.Error.WriteLine(
+                "usage: Qn90fScreenAnalysisDump output_rgb_path " +
+                "[screen-analysis|sa-ui]");
+            return 2;
+        }
+
+        try
+        {
+            CaptureProfile profile = SelectProfile(
+                arguments.Length == 2 ? arguments[1] : "screen-analysis");
+            int pid = FindProcess(profile);
+            uint loadBias = FindLoadBias(pid, profile);
+            uint managerPointerAddress = checked(
+                loadBias + profile.ManagerPointerOffset);
+            string memoryPath = string.Format(
+                CultureInfo.InvariantCulture,
+                "/proc/{0}/mem",
+                pid);
+            using (FileStream memory = new FileStream(
+                memoryPath,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.ReadWrite))
+            {
+                uint managerAddress;
+                byte initialized;
+                uint rgbAddress;
+                int width;
+                int height;
+                int? sequence;
+                WaitForCaptureManager(
+                    memory,
+                    managerPointerAddress,
+                    profile,
+                    out managerAddress,
+                    out initialized,
+                    out rgbAddress,
+                    out width,
+                    out height,
+                    out sequence);
+
+                Console.WriteLine("profile={0}", profile.Name);
+                Console.WriteLine("pid={0}", pid);
+                Console.WriteLine("load_bias=0x{0:x8}", loadBias);
+                Console.WriteLine(
+                    "capture_manager=0x{0:x8}",
+                    managerAddress);
+                Console.WriteLine("initialized={0}", initialized);
+                if (sequence.HasValue)
+                {
+                    Console.WriteLine("capture_sequence={0}", sequence.Value);
+                }
+                Console.WriteLine("width={0}", width);
+                Console.WriteLine("height={0}", height);
+                Console.WriteLine("rgb_address=0x{0:x8}", rgbAddress);
+
+                if (initialized == 0 ||
+                    (sequence.HasValue && sequence.Value < 0) ||
+                    rgbAddress == 0)
+                {
+                    throw new InvalidOperationException(
+                        "the stock service has not completed a capture");
+                }
+
+                if (width != ExpectedWidth || height != ExpectedHeight)
+                {
+                    throw new InvalidOperationException(
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            "unexpected retained frame dimensions: {0}x{1}",
+                            width,
+                            height));
+                }
+
+                int length = checked(width * height * 3);
+                byte[] rgb = ReadBytes(memory, rgbAddress, length);
+                int nonzero = CountNonzero(rgb);
+                if (nonzero == 0)
+                {
+                    throw new InvalidOperationException(
+                        "the retained RGB frame is entirely zero");
+                }
+
+                string outputPath = arguments[0];
+                string directory = Path.GetDirectoryName(outputPath);
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                File.WriteAllBytes(outputPath, rgb);
+                Console.WriteLine("rgb_path={0}", outputPath);
+                Console.WriteLine("rgb_bytes={0}", rgb.Length);
+                Console.WriteLine("nonzero_bytes={0}", nonzero);
+                return 0;
+            }
+        }
+        catch (Exception exception)
+        {
+            Console.Error.WriteLine(
+                "screen_analysis_dump_error={0}",
+                exception.Message);
+            return 1;
+        }
+    }
+
+    private static void WaitForCaptureManager(
+        FileStream memory,
+        uint managerPointerAddress,
+        CaptureProfile profile,
+        out uint managerAddress,
+        out byte initialized,
+        out uint rgbAddress,
+        out int width,
+        out int height,
+        out int? sequence)
+    {
+        DateTime deadline = DateTime.UtcNow.AddMilliseconds(
+            CaptureWaitMilliseconds);
+        do
+        {
+            managerAddress = ReadUInt32(memory, managerPointerAddress);
+            if (managerAddress != 0)
+            {
+                initialized = ReadBytes(
+                    memory,
+                    checked(managerAddress + profile.InitializedOffset),
+                    1)[0];
+                rgbAddress = ReadUInt32(
+                    memory,
+                    checked(managerAddress + profile.RgbBufferOffset));
+                width = ReadInt32(
+                    memory,
+                    checked(managerAddress + profile.WidthOffset));
+                height = ReadInt32(
+                    memory,
+                    checked(managerAddress + profile.HeightOffset));
+                sequence = profile.CaptureSequenceOffset.HasValue
+                    ? (int?)ReadInt32(
+                        memory,
+                        checked(
+                            managerAddress +
+                            profile.CaptureSequenceOffset.Value))
+                    : null;
+
+                if (initialized != 0 &&
+                    rgbAddress != 0 &&
+                    width == ExpectedWidth &&
+                    height == ExpectedHeight &&
+                    (!sequence.HasValue || sequence.Value >= 0))
+                {
+                    return;
+                }
+            }
+
+            Thread.Sleep(CaptureSampleMilliseconds);
+        }
+        while (DateTime.UtcNow < deadline);
+
+        managerAddress = 0;
+        initialized = 0;
+        rgbAddress = 0;
+        width = 0;
+        height = 0;
+        sequence = null;
+        throw new InvalidOperationException(
+            "no initialized CaptureManager appeared within the bounded wait");
+    }
+
+    private static CaptureProfile SelectProfile(string name)
+    {
+        if (name == ScreenAnalysisProfile.Name)
+        {
+            return ScreenAnalysisProfile;
+        }
+
+        if (name == SaUiProfile.Name)
+        {
+            return SaUiProfile;
+        }
+
+        throw new ArgumentException("unknown capture profile: " + name);
+    }
+
+    private static int FindProcess(CaptureProfile profile)
+    {
+        foreach (string processDirectory in Directory.GetDirectories("/proc"))
+        {
+            int pid;
+            if (!int.TryParse(
+                    Path.GetFileName(processDirectory),
+                    NumberStyles.None,
+                    CultureInfo.InvariantCulture,
+                    out pid))
+            {
+                continue;
+            }
+
+            try
+            {
+                string executable = ResolveLink(
+                    Path.Combine(processDirectory, "exe"));
+                if (executable == profile.Executable ||
+                    executable == profile.ExecutableInApps)
+                {
+                    return pid;
+                }
+            }
+            catch (IOException)
+            {
+            }
+            catch (UnauthorizedAccessException)
+            {
+            }
+        }
+
+        throw new InvalidOperationException(
+            profile.Executable + " is not running");
+    }
+
+    private static string ResolveLink(string path)
+    {
+        byte[] buffer = new byte[4096];
+        int length = readlink(path, buffer, (UIntPtr)buffer.Length);
+        if (length < 0)
+        {
+            throw new IOException(
+                "readlink failed for " + path,
+                new System.ComponentModel.Win32Exception(
+                    Marshal.GetLastWin32Error()));
+        }
+
+        return System.Text.Encoding.UTF8.GetString(buffer, 0, length);
+    }
+
+    [DllImport("libc", SetLastError = true)]
+    private static extern int readlink(
+        string path,
+        byte[] buffer,
+        UIntPtr bufferLength);
+
+    private static uint FindLoadBias(int pid, CaptureProfile profile)
+    {
+        string mapsPath = string.Format(
+            CultureInfo.InvariantCulture,
+            "/proc/{0}/maps",
+            pid);
+        uint? best = null;
+        foreach (string line in File.ReadAllLines(mapsPath))
+        {
+            if (!line.EndsWith(profile.Executable, StringComparison.Ordinal) &&
+                !line.EndsWith(
+                    profile.ExecutableInApps,
+                    StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            string[] fields = line.Split(
+                new[] { ' ' },
+                StringSplitOptions.RemoveEmptyEntries);
+            if (fields.Length < 5)
+            {
+                continue;
+            }
+
+            string[] range = fields[0].Split('-');
+            uint start = uint.Parse(
+                range[0],
+                NumberStyles.HexNumber,
+                CultureInfo.InvariantCulture);
+            uint fileOffset = uint.Parse(
+                fields[2],
+                NumberStyles.HexNumber,
+                CultureInfo.InvariantCulture);
+            uint candidate = checked(start - fileOffset);
+            if (!best.HasValue || candidate < best.Value)
+            {
+                best = candidate;
+            }
+        }
+
+        if (!best.HasValue)
+        {
+            throw new InvalidOperationException(
+                "could not find the service ELF mapping");
+        }
+
+        return best.Value;
+    }
+
+    private static int ReadInt32(FileStream memory, uint address)
+    {
+        return BitConverter.ToInt32(ReadBytes(memory, address, 4), 0);
+    }
+
+    private static uint ReadUInt32(FileStream memory, uint address)
+    {
+        return BitConverter.ToUInt32(ReadBytes(memory, address, 4), 0);
+    }
+
+    private static byte[] ReadBytes(
+        FileStream memory,
+        uint address,
+        int length)
+    {
+        byte[] bytes = new byte[length];
+        memory.Seek(address, SeekOrigin.Begin);
+        int offset = 0;
+        while (offset < bytes.Length)
+        {
+            int count = memory.Read(bytes, offset, bytes.Length - offset);
+            if (count == 0)
+            {
+                throw new EndOfStreamException(
+                    "short read from the target process memory");
+            }
+
+            offset += count;
+        }
+
+        return bytes;
+    }
+
+    private static int CountNonzero(IEnumerable<byte> bytes)
+    {
+        int count = 0;
+        foreach (byte value in bytes)
+        {
+            if (value != 0)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+}

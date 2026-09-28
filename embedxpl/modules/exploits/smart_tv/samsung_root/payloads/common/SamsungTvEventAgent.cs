@@ -1,0 +1,483 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Net.Sockets;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+internal static class SamsungTvEventAgent
+{
+    private const string ProtocolVersion = "SAMSUNG-TV-EVENTS/1";
+    private const int ConnectTimeoutMilliseconds = 5000;
+    private const int MaximumLineBytes = 64 * 1024;
+
+    [DllImport("libc", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int getpid();
+
+    [DllImport("libc", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int getuid();
+
+    [DllImport("libc", CallingConvention = CallingConvention.Cdecl)]
+    private static extern int getgid();
+
+    private sealed class EventPublisher : IDisposable
+    {
+        private readonly Stream stream;
+        private readonly byte[] nonce;
+        private readonly byte[] secret;
+        private readonly object gate = new object();
+        private long sequence;
+        private bool disposed;
+
+        internal EventPublisher(Stream stream, byte[] nonce, byte[] secret)
+        {
+            this.stream = stream;
+            this.nonce = nonce;
+            this.secret = secret;
+        }
+
+        internal bool Publish(string eventName, string monitor, string line)
+        {
+            lock (gate)
+            {
+                if (disposed)
+                {
+                    return false;
+                }
+                try
+                {
+                    sequence++;
+                    string json = "{\"event\":\""
+                        + EscapeJson(eventName)
+                        + "\",\"sequence\":"
+                        + sequence
+                        + ",\"monitor\":\""
+                        + EscapeJson(monitor)
+                        + "\",\"line\":\""
+                        + EscapeJson(line)
+                        + "\"}";
+                    string payload = "EVENT\t"
+                        + sequence
+                        + "\t"
+                        + Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
+                    WriteAuthenticated(stream, nonce, secret, payload);
+                    return true;
+                }
+                catch
+                {
+                    disposed = true;
+                    return false;
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            lock (gate)
+            {
+                disposed = true;
+            }
+        }
+    }
+
+    private sealed class MonitorProcess : IDisposable
+    {
+        private readonly Process process;
+        private readonly string name;
+        private readonly EventPublisher publisher;
+        private readonly ManualResetEventSlim disconnected;
+        private readonly bool filterHdmi;
+        private bool disposing;
+
+        internal MonitorProcess(
+            string name,
+            string executable,
+            string arguments,
+            EventPublisher publisher,
+            ManualResetEventSlim disconnected,
+            bool filterHdmi = false)
+        {
+            this.name = name;
+            this.publisher = publisher;
+            this.disconnected = disconnected;
+            this.filterHdmi = filterHdmi;
+            process = new Process();
+            process.StartInfo = new ProcessStartInfo(executable, arguments)
+            {
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true,
+            };
+            process.EnableRaisingEvents = true;
+            process.OutputDataReceived += OnOutput;
+            process.ErrorDataReceived += OnError;
+            process.Exited += OnExited;
+            if (!process.Start())
+            {
+                throw new InvalidOperationException(
+                    "failed to start " + name + " monitor");
+            }
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+        }
+
+        private void OnOutput(object sender, DataReceivedEventArgs arguments)
+        {
+            string line = arguments.Data;
+            if (line == null || (filterHdmi && !IsHdmiLine(line)))
+            {
+                return;
+            }
+            if (!publisher.Publish("monitor-line", name, line))
+            {
+                disconnected.Set();
+            }
+        }
+
+        private void OnError(object sender, DataReceivedEventArgs arguments)
+        {
+            string line = arguments.Data;
+            if (line != null
+                && !publisher.Publish("monitor-error", name, line))
+            {
+                disconnected.Set();
+            }
+        }
+
+        private void OnExited(object sender, EventArgs arguments)
+        {
+            if (!disposing)
+            {
+                publisher.Publish(
+                    "monitor-exited",
+                    name,
+                    process.ExitCode.ToString());
+            }
+        }
+
+        public void Dispose()
+        {
+            disposing = true;
+            try
+            {
+                if (!process.HasExited)
+                {
+                    process.Kill();
+                    process.WaitForExit(2000);
+                }
+            }
+            catch
+            {
+            }
+            process.Dispose();
+        }
+    }
+
+    public static int Main(string[] arguments)
+    {
+        if (arguments.Length != 5)
+        {
+            Console.Error.WriteLine(
+                "usage: SamsungTvEventAgent.dll host port token model include_hdmi");
+            return 2;
+        }
+
+        byte[] secret = null;
+        try
+        {
+            int port = int.Parse(arguments[1]);
+            bool includeHdmi = arguments[4] == "1";
+            if (!includeHdmi && arguments[4] != "0")
+            {
+                throw new ArgumentException("include_hdmi must be 0 or 1");
+            }
+            secret = ReadAndRemoveSecret(arguments[2]);
+            Run(arguments[0], port, arguments[3], includeHdmi, secret);
+            return 0;
+        }
+        catch (Exception error)
+        {
+            Console.Error.WriteLine(
+                "event_agent_error={0}: {1}",
+                error.GetType().Name,
+                error.Message);
+            return 1;
+        }
+        finally
+        {
+            if (secret != null)
+            {
+                Array.Clear(secret, 0, secret.Length);
+            }
+        }
+    }
+
+    private static void Run(
+        string host,
+        int port,
+        string model,
+        bool includeHdmi,
+        byte[] secret)
+    {
+        using (TcpClient client = new TcpClient())
+        {
+            Task connect = client.ConnectAsync(host, port);
+            if (!connect.Wait(ConnectTimeoutMilliseconds))
+            {
+                throw new TimeoutException("event callback timed out");
+            }
+            connect.GetAwaiter().GetResult();
+            client.NoDelay = true;
+            using (NetworkStream stream = client.GetStream())
+            {
+                string hello = ReadLine(stream);
+                string[] fields = hello.Split('\t');
+                if (fields.Length != 2 || fields[0] != ProtocolVersion)
+                {
+                    throw new InvalidDataException("invalid event hello");
+                }
+                byte[] nonce = HexDecode(fields[1]);
+                if (nonce.Length != 32)
+                {
+                    throw new InvalidDataException("invalid challenge length");
+                }
+                WriteAuthenticated(
+                    stream,
+                    nonce,
+                    secret,
+                    string.Join(
+                        "\t",
+                        "AUTH",
+                        getpid().ToString(),
+                        getuid().ToString(),
+                        getgid().ToString(),
+                        Convert.ToBase64String(Encoding.UTF8.GetBytes(model))));
+                RunMonitors(client, stream, nonce, secret, model, includeHdmi);
+            }
+        }
+    }
+
+    private static void RunMonitors(
+        TcpClient client,
+        Stream stream,
+        byte[] nonce,
+        byte[] secret,
+        string model,
+        bool includeHdmi)
+    {
+        using (ManualResetEventSlim disconnected = new ManualResetEventSlim())
+        using (EventPublisher publisher = new EventPublisher(stream, nonce, secret))
+        {
+            List<MonitorProcess> monitors = new List<MonitorProcess>();
+            try
+            {
+                monitors.Add(
+                    new MonitorProcess(
+                        "dbus",
+                        "/usr/bin/dbus-monitor",
+                        "--system "
+                            + "\"type='signal',interface='org.tizen.tv.appfw.appctxmgr'\" "
+                            + "\"type='signal',interface='org.tizen.aul.AppStatus'\" "
+                            + "\"type='signal',interface='org.tizen.speakermanager',member='SpeakerVolumeChanged'\"",
+                        publisher,
+                        disconnected));
+                monitors.Add(
+                    new MonitorProcess(
+                        "lifecycle",
+                        "/usr/bin/aul_test",
+                        "listen_app_lifecycle",
+                        publisher,
+                        disconnected));
+                if (includeHdmi)
+                {
+                    monitors.Add(
+                        new MonitorProcess(
+                            "hdmi-receiver",
+                            "/bin/dmesg",
+                            "-w",
+                            publisher,
+                            disconnected,
+                            true));
+                }
+                publisher.Publish("active", "agent", model);
+                Task.Run(
+                    delegate
+                    {
+                        try
+                        {
+                            client.Client.Receive(new byte[1], SocketFlags.Peek);
+                        }
+                        catch
+                        {
+                        }
+                        disconnected.Set();
+                    });
+                disconnected.Wait();
+            }
+            finally
+            {
+                for (int index = monitors.Count - 1; index >= 0; index--)
+                {
+                    monitors[index].Dispose();
+                }
+            }
+        }
+    }
+
+    private static bool IsHdmiLine(string line)
+    {
+        string value = line.ToLowerInvariant();
+        string[] patterns =
+        {
+            "v4l2-hdmisw", "hdmirx", "drm-dp", "port", "5v(",
+            "sync (", "audio clock exceeds", "tmds_clk", "power indent",
+            "no signal", "freeze", "dp_direct_mute", "mute status chg",
+            "unlocked", "qsyshdmierror", "eqsweep", "tmds holding",
+            "g_resolution", "s_resolution", "g_signal_info", "vact",
+        };
+        foreach (string pattern in patterns)
+        {
+            if (value.Contains(pattern))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static byte[] ReadAndRemoveSecret(string path)
+    {
+        try
+        {
+            return Convert.FromBase64String(File.ReadAllText(path).Trim());
+        }
+        finally
+        {
+            try
+            {
+                File.Delete(path);
+            }
+            catch
+            {
+            }
+        }
+    }
+
+    private static void WriteAuthenticated(
+        Stream stream,
+        byte[] nonce,
+        byte[] secret,
+        string payload)
+    {
+        string line = payload + "\t" + Authenticate(nonce, secret, payload);
+        byte[] bytes = Encoding.UTF8.GetBytes(line + "\n");
+        stream.Write(bytes, 0, bytes.Length);
+        stream.Flush();
+    }
+
+    private static string Authenticate(
+        byte[] nonce,
+        byte[] secret,
+        string payload)
+    {
+        byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
+        byte[] message = new byte[nonce.Length + 1 + payloadBytes.Length];
+        Buffer.BlockCopy(nonce, 0, message, 0, nonce.Length);
+        Buffer.BlockCopy(
+            payloadBytes,
+            0,
+            message,
+            nonce.Length + 1,
+            payloadBytes.Length);
+        using (HMACSHA256 hmac = new HMACSHA256(secret))
+        {
+            return HexEncode(hmac.ComputeHash(message));
+        }
+    }
+
+    private static string ReadLine(Stream stream)
+    {
+        using (MemoryStream buffer = new MemoryStream())
+        {
+            while (buffer.Length <= MaximumLineBytes)
+            {
+                int value = stream.ReadByte();
+                if (value < 0)
+                {
+                    throw new EndOfStreamException("event host disconnected");
+                }
+                if (value == '\n')
+                {
+                    return Encoding.UTF8.GetString(buffer.ToArray()).TrimEnd('\r');
+                }
+                buffer.WriteByte((byte)value);
+            }
+        }
+        throw new InvalidDataException("event frame exceeds size limit");
+    }
+
+    private static string EscapeJson(string value)
+    {
+        StringBuilder builder = new StringBuilder();
+        foreach (char character in value ?? "")
+        {
+            switch (character)
+            {
+                case '"':
+                case '\\':
+                    builder.Append('\\').Append(character);
+                    break;
+                case '\n':
+                    builder.Append("\\n");
+                    break;
+                case '\r':
+                    builder.Append("\\r");
+                    break;
+                case '\t':
+                    builder.Append("\\t");
+                    break;
+                default:
+                    if (character < ' ')
+                    {
+                        builder.Append("\\u")
+                            .Append(((int)character).ToString("x4"));
+                    }
+                    else
+                    {
+                        builder.Append(character);
+                    }
+                    break;
+            }
+        }
+        return builder.ToString();
+    }
+
+    private static string HexEncode(byte[] bytes)
+    {
+        StringBuilder output = new StringBuilder(bytes.Length * 2);
+        foreach (byte value in bytes)
+        {
+            output.Append(value.ToString("x2"));
+        }
+        return output.ToString();
+    }
+
+    private static byte[] HexDecode(string value)
+    {
+        if ((value.Length & 1) != 0)
+        {
+            throw new InvalidDataException("invalid hexadecimal length");
+        }
+        byte[] output = new byte[value.Length / 2];
+        for (int index = 0; index < output.Length; index++)
+        {
+            output[index] = Convert.ToByte(value.Substring(index * 2, 2), 16);
+        }
+        return output;
+    }
+}

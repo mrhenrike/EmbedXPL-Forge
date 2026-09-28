@@ -1,0 +1,31 @@
+Admin:1234
+Admin:admin
+Admin:motorola
+Admin:password
+Admin:the full MAC address
+Admin:unknown
+NET_(plus the last six characters of the MAC address):1234
+NET_(plus the last six characters of the MAC address):admin
+NET_(plus the last six characters of the MAC address):motorola
+NET_(plus the last six characters of the MAC address):password
+NET_(plus the last six characters of the MAC address):the full MAC address
+NET_(plus the last six characters of the MAC address):unknown
+admin:1234
+admin:admin
+admin:motorola
+admin:password
+admin:the full MAC address
+admin:unknown
+cusadmin:1234
+cusadmin:admin
+cusadmin:motorola
+cusadmin:password
+cusadmin:the full MAC address
+cusadmin:unknown
+unknown:1234
+unknown:admin
+unknown:motorola
+unknown:password
+unknown:the full MAC address
+unknown:unknown
+technician:technician
