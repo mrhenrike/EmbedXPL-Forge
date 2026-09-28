@@ -143,8 +143,10 @@ def _classify(
     if "hatsploit" in lower:
         return True, "hatsploit_public_framework"
 
-    # 4. ISF-absorbed
-    if "/isf_" in lower or "\\isf_" in lower or "isf_absorbed" in lower:
+    # 4. ISF-absorbed (path contains /ics/isf, /isf_, or isf_absorbed)
+    if "/ics/isf" in lower or "\\ics\\isf" in lower \
+            or "/isf_" in lower or "\\isf_" in lower \
+            or "isf_absorbed" in lower:
         return True, "isf_public_framework"
 
     # 5. Known real-target folders with CVEs (Hikvision / Dahua / Intelbras exploits)
@@ -162,10 +164,10 @@ def _classify(
     if is_known_target and cves:
         return True, "known_real_target"
 
-    # 6. CVE in local catalog with covered=1 → public PoC
+    # 6. CVE in local catalog with covered=1 → covered CVE (public PoC exists)
     poc_hits = [c for c in cves if c in covered_cves]
     if poc_hits:
-        return True, "public_poc"
+        return True, "covered_cve"
 
     # 7. Untested
     return False, ""
@@ -190,7 +192,7 @@ def run(update_db: bool = False, verbose: bool = False) -> dict:
         "hatsploit_public_framework": 0,
         "isf_public_framework": 0,
         "known_real_target": 0,
-        "public_poc": 0,
+        "covered_cve": 0,
         "untested": 0,
         "total": 0,
     }

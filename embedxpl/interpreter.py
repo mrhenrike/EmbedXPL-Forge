@@ -833,6 +833,34 @@ class EmbedXPLInterpreter(BaseInterpreter):
             self.module_metadata,
             ("name", "description", "devices", "authors", "references"),
         )
+
+        # Show tested status badge
+        try:
+            from embedxpl.tools.search import _load_test_status as _lts
+            module_path = str(self.current_module.__class__.__module__)
+            status = _lts()
+            rel_file = module_path.replace(".", "/") + ".py"
+            info = status.get(rel_file)
+            if info is None:
+                for key, val in status.items():
+                    if key.replace("\\", "/").endswith(rel_file.split("/", 2)[-1] if "/" in rel_file else rel_file):
+                        info = val
+                        break
+            if info:
+                tested = info.get("tested")
+                evidence = info.get("evidence", "")
+                cves = info.get("cves", [])
+                if tested is True:
+                    badge = "\033[92m[TESTED — {}]\033[0m".format(evidence) if evidence else "\033[92m[TESTED]\033[0m"
+                    cve_str = "  CVEs: {}".format(", ".join(cves[:4])) if cves else ""
+                    print_info("Test status: {}{}".format(badge, cve_str))
+                elif tested is False:
+                    print_info("Test status: \033[93m[UNTESTED]\033[0m  (stub/theoretical)")
+                else:
+                    print_info("Test status: \033[2m[UNKNOWN]\033[0m")
+        except Exception:
+            pass
+
         print_info()
 
     @module_required
