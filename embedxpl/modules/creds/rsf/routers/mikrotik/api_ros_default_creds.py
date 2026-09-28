@@ -7,7 +7,7 @@ import ssl
 
 from embedxpl.core.exploit import *
 from embedxpl.core.tcp.tcp_client import TCPClient
-# SKIPPED: # FIXED: from routersploit.libs.apiros.apiros_client import ApiRosClient, LoginError
+# SKIPPED: # FIXED: # FIXED: from routersploit.libs.apiros.apiros_client import ApiRosClient, LoginError
 
 
 class Exploit(TCPClient):
