@@ -3,8 +3,8 @@
 # EmbedXPL adaptation: André Henrique (@mrhenrike) | União Geek
 
 from embedxpl.core.exploit import *
-# SKIPPED: from routersploit.core.snmp.snmp_client import SNMPClient
-# SKIPPED: from routersploit.resources import wordlists
+# SKIPPED: # FIXED: from routersploit.core.snmp.snmp_client import SNMPClient
+# SKIPPED: # FIXED: from routersploit.resources import wordlists
 
 
 class Exploit(SNMPClient):

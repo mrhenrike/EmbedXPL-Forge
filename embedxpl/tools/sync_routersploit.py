@@ -34,15 +34,17 @@ _EXF_CREDS.mkdir(parents=True, exist_ok=True)
 # ---------------------------------------------------------------------------
 
 _IMPORT_MAP = {
-    "from routersploit.core.exploit import *": "from embedxpl.core.exploit import *",
-    "from routersploit.core.exploit import shell": "# from routersploit.core.exploit import shell  # absorbed",
-    "from routersploit.core.exploit.option import OptIP, OptPort": "from embedxpl.core.exploit.exploit import OptIP, OptPort",
-    "from routersploit.core.http.http_client import HTTPClient": "from embedxpl.core.exploit.http_client import HTTPClient",
-    "from routersploit.core.udp.udp_client import UDPClient": "from embedxpl.core.exploit.udp_client import UDPClient",
-    "from routersploit.core.tcp.tcp_client import TCPClient": "from embedxpl.core.exploit.tcp_client import TCPClient",
-    "from routersploit.core.ftp.ftp_client import FTPClient": "from embedxpl.core.exploit.ftp_client import FTPClient",
-    "from routersploit.core.ssh.ssh_client import SSHClient": "from embedxpl.core.exploit.ssh_client import SSHClient",
-    "from routersploit.core.telnet.telnet_client import TelnetClient": "from embedxpl.core.exploit.telnet_client import TelnetClient",
+    # Core exploit
+    "from routersploit.core.exploit import *":                    "from embedxpl.core.exploit import *",
+    "from routersploit.core.exploit import shell":                "# from routersploit.core.exploit import shell  # absorbed",
+    "from routersploit.core.exploit.option import OptIP, OptPort":"from embedxpl.core.exploit.exploit import OptIP, OptPort",
+    # Protocol clients — correct paths in EmbedXPL
+    "from routersploit.core.http.http_client import HTTPClient":  "from embedxpl.core.http.http_client import HTTPClient",
+    "from routersploit.core.udp.udp_client import UDPClient":     "from embedxpl.core.udp.udp_client import UDPClient",
+    "from routersploit.core.tcp.tcp_client import TCPClient":     "from embedxpl.core.tcp.tcp_client import TCPClient",
+    "from routersploit.core.ftp.ftp_client import FTPClient":     "from embedxpl.core.ftp.ftp_client import FTPClient",
+    "from routersploit.core.ssh.ssh_client import SSHClient":     "from embedxpl.core.ssh.ssh_client import SSHClient",
+    "from routersploit.core.telnet.telnet_client import TelnetClient": "from embedxpl.core.telnet.telnet_client import TelnetClient",
 }
 
 _HEADER = """\

@@ -39,17 +39,9 @@ _IMPORT_MAP = [
 
 def _transform(src: str) -> str:
     result = _HEADER + "\n"
-    # Add necessary EmbedXPL imports
-    has_http = "http" in src.lower()
-    has_ssh  = "ssh" in src.lower()
-    has_tcp  = "tcp_client" in src.lower() or "TCPClient" in src
-
-    result += "from embedxpl.core.exploit import *\n"
-    if has_http:
-        result += "from embedxpl.core.exploit.http_client import HTTPClient\n"
-    if has_ssh:
-        result += "from embedxpl.core.exploit.ssh_client import SSHClient\n"
-    result += "\n"
+    # Add HatSploit shim — provides all base classes HatSploit modules need
+    result += "from embedxpl.core.compat.hatsploit_shim import *\n"
+    result += "from embedxpl.core.exploit import *\n\n"
 
     for line in src.splitlines():
         stripped = line.strip()

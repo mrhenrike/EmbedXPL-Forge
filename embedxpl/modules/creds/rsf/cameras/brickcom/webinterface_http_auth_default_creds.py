@@ -3,7 +3,7 @@
 # EmbedXPL adaptation: André Henrique (@mrhenrike) | União Geek
 
 from embedxpl.core.exploit import *
-# SKIPPED: from routersploit.modules.creds.generic.http_basic_digest_default import Exploit as HTTPBasicDigestDefault
+# SKIPPED: # FIXED: from routersploit.modules.creds.generic.http_basic_digest_default import Exploit as HTTPBasicDigestDefault
 
 
 class Exploit(HTTPBasicDigestDefault):

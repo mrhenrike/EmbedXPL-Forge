@@ -1,7 +1,7 @@
 import itertools
-from routersploit.core.exploit import *
-from routersploit.core.ftp.ftp_client import FTPClient
-from routersploit.resources import wordlists
+from embedxpl.core.exploit import *
+from embedxpl.core.ftp.ftp_client import FTPClient
+# FIXED: from routersploit.resources import wordlists
 
 
 class Exploit(FTPClient):
