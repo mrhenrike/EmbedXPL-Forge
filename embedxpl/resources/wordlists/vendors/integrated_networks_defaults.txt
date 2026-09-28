@@ -1,3 +1,0 @@
-Administrator:1234
-Administrator:12345678
-Administrator:19750407

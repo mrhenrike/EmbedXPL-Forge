@@ -1,2 +1,0 @@
-admin:P@55w0rd!
-root:iDirect

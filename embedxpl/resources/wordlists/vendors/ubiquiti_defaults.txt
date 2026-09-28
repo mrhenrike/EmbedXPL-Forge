@@ -1,6 +1,0 @@
-admin:admin
-admin:same as WiFi password, created during initial setup
-admin:ubnt
-ubnt:admin
-ubnt:same as WiFi password, created during initial setup
-ubnt:ubnt

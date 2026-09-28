@@ -1,5 +1,0 @@
-admin:
-anonymous:
-billy-bob:
-ftp:
-guest:guest

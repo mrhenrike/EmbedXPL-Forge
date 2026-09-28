@@ -1,4 +1,0 @@
-admin:admin
-:s!a@m#n$p%c
-admin:password
-public:public

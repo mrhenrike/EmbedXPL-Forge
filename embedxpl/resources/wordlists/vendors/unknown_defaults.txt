@@ -1,4 +1,0 @@
-:password
-operator:operator
-overseer:overseer
-test:test

@@ -1,2 +1,0 @@
-admin:12345678
-admin:admin

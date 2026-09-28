@@ -1,6 +1,0 @@
-:access
-:admin
-:lantronix
-:system
-login:access
-sysadmin:PASS

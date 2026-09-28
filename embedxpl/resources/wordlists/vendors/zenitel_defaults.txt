@@ -1,4 +1,0 @@
-admin:alphaadmin
-ADMIN:alphacom
-:1851
-:1234

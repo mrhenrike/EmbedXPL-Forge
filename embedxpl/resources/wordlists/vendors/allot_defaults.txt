@@ -1,2 +1,0 @@
-admin:allot
-root:bagabu
