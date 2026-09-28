@@ -1,9 +1,0 @@
-admin:admin
-admin:guest
-admin:password
-guest:admin
-guest:guest
-guest:password
-netis:admin
-netis:guest
-netis:password

@@ -1,3 +1,0 @@
-admin@example.com:admin
-root:
-superdba:admin

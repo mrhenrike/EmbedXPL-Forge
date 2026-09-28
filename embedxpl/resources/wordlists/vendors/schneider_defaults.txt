@@ -1,3 +1,0 @@
-:admin
-USER:USER
-ntpupdate:ntpupdate
