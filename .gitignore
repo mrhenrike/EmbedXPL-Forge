@@ -142,3 +142,6 @@ packages/**/build.sh
 packages/**/build.ps1
 *.example
 *.sample
+
+# Scratch / local scratch artifacts
+/exploit.txt
