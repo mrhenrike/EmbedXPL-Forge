@@ -25,7 +25,15 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 _HERE = Path(__file__).resolve().parent.parent   # embedxpl/
-_MODULES = _HERE / "modules"
+_MODULES = (_HERE / "modules").resolve()
+
+
+def _rel_module_path(py: Path) -> str:
+    """Path relative to embedxpl/ for reports (works with custom --path)."""
+    try:
+        return str(py.resolve().relative_to(_HERE))
+    except ValueError:
+        return str(py)
 
 # ANSI colors
 _RED    = "\033[91m"
@@ -68,7 +76,7 @@ def audit_imports(root: Path) -> List[dict]:
         except ImportError as e:
             issues.append({
                 "step": 1, "level": "ERROR",
-                "file": str(py.relative_to(_HERE)),
+                "file": _rel_module_path(py),
                 "message": f"ImportError: {e}",
             })
         except Exception:
@@ -99,7 +107,7 @@ def audit_unused_imports(root: Path) -> List[dict]:
                 if "imported but unused" in line or "redefined while unused" in line:
                     issues.append({
                         "step": 2, "level": "WARN",
-                        "file": str(py.relative_to(_HERE)),
+                        "file": _rel_module_path(py),
                         "message": line.strip(),
                     })
     except ImportError:
@@ -127,7 +135,7 @@ def audit_metadata(root: Path) -> List[dict]:
         if has_class and "__info__" not in src:
             issues.append({
                 "step": 3, "level": "WARN",
-                "file": str(py.relative_to(_HERE)),
+                "file": _rel_module_path(py),
                 "message": "Class without __info__ dict",
             })
     return issues
@@ -149,7 +157,7 @@ def audit_deps(root: Path) -> List[dict]:
         except SyntaxError as e:
             issues.append({
                 "step": 4, "level": "ERROR",
-                "file": str(py.relative_to(_HERE)),
+                "file": _rel_module_path(py),
                 "message": f"SyntaxError: {e}",
             })
             continue
@@ -170,7 +178,7 @@ def audit_deps(root: Path) -> List[dict]:
                 except ImportError:
                     issues.append({
                         "step": 4, "level": "WARN",
-                        "file": str(py.relative_to(_HERE)),
+                        "file": _rel_module_path(py),
                         "message": f"Missing dependency: {top}",
                     })
 
@@ -217,7 +225,7 @@ def audit_patterns(root: Path) -> List[dict]:
             if re.search(pattern, src):
                 issues.append({
                     "step": 5, "level": level,
-                    "file": str(py.relative_to(_HERE)),
+                    "file": _rel_module_path(py),
                     "message": desc,
                 })
 
@@ -383,7 +391,7 @@ def main() -> None:
     parser.add_argument("--fix", action="store_true", help="Auto-fix where possible (unused imports)")
     args = parser.parse_args()
 
-    root = Path(args.path)
+    root = Path(args.path).resolve()
     steps = [args.step] if args.step else None
 
     exit_code = run_audit(root, steps, json_output=args.json)
