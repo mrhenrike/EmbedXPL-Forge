@@ -3,7 +3,7 @@
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
 
-__version__ = "5.0.0"
-__version_info__ = (5, 0, 0)
-__release_date__ = "2026-09-26"
+__version__ = "5.0.1"
+__version_info__ = (5, 0, 1)
+__release_date__ = "2026-10-06"
 __codename__ = "Unified XPL Suite Framework"
