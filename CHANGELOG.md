@@ -6,6 +6,11 @@ Format: [Semantic Versioning](https://semver.org) -- `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [5.0.1] — 2026-10-06
+
+### Changed
+- Release alignment: pyproject/version synced to 5.0.1 for GitHub Release + PyPI (HEAD beyond v5.0.0).
+
 ## [3.11.0] — 2026-09-26
 
 ### Added
