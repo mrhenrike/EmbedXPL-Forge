@@ -168,8 +168,10 @@ class BaseInterpreter:
             from embedxpl.core.banner import show_banner
             show_banner("embedxpl", version="v5.0.0")
         except Exception:
-            pass
+            if getattr(self, "banner", None):
+                print_info(self.banner)
         print_warning("FOR AUTHORIZED PENETRATION TESTING ONLY. Operator assumes full responsibility.")
+        print_warning("simulate=True enforced. Use 'set simulate false' to execute for real.")
         printer_queue.join()
         
         while True:
