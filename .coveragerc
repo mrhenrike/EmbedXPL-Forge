@@ -1,0 +1,21 @@
+[run]
+branch = false
+
+[report]
+omit =
+    */modules/*
+    */malware_research/*
+    */native_src/*
+    */nse/*
+    */resources/*
+    */tests/*
+    setup.py
+    */venv*/*
+    */.venv/*
+    */site-packages/*
+    conftest.py
+    */__pycache__/*
+
+[paths]
+source =
+    .
