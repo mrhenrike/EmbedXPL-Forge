@@ -24,5 +24,5 @@ def test_manifest_has_components() -> None:
 
 def test_manifest_forge_name() -> None:
     data = json.loads((ROOT / "third_party_manifest.json").read_text())
-    name = data.get("forge", "")
+    name = data.get("product", "")
     assert "EmbedXPL" in name or "embedxpl" in name.lower()
