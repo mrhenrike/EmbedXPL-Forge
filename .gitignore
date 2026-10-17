@@ -145,3 +145,17 @@ packages/**/build.ps1
 
 # Scratch / local scratch artifacts
 /exploit.txt
+
+# === Secrets & credentials — NEVER commit ===
+.netrc
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+id_rsa
+id_rsa.*
+*.credentials
+credentials.json
+secrets.json
