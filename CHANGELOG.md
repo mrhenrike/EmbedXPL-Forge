@@ -6,6 +6,27 @@ Format: [Semantic Versioning](https://semver.org) -- `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [6.0.0] — 2026-10-19
+
+### Added (Consolidation)
+- **FirewallXPL merge**: 343 files integrated from FirewallXPL-Forge
+  - Exploits: mitm, perimeter (223), routing, lb, vpn (new categories)
+  - Creds: generic (15), perimeter (14)
+  - Scanners: generic, mikrotik, perimeter, vpn, waf
+  - Autopwn: base, lb, vpn, waf modules
+  - Intel: cve_classifier, shodan_enricher
+  - Engines: firewall_tui (9 files), firewall_discovery (11 files), firewall_integrations
+- **PrinterXPL merge**: 29 files integrated from PrinterXPL-Forge
+  - Engines: pret/ (PRET engine), printer/ (attack_orchestrator, discovery, osdetect, capabilities)
+  - Protocols: PJL, PCL, PostScript, IPP, LPD, SMB, RAW, firmware, SSRF pivot (11 files)
+  - Payloads: printer-specific PostScript payloads
+- Optional dependencies: `[firewalls]` (textual, asyncssh), `[printers]` (pysnmp-lextudio, pyasn1)
+
+### Changed
+- Version bumped to 6.0.0 (MAJOR: absorbed FirewallXPL + PrinterXPL)
+
+---
+
 ## [5.1.0] — 2026-10-19
 
 ### Added
