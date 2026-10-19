@@ -295,7 +295,7 @@ exclude = [
 
 [tool.ruff.lint.per-file-ignores]
 "embedxpl/modules/**" = ["F401", "F404", "F523", "F524", "F601", "F811", "F821", "F841", "F842", "E402", "E711", "E712", "E722", "E731", "I001", "B006", "B012", "B018", "SIM101", "SIM112", "SIM116", "SIM118", "SIM201", "SIM211", "SIM212", "RUF034"]
-"embedxpl/engines/**" = ["F401", "F404", "F523", "F601", "F821", "F841", "E402", "E711", "E712", "E722", "I001", "B006", "B018", "SIM116", "SIM118", "SIM201", "SIM211", "SIM212", "SIM401", "RUF034"]
+"embedxpl/engines/**" = ["F401", "F404", "F523", "F601", "F821", "F841", "E402", "E711", "E712", "E722", "I001", "B006", "B018", "B034", "SIM116", "SIM118", "SIM201", "SIM211", "SIM212", "SIM401", "RUF034"]
 "embedxpl/libs/**" = ["F821"]
 "embedxpl/core/**" = ["F401", "F601", "F821", "F841", "E402", "E711", "E712", "E722", "I001", "B005", "B006", "B012", "SIM101", "SIM112", "SIM118", "SIM201", "SIM212"]
 "embedxpl/nse/**" = ["F821", "E722"]
@@ -308,6 +308,7 @@ exclude = [
 "tools/**" = ["F841", "SIM201", "E402"]
 "docs/**" = ["F841"]
 "exf.py" = ["E402"]
+"tests/**" = ["E402"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["embedxpl"]

@@ -233,7 +233,7 @@ class printer(cmd.Cmd, object):
             # Only show traceback in debug mode
             if hasattr(self, 'debug') and self.debug:
                 traceback.print_exc()
-            output().errmsg(f"Command failed: {str(e)}")
+            output().errmsg(f"Command failed: {e!s}")
             self.current_command = None
             return False
         finally:
