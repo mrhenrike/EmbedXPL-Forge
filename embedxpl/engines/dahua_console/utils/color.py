@@ -4,11 +4,9 @@
 # Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
 # Style: DIM, NORMAL, BRIGHT, RESET_ALL
 #====================================================================
-from colorama import init, Fore, Style
+from colorama import Fore, Style, init
 
-from .common import os_check
-from .common import singleton
-
+from .common import os_check, singleton
 
 # wrap must be True when the os is windows
 if os_check() == 'windows': init(wrap=True)

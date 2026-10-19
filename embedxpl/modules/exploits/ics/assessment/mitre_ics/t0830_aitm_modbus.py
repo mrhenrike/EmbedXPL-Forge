@@ -102,7 +102,9 @@ class Exploit(Exploit):
         print_warning("[T0830] This will intercept Modbus traffic. Ensure traffic forwarding.")
 
         try:
-            import os, time, threading
+            import os
+            import time
+            import threading
 
             target_mac  = _scapy.getmacbyip(self.target)
             gateway_mac = _scapy.getmacbyip(self.gateway)

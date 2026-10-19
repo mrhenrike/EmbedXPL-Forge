@@ -2,7 +2,6 @@ import click
 import requests
 import shodan
 import shodan.helpers as helpers
-
 from shodan.cli.helpers import get_api_key
 
 
@@ -31,7 +30,7 @@ def data_list(dataset):
             # Show the SHA1 checksum if available
             if file.get('sha1'):
                 click.echo(click.style('{:42s}'.format(file['sha1']), fg='green'), nl=False)
-            
+
             click.echo('{}'.format(file['url']))
     else:
         # If no dataset was provided then show a list of all datasets

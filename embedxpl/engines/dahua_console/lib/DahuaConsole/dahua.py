@@ -1,12 +1,12 @@
 import copy
+from pathlib import Path
 
 from Crypto.PublicKey import RSA
 from OpenSSL import crypto
-from pathlib import Path
 
 """ Local imports """
-from utils import *
 from net import Network
+from utils import *
 
 
 class DahuaFunctions(Network):
@@ -1211,7 +1211,7 @@ class DahuaFunctions(Network):
             "get": "(Get config from device)",
             "del": "(Delete config in device)",
         }
-        if len(cmd) == 1 or len(cmd) == 2 and cmd[1] == '-h':
+        if len(cmd) == 1 or (len(cmd) == 2 and cmd[1] == '-h'):
             log.info('{}'.format(help_all(msg=msg, usage=usage)))
             return True
 
@@ -1590,7 +1590,7 @@ class DahuaFunctions(Network):
             "stop": "(stop remote pcap)",
             "info": "(info about remote pcap)"
         }
-        if len(cmd) == 1 or cmd[1] == 'start' and not len(cmd) >= 4 or cmd[1] == '-h':
+        if len(cmd) == 1 or (cmd[1] == 'start' and not len(cmd) >= 4) or cmd[1] == '-h':
             log.info('{}'.format(help_all(msg=msg, usage=usage)))
             return True
 
@@ -1747,7 +1747,7 @@ class DahuaFunctions(Network):
                 "stop": "(Stop redirect logs to NFS)",
             }
         }
-        if len(cmd) < 2 or len(cmd) == 3 and cmd[1] == '-h':
+        if len(cmd) < 2 or (len(cmd) == 3 and cmd[1] == '-h'):
             log.info('{}'.format(help_all(msg=msg, usage=usage)))
             return True
 
@@ -2184,8 +2184,8 @@ class DahuaFunctions(Network):
                                 str(wifi_ap.get('AuthMode')) + str(wifi_ap.get('EncrAlgr')), "UNKNOWN"), GREEN)
                         ))
 
-            elif len(cmd) == 5 and cmd[2] == 'conn' or len(cmd) == 3 and cmd[2] in [
-                    'enable', 'disable', 'conn', 'disc', 'reset']:
+            elif (len(cmd) == 5 and cmd[2] == 'conn') or (len(cmd) == 3 and cmd[2] in [
+                    'enable', 'disable', 'conn', 'disc', 'reset']):
 
                 if cmd[2] == 'conn' and len(cmd) == 5:
 
@@ -2212,7 +2212,7 @@ class DahuaFunctions(Network):
 
                 wlan = dh_data.get('WLan').get('params').get('table').get(wireless_nic)
 
-                if len(cmd) == 3 and cmd[2] == 'conn' or len(cmd) == 3 and cmd[2] == 'disc':
+                if (len(cmd) == 3 and cmd[2] == 'conn') or (len(cmd) == 3 and cmd[2] == 'disc'):
                     if wlan.get('SSID'):
                         if nic.get('ConnStatus') == 'Connected' and cmd[2] == 'conn':
                             log.failure("Already Connected")
@@ -2227,7 +2227,7 @@ class DahuaFunctions(Network):
                     else:
                         log.failure("Wireless not configured")
                         return False
-                elif len(cmd) == 3 and cmd[2] == 'enable' or len(cmd) == 3 and cmd[2] == 'disable':
+                elif (len(cmd) == 3 and cmd[2] == 'enable') or (len(cmd) == 3 and cmd[2] == 'disable'):
                     if wlan.get('Enable') and cmd[2] == 'enable':
                         log.failure("Already Enabled")
                         return False
@@ -2266,8 +2266,8 @@ class DahuaFunctions(Network):
                     log.failure("dh_data: {}".format(dh_data))
                     return False
 
-                if cmd[2] == 'conn' and wlan.get('Enable')\
-                        or cmd[2] == 'enable' and wlan.get('SSID') and wlan.get('ConnectEnable'):
+                if (cmd[2] == 'conn' and wlan.get('Enable'))\
+                        or (cmd[2] == 'enable' and wlan.get('SSID') and wlan.get('ConnectEnable')):
                     conn = log.progress("Status")
 
                     while True:
@@ -2463,7 +2463,7 @@ class DahuaFunctions(Network):
                         upnp_map,
                     ))
 
-            elif len(cmd) >= 3 and cmd[2] == 'disable' or cmd[2] == 'enable':
+            elif (len(cmd) >= 3 and cmd[2] == 'disable') or cmd[2] == 'enable':
 
                 query_args = {
                     "method": "configManager.getConfig",
@@ -2475,8 +2475,8 @@ class DahuaFunctions(Network):
 
                 upnp_config = dh_data.get('params').get('table')
 
-                if not upnp_config.get('Enable') and cmd[2] == 'disable'\
-                        or upnp_config.get('Enable') and cmd[2] == 'enable':
+                if (not upnp_config.get('Enable') and cmd[2] == 'disable')\
+                        or (upnp_config.get('Enable') and cmd[2] == 'enable'):
                     log.failure("UPnP already {}".format('disabled' if cmd[2] == 'disable' else 'enabled'))
                     return False
 

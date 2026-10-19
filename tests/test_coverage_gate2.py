@@ -2,11 +2,9 @@
 from __future__ import annotations
 
 import json
-import sys
 import os
-import tempfile
+import sys
 from pathlib import Path
-from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -17,7 +15,7 @@ sys.path.insert(0, str(ROOT))
 # ---------------------------------------------------------------------------
 
 def test_version_attrs() -> None:
-    from embedxpl.version import __version__, __version_info__, __release_date__, __codename__
+    from embedxpl.version import __codename__, __release_date__, __version__, __version_info__
     assert isinstance(__version__, str)
     assert len(__version__.split(".")) == 3
     assert isinstance(__version_info__, tuple)
@@ -169,21 +167,21 @@ def test_pool_strategy_values() -> None:
 
 
 def test_smart_pool_default_init() -> None:
-    from embedxpl.core.pool import SmartPool, PoolStrategy
+    from embedxpl.core.pool import PoolStrategy, SmartPool
     pool = SmartPool()
     assert pool._resolved_strategy in (PoolStrategy.THREADS, PoolStrategy.PROCESSES)
     assert pool._max_workers >= 1
 
 
 def test_smart_pool_threads_strategy() -> None:
-    from embedxpl.core.pool import SmartPool, PoolStrategy
+    from embedxpl.core.pool import PoolStrategy, SmartPool
     pool = SmartPool(max_workers=4, strategy=PoolStrategy.THREADS)
     assert pool._resolved_strategy == PoolStrategy.THREADS
     assert pool._max_workers == 4
 
 
 def test_smart_pool_processes_strategy() -> None:
-    from embedxpl.core.pool import SmartPool, PoolStrategy
+    from embedxpl.core.pool import PoolStrategy, SmartPool
     pool = SmartPool(max_workers=2, strategy=PoolStrategy.PROCESSES)
     assert pool._resolved_strategy == PoolStrategy.PROCESSES
 
@@ -213,7 +211,7 @@ def test_lookup_invalid_mac() -> None:
 
 
 def test_clear_session_cache() -> None:
-    from embedxpl.core.oui import clear_session_cache, _session_cache
+    from embedxpl.core.oui import clear_session_cache
     clear_session_cache()
 
 
@@ -338,7 +336,7 @@ def test_cache_clear(tmp_path) -> None:
 # ---------------------------------------------------------------------------
 
 def test_get_runtime_returns_instance() -> None:
-    from embedxpl.runtime.executor import get_runtime, XplRuntime
+    from embedxpl.runtime.executor import XplRuntime, get_runtime
     rt = get_runtime()
     assert isinstance(rt, XplRuntime)
 

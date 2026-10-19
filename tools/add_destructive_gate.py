@@ -82,7 +82,7 @@ def patch_module(path: Path, dry_run: bool = False) -> bool:
     # 2. Add destructive_gate option after last Option declaration
     # Find position after class attributes (OptIP, OptPort, OptString, OptBool)
     last_opt = None
-    for m in re.finditer(r"^\s+(target|lhost|lport|port|timeout|cmd|payload|user|password|thread)\s*=\s*Opt\w+", 
+    for m in re.finditer(r"^\s+(target|lhost|lport|port|timeout|cmd|payload|user|password|thread)\s*=\s*Opt\w+",
                           new_content, re.MULTILINE):
         last_opt = m
 

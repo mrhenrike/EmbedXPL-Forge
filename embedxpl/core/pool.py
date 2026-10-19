@@ -8,18 +8,18 @@ Author: André Henrique (LinkedIn/X: @mrhenrike)
 Version: 0.1.0
 """
 
-import os
 import logging
-import time
+import os
 import threading
+import time
 from concurrent.futures import (
-    ThreadPoolExecutor,
-    ProcessPoolExecutor,
     Future,
+    ProcessPoolExecutor,
+    ThreadPoolExecutor,
     as_completed,
 )
 from enum import Enum
-from typing import Any, Callable, Iterable, List, Optional, Tuple
+from typing import Any, Callable, Iterable, List, Optional
 
 logger = logging.getLogger(__name__)
 

@@ -99,7 +99,7 @@ class Exploit(BaseExploit):
             print(f"\r[*] Testing ID: {unit_id:3d} ({progress}/{total})", end="", flush=True)
             if _probe_unit_id(self.target, self.port, unit_id, self.timeout):
                 found.append(unit_id)
-                print(f"\r                              ")
+                print("\r                              ")
                 print_success(f"[Modbus ID Fuzzer] Active Unit ID: {unit_id}")
             time.sleep(self.delay)
 

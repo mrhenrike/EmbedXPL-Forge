@@ -27,9 +27,9 @@ from __future__ import annotations
 import json
 import subprocess
 import time
-from typing import Any, Optional
-import urllib.request
 import urllib.error
+import urllib.request
+from typing import Any, Optional
 
 ARTEMIS_HOST = "http://localhost:8765"
 ADB_CMD = "adb"

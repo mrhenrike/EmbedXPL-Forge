@@ -13,15 +13,15 @@ Exports:
     Wdb2Client      — VxWorks WDB RPC v2 (UDP/17185) client
 """
 
-from .modbus_client import ModbusClient
 from .cip_client import CIPClient
+from .modbus_client import ModbusClient
 from .s7_client import S7Client
 from .s7plus_client import S7PlusClient
 from .wdb2_client import Wdb2Client
 
 __all__ = [
-    "ModbusClient",
     "CIPClient",
+    "ModbusClient",
     "S7Client",
     "S7PlusClient",
     "Wdb2Client",

@@ -15,7 +15,10 @@ Usage:
 # authorized use only
 """
 from __future__ import annotations
-import os, subprocess, shutil
+
+import os
+import shutil
+import subprocess
 from pathlib import Path
 
 _TEMPLATES_DEFAULT = Path(
@@ -39,14 +42,14 @@ def run_nuclei(
     nuclei_bin = shutil.which("nuclei")
     if not nuclei_bin:
         return {"error": "nuclei not installed (apt install nuclei)", "returncode": -1}
-    
+
     tpath = templates or str(get_templates_path())
     cmd = [nuclei_bin, "-target", target, "-templates", tpath, "-silent", "-json"]
     if tags:
         cmd += ["-tags", ",".join(tags)]
     if severity:
         cmd += ["-severity", ",".join(severity)]
-    
+
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
         return {"returncode": r.returncode, "stdout": r.stdout, "stderr": r.stderr[:500]}

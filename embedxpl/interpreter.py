@@ -1,40 +1,38 @@
 import atexit
-import itertools
-import pkgutil
-import os
-from pathlib import Path
-import sys
 import getopt
+import itertools
+import os
 import signal
+import sys
 import traceback
 from collections import Counter
+from pathlib import Path
 
 # Adaptation credits: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
-
 from embedxpl.core.exploit.exceptions import EmbedXPLException
-from embedxpl.core.exploit.utils import (
-    index_modules,
-    pythonize_path,
-    humanize_path,
-    import_exploit,
-    stop_after,
-    module_required,
-    MODULES_DIR,
-    WORDLISTS_DIR,
-)
-from embedxpl.core.exploit.printer import (
-    print_info,
-    print_success,
-    print_error,
-    print_status,
-    print_warning,
-    print_table,
-    pprint_dict_in_order,
-    PrinterThread,
-    printer_queue
-)
 from embedxpl.core.exploit.exploit import GLOBAL_OPTS
 from embedxpl.core.exploit.payloads import BasePayload
+from embedxpl.core.exploit.printer import (
+    PrinterThread,
+    pprint_dict_in_order,
+    print_error,
+    print_info,
+    print_status,
+    print_success,
+    print_table,
+    print_warning,
+    printer_queue,
+)
+from embedxpl.core.exploit.utils import (
+    MODULES_DIR,
+    WORDLISTS_DIR,
+    humanize_path,
+    import_exploit,
+    index_modules,
+    module_required,
+    pythonize_path,
+    stop_after,
+)
 
 try:
     import readline
@@ -158,11 +156,11 @@ class BaseInterpreter:
 
     def start(self):
         """ EmbedXPL main entry point. Starting interpreter loop. """
-        
+
         if not sys.stdin.isatty():
             print_info("stdin is not a TTY. Ensure `stdin_open` and `tty` are set")
             sys.exit(1)
-        
+
         # Banner figlet com stats em tempo real
         try:
             from embedxpl.core.banner import show_banner
@@ -173,7 +171,7 @@ class BaseInterpreter:
         print_warning("FOR AUTHORIZED PENETRATION TESTING ONLY. Operator assumes full responsibility.")
         print_warning("simulate=True enforced. Use 'set simulate false' to execute for real.")
         printer_queue.join()
-        
+
         while True:
             try:
                 command, args, kwargs = self.parse_line(input(self.prompt))
@@ -290,7 +288,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
     def __init__(self):
         super(EmbedXPLInterpreter, self).__init__()
         PrinterThread().start()
-        
+
         self.current_module = None
         self.raw_prompt_template = None
         self.module_prompt_template = None
@@ -312,8 +310,8 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
         self.__parse_prompt()
 
-        from embedxpl.core.hw_profiler import HWProfiler
         from embedxpl.core import config as exf_config
+        from embedxpl.core.hw_profiler import HWProfiler
         from embedxpl.core.session import SessionManager
         self._hw_profile = HWProfiler.detect()
         self._session_mgr = SessionManager()
@@ -551,6 +549,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
             targets_file: Path to a plain-text file with one IP or CIDR per line.
         """
         import os as _os
+
         from embedxpl.core.discovery import scan_from_file as _scan_from_file
 
         if not _os.path.isfile(targets_file):
@@ -688,9 +687,9 @@ class EmbedXPLInterpreter(BaseInterpreter):
                     evstr = f"  evidence: {evidence}" if evidence else ""
                     print_info(f"Test status: {badge}{evstr}")
                 elif tested is False:
-                    print_info(f"Test status: \033[93m[UNTESTED]\033[0m  (stub/theoretical)")
+                    print_info("Test status: \033[93m[UNTESTED]\033[0m  (stub/theoretical)")
                 else:
-                    print_info(f"Test status: \033[2m[UNKNOWN]\033[0m")
+                    print_info("Test status: \033[2m[UNKNOWN]\033[0m")
         except Exception:
             pass
 
@@ -708,7 +707,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
     def command_run(self, *args, **kwargs):
         print_status("Running module {}...".format(self.current_module))
         import time as _time
-        from embedxpl.core.session import ModuleResult
+
 
         previous_sigint_handler = signal.getsignal(signal.SIGINT)
         t0 = _time.monotonic()
@@ -954,7 +953,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
     def _show_devices(self, *args, **kwargs):
         """Display supported device types and vendor coverage."""
-        from embedxpl.core.exploit.printer import print_table, print_info
+        from embedxpl.core.exploit.printer import print_info, print_table
         vendors = set()
         for mod in self.modules:
             parts = mod.split(".")
@@ -993,7 +992,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
     @module_required
     def command_check(self, *args, **kwargs):
         import time as _time
-        from embedxpl.core.session import ModuleResult
+
 
         t0 = _time.monotonic()
         mod_path = str(self.current_module)
@@ -1060,11 +1059,12 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
         # --- Use rich search engine from tools/search.py ---
         try:
-            from embedxpl.tools.search import search as _xpl_search, print_results
+            from embedxpl.tools.search import print_results
+            from embedxpl.tools.search import search as _xpl_search
             results = _xpl_search(query, limit=60)
             if results:
                 print_results(results, query)
-                print_info(f"Tip: use <module_path> to load a module")
+                print_info("Tip: use <module_path> to load a module")
                 return
         except Exception:
             pass
@@ -1078,8 +1078,9 @@ class EmbedXPLInterpreter(BaseInterpreter):
             found_any = True
             path = humanize_path(module)
             try:
-                from embedxpl.core.exploit.printer import console as _con
                 from rich.text import Text
+
+                from embedxpl.core.exploit.printer import console as _con
                 text_obj = Text(path)
                 for word in keyword.split():
                     text_obj.highlight_words([word], style="bold red")
@@ -1119,10 +1120,10 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
     def command_sysinfo(self, *args, **kwargs):
         """Display detailed hardware profile of the host machine."""
-        from embedxpl.core.hw_profiler import HWProfiler
-        from embedxpl.core.exploit.printer import console as _con
         from rich.table import Table
-        from rich.panel import Panel
+
+        from embedxpl.core.exploit.printer import console as _con
+        from embedxpl.core.hw_profiler import HWProfiler
 
         profile = HWProfiler.detect(force=True)
         self._hw_profile = profile
@@ -1244,13 +1245,13 @@ class EmbedXPLInterpreter(BaseInterpreter):
             discover 192.168.18.0/24 --fresh
             discover -T /path/to/targets.txt
         """
-        import time as _time
         from datetime import datetime
-        from embedxpl.core.discovery import NetworkDiscovery
-        from embedxpl.core.session import SessionManager, host_id as _host_id
-        from embedxpl.core.exploit.printer import console as _con
-        from rich.table import Table
+
         from rich.panel import Panel
+        from rich.table import Table
+
+        from embedxpl.core.discovery import NetworkDiscovery
+        from embedxpl.core.exploit.printer import console as _con
 
         raw_args = list(args)
         force_fresh = "--fresh" in raw_args
@@ -1502,10 +1503,12 @@ class EmbedXPLInterpreter(BaseInterpreter):
             sessions export <ip>         Export session as JSON
             sessions purge               Delete ALL sessions (asks confirmation)
         """
-        from embedxpl.core.exploit.printer import console as _con
-        from rich.table import Table
-        from rich.panel import Panel
         from datetime import datetime
+
+        from rich.panel import Panel
+        from rich.table import Table
+
+        from embedxpl.core.exploit.printer import console as _con
 
         sub = ""
         sub_args: list = []
@@ -1705,8 +1708,9 @@ class EmbedXPLInterpreter(BaseInterpreter):
         """Record a module execution result into the session for the target host."""
         if not target_ip:
             return
-        from embedxpl.core.session import ModuleResult
         import time as _time
+
+        from embedxpl.core.session import ModuleResult
 
         session = self._session_mgr.load(target_ip)
         if not session:
@@ -1734,10 +1738,16 @@ class EmbedXPLInterpreter(BaseInterpreter):
             apt run <group_id>           Run ALL attacks for a group (interactive)
             apt run <group_id> <attack#> Run a specific attack by index
         """
-        from embedxpl.core.apt_catalog import get_catalog, get_group, list_groups, find_groups_by_device, find_groups_by_cve
-        from embedxpl.core.exploit.printer import console as _con
-        from rich.table import Table
         from rich.panel import Panel
+        from rich.table import Table
+
+        from embedxpl.core.apt_catalog import (
+            find_groups_by_cve,
+            find_groups_by_device,
+            get_group,
+            list_groups,
+        )
+        from embedxpl.core.exploit.printer import console as _con
 
         sub = ""
         sub_args: list = []
@@ -1974,7 +1984,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
     def command_nse(self, *args, **kwargs):
         """nse install | list | run <script> <target> — Manage EmbedXPL NSE scripts."""
-        from embedxpl.tools.nse_installer import install, status, run_nse
+        from embedxpl.tools.nse_installer import install, run_nse, status
         if not args:
             print_info("Usage: nse install | list | run <script> <target>")
             return
@@ -2042,7 +2052,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
             cfg_kwargs["arch"] = "x64"
 
         try:
-            from embedxpl.core.malware_builder.builder import MalwareBuilder, BuildConfig
+            from embedxpl.core.malware_builder.builder import BuildConfig, MalwareBuilder
             cfg = BuildConfig.from_args(**cfg_kwargs)
 
             print_info(f"Building {component} [{cfg.lang}/{cfg.arch}] transport={cfg.transport}")

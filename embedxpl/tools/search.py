@@ -36,7 +36,7 @@ import re
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Iterator, Optional
+from typing import Iterator, Optional
 
 _EMBEDXPL_ROOT = Path(__file__).resolve().parents[2]
 _MODULES_ROOT = _EMBEDXPL_ROOT / "embedxpl" / "modules"

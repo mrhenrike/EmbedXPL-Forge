@@ -1,6 +1,6 @@
-from utils import *
-from pwdmanager import PwdManager
 from dahua import DahuaFunctions
+from pwdmanager import PwdManager
+from utils import *
 
 
 class DahuaConnect(object):

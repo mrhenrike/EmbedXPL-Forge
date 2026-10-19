@@ -19,8 +19,9 @@ import logging
 import re
 import uuid
 import zlib
-from datetime import datetime, date
-from itertools import permutations as _permutations, product as _product
+from datetime import date, datetime
+from itertools import permutations as _permutations
+from itertools import product as _product
 from pathlib import Path
 from typing import Generator, Optional
 
@@ -169,7 +170,7 @@ def _normalize_date_fields(data: dict) -> dict:
     Também processa ``hire`` para entidades corporativas (mesma lógica).
     """
     try:
-        from embedxpl.engines.wordlists.date_profile import date_profile_from_yaml, build_date_tokens
+        from embedxpl.engines.wordlists.date_profile import build_date_tokens, date_profile_from_yaml
         from embedxpl.engines.wordlists.i18n import get_session_locale
     except ImportError:
         return data
@@ -2147,8 +2148,8 @@ def interactive_profile(
     Returns:
         Dict with all collected profile data.
     """
-    from embedxpl.engines.wordlists.i18n import t, ask_language_selection, get_session_locale
     from embedxpl.engines.wordlists.date_profile import ask_date_profile, build_date_tokens
+    from embedxpl.engines.wordlists.i18n import ask_language_selection, t
 
     # ── Language selection (first screen) ─────────────────────
     locale = ask_language_selection()
@@ -2186,7 +2187,7 @@ def interactive_profile(
     profile["location_country"] = _ask(t("field.country"))
     if profile.get("location_country"):
         try:
-            from embedxpl.engines.wordlists.country_tokens import resolve_country, country_display_name
+            from embedxpl.engines.wordlists.country_tokens import country_display_name, resolve_country
             _country_key = resolve_country(profile["location_country"])
             if _country_key:
                 profile["location_country_key"] = _country_key
@@ -2789,8 +2790,8 @@ def generate_from_profile(
     country_raw = (profile.get("location_country", "") or "").strip()
     if country_raw and _eng(24):
         from embedxpl.engines.wordlists.country_tokens import (
-            country_word_tokens,
             country_minimal_tokens,
+            country_word_tokens,
             resolve_country,
         )
         ckey = resolve_country(country_raw)

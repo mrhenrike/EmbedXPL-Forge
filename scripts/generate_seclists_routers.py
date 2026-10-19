@@ -3,6 +3,7 @@
 Author: André Henrique (LinkedIn/X: @mrhenrike)
 """
 from __future__ import annotations
+
 from pathlib import Path
 
 CREDS_BASE = Path(__file__).resolve().parent.parent / "embedxpl" / "modules" / "creds"

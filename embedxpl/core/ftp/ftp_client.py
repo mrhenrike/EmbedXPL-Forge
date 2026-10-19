@@ -1,12 +1,9 @@
 import ftplib
 import io
 
-from embedxpl.core.exploit.exploit import Exploit
-from embedxpl.core.exploit.exploit import Protocol
+from embedxpl.core.exploit.exploit import Exploit, Protocol
 from embedxpl.core.exploit.option import OptBool
-from embedxpl.core.exploit.printer import print_error
-from embedxpl.core.exploit.printer import print_success
-
+from embedxpl.core.exploit.printer import print_error, print_success
 
 FTP_TIMEOUT = 8.0
 

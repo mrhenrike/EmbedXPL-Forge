@@ -20,8 +20,7 @@ from __future__ import annotations
 
 import collections
 import re
-from pathlib import Path
-from typing import Dict, Generator, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 __version__ = "1.0.0"
 

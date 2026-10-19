@@ -2,7 +2,9 @@
 Crunch-style charset wordlist generator
 # Original: https://github.com/derv82/werdy/blob/master/crunch.py
 """
-import itertools, string, sys
+import itertools
+import string
+import sys
 from typing import Iterator
 
 CHARSETS = {

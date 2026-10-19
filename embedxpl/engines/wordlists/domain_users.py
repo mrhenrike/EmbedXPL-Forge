@@ -30,7 +30,6 @@ import logging
 import os
 import re
 import time
-from itertools import product
 from pathlib import Path
 from typing import Generator, Optional
 
@@ -958,7 +957,6 @@ def _leet_variants(word: str, max_variants: int = 6) -> list[str]:
     Returns:
         List of leet variants (without duplicates, excluding the original).
     """
-    from itertools import product as iproduct
     # Find all positions with leet substitutions
     positions = [(i, c) for i, c in enumerate(word) if c in _LEET_MAP]
     variants: set[str] = set()

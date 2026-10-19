@@ -143,10 +143,10 @@ class Exploit(_Base):
                 resp, _ = sock.recvfrom(1024)
                 desc_start = resp.find(b"Cisco") or resp.find(b"NetScreen") or resp.find(b"Juniper")
                 if b"Cisco" in resp:
-                    print(f"  SNMP open: Cisco device detected (EXTRABACON CVE-2016-6366 vector)")
+                    print("  SNMP open: Cisco device detected (EXTRABACON CVE-2016-6366 vector)")
                     findings.append("CISCO detected with SNMP open — check CVE-2016-6366")
                 elif b"NetScreen" in resp or b"Juniper" in resp:
-                    print(f"  SNMP open: Juniper/NetScreen detected (CVE-2015-7755 vector)")
+                    print("  SNMP open: Juniper/NetScreen detected (CVE-2015-7755 vector)")
                     findings.append("JUNIPER NetScreen with SNMP open — check CVE-2015-7755 backdoor")
                 else:
                     print(f"  SNMP open: {resp[20:60]!r}")

@@ -13,7 +13,7 @@ Version: 0.1.0
 
 import logging
 import ssl as _ssl
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 

@@ -140,7 +140,7 @@ class Exploit(Exploit):
     def check(self) -> bool:
         """Check if Scapy is available."""
         try:
-            import scapy  # noqa: F401
+            import scapy
             return True
         except ImportError:
             return False

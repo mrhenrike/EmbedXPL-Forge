@@ -28,7 +28,6 @@ import argparse
 import ast
 import hashlib
 import json
-import re
 import shutil
 import sys
 from datetime import datetime

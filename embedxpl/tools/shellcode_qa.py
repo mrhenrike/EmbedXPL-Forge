@@ -17,14 +17,11 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek
 from __future__ import annotations
 
 import hashlib
-import os
 import shutil
 import subprocess
-import tempfile
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
-
 
 SHELLCODETESTER_CMD = "shellcodetester"
 # Common bad chars for shellcode

@@ -258,7 +258,7 @@ def hibp_check(pw: str, timeout: float = 8.0) -> Optional[int]:
             headers={"Add-Padding": "true"},
         )
         resp.raise_for_status()
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         logger.warning("HIBP request failed: %s", exc)
         return None
     for line in resp.text.splitlines():

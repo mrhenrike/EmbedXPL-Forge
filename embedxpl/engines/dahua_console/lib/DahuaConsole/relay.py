@@ -1,9 +1,6 @@
-import requests
-from requests import packages
-from requests.packages import urllib3
-from requests.packages.urllib3 import exceptions
 from pathlib import Path
 
+import requests
 from utils import *
 
 

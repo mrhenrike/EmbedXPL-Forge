@@ -3,6 +3,7 @@
 Canonical: XPL-Suite/tools/search_base.py
 """
 from __future__ import annotations
+
 import sys
 from pathlib import Path
 
@@ -10,7 +11,7 @@ _SUITE_TOOLS = Path(__file__).resolve().parents[2] / "tools"
 if _SUITE_TOOLS.is_dir() and str(_SUITE_TOOLS) not in sys.path:
     sys.path.insert(0, str(_SUITE_TOOLS))
 
-from search_base import make_search_api, ModuleRecord  # noqa: F401
+from search_base import ModuleRecord, make_search_api  # noqa: F401
 
 search, search_cve, search_vendor, search_category, print_results = make_search_api("embedxpl.modules")
 

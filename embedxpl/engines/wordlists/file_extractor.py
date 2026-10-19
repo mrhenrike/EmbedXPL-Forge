@@ -16,7 +16,7 @@ from __future__ import annotations
 import logging
 import re
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Generator
 
 logger = logging.getLogger(__name__)
 

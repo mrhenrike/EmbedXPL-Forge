@@ -16,7 +16,6 @@ from typing import Any, Optional
 
 from . import toolchain
 from .cache import get_cached_binary, store_binary
-from .crosscompile import get_target
 
 _WORKSPACE_ROOT = Path(__file__).resolve().parents[3]
 _BUILD_TMP = _WORKSPACE_ROOT / ".tmp" / "go_builds"

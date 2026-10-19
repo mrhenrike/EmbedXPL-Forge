@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import itertools
 import logging
-import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path

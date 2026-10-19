@@ -12,11 +12,8 @@ import hashlib
 import json
 import os
 import shutil
-import time
-from dataclasses import dataclass, field, asdict
-from pathlib import Path
+from dataclasses import asdict, dataclass
 from typing import Optional
-
 
 _BUILDS_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "..", ".tmp", "builds"

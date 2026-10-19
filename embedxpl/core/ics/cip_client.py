@@ -8,11 +8,10 @@ Ported and modernised from ISF CIPClient (original: WenZhe Zhu / ICSsploit).
 Default port: 44818 (TCP).  UDP discovery: 2222.
 """
 
+import logging
 import socket
 import struct
-import logging
-from typing import Optional, Dict, Tuple
-
+from typing import Dict, Optional
 
 # EtherNet/IP command codes
 ENIP_REGISTER_SESSION = 0x0065

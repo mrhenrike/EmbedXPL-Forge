@@ -1,12 +1,11 @@
 import socket
+
 import requests
 import urllib3
 
-from embedxpl.core.exploit.exploit import Exploit
-from embedxpl.core.exploit.exploit import Protocol
+from embedxpl.core.exploit.exploit import Exploit, Protocol
 from embedxpl.core.exploit.option import OptBool
 from embedxpl.core.exploit.printer import print_error
-
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 

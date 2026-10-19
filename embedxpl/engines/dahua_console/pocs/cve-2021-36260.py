@@ -1,5 +1,4 @@
 import requests
-
 from loguru import logger
 
 from .base import POCTemplate

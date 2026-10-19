@@ -1,6 +1,7 @@
 import _thread
-from utils import *
+
 from connection import DahuaConnect
+from utils import *
 
 
 class DahuaEvents(DahuaConnect):

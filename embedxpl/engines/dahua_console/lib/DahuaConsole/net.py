@@ -1,12 +1,12 @@
+import _thread
 import ast
-import ndjson
 import copy
 import inspect
-import _thread
 
-from utils import *
+import ndjson
 from pwdmanager import PwdManager
-from relay import init_relay, DahuaHttp
+from relay import DahuaHttp, init_relay
+from utils import *
 
 
 def dahua_proto(proto):
@@ -928,7 +928,7 @@ sock.close()
                 return
 
             """ More for when fuzzing, we want the Response and not only True/False """
-            if fuzz and _sid or fuzz and object_id:
+            if (fuzz and _sid) or (fuzz and object_id):
                 self.fuzzDB.update({
                     method_name: {
                         "method_name": method_name,

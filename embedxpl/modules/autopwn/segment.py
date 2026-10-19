@@ -43,7 +43,7 @@ class AutoPwnReport:
 
     def summary(self) -> str:
         lines = [
-            f"",
+            "",
             f"{'='*70}",
             f"  EmbedXPL AutoPwn — {self.segment.upper()} Segment",
             f"  Target(s): {', '.join(self.targets)}",
