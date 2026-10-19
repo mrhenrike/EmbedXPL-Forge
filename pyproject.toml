@@ -129,9 +129,8 @@ Documentation  = "https://github.com/mrhenrike/EmbedXPL-Forge/wiki"
 Changelog      = "https://github.com/mrhenrike/EmbedXPL-Forge/releases"
 
 [project.scripts]
-exf = "embedxpl.__main__:main"
+exf      = "embedxpl.__main__:main"
 embedxpl = "embedxpl.__main__:main"
-fxf = "embedxpl.__main__:main"
 firmware-dl = "embedxpl.tools.firmware_downloader:main"
 firmware-analyze = "embedxpl.tools.firmware_analyzer:main"
 embedxpl-nse = "embedxpl.nse.__main__:main"
