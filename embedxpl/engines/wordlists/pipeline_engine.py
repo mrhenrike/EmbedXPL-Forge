@@ -268,7 +268,7 @@ class ProfilePipeline:
         if 28 not in engines:
             return
         try:
-            from embedxpl.engines.wordlists.keyword_mutations import mutate, MutationMode
+            from embedxpl.engines.wordlists.keyword_mutations import MutationMode, mutate
         except ImportError:
             logger.debug("keyword_mutations não disponível")
             return
@@ -303,7 +303,7 @@ class ProfilePipeline:
         if 11 not in engines:
             return
         try:
-            from embedxpl.engines.wordlists.rsmangler_engine import mangle, ManglerOptions
+            from embedxpl.engines.wordlists.rsmangler_engine import ManglerOptions, mangle
         except ImportError:
             logger.debug("rsmangler_engine não disponível")
             return
@@ -919,7 +919,7 @@ class ProfilePipeline:
 
         # Apply RSMangler pass
         try:
-            from embedxpl.engines.wordlists.rsmangler_engine import mangle, ManglerOptions
+            from embedxpl.engines.wordlists.rsmangler_engine import ManglerOptions, mangle
             opts = ManglerOptions(
                 perms=len(unique_words) <= 10,
                 force_perms=False,
@@ -1160,7 +1160,7 @@ class ProfilePipeline:
     def _run_archive_export(self, wordlist_path: str) -> dict:
         """Pós-processa wordlist com sanitize/sort/export."""
         try:
-            from embedxpl.engines.wordlists.archive_export import ExportOptions, ExportFormat, export_wordlist
+            from embedxpl.engines.wordlists.archive_export import ExportFormat, ExportOptions, export_wordlist
         except ImportError:
             logger.debug("archive_export não disponível")
             return {}

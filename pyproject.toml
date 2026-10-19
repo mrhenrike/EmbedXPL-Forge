@@ -1,0 +1,313 @@
+# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "embedxpl"
+version = "5.0.1"
+description = "Embedded & Perimeter Security Assessment Framework -- 2800+ modules, 900+ CVEs, 114+ vendors. Covers routers, IP cameras, GPON ONTs, ISP CPEs, IoT/embedded edge, firewalls (Fortinet/Cisco/PAN-OS/SonicWall), VPN appliances, printers, drones, switches, UPS/PDU, ICS/OT."
+readme = { file = "README.md", content-type = "text/markdown" }
+license = { file = "LICENSE" }
+authors = [
+    { name = "André Henrique", email = "henrique.santos@uniaogeek.com.br" },
+]
+maintainers = [
+    { name = "André Henrique", email = "henrique.santos@uniaogeek.com.br" },
+]
+keywords = [
+    "security", "pentesting", "router", "iot", "exploit",
+    "embedded", "firmware", "network-security", "vulnerability-scanner",
+    "gpon", "cve", "ethical-hacking", "red-team", "routersploit", "automation",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Telecommunications Industry",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Security",
+    "Topic :: System :: Networking",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "requests>=2.32.4",
+    "paramiko>=3.0",
+    "pysnmp>=4.4.12",
+    "pycryptodome>=3.18",
+    "scapy>=2.5",
+    "colorama>=0.4.6",
+    "rich>=13.0",
+    "aiohttp>=3.9",
+    "psutil>=5.9",
+    "python-nmap>=0.7.1",
+    "telnetlib3>=2.0.0; python_version >= '3.13'",
+    "xpl-core>=0.1.0",
+]
+
+[project.optional-dependencies]
+nse = [
+    "python-nmap>=0.7.1",
+]
+ml = [
+    "numpy>=1.24",
+    "scikit-learn>=1.3",
+]
+ml-gpu = [
+    "torch>=2.0.0",
+    "numpy>=1.24",
+]
+dev = [
+    "build>=1.0",
+    "twine>=5.0",
+    "flake8>=6.0",
+    "bandit>=1.7",
+    "pip-audit>=2.6",
+    "pytest>=7.0",
+]
+iot = []
+ot = [
+    "pymodbus>=3.5",
+]
+iiot = [
+    "pymodbus>=3.5",
+]
+at = [
+    "python-can>=4.3",
+]
+routers = []
+printers = []
+firewalls = []
+network-perimeter = []
+medical = []
+smart-home = []
+wearables = []
+vehicles = [
+    "python-can>=4.3",
+]
+hvac = [
+    "pymodbus>=3.5",
+]
+access-control = []
+specialized = [
+    "python-can>=4.3",
+]
+network-only = []
+all = [
+    "python-nmap>=0.7.1",
+    "numpy>=1.24",
+    "scikit-learn>=1.3",
+    "pymodbus>=3.5",
+    "python-can>=4.3",
+]
+
+[project.urls]
+Homepage       = "https://github.com/mrhenrike/EmbedXPL-Forge"
+Repository     = "https://github.com/mrhenrike/EmbedXPL-Forge"
+Documentation  = "https://github.com/mrhenrike/EmbedXPL-Forge/wiki"
+"Bug Tracker"  = "https://github.com/mrhenrike/EmbedXPL-Forge/issues"
+Changelog      = "https://github.com/mrhenrike/EmbedXPL-Forge/releases"
+
+[project.scripts]
+exf = "embedxpl.__main__:main"
+embedxpl = "embedxpl.__main__:main"
+fxf = "embedxpl.__main__:main"
+firmware-dl = "embedxpl.tools.firmware_downloader:main"
+firmware-analyze = "embedxpl.tools.firmware_analyzer:main"
+embedxpl-nse = "embedxpl.nse.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["embedxpl*"]
+
+[tool.setuptools.package-data]
+"embedxpl.data"       = ["oui.txt"]
+"embedxpl.nse"        = ["*.py"]
+"nse"                 = ["*.nse"]
+"embedxpl.resources"  = [
+    "catalogs/*.json",
+    "wordlists/**/*.txt",
+    "wordlists/*.txt",
+    "ssh_keys/*.json",
+    "ssh_keys/*.key",
+    "vendors/*.dat",
+    "vendors/*.csv",
+    "mibs/*",
+    "arsenal/*",
+    "ml/*.json",
+    "*.yaml",
+    "**/*.yaml",
+]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+no_implicit_reexport = true
+mypy_path = "."
+
+[[tool.mypy.overrides]]
+module = [
+    "scapy.*",
+    "paramiko.*",
+    "pysnmp.*",
+    "Crypto.*",
+    "cryptography.*",
+    "colorama.*",
+    "rich.*",
+    "aiohttp.*",
+    "aiohttp_socks.*",
+    "psutil.*",
+    "nmap.*",
+    "telnetlib3.*",
+    "requests.*",
+    "serial.*",
+    "bluepy.*",
+    "bluetooth.*",
+    "gattlib.*",
+    "impacket.*",
+    "OpenSSL.*",
+    "pymodbus.*",
+    "numpy.*",
+    "sklearn.*",
+    "torch.*",
+    "bs4.*",
+    "lxml.*",
+    "shodan.*",
+    "pwnlib.*",
+    "pwn.*",
+    "angr.*",
+    "archinfo.*",
+    "cle.*",
+    "claripy.*",
+    "capstone.*",
+    "pefile.*",
+    "ropgadget.*",
+    "ropper.*",
+    "hexdump.*",
+    "art.*",
+    "alive_progress.*",
+    "click.*",
+    "httpx.*",
+    "curl_cffi.*",
+    "websocket.*",
+    "websockets.*",
+    "yaml.*",
+    "xmltodict.*",
+    "gevent.*",
+    "upnpy.*",
+    "esptool.*",
+    "pyDes.*",
+    "pygame.*",
+    "PyLorcon2.*",
+    "dnslib.*",
+    "dns.*",
+    "loguru.*",
+    "networkx.*",
+    "xlsxwriter.*",
+    "ndjson.*",
+    "tldextract.*",
+    "pex.*",
+    "makeelf.*",
+    "ssh2.*",
+    "tableprint.*",
+    "termcolor.*",
+    "fake_useragent.*",
+    "IPy.*",
+    "httplib2.*",
+    "xpl_core.*",
+]
+ignore_missing_imports = true
+
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "SIM", "RUF"]
+ignore = [
+    "E101",
+    "E501",
+    "E701",
+    "E702",
+    "E703",
+    "E721",
+    "E741",
+    "W191",
+    "W291",
+    "W292",
+    "W293",
+    "F403",
+    "F405",
+    "B007",
+    "B008",
+    "B023",
+    "B028",
+    "B904",
+    "SIM102",
+    "SIM103",
+    "SIM105",
+    "SIM108",
+    "SIM110",
+    "SIM113",
+    "SIM114",
+    "SIM115",
+    "SIM117",
+    "SIM210",
+    "RUF001",
+    "RUF002",
+    "RUF003",
+    "RUF005",
+    "RUF012",
+    "RUF013",
+    "RUF015",
+    "RUF046",
+    "RUF059",
+]
+exclude = [
+    "embedxpl/malware_research/**",
+    "embedxpl/engines/fingerprint/tenable/**",
+    "embedxpl/modules/exploits/**",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"embedxpl/modules/**" = ["F401", "F404", "F523", "F524", "F601", "F811", "F821", "F841", "F842", "E402", "E711", "E712", "E722", "E731", "I001", "B006", "B012", "B018", "SIM101", "SIM112", "SIM116", "SIM118", "SIM201", "SIM211", "SIM212", "RUF034"]
+"embedxpl/engines/**" = ["F401", "F404", "F523", "F601", "F821", "F841", "E402", "E711", "E712", "E722", "I001", "B006", "B018", "SIM116", "SIM118", "SIM201", "SIM211", "SIM212", "SIM401", "RUF034"]
+"embedxpl/libs/**" = ["F821"]
+"embedxpl/core/**" = ["F401", "F601", "F821", "F841", "E402", "E711", "E712", "E722", "I001", "B005", "B006", "B012", "SIM101", "SIM112", "SIM118", "SIM201", "SIM212"]
+"embedxpl/nse/**" = ["F821", "E722"]
+"embedxpl/tools/**" = ["F401", "F821", "F841", "E402", "E711", "SIM118", "SIM201", "SIM222", "RUF100"]
+"embedxpl/intel/**" = ["F401", "F841", "E402", "B006", "B018", "B026", "SIM101", "SIM118", "SIM201"]
+"embedxpl/interpreter.py" = ["F821"]
+"embedxpl/__main__.py" = ["E402"]
+"embedxpl/runtime/**" = ["F841"]
+"scripts/**" = ["F601", "F841", "SIM201"]
+"tools/**" = ["F841", "SIM201", "E402"]
+"docs/**" = ["F841"]
+"exf.py" = ["E402"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["embedxpl"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"

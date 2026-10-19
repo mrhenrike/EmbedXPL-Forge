@@ -156,5 +156,5 @@ class Exploit(HTTPClient):
             except Exception:
                 continue
 
-        print_info(f"[ARUBA-CREDS] No default credentials found. Device may have been hardened.")
+        print_info("[ARUBA-CREDS] No default credentials found. Device may have been hardened.")
         print_info(f"[ARUBA-CREDS] Tested {len(self._CREDENTIALS)} pairs against {path}")

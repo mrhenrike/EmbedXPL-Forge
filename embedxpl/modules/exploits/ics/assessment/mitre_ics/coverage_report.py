@@ -77,7 +77,7 @@ class Exploit(Exploit):
         total_tids = total_cov = 0
         for tac_id, tac_name in TACTICS.items():
             tids = TACTIC_TIDS.get(tac_id, [])
-            covered = [t for t in tids if t in TECHNIQUE_INDEX and TECHNIQUE_INDEX[t]]
+            covered = [t for t in tids if TECHNIQUE_INDEX.get(t)]
             pct = int(len(covered) / len(tids) * 100) if tids else 0
             rows.append((tac_id, tac_name, str(len(tids)), str(len(covered)), "{}%".format(pct)))
             total_tids += len(tids)

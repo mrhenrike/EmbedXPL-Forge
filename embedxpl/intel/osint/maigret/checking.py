@@ -13,16 +13,16 @@ from urllib.parse import quote, urlparse
 
 # Third party imports
 import aiodns
-from alive_progress import alive_bar
 from aiohttp import ClientSession, TCPConnector, http_exceptions
-from aiohttp.resolver import ThreadedResolver
 from aiohttp.client_exceptions import (
     ClientConnectorDNSError,
     ClientConnectorError,
     ClientPayloadError,
     ServerDisconnectedError,
 )
+from aiohttp.resolver import ThreadedResolver
 from aiohttp_socks import ProxyConnectionError, ProxyError, ProxyTimeoutError
+from alive_progress import alive_bar
 from socid_extractor import extract, mutate_url  # type: ignore[import-not-found]
 
 # Local imports
@@ -31,10 +31,9 @@ from .activation import ParsingActivator, import_aiohttp_cookies
 from .error_detection import detect_error_page
 from .errors import CheckError
 from .executors import AsyncioQueueGeneratorExecutor
-from .result import MaigretCheckResult, MaigretCheckStatus, KeywordMatchStatus, SiteResult
+from .result import KeywordMatchStatus, MaigretCheckResult, MaigretCheckStatus, SiteResult
 from .sites import MaigretDatabase, MaigretSite
 from .utils import ascii_data_display, get_random_user_agent, is_plausible_username
-
 
 _DNS_ERROR_MARKERS = (
     "could not contact dns servers",  # aiohttp + aiodns wording
@@ -744,7 +743,7 @@ def debug_response_logging(url, html_text, status_code, check_error):
         status = status_code or "No response"
         f.write(f"url: {url}\nerror: {check_error}\nr: {status}\n")
         if html_text:
-            f.write(f"code: {status}\nresponse: {str(html_text)}\n")
+            f.write(f"code: {status}\nresponse: {html_text!s}\n")
 
 
 def process_site_result(
@@ -829,13 +828,13 @@ def process_site_result(
     # Keyword detection logic
     keywords = results_info.get("keywords", [])
     keyword_match_status = None
-    
+
     if keywords and html_text:
         keywords_found = []
         for keyword in keywords:
             if keyword.lower() in html_text.lower():
                 keywords_found.append(keyword)
-        
+
         if keywords_found:
             keyword_match_status = KeywordMatchStatus.KEYWORD_FOUND
             logger.debug(f"Keywords found in {site.name}: {keywords_found}")
@@ -930,8 +929,8 @@ def make_site_result(
     results_site["parsing_enabled"] = options["parsing"]
     results_site["url_main"] = site.url_main
     results_site["cookies"] = (
-        options.get("cookie_jar")
-        and options["cookie_jar"].filter_cookies(site.url_main)
+        (options.get("cookie_jar")
+        and options["cookie_jar"].filter_cookies(site.url_main))
         or None
     )
 
@@ -1146,7 +1145,7 @@ async def check_site_for_username(
                 )
             except Exception as e:
                 logger.warning(
-                    f"Failed activation {method} for site {site.name}: {str(e)}",
+                    f"Failed activation {method} for site {site.name}: {e!s}",
                     exc_info=True,
                 )
             else:
@@ -1909,7 +1908,7 @@ async def run_url_mutations(checker, site, results_info, options, logger, query_
 def parse_usernames(extracted_ids_data, logger) -> Dict:
     new_usernames = {}
     for k, v in extracted_ids_data.items():
-        if "username" in k and not "usernames" in k:
+        if "username" in k and "usernames" not in k:
             if is_plausible_username(v):
                 new_usernames[v] = "username"
             else:

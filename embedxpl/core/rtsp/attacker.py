@@ -366,7 +366,7 @@ class RTSPAttacker:
         total = len(streams)
 
         print(f"\n{'='*60}")
-        print(f"RTSP Camera Attack Summary")
+        print("RTSP Camera Attack Summary")
         print(f"{'='*60}")
         print(f"Total targets:   {total}")
         print(f"Accessible:      {len(accessible)}")

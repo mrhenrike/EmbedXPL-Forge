@@ -37,7 +37,7 @@ _PFSENSE_HEADER = re.compile(
 
 
 def parse_pfsense_line(raw: str) -> Optional[Dict[str, Any]]:
-    
+
     result: Dict[str, Any] = {"_raw": raw.strip()}
 
     m = _PFSENSE_HEADER.match(raw.strip())
@@ -79,7 +79,7 @@ def parse_pfsense_line(raw: str) -> Optional[Dict[str, Any]]:
 
 
 def _parse_filterlog_message(event: Dict[str, Any], message: str) -> None:
-    
+
     parts = message.split(",")
     if len(parts) >= 20:
         field_names = _FILTERLOG_FIELDS[:len(parts)]
@@ -96,7 +96,7 @@ def _parse_filterlog_message(event: Dict[str, Any], message: str) -> None:
 
 
 def _parse_sshd_message(event: Dict[str, Any], message: str) -> None:
-    
+
     # Accepted/Failed password/publickey for user X from IP port N
     m = re.search(
         r"(Accepted|Failed|Invalid|error:)\s+(\w+).*for\s+(\S+)\s+from\s+(\S+)\s+port\s+(\d+)",
@@ -113,7 +113,7 @@ def _parse_sshd_message(event: Dict[str, Any], message: str) -> None:
 
 
 def _parse_sudo_message(event: Dict[str, Any], message: str) -> None:
-    
+
     # user1 : TTY=pts/0 ; PWD=/root ; USER=root ; COMMAND=/bin/sh
     m = re.match(r"(\S+)\s*:\s*TTY=(\S+).*USER=(\S+)\s*;.*COMMAND=(.+)", message, re.I)
     if m:
@@ -124,7 +124,7 @@ def _parse_sudo_message(event: Dict[str, Any], message: str) -> None:
 
 
 class PfsenseSyslogParser:
-    
+
 
     def parse_file(
         self,
@@ -132,7 +132,7 @@ class PfsenseSyslogParser:
         max_lines: int = 50_000,
         log_types: Optional[List[str]] = None,
     ) -> List[Dict[str, Any]]:
-        
+
         events = []
         with open(path, encoding="utf-8", errors="replace") as f:
             for i, line in enumerate(f):

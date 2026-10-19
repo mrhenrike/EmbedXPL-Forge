@@ -1,6 +1,5 @@
 import struct
-import sys
-import argparse
+
 from makeelf.elf import *
 
 PART_TYPES = {

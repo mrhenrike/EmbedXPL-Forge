@@ -1,6 +1,6 @@
 """Reolink camera weak password check."""
-import requests
 from loguru import logger
+
 from .base import POCTemplate
 
 

@@ -21,7 +21,7 @@ import re
 import time
 import urllib.parse
 from pathlib import Path
-from typing import List, Optional, Set
+from typing import List, Set
 
 __version__ = "1.0.0"
 

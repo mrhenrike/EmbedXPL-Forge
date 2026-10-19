@@ -89,10 +89,10 @@ def auto_select_backend(hw_profile: Optional[HWProfile] = None, compute_mode: st
         from embedxpl.core.gpu.cpu_backend import CPUBackend
         return CPUBackend()
 
-    from embedxpl.core.gpu.cuda_backend import CUDABackend
-    from embedxpl.core.gpu.rocm_backend import ROCmBackend
-    from embedxpl.core.gpu.opencl_backend import OpenCLBackend
     from embedxpl.core.gpu.cpu_backend import CPUBackend
+    from embedxpl.core.gpu.cuda_backend import CUDABackend
+    from embedxpl.core.gpu.opencl_backend import OpenCLBackend
+    from embedxpl.core.gpu.rocm_backend import ROCmBackend
 
     candidates = [CUDABackend(), ROCmBackend(), OpenCLBackend()]
 

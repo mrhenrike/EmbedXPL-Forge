@@ -16,10 +16,9 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from embedxpl.core.orchestrator.artifact import (
-    CompiledArtifact,
     ArtifactCache,
+    CompiledArtifact,
 )
-
 
 _PROJECT_TMP = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "..", ".tmp"

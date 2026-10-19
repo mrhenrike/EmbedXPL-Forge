@@ -1,8 +1,7 @@
-import requests
-from requests.auth import HTTPDigestAuth
 from xml.etree import ElementTree
 
 from loguru import logger
+from requests.auth import HTTPDigestAuth
 
 from .base import POCTemplate
 

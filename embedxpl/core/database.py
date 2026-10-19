@@ -47,11 +47,9 @@ from __future__ import annotations
 import json
 import sqlite3
 import xml.etree.ElementTree as ET
-from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Generator, Optional
-
+from typing import Any, Optional
 
 # ---------------------------------------------------------------------------
 # Schema

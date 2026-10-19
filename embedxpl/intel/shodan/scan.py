@@ -1,13 +1,13 @@
-import click
 import collections
 import datetime
-import shodan
-import shodan.helpers as helpers
 import socket
 import threading
 import time
 
-from shodan.cli.helpers import get_api_key, async_spinner
+import click
+import shodan
+import shodan.helpers as helpers
+from shodan.cli.helpers import async_spinner, get_api_key
 from shodan.cli.settings import COLORIZE_FIELDS
 
 
@@ -275,7 +275,7 @@ def scan_submit(wait, filename, force, verbose, netblocks):
                     host = next(iter(hosts[ip].items()))[1]
 
                     click.echo(click.style(ip, fg='cyan'), nl=False)
-                    if 'hostnames' in host and host['hostnames']:
+                    if host.get('hostnames'):
                         click.echo(' ({})'.format(', '.join(host['hostnames'])), nl=False)
                     click.echo('')
 
@@ -284,9 +284,9 @@ def scan_submit(wait, filename, force, verbose, netblocks):
 
                         if 'city' in host['location'] and host['location']['city']:
                             print_field('City', host['location']['city'])
-                    if 'org' in host and host['org']:
+                    if host.get('org'):
                         print_field('Organization', host['org'])
-                    if 'os' in host and host['os']:
+                    if host.get('os'):
                         print_field('Operating System', host['os'])
                     click.echo('')
 

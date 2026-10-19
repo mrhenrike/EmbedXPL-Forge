@@ -20,16 +20,13 @@ import re
 from typing import Generator, Optional
 
 from embedxpl.engines.wordlists.profiler import (
-    ACCENT_MAP,
-    COMMON_SUFFIXES,
     WORD_SEPARATORS,
-    LEET_BASIC,
-    _split_words,
-    _word_variants,
-    _date_tokens,
-    _emit_all,
     _ask,
     _ask_multi,
+    _date_tokens,
+    _emit_all,
+    _split_words,
+    _word_variants,
     normalize,
     parse_date_input,
 )

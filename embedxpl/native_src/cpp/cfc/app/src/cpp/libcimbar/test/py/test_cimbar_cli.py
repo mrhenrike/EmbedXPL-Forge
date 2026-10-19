@@ -1,11 +1,10 @@
 import subprocess
+from os.path import getsize
+from os.path import join as path_join
 from subprocess import PIPE
-from os.path import join as path_join, getsize
 from unittest import TestCase
-from unittest.mock import patch
 
-from helpers import TestDirMixin, CIMBAR_SRC, BIN_DIR
-
+from helpers import BIN_DIR, CIMBAR_SRC, TestDirMixin
 
 CIMBAR_EXE = path_join(BIN_DIR, 'cimbar')
 

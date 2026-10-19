@@ -22,10 +22,8 @@ import os
 import pkgutil
 import sys
 import textwrap
-import traceback
 from collections import OrderedDict
 from typing import Any, Dict, List, Optional, Tuple
-
 
 _PROJECT_ROOT = os.path.abspath(
     os.path.join(os.path.dirname(__file__), os.pardir, os.pardir)
@@ -385,9 +383,9 @@ def _build_hardware_doc() -> str:
     """
     try:
         from embedxpl.core.hardware import (
-            HWReq,
             HARDWARE_DESCRIPTIONS,
             HARDWARE_EXAMPLES,
+            HWReq,
         )
     except ImportError:
         return "# Hardware Requirements\n\nCould not import hardware module.\n"

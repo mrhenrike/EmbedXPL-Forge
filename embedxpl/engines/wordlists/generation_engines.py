@@ -10,7 +10,7 @@ Author: André Henrique (@mrhenrike)
 """
 
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional
 
 logger = logging.getLogger(__name__)

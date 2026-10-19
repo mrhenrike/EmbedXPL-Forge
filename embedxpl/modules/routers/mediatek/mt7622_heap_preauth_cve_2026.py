@@ -39,7 +39,8 @@ def _port_open(host: str, port: int, timeout: float) -> bool:
 def _http_get(host: str, port: int, path: str, timeout: float) -> str:
     for scheme in ("http", "https"):
         try:
-            import urllib.request, ssl
+            import urllib.request
+            import ssl
             req = urllib.request.Request(
                 f"{scheme}://{host}:{port}{path}",
                 headers={"User-Agent": "EmbedXPL/3.9"},
@@ -93,7 +94,7 @@ class Exploit(Exploit):
 
     def run(self) -> None:
         host, port, timeout = str(self.target), int(self.port), float(self.timeout)
-        print_status(f"MediaTek MT7622 pre-auth heap overflow probe")
+        print_status("MediaTek MT7622 pre-auth heap overflow probe")
         if not host:
             print_error("No target IP specified")
             return

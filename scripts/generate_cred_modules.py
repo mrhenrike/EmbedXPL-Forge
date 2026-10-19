@@ -13,11 +13,8 @@ Version: 1.0.0
 
 from __future__ import annotations
 
-import json
 import logging
-import os
 from pathlib import Path
-from typing import Any
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)

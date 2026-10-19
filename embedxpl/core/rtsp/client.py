@@ -24,11 +24,9 @@ import hashlib
 import re
 import socket
 import ssl
-import time
 from typing import Optional, Tuple
 
-from embedxpl.core.rtsp.models import AuthType, RTSPStream
-
+from embedxpl.core.rtsp.models import AuthType
 
 # RTSP status codes (RFC 2326)
 RTSP_OK = 200

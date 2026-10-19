@@ -12,11 +12,9 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek
 from __future__ import annotations
 
 import subprocess
-import tempfile
 from pathlib import Path
 from typing import Any, Optional
 
-from . import toolchain
 from .cache import get_cached_binary, store_binary
 from .crosscompile import get_target
 

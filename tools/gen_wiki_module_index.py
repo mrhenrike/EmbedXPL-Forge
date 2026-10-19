@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 # Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
-
 import sys
 from pathlib import Path
 

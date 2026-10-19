@@ -1,8 +1,9 @@
 """Network utility functions."""
-import IPy
 import random
-import requests
 from xml import etree
+
+import IPy
+import requests
 
 
 def get_ip_segment(start: str, end: str) -> str:
@@ -38,7 +39,7 @@ def scrapy_useragent() -> None:
         tree = etree.HTML(page.text)
         items = tree.xpath('/html/body/div[2]/div[2]/div/ul')
         # Only take the first 100 entries - older entries are outdated browser versions
-        for i in items[:100]:  
+        for i in items[:100]:
             res[browser].append(i.xpath('li/a')[0].text)
     print(res)
 

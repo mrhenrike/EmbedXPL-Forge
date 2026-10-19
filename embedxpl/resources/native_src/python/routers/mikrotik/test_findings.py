@@ -7,9 +7,9 @@ Target: 167.71.20.188 (authorized SafeLabs CHR lab)
 Author: André Henrique (@mrhenrike)
 """
 
-import socket
-import logging
 import json
+import logging
+import socket
 from datetime import datetime
 
 logging.basicConfig(level=logging.WARNING)
@@ -178,8 +178,8 @@ def test_rest_api_ratelimit():
     Test if REST API (HTTP) also lacks rate-limiting.
     Makes 20 rapid auth attempts and checks for 429 or lockout.
     """
-    import http.client
     import base64
+    import http.client
     results = []
     for i in range(20):
         try:
@@ -200,7 +200,7 @@ def test_rest_api_ratelimit():
 
 def main():
     print("=" * 72)
-    print(f"  MIKROTIK-CONFIG-001 & -002 — Privilege Test")
+    print("  MIKROTIK-CONFIG-001 & -002 — Privilege Test")
     print(f"  Target: {TARGET}:{PORT}  |  {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 72)
 
@@ -226,13 +226,13 @@ def main():
             logged = api.login(username, password)
 
             if not logged:
-                print(f"  [-] LOGIN FAILED")
+                print("  [-] LOGIN FAILED")
                 result["error"] = "login failed"
                 api.close()
                 findings.append(result)
                 continue
 
-            print(f"  [+] LOGIN OK")
+            print("  [+] LOGIN OK")
 
             # Check user group/policy
             groups = test_sensitive_policy(api)
@@ -247,7 +247,7 @@ def main():
             result["wg_key_visible"] = wg_ok
             result["wg_key_value"] = wg_detail
             if wg_ok:
-                print(f"  [!!!] CONFIG-001 VULNERABLE: WireGuard private key READABLE")
+                print("  [!!!] CONFIG-001 VULNERABLE: WireGuard private key READABLE")
                 print(f"        {wg_detail}")
             else:
                 print(f"  [OK]  CONFIG-001: WireGuard key NOT readable → {wg_detail}")

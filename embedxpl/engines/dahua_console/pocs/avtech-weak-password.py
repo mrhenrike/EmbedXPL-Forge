@@ -1,6 +1,5 @@
 import base64
 
-import requests
 from loguru import logger
 
 from .base import POCTemplate

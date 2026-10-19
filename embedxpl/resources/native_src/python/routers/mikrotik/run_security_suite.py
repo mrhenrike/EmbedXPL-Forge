@@ -19,7 +19,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Tuple
 
 import requests
 import urllib3
@@ -37,7 +37,6 @@ from modules.snmp import SNMPScanner  # noqa: E402
 from modules.timing_oracle import TimingOracleAttacker  # noqa: E402
 from modules.web_security import WebSecurityTester  # noqa: E402
 from xpl.cve_db import get_all_cves, get_cves_for_version  # noqa: E402
-
 
 LOGGER = logging.getLogger("run_security_suite")
 

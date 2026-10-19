@@ -26,10 +26,10 @@ from .ics import ICSAutoPwn
 from .segment import SegmentAutoPwn
 
 __all__ = [
-    "RouterAutoPwn",
-    "PrinterAutoPwn",
-    "FirewallAutoPwn",
     "CameraAutoPwn",
+    "FirewallAutoPwn",
     "ICSAutoPwn",
+    "PrinterAutoPwn",
+    "RouterAutoPwn",
     "SegmentAutoPwn",
 ]

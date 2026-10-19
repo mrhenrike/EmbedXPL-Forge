@@ -6,7 +6,6 @@ Author: André Henrique (@mrhenrike) | União Geek
 import json
 import os
 import re
-import textwrap
 
 MODULES_BASE = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),

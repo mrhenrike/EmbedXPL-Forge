@@ -4,15 +4,13 @@
 
 from __future__ import annotations
 
+import csv
 import json
-import os
 import shutil
 import urllib.request
-import csv
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import Dict, Iterable, List, Set, Tuple
-
+from typing import Iterable, List, Set, Tuple
 
 GITHUB_API = "https://api.github.com/repos/{owner}/{repo}/git/trees/{ref}?recursive=1"
 RAW_BASE = "https://raw.githubusercontent.com/{owner}/{repo}/{ref}/{path}"

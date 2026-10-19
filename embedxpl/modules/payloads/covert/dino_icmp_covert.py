@@ -111,7 +111,7 @@ class Exploit(_Base):
             print("  1. ICMP Echo reachability (basic ping)")
             print("  2. Large ICMP payloads (data exfil capacity)")
             print("  3. Non-standard ICMP ID/sequence patterns")
-            print(f"  4. Outbound ICMP filtering detection")
+            print("  4. Outbound ICMP filtering detection")
             return
 
         print(f"[*] Dino ICMP covert channel assessment: {self.target}")

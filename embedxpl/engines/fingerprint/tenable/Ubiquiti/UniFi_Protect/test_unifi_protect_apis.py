@@ -11,12 +11,11 @@
 
 import argparse
 import http.client
-import json
+import os.path
+import re
 import ssl
 import sys
-import os.path
 import time
-import re
 
 TIMEOUT = None
 DEBUG = False
@@ -69,7 +68,7 @@ def cli_params():
 
 
 def find_endpoints(filepath):
-    pattern = '[^a-z][a-z]\.([a-z]+)\("(/[^"]+)",'
+    pattern = r'[^a-z][a-z]\.([a-z]+)\("(/[^"]+)",'
     endpoints = []
     with open(filepath) as fp:
         for line in fp:
@@ -86,7 +85,7 @@ def find_endpoints(filepath):
                 endpoints.append((method, endpoint))
                 debug("Found endpoint to test: {} {}".format(method, endpoint))
     return endpoints
-    
+
 
 def get_conn(host, port, use_ssl):
     """

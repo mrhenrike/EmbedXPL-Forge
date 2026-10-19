@@ -390,13 +390,13 @@ class RTSPClient:
             return f"Basic {cred}"
 
         if self._auth_type == "digest":
-            ha1 = hashlib.md5(  # noqa: S324
+            ha1 = hashlib.md5(
                 f"{self._username}:{self._realm}:{self._password}".encode()
             ).hexdigest()
-            ha2 = hashlib.md5(f"{method}:{uri}".encode()).hexdigest()  # noqa: S324
+            ha2 = hashlib.md5(f"{method}:{uri}".encode()).hexdigest()
             nc = "00000001"
-            cnonce = hashlib.md5(str(time.monotonic()).encode()).hexdigest()[:8]  # noqa: S324
-            response_hash = hashlib.md5(  # noqa: S324
+            cnonce = hashlib.md5(str(time.monotonic()).encode()).hexdigest()[:8]
+            response_hash = hashlib.md5(
                 f"{ha1}:{self._nonce}:{nc}:{cnonce}:auth:{ha2}".encode()
             ).hexdigest()
             return (

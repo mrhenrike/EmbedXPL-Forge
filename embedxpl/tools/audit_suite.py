@@ -22,7 +22,7 @@ import importlib.util
 import json
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import List
 
 _HERE = Path(__file__).resolve().parent.parent   # embedxpl/
 _MODULES = (_HERE / "modules").resolve()
@@ -93,9 +93,10 @@ def audit_unused_imports(root: Path) -> List[dict]:
     """Detect unused imports using pyflakes."""
     issues = []
     try:
+        import io
+
         from pyflakes import api as pf_api
         from pyflakes import messages as pf_msgs
-        import io
 
         files = _collect_py_files(root)
         for py in files:

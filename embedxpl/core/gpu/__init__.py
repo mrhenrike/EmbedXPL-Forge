@@ -7,7 +7,7 @@ from embedxpl.core.gpu.backend import ComputeBackend, auto_select_backend
 from embedxpl.core.gpu.cpu_backend import CPUBackend
 
 __all__ = [
+    "CPUBackend",
     "ComputeBackend",
     "auto_select_backend",
-    "CPUBackend",
 ]

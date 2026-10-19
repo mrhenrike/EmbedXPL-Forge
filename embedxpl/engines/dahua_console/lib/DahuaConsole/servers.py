@@ -1,8 +1,9 @@
-import select
-import queue
 import _thread
-from utils import *
+import queue
+import select
+
 from events import DahuaEvents
+from utils import *
 
 
 class Servers(DahuaEvents):

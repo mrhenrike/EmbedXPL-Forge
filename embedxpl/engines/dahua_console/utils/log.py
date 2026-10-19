@@ -1,5 +1,6 @@
 """Logging configuration via loguru."""
 import sys
+
 from loguru import logger
 
 

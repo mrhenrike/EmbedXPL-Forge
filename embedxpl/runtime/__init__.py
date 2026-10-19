@@ -19,20 +19,21 @@ Or using the module-level singleton::
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from .executor import XplRuntime, get_runtime, execute
-from .toolchain import available as toolchain_available, report as toolchain_report
-from .crosscompile import available_targets, get_target, TARGETS
 from .cache import cache_info, clear_cache
+from .crosscompile import TARGETS, available_targets, get_target
+from .executor import XplRuntime, execute, get_runtime
+from .toolchain import available as toolchain_available
+from .toolchain import report as toolchain_report
 
 __all__ = [
-    "XplRuntime",
-    "get_runtime",
-    "execute",
-    "toolchain_available",
-    "toolchain_report",
-    "available_targets",
-    "get_target",
     "TARGETS",
+    "XplRuntime",
+    "available_targets",
     "cache_info",
     "clear_cache",
+    "execute",
+    "get_runtime",
+    "get_target",
+    "toolchain_available",
+    "toolchain_report",
 ]
