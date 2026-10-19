@@ -29,7 +29,7 @@ import random
 import re
 from collections import Counter
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 

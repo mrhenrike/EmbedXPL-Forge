@@ -13,8 +13,6 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Iterable, List, Set, Tuple
-import re
-
 
 SCOPE_BLOCK_TOKENS: Tuple[str, ...] = ("camera", "dvr", "printer")
 

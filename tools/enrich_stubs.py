@@ -8,8 +8,6 @@ Version: 0.1.0
 """
 
 import os
-import re
-import sys
 from pathlib import Path
 
 MODULES_ROOT = Path(__file__).resolve().parent.parent / "embedxpl" / "modules"
@@ -188,7 +186,7 @@ class Exploit(HTTPClient):
             return False
         server = response.headers.get("Server", "").lower()
         if "rompager" in server:
-            version = re.search(r"rompager/([\d.]+)", server, re.IGNORECASE)
+            version = re.search(r"rompager/([\\d.]+)", server, re.IGNORECASE)
             if version:
                 try:
                     ver = tuple(int(x) for x in version.group(1).split("."))

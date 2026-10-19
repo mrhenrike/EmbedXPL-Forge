@@ -19,7 +19,6 @@ import json
 import logging
 import math
 import re
-import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Generator, Optional

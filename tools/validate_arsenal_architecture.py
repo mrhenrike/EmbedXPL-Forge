@@ -4,12 +4,10 @@
 from __future__ import annotations
 
 # Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
-
 import json
 import logging
 from pathlib import Path
 from typing import Dict, List
-
 
 LOGGER = logging.getLogger("validate_arsenal_architecture")
 

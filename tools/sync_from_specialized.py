@@ -19,10 +19,10 @@ from pathlib import Path
 from typing import Any
 
 # Reuse forward-sync map and helpers from sibling script.
-from sync_to_specialized import (  # noqa: E402
+from sync_to_specialized import (
     EMBEDXPL_ROOT,
-    FileResult,
     SYNC_MAP,
+    FileResult,
     _check_check_calls_run,
     _check_hardcoded_secrets,
     _content_sha256,
@@ -183,7 +183,7 @@ def sync_target_reverse(
                 )
                 if verbose:
                     print(f"  [OK {action}] {dst_str}")
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 if os.path.exists(tmp_path):
                     os.unlink(tmp_path)
                 results.append(FileResult(src_str, dst_str, "error", str(exc), sha256=dest_hash))

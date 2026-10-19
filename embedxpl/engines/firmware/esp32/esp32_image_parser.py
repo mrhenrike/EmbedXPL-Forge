@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 
 # Convert an ESP 32 OTA partition into an ELF
-import sys
+import argparse
 import json
-import os, argparse
-from makeelf.elf import *
-from esptool import *
+import os
+import sys
+
 from esp32_firmware_reader import *
+from esptool import *
+from makeelf.elf import *
 from read_nvs import *
+
 
 def image_base_name(path):
     filename_w_ext = os.path.basename(path)
@@ -23,7 +26,7 @@ def calcShFlg(flags):
         mask |= SHF.SHF_ALLOC
     if 'X' in flags:
         mask |= SHF.SHF_EXECINSTR
-            
+
     return mask
 
 # program header flags
@@ -114,7 +117,7 @@ def image2elf(filename, output_file, verbose=False):
 
     ##### append the sections #####
     ###############################
-    for name in section_data.keys():
+    for name in section_data:
         data = section_data[name]['data']
         addr = section_data[name]['addr']
         # build the section out as much as possible
@@ -157,7 +160,7 @@ def image2elf(filename, output_file, verbose=False):
             size = len(section_data['.iram0.vectors']['data']) + len(section_data['.iram0.text']['data'])
         else:
             size = len(section_data[name]['data'])
-        
+
         p_flags = calcPhFlg(flags)
         addr = section_data[name]['addr']
         align = 0x1000
@@ -239,7 +242,7 @@ def main():
                 return
 
             part_name = args.partition
-            
+
             if args.action == 'dump_partition' and args.output is not None:
                 dump_file = args.output
             else:
@@ -247,7 +250,7 @@ def main():
 
             if part_name in part_table:
                 part = part_table[part_name]
-            
+
                 if args.action == 'dump_partition':
                     dump_partition(fh, part_name, part['offset'], part['size'], dump_file)
                 if args.action == 'create_elf':

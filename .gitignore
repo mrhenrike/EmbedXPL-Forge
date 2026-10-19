@@ -114,14 +114,11 @@ samples/
 HANDOFF-AUDIT.md
 
 # === Local-only packaging (keep out of public tree unless force-added for CI) ===
-.github/workflows/
 .github/dependabot.yml
 .github/CODEOWNERS
 CODEOWNERS
 .github/FUNDING.yml
 FUNDING.yml
-.github/ISSUE_TEMPLATE*
-.github/PULL_REQUEST_TEMPLATE*
 CONTRIBUTING*
 CONTRIBUTORS*
 .travis.yml
@@ -130,10 +127,6 @@ azure-pipelines.yml
 Jenkinsfile
 .circleci/
 appveyor.yml
-pyproject.toml
-setup.py
-setup.cfg
-MANIFEST.in
 tox.ini
 .pypirc
 scripts/publish*
@@ -145,3 +138,17 @@ packages/**/build.ps1
 
 # Scratch / local scratch artifacts
 /exploit.txt
+
+# === Secrets & credentials — NEVER commit ===
+.netrc
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+id_rsa
+id_rsa.*
+*.credentials
+credentials.json
+secrets.json

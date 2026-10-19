@@ -9,12 +9,10 @@ Supports: session setup, SZL identity reads, PLC stop/start, block upload,
 password authentication (S7 300/400 series).
 """
 
+import logging
 import socket
 import struct
-import logging
-import time
-from typing import Optional, Tuple
-
+from typing import Optional
 
 # S7comm constants
 S7_PORT = 102

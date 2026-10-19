@@ -1,11 +1,11 @@
 
-from .base import Converter
-from ...helpers import iterate_files, get_ip, get_screenshot
+import os
 
 # Needed for decoding base64-strings in Python3
 from codecs import decode
 
-import os
+from ...helpers import get_ip, get_screenshot, iterate_files
+from .base import Converter
 
 
 class ImagesConverter(Converter):

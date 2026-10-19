@@ -20,7 +20,6 @@ Version: 1.0.0
 """
 from __future__ import annotations
 
-import json
 import logging
 from pathlib import Path
 from typing import Generator, Optional
@@ -59,7 +58,7 @@ def _require_torch():
         RuntimeError: If torch is not installed.
     """
     try:
-        import torch  # noqa: F401
+        import torch
         return torch
     except ImportError as exc:
         raise RuntimeError(_INSTALL_HINT) from exc
@@ -629,6 +628,6 @@ def handle_neural(args, ctx: dict):
     except RuntimeError as exc:
         logger.error(str(exc))
         return None
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         logger.error("neural error: %s", exc)
         return None

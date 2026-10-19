@@ -30,14 +30,12 @@ import os
 import re
 import socket
 import ssl
-import struct
 import subprocess
 import sys
 import threading
-import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Sequence, Set, Tuple
+from typing import Callable, Dict, List, Optional, Set, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -540,7 +538,6 @@ class NetworkDiscovery:
     def _scapy_available() -> bool:
         """Check if scapy is importable and ARP is usable."""
         try:
-            from scapy.all import ARP, Ether, srp
             return True
         except Exception:
             return False
@@ -759,7 +756,7 @@ class NetworkDiscovery:
         if seen_ips is None:
             seen_ips = set()
         try:
-            from scapy.all import ARP, Ether, srp, conf
+            from scapy.all import ARP, Ether, conf, srp
             conf.verb = 0
         except ImportError:
             self._scan_socket(callback, seen_ips)

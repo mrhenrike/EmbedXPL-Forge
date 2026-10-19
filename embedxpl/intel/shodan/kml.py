@@ -1,6 +1,6 @@
 
-from .base import Converter
 from ...helpers import iterate_files
+from .base import Converter
 
 
 class KmlConverter(Converter):
@@ -42,7 +42,7 @@ class KmlConverter(Converter):
             placemark = '<Placemark><name><![CDATA[<h1 style="margin-bottom:0;padding-bottom:0;font-size:1.5em">{}</h1>]]></name>'.format(ip)
             placemark += '<description><![CDATA['
 
-            if 'hostnames' in host and host['hostnames']:
+            if host.get('hostnames'):
                 placemark += '<div><a style="color: #999;margin-top:-10px;padding-top:0;" href="http://{0}" target="_blank">{0}</a></div>'.format(host['hostnames'][0])
 
             placemark += '<h2>Ports</h2><ul>'

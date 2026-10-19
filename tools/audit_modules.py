@@ -13,7 +13,6 @@ Version: 0.1.0
 import json
 import os
 import re
-import sys
 from collections import defaultdict
 
 MODULES_ROOT = os.path.join(os.path.dirname(__file__), "..", "embedxpl", "modules")

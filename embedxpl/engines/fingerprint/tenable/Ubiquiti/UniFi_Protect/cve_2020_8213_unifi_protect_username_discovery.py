@@ -52,11 +52,10 @@
 import argparse
 import http.client
 import json
+import os.path
 import ssl
 import sys
-import os.path
 import time
-
 
 TIMEOUT = None
 DEBUG = False

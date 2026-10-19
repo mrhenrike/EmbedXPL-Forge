@@ -1,5 +1,5 @@
+from dahua_logon_modes import dahua_gen1_hash, dahua_gen2_md5_hash, dahua_logon, dahua_onvif_sha1_hash
 from utils import *
-from dahua_logon_modes import dahua_logon, dahua_gen1_hash, dahua_gen2_md5_hash, dahua_onvif_sha1_hash
 
 
 class PwdManager(object):

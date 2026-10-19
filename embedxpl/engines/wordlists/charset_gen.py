@@ -26,11 +26,8 @@ Versão: 1.1.0
 from __future__ import annotations
 
 import logging
-import os
-import sys
 from configparser import ConfigParser
-from itertools import combinations, permutations, product
-from math import log10
+from itertools import permutations, product
 from pathlib import Path
 from typing import Generator, Optional
 
@@ -448,7 +445,7 @@ def estimate_constrained_size(
     Returns:
         Tupla (total_estimado, tamanho_formatado).
     """
-    from math import factorial, comb
+    from math import factorial
 
     d = len(BUILTIN_CHARSETS["numeric"])
     l_ = len(BUILTIN_CHARSETS["lalpha"])

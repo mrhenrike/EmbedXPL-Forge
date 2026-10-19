@@ -9,11 +9,10 @@ S7comm+ uses "SIMATIC-ROOT-ES" as dst-TSAP and adds an integrity layer
 on top of S7comm.  This client provides session setup and basic probing.
 """
 
+import logging
 import socket
 import struct
-import logging
 from typing import Optional
-
 
 S7PLUS_DST_TSAP = b"SIMATIC-ROOT-ES"
 

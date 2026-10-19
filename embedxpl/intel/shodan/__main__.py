@@ -26,27 +26,18 @@ The following commands are currently supported:
 
 """
 
-import click
 import csv
+import json
 import os
 import os.path
+import threading
+import time
+
+import click
 import pkg_resources
+import requests
 import shodan
 import shodan.helpers as helpers
-import threading
-import requests
-import time
-import json
-
-# The file converters that are used to go from .json.gz to various other formats
-from shodan.cli.converter import CsvConverter, KmlConverter, GeoJsonConverter, ExcelConverter, ImagesConverter
-
-# Constants
-from shodan.cli.settings import SHODAN_CONFIG_DIR, COLORIZE_FIELDS
-
-# Helper methods
-from shodan.cli.helpers import async_spinner, get_api_key, escape_data, timestr, open_streaming_file, get_banner_field, match_filters
-from shodan.cli.host import HOST_PRINT
 
 # Allow 3rd-parties to develop custom commands
 from click_plugins import with_plugins
@@ -54,10 +45,27 @@ from pkg_resources import iter_entry_points
 
 # Large subcommands are stored in separate modules
 from shodan.cli.alert import alert
+
+# The file converters that are used to go from .json.gz to various other formats
+from shodan.cli.converter import CsvConverter, ExcelConverter, GeoJsonConverter, ImagesConverter, KmlConverter
 from shodan.cli.data import data
+
+# Helper methods
+from shodan.cli.helpers import (
+    async_spinner,
+    escape_data,
+    get_api_key,
+    get_banner_field,
+    match_filters,
+    open_streaming_file,
+    timestr,
+)
+from shodan.cli.host import HOST_PRINT
 from shodan.cli.organization import org
 from shodan.cli.scan import scan
 
+# Constants
+from shodan.cli.settings import COLORIZE_FIELDS, SHODAN_CONFIG_DIR
 
 # Make "-h" work like "--help"
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])

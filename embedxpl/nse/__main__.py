@@ -20,6 +20,7 @@ Version: 2.0.0
 """
 
 import sys
+
 from embedxpl.nse.manager import NSEManager
 
 

@@ -2,7 +2,6 @@
 import os
 import random
 
-
 ingram_icon = r"""
           _    __..-:┑
    ║`====╩=╩=======╣ |
@@ -342,13 +341,13 @@ def generate_logo() -> list:
         if num & 1: head, tail = num // 2, num // 2 + 1
         else: head, tail = num // 2, num // 2
         font = [' '] * head + font + [' '] * tail
-    
+
     elif icon_height < font_height:
         num = font_height - icon_height
         if num & 1: head, tail = num // 2, num // 2 + 1
         else: head, tail = num // 2, num // 2
         icon = [' ' * icon_width] * head + icon + [' ' * icon_width] * tail
-    
+
     return [icon, font]
 
 

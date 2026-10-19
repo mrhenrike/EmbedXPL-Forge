@@ -14,9 +14,8 @@ Version: 1.0.0
 
 from __future__ import annotations
 
-import itertools
 from dataclasses import dataclass, field
-from typing import Any, Dict, Generator, List, Optional
+from typing import Dict, Generator, List, Optional
 
 __version__ = "1.0.0"
 

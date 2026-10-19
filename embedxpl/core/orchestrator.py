@@ -9,12 +9,10 @@ Version: 1.0.0
 
 from __future__ import annotations
 
-import importlib.resources
 import logging
-import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 try:
     import yaml

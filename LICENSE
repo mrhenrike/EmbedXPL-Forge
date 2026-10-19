@@ -1,16 +1,123 @@
-Copyright 2024-2026, EmbedXPL-Forge by André Henrique (@mrhenrike)
+# XPL-Suite Security Research License (XSRL) v1.0
+
+Copyright (c) 2024-2026 Andre Henrike de Oliveira (@mrhenrike) / Uniao Geek
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+## 1. Definitions
 
-    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-    * Neither the name of EmbedXPL-Forge nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+- "Software" means the source code, documentation, binaries, scripts, configuration
+  files, and any other materials included in this repository.
+- "Author" means the original copyright holder: Andre Henrike de Oliveira (@mrhenrike).
+- "Original Repository" means the source repository hosted at
+  https://github.com/mrhenrike/EmbedXPL-Forge from which the Software originates.
+- "Upstream Credits" means the authors and licenses of third-party components,
+  libraries, or code referenced in the Software, as documented in source file headers,
+  CREDITS files, or README attribution sections.
+- "Authorized Security Testing" means penetration testing, vulnerability assessment,
+  red team exercises, purple team exercises, security auditing, or similar activities
+  conducted with explicit written permission from the owner of the target system(s).
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+## 2. Grant of Rights
 
-The above licensing was taken from the BSD licensing and is applied to EmbedXPL-Forge as well.
+Subject to the terms and conditions of this License, the Author grants you a
+non-exclusive, worldwide, royalty-free license to:
 
-EmbedXPL-Forge is provided as is, and is a royalty free open-source application.
+a) **Use** the Software for educational purposes, academic research, security studies,
+   and Authorized Security Testing;
+b) **Copy and reproduce** the Software;
+c) **Modify** the Software and create derivative works;
+d) **Fork** the Software and maintain independent copies;
+e) **Distribute** the Software and derivative works, provided all conditions in
+   Section 3 are met.
 
-Feel free to modify, use, change, market, do whatever you want with it as long as you give the appropriate credit.
+## 3. Conditions
+
+Any use, copy, modification, fork, or distribution of the Software must comply with
+ALL of the following conditions:
+
+### 3.1 Attribution
+
+a) You must retain the Author's original copyright notice and attribution in all
+   copies and derivative works.
+b) You must retain all Upstream Credits, including but not limited to: original author
+   names, license notices, and attribution statements of third-party code used as a
+   base or reference for the Software.
+c) Modified files must carry a prominent notice stating that you changed the files and
+   the date of any change.
+d) Derivative works must include a clear statement identifying the original Software
+   and its Author.
+e) Any copy, fork, or derivative work must include a visible reference to the Original
+   Repository URL (https://github.com/mrhenrike/EmbedXPL-Forge) in the project's
+   README or equivalent documentation, so that users can trace the Software back to
+   its source.
+f) The Author's name and credits must not be removed, obscured, or replaced in any
+   copy, fork, or derivative work. The Author must remain credited as the original
+   creator in all circumstances.
+
+### 3.2 Same License
+
+a) Any distribution of the Software or derivative works must be under this same
+   License (XSRL v1.0).
+b) You may not apply any additional restrictions or alternative license terms to the
+   Software or derivative works.
+c) You may not sublicense the Software under different terms.
+
+### 3.3 Non-Commercial Use Only
+
+a) The Software may not be used, in whole or in part, for commercial purposes.
+b) "Commercial purposes" includes but is not limited to: selling the Software or
+   derivative works, incorporating the Software into commercial products or services,
+   using the Software to generate revenue directly or indirectly, and offering the
+   Software as part of a paid service.
+c) Use in non-profit organizations, academic institutions, and personal projects is
+   permitted, provided no commercial gain is derived.
+
+### 3.4 Ethical Use Only
+
+a) The Software may only be used for:
+   - Educational purposes and academic research;
+   - Security studies, training, and skill development;
+   - Authorized Security Testing (as defined in Section 1);
+   - Capture The Flag (CTF) competitions and security labs;
+   - Defensive security, incident response, and threat analysis.
+
+b) The Software may NOT be used for:
+   - Unauthorized access to systems, networks, or data;
+   - Any activity that violates applicable laws or regulations;
+   - Malicious purposes, including but not limited to: deploying malware against
+     unauthorized targets, conducting denial-of-service attacks, unauthorized
+     surveillance, data theft, or any form of cybercrime;
+   - Targeting individuals, organizations, or infrastructure without explicit
+     authorization;
+   - Any purpose that causes harm to individuals or organizations.
+
+## 4. No Warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+## 5. Limitation of Liability
+
+The Author shall not be held responsible for any misuse of the Software. Users are
+solely responsible for ensuring their use of the Software complies with all applicable
+laws, regulations, and ethical standards.
+
+## 6. Termination
+
+This License and the rights granted hereunder will terminate automatically if you fail
+to comply with any of the terms and conditions of this License. Upon termination, you
+must cease all use and destroy all copies of the Software in your possession.
+
+## 7. Severability
+
+If any provision of this License is held to be unenforceable, such provision shall be
+reformed only to the extent necessary to make it enforceable, and the remaining
+provisions shall continue in full force and effect.
+
+---
+
+SPDX-License-Identifier: LicenseRef-XSRL-1.0

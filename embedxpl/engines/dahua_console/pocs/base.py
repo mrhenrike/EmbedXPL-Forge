@@ -1,7 +1,8 @@
 """Base class for all POC modules."""
 import os
-import requests
 from collections import namedtuple
+
+import requests
 from loguru import logger
 
 

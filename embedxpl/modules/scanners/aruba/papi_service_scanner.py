@@ -106,7 +106,7 @@ class Exploit(HTTPClient):
             print_error(f"[PAPI-SCAN] UDP probe error: {exc}")
 
         # Step 2: Web fingerprint
-        print_status(f"[PAPI-SCAN] Checking web management interface...")
+        print_status("[PAPI-SCAN] Checking web management interface...")
         try:
             for path in ["/screens/wms/wms.login", "/swarm.cgi", "/", "/visualrf_ajax"]:
                 res = self.http_request("GET", f"https://{self.target}:{self.web_port}{path}",
@@ -144,16 +144,16 @@ class Exploit(HTTPClient):
             print_error(f"[PAPI-SCAN] Web probe error: {exc}")
 
         # Step 3: Vulnerability assessment
-        print_status(f"[PAPI-SCAN] Vulnerability assessment:")
+        print_status("[PAPI-SCAN] Vulnerability assessment:")
         if papi_active:
-            print_success(f"[PAPI-SCAN] PAPI EXPOSED — Potentially vulnerable to:")
-            print_success(f"[PAPI-SCAN]   CVE-2024-42509 (CVSS 9.8) — AOS-10 pre-auth RCE")
-            print_success(f"[PAPI-SCAN]   CVE-2024-47460 (CVSS 9.0) — AOS-10 cmd injection")
-            print_success(f"[PAPI-SCAN]   CVE-2023-35980 (CVSS 9.8) — Heap overflow")
-            print_success(f"[PAPI-SCAN]   CVE-2022-37885-37897 cluster (CVSS 9.8)")
-            print_success(f"[PAPI-SCAN]   CVE-2021-25144/25145/25146 (CVSS 9.8)")
+            print_success("[PAPI-SCAN] PAPI EXPOSED — Potentially vulnerable to:")
+            print_success("[PAPI-SCAN]   CVE-2024-42509 (CVSS 9.8) — AOS-10 pre-auth RCE")
+            print_success("[PAPI-SCAN]   CVE-2024-47460 (CVSS 9.0) — AOS-10 cmd injection")
+            print_success("[PAPI-SCAN]   CVE-2023-35980 (CVSS 9.8) — Heap overflow")
+            print_success("[PAPI-SCAN]   CVE-2022-37885-37897 cluster (CVSS 9.8)")
+            print_success("[PAPI-SCAN]   CVE-2021-25144/25145/25146 (CVSS 9.8)")
         else:
-            print_info(f"[PAPI-SCAN] PAPI not detected. Either patched, filtered, or not Aruba.")
+            print_info("[PAPI-SCAN] PAPI not detected. Either patched, filtered, or not Aruba.")
 
-        print_info(f"[PAPI-SCAN] Recommended: block UDP/8211 from untrusted networks")
-        print_info(f"[PAPI-SCAN] Use aos10_instant_papi_rce_cve_2024_42509 for exploitation attempt")
+        print_info("[PAPI-SCAN] Recommended: block UDP/8211 from untrusted networks")
+        print_info("[PAPI-SCAN] Use aos10_instant_papi_rce_cve_2024_42509 for exploitation attempt")

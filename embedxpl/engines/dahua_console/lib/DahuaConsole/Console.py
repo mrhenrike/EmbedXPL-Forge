@@ -4,13 +4,13 @@
 Author: bashis <mcw noemail eu> 2019-2021
 Subject: Dahua Debug Console
 """
-import argparse
 import _thread
+import argparse
 
-from utils import *
-from pwdmanager import PwdManager
 from dahua import DahuaFunctions
+from pwdmanager import PwdManager
 from servers import Servers
+from utils import *
 
 
 class DebugConsole(Servers):
@@ -250,7 +250,7 @@ class DebugConsole(Servers):
                         self.dh_console('console kill self.dh')
                         continue
 
-                    if msg == 'quit' or len(cmd) == 2 and cmd[0] == 'quit' and cmd[1] == 'all':
+                    if msg == 'quit' or (len(cmd) == 2 and cmd[0] == 'quit' and cmd[1] == 'all'):
 
                         if len(cmd) == 2 and cmd[1] == 'all':
                             self.quit_host(quit_all=True)
@@ -258,7 +258,7 @@ class DebugConsole(Servers):
                         if not self.quit_host(quit_all=False, msg=msg):
                             return False
 
-                    elif msg == 'shutdown' or msg == 'reboot' or len(cmd) == 2 and cmd[1] == 'all':
+                    elif msg == 'shutdown' or msg == 'reboot' or (len(cmd) == 2 and cmd[1] == 'all'):
 
                         if len(cmd) == 2 and cmd[1] == 'all':
                             self.quit_host(quit_all=True, msg=msg)
@@ -291,7 +291,7 @@ class DebugConsole(Servers):
 
     @staticmethod
     def memory_info():
-        from resource import getrusage, RUSAGE_SELF
+        from resource import RUSAGE_SELF, getrusage
         memory = getrusage(RUSAGE_SELF).ru_maxrss
         if sys.platform == 'darwin':
             memory = memory / 1024
@@ -592,7 +592,7 @@ class DebugConsole(Servers):
                 rhost = cmd[4]
                 proto = cmd[5]
                 rport = cmd[6] if len(cmd) == 7 else 5000
-            elif len(cmd) >= 6 and cmd[5] == 'dvrip' or cmd[5] == '3des':
+            elif (len(cmd) >= 6 and cmd[5] == 'dvrip') or cmd[5] == '3des':
                 rhost = cmd[4]
                 proto = cmd[5]
                 rport = cmd[6] if len(cmd) == 7 else 37777
@@ -673,7 +673,7 @@ class DebugConsole(Servers):
                 }
             }
 
-            if len(cmd) == 2 or len(cmd) == 3 and cmd[2] == '-h':
+            if len(cmd) == 2 or (len(cmd) == 3 and cmd[2] == '-h'):
                 log.info('{}'.format(help_all(msg=msg, usage=usage)))
                 return True
 
@@ -701,7 +701,7 @@ class DebugConsole(Servers):
                 }
             }
 
-            if len(cmd) == 2 or len(cmd) == 3 and cmd[2] == '-h':
+            if len(cmd) == 2 or (len(cmd) == 3 and cmd[2] == '-h'):
                 if len(cmd) <= 3:
                     log.info('{}'.format(help_all(msg=msg, usage=usage)))
                     return True

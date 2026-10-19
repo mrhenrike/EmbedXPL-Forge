@@ -29,11 +29,9 @@ from __future__ import annotations
 import argparse
 import json
 import logging
-import os
 import re
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 from typing import Optional
 
@@ -220,7 +218,7 @@ def harvest_exploitdb(
                         entry["local_path"] = str(dest_file)
                         entry["execution"] = "msf_bridge"
                         stats["ruby"] += 1
-                    except Exception as exc:
+                    except Exception:
                         stats["errors"] += 1
 
                 elif ext == ".c":
@@ -233,7 +231,7 @@ def harvest_exploitdb(
                         entry["local_path"] = str(dest_file)
                         entry["needs_compile"] = True
                         stats["c"] += 1
-                    except Exception as exc:
+                    except Exception:
                         stats["errors"] += 1
 
                 elif ext == ".sh":
@@ -243,7 +241,7 @@ def harvest_exploitdb(
                         shutil.copy2(src_path, dest_file)
                         entry["local_path"] = str(dest_file)
                         stats["shell"] += 1
-                    except Exception as exc:
+                    except Exception:
                         stats["errors"] += 1
                 else:
                     stats["other"] += 1
@@ -564,22 +562,22 @@ def generate_stats(dry_run: bool = True) -> None:
 
     # ExploitDB
     edb_stats = harvest_exploitdb(dry_run=True)
-    print(f"\nExploitDB Hardware/Embedded:")
+    print("\nExploitDB Hardware/Embedded:")
     print(f"  Python (.py):  {edb_stats.get('python', 0)} -> native EmbedXPL")
     print(f"  Ruby (.rb):    {edb_stats.get('ruby', 0)} -> MSF bridge")
     print(f"  C (.c):        {edb_stats.get('c', 0)} -> compile + run")
     print(f"  Shell (.sh):   {edb_stats.get('shell', 0)} -> direct execute")
 
-    print(f"\nRouterSploit (Python):")
-    print(f"  ~500 modules -> native EmbedXPL")
+    print("\nRouterSploit (Python):")
+    print("  ~500 modules -> native EmbedXPL")
 
-    print(f"\nMetasploit Framework (Ruby):")
-    print(f"  ~300 IoT modules -> MSF bridge")
+    print("\nMetasploit Framework (Ruby):")
+    print("  ~300 IoT modules -> MSF bridge")
 
-    print(f"\nTotal coverage:")
-    print(f"  Native Python: ~876 modules")
-    print(f"  MSF Bridge:    ~432 modules")
-    print(f"  C/Binary:      ~84 modules (compile)")
+    print("\nTotal coverage:")
+    print("  Native Python: ~876 modules")
+    print("  MSF Bridge:    ~432 modules")
+    print("  C/Binary:      ~84 modules (compile)")
 
 
 def main() -> None:

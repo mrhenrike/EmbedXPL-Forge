@@ -70,7 +70,7 @@ _LOGID_CATEGORIES: Dict[str, str] = {
 
 
 def parse_fortigate_kv(raw: str) -> Dict[str, Any]:
-    
+
     result: Dict[str, Any] = {"_raw": raw}
 
     # Extract key=value pairs (handle quoted values)
@@ -91,7 +91,7 @@ def parse_fortigate_kv(raw: str) -> Dict[str, Any]:
 
 
 def parse_fortinet_log_batch(log_lines: List[str]) -> List[Dict[str, Any]]:
-    
+
     events = []
     for line in log_lines:
         line = line.strip()
@@ -109,7 +109,7 @@ def parse_fortinet_log_batch(log_lines: List[str]) -> List[Dict[str, Any]]:
 
 
 def classify_fortigate_event(event: Dict[str, Any]) -> str:
-    
+
     subtype = str(event.get("subtype", "")).lower()
     event_type = str(event.get("type", event.get("fortigate.type", ""))).lower()
     logid = str(event.get("logid", event.get("fortigate.logid", "")))
@@ -130,7 +130,7 @@ def classify_fortigate_event(event: Dict[str, Any]) -> str:
 
 
 class FortigateSyslogParser:
-    
+
 
     def parse_file(
         self,
@@ -138,7 +138,7 @@ class FortigateSyslogParser:
         max_lines: int = 50_000,
         encoding: str = "utf-8",
     ) -> List[Dict[str, Any]]:
-        
+
         lines = []
         with open(path, encoding=encoding, errors="replace") as f:
             for i, line in enumerate(f):
@@ -152,18 +152,18 @@ class FortigateSyslogParser:
         events: List[Dict[str, Any]],
         category: str,
     ) -> List[Dict[str, Any]]:
-        
+
         return [e for e in events if classify_fortigate_event(e) == category]
 
     def extract_admin_events(self, events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        
+
         return [
             e for e in events
             if e.get("action") in ("login", "logout") or "login" in str(e.get("message", "")).lower()
         ]
 
     def extract_config_changes(self, events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        
+
         return [
             e for e in events
             if "config" in str(e.get("message", "")).lower()

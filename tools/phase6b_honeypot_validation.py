@@ -36,7 +36,7 @@ def main() -> int:
         if p.name != "__init__.py" and "__pycache__" not in str(p)
     )
 
-    print(f"Phase 6b honeypot validation snapshot:")
+    print("Phase 6b honeypot validation snapshot:")
     print(f"  Total modules scanned : {total_modules}")
     print(f"  Modules with honeypot refs: {len(honeypot_refs)}")
     for ref in honeypot_refs[:5]:

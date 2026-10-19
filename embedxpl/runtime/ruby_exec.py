@@ -115,7 +115,8 @@ class RubyExecutor:
         lines.append("run")
         lines.append("exit")
 
-        import tempfile, os
+        import os
+        import tempfile
         with tempfile.NamedTemporaryFile(
             mode="w", suffix=".rc", delete=False, prefix="embedxpl_msf_"
         ) as f:

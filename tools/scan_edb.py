@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Scan ExploitDB hardware folder for router CVEs not yet in EmbedXPL."""
+import json
 import os
 import re
-import json
 
 MODULES_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),

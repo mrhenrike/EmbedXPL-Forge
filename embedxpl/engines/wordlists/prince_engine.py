@@ -20,7 +20,6 @@ Version: 1.0.0
 """
 from __future__ import annotations
 
-import heapq
 import logging
 from collections import Counter
 from itertools import product

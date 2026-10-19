@@ -139,7 +139,7 @@ class Exploit(Exploit):
                             print_status("       This device can receive files via Bluetooth without pairing")
                             print_status("       Lasco-style propagation would target this device")
                 elif "OBEX File Transfer" in result.stdout:
-                    print_status(f"  OBEX File Transfer found — newer variant")
+                    print_status("  OBEX File Transfer found — newer variant")
                 else:
                     print_success(f"  OBEX push not exposed on {addr}")
             except Exception as e:

@@ -34,7 +34,6 @@ from __future__ import annotations
 
 import math
 import random
-import statistics
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple
 
@@ -120,7 +119,7 @@ def _extract_features(password: str) -> List[float]:
 class _IsoNode:
     """Node in an isolation tree."""
 
-    __slots__ = ("feature_idx", "split_value", "left", "right", "size")
+    __slots__ = ("feature_idx", "left", "right", "size", "split_value")
 
     def __init__(self) -> None:
         self.feature_idx: int = 0

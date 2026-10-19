@@ -411,7 +411,7 @@ class Exploit(Exploit):
 
     @staticmethod
     def _restore_network(exploit, snapshot):
-        setattr(exploit, "target_protocol", snapshot["protocol"])
+        exploit.target_protocol = snapshot["protocol"]
         ssl_val = snapshot.get("ssl")
         if ssl_val is not None and hasattr(exploit, "ssl"):
             if str(ssl_val).lower() in ("true", "false"):

@@ -24,7 +24,6 @@ from __future__ import annotations
 import argparse
 import ast
 import hashlib
-import importlib.util
 import json
 import os
 import py_compile
@@ -566,13 +565,13 @@ def main() -> int:
         print(f"    Warnings:  {warned}")
 
         if conflict:
-            print(f"\n  CONFLICTS (resolve manually):")
+            print("\n  CONFLICTS (resolve manually):")
             for r in results:
                 if r.status == "conflict":
                     print(f"    {r.dest} -- {r.reason}")
 
         if errors:
-            print(f"\n  ERRORS:")
+            print("\n  ERRORS:")
             for r in results:
                 if r.status == "error":
                     print(f"    {r.dest} -- {r.reason[:120]}")

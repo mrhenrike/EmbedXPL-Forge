@@ -1,13 +1,9 @@
 import socket
 
-from embedxpl.core.exploit.exploit import Exploit
-from embedxpl.core.exploit.exploit import Protocol
+from embedxpl.core.exploit.exploit import Exploit, Protocol
 from embedxpl.core.exploit.option import OptBool
-from embedxpl.core.exploit.printer import print_status
-from embedxpl.core.exploit.printer import print_error
-from embedxpl.core.exploit.utils import is_ipv4
-from embedxpl.core.exploit.utils import is_ipv6
-
+from embedxpl.core.exploit.printer import print_error, print_status
+from embedxpl.core.exploit.utils import is_ipv4, is_ipv6
 
 TCP_SOCKET_TIMEOUT = 8.0
 

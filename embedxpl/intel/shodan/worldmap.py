@@ -20,7 +20,6 @@ import time
 from shodan.exception import APIError
 from shodan.helpers import get_ip
 
-
 MAPS = {
     'world': {
         # offset (as (y, x) for curses...)
@@ -132,10 +131,10 @@ class AsciiMap(object):
                     desc += ' {}'.format(banner['location']['city'])
                 except Exception:
                     pass
-            
-            if 'tags' in banner and banner['tags']:
+
+            if banner.get('tags'):
                 desc += ' / {}'.format(','.join(banner['tags']))
-            
+
             entry = (
                 float(banner['location']['latitude']),
                 float(banner['location']['longitude']),
@@ -199,7 +198,7 @@ class MapApp(object):
         else:
             if self.last_fetch + self.polling_interval <= epoch_now:
                 refresh = True
-        
+
         if refresh:
             try:
                 # Grab 20 banners from the main stream

@@ -1,10 +1,10 @@
 """Wordlist path resolvers with Python 3.8+ compatibility."""
 
-from pathlib import Path
+import re
 from importlib import resources
+from pathlib import Path
 from typing import List, Optional
 from urllib.parse import unquote, urlparse
-import re
 
 
 def _wordlist_uri(filename: str) -> str:

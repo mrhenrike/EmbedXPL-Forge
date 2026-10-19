@@ -120,6 +120,6 @@ class Exploit(Exploit):
                 print_info(f"  - {fr_id} ({fr_name}): {req}")
         elif not interactive:
             print_info(
-                f"\nRun with interactive=True for guided checklist. "
-                f"Full assessment requires site survey per IEC 62443-2-1 / 3-3."
+                "\nRun with interactive=True for guided checklist. "
+                "Full assessment requires site survey per IEC 62443-2-1 / 3-3."
             )

@@ -197,7 +197,7 @@ class TpmsSpoof(Exploit):
                 line = line.strip()
                 if line.startswith("{"):
                     try:
-                        import json as _json  # noqa: PLC0415
+                        import json as _json
                         frame = _json.loads(line)
                         sensors.append(frame)
                         sid = frame.get("id", "?")

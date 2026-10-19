@@ -8,10 +8,10 @@ Ported and modernised from ISF ModbusClient (original: WenZhe Zhu / ICSsploit).
 Supports Function Codes: FC1 FC2 FC3 FC4 FC5 FC6 FC15 FC16 FC20 FC21 FC22 FC23
 """
 
+import logging
 import socket
 import struct
-import logging
-from typing import Optional, List
+from typing import List, Optional
 
 
 class ModbusClient:

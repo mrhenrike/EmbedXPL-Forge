@@ -83,7 +83,7 @@ def collect_wayback(domain: str, limit: int = 5000, timeout: float = 20.0) -> se
         resp = requests.get(url, timeout=timeout)
         resp.raise_for_status()
         rows = resp.json()
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         logger.error("wayback request failed: %s", exc)
         return set()
     texts: list[str] = []
@@ -133,7 +133,7 @@ def collect_github_org(org: str, max_repos: int = 200,
             )
             resp.raise_for_status()
             repos = resp.json()
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             logger.error("github request failed: %s", exc)
             break
         if not repos:
@@ -237,7 +237,7 @@ def enrich_llm(words: set[str], provider: str, model: str,
         else:
             logger.warning("unknown provider %r; skipping LLM enrichment", provider)
             return out
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         logger.warning("LLM enrichment failed (%s); using base words", exc)
         return out
     for tok in re.split(r"[,\n]", text):

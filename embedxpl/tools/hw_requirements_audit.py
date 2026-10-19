@@ -19,11 +19,9 @@ import importlib
 import json
 import os
 import pkgutil
-import sys
 import time
 from collections import defaultdict
 from pathlib import Path
-
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 _MODULES_BASE = _PROJECT_ROOT / "embedxpl" / "modules"

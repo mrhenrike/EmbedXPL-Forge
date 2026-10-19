@@ -36,13 +36,13 @@ def main() -> int:
     stub_count = len(stubs)
     enriched = total - stub_count
 
-    print(f"Deep intel backlog report:")
+    print("Deep intel backlog report:")
     print(f"  Total entries : {total}")
     print(f"  Enriched      : {enriched}")
     print(f"  Stub (missing fields): {stub_count}")
 
     if stubs:
-        print(f"\n  Top 10 stub entries:")
+        print("\n  Top 10 stub entries:")
         for e in stubs[:10]:
             print(f"    {e.get('cve_id','?')} — {e.get('vendor','?')}/{e.get('product','?')}")
 

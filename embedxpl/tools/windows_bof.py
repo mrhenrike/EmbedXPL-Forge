@@ -17,7 +17,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-
 COMMON_BADCHARS = bytes([0x00, 0x0A, 0x0D])
 
 

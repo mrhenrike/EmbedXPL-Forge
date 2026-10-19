@@ -10,22 +10,19 @@ Version: 0.1.0
 
 from __future__ import annotations
 
-import hashlib
-import json
 import logging
 import re
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
 _SKLEARN_AVAILABLE = False
 try:
+    import numpy as np
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.linear_model import LogisticRegression
     from sklearn.pipeline import Pipeline
-    import numpy as np
     _SKLEARN_AVAILABLE = True
 except ImportError:
     pass

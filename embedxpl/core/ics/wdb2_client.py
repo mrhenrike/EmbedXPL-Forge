@@ -8,11 +8,10 @@ RPC protocol v2 (UDP/17185).  Used to target VxWorks-based embedded devices.
 Ported and modernised from ISF Wdb2Client (original: WenZhe Zhu / ICSsploit).
 """
 
+import logging
 import socket
 import struct
-import logging
 from typing import Optional
-
 
 WDB_PORT = 17185
 WDB_PROC_CONNECT = 0x7A      # WdbConnect

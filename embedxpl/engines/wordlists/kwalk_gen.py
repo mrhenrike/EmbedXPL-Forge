@@ -13,7 +13,6 @@ Version: 1.0.0
 """
 from __future__ import annotations
 
-import itertools
 import logging
 from typing import Generator, Optional
 

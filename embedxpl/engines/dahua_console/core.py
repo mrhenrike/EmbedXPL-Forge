@@ -3,8 +3,8 @@ from collections import defaultdict
 from threading import Thread
 
 import gevent
-from loguru import logger
 from gevent.pool import Pool as geventPool
+from loguru import logger
 
 from .data import Data, SnapshotPipeline
 from .pocs import get_poc_dict

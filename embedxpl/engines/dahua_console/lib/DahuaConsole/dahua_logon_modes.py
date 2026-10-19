@@ -1,5 +1,6 @@
-from utils import *
 from datetime import datetime
+
+from utils import *
 
 """ For Dahua DES/3DES """
 ENCRYPT = 0x00

@@ -9,11 +9,10 @@ Usage:
     python tools/generate_attack_surface_maps.py
 """
 
-import math
-import os
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt

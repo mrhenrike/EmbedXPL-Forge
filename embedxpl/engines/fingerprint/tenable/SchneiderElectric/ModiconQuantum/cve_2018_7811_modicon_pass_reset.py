@@ -11,15 +11,16 @@
 #  - Modicon BMXNOR0200
 ##
 
-import urllib.request, argparse
+import argparse
+import urllib.request
 
 parser = argparse.ArgumentParser()
-parser.add_argument("target_host", help="Modicon Quantum host") 
-parser.add_argument("target_port", help="Modicon Quantum port (ie. 80)", type=int) 
-parser.add_argument("target_user", help="Username (ie. admin)") 
-parser.add_argument("new_pass", help="New password") 
+parser.add_argument("target_host", help="Modicon Quantum host")
+parser.add_argument("target_port", help="Modicon Quantum port (ie. 80)", type=int)
+parser.add_argument("target_user", help="Username (ie. admin)")
+parser.add_argument("new_pass", help="New password")
 args = parser.parse_args()
-  
+
 host = args.target_host
 port = args.target_port
 user = args.target_user
