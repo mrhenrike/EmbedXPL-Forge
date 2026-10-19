@@ -113,7 +113,7 @@ def _smb_probe_signing(host: str, port: int = 445, timeout: int = 5) -> Optional
             # bit 1 = NEGOTIATE_SECURITY_SIGNATURES_REQUIRED
             return bool(security_mode & 0x02)
         return None
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         logger.debug("SMB probe error on %s:%s - %s", host, port, exc)
         return None
 
@@ -155,7 +155,7 @@ def _smb_auth_impacket(
         if "STATUS_ACCESS_DENIED" in msg:
             return False, "SMB access denied"
         return False, "SMB error: {}".format(msg[:120])
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return False, "SMB connection error: {}".format(str(exc)[:120])
 
 
@@ -165,7 +165,7 @@ def _smb_auth_socket_fallback(host: str, port: int, timeout: int) -> Tuple[bool,
         sock = socket.create_connection((host, port), timeout=timeout)
         sock.close()
         return True, "SMB port reachable (impacket absent - auth not attempted)"
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return False, "SMB port unreachable: {}".format(str(exc)[:80])
 
 
@@ -248,7 +248,7 @@ def _winrm_ntlm_challenge(
             # requests-ntlm absent: report challenge detection only
             return False, "WinRM NTLM challenge confirmed (requests-ntlm absent; auth not completed)"
 
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return False, "WinRM error: {}".format(str(exc)[:120])
 
 
@@ -293,7 +293,7 @@ def _rdp_xfreerdp(
         return False, "xfreerdp not installed"
     except subprocess.TimeoutExpired:
         return False, "xfreerdp timed out"
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return False, "xfreerdp error: {}".format(str(exc)[:80])
 
 
@@ -310,7 +310,7 @@ def _rdp_port_probe(host: str, port: int, timeout: int) -> Tuple[bool, str]:
         sock.close()
         banner_hex = banner.hex()[:32]
         return True, "RDP port reachable (banner hex: {})".format(banner_hex)
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return False, "RDP unreachable: {}".format(str(exc)[:80])
 
 
@@ -345,7 +345,7 @@ def _webdav_ntlm_challenge(host: str, port: int, timeout: int) -> Tuple[bool, st
         if resp.status_code == 207:
             return False, "WebDAV PROPFIND succeeded without auth (no NTLM required)"
         return False, "WebDAV returned {} (no NTLM challenge)".format(resp.status_code)
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return False, "WebDAV error: {}".format(str(exc)[:120])
 
 
@@ -546,7 +546,7 @@ class Exploit(Exploit):
                 if "Negotiate" in www or "NTLM" in www:
                     return True, "WinRM simulate: NTLM challenge detected (401 with Negotiate)"
                 return False, "WinRM simulate: no NTLM challenge (status {})".format(resp.status_code)
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 return False, "WinRM simulate error: {}".format(str(exc)[:100])
 
         return _winrm_ntlm_challenge(host, port, username, password, timeout, use_tls)

@@ -764,7 +764,7 @@ var printerIP   = "{printer_ip}";
 var printerPort = {printer_port};
 
 // Encode the PostScript job
-var job = {repr(chosen_ps)};
+var job = {chosen_ps!r};
 
 function xspSend(ip, port, data, callback) {{
   var xhr = new XMLHttpRequest();

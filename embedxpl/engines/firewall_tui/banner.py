@@ -36,7 +36,7 @@ def render_banner(
         banner_text = Text(ASCII_ART, style="bold cyan")
         info_lines = [
             f"  Version    : {version}",
-            f"  Author     : Andr\u00e9 Henrique (@mrhenrike) | Uni\u00e3o Geek",
+            "  Author     : Andr\u00e9 Henrique (@mrhenrike) | Uni\u00e3o Geek",
             "",
         ]
         counts = " | ".join(f"{k}: {v}" for k, v in sorted(module_counts.items()))
