@@ -20,7 +20,6 @@ from __future__ import annotations
 import argparse
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
 _HERE = Path(__file__).resolve().parent.parent   # embedxpl/

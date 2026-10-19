@@ -26,7 +26,6 @@ import importlib
 import pkgutil
 from collections import OrderedDict
 
-
 CATEGORY_MODULES = {
     "iot": [
         "embedxpl.modules.exploits.cameras.*",
@@ -144,6 +143,31 @@ CATEGORY_MODULES = {
     "specialized": [
         "embedxpl.modules.exploits.specialized.*",
     ],
+    "mobile-ios": [
+        "embedxpl.modules.exploits.mobile.ios.*",
+        "embedxpl.modules.exploits.mobile.macos.*",
+    ],
+    "cameras-rtsp": [
+        "embedxpl.modules.scanners.cameras.*",
+        "embedxpl.modules.exploits.cameras.*",
+    ],
+    "routers-br": [
+        "embedxpl.modules.exploits.routers.tplink.*",
+        "embedxpl.modules.exploits.routers.intelbras.*",
+        "embedxpl.modules.exploits.routers.mikrotik.*",
+        "embedxpl.modules.exploits.routers.chipsets.*",
+        "embedxpl.modules.exploits.routers.asus.*",
+        "embedxpl.modules.creds.routers.*",
+    ],
+    "ics-modbus": [
+        "embedxpl.modules.exploits.ics.*",
+    ],
+    "waf-bypass": [
+        "embedxpl.modules.generic.*",
+    ],
+    "iot-mirai": [
+        "embedxpl.modules.exploits.iot.*",
+    ],
 }
 
 _ALL_GLOBS = []
@@ -254,34 +278,7 @@ def resolve_category(category_name):
     if normalized not in CATEGORY_MODULES:
         valid = ", ".join(sorted(CATEGORY_MODULES.keys()))
         raise ValueError(
-            "Unknown category '{cat}'. Valid categories: {v
-    # ── Batch Integration 2026-09-23 ─────────────────────────────────────
-    "mobile-ios": [
-        "embedxpl.modules.exploits.mobile.ios.*",
-        "embedxpl.modules.exploits.mobile.macos.*",
-    ],
-    "cameras-rtsp": [
-        "embedxpl.modules.scanners.cameras.*",
-        "embedxpl.modules.exploits.cameras.*",
-    ],
-    "routers-br": [
-        "embedxpl.modules.exploits.routers.tplink.*",
-        "embedxpl.modules.exploits.routers.intelbras.*",
-        "embedxpl.modules.exploits.routers.mikrotik.*",
-        "embedxpl.modules.exploits.routers.chipsets.*",
-        "embedxpl.modules.exploits.routers.asus.*",
-        "embedxpl.modules.creds.routers.*",
-    ],
-    "ics-modbus": [
-        "embedxpl.modules.exploits.ics.*",
-    ],
-    "waf-bypass": [
-        "embedxpl.modules.generic.*",
-    ],
-    "iot-mirai": [
-        "embedxpl.modules.exploits.iot.*",
-    ],
-}".format(
+            "Unknown category '{cat}'. Valid categories: {v}".format(
                 cat=category_name, v=valid,
             )
         )

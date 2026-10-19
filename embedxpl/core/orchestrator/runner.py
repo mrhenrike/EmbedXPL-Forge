@@ -12,11 +12,10 @@ import os
 import signal
 import subprocess
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional
 
 from embedxpl.core.orchestrator.artifact import CompiledArtifact
-
 
 _PROJECT_TMP = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "..", ".tmp"

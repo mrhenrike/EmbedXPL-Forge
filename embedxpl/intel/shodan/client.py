@@ -7,17 +7,16 @@ This module implements the Shodan API.
 
 :copyright: (c) 2014- by John Matherly
 """
+import json
 import math
 import os
 import time
 
 import requests
-import json
 
 from .exception import APIError
 from .helpers import create_facet_string
 from .stream import Stream
-
 
 # Try to disable the SSL warnings in urllib3 since not everybody can install
 # C extensions. If you're able to install C extensions you can try to run:
@@ -319,7 +318,7 @@ class Shodan:
         if proxies:
             self._session.proxies.update(proxies)
             self._session.trust_env = False
-        
+
         if os.environ.get('SHODAN_API_URL'):
             self.base_url = os.environ.get('SHODAN_API_URL')
 
@@ -595,7 +594,7 @@ class Shodan:
         results = self.search(query, minify=minify, page=page, fields=fields)
         if results['total']:
             total_pages = int(math.ceil(results['total'] / 100))
-                    
+
         for banner in results['matches']:
             try:
                 yield banner

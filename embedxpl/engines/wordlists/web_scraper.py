@@ -66,11 +66,11 @@ DEFAULT_STOPWORDS: frozenset[str] = frozenset({
     # PT-BR
     "que", "não", "com", "uma", "para", "por", "como", "mas", "foi", "isso",
     "ele", "ela", "são", "nas", "nos", "seu", "sua", "esse", "essa", "isto",
-    "nós", "eles", "elas", "dos", "das", "num", "uma", "uns", "umas", "mais",
-    "também", "ser", "ter", "tem", "era", "foi", "ser", "está", "este",
-    "esta", "isso", "aqui", "ali", "bem", "sim", "não", "já", "ainda",
+    "nós", "eles", "elas", "dos", "das", "num", "uns", "umas", "mais",
+    "também", "ser", "ter", "tem", "era", "está", "este",
+    "esta", "aqui", "ali", "bem", "sim", "já", "ainda",
     "mesmo", "muito", "pouco", "todo", "toda", "todos", "todas", "outro",
-    "outra", "outros", "outras", "quando", "onde", "porque", "como", "assim",
+    "outra", "outros", "outras", "quando", "onde", "porque", "assim",
     "então", "depois", "antes", "agora", "sempre", "nunca", "até", "sobre",
 })
 

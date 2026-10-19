@@ -1,6 +1,7 @@
 from json import dumps
-from .base import Converter
+
 from ...helpers import get_ip, iterate_files
+from .base import Converter
 
 
 class GeoJsonConverter(Converter):

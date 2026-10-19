@@ -1,6 +1,6 @@
 
-from .base import Converter
 from ...helpers import iterate_files
+from .base import Converter
 
 try:
     # python 3.x: Import ABC from collections.abc
@@ -9,7 +9,8 @@ except ImportError:
     # Python 2.x: Import ABC from collections
     from collections import MutableMapping
 
-from csv import writer as csv_writer, excel
+from csv import excel
+from csv import writer as csv_writer
 
 
 class CsvConverter(Converter):

@@ -1,7 +1,7 @@
+import base64
 import os
 import struct
-import base64
-import binascii
+
 from hexdump import hexdump
 
 nvs_types =  {
@@ -47,7 +47,7 @@ def parse_nvs_entries(entries, entry_state_bitmap):
 
         entry = entries[i]
         state = entry_state_bitmap[i]
-    
+
         entry_ns = entry[0]
         entry_type = entry[1]
         entry_span = entry[2]
@@ -109,7 +109,7 @@ def parse_nvs_entries(entries, entry_state_bitmap):
             print("      Data (U16) : %d" % (data))
             entry_data["entry_data_type"] = "U16"
             entry_data["entry_data"] = data
-        
+
         elif(nvs_types[entry_type] == "I16"):
             data = struct.unpack("<h", data[0:2])[0]
             print("      Data (I16) : %d" % (data))
@@ -121,7 +121,7 @@ def parse_nvs_entries(entries, entry_state_bitmap):
             print("      Data (U32) : %d" % (data))
             entry_data["entry_data_type"] = "U32"
             entry_data["entry_data"] = data
-        
+
         elif(nvs_types[entry_type] == "I32"):
             data = struct.unpack("<i", data[0:4])[0]
             print("      Data (I32) : %d" % (data))
@@ -134,7 +134,7 @@ def parse_nvs_entries(entries, entry_state_bitmap):
             entry_data["entry_data_type"] = "STR"
             print("        Size : %d " % (str_size))
             entry_data["entry_data_size"] = str_size
-            data = b'' 
+            data = b''
             for x in range(1, entry_span):
                 i += 1
                 data += entries[i]
@@ -148,7 +148,7 @@ def parse_nvs_entries(entries, entry_state_bitmap):
             entry_data["entry_data_type"] = "BLOB_DATA"
             print("        Size : %d " % (blob_data_size))
             entry_data["entry_data_size"] = blob_data_size
-            data = b'' 
+            data = b''
             for x in range(1, entry_span):
                 i += 1
                 data += entries[i]
@@ -162,7 +162,7 @@ def parse_nvs_entries(entries, entry_state_bitmap):
             entry_data["entry_data_type"] = "BLOB"
             print("        Size : %d " % (blob_size))
             entry_data["entry_data_size"] = blob_size
-            data = b'' 
+            data = b''
             for x in range(1, entry_span):
                 i += 1
                 data += entries[i]
@@ -211,7 +211,7 @@ def read_nvs_pages(fh):
         print("  page state : %s" % (page_state))
         print("  page seq no. : %d" % (seq_no))
         print("  page version : %d" % (version))
-       
+
         page_data["page_state"] = page_state
         page_data["page_seq_no"] = seq_no
         page_data["page_version"] = version
@@ -229,13 +229,13 @@ def read_nvs_pages(fh):
             bitnum = entry_num * 2
             byte_index = int(bitnum / 8)
             temp = entry_state_bitmap[byte_index]
-            
+
             temp = temp >> (6 - (bitnum % 8))
             temp = temp & 3
             entry_state_bitmap_decoded = entry_state_bitmap_decoded + str(temp)
 
         print("  page entry state bitmap (decoded) : %s" % (entry_state_bitmap_decoded))
-        page_data["page_entry_state_bitmap"] = entry_state_bitmap_decoded 
+        page_data["page_entry_state_bitmap"] = entry_state_bitmap_decoded
         sector_pos += 4096
         x += 1
 

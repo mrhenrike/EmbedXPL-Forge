@@ -9,6 +9,7 @@ Usage:
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
 from __future__ import annotations
+
 import json
 import re
 import sys

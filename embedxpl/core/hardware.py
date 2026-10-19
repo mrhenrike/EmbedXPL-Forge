@@ -18,7 +18,6 @@ References:
 Version: 1.0.0
 """
 
-import sys
 import textwrap
 from enum import Enum, unique
 

@@ -17,7 +17,6 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Iterable
 
-
 LINUX32_SYSCALL = {
     "exit": 1, "fork": 2, "read": 3, "write": 4, "open": 5, "close": 6,
     "execve": 11, "socketcall": 102, "dup2": 63,

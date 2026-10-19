@@ -5,12 +5,9 @@
 # endpoints and associated HTTP methods
 
 import argparse
-import json
-import sys
 import os.path
-import time
 import re
-
+import sys
 
 VALID_METHODS = ["GET", "HEAD", "OPTIONS", "TRACE", "CONNECT", "POST", "PUT", "DELETE", "PATCH"]
 
@@ -27,8 +24,8 @@ def cli_params():
 
 
 def find_endpoints(filepath):
-    apps_pattern = 'const apps=\{([^}]+)\}'
-    endpoint_pattern = 'app\.([a-z]+)\("(/api[^"]+)"'
+    apps_pattern = r'const apps=\{([^}]+)\}'
+    endpoint_pattern = r'app\.([a-z]+)\("(/api[^"]+)"'
     endpoints = []
     appname_endpoints = []
     appnames = []

@@ -22,12 +22,9 @@ Uso:
 
 from __future__ import annotations
 
-import ast
 import json
 import re
-import sys
 from pathlib import Path
-from typing import Any
 
 _HERE = Path(__file__).resolve().parent.parent   # embedxpl/
 _DATA = _HERE / "data"

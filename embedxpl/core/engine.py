@@ -21,8 +21,13 @@ class ScanResult:
     """Outcome of a single module execution against one target."""
 
     __slots__ = (
-        "target", "port", "protocol", "module_path",
-        "vulnerable", "error", "elapsed_s",
+        "elapsed_s",
+        "error",
+        "module_path",
+        "port",
+        "protocol",
+        "target",
+        "vulnerable",
     )
 
     def __init__(

@@ -26,7 +26,6 @@ import csv
 import json
 import logging
 import math
-import os
 import re
 import unicodedata
 from collections import Counter, defaultdict
@@ -275,7 +274,7 @@ class PatternModel:
         Returns:
             Training summary dict (counts only, no raw data).
         """
-        from embedxpl.engines.wordlists.domain_users import CORPORATE_PATTERNS, ALL_DOMAIN_SEPARATORS
+        from embedxpl.engines.wordlists.domain_users import ALL_DOMAIN_SEPARATORS, CORPORATE_PATTERNS
 
         # Build pattern classifier from CORPORATE_PATTERNS fmt strings
         pat_classifiers = _build_pattern_classifiers(CORPORATE_PATTERNS)

@@ -1,38 +1,41 @@
 import asyncio
+
 SNMP_IMPORT_ERROR = None
 try:
     from pysnmp.hlapi.v3arch.asyncio import (
-        SnmpEngine,
         CommunityData,
-        UsmUserData,
-        UdpTransportTarget,
         ContextData,
-        ObjectType,
         ObjectIdentity,
-        usmNoAuthProtocol,
-        usmHMACSHAAuthProtocol,
-        usmHMACMD5AuthProtocol,
-        usmNoPrivProtocol,
+        ObjectType,
+        SnmpEngine,
+        UdpTransportTarget,
+        UsmUserData,
+        get_cmd,
         usmAesCfb128Protocol,
         usmDESPrivProtocol,
-        get_cmd,
+        usmHMACMD5AuthProtocol,
+        usmHMACSHAAuthProtocol,
+        usmNoAuthProtocol,
+        usmNoPrivProtocol,
     )
 except ImportError:
     try:
         from pysnmp.hlapi.asyncio import (
-            SnmpEngine,
             CommunityData,
-            UsmUserData,
-            UdpTransportTarget,
             ContextData,
-            ObjectType,
             ObjectIdentity,
-            usmNoAuthProtocol,
-            usmHMACSHAAuthProtocol,
-            usmHMACMD5AuthProtocol,
-            usmNoPrivProtocol,
+            ObjectType,
+            SnmpEngine,
+            UdpTransportTarget,
+            UsmUserData,
             usmAesCfb128Protocol,
             usmDESPrivProtocol,
+            usmHMACMD5AuthProtocol,
+            usmHMACSHAAuthProtocol,
+            usmNoAuthProtocol,
+            usmNoPrivProtocol,
+        )
+        from pysnmp.hlapi.asyncio import (
             getCmd as get_cmd,
         )
     except ImportError as err:
@@ -52,12 +55,9 @@ except ImportError:
         usmDESPrivProtocol = None
         get_cmd = None
 
-from embedxpl.core.exploit.exploit import Exploit
-from embedxpl.core.exploit.exploit import Protocol
+from embedxpl.core.exploit.exploit import Exploit, Protocol
 from embedxpl.core.exploit.option import OptBool
-from embedxpl.core.exploit.printer import print_success
-from embedxpl.core.exploit.printer import print_error
-
+from embedxpl.core.exploit.printer import print_error, print_success
 
 SNMP_TIMEOUT = 15.0
 

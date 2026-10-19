@@ -103,8 +103,8 @@ class CPUBackend(ComputeBackend):
     @property
     def device_info(self) -> str:
         try:
-            import platform
             import os
+            import platform
             cores = os.cpu_count() or 1
             return f"CPU ({platform.processor() or 'unknown'}, {cores} threads)"
         except Exception:

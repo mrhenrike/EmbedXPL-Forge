@@ -13,12 +13,10 @@ Uso::
 from __future__ import annotations
 
 import json
-import os
-import pkgutil
 import sys
 import time
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict
 
 # ---------------------------------------------------------------------------
 # Caminhos

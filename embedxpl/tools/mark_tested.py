@@ -38,7 +38,6 @@ import sqlite3
 import sys
 import urllib.request
 from pathlib import Path
-from typing import Optional
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -144,7 +143,7 @@ def _load_msf_cves() -> set[str]:
         print(f"[!] MSF modules dir not found: {_MSF_MODULES_DIR}", file=sys.stderr)
         return set()
 
-    print(f"[*] Scanning MSF modules for CVEs (this may take a minute) …")
+    print("[*] Scanning MSF modules for CVEs (this may take a minute) …")
     import subprocess
     try:
         result = subprocess.run(
@@ -381,11 +380,11 @@ def run(update_db: bool = False, verbose: bool = False) -> dict:
 
     tested_total = counts["total"] - counts["untested"]
 
-    print(f"\n[*] Scan complete.")
+    print("\n[*] Scan complete.")
     print(f"    Total modules   : {counts['total']:,}")
     print(f"    Tested          : {tested_total:,}")
     print(f"    Untested        : {counts['untested']:,}")
-    print(f"\n    Evidence breakdown:")
+    print("\n    Evidence breakdown:")
     for k, v in counts.items():
         if k in ("total", "untested"):
             continue

@@ -1,18 +1,17 @@
-import click
 import csv
 import gzip
 import json
-import shodan
-from tldextract import extract
-from ipaddress import ip_address
-
 from collections import defaultdict
+from ipaddress import ip_address
 from operator import itemgetter
+from time import sleep
+
+import click
+import shodan
 from shodan import APIError
 from shodan.cli.helpers import get_api_key
 from shodan.helpers import open_file, write_banner
-from time import sleep
-
+from tldextract import extract
 
 MAX_QUERY_LENGTH = 1000
 
@@ -181,7 +180,7 @@ def alert_download(filename, alert_id):
             alerts = [api.alerts(aid=alert_id.strip())]
         else:
             alerts = api.alerts()
-        
+
         click.echo('Compiling list of networks/ IPs to download...')
         for alert in alerts:
             for net in alert['filters']['ip']:
@@ -189,7 +188,7 @@ def alert_download(filename, alert_id):
                     networks.add(net)
                 else:
                     ips.add(net)
-        
+
         click.echo('Downloading...')
         with open_file(filename) as fout:
             # Check if the user is able to use batch IP lookups
@@ -198,7 +197,7 @@ def alert_download(filename, alert_id):
                 api_info = api.info()
                 if api_info['plan'] in ['corp', 'stream-100']:
                     batch_size = 100
-            
+
             # Convert it to a list so we can index into it
             ips = list(ips)
 
@@ -209,14 +208,14 @@ def alert_download(filename, alert_id):
                     results = api.host(ip)
                     if not isinstance(results, list):
                         results = [results]
-                    
+
                     for host in results:
                         for banner in host['data']:
                             write_banner(fout, banner)
                 except APIError:
                     pass
                 sleep(1)  # Slow down a bit to make sure we don't hit the rate limit
-            
+
             # Grab all the network ranges
             for net in networks:
                 try:
@@ -224,7 +223,7 @@ def alert_download(filename, alert_id):
                     click.echo(net)
                     for banner in api.search_cursor('net:{}'.format(net)):
                         write_banner(fout, banner)
-                        
+
                         # Slow down a bit to make sure we don't hit the rate limit
                         if counter % 100 == 0:
                             sleep(1)
@@ -233,7 +232,7 @@ def alert_download(filename, alert_id):
                     pass
     except shodan.APIError as e:
         raise click.ClickException(e.value)
-    
+
     click.secho('Successfully downloaded results into: {}'.format(filename), fg='green')
 
 
@@ -256,7 +255,7 @@ def alert_export(filename):
             json.dump(alerts, fout)
     except Exception as e:
         raise click.ClickException(e.value)
-    
+
     click.secho('Successfully exported monitored networks', fg='green')
 
 
@@ -293,7 +292,7 @@ def alert_import(filename):
                         if info.get('ignore', []):
                             for whitelist in info['ignore']:
                                 api.ignore_alert_trigger_notification(alert['id'], trigger, whitelist['ip'], whitelist['port'])
-                
+
                 # Enable the notifiers
                 for prev_notifier in item.get('notifiers', []):
                     # We don't need to do anything for the default notifier as that
@@ -303,7 +302,7 @@ def alert_import(filename):
 
                     # Get the new notifier based on the ID of the old one
                     notifier = notifier_map.get(prev_notifier['id'])
-                    
+
                     # Create the notifier if it doesn't yet exist
                     if notifier is None:
                         notifier = api.notifier.create(prev_notifier['provider'], prev_notifier['args'], description=prev_notifier['description'])
@@ -314,7 +313,7 @@ def alert_import(filename):
                     api.add_alert_notifier(alert['id'], notifier['id'])
     except Exception as e:
         raise click.ClickException(e.value)
-    
+
     click.secho('Successfully imported monitored networks', fg='green')
 
 
@@ -335,7 +334,7 @@ def alert_info(alert):
     click.secho(info['created'], fg='magenta')
 
     click.secho('Notifications: ', nl=False, dim=True)
-    if 'triggers' in info and info['triggers']:
+    if info.get('triggers'):
         click.secho('enabled', fg='green')
     else:
         click.echo('disabled')
@@ -347,7 +346,7 @@ def alert_info(alert):
         click.echo(u' > {}'.format(click.style(network, fg='yellow')))
 
     click.echo('')
-    if 'triggers' in info and info['triggers']:
+    if info.get('triggers'):
         click.secho('Triggers:', dim=True)
         for trigger in info['triggers']:
             click.echo(u' > {}'.format(click.style(trigger, fg='yellow')))
@@ -380,11 +379,11 @@ def alert_list(expired):
                 nl=False
             )
 
-            if 'triggers' in alert and alert['triggers']:
+            if alert.get('triggers'):
                 click.secho('Triggers: ', fg='magenta', nl=False)
                 click.echo(', '.join(alert['triggers'].keys()), nl=False)
 
-            if 'expired' in alert and alert['expired']:
+            if alert.get('expired'):
                 click.secho('expired', fg='red')
             else:
                 click.echo('')

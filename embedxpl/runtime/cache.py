@@ -9,7 +9,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek
 from __future__ import annotations
 
 import hashlib
-import os
 import shutil
 from pathlib import Path
 from typing import Optional

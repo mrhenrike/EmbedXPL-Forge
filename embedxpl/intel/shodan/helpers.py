@@ -1,6 +1,7 @@
 import gzip
-import requests
 import json
+
+import requests
 
 from .exception import APIError
 
@@ -122,11 +123,11 @@ def iterate_files(files, fast=False):
 
 
 def get_screenshot(banner):
-    if 'screenshot' in banner and banner['screenshot']:
+    if banner.get('screenshot'):
         return banner['screenshot']
     elif 'opts' in banner and 'screenshot' in banner['opts']:
         return banner['opts']['screenshot']
-    
+
     return None
 
 

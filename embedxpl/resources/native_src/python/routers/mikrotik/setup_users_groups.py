@@ -18,7 +18,6 @@ from typing import Dict, List, Tuple
 
 import paramiko
 
-
 LOGGER = logging.getLogger("setup_users_groups")
 
 

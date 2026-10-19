@@ -11,8 +11,8 @@ from __future__ import annotations
 import logging
 from typing import List, Optional, Tuple
 
-from embedxpl.core.hw_profiler import HWProfiler, HWProfile
-from embedxpl.core.gpu.backend import ComputeBackend, auto_select_backend
+from embedxpl.core.gpu.backend import ComputeBackend
+from embedxpl.core.hw_profiler import HWProfile, HWProfiler
 
 logger = logging.getLogger(__name__)
 
@@ -78,10 +78,10 @@ def detect_all_backends(hw_profile: Optional[HWProfile] = None) -> List[ComputeB
     Returns:
         List of available ComputeBackend instances (always includes CPUBackend).
     """
-    from embedxpl.core.gpu.cuda_backend import CUDABackend
-    from embedxpl.core.gpu.rocm_backend import ROCmBackend
-    from embedxpl.core.gpu.opencl_backend import OpenCLBackend
     from embedxpl.core.gpu.cpu_backend import CPUBackend
+    from embedxpl.core.gpu.cuda_backend import CUDABackend
+    from embedxpl.core.gpu.opencl_backend import OpenCLBackend
+    from embedxpl.core.gpu.rocm_backend import ROCmBackend
 
     backends: List[ComputeBackend] = []
     for cls in (CUDABackend, ROCmBackend, OpenCLBackend, CPUBackend):

@@ -1,6 +1,8 @@
 import json
 from json.decoder import JSONDecodeError
+
 from pwn import *
+
 """Just to keep out error warnings in PyCharm"""
 global p8, p16, p32, p64, u8, u16, u32, u64
 

@@ -1,6 +1,5 @@
 # Helper methods for printing `host` information to the terminal.
 import click
-
 from shodan.helpers import get_ip
 
 
@@ -12,19 +11,19 @@ def host_print_pretty(host, history=False):
     if len(host['hostnames']) > 0:
         click.echo(u'{:25s}{}'.format('Hostnames:', ';'.join(host['hostnames'])))
 
-    if 'city' in host and host['city']:
+    if host.get('city'):
         click.echo(u'{:25s}{}'.format('City:', host['city']))
 
-    if 'country_name' in host and host['country_name']:
+    if host.get('country_name'):
         click.echo(u'{:25s}{}'.format('Country:', host['country_name']))
 
-    if 'os' in host and host['os']:
+    if host.get('os'):
         click.echo(u'{:25s}{}'.format('Operating System:', host['os']))
 
-    if 'org' in host and host['org']:
+    if host.get('org'):
         click.echo(u'{:25s}{}'.format('Organization:', host['org']))
 
-    if 'last_update' in host and host['last_update']:
+    if host.get('last_update'):
         click.echo('{:25s}{}'.format('Updated:', host['last_update']))
 
     click.echo('{:25s}{}'.format('Number of open ports:', len(host['ports'])))
@@ -74,9 +73,9 @@ def host_print_pretty(host, history=False):
     for banner in sorted(host['data'], key=lambda k: k['port']):
         product = ''
         version = ''
-        if 'product' in banner and banner['product']:
+        if banner.get('product'):
             product = banner['product']
-        if 'version' in banner and banner['version']:
+        if banner.get('version'):
             version = '({})'.format(banner['version'])
 
         click.echo(click.style('{:>7d}'.format(banner['port']), fg='cyan'), nl=False)

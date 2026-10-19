@@ -9,7 +9,7 @@ from threading import Lock, RLock, Thread
 
 from loguru import logger
 
-from .utils import common, timer, net
+from .utils import common, net, timer
 
 
 @common.singleton

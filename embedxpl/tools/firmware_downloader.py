@@ -14,16 +14,14 @@ Version: 1.0.0
 
 import argparse
 import logging
-import os
 import sys
+import urllib.request
 from pathlib import Path
 from typing import Any, Dict, Optional
+from urllib.error import HTTPError, URLError
 from urllib.request import Request
-from urllib.error import URLError, HTTPError
-import urllib.request
 
 import yaml
-
 
 logging.basicConfig(
     level=logging.INFO,

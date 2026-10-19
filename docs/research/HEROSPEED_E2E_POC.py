@@ -39,6 +39,7 @@ from __future__ import annotations
 import argparse
 import base64
 import datetime
+
 try:
     import crypt as _crypt
     def _des_crypt(password: str, salt: str) -> str:
@@ -53,15 +54,12 @@ except ImportError:
             import passlib.hash  # type: ignore
             return passlib.hash.des_crypt.using(salt=salt).hash(password)[:13]
         except ImportError:
-            return f"(crypt unavailable — use hashcat -m 1500 to crack)"
+            return "(crypt unavailable — use hashcat -m 1500 to crack)"
 import hashlib
 import json
 import re
 import socket
 import struct
-import sys
-import time
-from pathlib import Path
 
 __version__ = "1.0.0"
 __vuln_ids__ = ["HSLS-2026-001", "HSLS-2026-002", "HSLS-2026-003", "HSLS-2026-004"]
@@ -666,7 +664,7 @@ def main() -> int:
         print(f"  HSLS-2026-004 (Hardcoded Root Hash):     {status}")
 
     print()
-    print(f"  Shodan queries for exposure estimation:")
+    print("  Shodan queries for exposure estimation:")
     for name, q in SHODAN_QUERIES.items():
         print(f"    {name}: {q}")
 

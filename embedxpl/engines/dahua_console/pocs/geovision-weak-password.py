@@ -1,6 +1,5 @@
 import hashlib
 import re
-import requests
 
 from loguru import logger
 
@@ -57,9 +56,9 @@ class GeovisionWeakPassword(POCTemplate):
                         data['browser'] = ''
                     req = session.post(login_url, data=data, timeout=self.config.timeout, headers=self.headers, verify=False)
                     if req.status_code == 200 and 'Web-Manager' in req.text:
-                        hashed_user = re.findall(f'gUserName = "(.*)"', req.text)[0]
-                        hashed_password = re.findall(f'gPassword = "(.*)"', req.text)[0]
-                        desc = re.findall(f'gDesc = "(.*)"', req.text)[0]
+                        hashed_user = re.findall('gUserName = "(.*)"', req.text)[0]
+                        hashed_password = re.findall('gPassword = "(.*)"', req.text)[0]
+                        desc = re.findall('gDesc = "(.*)"', req.text)[0]
                         return ip, str(port), self.product, str(user), str(password), self.name, hashed_user, hashed_password, desc
                 except Exception as e:
                     logger.error(e)

@@ -223,7 +223,7 @@ class Exploit(BaseExploit):
             results = _scan_l2(self.iface, self.timeout)
             if results:
                 for dev in results:
-                    print_success(f"[Profinet DCP] Device found:")
+                    print_success("[Profinet DCP] Device found:")
                     for key, val in dev.items():
                         print_success(f"  {key}: {val}")
             else:

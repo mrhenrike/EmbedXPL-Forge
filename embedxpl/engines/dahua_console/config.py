@@ -1,8 +1,8 @@
 """Global configuration module."""
 import os
 from collections import namedtuple
-from .utils import net
 
+from .utils import net
 
 # Default configuration template (rebuilt fresh on each get_config() call)
 _DEFAULT_CONFIG = {

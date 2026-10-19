@@ -21,7 +21,7 @@ from __future__ import annotations
 import itertools
 import logging
 import re
-from typing import Dict, Iterable, Iterator, List, Optional, Sequence, Union
+from typing import Dict, Iterable, Iterator, List, Optional, Sequence
 
 logger = logging.getLogger(__name__)
 

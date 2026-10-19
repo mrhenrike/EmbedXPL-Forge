@@ -5,11 +5,9 @@
 # associated HTTP methods
 
 import argparse
-import sys
 import os.path
-import time
 import re
-
+import sys
 
 VALID_METHODS = ["GET", "HEAD", "OPTIONS", "TRACE", "CONNECT", "POST", "PUT", "DELETE", "PATCH"]
 
@@ -71,7 +69,7 @@ def main():
     """
     parser = cli_params()
     args = parser.parse_args()
-    
+
     if not os.path.isfile(args.file):
         sys.exit("File {} does not exist".format(args.file))
     endpoints = find_endpoints(args.file)

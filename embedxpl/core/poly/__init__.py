@@ -44,4 +44,4 @@ class PolyExploit(CCompiler, PolyRunner):
     """
 
 
-__all__ = ["CCompiler", "PolyRunner", "PolyExploit"]
+__all__ = ["CCompiler", "PolyExploit", "PolyRunner"]

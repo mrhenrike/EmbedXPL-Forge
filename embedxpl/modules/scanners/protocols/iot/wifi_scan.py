@@ -175,7 +175,7 @@ class Exploit(Exploit):
         tags = self._parse_tagged_params(tagged_data)
 
         ssid = ""
-        if _TAG_SSID in tags and tags[_TAG_SSID]:
+        if tags.get(_TAG_SSID):
             raw_ssid = tags[_TAG_SSID][0]
             ssid = raw_ssid.decode("utf-8", errors="replace")
 

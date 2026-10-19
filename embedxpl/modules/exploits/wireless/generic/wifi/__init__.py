@@ -12,14 +12,14 @@ New native modules (v1.7.0):
 
 # Lazy exports - avoid import-time side effects
 __all__ = [
-    "send_deauth",
-    "michael_mic",
-    "FloodEngine",
-    "WPSEngine",
-    "PhishingEngine",
     "CaptiveNetwork",
-    "MonitorModeManager",
     "DragonbloodSuite",
+    "FloodEngine",
+    "MonitorModeManager",
+    "PhishingEngine",
+    "WPSEngine",
+    "michael_mic",
+    "send_deauth",
 ]
 
 # Module-level __getattr__ for lazy class binding (PEP 562).

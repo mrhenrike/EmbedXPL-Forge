@@ -13,18 +13,14 @@ Author: André Henrique (@mrhenrike) | União Geek - https://github.com/Uniao-Ge
 from __future__ import annotations
 
 import argparse
-import ast
-import importlib
 import os
 import re
-import socket
 import subprocess
 import sys
-import threading
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -796,7 +792,7 @@ def run_gate(name: str) -> bool:
         _print_result(r)
     print(f"\n\033[1mResults: {passed}/{total} passed\033[0m", end="  ")
     if passed == total:
-        print(f"\033[92m(all passed)\033[0m")
+        print("\033[92m(all passed)\033[0m")
         print(f"\n\033[92m\033[1mGate {name} PASSED.\033[0m\n")
         return True
     else:

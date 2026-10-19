@@ -162,8 +162,9 @@ def logits_for_timing(
 
     if use_gpu:
         try:
-            from embedxpl.core.gpu.backend import auto_select_backend
             import numpy as np
+
+            from embedxpl.core.gpu.backend import auto_select_backend
             backend = auto_select_backend(compute_mode="auto")
             if backend.name != "cpu":
                 f_arr = np.array([f], dtype=np.float32)

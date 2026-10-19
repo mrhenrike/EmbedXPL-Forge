@@ -1,4 +1,3 @@
-import requests
 from xml.etree import ElementTree
 
 from loguru import logger

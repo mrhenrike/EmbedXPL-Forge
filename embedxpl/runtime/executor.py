@@ -33,12 +33,12 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
-from .python_exec import PythonExecutor
 from .c_exec import CExecutor
 from .cpp_exec import CppExecutor
 from .go_exec import GoExecutor
-from .rust_exec import RustExecutor
+from .python_exec import PythonExecutor
 from .ruby_exec import RubyExecutor
+from .rust_exec import RustExecutor
 
 
 class XplRuntime:

@@ -12,13 +12,10 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
 from __future__ import annotations
 
-import os
 import shutil
 import subprocess
-import sys
-import tempfile
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 _WORKSPACE_ROOT = Path(__file__).resolve().parents[2]
 _NATIVE_SRC = _WORKSPACE_ROOT / "embedxpl" / "resources" / "native_src"
@@ -162,8 +159,8 @@ class MultiLangModule:
 
     def write_and_serve_html(self, html_content: str, port: int = 8080) -> dict[str, Any]:
         """Write HTML payload to .tmp/ and start a minimal HTTP server."""
-        import threading
         import http.server
+        import threading
 
         tmp = _workspace_tmp()
         html_file = tmp / "payload.html"

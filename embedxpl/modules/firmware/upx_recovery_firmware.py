@@ -85,7 +85,7 @@ class Exploit(HTTPClient):
             try:
                 __import__(dep)
             except ImportError:
-                print_status(f"Dependency missing: pip install lief python-magic yara-python")
+                print_status("Dependency missing: pip install lief python-magic yara-python")
                 return False
         return True
 
@@ -120,7 +120,7 @@ class Exploit(HTTPClient):
             print_status("  Output: <binary>_recovered.elf + SHA256 report")
             print_status()
             print_status(f"  Tool: {_TOOL}")
-            print_status(f"  Deps: pip install lief python-magic yara-python")
+            print_status("  Deps: pip install lief python-magic yara-python")
             return
 
         if not self.check():
@@ -150,7 +150,7 @@ class Exploit(HTTPClient):
         output.mkdir(parents=True, exist_ok=True)
 
         cmd = ["python", str(_TOOL), str(fw)]
-        print_status(f"Running UPX recovery...")
+        print_status("Running UPX recovery...")
         try:
             result = subprocess.run(
                 cmd,

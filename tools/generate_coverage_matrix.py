@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 # Author: André Henrique (@mrhenrike) | União Geek - https://github.com/Uniao-Geek
-
 import ast
 import json
 import logging
@@ -14,7 +13,6 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Set, Tuple
-
 
 LOGGER = logging.getLogger("coverage_matrix")
 

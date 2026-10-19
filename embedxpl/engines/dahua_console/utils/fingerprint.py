@@ -1,8 +1,8 @@
 """Device fingerprinting based on HTTP responses and rules.csv."""
 import hashlib
 import re
-import requests
 
+import requests
 from loguru import logger
 from lxml import etree
 

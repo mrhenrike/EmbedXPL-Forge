@@ -320,10 +320,10 @@ def generate_pymangler_masks(
 
     try:
         from embedxpl.engines.wordlists.mangler import (
-            overseer_expand,
+            COMMON_MASKS,
             OverseerConfig,
             mask_expand,
-            COMMON_MASKS,
+            overseer_expand,
         )
     except ImportError:
         logger.debug("mangler not available for pymangler masks")

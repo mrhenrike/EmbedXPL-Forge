@@ -12,18 +12,17 @@ import os
 from typing import Optional
 
 from embedxpl.core.orchestrator.artifact import (
-    CompiledArtifact,
     ArtifactCache,
+    CompiledArtifact,
 )
 from embedxpl.core.orchestrator.compiler import (
-    CrossCompiler,
     BuildProfile,
+    CrossCompiler,
 )
 from embedxpl.core.orchestrator.runner import (
     ExploitRunner,
     RunResult,
 )
-
 
 _LANGUAGE_MAP = {
     "python": "python",
@@ -286,7 +285,6 @@ class ExploitOrchestrator:
         """Assemble, link, and run an assembly exploit."""
         import shutil
         import subprocess
-        import time
 
         nasm = shutil.which("nasm")
         ld = shutil.which("ld")

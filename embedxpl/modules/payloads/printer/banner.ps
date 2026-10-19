@@ -1,0 +1,10 @@
+%!PS
+% PrinterXPL-Forge Banner Payload
+% Prints a custom banner message on the printer
+% Usage: {{msg}} variable will be replaced with custom text
+
+/Helvetica findfont 16 scalefont setfont
+100 700 moveto
+({{msg}}) show
+showpage
+

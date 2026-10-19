@@ -1,4 +1,4 @@
-from os.path import join, realpath, dirname
+from os.path import dirname, join, realpath
 from tempfile import TemporaryDirectory
 
 CIMBAR_SRC = realpath(join(dirname(realpath(__file__)), '..', '..'))

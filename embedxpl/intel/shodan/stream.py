@@ -1,6 +1,7 @@
-import requests
 import json
 import ssl
+
+import requests
 
 from .exception import APIError
 

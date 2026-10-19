@@ -447,7 +447,7 @@ class Exploit(Exploit):
                         apache_data.good_ua_count,
                     )
                 )
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 print_error("Apache parse error: {}".format(exc))
 
         if nginx_path.exists():
@@ -459,7 +459,7 @@ class Exploit(Exploit):
                         nginx_data.blocked_ref_count,
                     )
                 )
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 print_error("Nginx parse error: {}".format(exc))
 
         if not apache_data and not nginx_data:

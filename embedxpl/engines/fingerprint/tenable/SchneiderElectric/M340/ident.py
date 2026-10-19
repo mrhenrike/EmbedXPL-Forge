@@ -1,19 +1,21 @@
 ## Requires PyModbus
 ## Identifies M340 Controllers
 
-import sys
-import struct
-# --------------------------------------------------------------------------- #
-# import the various server implementations
-# --------------------------------------------------------------------------- #
-from pymodbus.pdu import ModbusRequest, ModbusResponse, ModbusExceptions
-from pymodbus.client.sync import ModbusTcpClient as ModbusClient
-from pymodbus.bit_read_message import ReadCoilsRequest
-from pymodbus.compat import int2byte, byte2int
 # --------------------------------------------------------------------------- #
 # configure the client logging
 # --------------------------------------------------------------------------- #
 import logging
+import struct
+import sys
+
+from pymodbus.client.sync import ModbusTcpClient as ModbusClient
+from pymodbus.compat import int2byte
+
+# --------------------------------------------------------------------------- #
+# import the various server implementations
+# --------------------------------------------------------------------------- #
+from pymodbus.pdu import ModbusExceptions, ModbusRequest, ModbusResponse
+
 logging.basicConfig()
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)

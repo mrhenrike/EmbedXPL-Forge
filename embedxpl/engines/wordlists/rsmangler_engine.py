@@ -35,7 +35,7 @@ import datetime
 import itertools
 import logging
 import zlib
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Generator, Optional
 
 logger = logging.getLogger(__name__)
