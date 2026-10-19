@@ -6,6 +6,22 @@ Format: [Semantic Versioning](https://semver.org) -- `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [5.1.0] — 2026-10-19
+
+### Added
+- ruff lint configuration with auto-fix (1107 files, 3138 issues auto-corrected)
+- mypy type checking config with 70+ third-party module overrides
+- pytest config section in pyproject.toml
+- CI workflow: ruff lint gate + mypy typecheck + pytest matrix (py3.9-3.14)
+- 61 new tests: config, pool, hw_profiler, shells_shim, session (57 -> 118 total)
+
+### Fixed
+- `embedxpl/registry/categories.py`: batch integration categories (mobile-ios, cameras-rtsp, routers-br, ics-modbus, waf-bypass, iot-mirai) were accidentally merged into a ValueError string instead of the CATEGORY_MODULES dict (syntax error since 2026-09-23 batch)
+- `.gitignore`: removed blocks on pyproject.toml, setup.py, setup.cfg, MANIFEST.in, .github/workflows/
+
+### Changed
+- Exclude legacy ExploitDB scripts, tenable fingerprints and malware_research dirs from ruff lint (non-Python or Python 2 syntax)
+
 ## [5.0.1] — 2026-10-06
 
 ### Changed
