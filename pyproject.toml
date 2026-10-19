@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "5.1.0"
+version = "6.0.0"
 description = "Embedded & Perimeter Security Assessment Framework -- 2800+ modules, 900+ CVEs, 114+ vendors. Covers routers, IP cameras, GPON ONTs, ISP CPEs, IoT/embedded edge, firewalls (Fortinet/Cisco/PAN-OS/SonicWall), VPN appliances, printers, drones, switches, UPS/PDU, ICS/OT."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
@@ -90,8 +90,14 @@ at = [
     "python-can>=4.3",
 ]
 routers = []
-printers = []
-firewalls = []
+printers = [
+    "pysnmp-lextudio>=6.0",
+    "pyasn1>=0.5",
+]
+firewalls = [
+    "textual>=0.40",
+    "asyncssh>=2.14",
+]
 network-perimeter = []
 medical = []
 smart-home = []
