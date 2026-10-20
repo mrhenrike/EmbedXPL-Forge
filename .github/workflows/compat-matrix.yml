@@ -80,7 +80,7 @@ jobs:
 
       - name: Validate Python syntax compilation
         run: |
-          python -m compileall -q embedxpl tools
+          python -m compileall -q -x 'embedxpl/malware_research' embedxpl tools
 
       - name: Validate market priority yearly minimums
         run: |

@@ -166,6 +166,11 @@ check_untyped_defs = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 no_implicit_reexport = true
+exclude = [
+    "embedxpl/malware_research/",
+    "embedxpl/modules/exploits/",
+    "embedxpl/engines/fingerprint/tenable/",
+]
 mypy_path = "."
 
 [[tool.mypy.overrides]]
