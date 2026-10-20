@@ -151,7 +151,7 @@ class AsciiMap(object):
         self.window.clear()
         self.window.addstr(0, 0, self.map)
 
-        # FIXME: position to be defined in map config?
+        
         row = self.corners[2] - 6
         items_to_show = 5
         for lat, lon, char, desc, attrs, color in self.data:
@@ -175,7 +175,7 @@ class AsciiMap(object):
                     row += 1
                     items_to_show -= 1
                 except Exception:
-                    # FIXME: check window size before addstr()
+                    
                     break
         self.window.overwrite(target)
         self.window.leaveok(True)

@@ -897,7 +897,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         print_info()
 
     @module_required
-    def _show_devices(self, *args, **kwargs):  # TODO: cover with tests
+    def _show_devices(self, *args, **kwargs):  # TODO(wave3): cover with tests
         try:
             devices = self.current_module._Exploit__info__['devices']
 

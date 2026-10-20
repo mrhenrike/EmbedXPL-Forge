@@ -423,7 +423,7 @@ def alert_stats(limit, filename, facets):
     except shodan.APIError as e:
         raise click.ClickException(e.value)
 
-    # TODO: The below code was taken from __main__.py:stats() - we should refactor it so the code can be shared
+    # TODO(wave3): The below code was taken from __main__.py:stats() - we should refactor it so the code can be shared
     # Print the stats tables
     for facet in results['facets']:
         click.echo('Top {} Results for Facet: {}'.format(len(results['facets'][facet]), facet))
