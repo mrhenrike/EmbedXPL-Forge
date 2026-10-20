@@ -18,7 +18,7 @@ Cada módulo de credenciais herda de uma classe base de protocolo genérico e ad
 
 ```
 embedxpl/modules/creds/
-├── cameras/        Câmeras IP, NVRs, DVRs — 40+ pastas de vendor de câmeras
+├── cameras/        Câmeras IP, NVRs, DVRs  -  40+ pastas de vendor de câmeras
 │   ├── acti/           ftp_default_creds, ssh_default_creds, telnet_default_creds, webinterface_http_form_default_creds
 │   ├── axis/           + webinterface_http_auth_default_creds
 │   ├── basler/         + webinterface_http_form_default_creds
@@ -33,7 +33,7 @@ embedxpl/modules/creds/
 │   ├── dell_idrac/
 │   └── supermicro/
 │
-└── (routers, firewalls, switches, nas, printers — muitas subpastas de vendor)
+└── (routers, firewalls, switches, nas, printers  -  muitas subpastas de vendor)
 ```
 
 ---
@@ -43,12 +43,12 @@ embedxpl/modules/creds/
 | Opção | Tipo | Obrigatório | Padrão | Valores aceitos | Descrição |
 |-------|------|-------------|--------|-----------------|-----------|
 | `target` | `OptIP` | Sim | `""` | IPv4, IPv6, hostname, `file://caminho` | Host alvo ou arquivo com IPs (um por linha para multi-alvo) |
-| `port` | `OptPort` | Não | Padrão do protocolo | 1–65535 | Porta do serviço a testar |
-| `threads` | `OptInteger` | Não | `8` | 1–300 | Número de threads de conexão paralelas |
+| `port` | `OptPort` | Não | Padrão do protocolo | 1-65535 | Porta do serviço a testar |
+| `threads` | `OptInteger` | Não | `8` | 1-300 | Número de threads de conexão paralelas |
 | `defaults` | `OptWordlist` | Não | Específico do vendor | `user:pass`, pares separados por vírgula, ou `file://caminho` | Lista de credenciais a tentar |
 | `stop_on_success` | `OptBool` | Não | `True` | `true`, `false` | Parar após a primeira credencial bem-sucedida |
 | `verbosity` | `OptBool` | Não | `True` | `true`, `false` | Exibir cada tentativa de credencial na saída |
-| `timeout` | `OptInteger` | Não | `10` | 1–120 | Timeout por conexão em segundos |
+| `timeout` | `OptInteger` | Não | `10` | 1-120 | Timeout por conexão em segundos |
 
 **Portas padrão por protocolo:**
 
@@ -65,7 +65,7 @@ embedxpl/modules/creds/
 
 ## Tipos de módulo por protocolo
 
-### `telnet_default_creds` — Telnet
+### `telnet_default_creds`  -  Telnet
 
 Testa login Telnet com credenciais padrão do vendor. Usa `telnetlib3` no Python 3.13+ e `telnetlib` em versões anteriores.
 
@@ -78,7 +78,7 @@ exf (Hikvision Camera Default Telnet Creds) > set target 192.168.1.100
 exf (Hikvision Camera Default Telnet Creds) > run
 [*] Running module ...
 [*] Trying admin:12345 on 192.168.1.100:23
-[+] SUCCESS: admin:12345 — telnet session obtained
+[+] SUCCESS: admin:12345  -  telnet session obtained
 ```
 
 **Sessão de terminal (todas as credenciais falham):**
@@ -91,7 +91,7 @@ exf (Hikvision Camera Default Telnet Creds) > run
 [-] No valid credentials found
 ```
 
-**Sessão de terminal (câmera Dahua — múltiplos padrões):**
+**Sessão de terminal (câmera Dahua  -  múltiplos padrões):**
 
 ```text
 exf > use creds/cameras/dahua/telnet_default_creds
@@ -102,12 +102,12 @@ exf (Dahua Camera/DVR/NVR Default Telnet Creds) > run
 [*] Trying admin:admin on 192.168.1.50:23
 [-] FAIL: admin:admin
 [*] Trying 888888:888888 on 192.168.1.50:23
-[+] SUCCESS: 888888:888888 — telnet session obtained
+[+] SUCCESS: 888888:888888  -  telnet session obtained
 ```
 
 ---
 
-### `ssh_default_creds` — SSH
+### `ssh_default_creds`  -  SSH
 
 Testa login SSH com credenciais padrão do vendor usando Paramiko.
 
@@ -131,7 +131,7 @@ exf (Hikvision Camera Default SSH Creds) > run
 [*] Trying admin:12345 on 192.168.1.100:22
 [-] FAIL: admin:12345
 [*] Trying root:hikadmin on 192.168.1.100:22
-[+] SUCCESS: root:hikadmin — SSH session opened
+[+] SUCCESS: root:hikadmin  -  SSH session opened
 ```
 
 **Sessão de terminal (câmera Axis SSH):**
@@ -143,12 +143,12 @@ exf (Axis Camera Default SSH Creds) > set target 192.168.1.110
 exf (Axis Camera Default SSH Creds) > run
 [*] Running module ...
 [*] Trying root: on 192.168.1.110:22
-[+] SUCCESS: root: (empty password) — SSH session opened
+[+] SUCCESS: root: (empty password)  -  SSH session opened
 ```
 
 ---
 
-### `ftp_default_creds` — FTP
+### `ftp_default_creds`  -  FTP
 
 Testa login FTP usando credenciais padrão do vendor.
 
@@ -161,13 +161,13 @@ exf (Hikvision Camera Default FTP Creds) > set target 192.168.1.100
 exf (Hikvision Camera Default FTP Creds) > run
 [*] Running module ...
 [*] Trying admin:12345 on 192.168.1.100:21
-[+] SUCCESS: admin:12345 — FTP session opened
+[+] SUCCESS: admin:12345  -  FTP session opened
 230 Login successful.
 ```
 
 ---
 
-### `webinterface_http_auth_default_creds` — HTTP Basic/Digest Auth
+### `webinterface_http_auth_default_creds`  -  HTTP Basic/Digest Auth
 
 Testa endpoints de autenticação HTTP Basic ou Digest com credenciais padrão do vendor.
 
@@ -187,7 +187,7 @@ exf (Dahua Camera/DVR/NVR Default HTTP Auth Creds) > run
 
 ---
 
-### `webinterface_http_form_default_creds` — Login por Formulário HTTP
+### `webinterface_http_form_default_creds`  -  Login por Formulário HTTP
 
 Testa endpoints de formulário de login HTTP específicos do vendor (autenticação baseada em POST).
 
@@ -200,7 +200,7 @@ exf (ACTi Camera Default HTTP Form Creds) > set target 192.168.1.120
 exf (ACTi Camera Default HTTP Form Creds) > run
 [*] Running module ...
 [*] Trying admin:123456 on http://192.168.1.120:80/cgi-bin/encoder?USER=admin&PWD=123456
-[+] SUCCESS: admin:123456 — HTTP form login successful
+[+] SUCCESS: admin:123456  -  HTTP form login successful
 ```
 
 ---
@@ -212,29 +212,29 @@ Os seguintes vendors de câmeras possuem pelo menos um módulo de credenciais:
 | Vendor | ftp | ssh | telnet | webinterface |
 |--------|-----|-----|--------|--------------|
 | ACTi | Sim | Sim | Sim | form |
-| American Dynamics | Sim | Sim | Sim | — |
+| American Dynamics | Sim | Sim | Sim |  -  |
 | Arecont | Sim | Sim | Sim | auth |
-| Avigilon | Sim | Sim | Sim | — |
-| AVTech | Sim | Sim | Sim | — |
+| Avigilon | Sim | Sim | Sim |  -  |
+| AVTech | Sim | Sim | Sim |  -  |
 | Axis | Sim | Sim | Sim | auth |
 | Basler | Sim | Sim | Sim | form |
 | Bosch | Sim | Sim | Sim | auth |
 | Brickcom | Sim | Sim | Sim | auth |
 | Canon | Sim | Sim | Sim | auth |
 | CBC/GANZ | Sim | Sim | Sim | auth |
-| Cisco (câmeras) | Sim | Sim | Sim | — |
+| Cisco (câmeras) | Sim | Sim | Sim |  -  |
 | Dahua | Sim | Sim | Sim | auth |
-| D-Link (câmeras) | Sim | Sim | Sim | — |
+| D-Link (câmeras) | Sim | Sim | Sim |  -  |
 | DVTel | Sim | Sim | Sim | auth |
 | Dynacolor | Sim | Sim | Sim | auth |
 | EverFocus | Sim | Sim | Sim | auth |
 | FLIR | Sim | Sim | Sim | auth |
 | Foscam | Sim | Sim | Sim | auth |
-| GeoVision | Sim | Sim | Sim | — |
-| Grandstream | Sim | Sim | Sim | — |
-| Hikvision | Sim | Sim | Sim | — |
-| Honeywell | Sim | Sim | Sim | — |
-| Intelbras | — | — | — | combinado |
+| GeoVision | Sim | Sim | Sim |  -  |
+| Grandstream | Sim | Sim | Sim |  -  |
+| Hikvision | Sim | Sim | Sim |  -  |
+| Honeywell | Sim | Sim | Sim |  -  |
+| Intelbras |  -  |  -  |  -  | combinado |
 
 ---
 
@@ -275,7 +275,7 @@ exf (Hikvision Camera Default Telnet Creds) > set defaults file:///tmp/custom_cr
 [+] defaults => file:///tmp/custom_creds.txt
 ```
 
-Formato da wordlist — um par de credenciais por linha, separados por dois-pontos:
+Formato da wordlist  -  um par de credenciais por linha, separados por dois-pontos:
 
 ```text
 admin:admin
@@ -303,7 +303,7 @@ embedxpl -m creds/routers/dlink/telnet_default_creds -s "target 192.168.1.1"
 [*] Trying admin:admin on 192.168.1.1:23
 [-] FAIL: admin:admin
 [*] Trying admin:1234 on 192.168.1.1:23
-[+] SUCCESS: admin:1234 — telnet session obtained
+[+] SUCCESS: admin:1234  -  telnet session obtained
 ```
 
 ### Varredura SSH (roteador TP-Link)
@@ -317,7 +317,7 @@ embedxpl -m creds/routers/tplink/ssh_default_creds -s "target 192.168.0.1"
 [*] Trying admin:admin on 192.168.0.1:22
 [-] FAIL: admin:admin
 [*] Trying admin:tplink on 192.168.0.1:22
-[+] SUCCESS: admin:tplink — SSH session opened
+[+] SUCCESS: admin:tplink  -  SSH session opened
 ```
 
 ### Interface web HTTPS (câmera Dahua)
@@ -371,7 +371,7 @@ exf (Hikvision Camera Default Telnet Creds) > run
 ## Brute-force de comunidade SNMP (genérico)
 
 O teste de strings de comunidade SNMP está disponível via:
-- `generic/snmp/snmp_bruteforce` — bruteforcer SNMP genérico standalone
+- `generic/snmp/snmp_bruteforce`  -  bruteforcer SNMP genérico standalone
 
 Consulte [08-modulos-generic.md](08-modulos-generic.md) para a referência do módulo SNMP.
 
@@ -383,7 +383,7 @@ Consulte [08-modulos-generic.md](08-modulos-generic.md) para a referência do m�
 2. Defina `threads 16` para varredura mais rápida em alvos LAN (padrão 8).
 3. Use `stop_on_success false` para coletar todas as credenciais válidas (ex.: quando múltiplas contas têm senhas padrão).
 4. Combine com `discover` para encontrar hosts e depois alvejá-los: discover → obter IPs → alimentar o módulo de creds via `file://`.
-5. Para roteadores com SNMP: sempre tente as strings de comunidade `public` e `private` — são padrões embutidos na maioria dos vendors.
+5. Para roteadores com SNMP: sempre tente as strings de comunidade `public` e `private`  -  são padrões embutidos na maioria dos vendors.
 
 ---
 

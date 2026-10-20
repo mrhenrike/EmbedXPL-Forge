@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Aruba PAPI Protocol Scanner — UDP/8211 Service Detection and Fingerprint.
+"""Aruba PAPI Protocol Scanner  -  UDP/8211 Service Detection and Fingerprint.
 
 Scanner for Aruba Networks PAPI (Process Application Programming Interface)
 protocol on UDP/8211. Used to discover Aruba Access Points, Mobility
@@ -22,7 +22,7 @@ from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
-    """Aruba PAPI Service Scanner — UDP/8211.
+    """Aruba PAPI Service Scanner  -  UDP/8211.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -74,7 +74,7 @@ class Exploit(HTTPClient):
 
     @mute
     def check(self) -> bool:
-        """Always returns True — scanner is discovery-mode."""
+        """Always returns True  -  scanner is discovery-mode."""
         return True
 
     def run(self) -> None:
@@ -146,10 +146,10 @@ class Exploit(HTTPClient):
         # Step 3: Vulnerability assessment
         print_status("[PAPI-SCAN] Vulnerability assessment:")
         if papi_active:
-            print_success("[PAPI-SCAN] PAPI EXPOSED — Potentially vulnerable to:")
-            print_success("[PAPI-SCAN]   CVE-2024-42509 (CVSS 9.8) — AOS-10 pre-auth RCE")
-            print_success("[PAPI-SCAN]   CVE-2024-47460 (CVSS 9.0) — AOS-10 cmd injection")
-            print_success("[PAPI-SCAN]   CVE-2023-35980 (CVSS 9.8) — Heap overflow")
+            print_success("[PAPI-SCAN] PAPI EXPOSED  -  Potentially vulnerable to:")
+            print_success("[PAPI-SCAN]   CVE-2024-42509 (CVSS 9.8)  -  AOS-10 pre-auth RCE")
+            print_success("[PAPI-SCAN]   CVE-2024-47460 (CVSS 9.0)  -  AOS-10 cmd injection")
+            print_success("[PAPI-SCAN]   CVE-2023-35980 (CVSS 9.8)  -  Heap overflow")
             print_success("[PAPI-SCAN]   CVE-2022-37885-37897 cluster (CVSS 9.8)")
             print_success("[PAPI-SCAN]   CVE-2021-25144/25145/25146 (CVSS 9.8)")
         else:

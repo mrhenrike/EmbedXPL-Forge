@@ -4,7 +4,7 @@ from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
-    """ACTi Camera — Default Web Interface Credentials (HTTP Form).
+    """ACTi Camera  -  Default Web Interface Credentials (HTTP Form).
 
     Performs dictionary attack against the ACTi camera web interface login form.
 
@@ -20,7 +20,7 @@ class Exploit(HTTPClient):
         ),
         "authors": (
             "Marcin Bury <marcin[at]threat9.com>",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge port",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge port",
         ),
         "devices": (
             "ACTi Camera",

@@ -1,4 +1,4 @@
-# Third-Party Components — EmbedXPL-Forge
+# Third-Party Components  -  EmbedXPL-Forge
 
 **Version:** 1.0.0 (Phase 0)
 **Date:** 2026-09-18
@@ -54,6 +54,6 @@
 
 ---
 
-*Last updated: 2026-10-16 — F1-T03 watchTowr 12 modules.*
+*Last updated: 2026-10-16  -  F1-T03 watchTowr 12 modules.*
 *Reference: Section 14 of xpl-forge-ecosystem-master-integration.plan.md*
 *Contact: security.research@uniaogeek.com.br*

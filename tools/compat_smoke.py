@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 import json
 import logging
 import os
@@ -144,7 +144,7 @@ def main() -> int:
     ):
         result.imports[import_name] = _import_check(import_name)
 
-    # Optional deps — failure is non-fatal.
+    # Optional deps  -  failure is non-fatal.
     for import_name in ("nmap", "numpy", "sklearn", "yaml"):
         result.imports["opt_" + import_name] = _import_check(import_name)
 

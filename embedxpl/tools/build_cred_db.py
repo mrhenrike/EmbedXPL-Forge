@@ -4,9 +4,9 @@ Consolida múltiplas fontes de credenciais default em um único
 data/default_creds.json estruturado com 10.000+ entradas.
 
 Fontes integradas:
-  1. embedxpl/modules/creds/     — módulos Python existentes (extrai pares hardcoded)
-  2. embedxpl/data/default_creds.json  — base existente (1.019 entries)
-  3. embedxpl/data/ics_default_creds.json  — ICS (38 entries)
+  1. embedxpl/modules/creds/      -  módulos Python existentes (extrai pares hardcoded)
+  2. embedxpl/data/default_creds.json   -  base existente (1.019 entries)
+  3. embedxpl/data/ics_default_creds.json   -  ICS (38 entries)
   4. embedxpl/data/wordlists/iot/mirai_default_creds.json
   5. RouterSploit creds (se disponível em .tmp/routersploit/)
   6. SecLists Default-Credentials (se disponível)
@@ -120,7 +120,7 @@ def _extract_from_module(py_file: Path) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
-# Catálogo curado de creds por categoria (hardcoded — fontes públicas)
+# Catálogo curado de creds por categoria (hardcoded  -  fontes públicas)
 # ---------------------------------------------------------------------------
 
 _CURATED_ICS = [

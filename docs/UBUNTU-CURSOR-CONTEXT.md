@@ -1,11 +1,11 @@
-# EmbedXPL v5.0.0 — Ubuntu Cursor Context
+# EmbedXPL v5.0.0  -  Ubuntu Cursor Context
 ## Read this at the start of every session on Ubuntu
 
 ---
 
 ## What You're Building
 
-**EmbedXPL v5.0.0** — Unified XPL Suite Framework.
+**EmbedXPL v5.0.0**  -  Unified XPL Suite Framework.
 
 EmbedXPL absorbs a full copy of all specialized XPL Suite tools:
 - WirelessXPL (wireless/drones) → stays active standalone
@@ -41,10 +41,10 @@ Never auto-advance phases.
 | Component | Status |
 |---|---|
 | Plan | ✅ `~/projects/XPL-Suite/docs/PLAN-EMBEDXPL-V5.md` |
-| Phase 0 runtime | ❌ NOT DONE — start here |
-| Phase 1–15 | ❌ NOT DONE |
+| Phase 0 runtime | ❌ NOT DONE  -  start here |
+| Phase 1-15 | ❌ NOT DONE |
 | EmbedXPL version | v3.9.0 (bump to v5.0.0 at Phase 15) |
-| Existing `multi_lang_module.py` | ✅ 161 lines — base for Phase 0 |
+| Existing `multi_lang_module.py` | ✅ 161 lines  -  base for Phase 0 |
 
 ---
 
@@ -71,12 +71,12 @@ Never auto-advance phases.
 
 ---
 
-## Phase 0 — What To Build (start here)
+## Phase 0  -  What To Build (start here)
 
 Create `~/projects/XPL-Suite/EmbedXPL-Forge/embedxpl/runtime/`:
 
 ```python
-# executor.py — XplRuntime orchestrator
+# executor.py  -  XplRuntime orchestrator
 class XplRuntime:
     def execute(self, module, **kwargs):
         lang = getattr(module, 'native_language', 'python')
@@ -109,7 +109,7 @@ Also create:
 - `embedxpl/malware_research/__init__.py` (placeholder)
 - `embedxpl/engines/__init__.py` (update to include wordlists, nuclei, dahua_console)
 
-Extend existing `embedxpl/core/multi_lang_module.py` — it has `run_c_source()`,
+Extend existing `embedxpl/core/multi_lang_module.py`  -  it has `run_c_source()`,
 `run_ruby_source()`, `run_bash_source()`. Phase 0 builds the proper runtime
 that replaces/supersedes this with structured executors.
 
@@ -157,7 +157,7 @@ CROSS_COMPILERS = {
 
 ---
 
-## After Each Phase — Report Format
+## After Each Phase  -  Report Format
 
 ```
 === PHASE N COMPLETE ===

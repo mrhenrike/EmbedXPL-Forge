@@ -1,4 +1,4 @@
-"""EmbedXPL Search Engine — shim para canonical search_base.
+"""EmbedXPL Search Engine  -  shim para canonical search_base.
 
 Canonical: XPL-Suite/tools/search_base.py
 """

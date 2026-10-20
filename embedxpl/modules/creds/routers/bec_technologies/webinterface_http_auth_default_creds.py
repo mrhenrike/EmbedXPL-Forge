@@ -7,7 +7,7 @@ class Exploit(HTTPBasicDigestDefault):
     __info__ = {
         "name": "Bec Technologies Router Default Web Interface Creds",
         "description": "Dictionary attack against Bec Technologies Router Web Interface (HTTP Basic/Digest Auth).",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Bec Technologies Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

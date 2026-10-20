@@ -1,9 +1,9 @@
 """Invoke MikrotikAPI-BF as an external process (your code / PyPI install).
 
-Does not embed mikrotikapi-bf sources — delegates to ``mikrotikapi-bf`` on PATH
+Does not embed mikrotikapi-bf sources  -  delegates to ``mikrotikapi-bf`` on PATH
 or to a checkout of ``mikrotikapi-bf.py``. Up MIT license / credits stay with that project.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations

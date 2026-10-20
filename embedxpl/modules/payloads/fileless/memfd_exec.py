@@ -1,4 +1,4 @@
-"""Fileless Linux Payload — memfd_create execution.
+"""Fileless Linux Payload  -  memfd_create execution.
 
 Executa shellcode/ELF em arquivo anônimo de memória (sem toque em disco).
 Bypassa scanners de filesystem (ClamAV, Sophos, etc.).
@@ -22,7 +22,7 @@ _NR_MEMFD_CREATE = 319  # x86_64; ARM64=279, ARM=385, MIPS=4354
 class Payload(BasePayload):
     __info__ = {
         "name": "Fileless memfd_create",
-        "description": "Execute ELF/shellcode from anonymous memory — zero disk footprint.",
+        "description": "Execute ELF/shellcode from anonymous memory  -  zero disk footprint.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
         "references": [
             "https://man7.org/linux/man-pages/man2/memfd_create.2.html",

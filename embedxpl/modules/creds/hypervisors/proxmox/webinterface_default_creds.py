@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Proxmox VE — Default Web Interface Credentials (root@pam brute-force).
+"""Proxmox VE  -  Default Web Interface Credentials (root@pam brute-force).
 
 Version: 1.0.0
 """
@@ -72,7 +72,7 @@ class Exploit(HTTPClient):
                     ticket = ""
                 if ticket:
                     print_success(
-                        "Valid credentials: {}:{} — ticket: {}...".format(
+                        "Valid credentials: {}:{}  -  ticket: {}...".format(
                             username, password, ticket[:40]
                         )
                     )
@@ -81,7 +81,7 @@ class Exploit(HTTPClient):
                         return
             else:
                 code = resp.status_code if resp else "no response"
-                print_status("  {}:{} — {}".format(username, password, code))
+                print_status("  {}:{}  -  {}".format(username, password, code))
 
         if not found:
             print_error("No default credentials accepted")

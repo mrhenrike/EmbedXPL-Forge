@@ -1,11 +1,11 @@
-# EmbedXPL-Forge — Wiki (bilingual)
+# EmbedXPL-Forge  -  Wiki (bilingual)
 
 
 ## Languages / Idiomas
 
 | Locale | Hub |
 |--------|-----|
-| **English (en-US)** — default | [en-US/README.md](en-US/README.md) |
+| **English (en-US)**  -  default | [en-US/README.md](en-US/README.md) |
 | **Português (pt-BR)** | [pt-BR/README.md](pt-BR/README.md) |
 
 ## Architecture Diagrams
@@ -26,7 +26,7 @@ PNG gallery. Mermaid sources: [../diagrams/architecture/README.md](../diagrams/a
 
 ## Shared Resources
 
-- **Module path index (all locales):** [ANEXO-INDICE-MODULOS.md](ANEXO-INDICE-MODULOS.md) — regenerate with `python tools/gen_wiki_module_index.py`
+- **Module path index (all locales):** [ANEXO-INDICE-MODULOS.md](ANEXO-INDICE-MODULOS.md)  -  regenerate with `python tools/gen_wiki_module_index.py`
 
 ## Governance
 
@@ -40,4 +40,4 @@ PNG gallery. Mermaid sources: [../diagrams/architecture/README.md](../diagrams/a
 ## Repository Root
 
 - [README.md](../../README.md) (en-US) · [README.pt-BR.md](../../README.pt-BR.md)
-- [docs/README.md](../README.md) — docs folder hub
+- [docs/README.md](../README.md)  -  docs folder hub

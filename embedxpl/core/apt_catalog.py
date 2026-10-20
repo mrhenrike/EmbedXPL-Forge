@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""APT Group Attack Catalog — maps real-world threat actors to EmbedXPL modules.
+"""APT Group Attack Catalog  -  maps real-world threat actors to EmbedXPL modules.
 
 Provides a structured catalog of Advanced Persistent Threat (APT) groups
 that target network devices (routers, switches, IoT) covered by EmbedXPL.
@@ -361,7 +361,7 @@ def _build_catalog() -> None:
     )
 
     # ------------------------------------------------------------------ #
-    # SALT TYPHOON / RedMike (China — MSS-linked)                         #
+    # SALT TYPHOON / RedMike (China  -  MSS-linked)                         #
     # ------------------------------------------------------------------ #
     APT_CATALOG["salt_typhoon"] = APTGroup(
         id="salt_typhoon",
@@ -371,11 +371,11 @@ def _build_catalog() -> None:
         mitre_id="G1040",
         description=(
             "China MSS-linked APT responsible for the most significant telecom infrastructure breach in US history "
-            "(2021–2025). Compromised AT&T, Verizon, Lumen Technologies, and 600+ orgs worldwide, including "
-            "CALEA lawful-intercept infrastructure. Mass-exploited Cisco IOS XE in Dec 2024–Jan 2025 "
+            "(2021-2025). Compromised AT&T, Verizon, Lumen Technologies, and 600+ orgs worldwide, including "
+            "CALEA lawful-intercept infrastructure. Mass-exploited Cisco IOS XE in Dec 2024-Jan 2025 "
             "against 1,000+ telecom and university devices."
         ),
-        campaigns=["Operation RedMike (2021–2025)", "Cisco IOS XE Mass Exploitation (Dec 2024)", "FamousSparrow Hotels (2020)"],
+        campaigns=["Operation RedMike (2021-2025)", "Cisco IOS XE Mass Exploitation (Dec 2024)", "FamousSparrow Hotels (2020)"],
         references=[
             "https://nvd.nist.gov/vuln/detail/CVE-2023-20198",
             "https://nvd.nist.gov/vuln/detail/CVE-2023-20273",
@@ -457,7 +457,7 @@ def _build_catalog() -> None:
             "2025 campaign focused on RMM providers to gain downstream customer access. "
             "Known for rapid weaponization of CVEs and mass exploitation of Ivanti, Palo Alto, and Exchange."
         ),
-        campaigns=["IT Supply Chain (2024–2025)", "Exchange ProxyLogon (2021)", "Edge Device Reconnaissance (2025)"],
+        campaigns=["IT Supply Chain (2024-2025)", "Exchange ProxyLogon (2021)", "Edge Device Reconnaissance (2025)"],
         references=[
             "https://www.microsoft.com/en-us/security/blog/2025/03/05/silk-typhoon-targeting-it-supply-chain/",
             "https://nvd.nist.gov/vuln/detail/CVE-2025-0282",
@@ -503,7 +503,7 @@ def _build_catalog() -> None:
             "(NAS, IP cameras, DVRs, routers, firewalls). FBI court-authorized disruption September 2024. "
             "Used 66 CVEs to compromise devices and deploy Nosedive (Mirai variant) C2 via 'Sparrow' app."
         ),
-        campaigns=["Raptor Train Botnet (2021–2024)", "SOCKS5 Proxy Infrastructure for PRC APT groups"],
+        campaigns=["Raptor Train Botnet (2021-2024)", "SOCKS5 Proxy Infrastructure for PRC APT groups"],
         references=[
             "https://www.ic3.gov/CSA/2024/240918.pdf",
             "https://nvd.nist.gov/vuln/detail/CVE-2022-1388",
@@ -580,7 +580,7 @@ def _build_catalog() -> None:
             "Deployed VELVETSHELL backdoor inside Cisco Nexus switch OS (CVE-2024-20399) and "
             "maintained multi-year F5 BIG-IP footholds that survived factory resets."
         ),
-        campaigns=["F5 BIG-IP Persistent Espionage (2021–2024)", "Cisco Nexus Zero-Day (2024)"],
+        campaigns=["F5 BIG-IP Persistent Espionage (2021-2024)", "Cisco Nexus Zero-Day (2024)"],
         references=[
             "https://www.sygnia.co/blog/china-threat-group-velvet-ant-cisco-zero-day/",
             "https://nvd.nist.gov/vuln/detail/CVE-2024-20399",
@@ -673,11 +673,11 @@ def _build_catalog() -> None:
         country="China",
         mitre_id="G0045",
         description=(
-            "China MSS-linked APT responsible for Operation Cloud Hopper — systematic compromise of MSPs "
+            "China MSS-linked APT responsible for Operation Cloud Hopper  -  systematic compromise of MSPs "
             "to gain transitive access to downstream clients in 45+ countries. "
             "Network device exploitation used for lateral movement between MSP client environments."
         ),
-        campaigns=["Operation Cloud Hopper (2014–2018+)"],
+        campaigns=["Operation Cloud Hopper (2014-2018+)"],
         references=["https://attack.mitre.org/groups/G0045/"],
         attacks=[
             APTAttack(
@@ -711,7 +711,7 @@ def _build_catalog() -> None:
             "and ASUS routers with persistent firmware-level malware. Successor to VPNFilter. "
             "Malware survives factory resets via /etc/init.d/ RC script modification."
         ),
-        campaigns=["Cyclops Blink (2019–2022)", "VPNFilter (2016–2018)"],
+        campaigns=["Cyclops Blink (2019-2022)", "VPNFilter (2016-2018)"],
         references=[
             "https://www.cisa.gov/sites/default/files/publications/AA22-054A%20New%20Sandworm%20Malware%20Cyclops%20Blink%20Replaces%20VPN%20Filter.pdf",
             "https://nvd.nist.gov/vuln/detail/CVE-2022-26776",
@@ -731,7 +731,7 @@ def _build_catalog() -> None:
                 requires_auth=False,
             ),
             APTAttack(
-                name="VPNFilter Stage-1 — Multi-vendor SOHO Router Compromise",
+                name="VPNFilter Stage-1  -  Multi-vendor SOHO Router Compromise",
                 description=(
                     "VPNFilter Stage-1 persistence module targeting Linksys, MikroTik, Netgear, "
                     "TP-Link, QNAP, ASUS, D-Link, Huawei, Ubiquiti, ZTE devices. "
@@ -751,7 +751,7 @@ def _build_catalog() -> None:
     )
 
     # ------------------------------------------------------------------ #
-    # APT29 / Midnight Blizzard (Russia — SVR)                           #
+    # APT29 / Midnight Blizzard (Russia  -  SVR)                           #
     # ------------------------------------------------------------------ #
     APT_CATALOG["apt29"] = APTGroup(
         id="apt29",
@@ -800,7 +800,7 @@ def _build_catalog() -> None:
     )
 
     # ------------------------------------------------------------------ #
-    # APT33 / Elfin (Iran — IRGC)                                        #
+    # APT33 / Elfin (Iran  -  IRGC)                                        #
     # ------------------------------------------------------------------ #
     APT_CATALOG["apt33"] = APTGroup(
         id="apt33",
@@ -834,7 +834,7 @@ def _build_catalog() -> None:
     )
 
     # ------------------------------------------------------------------ #
-    # APT34 / OilRig (Iran — MOIS)                                       #
+    # APT34 / OilRig (Iran  -  MOIS)                                       #
     # ------------------------------------------------------------------ #
     APT_CATALOG["apt34"] = APTGroup(
         id="apt34",
@@ -870,7 +870,7 @@ def _build_catalog() -> None:
     )
 
     # ------------------------------------------------------------------ #
-    # MuddyWater (Iran — MOIS)                                           #
+    # MuddyWater (Iran  -  MOIS)                                           #
     # ------------------------------------------------------------------ #
     APT_CATALOG["muddywater"] = APTGroup(
         id="muddywater",
@@ -921,7 +921,7 @@ def _build_catalog() -> None:
             "Ukraine, and Georgia. Deploys WhisperGate wiper. Exploits perimeter network devices "
             "for initial access coordinated with kinetic operations."
         ),
-        campaigns=["WhisperGate Ukraine (2022)", "NATO Infrastructure Espionage (2020–2025)"],
+        campaigns=["WhisperGate Ukraine (2022)", "NATO Infrastructure Espionage (2020-2025)"],
         references=["https://www.cisa.gov/sites/default/files/2024-09/aa24-249a-russian-military-cyber-actors-target-us-and-global-critical-infrastructure.pdf"],
         attacks=[
             APTAttack(
@@ -954,7 +954,7 @@ def _build_catalog() -> None:
             "espionage. Uses compromised SOHO routers and NAS devices as proxy C2 infrastructure "
             "to obscure DPRK attribution."
         ),
-        campaigns=["TraderTraitor Crypto Heists (2021–2025)", "3CX Supply Chain (2023)", "AppleJeus Crypto Exchange Attacks"],
+        campaigns=["TraderTraitor Crypto Heists (2021-2025)", "3CX Supply Chain (2023)", "AppleJeus Crypto Exchange Attacks"],
         references=["https://us-cert.cisa.gov/ncas/alerts/aa22-108a"],
         attacks=[
             APTAttack(
@@ -978,7 +978,7 @@ def _build_catalog() -> None:
     )
 
     # ------------------------------------------------------------------ #
-    # KIMSUKY (North Korea — RGB)                                         #
+    # KIMSUKY (North Korea  -  RGB)                                         #
     # ------------------------------------------------------------------ #
     APT_CATALOG["kimsuky"] = APTGroup(
         id="kimsuky",
@@ -1003,7 +1003,7 @@ def _build_catalog() -> None:
                 cves=["CVE-2021-44228"],
                 modules=["exploits/misc/multi/log4shell_rce_cve_2021_44228"],
                 mitre_techniques=["T1190"],
-                target_devices=["Any Java application server with Log4j 2.0–2.14.1"],
+                target_devices=["Any Java application server with Log4j 2.0-2.14.1"],
                 phase="Initial Access",
                 requires_auth=False,
             ),
@@ -1011,7 +1011,7 @@ def _build_catalog() -> None:
     )
 
     # ------------------------------------------------------------------ #
-    # XENOTIME / Chernovite (Russia — TsNIIKhM / ICS-targeting)          #
+    # XENOTIME / Chernovite (Russia  -  TsNIIKhM / ICS-targeting)          #
     # ------------------------------------------------------------------ #
     APT_CATALOG["xenotime"] = APTGroup(
         id="xenotime",
@@ -1020,12 +1020,12 @@ def _build_catalog() -> None:
         country="Russia",
         mitre_id="G0088",
         description=(
-            "Russia TsNIIKhM-linked APT responsible for TRITON/TRISIS — the first-ever attack "
+            "Russia TsNIIKhM-linked APT responsible for TRITON/TRISIS  -  the first-ever attack "
             "on Safety Instrumented Systems (SIS). Targeted Schneider Electric Triconex SIS at "
             "a Saudi petrochemical facility (2017). Chernovite (Dragos 2022) developed INCONTROLLER/"
             "PIPEDREAM toolkit targeting Schneider Modicon, Omron Sysmac, OPC-UA servers."
         ),
-        campaigns=["TRITON/TRISIS — Saudi Petro Rabigh (2017)", "INCONTROLLER/PIPEDREAM Toolkit (2022)", "XENOTIME ICS Scanning (2019)"],
+        campaigns=["TRITON/TRISIS  -  Saudi Petro Rabigh (2017)", "INCONTROLLER/PIPEDREAM Toolkit (2022)", "XENOTIME ICS Scanning (2019)"],
         references=[
             "https://www.dragos.com/threat/xenotime",
             "https://cloud.google.com/blog/topics/threat-intelligence/incontroller-state-sponsored-ics-tool",
@@ -1033,7 +1033,7 @@ def _build_catalog() -> None:
         ],
         attacks=[
             APTAttack(
-                name="Siemens SIPROTEC Relay DoS (CVE-2015-5374) — Industroyer/Sandworm",
+                name="Siemens SIPROTEC Relay DoS (CVE-2015-5374)  -  Industroyer/Sandworm",
                 description=(
                     "Denial-of-service against Siemens SIPROTEC 4 and 5 protective relays via "
                     "specially crafted EN50022 packet on UDP/2404. Used in Industroyer Ukraine power grid attack. "
@@ -1043,28 +1043,28 @@ def _build_catalog() -> None:
                 modules=["exploits/ics/siemens/siprotec_relay_dos_cve_2015_5374"],
                 mitre_techniques=["T0835", "T0813"],
                 target_devices=["Siemens SIPROTEC 4", "Siemens SIPROTEC 5"],
-                phase="Impact — Denial of Safety",
+                phase="Impact  -  Denial of Safety",
                 requires_auth=False,
             ),
             APTAttack(
-                name="INCONTROLLER/PIPEDREAM — Modbus Protocol Abuse (Schneider Modicon)",
+                name="INCONTROLLER/PIPEDREAM  -  Modbus Protocol Abuse (Schneider Modicon)",
                 description=(
                     "EVILSCHOLAR component of INCONTROLLER abuses Modbus/TCP and UMAS protocol "
                     "to read/write control logic in Schneider Electric Modicon M340/M580 PLCs. "
-                    "No CVE — exploits design weaknesses in unauthenticated ICS protocols."
+                    "No CVE  -  exploits design weaknesses in unauthenticated ICS protocols."
                 ),
                 cves=[],
                 modules=["exploits/ics/schneider/modicon_modbus_control_cve_2018_7841"],
                 mitre_techniques=["T0866", "T0839", "T0820"],
                 target_devices=["Schneider Electric Modicon M340", "Modicon M580", "Modicon TM251/TM241"],
-                phase="Impact — Control Logic Manipulation",
+                phase="Impact  -  Control Logic Manipulation",
                 requires_auth=False,
             ),
         ],
     )
 
     # -----------------------------------------------------------------------
-    # Botnet threat actors — Mirai, Condi, Mozi
+    # Botnet threat actors  -  Mirai, Condi, Mozi
     # -----------------------------------------------------------------------
 
     APT_CATALOG["mirai_botnet"] = APTGroup(

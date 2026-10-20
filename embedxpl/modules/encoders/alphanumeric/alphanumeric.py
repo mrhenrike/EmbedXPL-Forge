@@ -1,4 +1,4 @@
-"""Alphanumeric encoder — output somente [A-Za-z0-9]."""
+"""Alphanumeric encoder  -  output somente [A-Za-z0-9]."""
 
 import string
 from embedxpl.core.exploit.encoders import BaseEncoder
@@ -30,7 +30,7 @@ def _b62_decode(s: bytes) -> bytes:
 class Encoder(BaseEncoder):
     __info__ = {
         "name": "Alphanumeric Encoder",
-        "description": "Encodes payload to [A-Za-z0-9] only — bypasses printable-only filters.",
+        "description": "Encodes payload to [A-Za-z0-9] only  -  bypasses printable-only filters.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
         "evasion_score": 6,
     }

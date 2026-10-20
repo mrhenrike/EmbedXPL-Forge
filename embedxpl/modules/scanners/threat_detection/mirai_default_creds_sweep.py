@@ -1,5 +1,5 @@
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
-"""Mirai default credential sweep — full table from Mirai source code.
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
+"""Mirai default credential sweep  -  full table from Mirai source code.
 
 Iterates through the 62 username/password pairs extracted from the original
 Mirai botnet source code (``mirai/bot/scanner.c``, ``loader/src/headers/table.c``)
@@ -21,8 +21,8 @@ References:
   https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-antonakakis.pdf
 
 MITRE ATT&CK:
-  T1078.001 — Valid Accounts: Default Accounts
-  T1110.001 — Brute Force: Password Guessing
+  T1078.001  -  Valid Accounts: Default Accounts
+  T1110.001  -  Brute Force: Password Guessing
 
 v1.0.0: initial 62-pair table (mirai/bot/scanner.c generic + table.c)
 v1.1.0: extended with Condi-Mirai scanner.c XOR-decoded pairs
@@ -55,7 +55,7 @@ from embedxpl.core.exploit import (
     print_warning,
 )
 
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 
 logger = logging.getLogger("embedxpl.scanners.threat_detection.mirai_default_creds_sweep")
 

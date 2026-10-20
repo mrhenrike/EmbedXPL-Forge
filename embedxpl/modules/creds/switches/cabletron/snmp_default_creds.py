@@ -4,7 +4,7 @@ from embedxpl.modules.creds.generic.snmp_bruteforce import Exploit as SNMPBrutef
 
 
 class Exploit(SNMPBruteforce):
-    """Cabletron/Enterasys Switch — Default SNMP Community Strings.
+    """Cabletron/Enterasys Switch  -  Default SNMP Community Strings.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -18,7 +18,7 @@ class Exploit(SNMPBruteforce):
             "If valid community strings are found, they are displayed to the user."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "devices": (
             "Cabletron/Enterasys Switch",

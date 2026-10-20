@@ -1,4 +1,4 @@
-"""GoTigate — Go-based FortiGate/FortiOS Scanner Bridge.
+"""GoTigate  -  Go-based FortiGate/FortiOS Scanner Bridge.
 
 Subprocess bridge to gotigate (https://github.com/gustavorobertux/gotigate)
 and related Go-based FortiGate scanners/exploit tools.  Primarily targets:

@@ -1,6 +1,6 @@
 """Default credentials database loader and query interface.
 
-Provides :class:`DefaultCredsDatabase` — a lightweight, lazy-loading wrapper
+Provides :class:`DefaultCredsDatabase`  -  a lightweight, lazy-loading wrapper
 around the compiled JSON databases in ``embedxpl/data/``.
 
 Usage::
@@ -85,9 +85,9 @@ class DefaultCredsDatabase:
 
         Args:
             vendor: Vendor name (case-insensitive; spaces/hyphens normalised).
-            protocol: Optional filter — ``"http"``, ``"ssh"``, ``"telnet"``,
+            protocol: Optional filter  -  ``"http"``, ``"ssh"``, ``"telnet"``,
                 ``"ftp"``, ``"snmp"``, ``"rtsp"``, or ``"multi"`` (unspecified).
-            device_type: Optional filter — ``"camera"``, ``"router"``,
+            device_type: Optional filter  -  ``"camera"``, ``"router"``,
                 ``"switch"``, ``"printer"``, ``"nas"``, ``"voip"``,
                 ``"firewall"``, ``"ics"``, ``"wireless"``, etc.
 

@@ -1,4 +1,4 @@
-"""UDP amplification test — identify open reflectors.
+"""UDP amplification test  -  identify open reflectors.
 
 Probes common UDP services (DNS, NTP, SSDP, SNMP, Memcached, CharGen)
 that can be exploited as amplification vectors in DDoS attacks.
@@ -7,7 +7,7 @@ Measures response size vs. request size to calculate amplification factor.
 Use to audit whether services on the target device can be abused as
 amplifiers against third parties.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations
@@ -83,7 +83,7 @@ class Exploit(HTTPClient):
                 else:
                     print_status(
                         f"  {name} UDP/{port}: responded ({resp_size}B, "
-                        f"amp x{amp:.1f} — below threshold)"
+                        f"amp x{amp:.1f}  -  below threshold)"
                     )
             else:
                 print_status(f"  {name} UDP/{port}: no response")

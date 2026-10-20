@@ -17,7 +17,7 @@ class Exploit(SSHDefault):
             "Covers FortiGate 60E/80E/100E (SOHO/SMB) and FortiOS default accounts. "
             "Cherry-picked from FirewallXPL-Forge."
         ),
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (
             "Fortinet FortiGate 60E / 80E / 100E / 200E",
             "Fortinet FortiWiFi 60E / 80E",

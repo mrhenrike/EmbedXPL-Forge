@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Intelbras CCTV — P2P/Cloud UID Predictability Scanner.
+"""Intelbras CCTV  -  P2P/Cloud UID Predictability Scanner.
 
 Probes Intelbras devices for P2P cloud connectivity indicators and
 checks UID generation patterns for predictability.
@@ -81,7 +81,7 @@ class Exploit(HTTPClient):
             if len(serial) > 6:
                 prefix = serial[:6]
                 print_status(
-                    "UID prefix pattern: {} — check for sequential/MAC-based generation"
+                    "UID prefix pattern: {}  -  check for sequential/MAC-based generation"
                     .format(prefix)
                 )
 

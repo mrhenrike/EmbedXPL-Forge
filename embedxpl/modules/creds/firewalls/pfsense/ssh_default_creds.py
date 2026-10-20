@@ -18,7 +18,7 @@ class Exploit(SSHDefault):
             "Default credentials admin:pfsense persist when first-time wizard is skipped. "
             "Cherry-picked from FirewallXPL-Forge."
         ),
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (
             "pfSense CE (Community Edition) all versions",
             "pfSense Plus (Netgate) all versions",

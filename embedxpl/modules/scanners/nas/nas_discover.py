@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""NAS Universal Discovery Scanner — HTTP/AFP/SMB.
+"""NAS Universal Discovery Scanner  -  HTTP/AFP/SMB.
 
 Discovers NAS devices by probing common management and protocol ports.
 
@@ -58,7 +58,7 @@ class Exploit(HTTPClient):
                 with socket.create_connection(
                     (self.target, port), timeout=float(self.timeout)
                 ):
-                    print_success("Port {}/{} open — {}".format(port, proto, desc))
+                    print_success("Port {}/{} open  -  {}".format(port, proto, desc))
             except Exception:
                 pass
 
@@ -71,7 +71,7 @@ class Exploit(HTTPClient):
                     if kw in text:
                         vendor = vend
                         break
-                print_success("Web UI detected on {} — Vendor: {}".format(path, vendor))
+                print_success("Web UI detected on {}  -  Vendor: {}".format(path, vendor))
                 break
 
     @mute

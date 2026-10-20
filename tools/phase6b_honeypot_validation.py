@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Phase 6b honeypot validation — non-gating snapshot check.
+"""Phase 6b honeypot validation  -  non-gating snapshot check.
 
 Validates that honeypot-related module stubs and catalog entries are
-consistent. Does NOT fail CI — informational only.
+consistent. Does NOT fail CI  -  informational only.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations
@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def main() -> int:
-    """Run honeypot validation snapshot — always exits 0 (non-gating)."""
+    """Run honeypot validation snapshot  -  always exits 0 (non-gating)."""
     modules_dir = ROOT / "embedxpl" / "modules"
 
     # Count modules that reference honeypot or canary detection patterns

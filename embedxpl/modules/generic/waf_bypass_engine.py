@@ -158,7 +158,7 @@ HTTP_SMUGGLING_PAYLOADS: list[dict] = [
         "name": "Chunked oversized",
         "headers": {"Transfer-Encoding": "chunked"},
         "body": "3\r\nABC DEF\r\n0\r\n\r\n",
-        "description": "Chunk size 3 but body 7 chars — WAF may not see the extra bytes",
+        "description": "Chunk size 3 but body 7 chars  -  WAF may not see the extra bytes",
     },
 ]
 
@@ -239,7 +239,7 @@ class WafTestResult:
 
 class WafBypassEngine:
     """
-    WAF bypass mutation engine — generates and tests bypass payloads.
+    WAF bypass mutation engine  -  generates and tests bypass payloads.
     All payload databases are embedded; no external files needed.
     """
 

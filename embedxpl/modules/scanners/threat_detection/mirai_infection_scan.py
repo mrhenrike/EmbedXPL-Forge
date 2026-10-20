@@ -1,10 +1,10 @@
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """Mirai-family infection indicator scanner.
 
 Probes a target host for the combination of signals that indicate an active
 Mirai/Condi/Gafgyt botnet infection:
 
-  1. Open Telnet port (23 / 2323) — primary propagation vector.
+  1. Open Telnet port (23 / 2323)  -  primary propagation vector.
   2. Default credentials accepted (root:root, admin:admin, root:vizxv …).
   3. BusyBox shell banner returned on successful login.
 
@@ -14,9 +14,9 @@ network perspective: it opens a TCP socket, sends credential pairs, and
 reads the response.  No payloads are dropped.
 
 MITRE ATT&CK (ICS / Enterprise):
-  T1078.001 — Valid Accounts: Default Accounts
-  T1133    — External Remote Services (Telnet)
-  T1595.001 — Active Scanning: Scanning IP Blocks
+  T1078.001  -  Valid Accounts: Default Accounts
+  T1133     -  External Remote Services (Telnet)
+  T1595.001  -  Active Scanning: Scanning IP Blocks
 
 References:
   https://unit42.paloaltonetworks.com/mirai-botnet/
@@ -46,7 +46,7 @@ from embedxpl.core.exploit import (
     print_warning,
 )
 
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 
 logger = logging.getLogger("embedxpl.scanners.threat_detection.mirai_infection_scan")
 

@@ -1,7 +1,7 @@
 """Modbus TCP Covert Channel Payload.
 
 Usa registros Modbus como canal de exfiltração/C2 em redes OT.
-Dados são codificados em holding registers (FC3/FC16) — tráfego
+Dados são codificados em holding registers (FC3/FC16)  -  tráfego
 aparece como leitura/escrita industrial legítima.
 
 Protocolo:
@@ -17,7 +17,7 @@ from embedxpl.core.exploit.payloads import BasePayload
 class Payload(BasePayload):
     __info__ = {
         "name": "Modbus Covert Channel",
-        "description": "Covert C2 via Modbus TCP registers — appears as industrial traffic.",
+        "description": "Covert C2 via Modbus TCP registers  -  appears as industrial traffic.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
     }
 

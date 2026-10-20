@@ -13,9 +13,9 @@
 | Métrica | Valor |
 |---------|-------|
 | Módulos ativos | 2800+ |
-| CVEs mapeados | 700+ (2001–2026) |
+| CVEs mapeados | 700+ (2001-2026) |
 | Famílias de vendors | 114+ |
-| Versões Python | 3.8 – 3.13 |
+| Versões Python | 3.8 - 3.13 |
 | Plataformas | Linux, macOS, Windows |
 | Licença | BSD-3-Clause |
 | Arquivo de histórico | `~/.exf_history` (100 entradas) |
@@ -27,12 +27,12 @@
 
 | Classe | Cobertura |
 |--------|-----------|
-| **Roteadores / GPON ONT / CPE** | Foco principal — 580+ módulos, 85+ pastas de vendor (D-Link, TP-Link, NETGEAR, Huawei, ZTE, MikroTik, Ubiquiti, ASUS, Linksys, Totolink e mais) |
+| **Roteadores / GPON ONT / CPE** | Foco principal  -  580+ módulos, 85+ pastas de vendor (D-Link, TP-Link, NETGEAR, Huawei, ZTE, MikroTik, Ubiquiti, ASUS, Linksys, Totolink e mais) |
 | **Câmeras IP / NVR / DVR** | Hikvision, Dahua, Herospeed/Longsee (todas as marcas OEM), Axis, Reolink, Amcrest, Annke, Intelbras, Uniview, Bosch, ACTi, Avigilon e mais |
-| **Firewalls / VPN / Appliances de Perímetro** | 80+ módulos — Fortinet, Palo Alto, Cisco, SonicWall, Check Point, Sophos, WatchGuard, Juniper |
-| **Impressoras / MFP** | 185+ módulos — HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung, CUPS |
+| **Firewalls / VPN / Appliances de Perímetro** | 80+ módulos  -  Fortinet, Palo Alto, Cisco, SonicWall, Check Point, Sophos, WatchGuard, Juniper |
+| **Impressoras / MFP** | 185+ módulos  -  HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung, CUPS |
 | **Switches Gerenciados L2/L3** | Cisco, D-Link, NETGEAR |
-| **ICS / OT / Industrial** | 35+ módulos — PLCs, SCADA HMIs, Modbus, S7comm, EtherNet/IP, Universal Robots |
+| **ICS / OT / Industrial** | 35+ módulos  -  PLCs, SCADA HMIs, Modbus, S7comm, EtherNet/IP, Universal Robots |
 | **BMC / IPMI** | ASUS ASMB8 (IPMI), Dell iDRAC9, Supermicro IPMI |
 | **BMS (Gestão Predial)** | ABB Cylon Aspect |
 | **NAS** | QNAP, Synology, D-Link NAS |
@@ -49,7 +49,7 @@
 
 | Requisito | Valor | Observações |
 |-----------|-------|-------------|
-| Python | **3.8 – 3.13** | Testado no CPython |
+| Python | **3.8 - 3.13** | Testado no CPython |
 | pip | 21.0 ou mais recente | Recomendado |
 | nmap | Opcional | Habilita varredura avançada no `discover` |
 | Npcap | Opcional (Windows) | Necessário para operações de socket raw com Scapy |
@@ -78,7 +78,7 @@ python-nmap >= 0.7.1  - Binding Python do nmap
 
 ## Instalação
 
-### Opção 1 — PyPI (recomendado para a maioria dos usuários)
+### Opção 1  -  PyPI (recomendado para a maioria dos usuários)
 
 ```bash
 pip install embedxpl
@@ -129,7 +129,7 @@ Successfully installed embedxpl-1.0.0 python-nmap-0.7.1
 
 ---
 
-### Opção 2 — Clone do Git + instalação editável (desenvolvimento / contribuição)
+### Opção 2  -  Clone do Git + instalação editável (desenvolvimento / contribuição)
 
 ```bash
 git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
@@ -154,7 +154,7 @@ python -m embedxpl         # invocação de módulo
 
 ---
 
-### Opção 3 — Modo não interativo de única execução (sem shell)
+### Opção 3  -  Modo não interativo de única execução (sem shell)
 
 ```bash
 pip install embedxpl
@@ -165,7 +165,7 @@ Consulte [04-modo-nao-interativo.md](04-modo-nao-interativo.md) para a referênc
 
 ---
 
-## Primeira execução — shell interativo
+## Primeira execução  -  shell interativo
 
 ```text
 $ embedxpl
@@ -220,7 +220,7 @@ Saída de exemplo (nmap ausente):
 [OK]  Python 3.11.9
 [OK]  requests 2.34.2
 ...
-[WARN] nmap not found in PATH — discover fingerprinting will use Scapy only (reduced accuracy)
+[WARN] nmap not found in PATH  -  discover fingerprinting will use Scapy only (reduced accuracy)
 [OK]  Module index: 2807 modules loaded
 ```
 
@@ -228,7 +228,7 @@ Saída de exemplo (problema de dependência):
 
 ```text
 [OK]  Python 3.9.18
-[-]   rich not installed — install with: pip install "rich>=13.0"
+[-]   rich not installed  -  install with: pip install "rich>=13.0"
 [OK]  Module index: 2807 modules loaded
 ```
 
@@ -278,7 +278,7 @@ Modos válidos: `cpu`, `gpu`, `hybrid`, `auto`. O modo selecionado é persistido
 
 ---
 
-## `sysinfo` — perfil de hardware
+## `sysinfo`  -  perfil de hardware
 
 ```text
 exf > sysinfo
@@ -357,12 +357,12 @@ CLI (exf / embedxpl / fxf)
     │       └── SessionManager (estado de varredura persistente por host)
     │
     └── Arsenal de Módulos  (embedxpl/modules/)
-            ├── exploits/     (1842 módulos — roteadores, câmeras, firewalls, impressoras, ICS, BMC...)
-            ├── creds/        (687 módulos — SSH, Telnet, FTP, HTTP, SNMP por vendor)
-            ├── scanners/     (134 módulos — descoberta de rede, scanners de protocolo, autopwn)
-            ├── payloads/     (32 módulos — x86, x64, ARM, MIPS, cmd, perl, php, python)
-            ├── encoders/     (13 módulos — base64, hex, Python/PHP/Perl)
-            └── generic/      (22 módulos — lookup de CVE, UPnP, SNMP, wordlist, DNS, PCAP)
+            ├── exploits/     (1842 módulos  -  roteadores, câmeras, firewalls, impressoras, ICS, BMC...)
+            ├── creds/        (687 módulos  -  SSH, Telnet, FTP, HTTP, SNMP por vendor)
+            ├── scanners/     (134 módulos  -  descoberta de rede, scanners de protocolo, autopwn)
+            ├── payloads/     (32 módulos  -  x86, x64, ARM, MIPS, cmd, perl, php, python)
+            ├── encoders/     (13 módulos  -  base64, hex, Python/PHP/Perl)
+            └── generic/      (22 módulos  -  lookup de CVE, UPnP, SNMP, wordlist, DNS, PCAP)
 ```
 
 ---
@@ -374,7 +374,7 @@ CLI (exf / embedxpl / fxf)
 | EmbedXPL-Forge | `pip install embedxpl` | `embedxpl` / `exf` | IoT / dispositivos de rede (amplo) |
 | FirewallXPL-Forge | `pip install firewallxpl` | `fxf` | Especialista em Firewall / VPN |
 | PrinterXPL-Forge | `pip install printerxpl-forge` | `printerxpl-forge` | Especialista em Impressoras / MFP |
-| WirelessXPL-Forge | `pip install wirelessxpl` | `wxf` | Wireless — Wi-Fi, BLE, Zigbee, Z-Wave |
+| WirelessXPL-Forge | `pip install wirelessxpl` | `wxf` | Wireless  -  Wi-Fi, BLE, Zigbee, Z-Wave |
 | MikrotikAPI-BF | `pip install mikrotikapi-bf` | `mikrotik-bf` | Brute-force da API RouterOS MikroTik |
 
 ---

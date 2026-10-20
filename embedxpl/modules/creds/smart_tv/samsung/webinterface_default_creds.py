@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Samsung SmartThings / Tizen — Default Credential Brute-Forcer.
+"""Samsung SmartThings / Tizen  -  Default Credential Brute-Forcer.
 
 Attempts to authenticate to the Samsung Smart TV session API on port 8001
 using a list of known default credential pairs. Reports any pair that
@@ -118,18 +118,18 @@ class Exploit(HTTPClient):
                 found_any = True
                 display_pass = password if password else "(empty)"
                 print_success(
-                    "VALID — {}:{} succeeded at {}".format(
+                    "VALID  -  {}:{} succeeded at {}".format(
                         username, display_pass, path
                     )
                 )
             else:
                 display_pass = password if password else "(empty)"
                 print_status(
-                    "  {}:{} — no match".format(username, display_pass)
+                    "  {}:{}  -  no match".format(username, display_pass)
                 )
         if not found_any:
             print_error(
-                "All default credential attempts failed — "
+                "All default credential attempts failed  -  "
                 "target does not appear to use default credentials."
             )
 

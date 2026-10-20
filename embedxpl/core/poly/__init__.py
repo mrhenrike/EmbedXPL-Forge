@@ -1,9 +1,9 @@
-# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek — https://github.com/Uniao-Geek
-"""EmbedXPL-Forge — PolyExploit Orchestrator.
+# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
+"""EmbedXPL-Forge  -  PolyExploit Orchestrator.
 
 Provides multi-language exploit execution capabilities:
-  - :class:`~embedxpl.core.poly.compiler.CCompiler` — C/C++ compile + run
-  - :class:`~embedxpl.core.poly.runner.PolyRunner`  — Ruby/Node/PHP/Bash/Perl execution
+  - :class:`~embedxpl.core.poly.compiler.CCompiler`  -  C/C++ compile + run
+  - :class:`~embedxpl.core.poly.runner.PolyRunner`   -  Ruby/Node/PHP/Bash/Perl execution
   - Combined :class:`PolyExploit` mixin for modules needing both
 
 Author: André Henrique (@mrhenrike) | União Geek

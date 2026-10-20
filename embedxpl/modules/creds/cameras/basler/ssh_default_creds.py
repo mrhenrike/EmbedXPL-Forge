@@ -4,7 +4,7 @@ from embedxpl.modules.creds.generic.ssh_default import Exploit as SSHDefault
 
 
 class Exploit(SSHDefault):
-    """Basler Camera — Default SSH Credentials.
+    """Basler Camera  -  Default SSH Credentials.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -18,7 +18,7 @@ class Exploit(SSHDefault):
         ),
         "authors": (
             "Marcin Bury <marcin[at]threat9.com>",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge port",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge port",
         ),
         "devices": (
             "Basler Camera",

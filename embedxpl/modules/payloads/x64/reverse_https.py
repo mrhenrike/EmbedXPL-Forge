@@ -1,4 +1,4 @@
-"""x64 Reverse HTTPS Shell — Python stager TLS."""
+"""x64 Reverse HTTPS Shell  -  Python stager TLS."""
 
 from embedxpl.core.exploit.payloads import BasePayload
 
@@ -6,7 +6,7 @@ from embedxpl.core.exploit.payloads import BasePayload
 class Payload(BasePayload):
     __info__ = {
         "name": "x64 Reverse HTTPS",
-        "description": "x64 TLS reverse shell stager — downloads and exec stage2 over HTTPS.",
+        "description": "x64 TLS reverse shell stager  -  downloads and exec stage2 over HTTPS.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
     }
     options = {

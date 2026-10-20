@@ -1,7 +1,7 @@
 """EV1527 / OOK Rolling Code Vehicle Replay Attack (CVE-2025-70994).
 
 Various cheap vehicle remote controls using the EV1527 OOK protocol do not
-implement rolling codes — they transmit fixed 24-bit codes that can be
+implement rolling codes  -  they transmit fixed 24-bit codes that can be
 captured and replayed.  CVE-2025-70994 covers a specific ISM-band vehicle
 remote using this protocol where the manufacturer's documentation explicitly
 states rolling codes are implemented but they are not.
@@ -69,7 +69,7 @@ class Exploit(Exploit):
     code_hex = OptString("", "Captured 24-bit EV1527 code (hex, e.g. 'A1B2C3')")
     freq_mhz = OptString("433.92", "Carrier frequency in MHz")
     hw_tool = OptString("flipper_zero", "RF hardware: flipper_zero | hackrf | rtlsdr")
-    dry_run = OptBool(True, "Dry run — describe only")
+    dry_run = OptBool(True, "Dry run  -  describe only")
 
     @mute
     def check(self) -> bool:
@@ -81,7 +81,7 @@ class Exploit(Exploit):
         hw = str(self.hw_tool)
         dry_run = bool(self.dry_run)
 
-        print_status(f"EV1527 vehicle replay attack — {_CVE}")
+        print_status(f"EV1527 vehicle replay attack  -  {_CVE}")
 
         if not code_hex:
             print_info("No code specified. Capture first with: Flipper Zero → Sub-GHz → Read")

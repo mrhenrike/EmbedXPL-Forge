@@ -1,7 +1,7 @@
-# Code of Conduct — EmbedXPL-Forge
+# Code of Conduct  -  EmbedXPL-Forge
 
 
-**Language:** **English (en-US)** — default. **Português (pt-BR):** [CODE_OF_CONDUCT.pt-BR.md](CODE_OF_CONDUCT.pt-BR.md)
+**Language:** **English (en-US)**  -  default. **Português (pt-BR):** [CODE_OF_CONDUCT.pt-BR.md](CODE_OF_CONDUCT.pt-BR.md)
 
 ## Our pledge
 

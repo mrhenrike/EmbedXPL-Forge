@@ -1,5 +1,5 @@
 # Author: André Henrique (@mrhenrike) | União Geek
-"""Sony Bravia — Unauthenticated UPnP DLNA MediaRenderer Security Audit Scanner.
+"""Sony Bravia  -  Unauthenticated UPnP DLNA MediaRenderer Security Audit Scanner.
 
 Probes the Sony Bravia non-Android TV UPnP MediaRenderer service (IPI/1.0,
 TCP port 2870) for unauthenticated access vulnerabilities:
@@ -11,7 +11,7 @@ TCP port 2870) for unauthenticated access vulnerabilities:
   5. Unauthenticated transport state read (GetTransportInfo)
   6. Unauthorized volume write test (SetVolume)
   7. Unauthorized mute test (SetMute)
-  8. URI injection test (SetAVTransportURI — SSRF prerequisite)
+  8. URI injection test (SetAVTransportURI  -  SSRF prerequisite)
 
 CONFIRMED AFFECTED:
   Sony Bravia KDL-50W665F v7.631-4.000-0106 (firmware 2023-02-14)
@@ -20,7 +20,7 @@ CONFIRMED AFFECTED:
 CVSSv3.1 (unauthorized control): AV:A/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L = 6.3
 CVSSv3.1 (SSRF when TV on):     AV:A/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N = 6.1
 
-CVE: Candidate — no assigned CVE for this specific attack class on non-Android Bravia
+CVE: Candidate  -  no assigned CVE for this specific attack class on non-Android Bravia
 Version: 1.0.0
 """
 import socket
@@ -96,7 +96,7 @@ class Exploit(HTTPClient):
 
     target      = OptIP("", "Target IPv4 address of the Sony Bravia TV")
     port        = OptPort(_UPNP_PORT, "UPnP MediaRenderer port (default 2870)")
-    test_write  = OptBool(False, "Perform write tests (SetVolume, SetMute) — may affect TV")
+    test_write  = OptBool(False, "Perform write tests (SetVolume, SetMute)  -  may affect TV")
     ssrf_uri    = OptString("", "URI to inject via SetAVTransportURI (leave empty to skip)")
     timeout     = OptInteger(8, "HTTP request timeout (seconds)")
 

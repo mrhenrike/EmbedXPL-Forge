@@ -1,9 +1,9 @@
-"""EmbedXPL-Forge — Infrastructure Orchestrator.
+"""EmbedXPL-Forge  -  Infrastructure Orchestrator.
 
 Maps (infra, context) tuples to ordered module lists and generates
 structured scan plans that the AsyncScanEngine can execute directly.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
@@ -269,7 +269,7 @@ class InfraOrchestrator:
         profiles = self.load_profiles()
 
         print("\n╔══════════════════════════════════════════════╗")
-        print("║   EmbedXPL-Forge — Infrastructure Wizard     ║")
+        print("║   EmbedXPL-Forge  -  Infrastructure Wizard     ║")
         print("╚══════════════════════════════════════════════╝\n")
 
         # Select infra type
@@ -277,7 +277,7 @@ class InfraOrchestrator:
         for i, key in enumerate(infra_types, 1):
             label = profiles[key].get("label", key)
             desc = profiles[key].get("description", "")
-            print("  [{}] {}  —  {}".format(i, key.upper(), label))
+            print("  [{}] {}   -   {}".format(i, key.upper(), label))
             if desc:
                 print("      {}".format(desc))
 
@@ -297,7 +297,7 @@ class InfraOrchestrator:
         print("\nSelect operational context for [{}]:".format(infra.upper()))
         for i, key in enumerate(contexts, 1):
             label = ctx_map[key].get("label", key)
-            print("  [{}] {}  —  {}".format(i, key, label))
+            print("  [{}] {}   -   {}".format(i, key, label))
 
         while True:
             raw = input("\nContext [1-{}]: ".format(len(contexts))).strip()
@@ -337,7 +337,7 @@ class InfraOrchestrator:
         """
         profiles = self.load_profiles()
         lines = [
-            "\nEmbedXPL-Forge — Infrastructure Taxonomy",
+            "\nEmbedXPL-Forge  -  Infrastructure Taxonomy",
             "=" * 55,
         ]
         for infra_key, infra_data in sorted(profiles.items()):

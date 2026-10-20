@@ -1,6 +1,6 @@
 """
-EmbedXPL-Forge — VxWorks WDB RPC v2 Client
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+EmbedXPL-Forge  -  VxWorks WDB RPC v2 Client
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 
 Python 3 raw-socket implementation of the Wind River WDB (Workbench Debug Bus)
 RPC protocol v2 (UDP/17185).  Used to target VxWorks-based embedded devices.

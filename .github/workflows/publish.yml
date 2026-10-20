@@ -1,4 +1,4 @@
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 #
 # Auto-publish embedxpl to PyPI whenever the version in pyproject.toml
 # is not yet available on PyPI.
@@ -71,10 +71,10 @@ jobs:
           echo "PyPI HTTP status for $VERSION: $HTTP"
           if [ "$HTTP" = "404" ]; then
             echo "should_publish=true" >> "$GITHUB_OUTPUT"
-            echo "Version $VERSION is NOT on PyPI — will publish"
+            echo "Version $VERSION is NOT on PyPI  -  will publish"
           else
             echo "should_publish=false" >> "$GITHUB_OUTPUT"
-            echo "Version $VERSION already on PyPI — skipping publish"
+            echo "Version $VERSION already on PyPI  -  skipping publish"
           fi
 
   # ------------------------------------------------------------------ #
@@ -141,7 +141,7 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if git ls-remote --tags origin "refs/tags/v$VERSION" | grep -q "v$VERSION"; then
-            echo "Tag v$VERSION already exists on remote — skipping tag creation"
+            echo "Tag v$VERSION already exists on remote  -  skipping tag creation"
           else
             git tag -a "v$VERSION" -m "EmbedXPL-Forge v$VERSION (auto-tagged by CI)"
             git push origin "v$VERSION"

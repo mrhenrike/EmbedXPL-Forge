@@ -1,11 +1,11 @@
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
-# EmbedXPL-Forge — Infrastructure Context Taxonomy
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
+# EmbedXPL-Forge  -  Infrastructure Context Taxonomy
 # Maps infrastructure types and operational contexts to module path prefixes
 # Version: 1.0.0
 ---
 profiles:
   ot:
-    label: "OT — Operational Technology"
+    label: "OT  -  Operational Technology"
     description: "ICS/SCADA/IIoT/AT environments"
     contexts:
       ics:
@@ -32,7 +32,7 @@ profiles:
           - exploits/bms/
 
   it:
-    label: "IT — Information Technology"
+    label: "IT  -  Information Technology"
     description: "Enterprise networks, servers, and virtualization"
     contexts:
       enterprise_network:
@@ -70,7 +70,7 @@ profiles:
           - creds/ups/
 
   iot:
-    label: "IoT — Internet of Things"
+    label: "IoT  -  Internet of Things"
     description: "Consumer and corporate connected devices"
     contexts:
       home:

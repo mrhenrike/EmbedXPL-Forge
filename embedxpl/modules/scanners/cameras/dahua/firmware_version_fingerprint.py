@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Dahua CCTV — Firmware Version Fingerprint Scanner.
+"""Dahua CCTV  -  Firmware Version Fingerprint Scanner.
 
 Fingerprints Dahua device firmware version, platform, and SoC via
 unauthenticated web endpoints and protocol probing.
@@ -83,7 +83,7 @@ class Exploit(HTTPClient):
                 pass
 
         if not info:
-            print_error("No information extracted — endpoints may require authentication")
+            print_error("No information extracted  -  endpoints may require authentication")
             return
 
         fw_ver = info.get("firmware_version", "")
@@ -94,7 +94,7 @@ class Exploit(HTTPClient):
                 break
 
         print_success(
-            "Fingerprint complete — {} data points extracted".format(len(info))
+            "Fingerprint complete  -  {} data points extracted".format(len(info))
         )
 
     def check(self) -> bool:

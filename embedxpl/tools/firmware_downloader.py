@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Firmware Downloader CLI Wrapper — EmbedXPL-Forge.
+"""Firmware Downloader CLI Wrapper  -  EmbedXPL-Forge.
 
 Resolves vendor firmware sources from firmware_sources.yaml and downloads
 firmware files from public portals or direct URLs.
@@ -152,7 +152,7 @@ def main() -> None:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(
         prog="firmware_downloader",
-        description="EmbedXPL-Forge — Firmware Downloader CLI",
+        description="EmbedXPL-Forge  -  Firmware Downloader CLI",
     )
     parser.add_argument("--list", action="store_true", help="List all known firmware sources")
     parser.add_argument("--vendor", type=str, help="Vendor key (e.g. hikvision, tplink)")

@@ -1,4 +1,4 @@
-"""TCP Xmas scan — firewall/IDS evasion fingerprinting.
+"""TCP Xmas scan  -  firewall/IDS evasion fingerprinting.
 
 Sends TCP packets with FIN, URG, and PSH flags set simultaneously
 (the "Xmas tree" pattern). RFC-compliant stacks should respond with
@@ -7,7 +7,7 @@ port state inference. Useful for firewall rule testing and OS fingerprinting.
 
 Requires root/administrator privileges for raw socket access.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations
@@ -46,13 +46,13 @@ class Exploit(HTTPClient):
             from scapy.all import IP, TCP, sr1, conf
             conf.verb = 0
         except ImportError:
-            print_error("scapy not installed — run: pip install scapy")
+            print_error("scapy not installed  -  run: pip install scapy")
             return
 
         try:
             port_list = [int(p.strip()) for p in self.ports.split(",") if p.strip()]
         except ValueError:
-            print_error("Invalid port list — use comma-separated integers")
+            print_error("Invalid port list  -  use comma-separated integers")
             return
 
         print_status(f"TCP Xmas scan: {self.target} ({len(port_list)} ports)...")
@@ -71,7 +71,7 @@ class Exploit(HTTPClient):
                     closed.append(port)
                     print_status(f"  Port {port}: closed (RST received)")
             except Exception as e:
-                print_error(f"  Port {port}: error — {e}")
+                print_error(f"  Port {port}: error  -  {e}")
 
         print_status(f"\nSummary: {len(open_filtered)} open/filtered, {len(closed)} closed")
         if open_filtered:
@@ -79,7 +79,7 @@ class Exploit(HTTPClient):
 
     @mute
     def check(self) -> bool:
-        """Quick check — scapy available and target is reachable."""
+        """Quick check  -  scapy available and target is reachable."""
         try:
             from scapy.all import IP, ICMP, sr1, conf
             conf.verb = 0

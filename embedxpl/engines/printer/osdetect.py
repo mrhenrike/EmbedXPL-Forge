@@ -12,13 +12,13 @@ def get_os() -> str:
     Detect the host operating system.
 
     Returns one of:
-        'linux'    – Standard Linux
-        'wsl'      – Windows Subsystem for Linux
-        'android'  – Android via Termux (or similar)
-        'windows'  – Native Windows
-        'darwin'   – macOS
-        'bsd'      – FreeBSD / OpenBSD / NetBSD
-        'unsupported' – anything else
+        'linux'    - Standard Linux
+        'wsl'      - Windows Subsystem for Linux
+        'android'  - Android via Termux (or similar)
+        'windows'  - Native Windows
+        'darwin'   - macOS
+        'bsd'      - FreeBSD / OpenBSD / NetBSD
+        'unsupported' - anything else
 
     Result is cached after the first call.
     """

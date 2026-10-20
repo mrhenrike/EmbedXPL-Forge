@@ -24,8 +24,8 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 # ── Colour palette (matches MikrotikAPI-BF reference style) ──────────────────
 C_GREEN_CORE  = "#4CAF50"   # mandatory component, covered
-C_ORANGE      = "#FF9800"   # access vector  — covered
-C_ORANGE_RED  = "#E65100"   # access vector  — NOT covered
+C_ORANGE      = "#FF9800"   # access vector   -  covered
+C_ORANGE_RED  = "#E65100"   # access vector   -  NOT covered
 C_YELLOW      = "#FDD835"   # optional component
 C_CYAN        = "#26C6DA"   # access target (device/system)
 C_GREY_BG     = "#F5F5F5"   # canvas background
@@ -87,8 +87,8 @@ def _arrow(ax, x0, y0, x1, y1):
 def _legend(ax, x, y, covered_count, total_count, title):
     patches = [
         mpatches.Patch(color=C_GREEN_CORE,  label="Mandatory component (covered)"),
-        mpatches.Patch(color=C_ORANGE,      label="Access vector — covered ✓"),
-        mpatches.Patch(color=C_ORANGE_RED,  label="Access vector — NOT covered ✗"),
+        mpatches.Patch(color=C_ORANGE,      label="Access vector  -  covered ✓"),
+        mpatches.Patch(color=C_ORANGE_RED,  label="Access vector  -  NOT covered ✗"),
         mpatches.Patch(color=C_YELLOW,      label="Optional component"),
         mpatches.Patch(color=C_CYAN,        label="Access target"),
     ]
@@ -107,7 +107,7 @@ def _legend(ax, x, y, covered_count, total_count, title):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Diagram 1 — SOHO Router Attack Surface
+# Diagram 1  -  SOHO Router Attack Surface
 # ─────────────────────────────────────────────────────────────────────────────
 
 def diagram_soho_router():
@@ -116,13 +116,13 @@ def diagram_soho_router():
     fig.patch.set_facecolor(C_GREY_BG)
     ax.set_xlim(0, 14); ax.set_ylim(0, 9)
     ax.axis("off")
-    fig.suptitle("EmbedXPL-Forge v1.0.0 — SOHO Router Attack Surface Map",
+    fig.suptitle("EmbedXPL-Forge v1.0.0  -  SOHO Router Attack Surface Map",
                  fontsize=13, fontweight="bold", color=C_DARK_TEXT, y=0.97)
 
     cx, cy = 7.0, 4.5
     _draw_core(ax, cx, cy, "SOHO Gateway\nSoC · NAND · Linux\nvendor firmware")
 
-    # access vectors — left side
+    # access vectors  -  left side
     vectors_left = [
         (4.5, 7.5, "telnet :23",         C_ORANGE,     "check"),
         (3.2, 6.5, "ssh :22",            C_ORANGE,     "check"),
@@ -133,7 +133,7 @@ def diagram_soho_router():
         (4.5, 1.5, "upnp/ssdp :1900",   C_ORANGE,     "check"),
     ]
 
-    # access vectors — right side
+    # access vectors  -  right side
     vectors_right = [
         (9.5, 7.5, "console / serial",   C_ORANGE_RED, "cross"),
         (10.8, 6.5, "jtag / uart",       C_ORANGE_RED, "cross"),
@@ -167,7 +167,7 @@ def diagram_soho_router():
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Diagram 2 — TP-Link Attack Surface (APT28 Campaign)
+# Diagram 2  -  TP-Link Attack Surface (APT28 Campaign)
 # ─────────────────────────────────────────────────────────────────────────────
 
 def diagram_tplink_apt28():
@@ -175,7 +175,7 @@ def diagram_tplink_apt28():
     ax.set_facecolor(C_GREY_BG); fig.patch.set_facecolor(C_GREY_BG)
     ax.set_xlim(0, 14); ax.set_ylim(0, 9); ax.axis("off")
     fig.suptitle(
-        "EmbedXPL-Forge — TP-Link Attack Surface Map with APT28/GRU Coverage",
+        "EmbedXPL-Forge  -  TP-Link Attack Surface Map with APT28/GRU Coverage",
         fontsize=12, fontweight="bold", color=C_DARK_TEXT, y=0.97)
 
     cx, cy = 7.0, 5.0
@@ -222,7 +222,7 @@ def diagram_tplink_apt28():
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Diagram 3 — MikroTik Attack Surface
+# Diagram 3  -  MikroTik Attack Surface
 # ─────────────────────────────────────────────────────────────────────────────
 
 def diagram_mikrotik():
@@ -230,14 +230,14 @@ def diagram_mikrotik():
     ax.set_facecolor(C_GREY_BG); fig.patch.set_facecolor(C_GREY_BG)
     ax.set_xlim(0, 14); ax.set_ylim(0, 9); ax.axis("off")
     fig.suptitle(
-        "EmbedXPL-Forge — MikroTik RouterOS Attack Surface Map with Coverage Status",
+        "EmbedXPL-Forge  -  MikroTik RouterOS Attack Surface Map with Coverage Status",
         fontsize=12, fontweight="bold", color=C_DARK_TEXT, y=0.97)
 
     cx, cy = 7.0, 5.0
     _draw_core(ax, cx, cy, "MikroTik RouterOS\nMIPS · Kernel 3.x\nSwitch ASIC")
 
     vectors = [
-        # left — covered
+        # left  -  covered
         (4.2, 7.8, "winbox :8291",        C_ORANGE,     "check"),
         (2.8, 6.8, "ssh :22",             C_ORANGE,     "check"),
         (4.2, 5.8, "telnet :23",          C_ORANGE,     "check"),
@@ -245,7 +245,7 @@ def diagram_mikrotik():
         (4.2, 3.8, "ftp :21",             C_ORANGE,     "check"),
         (2.8, 2.8, "http/https :80/:443", C_ORANGE,     "check"),
         (4.2, 1.8, "snmp :161",           C_ORANGE,     "check"),
-        # right — not covered / partial
+        # right  -  not covered / partial
         (9.8, 7.8, "dude :8291",          C_ORANGE_RED, "cross"),
         (11.2, 6.8, "netinstall/serial",  C_ORANGE_RED, "cross"),
         (9.8, 5.8, "ipsec vpn",           C_YELLOW,     None),
@@ -277,7 +277,7 @@ def diagram_mikrotik():
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Diagram 4 — GPON ONT Attack Surface (Huawei EG8145)
+# Diagram 4  -  GPON ONT Attack Surface (Huawei EG8145)
 # ─────────────────────────────────────────────────────────────────────────────
 
 def diagram_gpon_ont():
@@ -285,14 +285,14 @@ def diagram_gpon_ont():
     ax.set_facecolor(C_GREY_BG); fig.patch.set_facecolor(C_GREY_BG)
     ax.set_xlim(0, 15); ax.set_ylim(0, 9); ax.axis("off")
     fig.suptitle(
-        "EmbedXPL-Forge — GPON ONT Attack Surface Map (Huawei EG8145X6-10 / EG8145V5-V2)",
+        "EmbedXPL-Forge  -  GPON ONT Attack Surface Map (Huawei EG8145X6-10 / EG8145V5-V2)",
         fontsize=12, fontweight="bold", color=C_DARK_TEXT, y=0.97)
 
     cx, cy = 7.5, 5.0
     _draw_core(ax, cx, cy, "GPON ONT / CPE\nDopra Linux 5.10\nBBSP/ASP webstack\nHuawei EG8145")
 
     vectors = [
-        # left — covered
+        # left  -  covered
         (4.5, 8.0, "web UI HTTP :80",         C_ORANGE,     "check"),
         (2.9, 7.1, "ssh :22 (filtered)",       C_ORANGE,     "check"),
         (4.5, 6.1, "telnet :23 (filtered)",    C_ORANGE,     "check"),
@@ -300,7 +300,7 @@ def diagram_gpon_ont():
         (4.5, 4.0, "snmp :161",                C_ORANGE,     "check"),
         (2.9, 3.0, "tr-069 :37443",            C_YELLOW,     None),
         (4.5, 2.0, "csrf non-validation",      C_ORANGE,     "check"),
-        # right — not covered / partial
+        # right  -  not covered / partial
         (10.5, 8.0, "gpon/xgs-pon if",        C_ORANGE_RED, "cross"),
         (12.1, 7.1, "omci channel",            C_ORANGE_RED, "cross"),
         (10.5, 6.1, "uart/jtag physical",      C_ORANGE_RED, "cross"),
@@ -333,7 +333,7 @@ def diagram_gpon_ont():
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Diagram 5 — APT Group Attack Chain (overview)
+# Diagram 5  -  APT Group Attack Chain (overview)
 # ─────────────────────────────────────────────────────────────────────────────
 
 def diagram_apt_chain():
@@ -341,7 +341,7 @@ def diagram_apt_chain():
     ax.set_facecolor(C_GREY_BG); fig.patch.set_facecolor(C_GREY_BG)
     ax.set_xlim(0, 15); ax.set_ylim(0, 9); ax.axis("off")
     fig.suptitle(
-        "EmbedXPL-Forge — APT Group Attack Chains Against Network Devices",
+        "EmbedXPL-Forge  -  APT Group Attack Chains Against Network Devices",
         fontsize=12, fontweight="bold", color=C_DARK_TEXT, y=0.97)
 
     # central node = EmbedXPL engine
@@ -398,7 +398,7 @@ def diagram_apt_chain():
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Diagram 6 — Module Architecture Overview
+# Diagram 6  -  Module Architecture Overview
 # ─────────────────────────────────────────────────────────────────────────────
 
 def diagram_module_architecture():
@@ -406,7 +406,7 @@ def diagram_module_architecture():
     ax.set_facecolor(C_GREY_BG); fig.patch.set_facecolor(C_GREY_BG)
     ax.set_xlim(0, 14); ax.set_ylim(0, 8); ax.axis("off")
     fig.suptitle(
-        "EmbedXPL-Forge v1.0.0 — Module Architecture Overview",
+        "EmbedXPL-Forge v1.0.0  -  Module Architecture Overview",
         fontsize=12, fontweight="bold", color=C_DARK_TEXT, y=0.97)
 
     # core engine

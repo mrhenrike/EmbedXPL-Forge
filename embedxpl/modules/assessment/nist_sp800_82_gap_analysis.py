@@ -21,21 +21,21 @@ from embedxpl.core.exploit import *
 
 
 _SP800_82_CONTROL_FAMILIES = {
-    "AC": "Access Control — Limit access to OT systems to authorized users",
-    "AU": "Audit and Accountability — Collect and protect OT system audit logs",
-    "CM": "Configuration Management — Baseline and change-manage OT configs",
-    "IA": "Identification and Authentication — Authenticate OT users/devices",
-    "IR": "Incident Response — OT-specific incident response capability",
-    "MA": "Maintenance — Secure maintenance on OT systems",
-    "MP": "Media Protection — Protect OT removable media",
-    "PE": "Physical and Environmental Protection — Physical OT access controls",
-    "PL": "Planning — OT security planning and policies",
-    "PS": "Personnel Security — OT personnel screening and training",
-    "RA": "Risk Assessment — Identify and assess OT security risks",
-    "CA": "Assessment, Authorization, Monitoring — OT security assessments",
-    "SC": "System and Communications Protection — OT network segmentation",
-    "SI": "System and Information Integrity — Patch management / malware defense",
-    "SA": "System and Services Acquisition — OT security in procurement",
+    "AC": "Access Control  -  Limit access to OT systems to authorized users",
+    "AU": "Audit and Accountability  -  Collect and protect OT system audit logs",
+    "CM": "Configuration Management  -  Baseline and change-manage OT configs",
+    "IA": "Identification and Authentication  -  Authenticate OT users/devices",
+    "IR": "Incident Response  -  OT-specific incident response capability",
+    "MA": "Maintenance  -  Secure maintenance on OT systems",
+    "MP": "Media Protection  -  Protect OT removable media",
+    "PE": "Physical and Environmental Protection  -  Physical OT access controls",
+    "PL": "Planning  -  OT security planning and policies",
+    "PS": "Personnel Security  -  OT personnel screening and training",
+    "RA": "Risk Assessment  -  Identify and assess OT security risks",
+    "CA": "Assessment, Authorization, Monitoring  -  OT security assessments",
+    "SC": "System and Communications Protection  -  OT network segmentation",
+    "SI": "System and Information Integrity  -  Patch management / malware defense",
+    "SA": "System and Services Acquisition  -  OT security in procurement",
 }
 
 _HIGH_PRIORITY = ("AC", "IA", "SC", "SI", "IR", "CM")
@@ -69,7 +69,7 @@ class Exploit(Exploit):
         profile = str(self.profile).lower()
         show_all = bool(self.show_all)
 
-        print_status(f"NIST SP 800-82 Rev 3 Gap Analysis — Profile: {profile.upper()}")
+        print_status(f"NIST SP 800-82 Rev 3 Gap Analysis  -  Profile: {profile.upper()}")
         print_info("Control families sorted by priority for OT environments:")
         print_info("=" * 65)
 

@@ -7,7 +7,7 @@ Enhanced advisor with:
 - Auto-tuning of timing profiles based on scan history
 - GPU-accelerated logits via ComputeBackend (A3)
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 Version: 0.2.0
 """
 

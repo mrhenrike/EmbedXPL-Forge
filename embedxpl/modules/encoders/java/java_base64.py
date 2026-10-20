@@ -1,4 +1,4 @@
-"""Java base64 encoder — gera source Java com payload embutido."""
+"""Java base64 encoder  -  gera source Java com payload embutido."""
 
 import base64
 from embedxpl.core.exploit.encoders import BaseEncoder

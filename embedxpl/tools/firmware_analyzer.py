@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Firmware Analyzer — EmbedXPL-Forge v2.0.
+"""Firmware Analyzer  -  EmbedXPL-Forge v2.0.
 
 Wraps binwalk, unblob, Firmwalker, and EMBA to provide a unified
 firmware analysis pipeline for extracted IoT/OT firmware images.
@@ -293,7 +293,7 @@ def main() -> None:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(
         prog="firmware_analyzer",
-        description="EmbedXPL-Forge — Firmware Analyzer (binwalk/unblob/Firmwalker/EMBA)",
+        description="EmbedXPL-Forge  -  Firmware Analyzer (binwalk/unblob/Firmwalker/EMBA)",
     )
     parser.add_argument("--file", required=True, help="Path to firmware binary to analyze")
     parser.add_argument(

@@ -1,6 +1,6 @@
 """ML attack advisor, response classifier, banner fingerprinter, and GPU hints.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from embedxpl.core.ml.advisor import AdvisorContext, AttackAdvisor, ScanOutcome

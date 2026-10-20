@@ -65,14 +65,14 @@ python --version    # must be >= 3.8
 **Fix options:**
 
 ```bash
-# Option 1 — non-interactive mode (no TTY required)
+# Option 1  -  non-interactive mode (no TTY required)
 python -m embedxpl -m exploits/routers/tplink/wr841n_credential_disclosure_cve_2023_50224 \
     -s "target 192.168.1.1" -s "port 80"
 
-# Option 2 — Docker: allocate a pseudo-TTY
+# Option 2  -  Docker: allocate a pseudo-TTY
 docker run -it --rm embedxpl-forge embedxpl
 
-# Option 3 — SSH: request a TTY
+# Option 3  -  SSH: request a TTY
 ssh -t user@host 'embedxpl'
 ```
 
@@ -111,7 +111,7 @@ This is expected behavior. `Ctrl+C` cancels the current operation. To exit the s
 
 ## Python version issues
 
-### Python 3.13+ — `telnetlib` removed
+### Python 3.13+  -  `telnetlib` removed
 
 ```
 ModuleNotFoundError: No module named 'telnetlib'
@@ -145,7 +145,7 @@ python --version
 ### `readline` not available (Windows)
 
 ```
-[WARN] readline not available — tab completion disabled
+[WARN] readline not available  -  tab completion disabled
 ```
 
 This is a non-critical warning on Windows. The interpreter uses a shim that disables tab completion but all commands work normally. To enable tab completion on Windows, install `pyreadline3`:
@@ -158,7 +158,7 @@ pip install pyreadline3
 
 ## Protocol-specific issues
 
-### SSH — `No existing session` / `Authentication failed`
+### SSH  -  `No existing session` / `Authentication failed`
 
 ```
 [-] Authentication failed for 192.168.1.1:22
@@ -176,7 +176,7 @@ pip install pyreadline3
 
 ---
 
-### Telnet — connection refused
+### Telnet  -  connection refused
 
 ```
 [-] Connection refused: 192.168.1.1:23
@@ -196,7 +196,7 @@ pip install telnetlib3
 
 ---
 
-### HTTP/HTTPS — SSL certificate errors
+### HTTP/HTTPS  -  SSL certificate errors
 
 ```
 ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED]
@@ -216,7 +216,7 @@ exf> setg ssl_verify false
 
 ---
 
-### SNMP — no response
+### SNMP  -  no response
 
 ```
 [-] SNMP: no response from 192.168.1.1 (timeout after 5s)
@@ -233,7 +233,7 @@ exf> setg ssl_verify false
 
 ---
 
-### Modbus TCP — connection errors
+### Modbus TCP  -  connection errors
 
 ```
 [-] Modbus: connection refused on 192.168.1.100:502
@@ -249,7 +249,7 @@ If the port is filtered, the target may require direct serial RS-485 (Modbus RTU
 
 ---
 
-### FTP — `530 Login incorrect`
+### FTP  -  `530 Login incorrect`
 
 ```
 [-] FTP authentication failed: 530 Login incorrect
@@ -359,7 +359,7 @@ embedxpl-nse run --target 192.168.1.1 --scripts hikvision-vuln --ports 80,443,80
 
 ## CVE-specific issues
 
-### CVE-2022-40684 (FortiOS auth bypass) — HTTP 404
+### CVE-2022-40684 (FortiOS auth bypass)  -  HTTP 404
 
 ```
 [-] HTTP 404 on /api/v2/cmdb/system/admin/admin
@@ -373,11 +373,11 @@ exf (fortios_version_check) > set target 192.168.1.1
 exf (fortios_version_check) > run
 ```
 
-Affected versions: FortiOS 5.x, 6.x, 7.0.0–7.0.6, 7.2.0–7.2.1.
+Affected versions: FortiOS 5.x, 6.x, 7.0.0-7.0.6, 7.2.0-7.2.1.
 
 ---
 
-### CVE-2021-36260 (Hikvision RCE) — command not executed
+### CVE-2021-36260 (Hikvision RCE)  -  command not executed
 
 ```
 [*] Sent payload but no connection received on 0.0.0.0:4444
@@ -394,7 +394,7 @@ Affected versions: FortiOS 5.x, 6.x, 7.0.0–7.0.6, 7.2.0–7.2.1.
 
 ---
 
-### CVE-2024-3400 (PAN-OS GlobalProtect) — no session
+### CVE-2024-3400 (PAN-OS GlobalProtect)  -  no session
 
 ```
 [-] No shell received. Target may be patched.
@@ -412,7 +412,7 @@ exf (panos_version_check) > check
 
 ---
 
-### CVE-2023-27997 (FortiGate SSL-VPN heap overflow) — crash instead of shell
+### CVE-2023-27997 (FortiGate SSL-VPN heap overflow)  -  crash instead of shell
 
 The heap overflow may crash the target before the payload executes on certain firmware variants. Use `check` first:
 
@@ -420,7 +420,7 @@ The heap overflow may crash the target before the payload executes on certain fi
 exf> use exploits/firewalls/fortinet/fortigate_ssl_vpn_heap_overflow_cve_2023_27997
 exf (fortigate_ssl_vpn_heap_overflow_cve_2023_27997) > set target 192.168.1.1
 exf (fortigate_ssl_vpn_heap_overflow_cve_2023_27997) > check
-[+] Target is vulnerable — proceed with run
+[+] Target is vulnerable  -  proceed with run
 exf (fortigate_ssl_vpn_heap_overflow_cve_2023_27997) > run
 ```
 
@@ -428,7 +428,7 @@ Affected versions: FortiOS 6.0.x, 6.2.x, 6.4.x < 6.4.13, 7.0.x < 7.0.12, 7.2.x <
 
 ---
 
-### CVE-2018-14847 (MikroTik Winbox) — connection refused
+### CVE-2018-14847 (MikroTik Winbox)  -  connection refused
 
 ```
 [-] Connection refused on port 8291
@@ -484,7 +484,7 @@ exf> compute cpu
 
 ---
 
-### `compute hybrid` — only CPU work happening
+### `compute hybrid`  -  only CPU work happening
 
 Hybrid mode uses GPU for ML-accelerated modules (credential ranking, fuzzing entropy) and CPU for all standard exploit modules. If all selected modules are standard exploits, hybrid behaves identically to CPU.
 

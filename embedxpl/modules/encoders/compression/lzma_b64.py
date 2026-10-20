@@ -9,7 +9,7 @@ from embedxpl.core.exploit.payloads import Architectures
 class Encoder(BaseEncoder):
     __info__ = {
         "name": "LZMA2+Base64 Encoder",
-        "description": "LZMA2 compress then base64 — best compression ratio.",
+        "description": "LZMA2 compress then base64  -  best compression ratio.",
         "authors": ("André Henrike (@mrhenrike)", "União Geek"),
         "evasion_score": 4,
     }

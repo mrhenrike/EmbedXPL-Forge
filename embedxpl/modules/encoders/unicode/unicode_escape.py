@@ -7,7 +7,7 @@ from embedxpl.core.exploit.payloads import Architectures
 class Encoder(BaseEncoder):
     __info__ = {
         "name": "Unicode Escape Encoder",
-        "description": "Encodes bytes as \\u00XX unicode escapes — for JS/JSON/YAML contexts.",
+        "description": "Encodes bytes as \\u00XX unicode escapes  -  for JS/JSON/YAML contexts.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
         "evasion_score": 4,
     }

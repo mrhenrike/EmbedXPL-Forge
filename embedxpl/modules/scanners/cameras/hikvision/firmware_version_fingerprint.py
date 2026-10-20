@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Hikvision Firmware Version Fingerprinter — HTTP/ISAPI enumeration.
+"""Hikvision Firmware Version Fingerprinter  -  HTTP/ISAPI enumeration.
 
 Identifies Hikvision device model, firmware version, and build date via
 HTTP and ISAPI endpoints. Maps discovered versions to known CVEs and

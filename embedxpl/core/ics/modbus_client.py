@@ -1,6 +1,6 @@
 """
-EmbedXPL-Forge — Modbus/TCP Client
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+EmbedXPL-Forge  -  Modbus/TCP Client
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 
 Python 3 raw-socket implementation of the Modbus/TCP protocol.
 Ported and modernised from ISF ModbusClient (original: WenZhe Zhu / ICSsploit).
@@ -125,7 +125,7 @@ class ModbusClient:
     # ------------------------------------------------------------------ #
 
     def read_coils(self, address: int, count: int) -> Optional[List[int]]:
-        """FC1 — Read Coil Status.
+        """FC1  -  Read Coil Status.
 
         Args:
             address: Starting coil address.
@@ -146,7 +146,7 @@ class ModbusClient:
         return bits[:count]
 
     def read_discrete_inputs(self, address: int, count: int) -> Optional[List[int]]:
-        """FC2 — Read Discrete Inputs.
+        """FC2  -  Read Discrete Inputs.
 
         Args:
             address: Starting input address.
@@ -167,7 +167,7 @@ class ModbusClient:
         return bits[:count]
 
     def read_holding_registers(self, address: int, count: int) -> Optional[List[int]]:
-        """FC3 — Read Holding Registers.
+        """FC3  -  Read Holding Registers.
 
         Args:
             address: Starting register address.
@@ -187,7 +187,7 @@ class ModbusClient:
         return registers
 
     def read_input_registers(self, address: int, count: int) -> Optional[List[int]]:
-        """FC4 — Read Input Registers.
+        """FC4  -  Read Input Registers.
 
         Args:
             address: Starting register address.
@@ -211,7 +211,7 @@ class ModbusClient:
     # ------------------------------------------------------------------ #
 
     def write_single_coil(self, address: int, value: bool) -> bool:
-        """FC5 — Write Single Coil.
+        """FC5  -  Write Single Coil.
 
         Args:
             address: Coil address.
@@ -225,11 +225,11 @@ class ModbusClient:
         return self._send_recv(pdu) is not None
 
     def write_single_register(self, address: int, value: int) -> bool:
-        """FC6 — Write Single Register.
+        """FC6  -  Write Single Register.
 
         Args:
             address: Register address.
-            value: 16-bit register value (0x0000–0xFFFF).
+            value: 16-bit register value (0x0000-0xFFFF).
 
         Returns:
             True if the register was written, False otherwise.
@@ -238,7 +238,7 @@ class ModbusClient:
         return self._send_recv(pdu) is not None
 
     def write_multiple_coils(self, address: int, values: List[int]) -> bool:
-        """FC15 — Write Multiple Coils.
+        """FC15  -  Write Multiple Coils.
 
         Args:
             address: Starting coil address.
@@ -257,7 +257,7 @@ class ModbusClient:
         return self._send_recv(pdu) is not None
 
     def write_multiple_registers(self, address: int, values: List[int]) -> bool:
-        """FC16 — Write Multiple Registers.
+        """FC16  -  Write Multiple Registers.
 
         Args:
             address: Starting register address.
@@ -277,7 +277,7 @@ class ModbusClient:
     # ------------------------------------------------------------------ #
 
     def read_device_identification(self) -> Optional[dict]:
-        """FC43/0x0E — Read Device Identification (MEI).
+        """FC43/0x0E  -  Read Device Identification (MEI).
 
         Returns:
             Dict with 'vendor', 'product_code', 'version' or None on error.

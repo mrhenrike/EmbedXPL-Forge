@@ -4,7 +4,7 @@ from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
-    """Basler Camera — Default Web Interface Credentials (HTTP Form).
+    """Basler Camera  -  Default Web Interface Credentials (HTTP Form).
 
     Performs dictionary attack against the Basler camera login form via
     the /cgi-bin/auth_if.cgi?Login endpoint.
@@ -21,7 +21,7 @@ class Exploit(HTTPClient):
         ),
         "authors": (
             "Marcin Bury <marcin[at]threat9.com>",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge port",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge port",
         ),
         "devices": (
             "Basler Camera",

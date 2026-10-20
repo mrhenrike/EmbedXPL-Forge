@@ -1,6 +1,6 @@
 # Módulos ICS / OT Industrial
 
-**Idioma:** Português (pt-BR). **English:** — *(página exclusiva pt-BR)*
+**Idioma:** Português (pt-BR). **English:**  -  *(página exclusiva pt-BR)*
 
 ---
 
@@ -91,7 +91,7 @@ exf (Modbus TCP Scanner) > run
 [*] Reading holding registers (FC03): addresses 0-49
 [+] Register 0: 0x00FF (255)
 [+] Register 1: 0x1234 (4660)
-[+] Modbus scan complete — 2 active coils, 2 populated registers
+[+] Modbus scan complete  -  2 active coils, 2 populated registers
 ```
 
 ---
@@ -141,7 +141,7 @@ exf (S7comm Scanner) > run
     - DB1 (Data Block 1)
     - DB100 (Data Block 100)
 [*] CPU State: RUN
-[!] S7comm: No authentication required — full read/write access
+[!] S7comm: No authentication required  -  full read/write access
 ```
 
 ---
@@ -183,7 +183,7 @@ exf (DNP3 Scanner) > run
     Destination: 1 (master)
     DNP3 version: 3
 [*] Reading binary inputs (Group 1)...
-[+] DNP3 scan successful — device is accessible without authentication
+[+] DNP3 scan successful  -  device is accessible without authentication
 ```
 
 ---
@@ -211,7 +211,7 @@ exf (UR PolyScope5 Dashboard Command Injection) > run
 
 **Descrição:** CVE-2026-8153 é uma injeção de comando no servidor Dashboard do Universal Robots PolyScope 5. A interface de dashboard na porta 29999 aceita comandos diretamente sem sanitização adequada, permitindo RCE como root no robô.
 
-**Dispositivos afetados:** Universal Robots UR3e, UR5e, UR10e, UR16e — PolyScope 5 antes da versão 5.13.
+**Dispositivos afetados:** Universal Robots UR3e, UR5e, UR10e, UR16e  -  PolyScope 5 antes da versão 5.13.
 
 ---
 
@@ -247,8 +247,8 @@ exf (Rockwell PLC Discover) > set target 192.168.100.0/24
 exf (Rockwell PLC Discover) > run
 [*] Running module ...
 [*] Scanning 192.168.100.0/24 for Rockwell PLCs (EtherNet/IP port 44818)...
-[+] 192.168.100.40 — 1756-L73 LOGIX5573 (MicroLogix 1400)
-[+] 192.168.100.41 — 1769-L33ER CompactLogix L33ER
+[+] 192.168.100.40  -  1756-L73 LOGIX5573 (MicroLogix 1400)
+[+] 192.168.100.41  -  1769-L33ER CompactLogix L33ER
 [+] Found 2 Rockwell PLC(s)
 ```
 
@@ -261,9 +261,9 @@ exf (PROFINET DCP Scanner) > set target 192.168.100.0/24
 exf (PROFINET DCP Scanner) > run
 [*] Running module ...
 [*] Sending PROFINET DCP Identify All...
-[+] 192.168.100.50 — Siemens SCALANCE X208 (switch industrial)
-[+] 192.168.100.51 — Siemens S7-1515-2 PN (PLC)
-[+] 192.168.100.52 — Phoenix Contact FL SWITCH 2108 (switch)
+[+] 192.168.100.50  -  Siemens SCALANCE X208 (switch industrial)
+[+] 192.168.100.51  -  Siemens S7-1515-2 PN (PLC)
+[+] 192.168.100.52  -  Phoenix Contact FL SWITCH 2108 (switch)
 [+] Found 3 PROFINET device(s)
 ```
 

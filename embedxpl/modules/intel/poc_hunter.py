@@ -1,4 +1,4 @@
-"""POC-Hunter / PoC Finder — Multi-Source Public PoC Discovery.
+"""POC-Hunter / PoC Finder  -  Multi-Source Public PoC Discovery.
 
 Searches multiple sources for public PoC exploits related to a CVE or keyword:
   - GitHub Search API (via unauthenticated public search)
@@ -83,10 +83,10 @@ def search_exploitdb(keyword: str, timeout: float = 15) -> list[dict[str, Any]]:
 
 
 class Exploit(Exploit):
-    """POC-Hunter — Multi-source public PoC discovery (GitHub + EDB + nomi-sec)."""
+    """POC-Hunter  -  Multi-source public PoC discovery (GitHub + EDB + nomi-sec)."""
 
     __info__ = {
-        "name": "POC-Hunter — Multi-Source Public PoC Discovery",
+        "name": "POC-Hunter  -  Multi-Source Public PoC Discovery",
         "description": (
             "Searches GitHub, Exploit-DB, and nomi-sec for public PoC exploits "
             "matching a CVE ID or keyword. Aggregates results from multiple indices. "
@@ -101,7 +101,7 @@ class Exploit(Exploit):
             "https://github.com/l0n3m4n/pocfinder",
             "https://github.com/4m3rr0r/poc-finder",
         ),
-        "devices": ("Intelligence gathering — any vulnerability keyword",),
+        "devices": ("Intelligence gathering  -  any vulnerability keyword",),
     }
 
     query = OptString("CVE-2024-12345", "CVE ID or keyword to search")
@@ -115,14 +115,14 @@ class Exploit(Exploit):
         query = str(self.query).strip()
         timeout = float(self.timeout)
 
-        print_status(f"POC-Hunter lookup — {query}")
+        print_status(f"POC-Hunter lookup  -  {query}")
 
         # GitHub
         print_status("Searching GitHub API…")
         gh_results = search_github_api(query, timeout)
         if gh_results:
             for r in gh_results[:5]:
-                print_success(f"  [GitHub ★{r.get('stargazers_count',0):>4}] {r.get('html_url','')} — {r.get('description','')[:60]}")
+                print_success(f"  [GitHub ★{r.get('stargazers_count',0):>4}] {r.get('html_url','')}  -  {r.get('description','')[:60]}")
         else:
             print_info("  GitHub: no results (may be rate-limited)")
 

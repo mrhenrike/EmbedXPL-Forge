@@ -1,4 +1,4 @@
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """Mirai/Condi CnC beacon and infrastructure detector.
 
 Probes a target host for signs of an active Mirai/Condi Command-and-Control
@@ -30,9 +30,9 @@ Source references:
   jgamblin-mirai-source/scripts/db.sql (MySQL C2 schema)
 
 MITRE ATT&CK:
-  T1219  — Remote Access Software (C2 infrastructure)
-  T1571  — Non-Standard Port
-  T1046  — Network Service Discovery
+  T1219   -  Remote Access Software (C2 infrastructure)
+  T1571   -  Non-Standard Port
+  T1046   -  Network Service Discovery
 
 Version: 1.0.0
 """
@@ -59,7 +59,7 @@ from embedxpl.core.exploit import (
     print_warning,
 )
 
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 
 logger = logging.getLogger("embedxpl.scanners.threat_detection.mirai_c2_beacon_detect")
 
@@ -72,7 +72,7 @@ _MIRAI_CNC_PORT: int = 3778
 _MIRAI_SCAN_CB_PORT: int = 9555
 
 # Mirai CnC bot ping handshake: type=0x00, len=0x00000001, data=0x00
-# Observed in cnc/main.go / cnc/bot.go — first bytes sent to connecting bot
+# Observed in cnc/main.go / cnc/bot.go  -  first bytes sent to connecting bot
 _MIRAI_CNC_PING: bytes = b"\x00\x00\x00\x00\x01\x00"
 
 # MySQL banner markers consistent with a Mirai CnC server

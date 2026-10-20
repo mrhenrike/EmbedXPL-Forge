@@ -18,7 +18,7 @@ class Exploit(SSHDefault):
     __info__ = {{
         "name": "{dn} Default SSH Creds",
         "description": "Dictionary attack with default credentials against {dn} SSH service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("{dn}",),
     }}
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")
@@ -37,7 +37,7 @@ class Exploit(TelnetDefault):
     __info__ = {{
         "name": "{dn} Default Telnet Creds",
         "description": "Dictionary attack with default credentials against {dn} Telnet service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("{dn}",),
     }}
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")
@@ -56,7 +56,7 @@ class Exploit(FTPDefault):
     __info__ = {{
         "name": "{dn} Default FTP Creds",
         "description": "Dictionary attack with default credentials against {dn} FTP service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("{dn}",),
     }}
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")
@@ -75,7 +75,7 @@ class Exploit(HTTPBasicDigestDefault):
     __info__ = {{
         "name": "{dn} Default Web Interface Creds",
         "description": "Dictionary attack against {dn} Web Interface (HTTP Basic/Digest Auth).",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("{dn}",),
     }}
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

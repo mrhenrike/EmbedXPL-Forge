@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""VxWorks RTOS Scanner — WdbRPC v2 (UDP/17185) device detection.
+"""VxWorks RTOS Scanner  -  WdbRPC v2 (UDP/17185) device detection.
 
 Wind River VxWorks is the world's most widely deployed RTOS, found in
 PLCs, industrial controllers, avionics, medical devices, and network
@@ -15,7 +15,7 @@ parses the response to identify:
   - Target type, memory size
   - Operating system build date
 
-WDB on UDP/17185 has no authentication — any device responding is
+WDB on UDP/17185 has no authentication  -  any device responding is
 potentially exploitable for full memory access and code execution.
 
 Protocol: WdbRPC v2 (Wind DeBug RPC) over UDP/17185
@@ -53,7 +53,7 @@ _WDB_PING_REQ = struct.pack(
     0,             # verifier flavor: AUTH_NULL
 ) + struct.pack("!I", 0)  # verifier length + WDB header sequence
 
-# WdbRPC v2 GetInfo request (procedure 5 — WdbInfoGet)
+# WdbRPC v2 GetInfo request (procedure 5  -  WdbInfoGet)
 _WDB_INFO_REQ = struct.pack(
     "!IIIIIIIII",
     2,             # XID
@@ -163,7 +163,7 @@ def _sizeof_fmt(num: int) -> str:
 
 
 class Exploit(BaseExploit):
-    """VxWorks RTOS WDB Agent Scanner — UDP/17185 device detection.
+    """VxWorks RTOS WDB Agent Scanner  -  UDP/17185 device detection.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -174,12 +174,12 @@ class Exploit(BaseExploit):
         "description": (
             "Sends WdbRPC v2 Ping and GetInfo requests to UDP/17185 to detect "
             "Wind River VxWorks devices with the WDB debug agent enabled. "
-            "WDB has no authentication — a responding device is directly exploitable. "
+            "WDB has no authentication  -  a responding device is directly exploitable. "
             "Ported from ISF icssploit vxworks_6_scan.py using raw sockets (no Scapy)."
         ),
         "authors": (
             "wenzhe zhu <jtrkid[at]gmail.com> (ISF icssploit)",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge port",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge port",
         ),
         "references": (
             "https://nvd.nist.gov/vuln/detail/CVE-2010-2967",
@@ -205,7 +205,7 @@ class Exploit(BaseExploit):
         print_status(f"[VxWorks] Probing {self.target}:{self.port}/UDP for WDB agent...")
         result = _wdb_probe(self.target, self.port, self.timeout)
         if result:
-            print_success(f"[VxWorks] WDB agent detected on {self.target}:{self.port}/UDP — device is UNPROTECTED")
+            print_success(f"[VxWorks] WDB agent detected on {self.target}:{self.port}/UDP  -  device is UNPROTECTED")
             for key, val in result.items():
                 if isinstance(val, list):
                     print_success(f"  {key}: {', '.join(val)}")

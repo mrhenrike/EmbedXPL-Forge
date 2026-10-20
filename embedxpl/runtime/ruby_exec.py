@@ -1,4 +1,4 @@
-"""EmbedXPL Runtime — Ruby Executor.
+"""EmbedXPL Runtime  -  Ruby Executor.
 
 Runs Ruby scripts (.rb) with optional Metasploit Framework integration.
 Supports both standalone ruby scripts and MSF-format modules.

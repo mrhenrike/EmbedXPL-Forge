@@ -1,4 +1,4 @@
-"""EmbedXPL Runtime — Cross-Compilation Targets.
+"""EmbedXPL Runtime  -  Cross-Compilation Targets.
 
 Maps architecture names to cross-compiler binaries and build flags.
 Supports: ARM32, ARM64, MIPS BE, MIPS LE, x86, x64.

@@ -1,4 +1,4 @@
-"""EmbedXPL AutoPwn — Firewall segment."""
+"""EmbedXPL AutoPwn  -  Firewall segment."""
 from .segment import SegmentAutoPwn
 
 class FirewallAutoPwn(SegmentAutoPwn):

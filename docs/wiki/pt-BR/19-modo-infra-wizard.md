@@ -1,6 +1,6 @@
 # Modo Infra e Wizard de Infraestrutura
 
-**Idioma:** Português (pt-BR). **English:** — *(página exclusiva pt-BR)*
+**Idioma:** Português (pt-BR). **English:**  -  *(página exclusiva pt-BR)*
 
 ---
 
@@ -10,8 +10,8 @@ O **modo infra** (`--infra`) é um orquestrador de varredura baseado em contexto
 
 Há duas formas de usar o modo infra:
 
-1. **Modo wizard** (`--infra wizard`) — assistente interativo numerado que guia o usuário na seleção do tipo e contexto
-2. **Modo direto** (`--infra <tipo> --context <contexto> --target <ip>`) — execução não interativa para automação e scripts
+1. **Modo wizard** (`--infra wizard`)  -  assistente interativo numerado que guia o usuário na seleção do tipo e contexto
+2. **Modo direto** (`--infra <tipo> --context <contexto> --target <ip>`)  -  execução não interativa para automação e scripts
 
 ---
 
@@ -27,7 +27,7 @@ embedxpl --infra wizard
 
 O wizard apresenta menus numerados em sequência:
 
-**Passo 1 — Seleção do tipo de infraestrutura:**
+**Passo 1  -  Seleção do tipo de infraestrutura:**
 
 ```text
 $ embedxpl --infra wizard
@@ -40,7 +40,7 @@ Select infrastructure type:
 Choice:
 ```
 
-**Passo 2 — Seleção do contexto:**
+**Passo 2  -  Seleção do contexto:**
 
 ```text
 Choice: 1
@@ -55,7 +55,7 @@ Select context for 'ot':
 Choice:
 ```
 
-**Passo 3 — Resultado do plano de varredura:**
+**Passo 3  -  Resultado do plano de varredura:**
 
 ```text
 Choice: 1
@@ -249,7 +249,7 @@ profiles:
         - "creds/ics/"
         - "exploits/firewalls/siemens/"
         - "exploits/firewalls/moxa/"
-      description: "Industrial Control Systems — Modbus, S7comm, EtherNet/IP, BACnet"
+      description: "Industrial Control Systems  -  Modbus, S7comm, EtherNet/IP, BACnet"
 ```
 
 ---

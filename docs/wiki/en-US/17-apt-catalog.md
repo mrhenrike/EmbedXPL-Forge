@@ -25,7 +25,7 @@ apt run <group_id> <index>  Load a specific attack by index number
 
 ---
 
-## `apt` / `apt list` — list all groups
+## `apt` / `apt list`  -  list all groups
 
 ```
 exf> apt
@@ -50,7 +50,7 @@ exf> apt
 
 ---
 
-## `apt show APT28` — attack chain detail
+## `apt show APT28`  -  attack chain detail
 
 ```
 exf> apt show apt28
@@ -137,18 +137,18 @@ exf> apt show sandworm
 
 ---
 
-## `apt search` — search by device or CVE
+## `apt search`  -  search by device or CVE
 
 ### Search by device keyword
 
 ```
 exf> apt search tplink
 
-[+] APT28 / Forest Blizzard (Russia) — 6 attacks
+[+] APT28 / Forest Blizzard (Russia)  -  6 attacks
   -> TP-Link WR841N Credential Disclosure [CVE-2023-50224]
   -> TP-Link Parental Control RCE [CVE-2025-9377]
   -> TP-Link DNS Hijack (20+ models) [Impact]
-[+] Quad7 / CovertNetwork-1658 (China) — 2 attacks
+[+] Quad7 / CovertNetwork-1658 (China)  -  2 attacks
   -> TP-Link WR841N Exploit Chain [CVE-2023-50224, CVE-2025-9377]
 ```
 
@@ -157,7 +157,7 @@ exf> apt search tplink
 ```
 exf> apt search CVE-2018-14847
 
-[+] Volt Typhoon (China) — 3 attacks
+[+] Volt Typhoon (China)  -  3 attacks
   -> MikroTik Winbox Credential Disclosure [CVE-2018-14847]
 ```
 
@@ -179,14 +179,14 @@ exf> apt search
 
 ---
 
-## `apt run <group_id>` — load first attack module
+## `apt run <group_id>`  -  load first attack module
 
 `apt run` loads the first executable module in the group's attack chain and places it in the `current_module` context. The user then sets the target and runs the module interactively.
 
 ```
 exf> apt run apt28
 
-[*] [Initial Access] TP-Link WR841N Credential Disclosure — loading exploits/routers/tplink/wr841n_credential_disclosure_cve_2023_50224
+[*] [Initial Access] TP-Link WR841N Credential Disclosure  -  loading exploits/routers/tplink/wr841n_credential_disclosure_cve_2023_50224
 [*] Module loaded. Set target and run with 'run' or 'check'
 
 exf (tplink/wr841n_credential_disclosure_cve_2023_50224) > set target 192.168.1.1
@@ -203,12 +203,12 @@ exf (tplink/wr841n_credential_disclosure_cve_2023_50224) > run
 
 ---
 
-## `apt run <group_id> <attack_index>` — load specific attack
+## `apt run <group_id> <attack_index>`  -  load specific attack
 
 ```
 exf> apt run apt28 1
 
-[*] [Execution] TP-Link Parental Control RCE — loading exploits/routers/tplink/wr841n_parental_control_rce_cve_2025_9377
+[*] [Execution] TP-Link Parental Control RCE  -  loading exploits/routers/tplink/wr841n_parental_control_rce_cve_2025_9377
 [*] Module loaded. Set target and run with 'run' or 'check'
 
 exf (tplink/wr841n_parental_control_rce_cve_2025_9377) > set target 192.168.1.1
@@ -220,14 +220,14 @@ exf (tplink/wr841n_parental_control_rce_cve_2025_9377) > run
 
 ---
 
-## `apt run` — attack with no executable module
+## `apt run`  -  attack with no executable module
 
 Some attacks are detection/analysis techniques without exploit modules:
 
 ```
 exf> apt run apt28 4
 
-[*] Skipping 'DNS Hijack Detection' — no executable module
+[*] Skipping 'DNS Hijack Detection'  -  no executable module
 ```
 
 ---

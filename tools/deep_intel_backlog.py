@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Deep intel backlog — non-gating enrichment pass.
+"""Deep intel backlog  -  non-gating enrichment pass.
 
 Scans the module catalog for stub entries (missing CVSS, product, description)
-and prints a backlog report. Does NOT fail CI — informational only.
+and prints a backlog report. Does NOT fail CI  -  informational only.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations
@@ -18,9 +18,9 @@ CATALOG = ROOT / "embedxpl" / "resources" / "catalogs" / "cve_extended_catalog.j
 
 
 def main() -> int:
-    """Produce backlog report — always exits 0 (non-gating)."""
+    """Produce backlog report  -  always exits 0 (non-gating)."""
     if not CATALOG.exists():
-        print("Catalog not found — skipping deep intel pass.")
+        print("Catalog not found  -  skipping deep intel pass.")
         return 0
 
     with CATALOG.open() as f:
@@ -44,7 +44,7 @@ def main() -> int:
     if stubs:
         print("\n  Top 10 stub entries:")
         for e in stubs[:10]:
-            print(f"    {e.get('cve_id','?')} — {e.get('vendor','?')}/{e.get('product','?')}")
+            print(f"    {e.get('cve_id','?')}  -  {e.get('vendor','?')}/{e.get('product','?')}")
 
     print("\nDeep intel pass complete (non-gating).")
     return 0

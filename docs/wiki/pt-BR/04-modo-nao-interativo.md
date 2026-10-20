@@ -25,19 +25,19 @@ python exf.py      -m <caminho> -s "<opt> <val>"   # bootstrap legado
 
 | Flag | Forma longa | Tipo | Obrigatório | Descrição |
 |------|-------------|------|-------------|-----------|
-| `-h` | `--help` | — | Não | Imprimir ajuda de uso e sair |
+| `-h` | `--help` |  -  | Não | Imprimir ajuda de uso e sair |
 | `-m` | `--module` | string | Sim* | Caminho do módulo, ex.: `exploits/cameras/hikvision/rtsp_rce_cve_2021_36260` |
 | `-s` | `--set` | string | Não | Definir uma opção do módulo; repita para cada opção (formato `"opcao valor"`) |
 | `-T` | `--targets` | string (caminho de arquivo) | Não | Varredura multi-alvo a partir de arquivo; cada linha é um IP ou CIDR |
-| `--infra` | — | string | Não | Tipo de infraestrutura: `wizard`, `ot`, `it`, `soho`, ou chave personalizada |
-| `--context` | — | string | Não | Contexto operacional para modo infra (ex.: `ics`, `scada`, `dmz`) |
-| `--target` | — | string | Não | Endereço IP ou faixa CIDR para o plano de varredura infra |
+| `--infra` |  -  | string | Não | Tipo de infraestrutura: `wizard`, `ot`, `it`, `soho`, ou chave personalizada |
+| `--context` |  -  | string | Não | Contexto operacional para modo infra (ex.: `ics`, `scada`, `dmz`) |
+| `--target` |  -  | string | Não | Endereço IP ou faixa CIDR para o plano de varredura infra |
 
 \* `-m` é obrigatório a menos que seja usado `-T`, `--infra wizard` ou `-h`.
 
 ---
 
-## `-h` / `--help` — ajuda de uso
+## `-h` / `--help`  -  ajuda de uso
 
 ```bash
 embedxpl -h
@@ -55,13 +55,13 @@ $ embedxpl -h
 
 ---
 
-## `-m` / `--module` — executar um único módulo
+## `-m` / `--module`  -  executar um único módulo
 
 ```bash
 embedxpl -m <caminho_modulo> [-s "<opcao> <valor>"] ...
 ```
 
-**Sessão de terminal — exploit básico:**
+**Sessão de terminal  -  exploit básico:**
 
 ```bash
 $ embedxpl -m exploits/cameras/hikvision/rtsp_rce_cve_2021_36260 \
@@ -78,14 +78,14 @@ $ embedxpl -m exploits/cameras/hikvision/rtsp_rce_cve_2021_36260 \
 [!] Verify execution via OOB (e.g., Burp Collaborator or Interactsh).
 ```
 
-**Erro — nenhum módulo especificado:**
+**Erro  -  nenhum módulo especificado:**
 
 ```text
 $ embedxpl
 [-] A module is required when running non-interactively
 ```
 
-**Erro — módulo desconhecido:**
+**Erro  -  módulo desconhecido:**
 
 ```text
 $ embedxpl -m exploits/cameras/hikvision/does_not_exist
@@ -94,7 +94,7 @@ $ embedxpl -m exploits/cameras/hikvision/does_not_exist
 
 ---
 
-## `-s` / `--set` — definir opções do módulo
+## `-s` / `--set`  -  definir opções do módulo
 
 Cada flag `-s` aceita uma **única string entre aspas** contendo `"nome_opcao valor"`.
 
@@ -110,11 +110,11 @@ embedxpl -m exploits/cameras/dahua/cctv_rce_cve_2021_36260 \
 **Formato incorreto (não faça isso):**
 
 ```bash
-# ERRADO — múltiplas opções em um único -s:
+# ERRADO  -  múltiplas opções em um único -s:
 embedxpl -m ... -s "target 192.168.1.50 port 80"
 ```
 
-**Valores com espaços — coloque aspas em todo o argumento `-s`:**
+**Valores com espaços  -  coloque aspas em todo o argumento `-s`:**
 
 ```bash
 embedxpl -m exploits/printers/generic/pjl_info_disclosure \
@@ -124,7 +124,7 @@ embedxpl -m exploits/printers/generic/pjl_info_disclosure \
 
 ---
 
-## `-T` / `--targets` — varredura multi-alvo a partir de arquivo
+## `-T` / `--targets`  -  varredura multi-alvo a partir de arquivo
 
 ```bash
 embedxpl -T <arquivo_alvos>
@@ -134,7 +134,7 @@ embedxpl -T <arquivo_alvos>
 
 | Parâmetro | Tipo | Obrigatório | Padrão | Valores aceitos | Descrição |
 |-----------|------|-------------|--------|-----------------|-----------|
-| `arquivo_alvos` | string (caminho de arquivo) | Sim | — | Caminho de arquivo legível | Caminho para arquivo com IPs/CIDRs, um por linha |
+| `arquivo_alvos` | string (caminho de arquivo) | Sim |  -  | Caminho de arquivo legível | Caminho para arquivo com IPs/CIDRs, um por linha |
 
 Formato do arquivo de alvos (uma entrada por linha; linhas em branco e comentários `#` são ignorados):
 
@@ -154,23 +154,23 @@ $ embedxpl -T /tmp/targets.txt
 [*] Multi-target scan from file: /tmp/targets.txt
 [*] [192.168.1.1] [scanning] Starting ARP/ICMP sweep
 [*] [192.168.1.1] [fingerprint] Probing 192.168.1.1...
-[+] [192.168.1.1] done — 4 modules matched
+[+] [192.168.1.1] done  -  4 modules matched
 [*] [192.168.1.2] [scanning] Starting ARP/ICMP sweep
-[+] [192.168.1.2] done — 2 modules matched
+[+] [192.168.1.2] done  -  2 modules matched
 [*] [10.0.0.0/24] [scanning] Scanning 254 hosts...
-[+] [10.0.0.0/24] done — 6 total host(s) found
+[+] [10.0.0.0/24] done  -  6 total host(s) found
 
-Scan complete — 3 target(s), 8 total host(s) found
-  192.168.1.1 — 1 host(s):
-    192.168.1.1: Huawei EG8145X6 [80,443] 78% — 4 modules
-  192.168.1.2 — 1 host(s):
-    192.168.1.2: ZTE H168N [80,23] 65% — 2 modules
-  10.0.0.0/24 — 6 host(s):
-    10.0.0.1: TP-Link Archer C6 [80,443] 82% — 5 modules
+Scan complete  -  3 target(s), 8 total host(s) found
+  192.168.1.1  -  1 host(s):
+    192.168.1.1: Huawei EG8145X6 [80,443] 78%  -  4 modules
+  192.168.1.2  -  1 host(s):
+    192.168.1.2: ZTE H168N [80,23] 65%  -  2 modules
+  10.0.0.0/24  -  6 host(s):
+    10.0.0.1: TP-Link Archer C6 [80,443] 82%  -  5 modules
     ...
 ```
 
-**Erro — arquivo não encontrado:**
+**Erro  -  arquivo não encontrado:**
 
 ```text
 $ embedxpl -T /tmp/nonexistent.txt
@@ -181,7 +181,7 @@ $ embedxpl -T /tmp/nonexistent.txt
 
 ---
 
-## `--infra wizard` — wizard interativo de infraestrutura
+## `--infra wizard`  -  wizard interativo de infraestrutura
 
 ```bash
 embedxpl --infra wizard
@@ -219,7 +219,7 @@ Cancelado com Ctrl+C:
 
 ---
 
-## `--infra` + `--context` + `--target` — plano de varredura de infraestrutura
+## `--infra` + `--context` + `--target`  -  plano de varredura de infraestrutura
 
 ```bash
 embedxpl --infra <tipo> --context <contexto> --target <ip_ou_cidr>
@@ -233,7 +233,7 @@ embedxpl --infra <tipo> --context <contexto> --target <ip_ou_cidr>
 | `--context` | string | Não | Contexto operacional dentro do tipo infra (ex.: `ics`) |
 | `--target` | string | Não | IP ou faixa CIDR |
 
-**Sessão de terminal — plano de varredura OT/ICS:**
+**Sessão de terminal  -  plano de varredura OT/ICS:**
 
 ```text
 $ embedxpl --infra ot --context ics --target 192.168.100.0/24
@@ -254,14 +254,14 @@ $ embedxpl --infra ot --context ics --target 192.168.100.0/24
 [*] Or launch interactive shell and type 'use <module>' to explore.
 ```
 
-**Sessão de terminal — tipo infra desconhecido:**
+**Sessão de terminal  -  tipo infra desconhecido:**
 
 ```text
 $ embedxpl --infra unknown_type --context ics
 [-] Unknown infra type 'unknown_type'. Valid: ot, it, soho, iot
 ```
 
-**Sessão de terminal — infra válida, sem contexto (lista contextos disponíveis):**
+**Sessão de terminal  -  infra válida, sem contexto (lista contextos disponíveis):**
 
 ```text
 $ embedxpl --infra ot
@@ -306,7 +306,7 @@ embedxpl \
 [*] Trying admin:admin on 192.168.1.1:23
 [-] FAIL: admin:admin
 [*] Trying admin:1234 on 192.168.1.1:23
-[+] SUCCESS: admin:1234 — telnet shell obtained
+[+] SUCCESS: admin:1234  -  telnet shell obtained
 ```
 
 ### Auth bypass em firewall (FortiOS CVE-2022-40684)

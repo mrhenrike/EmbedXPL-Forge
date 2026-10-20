@@ -136,7 +136,7 @@ class Exploit(Exploit):
     )
     ml_auto_timing = OptBool(
         False,
-        "When ml_advisor true: overwrite timing_template with advisor suggestion (T0–T5)",
+        "When ml_advisor true: overwrite timing_template with advisor suggestion (T0-T5)",
         advanced=True,
     )
     ml_use_gpu = OptBool(
@@ -181,7 +181,7 @@ class Exploit(Exploit):
 
     def _print_service_ports(self):
         print_status(
-            "AutoPwn services — HTTP:{} HTTPS:{} FTP:{} SSH:{} SFTP:{} Telnet:{} SNMP:{} TCP:{} UDP:{}".format(
+            "AutoPwn services  -  HTTP:{} HTTPS:{} FTP:{} SSH:{} SFTP:{} Telnet:{} SNMP:{} TCP:{} UDP:{}".format(
                 self.http_use,
                 self.https_use,
                 self.ftp_use,
@@ -194,7 +194,7 @@ class Exploit(Exploit):
             )
         )
         print_status(
-            "AutoPwn service ports — HTTP: {} | HTTPS: {} | FTP: {} | SSH: {} | SFTP: {} | Telnet: {} | SNMP: {} | TCP: {} | UDP: {}".format(
+            "AutoPwn service ports  -  HTTP: {} | HTTPS: {} | FTP: {} | SSH: {} | SFTP: {} | Telnet: {} | SNMP: {} | TCP: {} | UDP: {}".format(
                 self._parse_ports_list(self.http_ports, self.http_port),
                 self._parse_ports_list(self.https_ports, self.https_port),
                 self._parse_ports_list(self.ftp_ports, self.ftp_port),

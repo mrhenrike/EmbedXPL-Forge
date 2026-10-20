@@ -1,4 +1,4 @@
-# EmbedXPL v5.0.0 — XPL Suite Unified + Specialized Tools
+# EmbedXPL v5.0.0  -  XPL Suite Unified + Specialized Tools
 
 ---
 
@@ -71,17 +71,17 @@ EmbedXPL     ─── TUDO acima + routers + cameras + mikrotik + malware + sma
 | **FirewallXPL-Forge** | firewall/NGFW/UTM/IDS/IPS/NAC | público, ativo | ✅ `firewallxpl` |
 | **WordlistXPL-Forge** | wordlists engine | público, ativo | ✅ `wordlistxpl` |
 | **TupaXPL-Forge** | LLM/AI/ops/red team | **privado**, ativo | N/A |
-| MikrotikAPI-BF | *(absorvido — sem domínio único)* | público + **archived** ⚠️ | ❌ yanked → `embedxpl` |
+| MikrotikAPI-BF | *(absorvido  -  sem domínio único)* | público + **archived** ⚠️ | ❌ yanked → `embedxpl` |
 
 ---
 
-## Phase 0 — Multi-Language Runtime
+## Phase 0  -  Multi-Language Runtime
 
 Fundação do novo EmbedXPL. Todas as fases dependem disto.
 
 ```
 embedxpl/runtime/
-  executor.py        # orchestrator — detecta linguagem e roteia
+  executor.py        # orchestrator  -  detecta linguagem e roteia
   python_exec.py     # .py nativo (padrão, 95%+ dos módulos)
   c_exec.py          # gcc/clang + cross: arm-linux-gnueabi, aarch64, mips, mipsle
   cpp_exec.py        # g++/clang++
@@ -113,7 +113,7 @@ class MsfEternalBlue(BaseExploit):
 
 ---
 
-## Phase 1 — Deep Research Audit + Clone Rapid7 + Tenable
+## Phase 1  -  Deep Research Audit + Clone Rapid7 + Tenable
 
 **Gate de entrada:** `APROVADO: P1`  
 **Entrega:** Relatório completo com mapa de todos os repos + plano de mapeamento por módulo
@@ -124,7 +124,7 @@ Repos NUNCA analisados em profundidade + novos a clonar:
 
 ### 🦠 Malware Samples (malware para pesquisa de defesa + RE)
 
-**`malware-samples/` — inventário:**
+**`malware-samples/`  -  inventário:**
 
 | Dir | Files | Conteúdo | Destino |
 |---|---|---|---|
@@ -136,33 +136,33 @@ Repos NUNCA analisados em profundidade + novos a clonar:
 | `Mirai-ioT-Botnet/` | 77 | Mirai botnet research | `malware_research/mirai/` |
 | `print-malware/` | 7 | Printer malware C# (`Program.cs`, `vars.cs`) + Python | `malware_research/printers/` + PrinterXPL |
 | `ICS4U-Malware/` | 6 | ICS curriculum malware samples | `malware_research/ics_apt/` |
-| `lisa/` | 93 | Unknown — audit needed | a definir |
-| `akaja/` | 8 | Unknown — audit needed | a definir |
+| `lisa/` | 93 | Unknown  -  audit needed | a definir |
+| `akaja/` | 8 | Unknown  -  audit needed | a definir |
 
-**`IoT_ARM/` destaque** — tem source code Mirai-style com:
+**`IoT_ARM/` destaque**  -  tem source code Mirai-style com:
 - `crosscompiler.bash` → integrar em `runtime/crosscompile.py` (aproveitar scripts de cross-compile!)
 - `attack_app.c`, `attack_gre.c`, `attack_tcp.c`, `attack_udp.c` → `native_src/c/mirai_iot/`
 - `attack.go`, `bot.go` → `native_src/go/mirai_bot/`
 - Wordlists: `Mirai Passwords.txt`, `Telnet Passwords.txt`, `SSH Passwords.txt` → `data/wordlists/iot/`
 
 **`thezoo/` (1.455 files):**
-- `Binaries/` — binários compilados de malware (estudar para IoT relevantes: botnet, rootkit, RAT)
-- `Source/` — código fonte (prioridade: IoT botnets, Linux rootkits, network worms)
+- `Binaries/`  -  binários compilados de malware (estudar para IoT relevantes: botnet, rootkit, RAT)
+- `Source/`  -  código fonte (prioridade: IoT botnets, Linux rootkits, network worms)
 - Filtrar: relevantes para embedded/IoT/ICS → `malware_research/`
 
 ---
 
 ### Submodulos/OT (61.847 files)
-- `BusPwn/` — bus attack toolkit → `ics/bus_attacks/`?
-- `ics-tools/` — coleção de ferramentas ICS
+- `BusPwn/`  -  bus attack toolkit → `ics/bus_attacks/`?
+- `ics-tools/`  -  coleção de ferramentas ICS
 - `modbus-tcp-auditor-tool/` → enriquecer IndustrialXPL + EmbedXPL `ics/modbus/`
 - `s7comm-auditor-tool/` → enriquecer IndustrialXPL + EmbedXPL `ics/siemens/`
-- `ixf-vendor/` — vendor-specific
+- `ixf-vendor/`  -  vendor-specific
 
 ### Submodulos/IoT (56.006 files)
-- `_loose-root/` — coleção de root exploits IoT
-- `aic8800-src/` — source code chipset AIC8800 (WiFi+BT chip usado em muitos dispositivos)
-- `third-party-router-poc/` — pode ter centenas de CVEs de routers não catalogados
+- `_loose-root/`  -  coleção de root exploits IoT
+- `aic8800-src/`  -  source code chipset AIC8800 (WiFi+BT chip usado em muitos dispositivos)
+- `third-party-router-poc/`  -  pode ter centenas de CVEs de routers não catalogados
 
 ### Submodulos/Hacking (22.784 files, 26 ferramentas)
 | Ferramenta | Descrição | Destino |
@@ -191,7 +191,7 @@ Repos NUNCA analisados em profundidade + novos a clonar:
 
 ---
 
-### 🔴 Rapid7 — Clone + Integração
+### 🔴 Rapid7  -  Clone + Integração
 
 **Repos a clonar em `D:\Projects\Labs\rapid7\`:**
 
@@ -212,15 +212,15 @@ class MetasploitModule(BaseExploit):
 ```
 
 **Seleção de módulos MSF relevantes para EmbedXPL:**
-- `modules/exploits/linux/` — Linux embedded exploits
-- `modules/exploits/multi/` — multi-platform (muitos IoT)
-- `modules/exploits/hardware/` — hardware specific
-- `modules/auxiliary/scanner/` — scanners (muito útil)
-- `modules/auxiliary/server/` — rogue servers
+- `modules/exploits/linux/`  -  Linux embedded exploits
+- `modules/exploits/multi/`  -  multi-platform (muitos IoT)
+- `modules/exploits/hardware/`  -  hardware specific
+- `modules/auxiliary/scanner/`  -  scanners (muito útil)
+- `modules/auxiliary/server/`  -  rogue servers
 
 ---
 
-### 🟡 Tenable — Clone + Integração
+### 🟡 Tenable  -  Clone + Integração
 
 **Repos a clonar em `D:\Projects\Labs\tenable\`:**
 
@@ -231,7 +231,7 @@ class MetasploitModule(BaseExploit):
 | `tenable/pyTenable` | Tenable API Python client | TupaXPL / intel/ |
 | Tenable Research blog CVE disclosures | PoC links e writeups | mapear por CVE |
 
-**Nota:** Tenable NASL plugins (Nessus Attack Scripting Language) são proprietários — não há repo público com plugins. O que existe são os CVE disclosures e PoC associados. Clonar os repos públicos da organização `tenable-labs` no GitHub.
+**Nota:** Tenable NASL plugins (Nessus Attack Scripting Language) são proprietários  -  não há repo público com plugins. O que existe são os CVE disclosures e PoC associados. Clonar os repos públicos da organização `tenable-labs` no GitHub.
 
 ---
 
@@ -242,7 +242,7 @@ class MetasploitModule(BaseExploit):
 
 ---
 
-## Phase 2 — Sync Model
+## Phase 2  -  Sync Model
 
 EmbedXPL recebe cópias dos módulos dos specialized tools. Para manter em sync:
 
@@ -273,7 +273,7 @@ Nova vuln impressora descoberta
 
 ---
 
-## Phase 3 — WirelessXPL → EmbedXPL Copy
+## Phase 3  -  WirelessXPL → EmbedXPL Copy
 
 WirelessXPL **permanece ativo, público, com PyPI.**
 
@@ -285,12 +285,12 @@ EmbedXPL recebe cópia completa de 518 py cobrindo:
 
 **Protocolos RF:** LoRaWAN, sub-ghz (433/868/915 MHz), UWB, TPMS, V2X, DECT, NFC, matter
 
-**Drones (CRÍTICO — sempre em WirelessXPL):**
-- `dji/` — DJI drone protocol attacks
-- `holystone/` + `parrot/` — consumer drone attacks
-- `fpv/` — FPV racing drone attacks
-- `px4/` — PX4 flight controller attacks
-- `mavlink/` — MAVLink protocol attacks
+**Drones (CRÍTICO  -  sempre em WirelessXPL):**
+- `dji/`  -  DJI drone protocol attacks
+- `holystone/` + `parrot/`  -  consumer drone attacks
+- `fpv/`  -  FPV racing drone attacks
+- `px4/`  -  PX4 flight controller attacks
+- `mavlink/`  -  MAVLink protocol attacks
 
 **IoT wireless:** iot_proto, mdns, mediatek, cellular, SIM
 
@@ -298,7 +298,7 @@ EmbedXPL recebe cópia completa de 518 py cobrindo:
 
 ---
 
-## Phase 4 — WordlistXPL → EmbedXPL Copy
+## Phase 4  -  WordlistXPL → EmbedXPL Copy
 
 WordlistXPL **permanece ativo, público, com PyPI.**
 
@@ -311,7 +311,7 @@ EmbedXPL recebe cópia completa:
 
 ---
 
-## Phase 5 — PrinterXPL → EmbedXPL Copy
+## Phase 5  -  PrinterXPL → EmbedXPL Copy
 
 PrinterXPL **permanece ativo, público, com PyPI.**
 
@@ -323,61 +323,61 @@ EmbedXPL recebe 653 py (upgradar stubs com código real):
 
 ---
 
-## Phase 6 — FirewallXPL → EmbedXPL Copy
+## Phase 6  -  FirewallXPL → EmbedXPL Copy
 
 FirewallXPL **permanece ativo, público, com PyPI.**
 
 EmbedXPL recebe 434 py (firewalls/ já existe, upgradar):
 - **Perimeter NGFW:** checkpoint, cisco, citrix, f5, fortinet, h3c, hillstone, huawei, ivanti, juniper, kerio, paloalto, pfsense, opnsense, radware, sangfor, sonicwall, sophos, stormshield, symantec, trellix, trendmicro, vyos, watchguard, zyxel
-- **LB (Load Balancers):** `lb/` — F5, Radware, HAProxy, Nginx
-- **NAC:** `nac/` — Cisco ISE, ForeScout, Aruba
-- **VPN:** `vpn/` — OpenVPN, IPsec, WireGuard attacks
-- **WAF:** `waf/` — ModSecurity, AWS WAF, Cloudflare bypass
+- **LB (Load Balancers):** `lb/`  -  F5, Radware, HAProxy, Nginx
+- **NAC:** `nac/`  -  Cisco ISE, ForeScout, Aruba
+- **VPN:** `vpn/`  -  OpenVPN, IPsec, WireGuard attacks
+- **WAF:** `waf/`  -  ModSecurity, AWS WAF, Cloudflare bypass
 - **UTM/IDS/IPS:** stormshield, trellix, symantec, trendmicro
 - 13 novos módulos da sessão de hoje: SonicWall, Cisco ISE, F5, CheckPoint, Netscaler, Ivanti, WatchGuard, Juniper, FortiWeb, etc.
 
 ---
 
-## Phase 7 — IndustrialXPL → EmbedXPL Copy
+## Phase 7  -  IndustrialXPL → EmbedXPL Copy
 
 IndustrialXPL **permanece ativo, público, com PyPI.**
 
 EmbedXPL recebe 2.361 py (ics/ e ot_iiot/ massivos):
 
 **Protocolos OT embarcados:**
-- `modbus/` — Modbus TCP/RTU attacks
-- `s7comm/` + `s7comm_plus/` — Siemens S7 protocol
-- `fins/` — Omron FINS protocol
-- `dnp3/` — DNP3 (utilities SCADA)
-- `iec104/` — IEC 60870-5-104
-- `iec61850/` — IEC 61850 (substations)
-- `profibus/` + `profinet/` — Siemens factory bus
-- `ethercat/` — Beckhoff EtherCAT
-- `bacnet/` — Building automation
-- `knx/` — Smart building
-- `lonworks/` — Echelon
-- `hart/` — HART instruments
-- `canopen/` + `can/` — CAN bus
-- `enip/` + `ethernet_ip/` — Allen-Bradley EtherNet/IP
-- `opc_ua/` + `opc_da/` — OPC protocols
-- `modbus_mstp/` — BACnet MS/TP
+- `modbus/`  -  Modbus TCP/RTU attacks
+- `s7comm/` + `s7comm_plus/`  -  Siemens S7 protocol
+- `fins/`  -  Omron FINS protocol
+- `dnp3/`  -  DNP3 (utilities SCADA)
+- `iec104/`  -  IEC 60870-5-104
+- `iec61850/`  -  IEC 61850 (substations)
+- `profibus/` + `profinet/`  -  Siemens factory bus
+- `ethercat/`  -  Beckhoff EtherCAT
+- `bacnet/`  -  Building automation
+- `knx/`  -  Smart building
+- `lonworks/`  -  Echelon
+- `hart/`  -  HART instruments
+- `canopen/` + `can/`  -  CAN bus
+- `enip/` + `ethernet_ip/`  -  Allen-Bradley EtherNet/IP
+- `opc_ua/` + `opc_da/`  -  OPC protocols
+- `modbus_mstp/`  -  BACnet MS/TP
 
 **Vendors PLCs/HMIs/SCADA (300+ categorias):**
 Siemens, Rockwell/Allen-Bradley, Schneider Electric, ABB, Omron, GE/GE Vernova, Honeywell, Beckhoff, WAGO, Phoenix Contact, Mitsubishi, Yaskawa, Fanuc, Keyence, Pilz, SEL, Emerson, Aveva/OSIsoft, Delta, Fuji Electric, LS Electric, Moxa, WAGO, Turck, Murr, ProSoft, etc.
 
 ---
 
-## Phase 0 — Multi-Language Runtime
+## Phase 0  -  Multi-Language Runtime
 **Gate de entrada:** execução imediata (Phase 0 não precisa de gate, é a fundação)  
 **Gate de saída:** apresentar relatório → aguardar `APROVADO: P1`
 
 ---
 
-## Phase 8 — MikrotikAPI-BF Absorção (único que para)
+## Phase 8  -  MikrotikAPI-BF Absorção (único que para)
 **Gate de entrada:** `APROVADO: P8`  
 **Gate de saída:** apresentar relatório → aguardar `APROVADO: P9`
 
-MikrotikAPI-BF **para desenvolvimento** — sem domínio único que justifique standalone.
+MikrotikAPI-BF **para desenvolvimento**  -  sem domínio único que justifique standalone.
 
 55 py + 8 NSE → `embedxpl/modules/exploits/network_os/mikrotik/`:
 - Attack core: `timing_oracle.py`, `winbox_auth.py` (CVE-2018-14847), `fingerprint.py`, `discovery.py`, `stealth.py`
@@ -391,7 +391,7 @@ MikrotikAPI-BF **para desenvolvimento** — sem domínio único que justifique s
 
 ---
 
-## Phase 9 — EmbedXPL Conteúdo Único: Cameras + RTSP
+## Phase 9  -  EmbedXPL Conteúdo Único: Cameras + RTSP
 **Gate de entrada:** `APROVADO: P9`  
 **Gate de saída:** apresentar relatório → aguardar `APROVADO: P10`
 
@@ -412,13 +412,13 @@ Módulo Python usa `GoExecutor` → compila → cache.
 
 ---
 
-## Phase 10 — Malware Research Integration
+## Phase 10  -  Malware Research Integration
 **Gate de entrada:** `APROVADO: P10`  
 **Gate de saída:** apresentar relatório → aguardar `APROVADO: P11`
 
 **Fontes:**
 
-**`IoT_ARM/` — Mirai Source (C + Go):**
+**`IoT_ARM/`  -  Mirai Source (C + Go):**
 - `attack_app.c`, `attack_gre.c`, `attack_tcp.c`, `attack_udp.c` → `native_src/c/mirai_iot/`
 - `attack.go`, `bot.go`, `admin.go` → `native_src/go/mirai_bot/`
 - `crosscompiler.bash` → extrair padrões para `runtime/crosscompile.py`
@@ -429,25 +429,25 @@ Módulo Python usa `GoExecutor` → compila → cache.
 - Analisar e documentar TTPs → `malware_research/ics_apt/trisis/`
 - Extrair indicadores → IndustrialXPL `malware/` + EmbedXPL `ics/`
 
-**`thezoo Source/` — filtrar IoT/Linux relevante:**
+**`thezoo Source/`  -  filtrar IoT/Linux relevante:**
 - Botnets IoT: Mirai variants, Bashlite, Tsunami, Kaiten
 - Linux rootkits aplicáveis a embedded
 - Network worm code
 - → `malware_research/` por categoria
 
 **`cube-maliot-2021/` (47.931 files):**
-- Dataset massivo — analisar estrutura antes de copiar
+- Dataset massivo  -  analisar estrutura antes de copiar
 - Extrair samples únicos relevantes para embedded
 - → `malware_research/iot/`
 
 **`print-malware/` (C# + Python):**
-- `Program.cs`, `vars.cs` — C# printer malware → `malware_research/printers/`
+- `Program.cs`, `vars.cs`  -  C# printer malware → `malware_research/printers/`
 - Python variants (`popup.py`, `smal2.0.py`) → `malware_research/printers/`
 - Estudo para PrinterXPL defensive modules
 
 ---
 
-## Phase 11 — Rapid7 + Tenable Integration
+## Phase 11  -  Rapid7 + Tenable Integration
 **Gate de entrada:** `APROVADO: P11`  
 **Gate de saída:** apresentar relatório → aguardar `APROVADO: P12`
 
@@ -463,13 +463,13 @@ Módulo Python usa `GoExecutor` → compila → cache.
 
 ---
 
-## Phase 12 — Native Source Trees
+## Phase 12  -  Native Source Trees
 **Gate de entrada:** `APROVADO: P12`  
 **Gate de saída:** apresentar relatório → aguardar `APROVADO: P13`
 
 ---
 
-## Phase 11b (renumerada) — EmbedXPL Conteúdo Único: Routers + MikroTik
+## Phase 11b (renumerada)  -  EmbedXPL Conteúdo Único: Routers + MikroTik
 
 Após absorção do MikrotikAPI-BF, expandir:
 
@@ -490,13 +490,13 @@ CVE-2026-13355, 19658, 12227, 92229, 6433, 8181, 14281, 89055, 41940
 
 ---
 
-## Phase 13 — Intel/OSINT + Arsenal CVEs Pendentes
+## Phase 13  -  Intel/OSINT + Arsenal CVEs Pendentes
 **Gate de entrada:** `APROVADO: P13`  
 **Gate de saída:** apresentar relatório → aguardar `APROVADO: P14`
 
 ---
 
-## Phase 13b (legacy) — EmbedXPL Conteúdo Único: Malware + Intel
+## Phase 13b (legacy)  -  EmbedXPL Conteúdo Único: Malware + Intel
 
 **Malware Research** (pesquisa, não execução):
 - `Submodulos/malware/mirai-pcanyi/` → `malware_research/mirai/`
@@ -509,7 +509,7 @@ CVE-2026-13355, 19658, 12227, 92229, 6433, 8181, 14281, 89055, 41940
 
 ---
 
-## Phase 12 — Native Source Trees (C/C++/Go/Ruby)
+## Phase 12  -  Native Source Trees (C/C++/Go/Ruby)
 **Gate de entrada:** `APROVADO: P12`
 
 ```
@@ -517,11 +517,11 @@ embedxpl/native_src/
   go/
     cameradar/         Cameradar RTSP scanner (Go)
   c/
-    meltdown/          9 arquivos C — hardware/spectre
-    samsung_tv_root/   3 arquivos C — smart_tv root
+    meltdown/          9 arquivos C  -  hardware/spectre
+    samsung_tv_root/   3 arquivos C  -  smart_tv root
   cpp/
-    oboromi/           3 arquivos C++ — camera overflow
-    cfc/               60C + 84cpp — toolkit completo
+    oboromi/           3 arquivos C++  -  camera overflow
+    cfc/               60C + 84cpp  -  toolkit completo
   ruby/
     msf_modules/       módulos MSF Ruby harvested
     atomic_red_team/   4 módulos Ruby ATT&CK
@@ -531,7 +531,7 @@ Cross-compile targets: `arm-linux-gnueabi`, `aarch64-linux-gnu`, `mips-linux-gnu
 
 ---
 
-## Phase 13 — Arsenal CVEs Pendentes + Submodulos OT/IoT
+## Phase 13  -  Arsenal CVEs Pendentes + Submodulos OT/IoT
 **Gate de entrada:** `APROVADO: P13`  
 **Gate de saída:** apresentar relatório → aguardar `APROVADO: P14`
 
@@ -542,7 +542,7 @@ Repos marcados como "Studied" no HANDOFF mas sem módulo ainda:
 
 ---
 
-## Phase 14 — Intel/OSINT + Submodulos/OT e IoT Integration
+## Phase 14  -  Intel/OSINT + Submodulos/OT e IoT Integration
 **Gate de entrada:** `APROVADO: P14`  
 **Gate de saída:** apresentar relatório → aguardar `APROVADO: P15`
 
@@ -559,13 +559,13 @@ Repos marcados como "Studied" no HANDOFF mas sem módulo ainda:
 
 ---
 
-## Phase 15 — Releases (FINAL)
+## Phase 15  -  Releases (FINAL)
 **Gate de entrada:** `APROVADO: P15`  
-**Nenhum gate de saída — esta é a fase final.**
+**Nenhum gate de saída  -  esta é a fase final.**
 
 **MikrotikAPI-BF:**
 - `archived: true`, `private: false`
-- README: banner `> [!WARNING] DEPRECATED — absorbed into EmbedXPL v5.0.0`
+- README: banner `> [!WARNING] DEPRECATED  -  absorbed into EmbedXPL v5.0.0`
 - PyPI: yank + deprecated notice pointing to `embedxpl`
 
 **EmbedXPL v5.0.0:**
@@ -586,19 +586,19 @@ Repos marcados como "Studied" no HANDOFF mas sem módulo ainda:
 
 ```
 embedxpl/
-  runtime/               NOVO — Python/C/C++/Go/Rust/Ruby engine
-  native_src/            NOVO — Go/C/C++/Ruby source trees
+  runtime/               NOVO  -  Python/C/C++/Go/Rust/Ruby engine
+  native_src/            NOVO  -  Go/C/C++/Ruby source trees
     go/cameradar/
     c/meltdown/ samsung_tv/
     cpp/oboromi/ cfc/
     ruby/msf/ atomic/
-  engines/               NOVO — shared engines
+  engines/               NOVO  -  shared engines
     dahua_console/       DahuaConsole (Dahua protocol)
     nuclei/              nuclei-templates scanner
     wordlists/           WordlistXPL copy
-  intel/                 NOVO — OSINT + reconnaissance
+  intel/                 NOVO  -  OSINT + reconnaissance
     osint/               maigret, theHarvester, spiderfoot
-  malware_research/      NOVO — IoT malware study
+  malware_research/      NOVO  -  IoT malware study
     mirai/               Mirai botnet source
   data/
     rtsp_routes/         Cameradar 300+ rotas

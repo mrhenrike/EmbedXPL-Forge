@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PrinterXPL-Forge — Printer Storage / Filesystem Module
+PrinterXPL-Forge  -  Printer Storage / Filesystem Module
 =====================================================
 Read, list, download and upload files from printer internal storage via:
 
-  A. FTP (port 21) — some enterprise printers expose FTP for config/log files
-  B. Web file manager — many printers expose /WEB/FOLDER or similar endpoints
-  C. SNMP MIB data extraction — full MIB walk including saved job metadata
-  D. SMB shares — extend existing SMB module for listing/downloading
-  E. HTTP path traversal — common web admin vulnerabilities
+  A. FTP (port 21)  -  some enterprise printers expose FTP for config/log files
+  B. Web file manager  -  many printers expose /WEB/FOLDER or similar endpoints
+  C. SNMP MIB data extraction  -  full MIB walk including saved job metadata
+  D. SMB shares  -  extend existing SMB module for listing/downloading
+  E. HTTP path traversal  -  common web admin vulnerabilities
 
 Operations:
-  list_files()    — list accessible files/directories
-  download_file() — pull a file to local disk
-  upload_file()   — push a file to the printer
-  delete_file()   — delete a file from the printer
-  dump_mib()      — full SNMP MIB dump to file
-  get_saved_jobs()— retrieve saved/queued print jobs
+  list_files()     -  list accessible files/directories
+  download_file()  -  pull a file to local disk
+  upload_file()    -  push a file to the printer
+  delete_file()    -  delete a file from the printer
+  dump_mib()       -  full SNMP MIB dump to file
+  get_saved_jobs() -  retrieve saved/queued print jobs
 """
 
 # Author    : Andre Henrique (@mrhenrike)
@@ -371,7 +371,7 @@ def snmp_dump(
         import warnings
         warnings.filterwarnings('ignore', category=RuntimeWarning)
     except ImportError:
-        _log.error("pysnmp not installed — SNMP dump unavailable")
+        _log.error("pysnmp not installed  -  SNMP dump unavailable")
         return result
 
     from utils.ports import PortConfig as _PC
@@ -431,10 +431,10 @@ def snmp_write(
     Attempt to write a value via SNMP SET (requires 'private' or writable community).
 
     Common writable OIDs:
-      1.3.6.1.2.1.1.5.0 — sysName (device hostname)
-      1.3.6.1.2.1.1.6.0 — sysLocation
-      1.3.6.1.2.1.1.4.0 — sysContact
-      1.3.6.1.4.1.11.2.3.9.1.1.6.0 — HP: job-info-name1 (printed name)
+      1.3.6.1.2.1.1.5.0  -  sysName (device hostname)
+      1.3.6.1.2.1.1.6.0  -  sysLocation
+      1.3.6.1.2.1.1.4.0  -  sysContact
+      1.3.6.1.4.1.11.2.3.9.1.1.6.0  -  HP: job-info-name1 (printed name)
     """
     try:
         from pysnmp.hlapi import (
@@ -472,7 +472,7 @@ def get_saved_jobs(
     Attempt to retrieve saved/stored print jobs from the printer.
 
     Methods tried:
-      1. IPP Get-Jobs with 'completed' and 'all' — metadata only
+      1. IPP Get-Jobs with 'completed' and 'all'  -  metadata only
       2. Web interface job list pages
       3. FTP /jobs or /spool directories (if FTP is open)
 
@@ -556,7 +556,7 @@ def storage_audit(
     if ftp['accessible']:
         result['risk'].append(f'FTP_ACCESSIBLE ({ftp["credentials"][0]})')
         if verbose:
-            print(f"  [STORAGE] \033[1;31m[VULN]\033[0m FTP open — "
+            print(f"  [STORAGE] \033[1;31m[VULN]\033[0m FTP open  -  "
                   f"creds={ftp['credentials']}, "
                   f"files={len(ftp['files'])}, "
                   f"writable={ftp['writable']}")

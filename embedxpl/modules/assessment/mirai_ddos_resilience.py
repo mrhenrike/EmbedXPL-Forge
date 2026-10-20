@@ -5,10 +5,10 @@
 # MITRE: T1498.001 (Direct Network Flood), T1499.002 (Service Exhaustion Flood)
 """
 # ============================================================
-# AUTHORIZED USE ONLY — See docs/malware-research/DISCLAIMER.md
+# AUTHORIZED USE ONLY  -  See docs/malware-research/DISCLAIMER.md
 # Use only against systems you own or have WRITTEN authorization
 # to test. Operator assumes full legal responsibility for use.
-# simulate=True by default — set False only for authorized tests.
+# simulate=True by default  -  set False only for authorized tests.
 # ============================================================
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ METADATA = {
     "description":    (
         "Assesses target device/service resilience against the 10 attack vectors "
         "implemented in Mirai (attack_udp.c, attack_tcp.c, attack_app.c). "
-        "Sends low-rate probe traffic (NOT a DDoS — only 10 packets per vector) "
+        "Sends low-rate probe traffic (NOT a DDoS  -  only 10 packets per vector) "
         "to characterize how the target responds. "
         "Vectors: UDP flood, TCP SYN, ACK flood, GRE IP, HTTP GET flood."
     ),
@@ -109,7 +109,7 @@ class Exploit(_Base):
             print(f"  Would test {len(MIRAI_ATTACK_VECTORS)} attack vectors ({self.probe_count} probes each)")
             for name, vec in MIRAI_ATTACK_VECTORS.items():
                 print(f"  [{name}] {vec['description']} ({vec['protocol']})")
-            print("  Note: low-rate only — NOT a DDoS attack")
+            print("  Note: low-rate only  -  NOT a DDoS attack")
             return
 
         print(f"[*] Mirai DDoS resilience assessment: {self.target}:{self.port}")
@@ -134,9 +134,9 @@ class Exploit(_Base):
             print(f"    {'[RESPONDS]' if http_results['responds'] else '[NO RESPONSE]'} "
                   f"status={http_results.get('status', 'N/A')}")
 
-        # UDP probe (non-raw socket — use echo/DNS)
+        # UDP probe (non-raw socket  -  use echo/DNS)
         if self.vectors in ("all", "udp"):
-            print("[*] Vector: UDP flood (atk_vec_udp) — probing UDP/7 echo")
+            print("[*] Vector: UDP flood (atk_vec_udp)  -  probing UDP/7 echo")
             udp_results = self._probe_udp()
             results["udp"] = udp_results
             print(f"    UDP/7: {'OPEN' if udp_results['responds'] else 'CLOSED/FILTERED'}")

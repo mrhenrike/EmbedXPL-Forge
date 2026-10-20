@@ -22,7 +22,7 @@ _HSF_ROOT = Path("/run/media/mrhenrike/Data/Projects/Submodulos/IoT/third-party-
 _EXF_DEST = _HERE / "modules" / "exploits" / "hatsploit"
 
 _HEADER = """\
-# Absorbed from HatSploit (EntySec) — rewritten for EmbedXPL v5.0.0
+# Absorbed from HatSploit (EntySec)  -  rewritten for EmbedXPL v5.0.0
 # Original authors preserved in __info__
 # EmbedXPL adaptation: André Henrique (@mrhenrike) | União Geek
 """
@@ -37,7 +37,7 @@ _IMPORT_MAP = [
 
 def _transform(src: str) -> str:
     result = _HEADER + "\n"
-    # Add HatSploit shim — provides all base classes HatSploit modules need
+    # Add HatSploit shim  -  provides all base classes HatSploit modules need
     result += "from embedxpl.core.compat.hatsploit_shim import *\n"
     result += "from embedxpl.core.exploit import *\n\n"
 

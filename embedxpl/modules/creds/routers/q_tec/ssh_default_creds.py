@@ -7,7 +7,7 @@ class Exploit(SSHDefault):
     __info__ = {
         "name": "Q Tec Router Default SSH Creds",
         "description": "Dictionary attack with default credentials against Q Tec Router SSH service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Q Tec Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

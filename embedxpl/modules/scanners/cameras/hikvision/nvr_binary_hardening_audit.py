@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Hikvision NVR/DVR Binary Hardening Audit — ELF security analysis.
+"""Hikvision NVR/DVR Binary Hardening Audit  -  ELF security analysis.
 
 Analyzes extracted firmware binaries for security hardening features:
 PIE/ASLR, NX/DEP, RELRO, Stack Canaries, and FORTIFY_SOURCE. Uses the

@@ -107,13 +107,13 @@ ERRORS_TYPES = {
     'Request timeout': 'Try to increase timeout or to switch to another internet service provider',
     'Connecting failure': 'Check your internet connection; if only a subset of sites fails, try `-n 10` to lower parallelism',
     'Connecting failure (DNS)': (
-        'DNS resolution failed for most sites — Maigret\'s async DNS resolver (aiodns) could not contact a server. '
+        'DNS resolution failed for most sites  -  Maigret\'s async DNS resolver (aiodns) could not contact a server. '
         'First, try `--dns-resolver threaded` to fall back to the system DNS resolver (often fixes this on Windows / VPN / corporate networks). '
         'If that does not help, check your internet connection, VPN, or firewall, and consider a public resolver (1.1.1.1 or 8.8.8.8)'
     ),
     'Webgate unavailable': (
         'cloudflare_bypass is enabled but every configured solver is unreachable. '
-        'Verify the URLs under `cloudflare_bypass.modules` in settings.json, and start at least one solver — '
+        'Verify the URLs under `cloudflare_bypass.modules` in settings.json, and start at least one solver  -  '
         'most commonly FlareSolverr (`docker run -d -p 8191:8191 ghcr.io/flaresolverr/flaresolverr:latest`). '
         'Or set `cloudflare_bypass.enabled` to false in settings.json (and drop `--cloudflare-bypass`) to skip CF-protected sites'
     ),
@@ -134,7 +134,7 @@ TEMPORARY_ERRORS_TYPES = [
     'Payload',
 ]
 
-THRESHOLD = 3  # percent — default threshold above which an error type is "important"
+THRESHOLD = 3  # percent  -  default threshold above which an error type is "important"
 
 # Per-error-type threshold overrides. The default 3% catches systemic issues
 # (Captcha, Bot protection) quickly, but for some classes a low percentage is
@@ -144,7 +144,7 @@ THRESHOLD = 3  # percent — default threshold above which an error type is "imp
 #   dead DNS records (sites that shut down). Firing the alarm at 3% means
 #   3 dead domains in a 100-site batch produce a Windows/VPN troubleshooting
 #   suggestion that is wrong for nearly every user. Wait for ≥10% before
-#   nagging — at that rate it's clearly the user's resolver, not data rot.
+#   nagging  -  at that rate it's clearly the user's resolver, not data rot.
 ERROR_THRESHOLDS: Dict[str, float] = {
     'Connecting failure (DNS)': 10,
 }
@@ -211,8 +211,8 @@ def notify_about_errors(
     Prepare error notifications in search results, to be displayed by the
     notify object. Each notification is a tuple:
 
-    - ``(text, symbol)`` — plain message rendered fully bold/bright
-    - ``(text, symbol, advice)`` — header (``text``) is bold, ``advice`` is
+    - ``(text, symbol)``  -  plain message rendered fully bold/bright
+    - ``(text, symbol, advice)``  -  header (``text``) is bold, ``advice`` is
       appended in normal weight so the actionable explanation does not
       visually overwhelm the count line. Consumer (``notify.warning``)
       uses ``*tuple`` unpacking; the extra arg is optional there.

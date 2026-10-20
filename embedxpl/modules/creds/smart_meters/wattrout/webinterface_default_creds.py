@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""WATTrouter — Default Web Interface Credentials.
+"""WATTrouter  -  Default Web Interface Credentials.
 
 Version: 1.0.0
 """
@@ -61,7 +61,7 @@ class Exploit(HTTPClient):
                     if self.stop_on_success:
                         return
             code = resp.status_code if resp else "no response"
-            print_status("  {}:{} — {}".format(username, password, code))
+            print_status("  {}:{}  -  {}".format(username, password, code))
 
         if not found:
             print_error("No default credentials accepted")

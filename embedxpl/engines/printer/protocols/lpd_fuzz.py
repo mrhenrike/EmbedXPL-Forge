@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-LPD (RFC 1179) security testing — native port of RUB-NDS/PRET lpd/lpdtest.py
+LPD (RFC 1179) security testing  -  native port of RUB-NDS/PRET lpd/lpdtest.py
 and lpdprint.py. Tests legacy LPD implementations for path traversal, arbitrary
 file write/delete, shell injection, and queue brute-force.
 """

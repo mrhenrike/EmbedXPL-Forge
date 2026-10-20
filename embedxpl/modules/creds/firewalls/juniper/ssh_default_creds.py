@@ -17,7 +17,7 @@ class Exploit(SSHDefault):
             "and legacy SSG series SSH. Covers SOHO/SMB models: SRX100/210/220/300. "
             "Cherry-picked from FirewallXPL-Forge."
         ),
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (
             "Juniper SRX100 / SRX210 / SRX220 / SRX300 / SRX320",
             "Juniper SSG 5 / SSG 20 (legacy NetScreen OS)",

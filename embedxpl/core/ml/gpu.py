@@ -3,7 +3,7 @@
 Uses the HWProfiler for hardware discovery and ComputeBackend for
 backend abstraction. Maintains backward-compatible ``gpu_capability_summary()``.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations

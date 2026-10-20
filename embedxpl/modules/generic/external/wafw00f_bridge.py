@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""WAFW00F — Web Application Firewall Detection Bridge.
+"""WAFW00F  -  Web Application Firewall Detection Bridge.
 
 Wrapper module that invokes the wafw00f tool as a subprocess to detect
 WAF presence on a target web application.

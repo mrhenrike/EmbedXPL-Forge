@@ -1,4 +1,4 @@
-# Documentação — EmbedXPL-Forge
+# Documentação  -  EmbedXPL-Forge
 
 
 **Idiomas:** Arquivos neste diretório são primariamente **English (en-US)**. **Português (pt-BR)** Wiki: [wiki/pt-BR/README.md](wiki/pt-BR/README.md).

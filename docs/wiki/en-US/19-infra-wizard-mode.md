@@ -15,7 +15,7 @@ There are two modes:
 | **Direct** | `exf --infra ot --context ics --target 10.0.0.0/24` | Resolves and prints the module plan for the given infra/context/target combination |
 | **Wizard** | `exf --infra wizard` | Interactive step-by-step menu: prompts for infra type, context, and target, then prints the plan |
 
-Neither mode automatically runs exploit modules — the plan is presented for review, and the user selects modules interactively afterward.
+Neither mode automatically runs exploit modules  -  the plan is presented for review, and the user selects modules interactively afterward.
 
 ---
 
@@ -23,7 +23,7 @@ Neither mode automatically runs exploit modules — the plan is presented for re
 
 | Flag | Type | Required | Default | Accepted values | Description |
 |------|------|----------|---------|-----------------|-------------|
-| `--infra` | string | Yes | — | `ot`, `it`, `iot`, `wizard` | Infrastructure taxonomy type, or `wizard` for interactive mode |
+| `--infra` | string | Yes |  -  | `ot`, `it`, `iot`, `wizard` | Infrastructure taxonomy type, or `wizard` for interactive mode |
 | `--context` | string | Conditional | `""` | `ics`, `scada`, `plc`, `hmi`, `dcs`, `bms`, `smart_grid`, `oil_gas`, `manufacturing`, `datacenter`, `enterprise`, `campus`, `cloud`, `soho` | Operational context within the infra type |
 | `--target` | string | No | `127.0.0.1` | IPv4 / CIDR | Target IP or network range for the scan plan |
 
@@ -35,13 +35,13 @@ If `--context` is omitted, the orchestrator lists available contexts for the giv
 
 | `--infra` | Available `--context` values | Description |
 |-----------|------------------------------|-------------|
-| `ot` | `ics`, `scada`, `plc`, `hmi`, `dcs`, `bms`, `smart_grid`, `oil_gas`, `manufacturing` | Operational Technology — industrial networks |
+| `ot` | `ics`, `scada`, `plc`, `hmi`, `dcs`, `bms`, `smart_grid`, `oil_gas`, `manufacturing` | Operational Technology  -  industrial networks |
 | `it` | `datacenter`, `enterprise`, `campus`, `cloud` | Traditional IT infrastructure |
 | `iot` | `soho`, `smart_home`, `industrial_iot`, `medical_iot`, `retail_iot` | Internet of Things networks |
 
 ---
 
-## Direct mode — `--infra ot --context ics`
+## Direct mode  -  `--infra ot --context ics`
 
 ### List available contexts
 
@@ -65,7 +65,7 @@ $ exf --infra ot
 ```text
 $ exf --infra ot --context ics --target 10.0.50.0/24
 
-[*] Infrastructure scan plan — OT / ICS
+[*] Infrastructure scan plan  -  OT / ICS
     Target: 10.0.50.0/24
     Infra:  ot
     Context: ics
@@ -104,12 +104,12 @@ $ exf --infra ot --context ics --target 10.0.50.0/24
 [*] Or launch interactive shell and type 'use <module>' to explore.
 ```
 
-### Scan plan — IT datacenter
+### Scan plan  -  IT datacenter
 
 ```text
 $ exf --infra it --context datacenter --target 172.16.0.0/16
 
-[*] Infrastructure scan plan — IT / Datacenter
+[*] Infrastructure scan plan  -  IT / Datacenter
     Target: 172.16.0.0/16
     Infra:  it
     Context: datacenter
@@ -132,12 +132,12 @@ $ exf --infra it --context datacenter --target 172.16.0.0/16
       ... (24 more)
 ```
 
-### Scan plan — IoT SOHO
+### Scan plan  -  IoT SOHO
 
 ```text
 $ exf --infra iot --context soho --target 192.168.1.0/24
 
-[*] Infrastructure scan plan — IoT / SOHO
+[*] Infrastructure scan plan  -  IoT / SOHO
     Target: 192.168.1.0/24
     Infra:  iot
     Context: soho
@@ -167,7 +167,7 @@ $ exf --infra iot --context soho --target 192.168.1.0/24
 
 ---
 
-## Wizard mode — `--infra wizard`
+## Wizard mode  -  `--infra wizard`
 
 The wizard presents a numbered interactive menu for infra type and context selection, then prints the resolved module plan.
 
@@ -177,26 +177,26 @@ The wizard presents a numbered interactive menu for infra type and context selec
 $ exf --infra wizard
 
 =================================================================
-  EmbedXPL-Forge — Infrastructure Orchestrator Wizard
+  EmbedXPL-Forge  -  Infrastructure Orchestrator Wizard
 =================================================================
 
 Select infrastructure type:
-  [1] ot   — Operational Technology (ICS/SCADA/PLC networks)
-  [2] it   — Information Technology (datacenter, enterprise)
-  [3] iot  — Internet of Things (SOHO, smart home, industrial IoT)
+  [1] ot    -  Operational Technology (ICS/SCADA/PLC networks)
+  [2] it    -  Information Technology (datacenter, enterprise)
+  [3] iot   -  Internet of Things (SOHO, smart home, industrial IoT)
 
 Enter selection [1-3]: 1
 
 Select operational context for OT:
-  [1] ics            — Industrial Control Systems (generic)
-  [2] scada          — Supervisory Control and Data Acquisition
-  [3] plc            — PLC-focused environment
-  [4] hmi            — Human Machine Interfaces
-  [5] dcs            — Distributed Control Systems
-  [6] bms            — Building Management Systems
-  [7] smart_grid     — Smart Grid / Energy infrastructure
-  [8] oil_gas        — Oil & Gas (refineries, pipelines)
-  [9] manufacturing  — Manufacturing / factory floor
+  [1] ics             -  Industrial Control Systems (generic)
+  [2] scada           -  Supervisory Control and Data Acquisition
+  [3] plc             -  PLC-focused environment
+  [4] hmi             -  Human Machine Interfaces
+  [5] dcs             -  Distributed Control Systems
+  [6] bms             -  Building Management Systems
+  [7] smart_grid      -  Smart Grid / Energy infrastructure
+  [8] oil_gas         -  Oil & Gas (refineries, pipelines)
+  [9] manufacturing   -  Manufacturing / factory floor
 
 Enter selection [1-9]: 2
 
@@ -204,7 +204,7 @@ Enter target IP or CIDR (e.g. 10.0.0.1 or 10.0.50.0/24): 10.0.100.0/24
 
 [*] Building scan plan for OT/SCADA, target: 10.0.100.0/24...
 
-[*] Infrastructure scan plan — OT / SCADA
+[*] Infrastructure scan plan  -  OT / SCADA
     Target: 10.0.100.0/24
     Infra:  ot
     Context: scada
@@ -317,8 +317,8 @@ exf (Modbus Scanner) > set target 10.0.50.0/24
 [+] target => 10.0.50.0/24
 exf (Modbus Scanner) > run
 [*] Scanning 254 hosts on Modbus TCP port 502...
-[+] 10.0.50.10  — Modbus device responding (Schneider Modicon M340)
-[+] 10.0.50.11  — Modbus device responding (Siemens S7-1200)
+[+] 10.0.50.10   -  Modbus device responding (Schneider Modicon M340)
+[+] 10.0.50.11   -  Modbus device responding (Siemens S7-1200)
 
 exf > use exploits/ics/siemens/s7_1200_plc_control
 exf (Siemens S7-1200 PLC Control) > set target 10.0.50.11
@@ -332,7 +332,7 @@ exf (Siemens S7-1200 PLC Control) > run
 
 - **No auto-exploitation**: The wizard and `--infra/--context` flags are read-only planning tools. They do not automatically run exploit modules.
 - **Module ordering**: Modules within a plan are ordered by severity (critical first) and discovery phase first, exploits second.
-- **CIDR targets**: When a CIDR range is provided as `--target`, the plan uses it for all scanner modules. Individual exploit modules require a single IP — use `discover` or scanner output to enumerate specific targets first.
+- **CIDR targets**: When a CIDR range is provided as `--target`, the plan uses it for all scanner modules. Individual exploit modules require a single IP  -  use `discover` or scanner output to enumerate specific targets first.
 
 > See also: [20-ics-ot-modules.md](20-ics-ot-modules.md) for full ICS/OT exploit module reference.
 

@@ -35,7 +35,7 @@ class ScanDashboard:
     def start(self) -> None:
         """Start the live dashboard."""
         if not has_rich:
-            logger.info("Rich not installed — dashboard disabled")
+            logger.info("Rich not installed  -  dashboard disabled")
             return
         layout = self._build_layout()
         self._live = Live(layout, console=console, refresh_per_second=2)

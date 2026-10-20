@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Roku ECP Discovery Scanner — SSDP + port 8060 HTTP probe.
+"""Roku ECP Discovery Scanner  -  SSDP + port 8060 HTTP probe.
 
 Discovers Roku devices on the local network via SSDP multicast
 and direct HTTP probe to identify models and firmware versions.
@@ -28,7 +28,7 @@ _SSDP_SEARCH = (
 
 
 class Exploit(HTTPClient):
-    """Roku ECP Device Discovery — SSDP + HTTP probe.
+    """Roku ECP Device Discovery  -  SSDP + HTTP probe.
 
     Discovers Roku devices via SSDP multicast (ST: roku:ecp) and
     probes port 8060 /query/device-info for model and firmware details.

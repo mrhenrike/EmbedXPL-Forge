@@ -7,7 +7,7 @@ class Exploit(SSHDefault):
     __info__ = {
         "name": "Dynamode Router Default SSH Creds",
         "description": "Dictionary attack with default credentials against Dynamode Router SSH service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Dynamode Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

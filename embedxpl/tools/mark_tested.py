@@ -1,23 +1,23 @@
-"""EmbedXPL — Module Test-Status Marker.
+"""EmbedXPL  -  Module Test-Status Marker.
 
 Scans ALL .py files under embedxpl/modules/, determines whether each module
 has been tested/confirmed in a real environment, and writes the result to
 embedxpl/data/module_test_status.json.
 
 Decision logic (in priority order):
-  1.  kev                      — Any CVE referenced by the module is in the CISA KEV list.
-  2.  rsf_public_framework     — Module path contains /rsf_  (RouterSploit-absorbed).
-  3.  hatsploit_public_framework — Module path contains /hatsploit (HatSploit-absorbed).
-  4.  isf_public_framework     — Module path contains /isf_  (ISF-absorbed).
-  5.  known_real_target        — Module lives under cameras/hikvision/, cameras/dahua/,
+  1.  kev                       -  Any CVE referenced by the module is in the CISA KEV list.
+  2.  rsf_public_framework      -  Module path contains /rsf_  (RouterSploit-absorbed).
+  3.  hatsploit_public_framework  -  Module path contains /hatsploit (HatSploit-absorbed).
+  4.  isf_public_framework      -  Module path contains /isf_  (ISF-absorbed).
+  5.  known_real_target         -  Module lives under cameras/hikvision/, cameras/dahua/,
                                  cameras/intelbras/ AND has at least one CVE reference.
-  6.  exploitdb                — Filename starts with edb_  (ExploitDB-sourced exploit).
-  7.  metasploit_equivalent    — Any CVE is present in the Metasploit Framework modules.
-  8.  tenable_check            — Module path contains 'tenable' (Tenable-sourced check).
-  9.  lab_poc                  — Any CVE matches a verified PoC dir in the local Labs arsenal.
-  10. public_poc               — Any CVE has a public PoC (poc_github) in TupaXPL cve_catalog.
-  11. covered_cve              — Any CVE is in embedxpl/data/cve_catalog.db with covered=1.
-  12. False / None             — Everything else: tested=False (stub/theoretical).
+  6.  exploitdb                 -  Filename starts with edb_  (ExploitDB-sourced exploit).
+  7.  metasploit_equivalent     -  Any CVE is present in the Metasploit Framework modules.
+  8.  tenable_check             -  Module path contains 'tenable' (Tenable-sourced check).
+  9.  lab_poc                   -  Any CVE matches a verified PoC dir in the local Labs arsenal.
+  10. public_poc                -  Any CVE has a public PoC (poc_github) in TupaXPL cve_catalog.
+  11. covered_cve               -  Any CVE is in embedxpl/data/cve_catalog.db with covered=1.
+  12. False / None              -  Everything else: tested=False (stub/theoretical).
 
 Output:
   embedxpl/data/module_test_status.json
@@ -196,7 +196,7 @@ def _load_tupa_poc_cves() -> set[str]:
         return set()
     try:
         conn = sqlite3.connect(str(_TUPA_CVE_DB))
-        # poc_github is a JSON array — non-empty means at least one GitHub PoC exists
+        # poc_github is a JSON array  -  non-empty means at least one GitHub PoC exists
         rows = conn.execute(
             "SELECT cve_id FROM cves WHERE poc_github IS NOT NULL AND poc_github != '[]'"
         ).fetchall()
@@ -234,8 +234,8 @@ def _classify(
     """Return (tested, evidence) for a single module.
 
     Returns:
-        (True, evidence_label) — confirmed tested
-        (False, '')            — untested / stub
+        (True, evidence_label)  -  confirmed tested
+        (False, '')             -  untested / stub
     """
     lower = rel_path.lower()
     filename = lower.split("/")[-1]
@@ -274,11 +274,11 @@ def _classify(
     if is_known_target and cves:
         return True, "known_real_target"
 
-    # 6. ExploitDB — filename starts with edb_ (e.g. edb_38514.py)
+    # 6. ExploitDB  -  filename starts with edb_ (e.g. edb_38514.py)
     if filename.startswith("edb_") or "/edb_" in lower:
         return True, "exploitdb"
 
-    # 7. Metasploit cross-reference — CVE present in MSF modules
+    # 7. Metasploit cross-reference  -  CVE present in MSF modules
     if msf_cves:
         msf_hits = [c for c in cves if c in msf_cves]
         if msf_hits:
@@ -288,13 +288,13 @@ def _classify(
     if "tenable" in lower:
         return True, "tenable_check"
 
-    # 9. Lab PoC — CVE matches a verified PoC repo in local Labs arsenal
+    # 9. Lab PoC  -  CVE matches a verified PoC repo in local Labs arsenal
     if lab_cves:
         lab_hits = [c for c in cves if c in lab_cves]
         if lab_hits:
             return True, "lab_poc"
 
-    # 10. TupaXPL public PoC — CVE has a GitHub PoC in the pocindex catalog
+    # 10. TupaXPL public PoC  -  CVE has a GitHub PoC in the pocindex catalog
     if tupa_poc_cves:
         poc_hits = [c for c in cves if c in tupa_poc_cves]
         if poc_hits:

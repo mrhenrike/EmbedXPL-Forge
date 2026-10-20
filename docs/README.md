@@ -1,4 +1,4 @@
-# Documentation — EmbedXPL-Forge
+# Documentation  -  EmbedXPL-Forge
 
 
 **Languages:** Files below are primarily **English (en-US)**. **Português (pt-BR)** hub: [README.pt-BR.md](README.pt-BR.md). Wiki: [wiki/pt-BR/README.md](wiki/pt-BR/README.md).

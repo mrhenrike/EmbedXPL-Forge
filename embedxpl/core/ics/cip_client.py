@@ -1,6 +1,6 @@
 """
-EmbedXPL-Forge — EtherNet/IP (CIP) Client
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+EmbedXPL-Forge  -  EtherNet/IP (CIP) Client
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 
 Python 3 raw-socket implementation of EtherNet/IP Encapsulation and CIP.
 Ported and modernised from ISF CIPClient (original: WenZhe Zhu / ICSsploit).

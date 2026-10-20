@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Intelbras PVIP 1000 IP Camera — Network Discovery Scanner.
+"""Intelbras PVIP 1000 IP Camera  -  Network Discovery Scanner.
 
 Discovers Intelbras PVIP 1000 cameras via HTTP and SIP probes.
 

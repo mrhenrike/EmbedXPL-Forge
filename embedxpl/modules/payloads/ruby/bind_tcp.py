@@ -6,7 +6,7 @@ from embedxpl.core.exploit.payloads import BasePayload
 class Payload(BasePayload):
     __info__ = {
         "name": "Ruby Bind TCP",
-        "description": "Ruby bind TCP shell — listens on target.",
+        "description": "Ruby bind TCP shell  -  listens on target.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
     }
 

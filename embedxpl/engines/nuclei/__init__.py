@@ -1,4 +1,4 @@
-"""EmbedXPL Nuclei engine — nuclei-templates scanner integration.
+"""EmbedXPL Nuclei engine  -  nuclei-templates scanner integration.
 
 nuclei-templates are stored at:
   /run/media/mrhenrike/Data/Projects/Submodulos/Hacking/nuclei-templates/

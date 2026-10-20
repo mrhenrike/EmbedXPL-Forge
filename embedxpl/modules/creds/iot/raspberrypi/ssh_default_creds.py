@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Raspberry Pi — Default SSH Credentials.
+"""Raspberry Pi  -  Default SSH Credentials.
 
 Attempts SSH authentication using known Raspberry Pi default credentials.
 
@@ -74,9 +74,9 @@ class Exploit(SSHClient):
                         return
                 else:
                     display_pass = password if password else "(blank)"
-                    print_status("  {}:{} — failed".format(username, display_pass))
+                    print_status("  {}:{}  -  failed".format(username, display_pass))
             except Exception as e:
-                print_status("  {}:{} — error: {}".format(username, password, e))
+                print_status("  {}:{}  -  error: {}".format(username, password, e))
 
         if not found:
             print_error("No default credentials accepted")

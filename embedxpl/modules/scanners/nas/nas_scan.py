@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""NAS Scanner — AutoPwn-style discovery and exploitation of NAS devices.
+"""NAS Scanner  -  AutoPwn-style discovery and exploitation of NAS devices.
 
 Runs all exploit and credential modules tagged for the 'nas' category
 against the target, delegating to individual NAS exploit modules.
@@ -12,7 +12,7 @@ from embedxpl.modules.scanners.autopwn import Exploit
 
 
 class Exploit(Exploit):
-    """NAS Scanner — Auto-discovers NAS vulnerabilities and weak credentials.
+    """NAS Scanner  -  Auto-discovers NAS vulnerabilities and weak credentials.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -27,7 +27,7 @@ class Exploit(Exploit):
         ),
         "authors": (
             "Marcin Bury <marcin[at]threat9.com>",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "devices": (
             "NAS",

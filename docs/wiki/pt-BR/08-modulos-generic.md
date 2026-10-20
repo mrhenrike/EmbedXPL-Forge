@@ -4,7 +4,7 @@
 
 ---
 
-Os módulos generic operam entre vendors e classes de dispositivos — eles visam protocolos e serviços comuns em vez de vulnerabilidades específicas de vendor.
+Os módulos generic operam entre vendors e classes de dispositivos  -  eles visam protocolos e serviços comuns em vez de vulnerabilidades específicas de vendor.
 
 ## Mapa de Módulos
 
@@ -24,17 +24,17 @@ Os módulos generic operam entre vendors e classes de dispositivos — eles visa
 
 O `igd_exploit` é o módulo UPnP mais abrangente. Ele encadeia:
 
-1. **SSDP M-SEARCH** — descobre todos os serviços IGD no alvo
-2. **Parsing do XML de descrição do dispositivo** — extrai modelo, número de série, lista de serviços
-3. **Enumeração SCPD** — lista todas as ações SOAP disponíveis por serviço
-4. **GetExternalIPAddress** — divulga o IP WAN/externo sem autenticação
-5. **GetGenericPortMappingEntry** — enumera todos os mapeamentos de porta NAT existentes
-6. **AddPortMapping** — adiciona regras de bypass de firewall sem autenticação (CRÍTICO)
-7. **DeletePortMapping** — remove regras NAT
-8. **GetStatusInfo / GetNATRSIPStatus** — status da conexão WAN e tempo de atividade
-9. **WANCommonInterfaceConfig** — estatísticas de tráfego (bytes/pacotes enviados/recebidos, tipo de link)
-10. **ForceTermination** — capacidade de desconexão WAN (DoS) — ignorado por padrão
-11. **Event SUBSCRIBE** — monitora eventos WAN em tempo real
+1. **SSDP M-SEARCH**  -  descobre todos os serviços IGD no alvo
+2. **Parsing do XML de descrição do dispositivo**  -  extrai modelo, número de série, lista de serviços
+3. **Enumeração SCPD**  -  lista todas as ações SOAP disponíveis por serviço
+4. **GetExternalIPAddress**  -  divulga o IP WAN/externo sem autenticação
+5. **GetGenericPortMappingEntry**  -  enumera todos os mapeamentos de porta NAT existentes
+6. **AddPortMapping**  -  adiciona regras de bypass de firewall sem autenticação (CRÍTICO)
+7. **DeletePortMapping**  -  remove regras NAT
+8. **GetStatusInfo / GetNATRSIPStatus**  -  status da conexão WAN e tempo de atividade
+9. **WANCommonInterfaceConfig**  -  estatísticas de tráfego (bytes/pacotes enviados/recebidos, tipo de link)
+10. **ForceTermination**  -  capacidade de desconexão WAN (DoS)  -  ignorado por padrão
+11. **Event SUBSCRIBE**  -  monitora eventos WAN em tempo real
 
 ```text
 EmbedXPL-Forge > use generic/upnp/igd_exploit

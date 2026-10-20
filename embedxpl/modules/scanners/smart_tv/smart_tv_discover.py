@@ -128,7 +128,7 @@ class Exploit(BaseExploit):
                 banner = _tcp_probe(self.target, port, float(self.timeout))
                 if banner is not None:
                     with lock:
-                        results[port] = "[TCP/{:5d}] {} — {}".format(
+                        results[port] = "[TCP/{:5d}] {}  -  {}".format(
                             port, label, banner[:80] if banner != "(connected, no banner)" else ""
                         )
                         print_success(results[port])

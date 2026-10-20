@@ -32,7 +32,7 @@ def _resolve_address(host: str) -> tuple:
     # Strip brackets from IPv6 literals like [::1]
     host_clean = host.strip('[]')
 
-    # Attempt getaddrinfo — returns list of (family, type, proto, canonname, sockaddr)
+    # Attempt getaddrinfo  -  returns list of (family, type, proto, canonname, sockaddr)
     try:
         infos = socket.getaddrinfo(host_clean, None, socket.AF_UNSPEC, socket.SOCK_STREAM)
     except socket.gaierror as exc:
@@ -97,7 +97,7 @@ class RAWProtocol:
     def send(self, data: bytes | str) -> None:
         """Send raw bytes (or a string which will be UTF-8 encoded)."""
         if not self.sock:
-            raise ConnectionError("Not connected — call connect() first")
+            raise ConnectionError("Not connected  -  call connect() first")
         if isinstance(data, str):
             data = data.encode('utf-8', errors='replace')
         self.sock.sendall(data)

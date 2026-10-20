@@ -1,10 +1,10 @@
 """Delegate execution to Rapid7 Metasploit ``msfconsole`` (local install).
 
-Uses the framework's own Ruby modules *verbatim* — no EmbedXPL port of MSF
+Uses the framework's own Ruby modules *verbatim*  -  no EmbedXPL port of MSF
 code. Keep original authors and ``LICENSE`` from your Metasploit checkout.
 Requires authorized testing targets only.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ class Exploit(Exploit):
     __info__ = {
         "name": "Metasploit Console Bridge",
         "description": "Invokes local msfconsole with 'use <module>; setg RHOSTS; …; check|run'. "
-        "MSF modules and license remain under Rapid7/BSD at your install path — this module only "
+        "MSF modules and license remain under Rapid7/BSD at your install path  -  this module only "
         "orchestrates the CLI. Not legal advice: comply with all licenses and target authorization.",
         "authors": (
             "André Henrique (@mrhenrike)",

@@ -1,3 +1,3 @@
-"""EmbedXPL — wordlist_fuzzing modules (synced from specialized tool).
+"""EmbedXPL  -  wordlist_fuzzing modules (synced from specialized tool).
 # authorized use only
 """

@@ -1,6 +1,6 @@
-"""XOR Polymorphic encoder — chave aleatória por geração.
+"""XOR Polymorphic encoder  -  chave aleatória por geração.
 
-O primeiro byte do output É a chave — o stub a extrai e decifra.
+O primeiro byte do output É a chave  -  o stub a extrai e decifra.
 Bypassa AVs baseados em hash/assinatura estática.
 """
 
@@ -12,7 +12,7 @@ from embedxpl.core.exploit.payloads import Architectures
 class Encoder(BaseEncoder):
     __info__ = {
         "name": "XOR Polymorphic Encoder",
-        "description": "Polymorphic XOR — random key per generation prepended as first byte.",
+        "description": "Polymorphic XOR  -  random key per generation prepended as first byte.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
         "evasion_score": 5,
     }
@@ -30,7 +30,7 @@ class Encoder(BaseEncoder):
 
     def decode_stub_c(self) -> str:
         return (
-            "// XOR poly decode stub — key is first byte\n"
+            "// XOR poly decode stub  -  key is first byte\n"
             "void decode(unsigned char *buf, int len) {\n"
             "    unsigned char key = buf[0];\n"
             "    for (int i = 1; i < len; i++) buf[i] ^= key;\n"

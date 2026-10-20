@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""BMC/IPMI Universal Scanner — Redfish + IPMI UDP Discovery.
+"""BMC/IPMI Universal Scanner  -  Redfish + IPMI UDP Discovery.
 
 Discovers BMC/IPMI management interfaces on servers.
 
@@ -76,7 +76,7 @@ class Exploit(HTTPClient):
                     vendor = vend
                     break
             print_success(
-                "Redfish API detected on {}:{} — Vendor: {}".format(
+                "Redfish API detected on {}:{}  -  Vendor: {}".format(
                     self.target, self.port, vendor
                 )
             )

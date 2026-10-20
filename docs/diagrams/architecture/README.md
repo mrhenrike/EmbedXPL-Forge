@@ -1,4 +1,4 @@
-# Architecture Diagrams — EmbedXPL-Forge
+# Architecture Diagrams  -  EmbedXPL-Forge
 
 
 **Languages:** Diagram labels are **English (en-US)** by default. **Português (pt-BR):** [README.pt-BR.md](README.pt-BR.md).
@@ -10,7 +10,7 @@ Diagrams show device attack surfaces with coverage indicators for EmbedXPL-Forge
 | File | Category |
 |------|----------|
 | [01-router-soho.mmd](01-router-soho.mmd) | SOHO / home gateway (Linux / RTOS firmware) |
-| [02-switch-l2-l3.mmd](02-switch-l2-l3.mmd) | Managed L2/L3 switch (limited coverage — 3 modules) |
+| [02-switch-l2-l3.mmd](02-switch-l2-l3.mmd) | Managed L2/L3 switch (limited coverage  -  3 modules) |
 | [04-isp-cpe.mmd](04-isp-cpe.mmd) | ISP CPE / GPON ONT (Huawei EchoLife/OptiXstar, validated) |
 | [05-edge-mixed.mmd](05-edge-mixed.mmd) | Mixed small-office edge (router + basic security combo) |
 | [07-gpon-ont-attack.mmd](07-gpon-ont-attack.mmd) | GPON ONT full attack surface map (validated on EG8145X6-10) |

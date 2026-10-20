@@ -82,7 +82,7 @@ class Exploit(Exploit):
     lon = OptString("-0.1276", "Spoofed longitude (decimal degrees)")
     sog = OptString("0.0", "Speed over ground (knots)")
     count = OptInteger(10, "Number of sentences to send")
-    dry_run = OptBool(True, "Dry run — show sentences only")
+    dry_run = OptBool(True, "Dry run  -  show sentences only")
 
     @mute
     def check(self) -> bool:

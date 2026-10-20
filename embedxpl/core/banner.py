@@ -1,4 +1,4 @@
-"""EmbedXPL Suite — Banner Engine.
+"""EmbedXPL Suite  -  Banner Engine.
 
 Exibe o banner figlet da ferramenta com estatísticas em tempo real.
 Banners pré-gerados estão em embedxpl/resources/banners/*.txt.
@@ -27,7 +27,7 @@ _ROOT = _HERE.parent                             # embedxpl/
 _BANNERS_DIR = _ROOT / "resources" / "banners"
 _CACHE_DIR = Path.home() / ".embedxpl"
 _CACHE_FILE = _CACHE_DIR / "stats_cache.json"
-_CACHE_TTL = 300   # segundos — recontar se cache tiver mais de 5 min
+_CACHE_TTL = 300   # segundos  -  recontar se cache tiver mais de 5 min
 
 # ---------------------------------------------------------------------------
 # Mapeamento tool_name → arquivo de banner
@@ -212,7 +212,7 @@ def show_banner(
     Args:
         tool_name: Nome da ferramenta (embedxpl, industrialxpl, etc.)
         version:   String de versão exibida ao lado do banner.
-        db:        Instância EXFDatabase (opcional — usado para stats de workspace).
+        db:        Instância EXFDatabase (opcional  -  usado para stats de workspace).
         color:     Se False, desativa cores ANSI.
     """
     # Desativa cores se não for terminal
@@ -279,7 +279,7 @@ def show_banner(
 
 
 def show_banner_for_suite(tool_name: str, **kwargs) -> None:
-    """Alias público — usado pelos interpreters dos tools especializados."""
+    """Alias público  -  usado pelos interpreters dos tools especializados."""
     show_banner(tool_name, **kwargs)
 
 

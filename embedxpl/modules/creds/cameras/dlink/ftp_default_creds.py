@@ -4,7 +4,7 @@ from embedxpl.modules.creds.generic.ftp_default import Exploit as FTPDefault
 
 
 class Exploit(FTPDefault):
-    """D-Link Camera — Default FTP Credentials.
+    """D-Link Camera  -  Default FTP Credentials.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -18,7 +18,7 @@ class Exploit(FTPDefault):
         ),
         "authors": (
             "Marcin Bury <marcin[at]threat9.com>",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge port",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge port",
         ),
         "devices": (
             "D-Link Camera",

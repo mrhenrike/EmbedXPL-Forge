@@ -7,7 +7,7 @@ and mapping to EmbedXPL-Forge exploit modules when available.
 Also supports live enrichment from local JSON catalogs and the existing
 module tree's __info__ metadata.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations
@@ -59,7 +59,7 @@ class CVEEntry:
 
 
 # =====================================================================
-# Embedded CVE catalog — curated for in-scope devices
+# Embedded CVE catalog  -  curated for in-scope devices
 # =====================================================================
 
 _EMBEDDED_CVES: List[Dict[str, Any]] = [
@@ -118,7 +118,7 @@ _EMBEDDED_CVES: List[Dict[str, Any]] = [
     {"cve_id": "CVE-2019-9494", "vendor": "generic", "product": "wpa3", "affected_versions": "WPA3-SAE implementations", "description": "SAE side-channel timing attack (Dragonblood)", "cvss_score": 5.9, "access_vector": "ADJACENT"},
     {"cve_id": "CVE-2019-9496", "vendor": "generic", "product": "wpa3", "affected_versions": "WPA3-Transition mode", "description": "SAE transition mode downgrade to WPA2", "cvss_score": 7.5, "access_vector": "ADJACENT"},
     # --- Multi-vendor ---
-    {"cve_id": "CVE-2014-9222", "vendor": "multi", "product": "rom0", "affected_versions": "Allegro RomPager < 4.34", "description": "Misfortune Cookie — RCE via HTTP cookie overflow in embedded devices", "cvss_score": 9.8, "access_vector": "REMOTE"},
+    {"cve_id": "CVE-2014-9222", "vendor": "multi", "product": "rom0", "affected_versions": "Allegro RomPager < 4.34", "description": "Misfortune Cookie  -  RCE via HTTP cookie overflow in embedded devices", "cvss_score": 9.8, "access_vector": "REMOTE"},
     # --- Physical-only examples (not remotely exploitable) ---
     {"cve_id": "CVE-2020-27301", "vendor": "cisco", "product": "jabber", "affected_versions": "Jabber for Windows", "description": "DLL hijacking (requires local access)", "cvss_score": 7.8, "access_vector": "LOCAL"},
     {"cve_id": "CVE-2018-0150", "vendor": "cisco", "product": "ios_xe", "affected_versions": "IOS XE with hardcoded credentials", "description": "Hardcoded root credentials (console/physical access)", "cvss_score": 9.8, "access_vector": "PHYSICAL"},
@@ -182,7 +182,7 @@ def _load_poc_intel_cve_hints(repo_root: Path) -> List[CVEEntry]:
     except (OSError, json.JSONDecodeError) as exc:
         logger.warning("embedded_third_party_poc_intel.json unreadable: %s", exc)
         return []
-    # Bulk indices (tg12, ExploitDB mirrors) stay in JSON for tooling — not loaded into lookup RAM.
+    # Bulk indices (tg12, ExploitDB mirrors) stay in JSON for tooling  -  not loaded into lookup RAM.
     skip_slugs = frozenset(
         {
             "tg12__PoC_CVEs",

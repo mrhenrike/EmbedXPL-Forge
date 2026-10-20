@@ -51,7 +51,7 @@ PNG gallery. Mermaid sources: [../../diagrams/architecture/README.md](../../diag
 | [20-ics-ot-modules.md](20-ics-ot-modules.md) | ICS/OT module coverage: Modbus, S7, EtherNet/IP, Universal Robots |
 | [21-rtsp-camera-engine.md](21-rtsp-camera-engine.md) | RTSP/cameradar engine: discovery, attacks, credential testing |
 | [22-cve-module-reference.md](22-cve-module-reference.md) | Full CVE module index with CVSS and affected versions (151+ firewall/VPN/NAC modules, Tier 3 expansion) |
-| [23-vendor-reference-firewalls.md](23-vendor-reference-firewalls.md) | Firewall/VPN/NAC vendor module reference — 34 vendors including Sangfor, Aruba ClearPass, Citrix/NetScaler, Ivanti |
+| [23-vendor-reference-firewalls.md](23-vendor-reference-firewalls.md) | Firewall/VPN/NAC vendor module reference  -  34 vendors including Sangfor, Aruba ClearPass, Citrix/NetScaler, Ivanti |
 | [Module path index (all locales)](../ANEXO-INDICE-MODULOS.md) | Full module path list |
 
 ## End-to-End Examples (input and expected output)

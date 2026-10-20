@@ -101,7 +101,7 @@ class Exploit(HTTPClient):
                 if result:
                     found_any = True
                     version, banner_snippet = result
-                    msg = "MagicINFO server at {}:{}{} — version: {}".format(
+                    msg = "MagicINFO server at {}:{}{}  -  version: {}".format(
                         self.target, probe_port, path, version or "unknown"
                     )
                     print_success(msg)

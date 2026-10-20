@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Samsung MagicINFO 9 — Hardcoded Database Credentials (CVE-2026-25202).
+"""Samsung MagicINFO 9  -  Hardcoded Database Credentials (CVE-2026-25202).
 
 Probes the MagicINFO 9 server for publicly accessible configuration endpoints
 or exposed configuration files that may disclose hardcoded database credentials.
@@ -73,7 +73,7 @@ def _extract_credentials(body: str) -> Optional[str]:
 
 
 class Exploit(HTTPClient):
-    """Samsung MagicINFO 9 Hardcoded Database Credentials — CVE-2026-25202.
+    """Samsung MagicINFO 9 Hardcoded Database Credentials  -  CVE-2026-25202.
 
     MagicINFO 9 stores database connection credentials in configuration files
     that may be accessible via the web server context without authentication.
@@ -133,7 +133,7 @@ class Exploit(HTTPClient):
                     )
         if not found_any:
             print_error(
-                "No configuration files exposed — target may be patched or "
+                "No configuration files exposed  -  target may be patched or "
                 "WEB-INF is not accessible."
             )
 

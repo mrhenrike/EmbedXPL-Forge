@@ -1,4 +1,4 @@
-# DRAFT — SecLists issue: curated PT-BR password subset
+# DRAFT  -  SecLists issue: curated PT-BR password subset
 
 > Local draft only. Copy/edit by hand before opening on GitHub.
 > Do not paste AI-authored prose if submitting to SecLists.
@@ -8,7 +8,7 @@
 
 Interest in a curated Brazilian Portuguese password subset (no breach dump)
 
-## Body (skeleton — rewrite in your own words)
+## Body (skeleton  -  rewrite in your own words)
 
 ### Summary
 

@@ -35,7 +35,7 @@ from embedxpl.modules.creds.generic.ssh_default import Exploit as SSHDefault
 
 
 class Exploit(SSHDefault):
-    """{display_name} — Default SSH Credentials.
+    """{display_name}  -  Default SSH Credentials.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -49,7 +49,7 @@ class Exploit(SSHDefault):
             "If valid credentials are found, they are displayed to the user."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "devices": (
             "{display_name}",
@@ -72,7 +72,7 @@ from embedxpl.modules.creds.generic.telnet_default import Exploit as TelnetDefau
 
 
 class Exploit(TelnetDefault):
-    """{display_name} — Default Telnet Credentials.
+    """{display_name}  -  Default Telnet Credentials.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -86,7 +86,7 @@ class Exploit(TelnetDefault):
             "If valid credentials are found, they are displayed to the user."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "devices": (
             "{display_name}",
@@ -109,7 +109,7 @@ from embedxpl.modules.creds.generic.ftp_default import Exploit as FTPDefault
 
 
 class Exploit(FTPDefault):
-    """{display_name} — Default FTP Credentials.
+    """{display_name}  -  Default FTP Credentials.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -123,7 +123,7 @@ class Exploit(FTPDefault):
             "If valid credentials are found, they are displayed to the user."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "devices": (
             "{display_name}",
@@ -146,7 +146,7 @@ from embedxpl.modules.creds.generic.http_basic_digest_default import Exploit as 
 
 
 class Exploit(HTTPBasicDigestDefault):
-    """{display_name} — Default Web Interface Credentials (HTTP Basic/Digest Auth).
+    """{display_name}  -  Default Web Interface Credentials (HTTP Basic/Digest Auth).
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -160,7 +160,7 @@ class Exploit(HTTPBasicDigestDefault):
             "If valid credentials are found, they are displayed to the user."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "devices": (
             "{display_name}",
@@ -184,7 +184,7 @@ from embedxpl.modules.creds.generic.snmp_bruteforce import Exploit as SNMPBrutef
 
 
 class Exploit(SNMPBruteforce):
-    """{display_name} — Default SNMP Community Strings.
+    """{display_name}  -  Default SNMP Community Strings.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -198,7 +198,7 @@ class Exploit(SNMPBruteforce):
             "If valid community strings are found, they are displayed to the user."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "devices": (
             "{display_name}",
@@ -239,7 +239,7 @@ def get_primary_cred(vendor_key: str) -> str:
 # modules_to_create: list of 'ssh','telnet','ftp','http_auth','snmp'
 VENDORS_TO_CREATE: list[tuple[str, str, str, int, list[str]]] = [
     # -----------------------------------------------------------------------
-    # CAMERAS — missing 15 vendors
+    # CAMERAS  -  missing 15 vendors
     # -----------------------------------------------------------------------
     ("cameras", "dahua", "Dahua Camera/DVR/NVR", 80, ["ssh", "telnet", "ftp", "http_auth"]),
     ("cameras", "foscam", "Foscam IP Camera", 80, ["ssh", "telnet", "ftp", "http_auth"]),
@@ -258,7 +258,7 @@ VENDORS_TO_CREATE: list[tuple[str, str, str, int, list[str]]] = [
     ("cameras", "arecont", "Arecont Vision MegaVideo", 80, ["ssh", "telnet", "ftp", "http_auth"]),
     ("cameras", "mobotix", "Mobotix IP Camera", 80, ["ssh", "telnet", "ftp", "http_auth"]),
     # -----------------------------------------------------------------------
-    # SWITCHES — new category
+    # SWITCHES  -  new category
     # -----------------------------------------------------------------------
     ("switches", "cisco_catalyst", "Cisco Catalyst Switch", 80, ["ssh", "telnet", "snmp", "http_auth"]),
     ("switches", "hp_procurve", "HP ProCurve Switch", 80, ["ssh", "telnet", "snmp", "http_auth"]),
@@ -274,7 +274,7 @@ VENDORS_TO_CREATE: list[tuple[str, str, str, int, list[str]]] = [
     ("switches", "accton", "Accton/EdgeCore Switch", 80, ["ssh", "telnet", "http_auth"]),
     ("switches", "allied_telesyn", "Allied Telesyn/Telesis Switch", 80, ["ssh", "telnet", "http_auth"]),
     # -----------------------------------------------------------------------
-    # FIREWALLS — new category
+    # FIREWALLS  -  new category
     # -----------------------------------------------------------------------
     ("firewalls", "sonicwall", "SonicWall Firewall/UTM", 443, ["ssh", "http_auth"]),
     ("firewalls", "watchguard", "WatchGuard Firebox", 443, ["ssh", "http_auth"]),
@@ -283,7 +283,7 @@ VENDORS_TO_CREATE: list[tuple[str, str, str, int, list[str]]] = [
     ("firewalls", "checkpoint", "Check Point Gateway", 443, ["ssh", "http_auth"]),
     ("firewalls", "cisco_asa", "Cisco ASA Firewall", 443, ["ssh", "telnet", "http_auth"]),
     # -----------------------------------------------------------------------
-    # PRINTERS — new category
+    # PRINTERS  -  new category
     # -----------------------------------------------------------------------
     ("printers", "hp", "HP LaserJet/OfficeJet Printer", 80, ["ftp", "http_auth"]),
     ("printers", "xerox", "Xerox WorkCentre/ColorQube", 80, ["ftp", "http_auth"]),
@@ -299,7 +299,7 @@ VENDORS_TO_CREATE: list[tuple[str, str, str, int, list[str]]] = [
     ("printers", "samsung", "Samsung ML/CLX/SCX Printer", 80, ["ftp", "http_auth"]),
     ("printers", "panasonic", "Panasonic KX Printer", 80, ["ftp", "http_auth"]),
     # -----------------------------------------------------------------------
-    # NAS / Storage — new category
+    # NAS / Storage  -  new category
     # -----------------------------------------------------------------------
     ("nas", "qnap", "QNAP NAS", 80, ["ssh", "ftp", "http_auth"]),
     ("nas", "synology", "Synology DiskStation NAS", 5000, ["ssh", "ftp", "http_auth"]),
@@ -309,7 +309,7 @@ VENDORS_TO_CREATE: list[tuple[str, str, str, int, list[str]]] = [
     ("nas", "buffalo", "Buffalo LinkStation/TeraStation NAS", 80, ["ssh", "ftp", "http_auth"]),
     ("nas", "netgear", "Netgear ReadyNAS", 80, ["ssh", "ftp", "http_auth"]),
     # -----------------------------------------------------------------------
-    # VoIP / Video Conferencing — new category
+    # VoIP / Video Conferencing  -  new category
     # -----------------------------------------------------------------------
     ("voip", "polycom", "Polycom SoundPoint/ViewStation", 80, ["ssh", "telnet", "ftp", "http_auth"]),
     ("voip", "tandberg", "TANDBERG/Cisco TelePresence", 80, ["ssh", "telnet", "http_auth"]),
@@ -320,7 +320,7 @@ VENDORS_TO_CREATE: list[tuple[str, str, str, int, list[str]]] = [
     ("voip", "sangoma", "Sangoma/FreePBX Gateway", 80, ["ssh", "http_auth"]),
     ("voip", "audiocodes", "AudioCodes Mediant Gateway", 80, ["ssh", "http_auth"]),
     # -----------------------------------------------------------------------
-    # ICS / OT — new category
+    # ICS / OT  -  new category
     # -----------------------------------------------------------------------
     ("ics", "siemens", "Siemens PLC/SCADA/Switch", 80, ["ssh", "telnet", "http_auth"]),
     ("ics", "schneider", "Schneider Electric/APC", 80, ["ssh", "telnet", "http_auth"]),
@@ -331,14 +331,14 @@ VENDORS_TO_CREATE: list[tuple[str, str, str, int, list[str]]] = [
     ("ics", "moxa", "Moxa NPort/EDS Serial/Switch", 80, ["ssh", "telnet", "http_auth"]),
     ("ics", "omron", "OMRON NJ/NX PLC", 80, ["ssh", "http_auth"]),
     # -----------------------------------------------------------------------
-    # ISP CPEs — additional
+    # ISP CPEs  -  additional
     # -----------------------------------------------------------------------
     ("ispcpes", "sagemcom", "Sagemcom CPE/Gateway", 80, ["ssh", "telnet", "ftp", "http_auth"]),
     ("ispcpes", "arris", "Arris Cable Modem/CPE", 80, ["ssh", "telnet", "ftp", "http_auth"]),
     ("ispcpes", "netcomm", "NetComm Wireless CPE", 80, ["ssh", "telnet", "ftp", "http_auth"]),
     ("ispcpes", "actiontec", "Actiontec Router/CPE", 80, ["ssh", "telnet", "ftp", "http_auth"]),
     # -----------------------------------------------------------------------
-    # Routers — additional vendors
+    # Routers  -  additional vendors
     # -----------------------------------------------------------------------
     ("routers", "tenda", "Tenda Router", 80, ["ssh", "telnet", "ftp", "http_auth"]),
     ("routers", "draytek", "DrayTek Vigor Router", 80, ["ssh", "telnet", "ftp", "http_auth"]),

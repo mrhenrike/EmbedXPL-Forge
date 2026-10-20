@@ -8,8 +8,8 @@
 
 ```bash
 embedxpl           # recomendado (após pip install embedxpl)
-exf                # alias — comportamento idêntico
-fxf                # alias — comportamento idêntico
+exf                # alias  -  comportamento idêntico
+fxf                # alias  -  comportamento idêntico
 python -m embedxpl # invocação de módulo
 python exf.py      # bootstrap legado (a partir da raiz do clone git)
 ```
@@ -49,8 +49,8 @@ exf (AutoPwn) >                    # módulo scanner carregado
 ```
 
 O prompt pode ser personalizado via variáveis de ambiente:
-- `EXF_RAW_PROMPT` — prompt quando nenhum módulo está ativo (deve conter `{host}`)
-- `EXF_MODULE_PROMPT` — prompt quando um módulo está ativo (deve conter `{host}` e `{module}`)
+- `EXF_RAW_PROMPT`  -  prompt quando nenhum módulo está ativo (deve conter `{host}`)
+- `EXF_MODULE_PROMPT`  -  prompt quando um módulo está ativo (deve conter `{host}` e `{module}`)
 
 ---
 
@@ -80,7 +80,7 @@ firmware_crypto_key_extract
 | `help` | `help` | Exibir os menus de ajuda global e de módulo |
 | `use` | `use <caminho_do_modulo>` | Carregar um módulo do arsenal de módulos |
 | `search` | `search [termo] [filtros]` | Pesquisar módulos por palavra-chave, CVE ou filtro |
-| `show` | `show <subcomando>` | Exibir listagens — veja os subcomandos abaixo |
+| `show` | `show <subcomando>` | Exibir listagens  -  veja os subcomandos abaixo |
 | `exec` | `exec <comando_shell>` | Executar um comando de shell do SO via `os.system()` |
 | `sysinfo` | `sysinfo` | Exibir CPU, RAM, GPU, modo de computação em detalhe |
 | `compute` | `compute <modo>` | Definir backend de computação (`cpu`, `gpu`, `hybrid`, `auto`) |
@@ -109,7 +109,7 @@ firmware_crypto_key_extract
 
 ---
 
-## `help` — exibir ajuda
+## `help`  -  exibir ajuda
 
 **Sintaxe:**
 
@@ -154,7 +154,7 @@ exf >
 
 ---
 
-## `use` — carregar um módulo
+## `use`  -  carregar um módulo
 
 **Sintaxe:**
 
@@ -166,30 +166,30 @@ use <caminho_do_modulo>
 
 | Parâmetro | Tipo | Obrigatório | Padrão | Valores aceitos | Descrição |
 |-----------|------|-------------|--------|-----------------|-----------|
-| `caminho_do_modulo` | string | Sim | — | Qualquer caminho de módulo válido | Caminho separado por barra relativo a `embedxpl/modules/`. Pontos ou barras funcionam. |
+| `caminho_do_modulo` | string | Sim |  -  | Qualquer caminho de módulo válido | Caminho separado por barra relativo a `embedxpl/modules/`. Pontos ou barras funcionam. |
 
-**Sessão de terminal — carregando um exploit:**
+**Sessão de terminal  -  carregando um exploit:**
 
 ```text
 exf > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
 exf (Hikvision Unauthenticated RCE) >
 ```
 
-**Sessão de terminal — carregando um módulo de credenciais:**
+**Sessão de terminal  -  carregando um módulo de credenciais:**
 
 ```text
 exf > use creds/routers/dlink/telnet_default_creds
 exf (telnet_default_creds) >
 ```
 
-**Sessão de terminal — carregando um scanner:**
+**Sessão de terminal  -  carregando um scanner:**
 
 ```text
 exf > use scanners/autopwn
 exf (AutoPwn) >
 ```
 
-**Sessão de terminal — módulo não encontrado:**
+**Sessão de terminal  -  módulo não encontrado:**
 
 ```text
 exf > use exploits/cameras/hikvision/does_not_exist
@@ -204,7 +204,7 @@ exf >
 
 ---
 
-## `set` — definir uma opção do módulo
+## `set`  -  definir uma opção do módulo
 
 **Sintaxe:**
 
@@ -216,15 +216,15 @@ set <nome_opcao> <valor>
 
 | Parâmetro | Tipo | Obrigatório | Padrão | Valores aceitos | Descrição |
 |-----------|------|-------------|--------|-----------------|-----------|
-| `nome_opcao` | string | Sim | — | Qualquer opção definida pelo módulo | Opção a configurar |
-| `valor` | string | Sim | — | Depende do tipo da opção | Novo valor para a opção |
+| `nome_opcao` | string | Sim |  -  | Qualquer opção definida pelo módulo | Opção a configurar |
+| `valor` | string | Sim |  -  | Depende do tipo da opção | Novo valor para a opção |
 
 **Tipos de dados de opção:**
 
 | Tipo | Formato de entrada no shell | Exemplo |
 |------|-----------------------------|---------|
 | `OptIP` | IPv4, IPv6, hostname ou `file://caminho` | `192.168.1.1`, `file:///tmp/hosts.txt` |
-| `OptPort` | Inteiro 1–65535 | `443`, `9100` |
+| `OptPort` | Inteiro 1-65535 | `443`, `9100` |
 | `OptBool` | `true` ou `false` (sem distinção de maiúsculas) | `true`, `false` |
 | `OptString` | Qualquer string | `admin`, `id`, `whoami` |
 | `OptInteger` | Inteiro decimal ou hexadecimal | `10`, `0x1F` |
@@ -246,7 +246,7 @@ exf (Hikvision Unauthenticated RCE) > set command "id; uname -a"
 [+] command => id; uname -a
 ```
 
-**Caso de erro — nome de opção inválido:**
+**Caso de erro  -  nome de opção inválido:**
 
 ```text
 exf (Hikvision Unauthenticated RCE) > set nonexistent_option foo
@@ -256,7 +256,7 @@ exf (Hikvision Unauthenticated RCE) > set nonexistent_option foo
 
 ---
 
-## `setg` — definir uma opção global
+## `setg`  -  definir uma opção global
 
 **Sintaxe:**
 
@@ -287,7 +287,7 @@ exf (Dahua RCE CVE-2021-36260 (DAHUA-2026-006)) >
 
 ---
 
-## `unsetg` — limpar uma opção global
+## `unsetg`  -  limpar uma opção global
 
 **Sintaxe:**
 
@@ -312,7 +312,7 @@ exf (Hikvision Unauthenticated RCE) > unsetg port
 
 ---
 
-## `back` — descarregar módulo atual
+## `back`  -  descarregar módulo atual
 
 **Sintaxe:**
 
@@ -335,7 +335,7 @@ exf >
 
 ---
 
-## `run` / `exploit` — executar um módulo
+## `run` / `exploit`  -  executar um módulo
 
 **Sintaxe:**
 
@@ -346,7 +346,7 @@ exploit
 
 **Parâmetros:** nenhum (as opções são definidas previamente com `set`).
 
-**Sessão de terminal — execução de módulo exploit:**
+**Sessão de terminal  -  execução de módulo exploit:**
 
 ```text
 exf > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
@@ -364,7 +364,7 @@ exf (Hikvision Unauthenticated RCE) > run
 exf (Hikvision Unauthenticated RCE) >
 ```
 
-**Sessão de terminal — cancelado com Ctrl+C:**
+**Sessão de terminal  -  cancelado com Ctrl+C:**
 
 ```text
 exf (AutoPwn) > run
@@ -383,7 +383,7 @@ exf (AutoPwn) >
 
 ---
 
-## `check` — verificar apenas a vulnerabilidade
+## `check`  -  verificar apenas a vulnerabilidade
 
 **Sintaxe:**
 
@@ -420,7 +420,7 @@ exf (Dahua RCE CVE-2021-36260 (DAHUA-2026-006)) > check
 
 ---
 
-## `show` — exibir informações do módulo/sistema
+## `show`  -  exibir informações do módulo/sistema
 
 **Sintaxe:**
 
@@ -443,14 +443,14 @@ show <subcomando>
 | `scanners` | Não | Todos os caminhos de módulos de scanner |
 | `creds` | Não | Todos os caminhos de módulos de credenciais |
 
-**Sessão de terminal — `show info`:**
+**Sessão de terminal  -  `show info`:**
 
 ```text
 exf > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
 exf (Hikvision Unauthenticated RCE) > show info
 
 [*] Name:        Hikvision Unauthenticated RCE
-[*] Description: CVE-2021-36260 — Hikvision IP cameras allow remote code execution
+[*] Description: CVE-2021-36260  -  Hikvision IP cameras allow remote code execution
                  without authentication via crafted HTTP PUT to /SDK/webLanguage.
                  The command is injected via the lang parameter, executing as root.
 [*] Devices:     Hikvision IP Cameras (DS-2CD series, DS-2DE series, etc.)
@@ -461,7 +461,7 @@ exf (Hikvision Unauthenticated RCE) > show info
                  https://www.exploit-db.com/exploits/50441
 ```
 
-**Sessão de terminal — `show options`:**
+**Sessão de terminal  -  `show options`:**
 
 ```text
 exf (Hikvision Unauthenticated RCE) > show options
@@ -485,7 +485,7 @@ Module options:
 
 ---
 
-## `compute` — definir modo de computação
+## `compute`  -  definir modo de computação
 
 **Sintaxe:**
 
@@ -513,7 +513,7 @@ exf > compute gpu
 [+] compute_mode => gpu
 ```
 
-**Caso de erro — modo inválido:**
+**Caso de erro  -  modo inválido:**
 
 ```text
 exf > compute turbo
@@ -522,7 +522,7 @@ exf > compute turbo
 
 ---
 
-## `exec` — executar comandos do shell do SO
+## `exec`  -  executar comandos do shell do SO
 
 **Sintaxe:**
 
@@ -558,12 +558,12 @@ Módulos de exploit que suportam entrega de shell pós-exploração expõem esta
 | Opção | Tipo | Padrão | Valores aceitos | Descrição |
 |-------|------|--------|-----------------|-----------|
 | `lhost` | `OptString` | `""` | Qualquer IP | IP do atacante para callback do reverse shell |
-| `lport` | `OptPort` | `4444` | 1–65535 | Porta do listener para reverse shell |
+| `lport` | `OptPort` | `4444` | 1-65535 | Porta do listener para reverse shell |
 | `shell_type` | `OptString` | `auto` | Veja lista abaixo | Tipo de shell/payload |
 | `force_exploit` | `OptBool` | `false` | `true`, `false` | Ignorar `check()` e ir direto à exploração |
 | `ask_on_fail` | `OptBool` | `true` | `true`, `false` | Perguntar ao usuário se `check()` retornar False |
 | `pty_upgrade` | `OptBool` | `true` | `true`, `false` | Enviar automaticamente `python3 pty.spawn()` ao conectar ao shell |
-| `listener_timeout` | `OptPort` | `60` | 1–65535 | Segundos para aguardar conexão reversa |
+| `listener_timeout` | `OptPort` | `60` | 1-65535 | Segundos para aguardar conexão reversa |
 
 **Valores aceitos para `shell_type`:**
 `bash`, `nc`, `python`, `perl`, `ruby`, `php`, `awk`, `socat`, `powershell`, `powershell_b64`, `nc_bind`, `python_bind`, `meterpreter_linux`, `meterpreter_windows`, `meterpreter_php`, `php_webshell`, `aspx_webshell`, `auto`

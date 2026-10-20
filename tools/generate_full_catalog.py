@@ -5,7 +5,7 @@ Produces FULL_CATALOG.md and FULL_CATALOG.txt with every module, exploit,
 scanner, credential module, encoder, payload, CVE and attack class listed
 individually in organized sections.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations
@@ -252,7 +252,7 @@ def _build_md(
     ]
 
     lines: List[str] = [
-        "# EmbedXPL-Forge — Full Module Catalog",
+        "# EmbedXPL-Forge  -  Full Module Catalog",
         "",
         "> Generated: {}".format(now),
         "> Author: Andre Henrique (@mrhenrike) | Uniao Geek",
@@ -265,8 +265,8 @@ def _build_md(
     for key, label in cat_rows:
         st = cat_stats.get(key) or {"modules": 0, "vendor_groups": 0}
         lines.append("| {} | {} | {} |".format(label, st["modules"], st["vendor_groups"]))
-    lines.append("| **Total Modules** | **{}** | — |".format(len(records)))
-    lines.append("| Distinct CVEs | {} | — |".format(len(all_cves)))
+    lines.append("| **Total Modules** | **{}** |  -  |".format(len(records)))
+    lines.append("| Distinct CVEs | {} |  -  |".format(len(all_cves)))
 
     gt = int(disk.get("grand_total_bytes", 0) or 0)
     lines.extend([

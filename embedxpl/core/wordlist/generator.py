@@ -4,7 +4,7 @@ Generates password and username wordlists based on target profile
 (corporate vs personal), applying common mutation patterns inspired
 by crunch/CUPP but focused on router/network device contexts.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations

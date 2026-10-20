@@ -6,8 +6,8 @@ Probes ports 8001 and 8002 for the Samsung Tizen REST API device-info endpoint
 information from the JSON response. Also performs a lightweight AllShare/DLNA
 UDP probe on port 55000, and SSDP multicast discovery.
 
-Research: TIZEN-2026-001 — Missing authentication on Smart Hub API (CVSSv3.1 9.8)
-CVE: N/A (pending Samsung PSIRT — report date 2026-04-21)
+Research: TIZEN-2026-001  -  Missing authentication on Smart Hub API (CVSSv3.1 9.8)
+CVE: N/A (pending Samsung PSIRT  -  report date 2026-04-21)
 CVSS: 9.8
 Version: 2.0.0
 """
@@ -98,7 +98,7 @@ class Exploit(HTTPClient):
             "https://developer.samsung.com/smarttv/develop/",
             "TIZEN-2026-001: https://github.com/Uniao-Geek/Embedded-Firmware-Research",
         ),
-        "devices": ("Samsung Smart TV (Tizen 4.x–6.x)",),
+        "devices": ("Samsung Smart TV (Tizen 4.x-6.x)",),
         "vuln_ids": ("TIZEN-2026-001",),
         "cvss":    "9.8",
     }
