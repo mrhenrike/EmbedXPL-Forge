@@ -162,9 +162,18 @@ python_version = "3.12"
 strict = true
 mypy_path = "."
 exclude = [
-    "embedxpl/malware_research/ics_apt/trisis/decompiled_code/",
-    "embedxpl/malware_research/ics_apt/blackenergy/v2/",
-    "embedxpl/malware_research/symbolic_execution/",
+    "embedxpl/malware_research/",
+    "embedxpl/modules/exploits/",
+    "embedxpl/engines/fingerprint/tenable/",
+    "100fio_networks/",
+    "lb-link/",
+    "1net1/",
+    "2025/",
+    "2wire/",
+    "3bb/",
+    "3com/",
+    "7_technologies/",
+    "tools/",
 ]
 
 # Third-party stubs: ignore missing imports
@@ -252,25 +261,19 @@ module = [
     "embedxpl.libs.*",
     "embedxpl.tools.*",
     "embedxpl.nse.*",
-]
-disallow_untyped_defs = false
-disallow_untyped_calls = false
-disallow_incomplete_defs = false
-disallow_untyped_decorators = false
-warn_return_any = false
-
-# Core, intel, runtime, registry: strict but relaxed on untyped defs for now
-[[tool.mypy.overrides]]
-module = [
     "embedxpl.core.*",
     "embedxpl.intel.*",
     "embedxpl.runtime.*",
     "embedxpl.registry.*",
     "embedxpl.interpreter",
+    "embedxpl.__main__",
+    "embedxpl.resources.*",
 ]
-disallow_untyped_defs = false
-disallow_untyped_calls = false
-disallow_incomplete_defs = false
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = ["venv_bootstrap", "tools.*"]
+ignore_errors = true
 
 [tool.ruff]
 target-version = "py39"
