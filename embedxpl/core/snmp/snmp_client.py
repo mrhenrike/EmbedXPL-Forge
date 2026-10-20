@@ -65,7 +65,7 @@ SNMP_TIMEOUT = 15.0
 async def _build_transport_target(snmp_target: str, snmp_port: int, retries: int):
     """Build SNMP transport target across pysnmp API variants."""
     if UdpTransportTarget is None:
-        raise RuntimeError("SNMP backend unavailable: {}".format(SNMP_IMPORT_ERROR))
+        raise RuntimeError(f"SNMP backend unavailable: {SNMP_IMPORT_ERROR}")
     if hasattr(UdpTransportTarget, "create"):
         return await UdpTransportTarget.create((snmp_target, snmp_port), timeout=SNMP_TIMEOUT, retries=retries)
 
@@ -85,13 +85,13 @@ class SNMPCli:
         """
 
         if SnmpEngine is None or get_cmd is None:
-            raise RuntimeError("SNMP backend unavailable: {}".format(SNMP_IMPORT_ERROR))
+            raise RuntimeError(f"SNMP backend unavailable: {SNMP_IMPORT_ERROR}")
 
         self.snmp_target = snmp_target
         self.snmp_port = snmp_port
         self.verbosity = verbosity
 
-        self.peer = "{}:{}".format(self.snmp_target, snmp_port)
+        self.peer = f"{self.snmp_target}:{snmp_port}"
 
     def get(self, community_string: str, oid: str, version: int = 1, retries: int = 0) -> bytes:
         """ Get OID from SNMP server
@@ -137,17 +137,17 @@ class SNMPCli:
         if errorIndication:
             print_error(
                 self.peer,
-                "SNMP request error for community '{}': {}".format(community_string, errorIndication),
+                f"SNMP request error for community '{community_string}': {errorIndication}",
                 verbose=self.verbosity,
             )
         elif errorStatus:
             print_error(
                 self.peer,
-                "SNMP response error for community '{}': {}".format(community_string, errorStatus.prettyPrint()),
+                f"SNMP response error for community '{community_string}': {errorStatus.prettyPrint()}",
                 verbose=self.verbosity,
             )
         else:
-            print_success(self.peer, "SNMP valid community string found: '{}'".format(community_string), verbose=self.verbosity)
+            print_success(self.peer, f"SNMP valid community string found: '{community_string}'", verbose=self.verbosity)
             return varBinds
 
         return None
@@ -231,17 +231,17 @@ class SNMPCli:
             if errorIndication:
                 print_error(
                     self.peer,
-                    "SNMPv3 request error for user '{}': {}".format(username, errorIndication),
+                    f"SNMPv3 request error for user '{username}': {errorIndication}",
                     verbose=self.verbosity,
                 )
             elif errorStatus:
                 print_error(
                     self.peer,
-                    "SNMPv3 response error for user '{}': {}".format(username, errorStatus.prettyPrint()),
+                    f"SNMPv3 response error for user '{username}': {errorStatus.prettyPrint()}",
                     verbose=self.verbosity,
                 )
             else:
-                print_success(self.peer, "SNMPv3 valid credentials found for user '{}'".format(username), verbose=self.verbosity)
+                print_success(self.peer, f"SNMPv3 valid credentials found for user '{username}'", verbose=self.verbosity)
                 return varBinds
         except Exception as err:
             print_error(self.peer, "SNMPv3 authentication error", err, verbose=self.verbosity)

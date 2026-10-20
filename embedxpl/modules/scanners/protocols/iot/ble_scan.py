@@ -94,9 +94,9 @@ class Exploit(Exploit):
             sock.bind((int(self.hci_device),))
             sock.settimeout(float(self.timeout))
             return sock
-        except (socket.error, OSError, AttributeError) as exc:
+        except (OSError, AttributeError) as exc:
             raise RuntimeError(
-                "Cannot open HCI device hci{}: {}".format(self.hci_device, exc)
+                f"Cannot open HCI device hci{self.hci_device}: {exc}"
             )
 
     def _hci_send_cmd(self, sock: socket.socket, ogf: int, ocf: int,
@@ -131,7 +131,7 @@ class Exploit(Exploit):
                 break
             ad_type = data[offset + 1]
             ad_data = data[offset + 2:offset + 1 + length]
-            type_name = _AD_TYPES.get(ad_type, "Type 0x{:02x}".format(ad_type))
+            type_name = _AD_TYPES.get(ad_type, f"Type 0x{ad_type:02x}")
             structures.append({
                 "type": ad_type,
                 "type_name": type_name,
@@ -142,11 +142,11 @@ class Exploit(Exploit):
 
     def _format_mac(self, raw: bytes) -> str:
         """Format 6-byte address as MAC string."""
-        return ":".join("{:02X}".format(b) for b in reversed(raw))
+        return ":".join(f"{b:02X}" for b in reversed(raw))
 
     def _uuid16_to_full(self, uuid16: int) -> str:
         """Expand 16-bit UUID to full 128-bit string."""
-        return "{:08x}-0000-1000-8000-00805f9b34fb".format(uuid16)
+        return f"{uuid16:08x}-0000-1000-8000-00805f9b34fb"
 
     def _extract_uuids(self, ad_structures: list) -> list:
         """Extract service UUIDs from advertising structures."""
@@ -184,7 +184,7 @@ class Exploit(Exploit):
         try:
             sock = self._hci_open()
         except RuntimeError as exc:
-            print_error("{}".format(exc))
+            print_error(f"{exc}")
             return []
 
         try:
@@ -228,9 +228,9 @@ class Exploit(Exploit):
                                 "ad_structures": ad_structs,
                             }
                         offset = rssi_offset + 1
-                except socket.timeout:
+                except TimeoutError:
                     break
-                except (socket.error, OSError):
+                except OSError:
                     break
             self._disable_le_scan(sock)
         finally:
@@ -251,12 +251,10 @@ class Exploit(Exploit):
     @multi
     def run(self) -> None:
         """Execute BLE advertising scan."""
-        print_status("Starting BLE scan on hci{} for {} seconds".format(
-            self.hci_device, self.timeout
-        ))
+        print_status(f"Starting BLE scan on hci{self.hci_device} for {self.timeout} seconds")
 
         if not self.check():
-            print_error("HCI device hci{} not available".format(self.hci_device))
+            print_error(f"HCI device hci{self.hci_device} not available")
             return
 
         devices = self._scan_advertisements()
@@ -264,7 +262,7 @@ class Exploit(Exploit):
             print_warning("No BLE devices discovered")
             return
 
-        print_success("Discovered {} BLE device(s)".format(len(devices)))
+        print_success(f"Discovered {len(devices)} BLE device(s)")
         for dev in sorted(devices, key=lambda d: d["rssi"], reverse=True):
             name_str = dev["name"] or "(unknown)"
             print_info("{} [{}] RSSI: {} dBm - {}".format(
@@ -272,4 +270,4 @@ class Exploit(Exploit):
             ))
             for uuid in dev["uuids"]:
                 svc_name = _COMMON_SERVICES.get(uuid, "Custom Service")
-                print_info("  Service: {} ({})".format(svc_name, uuid))
+                print_info(f"  Service: {svc_name} ({uuid})")

@@ -14,7 +14,6 @@ Repo: https://github.com/helviojunior/shellcodetester
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
 
-from __future__ import annotations
 
 import hashlib
 import shutil
@@ -50,7 +49,7 @@ class ShellcodeQA:
     def __init__(
         self,
         bad_chars: bytes = DEFAULT_BADCHARS,
-        output_dir: Optional[str] = None,
+        output_dir: str | None = None,
     ) -> None:
         self.bad_chars = bad_chars
         self.output_dir = Path(output_dir or ".tmp/shellcode_qa")
@@ -71,7 +70,7 @@ class ShellcodeQA:
     # Bad char analysis (pure Python, no external tool needed)
     # ------------------------------------------------------------------
 
-    def check_bad_chars(self, shellcode: bytes, bad_chars: Optional[bytes] = None) -> list[str]:
+    def check_bad_chars(self, shellcode: bytes, bad_chars: bytes | None = None) -> list[str]:
         """Scan shellcode for bad characters.
 
         Args:
@@ -141,7 +140,7 @@ class ShellcodeQA:
     # NASM assembly
     # ------------------------------------------------------------------
 
-    def assemble(self, asm_source: str, arch: str = "x64") -> Optional[bytes]:
+    def assemble(self, asm_source: str, arch: str = "x64") -> bytes | None:
         """Assemble NASM source to shellcode bytes.
 
         Args:

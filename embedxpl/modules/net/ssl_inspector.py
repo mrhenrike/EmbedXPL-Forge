@@ -14,12 +14,11 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import socket
 import ssl
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timezone, UTC
 from typing import Any, Dict, List, Optional
 
 __version__ = "1.0.0"
@@ -37,7 +36,7 @@ class SslProfile:
     expiry_days: int = 0
     issuer: str = ""
     subject: str = ""
-    san: List[str] = field(default_factory=list)
+    san: list[str] = field(default_factory=list)
     not_before: str = ""
     not_after: str = ""
     error: str = ""
@@ -55,7 +54,7 @@ class SslProfile:
         return "INFO"
 
     @property
-    def findings(self) -> List[str]:
+    def findings(self) -> list[str]:
         issues = []
         if not self.has_tls:
             issues.append("No TLS/SSL - credentials transmitted in plaintext")
@@ -139,7 +138,7 @@ class DeviceSslInspector:
 
         return profile
 
-    def _parse_cert(self, profile: SslProfile, cert: Dict[str, Any]) -> SslProfile:
+    def _parse_cert(self, profile: SslProfile, cert: dict[str, Any]) -> SslProfile:
         """Extract certificate fields into SslProfile."""
         # Subject
         subject_dict = dict(x[0] for x in cert.get("subject", []))
@@ -167,7 +166,7 @@ class DeviceSslInspector:
         if not_after:
             try:
                 expiry = datetime.strptime(not_after, "%b %d %H:%M:%S %Y %Z")
-                now = datetime.now(timezone.utc).replace(tzinfo=None)
+                now = datetime.now(UTC).replace(tzinfo=None)
                 days = (expiry - now).days
                 profile.expiry_days = days
                 profile.expired = days < 0
@@ -178,9 +177,9 @@ class DeviceSslInspector:
 
     def batch_inspect(
         self,
-        targets: List[tuple],  # [(host, port), ...]
+        targets: list[tuple],  # [(host, port), ...]
         delay_sec: float = 0.5,
-    ) -> List[SslProfile]:
+    ) -> list[SslProfile]:
         """Inspect multiple targets with rate limiting.
 
         Args:

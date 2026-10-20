@@ -17,7 +17,6 @@ Author: André Henrique (@mrhenrike) | União Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import logging
 import os
@@ -49,7 +48,7 @@ _EXT_MAP = {
 }
 
 
-def _find_runtime(lang: str) -> Optional[str]:
+def _find_runtime(lang: str) -> str | None:
     """Find runtime binary for a given language key."""
     for cmd in _RUNTIME_MAP.get(lang, []):
         if shutil.which(cmd):
@@ -84,10 +83,10 @@ class PolyRunner:
         self,
         source: str,
         lang: str,
-        args: Optional[List[str]] = None,
+        args: list[str] | None = None,
         timeout: int = 60,
-        env: Optional[dict] = None,
-        stdin_data: Optional[bytes] = None,
+        env: dict | None = None,
+        stdin_data: bytes | None = None,
     ) -> str:
         """Execute a script in the specified language runtime.
 
@@ -141,27 +140,27 @@ class PolyRunner:
             except Exception:
                 pass
 
-    def run_ruby(self, source: str, args: Optional[List[str]] = None,
+    def run_ruby(self, source: str, args: list[str] | None = None,
                  timeout: int = 60) -> str:
         """Execute Ruby script source and return output."""
         return self.run_script(source, "ruby", args, timeout)
 
-    def run_node(self, source: str, args: Optional[List[str]] = None,
+    def run_node(self, source: str, args: list[str] | None = None,
                  timeout: int = 60) -> str:
         """Execute Node.js script source and return output."""
         return self.run_script(source, "node", args, timeout)
 
-    def run_php(self, source: str, args: Optional[List[str]] = None,
+    def run_php(self, source: str, args: list[str] | None = None,
                 timeout: int = 60) -> str:
         """Execute PHP script source and return output."""
         return self.run_script(source, "php", args, timeout)
 
-    def run_bash(self, source: str, args: Optional[List[str]] = None,
+    def run_bash(self, source: str, args: list[str] | None = None,
                  timeout: int = 60) -> str:
         """Execute Bash/shell script source and return output."""
         return self.run_script(source, "bash", args, timeout)
 
-    def run_perl(self, source: str, args: Optional[List[str]] = None,
+    def run_perl(self, source: str, args: list[str] | None = None,
                  timeout: int = 60) -> str:
         """Execute Perl script source and return output."""
         return self.run_script(source, "perl", args, timeout)
@@ -169,7 +168,7 @@ class PolyRunner:
     def run_msf_module(
         self,
         module_path: str,
-        options: Optional[dict] = None,
+        options: dict | None = None,
         timeout: int = 120,
     ) -> str:
         """Execute a Metasploit module via msfconsole.

@@ -5,7 +5,6 @@ placeholder tokens with runtime values.
 
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
-from __future__ import annotations
 import base64
 import json
 from dataclasses import dataclass

@@ -12,7 +12,8 @@ import asyncio
 import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
-from typing import Any, Callable, List, Optional
+from typing import Any, List, Optional
+from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -36,8 +37,8 @@ class ScanResult:
         port: int,
         protocol: str,
         module_path: str,
-        vulnerable: Optional[bool],
-        error: Optional[str] = None,
+        vulnerable: bool | None,
+        error: str | None = None,
         elapsed_s: float = 0.0,
     ):
         self.target = target
@@ -50,9 +51,7 @@ class ScanResult:
 
     def __repr__(self) -> str:
         status = "VULN" if self.vulnerable else ("SAFE" if self.vulnerable is False else "UNKNOWN")
-        return "<ScanResult {}:{} {} {} {:.2f}s>".format(
-            self.target, self.port, self.module_path, status, self.elapsed_s,
-        )
+        return f"<ScanResult {self.target}:{self.port} {self.module_path} {status} {self.elapsed_s:.2f}s>"
 
 
 class AsyncScanEngine:
@@ -80,9 +79,9 @@ class AsyncScanEngine:
         self.max_workers: int = max(1, max_workers)
         self.module_timeout_s: int = module_timeout_s
         self.delay_s: float = max(0.0, delay_between_modules_s)
-        self._semaphore: Optional[asyncio.Semaphore] = None
-        self._executor: Optional[ThreadPoolExecutor] = None
-        self._results: List[ScanResult] = []
+        self._semaphore: asyncio.Semaphore | None = None
+        self._executor: ThreadPoolExecutor | None = None
+        self._results: list[ScanResult] = []
         self._cancelled: bool = False
         self._start_time: float = 0.0
 
@@ -100,14 +99,14 @@ class AsyncScanEngine:
             )
         return await loop.run_in_executor(self._executor, fn)
 
-    async def _check_module(self, exploit: Any) -> Optional[bool]:
+    async def _check_module(self, exploit: Any) -> bool | None:
         """Run ``exploit.check()`` in the thread pool."""
         timeout = float(self.module_timeout_s) if self.module_timeout_s > 0 else 0
         try:
             return await self._exec_in_pool(exploit.check, timeout)
-        except asyncio.TimeoutError:
+        except TimeoutError:
             raise RuntimeError(
-                "check() timed out after {}s".format(self.module_timeout_s)
+                f"check() timed out after {self.module_timeout_s}s"
             )
 
     async def _run_module(self, exploit: Any) -> None:
@@ -115,9 +114,9 @@ class AsyncScanEngine:
         timeout = float(self.module_timeout_s * 3) if self.module_timeout_s > 0 else 0
         try:
             await self._exec_in_pool(exploit.run, timeout)
-        except asyncio.TimeoutError:
+        except TimeoutError:
             raise RuntimeError(
-                "run() timed out after {}s".format(self.module_timeout_s * 3)
+                f"run() timed out after {self.module_timeout_s * 3}s"
             )
 
     # ------------------------------------------------------------------
@@ -129,7 +128,7 @@ class AsyncScanEngine:
         module_class: type,
         target: str,
         port: int,
-        configure_fn: Optional[Callable] = None,
+        configure_fn: Callable | None = None,
         confirm_passes: int = 1,
         run_on_vulnerable: bool = False,
     ) -> ScanResult:
@@ -194,14 +193,14 @@ class AsyncScanEngine:
 
     async def scan_all(
         self,
-        modules: List[type],
+        modules: list[type],
         target: str,
         port: int,
-        configure_fn: Optional[Callable] = None,
+        configure_fn: Callable | None = None,
         confirm_passes: int = 1,
         run_on_vulnerable: bool = False,
-        on_result: Optional[Callable] = None,
-    ) -> List[ScanResult]:
+        on_result: Callable | None = None,
+    ) -> list[ScanResult]:
         """Scan one target with multiple modules concurrently.
 
         Args:
@@ -258,14 +257,14 @@ class AsyncScanEngine:
 
     async def scan_targets(
         self,
-        modules: List[type],
-        targets: List[str],
+        modules: list[type],
+        targets: list[str],
         port: int,
-        configure_fn: Optional[Callable] = None,
+        configure_fn: Callable | None = None,
         confirm_passes: int = 1,
         run_on_vulnerable: bool = False,
-        on_result: Optional[Callable] = None,
-    ) -> List[ScanResult]:
+        on_result: Callable | None = None,
+    ) -> list[ScanResult]:
         """Scan multiple targets with multiple modules concurrently.
 
         Flattens all (module x target) combinations into a single async pool.
@@ -355,11 +354,11 @@ class AsyncScanEngine:
 
     def run_sync(
         self,
-        modules: List[type],
+        modules: list[type],
         target: str,
         port: int,
         **kwargs,
-    ) -> List[ScanResult]:
+    ) -> list[ScanResult]:
         """Synchronous wrapper around :meth:`scan_all`.
 
         Creates its own event loop; safe to call from blocking code
@@ -393,11 +392,11 @@ class AsyncScanEngine:
 
     def run_sync_multi(
         self,
-        modules: List[type],
-        targets: List[str],
+        modules: list[type],
+        targets: list[str],
         port: int,
         **kwargs,
-    ) -> List[ScanResult]:
+    ) -> list[ScanResult]:
         """Synchronous wrapper around :meth:`scan_targets`.
 
         Args:

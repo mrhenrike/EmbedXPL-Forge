@@ -10,7 +10,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek
 
 # authorized use only
 """
-from __future__ import annotations
 
 import os
 import shutil
@@ -26,7 +25,7 @@ _BUILD_TMP      = _WORKSPACE_ROOT / ".tmp" / "native_builds"
 _BUILD_TMP.mkdir(parents=True, exist_ok=True)
 
 
-def _resolve_src(lang: str, relative_path: str) -> Optional[Path]:
+def _resolve_src(lang: str, relative_path: str) -> Path | None:
     """Resolve a path relative to native_src/<lang>/."""
     candidates = [
         _NATIVE_SRC / lang / relative_path,

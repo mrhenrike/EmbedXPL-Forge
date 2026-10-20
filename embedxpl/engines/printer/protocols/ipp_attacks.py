@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PrinterXPL-Forge — IPP Attack Module
 ===================================
@@ -24,7 +23,6 @@ Attack categories:
 # LinkedIn  : https://linkedin.com/in/mrhenrike
 # X/Twitter : https://x.com/mrhenrike
 
-from __future__ import annotations
 
 import logging
 import re
@@ -86,7 +84,7 @@ def _build_request(op: int, printer_uri: str, attrs: list[bytes] = None) -> byte
 def _post_ipp(
     host: str, port: int, path: str, body: bytes,
     scheme: str = 'https', timeout: float = 10,
-) -> Optional[bytes]:
+) -> bytes | None:
     """POST an IPP request and return raw bytes, or None on error."""
     url = f"{scheme}://{host}:{port}{path}"
     try:
@@ -103,7 +101,7 @@ def _post_ipp(
     return None
 
 
-def _decode_text_attrs(raw: bytes) -> Dict[str, str]:
+def _decode_text_attrs(raw: bytes) -> dict[str, str]:
     """Extract printable text attributes from raw IPP response bytes."""
     text = raw.decode('latin-1', errors='replace')
     attrs = {}
@@ -126,7 +124,7 @@ def _decode_text_attrs(raw: bytes) -> Dict[str, str]:
 
 def discover_endpoints(
     host: str, timeout: float = 5,
-) -> List[Dict]:
+) -> list[dict]:
     """
     Probe common IPP endpoints and return a list of responsive ones.
 
@@ -175,7 +173,7 @@ def discover_endpoints(
 def get_printer_info(
     host: str, port: int = 631, path: str = '/ipp/print',
     scheme: str = 'https', timeout: float = 10,
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """
     Retrieve all printer attributes via IPP Get-Printer-Attributes (op 0x000B).
 
@@ -196,7 +194,7 @@ def get_printer_info(
 def list_jobs(
     host: str, port: int = 631, path: str = '/ipp/print',
     scheme: str = 'https', which: str = 'all', timeout: float = 10,
-) -> List[Dict]:
+) -> list[dict]:
     """
     List print jobs via IPP Get-Jobs (op 0x000A).
 
@@ -285,7 +283,7 @@ def submit_job(
     job_name: str    = 'test-job',
     timeout:  float  = 15,
     dry_run:  bool   = True,
-) -> Dict:
+) -> dict:
     """
     Submit an anonymous IPP print job.
 
@@ -406,7 +404,7 @@ def purge_all_jobs(
     path:   str   = '/ipp/print',
     scheme: str   = 'https',
     timeout:float = 10,
-) -> Dict:
+) -> dict:
     """
     Send IPP Purge-Jobs (op 0x0012) to clear all queued/held jobs.
 
@@ -429,7 +427,7 @@ def purge_all_jobs(
 def cancel_all_active(
     host: str, port: int = 631, path: str = '/ipp/print',
     scheme: str = 'https', timeout: float = 10,
-) -> List[int]:
+) -> list[int]:
     """
     List active jobs and cancel each one (fallback for printers without Purge-Jobs).
 
@@ -516,7 +514,7 @@ def audit(
     host:    str,
     timeout: float = 10,
     verbose: bool  = True,
-) -> Dict:
+) -> dict:
     """
     Run a comprehensive IPP security audit on *host*.
 

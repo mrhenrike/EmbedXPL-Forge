@@ -12,7 +12,6 @@ EmbedXPL port
 Maintainer : Andre Henrique (@mrhenrike) | Uniao Geek
 Notes      : Adapted from FirewallXPL-Forge parsers. No functional changes.
 """
-from __future__ import annotations
 
 import re
 import shlex
@@ -21,7 +20,7 @@ from typing import Any, Dict, List, Optional
 __version__ = "1.0.0"
 
 # FortiGate field aliases -> ECS-like normalized names
-_FIELD_MAP: Dict[str, str] = {
+_FIELD_MAP: dict[str, str] = {
     "devname": "device.name",
     "devid": "device.id",
     "date": "event.date",
@@ -56,7 +55,7 @@ _FIELD_MAP: Dict[str, str] = {
 }
 
 # FortiGate log ID categories
-_LOGID_CATEGORIES: Dict[str, str] = {
+_LOGID_CATEGORIES: dict[str, str] = {
     "01": "system",
     "02": "traffic",
     "04": "ips",
@@ -69,9 +68,9 @@ _LOGID_CATEGORIES: Dict[str, str] = {
 }
 
 
-def parse_fortigate_kv(raw: str) -> Dict[str, Any]:
+def parse_fortigate_kv(raw: str) -> dict[str, Any]:
 
-    result: Dict[str, Any] = {"_raw": raw}
+    result: dict[str, Any] = {"_raw": raw}
 
     # Extract key=value pairs (handle quoted values)
     kv_pattern = re.compile(r'(\w+)=("(?:[^"\\]|\\.)*"|[^ ]+)')
@@ -90,7 +89,7 @@ def parse_fortigate_kv(raw: str) -> Dict[str, Any]:
     return result
 
 
-def parse_fortinet_log_batch(log_lines: List[str]) -> List[Dict[str, Any]]:
+def parse_fortinet_log_batch(log_lines: list[str]) -> list[dict[str, Any]]:
 
     events = []
     for line in log_lines:
@@ -108,7 +107,7 @@ def parse_fortinet_log_batch(log_lines: List[str]) -> List[Dict[str, Any]]:
     return events
 
 
-def classify_fortigate_event(event: Dict[str, Any]) -> str:
+def classify_fortigate_event(event: dict[str, Any]) -> str:
 
     subtype = str(event.get("subtype", "")).lower()
     event_type = str(event.get("type", event.get("fortigate.type", ""))).lower()
@@ -137,7 +136,7 @@ class FortigateSyslogParser:
         path: str,
         max_lines: int = 50_000,
         encoding: str = "utf-8",
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
 
         lines = []
         with open(path, encoding=encoding, errors="replace") as f:
@@ -149,20 +148,20 @@ class FortigateSyslogParser:
 
     def filter_by_category(
         self,
-        events: List[Dict[str, Any]],
+        events: list[dict[str, Any]],
         category: str,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
 
         return [e for e in events if classify_fortigate_event(e) == category]
 
-    def extract_admin_events(self, events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def extract_admin_events(self, events: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
         return [
             e for e in events
             if e.get("action") in ("login", "logout") or "login" in str(e.get("message", "")).lower()
         ]
 
-    def extract_config_changes(self, events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def extract_config_changes(self, events: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
         return [
             e for e in events

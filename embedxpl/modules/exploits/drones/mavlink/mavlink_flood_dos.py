@@ -6,7 +6,6 @@ Floods the drone's UDP MAVLink port with high-rate HEARTBEAT messages,
 saturating the uplink bandwidth and potentially severing the legitimate
 ground control station connection.
 """
-from __future__ import annotations
 
 import logging
 import socket

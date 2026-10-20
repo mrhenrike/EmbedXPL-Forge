@@ -17,7 +17,6 @@ Author: André Henrique (@mrhenrike) | União Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import base64
 import hashlib
@@ -80,7 +79,7 @@ def _build_describe_request(
     return headers
 
 
-def _parse_rtsp_response(raw: bytes) -> Tuple[int, dict, str]:
+def _parse_rtsp_response(raw: bytes) -> tuple[int, dict, str]:
     """Parse an RTSP/1.0 response.
 
     Args:
@@ -114,7 +113,7 @@ def _parse_rtsp_response(raw: bytes) -> Tuple[int, dict, str]:
     return status_code, headers, body
 
 
-def _parse_digest_challenge(www_auth: str) -> Tuple[str, str]:
+def _parse_digest_challenge(www_auth: str) -> tuple[str, str]:
     """Extract realm and nonce from a Digest WWW-Authenticate header."""
     realm_m = re.search(r'realm="([^"]*)"', www_auth, re.IGNORECASE)
     nonce_m = re.search(r'nonce="([^"]*)"', www_auth, re.IGNORECASE)
@@ -172,7 +171,7 @@ class RTSPOverHTTPTunnel:
             return ctx.wrap_socket(sock, server_hostname=self.host)
         return sock
 
-    def send_rtsp_via_http(self, rtsp_request: str) -> Optional[bytes]:
+    def send_rtsp_via_http(self, rtsp_request: str) -> bytes | None:
         """Send an RTSP request through HTTP POST tunnel.
 
         Args:
@@ -208,7 +207,7 @@ class RTSPOverHTTPTunnel:
                     data += chunk
                     if b"\r\n\r\n" in data:
                         break
-                except socket.timeout:
+                except TimeoutError:
                     break
             sock.close()
             # Strip HTTP headers; remaining body is base64 RTSP response
@@ -222,7 +221,7 @@ class RTSPOverHTTPTunnel:
             return None
         return None
 
-    def establish_get_channel(self) -> Optional[socket.socket]:
+    def establish_get_channel(self) -> socket.socket | None:
         """Establish the HTTP GET channel for server→client RTSP responses."""
         http_get = (
             f"GET /rtsp-tunnel HTTP/1.0\r\n"
@@ -278,7 +277,7 @@ class RTSPClient:
         self.use_tls = use_tls
         self.tunnel_http = tunnel_http
         self._cseq = 0
-        self._http_tunnel: Optional[RTSPOverHTTPTunnel] = None
+        self._http_tunnel: RTSPOverHTTPTunnel | None = None
         if tunnel_http:
             self._http_tunnel = RTSPOverHTTPTunnel(
                 host, port, timeout=timeout, use_tls=use_tls
@@ -323,7 +322,7 @@ class RTSPClient:
             sock = ctx.wrap_socket(sock, server_hostname=self.host)
         return sock
 
-    def _send_recv(self, request: str, sock: Optional[socket.socket] = None) -> bytes:
+    def _send_recv(self, request: str, sock: socket.socket | None = None) -> bytes:
         """Send an RTSP request and read the full response.
 
         Automatically routes through HTTP tunnel if ``tunnel_http=True``.
@@ -355,7 +354,7 @@ class RTSPClient:
                         header_end = data.find(b"\r\n\r\n") + 4
                         if len(data) - header_end >= cl:
                             break
-                except socket.timeout:
+                except TimeoutError:
                     break
         except Exception:
             pass
@@ -367,7 +366,7 @@ class RTSPClient:
                     pass
         return data
 
-    def options(self) -> Tuple[int, dict, str]:
+    def options(self) -> tuple[int, dict, str]:
         """Send RTSP OPTIONS request.
 
         Returns:
@@ -387,7 +386,7 @@ class RTSPClient:
         digest_realm: str = "",
         digest_nonce: str = "",
         scheme: str = "rtsp",
-    ) -> Tuple[int, dict, str]:
+    ) -> tuple[int, dict, str]:
         """Send RTSP DESCRIBE request.
 
         Args:
@@ -418,7 +417,7 @@ class RTSPClient:
         raw = self._send_recv(req)
         return _parse_rtsp_response(raw)
 
-    def probe_auth_type(self, route: str = "") -> Tuple[AuthType, str, str]:
+    def probe_auth_type(self, route: str = "") -> tuple[AuthType, str, str]:
         """Probe a stream to detect authentication type.
 
         Mirrors cameradar's probeDescribeHeaders — sends DESCRIBE without auth

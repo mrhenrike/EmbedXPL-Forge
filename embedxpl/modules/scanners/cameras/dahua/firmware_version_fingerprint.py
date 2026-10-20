@@ -64,10 +64,10 @@ class Exploit(HTTPClient):
 
     def run(self) -> None:
         if not self.check():
-            print_error("Target not responding on {}:{}".format(self.target, self.port))
+            print_error(f"Target not responding on {self.target}:{self.port}")
             return
 
-        print_status("Fingerprinting Dahua device at {}...".format(self.target))
+        print_status(f"Fingerprinting Dahua device at {self.target}...")
         info = {}
 
         for path, label in self._INFO_ENDPOINTS:
@@ -78,7 +78,7 @@ class Exploit(HTTPClient):
                     if "=" in value:
                         value = value.split("=", 1)[1].strip()
                     info[label] = value
-                    print_success("{}: {}".format(label, value))
+                    print_success(f"{label}: {value}")
             except Exception:
                 pass
 
@@ -90,11 +90,11 @@ class Exploit(HTTPClient):
         for prefix, platform in self._PLATFORM_MAP.items():
             if prefix in fw_ver:
                 info["estimated_platform"] = platform
-                print_info("Estimated platform: {}".format(platform))
+                print_info(f"Estimated platform: {platform}")
                 break
 
         print_success(
-            "Fingerprint complete — {} data points extracted".format(len(info))
+            f"Fingerprint complete — {len(info)} data points extracted"
         )
 
     def check(self) -> bool:

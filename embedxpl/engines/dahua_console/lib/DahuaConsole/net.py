@@ -27,9 +27,9 @@ def dahua_proto(proto):
     return False
 
 
-class Network(object):
+class Network:
     def __init__(self):
-        super(Network, self).__init__()
+        super().__init__()
 
         self.args = None
 
@@ -128,7 +128,7 @@ class Network(object):
     def custom_exec_command(self, cmd, script='', timeout=10, env_export=None):
         """ Custom SSH exec_command(), still using pwntools 'transport()' """
 
-        env_export = ';'.join('export {}={}'.format(var, env_export.get(var)) for var in env_export)
+        env_export = ';'.join(f'export {var}={env_export.get(var)}' for var in env_export)
         cmd = ''.join([env_export, cmd, script])
 
         stdout = b''
@@ -165,7 +165,7 @@ class Network(object):
             stderr = b''.join([stderr, relay.recv_stderr(4096)])
         except Exception as e:
             print('[custom_exec_command] (relay)', repr(e))
-            return {"stdout": [], "stderr": ['exec request failed on channel {}'.format(relay.get_id())]}
+            return {"stdout": [], "stderr": [f'exec request failed on channel {relay.get_id()}']}
         finally:
             if relay:
                 relay.close()
@@ -195,7 +195,7 @@ class Network(object):
             "dvrip": "[host]"
         }
         if len(cmd) < 2 or len(cmd) > 3 or cmd[1] == '-h':
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return True
         discover = cmd[1]
 
@@ -248,7 +248,7 @@ class Network(object):
             packet = p32(0xa3010001, endian='big') + (p32(0x0) * 3) + p32(0x02000000, endian='big') + (p32(0x0) * 3)
 
         else:
-            log.failure('{}'.format(help_all(msg=cmd[0], usage=usage)))
+            log.failure(f'{help_all(msg=cmd[0], usage=usage)}')
             return False
 
         if self.relay_host:
@@ -311,7 +311,7 @@ sock.close()
                 else:
                     if len(remote_recvfrom.get('stderr')):
                         for stderr in remote_recvfrom.get('stderr'):
-                            log.warning('[stderr] {}'.format(stderr))
+                            log.warning(f'[stderr] {stderr}')
                     return True
             else:
                 try:
@@ -322,7 +322,7 @@ sock.close()
                     sock.close()
                     return True
 
-            log.success("dh_discover response from: {}:{}".format(remote_ip, remote_port))
+            log.success(f"dh_discover response from: {remote_ip}:{remote_port}")
             self._debug("RECV", dh_data)
 
             dh_data = dh_data[32:].decode('latin-1')
@@ -334,8 +334,7 @@ sock.close()
             elif discover == 'dvrip':
                 bin_info = {
                     "Version": {
-                        "Version": "{}.{}.{}.{}".format(
-                            u16(dh_data[0:2]), u16(dh_data[2:4]), u16(dh_data[4:6]), u16(dh_data[6:8]))
+                        "Version": f"{u16(dh_data[0:2])}.{u16(dh_data[2:4])}.{u16(dh_data[4:6])}.{u16(dh_data[6:8])}"
                     },
                     "Network": {
                         "Hostname": dh_data[8:24].strip('\x00'),
@@ -381,7 +380,7 @@ sock.close()
 
                 }
 
-                log.info("Binary:\n{}".format(json.dumps(bin_info, indent=4)))
+                log.info(f"Binary:\n{json.dumps(bin_info, indent=4)}")
                 log.info("Ascii:\n{}".format(dh_data[88:].strip('\x00')))
 
     def dh_connect(self, username=None, password=None, logon=None, force=False):
@@ -389,7 +388,7 @@ sock.close()
         console = None
 
         log.info(
-            color('logon type "{}" with proto "{}" at {}:{}'.format(logon, self.proto, self.rhost, self.rport), LGREEN)
+            color(f'logon type "{logon}" with proto "{self.proto}" at {self.rhost}:{self.rport}', LGREEN)
         )
 
         if self.relay_host:
@@ -494,11 +493,7 @@ sock.close()
             else:
                 remote_time = '(null)'
 
-            log.info("Remote Model: {}, Class: {}, Time: {}".format(
-                self.DeviceType,
-                self.DeviceClass,
-                remote_time
-            ))
+            log.info(f"Remote Model: {self.DeviceType}, Class: {self.DeviceClass}, Time: {remote_time}")
 
         if self.args.dump:
             return True
@@ -546,11 +541,11 @@ sock.close()
                         for NUM in range(0, len(dh_data)):
                             self._check_for_keepalive(dh_data[NUM])
                     except EOFError as e:
-                        log.failure('[_sleep_check_socket] {}'.format(repr(e)))
+                        log.failure(f'[_sleep_check_socket] {repr(e)}')
                         self.remote.close()
                         return False
                     except (AttributeError, ValueError, TypeError) as e:
-                        log.failure('[_sleep_check_socket] ({}) {}'.format(repr(e), dh_data))
+                        log.failure(f'[_sleep_check_socket] ({repr(e)}) {dh_data}')
                         pass
                 time.sleep(dsleep)
                 continue
@@ -571,7 +566,7 @@ sock.close()
                 return False
 
             if not self.remote.connected() or self.keep_alive_timeout == self.keep_alive_timeout_times:
-                log.warning('self termination ({})'.format(self.rhost))
+                log.warning(f'self termination ({self.rhost})')
                 self.terminate = True
                 self.remote.close()
                 # TEST
@@ -606,14 +601,14 @@ sock.close()
                 continue
 
             except EOFError as e:
-                log.failure('[keepAlive] {}'.format(repr(e)))
+                log.failure(f'[keepAlive] {repr(e)}')
                 self.remote.close()
                 if self.relay:
                     self.relay.close()
                 continue
 
             if dh_data is None:
-                log.failure('[keepAlive timeout] ({})'.format(self.rhost))
+                log.failure(f'[keepAlive timeout] ({self.rhost})')
                 self.keep_alive_timeout += 1
                 self.event.set()
                 continue
@@ -628,12 +623,12 @@ sock.close()
             # keepAlive answer
             if dh_data.get('result') and dh_data.get('params').get('timeout'):
                 if self.event.is_set():
-                    log.success('[keepAlive back] ({})'.format(self.rhost))
+                    log.success(f'[keepAlive back] ({self.rhost})')
                     self.keep_alive_timeout = 0
                     self.event.clear()
             elif not dh_data.get('result') and dh_data.get('error').get('code') == 287637505:
                 # Invalid session in request data!
-                log.failure('[keepAlive timeout] ({})'.format(self.rhost))
+                log.failure(f'[keepAlive timeout] ({self.rhost})')
                 self.keep_alive_timeout = self.keep_alive_timeout_times
                 self.event.set()
 
@@ -694,7 +689,7 @@ sock.close()
                         print(json.dumps(dh_data, indent=4))
 
                 except AttributeError:
-                    log.failure('[clientNotify] Unknown dh_data: {}'.format(dh_data))
+                    log.failure(f'[clientNotify] Unknown dh_data: {dh_data}')
                     pass
 
             return True
@@ -731,7 +726,7 @@ sock.close()
                 dh_data = json.loads(dh_data)
             except (AttributeError, JSONDecodeError) as e:
                 if not dh_data.find('\n'):
-                    log.failure("[sendCall] (json) ({}) {}".format(repr(e), dh_data))
+                    log.failure(f"[sendCall] (json) ({repr(e)}) {dh_data}")
                     pass
                 tmp = dh_data.split('\n')
                 dh_data = json.loads(tmp[0])
@@ -740,9 +735,9 @@ sock.close()
 
             if not dh_data.get('result') and dh_data.get('error'):
                 if self.debugCalls:
-                    log.failure(color("query: {}".format(query_args), GREEN))
+                    log.failure(color(f"query: {query_args}", GREEN))
                     log.failure(color(
-                        "response: {}".format(dh_data), LRED))
+                        f"response: {dh_data}", LRED))
 
                 if errorcodes:
                     return dh_data
@@ -834,7 +829,7 @@ sock.close()
             try:
                 dh_data = json.loads(dh_data)
             except (AttributeError, JSONDecodeError) as e:
-                log.failure("[sendCall] (json) ({}) {}".format(repr(e), dh_data))
+                log.failure(f"[sendCall] (json) ({repr(e)}) {dh_data}")
                 try:
                     dh_data += self.p2p(packet=None, recv=True)
                 except (KeyboardInterrupt, EOFError):
@@ -847,9 +842,9 @@ sock.close()
 
             if not dh_data.get('result'):
                 if self.debugCalls:
-                    log.failure(color("query: {}".format(self.multicall_query_args), GREEN))
+                    log.failure(color(f"query: {self.multicall_query_args}", GREEN))
                     log.failure(color(
-                        "response: {}".format(dh_data), LRED))
+                        f"response: {dh_data}", LRED))
                 return None
 
             dh_data = dh_data.get('params')
@@ -858,8 +853,7 @@ sock.close()
             for key in range(0, len(dh_data)):
                 """ Looks like to be FIFO, bailout just in case to catch any ID mismatch """
                 if not self.multicall_return_check[key].get('id') == dh_data[key].get('id'):
-                    log.error("Function SendCall() ID mismatch :\nreq: {}\nres: {}".format(
-                        self.multicall_return_check[key], dh_data[key]))
+                    log.error(f"Function SendCall() ID mismatch :\nreq: {self.multicall_return_check[key]}\nres: {dh_data[key]}")
                 tmp[self.multicall_return_check[key].get('method')] = dh_data[key]
 
             self.multicall_query_args = []
@@ -879,38 +873,38 @@ sock.close()
             for service in copy.deepcopy(self.instance_serviceDB):
                 if not service == 'console':
                     log.warning(
-                        color('BUG: instance_service "{}" should have already been stopped (stop now)'.format(service),
+                        color(f'BUG: instance_service "{service}" should have already been stopped (stop now)',
                               LRED))
                 if self.debugCalls:
-                    log.info('[instance_service] sending stop to: {}'.format(service))
+                    log.info(f'[instance_service] sending stop to: {service}')
                 self.instance_service(service, stop=True)
             return True
 
         elif list_all:
             for service in self.instance_serviceDB:
-                dh_data = '{}'.format(help_msg(service))
+                dh_data = f'{help_msg(service)}'
                 for key in self.instance_serviceDB.get(service):
-                    dh_data += '[{}] = {}\n'.format(key, self.instance_serviceDB.get(service).get(key))
+                    dh_data += f'[{key}] = {self.instance_serviceDB.get(service).get(key)}\n'
                 log.info(dh_data)
             return True
 
         elif pull:
             if method_name not in self.instance_serviceDB:
                 if self.debugCalls:
-                    log.failure('[instanceService] (pull) method_name: {} do not exist'.format(method_name))
+                    log.failure(f'[instanceService] (pull) method_name: {method_name} do not exist')
                 return False
             if self.debugCalls:
-                log.success('[instanceService] (pull) method_name: {} do exist'.format(method_name))
+                log.success(f'[instanceService] (pull) method_name: {method_name} do exist')
             return self.instance_serviceDB.get(method_name).get(pull)
 
         elif start:
             if not self.check_for_service(method_name):
                 if self.debugCalls:
-                    log.failure('[instanceService] (service) method_name: {} do not exist'.format(method_name))
+                    log.failure(f'[instanceService] (service) method_name: {method_name} do not exist')
                 return False
             if method_name in self.instance_serviceDB:
                 if self.debugCalls:
-                    log.failure('[instanceService] (create) method_name: {} do exist'.format(method_name))
+                    log.failure(f'[instanceService] (create) method_name: {method_name} do exist')
                 return False
 
             object_id, _proc_id, _sid, dparams, attach_params = self.instance_create(
@@ -943,7 +937,7 @@ sock.close()
 
             if not object_id:
                 if self.debugCalls:
-                    log.failure('[instanceService] (create) Object: {} do not exist'.format(method_name))
+                    log.failure(f'[instanceService] (create) Object: {method_name} do not exist')
                 return False
 
             self.instance_serviceDB.update({
@@ -959,14 +953,14 @@ sock.close()
             })
 
             if self.debugCalls:
-                log.success('[instanceService] (update) {}'.format(method_name))
+                log.success(f'[instanceService] (update) {method_name}')
                 self.instance_service(list_all=True)
             return True
 
         elif stop:
             if method_name not in self.instance_serviceDB:
                 if self.debugCalls:
-                    log.failure('[instanceService] (destroy) method_name: {} do not exist'.format(method_name))
+                    log.failure(f'[instanceService] (destroy) method_name: {method_name} do not exist')
                 return False
 
             result, method, dh_data = self.instance_destroy(
@@ -979,12 +973,12 @@ sock.close()
             if method_name in self.instance_serviceDB:
                 self.instance_serviceDB.pop(method_name)
                 if self.debugCalls:
-                    log.success('[destroy] pop: {}'.format(method_name))
+                    log.success(f'[destroy] pop: {method_name}')
                     self.instance_service(list_all=True)
 
             if not result:
                 if self.debugCalls:
-                    log.failure('[instanceService] (destroy,instance_destroy) {} {} {}'.format(result, method, dh_data))
+                    log.failure(f'[instanceService] (destroy,instance_destroy) {result} {method} {dh_data}')
                 return False
 
         return True
@@ -1000,7 +994,7 @@ sock.close()
 
         if not attach_only:
             query_args = {
-                "method": "{}.factory.instance".format(method),
+                "method": f"{method}.factory.instance",
                 "params": params,
             }
 
@@ -1015,7 +1009,7 @@ sock.close()
                 return None, None, None, None, None
 
             if dh_data is False:
-                return False, "{}.factory.instance".format(method), dh_data, params, None
+                return False, f"{method}.factory.instance", dh_data, params, None
 
             if multicall and multicallsend:
                 for answer in dh_data:
@@ -1025,7 +1019,7 @@ sock.close()
                 dparams = self.params_tmp.get(dh_data.get('id'), 'error to get "params"')
 
             if dh_data is None or not dh_data.get('result'):
-                return False, "{}.factory.instance".format(method), dh_data, params, None
+                return False, f"{method}.factory.instance", dh_data, params, None
 
             object_id = dh_data.get('result')
             _proc_id = object_id
@@ -1047,7 +1041,7 @@ sock.close()
             for paramsTmp in self.attachParamsTMP:
                 query_args = {
                     # "method": "{}.attachAsyncResult".format(method),	# .params.cmd needed
-                    "method": "{}.attach".format(method),
+                    "method": f"{method}.attach",
                     "params": {
                         "proc": _proc_id,
                         # "cmd": "????",	# .attachAsyncResult
@@ -1062,7 +1056,7 @@ sock.close()
 
             query_args = {
                 # "method": "{}.attachAsyncResult".format(method),	# .params.cmd needed
-                "method": "{}.attach".format(method),
+                "method": f"{method}.attach",
                 "params": {
                     "proc": _proc_id,
                     # "cmd": "????",	# .attachAsyncResult
@@ -1073,7 +1067,7 @@ sock.close()
             dh_data = self.send_call(query_args, errorcodes=fuzz, multicall=True, multicallsend=True)
             if not dh_data:
                 self.instance_destroy(method=method, _proc_id=_proc_id, object_id=object_id, detach=False)
-                return False, "{}.attach".format(method), dh_data, dparams, attach_params
+                return False, f"{method}.attach", dh_data, dparams, attach_params
 
             for answer in dh_data:
                 if dh_data.get(answer).get('result'):
@@ -1084,7 +1078,7 @@ sock.close()
         else:
             query_args = {
                 # "method": "{}.attachAsyncResult".format(method),	# .params.cmd needed
-                "method": "{}.attach".format(method),
+                "method": f"{method}.attach",
                 "params": {
                     "proc": _proc_id,
                     # "cmd": "????",	# .attachAsyncResult
@@ -1098,12 +1092,12 @@ sock.close()
 
         if not dh_data and not attach_only:
             self.instance_destroy(method=method, _proc_id=_proc_id, object_id=object_id, detach=False)
-            return False, "{}.attach".format(method), dh_data, params if not multicall else dparams, attach_params
+            return False, f"{method}.attach", dh_data, params if not multicall else dparams, attach_params
 
         if not dh_data.get('result'):
             if object_id and not attach_only:
                 self.instance_destroy(method=method, _proc_id=_proc_id, object_id=object_id, detach=False)
-            return False, "{}.attach".format(method), dh_data, params if not multicall else dparams, attach_params
+            return False, f"{method}.attach", dh_data, params if not multicall else dparams, attach_params
 
         if dh_data.get('params'):
             _sid = dh_data.get('params').get('SID')
@@ -1120,7 +1114,7 @@ sock.close()
         if detach:
             query_args = {
                 # "method": "{}.detachAsyncResult".format(method),	# .params.cmd needed
-                "method": "{}.detach".format(method),
+                "method": f"{method}.detach",
                 "params": {
                     "proc": _proc_id,
                     # "cmd": "????",	# .detachAsyncResult
@@ -1133,25 +1127,25 @@ sock.close()
             dh_data = self.send_call(query_args)
             # if dh_data == False or not dh_data:
             if not dh_data:
-                return False, "{}.detach".format(method), dh_data
+                return False, f"{method}.detach", dh_data
 
             if not dh_data.get('result'):
-                return False, "{}.detach".format(method), dh_data
+                return False, f"{method}.detach", dh_data
 
         query_args = {
-            "method": "{}.destroy".format(method),
+            "method": f"{method}.destroy",
             "params": None,
             "object": object_id,
         }
 
         dh_data = self.send_call(query_args)
         if not dh_data:
-            return False, "{}.destroy".format(method), dh_data
+            return False, f"{method}.destroy", dh_data
 
         if not dh_data.get('result'):
-            return False, "{}.destroy".format(method), dh_data
+            return False, f"{method}.destroy", dh_data
 
-        return True, "{}.destroy".format(method), dh_data
+        return True, f"{method}.destroy", dh_data
 
     #
     # Checking and caches if a service exist or not
@@ -1174,7 +1168,7 @@ sock.close()
                 if self.RemoteServicesCache.get('params').get('service')[count] == service:
                     return True
 
-        log.failure("Service [{}] not supported on remote device".format(service))
+        log.failure(f"Service [{service}] not supported on remote device")
         return False
 
     #
@@ -1190,7 +1184,7 @@ sock.close()
         }
 
         if len(cmd) == 1 or cmd[1] == '-h':
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return True
 
         if not self.udp_server:
@@ -1226,7 +1220,7 @@ sock.close()
             return
 
         else:
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return False
 
     #
@@ -1290,7 +1284,7 @@ sock.close()
                                     event_id_map.update({self.ID: member})
                                     self.send_call(query_args, multicall=True)
                                 elif config_members[member][count].get('Enable'):
-                                    log.success('{}[{}]: Already enabled'.format(member, count))
+                                    log.success(f'{member}[{count}]: Already enabled')
 
                             elif config_members[member][count].get('CurrentProfile'):  # CommGlobal
 
@@ -1316,7 +1310,7 @@ sock.close()
                                     event_id_map.update({self.ID: member})
                                     self.send_call(query_args, multicall=True)
                                 elif config_members[member][count].get('AlarmEnable'):
-                                    log.success('{}[{}]: Already enabled'.format(member, count))
+                                    log.success(f'{member}[{count}]: Already enabled')
 
                     elif isinstance(config_members[member], dict):
 
@@ -1340,7 +1334,7 @@ sock.close()
                                 event_id_map.update({self.ID: member})
                                 self.send_call(query_args, multicall=True)
                             elif config_members[member].get('Enable'):
-                                log.success('{}: Already enabled'.format(member))
+                                log.success(f'{member}: Already enabled')
 
                         elif 'AlarmEnable' in config_members[member]:  # CommGlobal
 
@@ -1364,7 +1358,7 @@ sock.close()
                                 event_id_map.update({self.ID: member})
                                 self.send_call(query_args, multicall=True)
                             elif config_members[member].get('AlarmEnable'):
-                                log.success('{}: Already enabled'.format(member))
+                                log.success(f'{member}: Already enabled')
 
                 except (AttributeError, IndexError):
                     pass
@@ -1456,7 +1450,7 @@ sock.close()
         }
 
         if len(cmd) == 1 or cmd[1] == '-h':
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return True
 
         #
@@ -1478,7 +1472,7 @@ sock.close()
 
             object_id = self.instance_service(method_name, fuzz=True, pull='object')
             if not object_id:
-                log.failure('{}: Error!'.format(method_name))
+                log.failure(f'{method_name}: Error!')
                 return False
 
             query_args = {
@@ -1502,7 +1496,7 @@ sock.close()
                 self.instance_service(method_name, dattach=True, start=True)
             object_id = self.instance_service(method_name, fuzz=True, pull='object')
             if not object_id:
-                log.failure('{}: Error!'.format(method_name))
+                log.failure(f'{method_name}: Error!')
                 return False
 
             query_args = {
@@ -1516,23 +1510,23 @@ sock.close()
         elif cmd[1] == 'arpscan':
 
             if not len(cmd) == 4:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return False
             ip_begin = cmd[2]
             ip_end = cmd[3]
 
             if not check_ip(cmd[2]):
-                log.failure('"{}" is not valid host'.format(cmd[2]))
+                log.failure(f'"{cmd[2]}" is not valid host')
                 return False
             if not check_ip(cmd[3]):
-                log.failure('"{}" is not valid host'.format(cmd[3]))
+                log.failure(f'"{cmd[3]}" is not valid host')
                 return False
 
             if not self.instance_service(method_name, pull='object'):
                 self.instance_service(method_name, dattach=True, start=True)
             object_id = self.instance_service(method_name, fuzz=True, pull='object')
             if not object_id:
-                log.failure('{}: Error!'.format(method_name))
+                log.failure(f'{method_name}: Error!')
                 return False
 
             query_args = {
@@ -1550,7 +1544,7 @@ sock.close()
                 self.instance_service(method_name, dattach=True, start=True)
             object_id = self.instance_service(method_name, fuzz=True, pull='object')
             if not object_id:
-                log.failure('{}: Error!'.format(method_name))
+                log.failure(f'{method_name}: Error!')
                 return False
 
             query_args = {
@@ -1570,7 +1564,7 @@ sock.close()
                 self.instance_service(method_name, dattach=True, start=True)
             object_id = self.instance_service(method_name, fuzz=True, pull='object')
             if not object_id:
-                log.failure('{}: Error!'.format(method_name))
+                log.failure(f'{method_name}: Error!')
                 return False
 
             query_args = {
@@ -1606,7 +1600,7 @@ sock.close()
                 self.instance_service(method_name, dattach=True, start=True)
             object_id = self.instance_service(method_name, fuzz=True, pull='object')
             if not object_id:
-                log.failure('{}: Error!'.format(method_name))
+                log.failure(f'{method_name}: Error!')
                 return False
 
             query_args = {
@@ -1621,7 +1615,7 @@ sock.close()
             }
 
         else:
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return True
 
         dh_data = self.send_call(query_args, errorcodes=True)
@@ -1646,8 +1640,7 @@ sock.close()
 
             """ Print send/recv dh_data and current line number """
             print(color(
-                "[BEGIN {} ({})] <{:-^40}>".format(
-                    direction, self.rhost, inspect.currentframe().f_back.f_lineno), LBLUE))
+                f"[BEGIN {direction} ({self.rhost})] <{inspect.currentframe().f_back.f_lineno:-^40}>", LBLUE))
             if (self.debug == 2) or (self.debug == 3):
                 print(hexdump(packet))
             if (self.debug == 1) or (self.debug == 3):
@@ -1679,8 +1672,7 @@ sock.close()
                     """ Unknown packet, do hexdump """
                     log.failure("DEBUG: Unknown packet")
                     print(hexdump(packet))
-            print(color("[ END  {} ({})] <{:-^40}>".format(
-                direction, self.rhost, inspect.currentframe().f_back.f_lineno), BLUE))
+            print(color(f"[ END  {direction} ({self.rhost})] <{inspect.currentframe().f_back.f_lineno:-^40}>", BLUE))
         return
 
     def _p2p_len(self, dh_data):
@@ -1752,7 +1744,7 @@ sock.close()
         # Fix bugs with SSH relay
         if self.proto in ['http', 'https']:
             self.lock.acquire()
-            self._debug("SEND", '{},{}\n\n{}'.format(self.remote.headers, self.remote.cookies.get_dict(), packet))
+            self._debug("SEND", f'{self.remote.headers},{self.remote.cookies.get_dict()}\n\n{packet}')
             dh_data = self.remote.send(query_args=packet, login=login, timeout=20)
             self.update_id()
             self.lock.release()
@@ -1760,7 +1752,7 @@ sock.close()
                 return None
             elif isinstance(dh_data, str):
                 return dh_data
-            self._debug("RECV", '{}\n\n{}'.format(dh_data.headers, dh_data.json()))
+            self._debug("RECV", f'{dh_data.headers}\n\n{dh_data.json()}')
             return dh_data.content
 
         if lock:
@@ -1779,7 +1771,7 @@ sock.close()
             header = header.replace('_ID_'.encode('latin-1'), p32(self.ID))
 
             if not len(header) == 32:
-                log.error("Binary header != 32 ({})".format(len(header)))
+                log.error(f"Binary header != 32 ({len(header)})")
                 if self.lock.locked():
                     self.lock.release()
                 return None
@@ -1820,7 +1812,7 @@ sock.close()
                 if self.lock.locked():
                     self.lock.release()
                 self.socket_event.set()
-                log.failure('[p2p] send: {}'.format(repr(e)))
+                log.failure(f'[p2p] send: {repr(e)}')
                 return None
 
         #
@@ -1878,7 +1870,7 @@ sock.close()
             if self.lock.locked():
                 self.lock.release()
             self.remote.close()
-            log.failure('[p2p] {}'.format(repr(e)))
+            log.failure(f'[p2p] {repr(e)}')
             raise EOFError
 
         if not len(dh_data) and self.lock.locked():
@@ -1909,7 +1901,7 @@ sock.close()
                 else:
                     if len_recved == 0:
                         log.failure("[p2p] Unknown packet")
-                        print("PROTO: \033[92m[\033[91m{}\033[92m]\033[0m".format(binascii.b2a_hex(dh_data[0:4])))
+                        print(f"PROTO: \033[92m[\033[91m{binascii.b2a_hex(dh_data[0:4])}\033[92m]\033[0m")
                         print(hexdump(dh_data))
                         if self.lock.locked():
                             self.lock.release()
@@ -2025,8 +2017,7 @@ sock.close()
             realm = log.progress(color('Onvif REALM', YELLOW))
             realm.status('requesting')
             """ We need to get correct REALM, as it differs for newer devices  """
-            rtsp = 'OPTIONS rtsp://{host}:{port}?proto=Onvif RTSP/1.1\r\nCSeq: 1\r\n\r\n'.format(
-                host=self.rhost, port=self.rport)
+            rtsp = f'OPTIONS rtsp://{self.rhost}:{self.rport}?proto=Onvif RTSP/1.1\r\nCSeq: 1\r\n\r\n'
 
             req = remote(self.rhost, self.rport)
             req.send(rtsp)
@@ -2035,7 +2026,7 @@ sock.close()
             dh_realm = rtsp[rtsp.find(b'Login to'):rtsp.rfind(b'", nonce=')].decode('latin-1')
             if self.debugCalls:
                 log.info('DHIP REALM: {}'.format(dh_data.get('params').get('realm')))
-                log.info('RTSP REALM: {}'.format(dh_realm))
+                log.info(f'RTSP REALM: {dh_realm}')
             dh_data.get('params').update({'realm': dh_realm})
             realm.success(color(dh_realm, GREEN))
 
@@ -2191,14 +2182,14 @@ sock.close()
         elif self.ErrorCode[:2] == b'\x01\x00':
             login.failure('Authentication failed: {} tries left {}'.format(
                 u16(self.AuthCode[0:2], endian='big'),
-                '(BUG: SessionID = {})'.format(self.SessionID) if self.SessionID else '')
+                f'(BUG: SessionID = {self.SessionID})' if self.SessionID else '')
             )
             return False
         elif self.ErrorCode[:2] == b'\x01\x01':
             login.failure('Username invalid')
             return False
         elif self.ErrorCode[:2] == b'\x01\x04':
-            login.failure('Account locked: {}'.format(dh_data))
+            login.failure(f'Account locked: {dh_data}')
             return False
         elif self.ErrorCode[:2] == b'\x01\x05':
             login.failure('Undefined code: 0x01 0x05')
@@ -2213,7 +2204,7 @@ sock.close()
             login.failure('User already logged in')
             return False
         else:
-            login.failure(color('Unknown ErrorCode: {}'.format(self.ErrorCode[:2]), RED))
+            login.failure(color(f'Unknown ErrorCode: {self.ErrorCode[:2]}', RED))
             return False
 
         if self.args.save and not self.proto == '3des':
@@ -2261,7 +2252,7 @@ sock.close()
         while True:
             self.recv_stream_status.clear()
             event_data = self.remote.recv_stream()
-            self._debug("RECV ({})".format(len(event_data)), event_data)
+            self._debug(f"RECV ({len(event_data)})", event_data)
             if not event_data:
                 log.failure('[subscribe_notify] == 0')
                 # self.event.set()

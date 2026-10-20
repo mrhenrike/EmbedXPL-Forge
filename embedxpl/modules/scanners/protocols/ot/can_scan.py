@@ -91,9 +91,9 @@ class Exploit(Exploit):
             sock.bind((str(self.interface),))
             sock.settimeout(1.0)
             return sock
-        except (socket.error, OSError, AttributeError) as exc:
+        except (OSError, AttributeError) as exc:
             raise RuntimeError(
-                "Cannot open CAN socket on {}: {}".format(self.interface, exc)
+                f"Cannot open CAN socket on {self.interface}: {exc}"
             )
 
     def _recv_frame(self, sock: socket.socket) -> dict:
@@ -108,7 +108,7 @@ class Exploit(Exploit):
         arb_id = can_id & (_CAN_EFF_MASK if is_extended else _CAN_SFF_MASK)
         return {
             "arb_id": arb_id,
-            "arb_id_hex": "0x{:08X}".format(arb_id) if is_extended else "0x{:03X}".format(arb_id),
+            "arb_id_hex": f"0x{arb_id:08X}" if is_extended else f"0x{arb_id:03X}",
             "dlc": dlc & 0x0F,
             "data": payload,
             "extended": is_extended,
@@ -151,9 +151,9 @@ class Exploit(Exploit):
                     }
                 arb_ids[aid]["count"] += 1
                 arb_ids[aid]["dlc_set"].add(frame["dlc"])
-            except socket.timeout:
+            except TimeoutError:
                 continue
-            except (socket.error, OSError):
+            except OSError:
                 break
         return arb_ids
 
@@ -172,7 +172,7 @@ class Exploit(Exploit):
                 if rx_base <= frame["arb_id"] <= rx_base + 0x07:
                     if len(frame["data"]) >= 2 and frame["data"][1] == 0x7E:
                         return True
-            except socket.timeout:
+            except TimeoutError:
                 continue
         return False
 
@@ -196,7 +196,7 @@ class Exploit(Exploit):
                             return data[4:].decode("ascii", errors="replace").strip("\x00")
                     if len(data) >= 2 and data[1] == 0x7F:
                         return ""
-            except socket.timeout:
+            except TimeoutError:
                 continue
         return ""
 
@@ -225,20 +225,18 @@ class Exploit(Exploit):
     @multi
     def run(self) -> None:
         """Execute CAN bus capture and UDS scan."""
-        print_status("Starting CAN bus capture on {} for {} seconds".format(
-            self.interface, self.timeout
-        ))
+        print_status(f"Starting CAN bus capture on {self.interface} for {self.timeout} seconds")
 
         try:
             sock = self._open_can_socket()
         except RuntimeError as exc:
-            print_error("{}".format(exc))
+            print_error(f"{exc}")
             return
 
         try:
             arb_ids = self._passive_capture(sock)
         except Exception as exc:
-            print_error("Capture error: {}".format(exc))
+            print_error(f"Capture error: {exc}")
             sock.close()
             return
 
@@ -247,7 +245,7 @@ class Exploit(Exploit):
             sock.close()
             return
 
-        print_success("Captured {} unique arbitration ID(s)".format(len(arb_ids)))
+        print_success(f"Captured {len(arb_ids)} unique arbitration ID(s)")
         for entry in sorted(arb_ids.values(), key=lambda e: e["arb_id"]):
             dlc_str = "/".join(str(d) for d in sorted(entry["dlc_set"]))
             print_info("{} - {} frame(s), DLC: {}, {}".format(
@@ -263,7 +261,7 @@ class Exploit(Exploit):
             if uds_results:
                 print_success("UDS data extracted:")
                 for name, value in uds_results.items():
-                    print_info("  {}: {}".format(name, value))
+                    print_info(f"  {name}: {value}")
             else:
                 print_info("No UDS responses received (no UDS-capable ECU or access denied)")
 

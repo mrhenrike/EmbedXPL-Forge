@@ -5,7 +5,6 @@ Plugins are discovered via setuptools entry_points under the group
 :class:`PluginBase`.
 """
 
-from __future__ import annotations
 
 import abc
 import logging
@@ -42,7 +41,7 @@ class PluginMeta:
     version: str
     description: str = ""
     author: str = ""
-    module_paths: List[str] = field(default_factory=list)
+    module_paths: list[str] = field(default_factory=list)
 
 
 class PluginBase(abc.ABC):
@@ -69,14 +68,14 @@ class PluginRegistry:
     ENTRY_POINT_GROUP = "embedxpl.plugins"
 
     def __init__(self) -> None:
-        self._plugins: Dict[str, PluginBase] = {}
-        self._modules: Dict[str, Any] = {}
+        self._plugins: dict[str, PluginBase] = {}
+        self._modules: dict[str, Any] = {}
 
     @property
-    def loaded(self) -> List[str]:
+    def loaded(self) -> list[str]:
         return list(self._plugins.keys())
 
-    def discover(self) -> List[str]:
+    def discover(self) -> list[str]:
         """Discover available plugins via entry_points (does not load them)."""
         from .loader import discover_entry_points
 
@@ -97,9 +96,9 @@ class PluginRegistry:
         logger.info("Plugin loaded: %s v%s", meta.name, meta.version)
         return meta
 
-    def load_all(self) -> List[PluginMeta]:
+    def load_all(self) -> list[PluginMeta]:
         """Discover and load every available plugin."""
-        results: List[PluginMeta] = []
+        results: list[PluginMeta] = []
         for name in self.discover():
             try:
                 results.append(self.load(name))
@@ -122,8 +121,8 @@ class PluginRegistry:
         """Register a module contributed by a plugin."""
         self._modules[path] = module
 
-    def get_modules(self) -> Dict[str, Any]:
+    def get_modules(self) -> dict[str, Any]:
         return dict(self._modules)
 
-    def list(self) -> List[PluginMeta]:
+    def list(self) -> list[PluginMeta]:
         return [p.meta() for p in self._plugins.values()]

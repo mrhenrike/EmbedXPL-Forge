@@ -22,12 +22,12 @@ _DIAL_ST   = "urn:dial-multiscreen-org:service:dial:1"
 
 _MSEARCH = (
     "M-SEARCH * HTTP/1.1\r\n"
-    "HOST: {}:{}\r\n"
+    f"HOST: {_SSDP_ADDR}:{_SSDP_PORT}\r\n"
     'MAN: "ssdp:discover"\r\n'
     "MX: 3\r\n"
-    "ST: {}\r\n"
+    f"ST: {_DIAL_ST}\r\n"
     "\r\n"
-).format(_SSDP_ADDR, _SSDP_PORT, _DIAL_ST)
+)
 
 _DIAL_APP_PATHS = ("/apps/", "/dial/apps/", "/upnp/dial/apps/")
 
@@ -88,13 +88,13 @@ class Exploit(BaseExploit):
     # Internal helpers
     # ------------------------------------------------------------------
 
-    def _ssdp_discover(self) -> List[Tuple[str, str]]:
+    def _ssdp_discover(self) -> list[tuple[str, str]]:
         """Send M-SEARCH and collect (ip, location_url) pairs from responses.
 
         Returns:
             List of tuples containing (source_ip, LOCATION header value).
         """
-        found: List[Tuple[str, str]] = []
+        found: list[tuple[str, str]] = []
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
             sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
@@ -116,10 +116,10 @@ class Exploit(BaseExploit):
                         seen.add(key)
                         found.append(key)
                         print_success("DIAL device at {} — LOCATION: {}".format(ip, loc or "N/A"))
-                except socket.timeout:
+                except TimeoutError:
                     break
         except OSError as exc:
-            print_error("SSDP socket error: {}".format(exc))
+            print_error(f"SSDP socket error: {exc}")
         finally:
             try:
                 sock.close()
@@ -136,7 +136,7 @@ class Exploit(BaseExploit):
         """
         import urllib.request
         for path in _DIAL_APP_PATHS:
-            url = "http://{}:{}{}".format(ip, port, path)
+            url = f"http://{ip}:{port}{path}"
             try:
                 with urllib.request.urlopen(url, timeout=5) as resp:
                     body = resp.read(2000).decode(errors="replace")
@@ -146,9 +146,7 @@ class Exploit(BaseExploit):
                             device_type = label
                             break
                     print_success(
-                        "DIAL app list at {} — Device: {} — Preview: {}".format(
-                            url, device_type, body[:200]
-                        )
+                        f"DIAL app list at {url} — Device: {device_type} — Preview: {body[:200]}"
                     )
                     return
             except Exception:
@@ -181,9 +179,7 @@ class Exploit(BaseExploit):
         each for the DIAL app-list endpoint to fingerprint the device.
         """
         print_status(
-            "Sending SSDP M-SEARCH for DIAL to {} (timeout {}s)...".format(
-                self.target, self.timeout
-            )
+            f"Sending SSDP M-SEARCH for DIAL to {self.target} (timeout {self.timeout}s)..."
         )
         devices = self._ssdp_discover()
 
@@ -191,7 +187,7 @@ class Exploit(BaseExploit):
             print_error("No DIAL devices found via SSDP.")
             return
 
-        print_success("Found {} DIAL device(s). Probing app lists...".format(len(devices)))
+        print_success(f"Found {len(devices)} DIAL device(s). Probing app lists...")
         for ip, loc in devices:
             dial_port = self._parse_location_port(loc) if loc else 8008
             self._probe_dial_apps(ip, dial_port)

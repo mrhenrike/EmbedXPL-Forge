@@ -60,28 +60,26 @@ class Exploit(BaseExploit):
 
     def run(self) -> None:
         """Probe ports 3000 and 3001 for SSAP service presence."""
-        print_status("Probing LG WebOS SSAP on {}...".format(self.target))
+        print_status(f"Probing LG WebOS SSAP on {self.target}...")
 
         for probe_port in (3000, 3001):
             banner = self._probe_port(probe_port)
             if banner is not None:
                 proto = "wss" if probe_port == 3001 else "ws"
                 print_success(
-                    "SSAP port {}/{} open on {}".format(probe_port, proto, self.target)
+                    f"SSAP port {probe_port}/{proto} open on {self.target}"
                 )
                 version = self._extract_version(banner)
                 if version:
-                    print_success("WebOS version hint: {}".format(version))
+                    print_success(f"WebOS version hint: {version}")
                 else:
                     print_status("Banner (first 200 chars): {}".format(
                         banner[:200].replace("\r\n", " | ")
                     ))
             else:
-                print_error("Port {} closed or no response on {}".format(
-                    probe_port, self.target
-                ))
+                print_error(f"Port {probe_port} closed or no response on {self.target}")
 
-    def _probe_port(self, port: int) -> Optional[str]:
+    def _probe_port(self, port: int) -> str | None:
         """Attempt a WebSocket handshake on the given port.
 
         Args:
@@ -99,10 +97,10 @@ class Exploit(BaseExploit):
             data = sock.recv(_READ_BYTES)
             sock.close()
             return data.decode("utf-8", errors="replace")
-        except (socket.timeout, ConnectionRefusedError, OSError):
+        except (TimeoutError, ConnectionRefusedError, OSError):
             return None
         except Exception as exc:
-            print_error("Probe error on port {}: {}".format(port, exc))
+            print_error(f"Probe error on port {port}: {exc}")
             return None
 
     @staticmethod

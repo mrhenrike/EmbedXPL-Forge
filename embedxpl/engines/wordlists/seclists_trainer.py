@@ -10,7 +10,6 @@ Only structural patterns are extracted - no raw data is stored.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 Version: 1.1.0
 """
-from __future__ import annotations
 
 import json
 import logging
@@ -35,7 +34,7 @@ _KNOWN_SECLISTS_RELATIVES = [
 ]
 
 
-def find_seclists_root(hint: Optional[str] = None) -> Optional[Path]:
+def find_seclists_root(hint: str | None = None) -> Path | None:
     """Locate SecLists root directory.
 
     Searches the provided hint path first, then known relative locations
@@ -72,7 +71,7 @@ def _has_passwords(root: Path) -> bool:
     return any(pwd_dir.iterdir())
 
 
-def diagnose_corpus(seclists_root: Optional[Path] = None) -> Dict[str, List[str]]:
+def diagnose_corpus(seclists_root: Path | None = None) -> dict[str, list[str]]:
     """Report which corpus files are present and which are missing.
 
     Useful for debugging incomplete SecLists checkouts. Prints a clear
@@ -86,7 +85,7 @@ def diagnose_corpus(seclists_root: Optional[Path] = None) -> Dict[str, List[str]
     """
     root = seclists_root or find_seclists_root()
     corpus = load_corpus_index()
-    result: Dict[str, List[str]] = {"found": [], "missing": [], "seclists_root": str(root) if root else "not found"}
+    result: dict[str, list[str]] = {"found": [], "missing": [], "seclists_root": str(root) if root else "not found"}
 
     if not root:
         logger.warning(
@@ -139,7 +138,7 @@ def load_corpus_index() -> dict:
 def train_from_seclists(
     model,
     seclists_root: Path,
-    categories: Optional[List[str]] = None,
+    categories: list[str] | None = None,
     max_password_sources: int = 0,
     max_username_sources: int = 0,
 ) -> dict:

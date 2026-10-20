@@ -29,7 +29,7 @@ class ModbusClient:
         self._port = port
         self._unit_id = unit_id
         self._timeout = timeout
-        self._sock: Optional[socket.socket] = None
+        self._sock: socket.socket | None = None
         self._tid = 0
         self._logger = logging.getLogger(self.__class__.__name__)
 
@@ -87,7 +87,7 @@ class ModbusClient:
         length = len(pdu) + 1  # +1 for unit_id
         return struct.pack(">HHHB", tid, 0, length, self._unit_id) + pdu
 
-    def _send_recv(self, pdu: bytes) -> Optional[bytes]:
+    def _send_recv(self, pdu: bytes) -> bytes | None:
         """Send PDU, return raw response PDU (stripped of MBAP).
 
         Returns:
@@ -124,7 +124,7 @@ class ModbusClient:
     # Read coils / discrete / registers
     # ------------------------------------------------------------------ #
 
-    def read_coils(self, address: int, count: int) -> Optional[List[int]]:
+    def read_coils(self, address: int, count: int) -> list[int] | None:
         """FC1 — Read Coil Status.
 
         Args:
@@ -145,7 +145,7 @@ class ModbusClient:
                 bits.append((byte >> bit) & 1)
         return bits[:count]
 
-    def read_discrete_inputs(self, address: int, count: int) -> Optional[List[int]]:
+    def read_discrete_inputs(self, address: int, count: int) -> list[int] | None:
         """FC2 — Read Discrete Inputs.
 
         Args:
@@ -166,7 +166,7 @@ class ModbusClient:
                 bits.append((byte >> bit) & 1)
         return bits[:count]
 
-    def read_holding_registers(self, address: int, count: int) -> Optional[List[int]]:
+    def read_holding_registers(self, address: int, count: int) -> list[int] | None:
         """FC3 — Read Holding Registers.
 
         Args:
@@ -186,7 +186,7 @@ class ModbusClient:
             registers.append(struct.unpack(">H", rsp[i:i + 2])[0])
         return registers
 
-    def read_input_registers(self, address: int, count: int) -> Optional[List[int]]:
+    def read_input_registers(self, address: int, count: int) -> list[int] | None:
         """FC4 — Read Input Registers.
 
         Args:
@@ -237,7 +237,7 @@ class ModbusClient:
         pdu = struct.pack(">BHH", 0x06, address, value & 0xFFFF)
         return self._send_recv(pdu) is not None
 
-    def write_multiple_coils(self, address: int, values: List[int]) -> bool:
+    def write_multiple_coils(self, address: int, values: list[int]) -> bool:
         """FC15 — Write Multiple Coils.
 
         Args:
@@ -256,7 +256,7 @@ class ModbusClient:
         pdu = struct.pack(">BHHB", 0x0F, address, count, byte_count) + bytes(coil_bytes)
         return self._send_recv(pdu) is not None
 
-    def write_multiple_registers(self, address: int, values: List[int]) -> bool:
+    def write_multiple_registers(self, address: int, values: list[int]) -> bool:
         """FC16 — Write Multiple Registers.
 
         Args:
@@ -276,7 +276,7 @@ class ModbusClient:
     # Device identification
     # ------------------------------------------------------------------ #
 
-    def read_device_identification(self) -> Optional[dict]:
+    def read_device_identification(self) -> dict | None:
         """FC43/0x0E — Read Device Identification (MEI).
 
         Returns:

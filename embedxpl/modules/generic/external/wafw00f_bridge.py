@@ -52,9 +52,9 @@ class Exploit(BaseExploit):
 
         url = self.target
         if not url.startswith(("http://", "https://")):
-            url = "http://{}".format(url)
+            url = f"http://{url}"
 
-        print_status("Running wafw00f on {}...".format(url))
+        print_status(f"Running wafw00f on {url}...")
 
         cmd = ["wafw00f", url, "-o", "-"]
         if self.extra_args:
@@ -69,22 +69,22 @@ class Exploit(BaseExploit):
             )
             output = result.stdout + result.stderr
             if output.strip():
-                print_success("WAFW00F result for {}:".format(url))
+                print_success(f"WAFW00F result for {url}:")
                 for line in output.split("\n"):
                     if line.strip():
-                        print_status("  {}".format(line))
+                        print_status(f"  {line}")
             else:
                 print_status("wafw00f returned no output")
 
             if result.returncode == 0:
                 print_success("Detection complete")
             else:
-                print_status("wafw00f exit code: {}".format(result.returncode))
+                print_status(f"wafw00f exit code: {result.returncode}")
 
         except subprocess.TimeoutExpired:
             print_error("wafw00f timed out after 60 seconds")
         except Exception as e:
-            print_error("Error running wafw00f: {}".format(e))
+            print_error(f"Error running wafw00f: {e}")
 
     @mute
     def check(self) -> bool:

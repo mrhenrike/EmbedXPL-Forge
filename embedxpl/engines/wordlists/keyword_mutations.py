@@ -11,7 +11,6 @@ Funciona bem para nomes próprios e keywords pessoais (2-4 sílabas).
 
 Author: André Henrique (@mrhenrike)
 """
-from __future__ import annotations
 
 import logging
 import re
@@ -208,7 +207,7 @@ def _crc32(s: str) -> int:
 
 
 def mutate(
-    words: Union[list[str], str],
+    words: list[str] | str,
     modes: list[MutationMode],
     include_original: bool = True,
 ) -> list[str]:
@@ -260,7 +259,7 @@ def mutate(
 def mutate_tokens(
     token_dict: dict,
     modes: list[MutationMode],
-    scope_keys: Optional[list[str]] = None,
+    scope_keys: list[str] | None = None,
 ) -> dict:
     """Apply mutations to string/list values in a profile dictionary.
 

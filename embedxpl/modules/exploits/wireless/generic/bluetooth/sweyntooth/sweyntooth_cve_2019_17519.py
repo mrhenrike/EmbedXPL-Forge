@@ -8,7 +8,6 @@ oversized or unexpected length to deadlock/crash the BLE stack.
 Affected: Texas Instruments CC2640R2F (primary), Dialog DA14580/85/86,
 NXP KW41Z. The LL_LENGTH_REQ PDU with max_rx_octets > 251 triggers the bug.
 """
-from __future__ import annotations
 
 import asyncio
 import logging

@@ -18,4 +18,4 @@ class Encoder(BaseEncoder):
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
             "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm",
         ))
-        return "eval(str_rot13('{}'));".format(encoded_payload)
+        return f"eval(str_rot13('{encoded_payload}'));"

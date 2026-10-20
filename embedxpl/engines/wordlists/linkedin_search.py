@@ -17,7 +17,6 @@ Fallback chain:
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 import os
@@ -71,7 +70,7 @@ def _get_session():
 
     token = _get_access_token()
     if not token:
-        raise EnvironmentError(
+        raise OSError(
             "LINKEDIN_ACCESS_TOKEN not set. "
             "Add it to your .env file or set the environment variable."
         )
@@ -163,7 +162,7 @@ def validate_token() -> dict:
         return {"ok": False, "error": str(exc)}
 
 
-def get_company_urn(company_name: str) -> Optional[str]:
+def get_company_urn(company_name: str) -> str | None:
     """
     Try to find a LinkedIn organization URN by company name.
 
@@ -179,7 +178,7 @@ def get_company_urn(company_name: str) -> Optional[str]:
     """
     try:
         session = _get_session()
-    except (ImportError, EnvironmentError) as exc:
+    except (OSError, ImportError) as exc:
         logger.warning("LinkedIn session error: %s", exc)
         return None
 
@@ -228,7 +227,7 @@ def search_employees_by_company(
     """
     try:
         session = _get_session()
-    except (ImportError, EnvironmentError) as exc:
+    except (OSError, ImportError) as exc:
         logger.warning("LinkedIn not available: %s", exc)
         return []
 
@@ -317,7 +316,7 @@ def _extract_name_from_element(elem: dict) -> str:
 
 def search_employees(
     company_name: str,
-    domain:       Optional[str] = None,
+    domain:       str | None = None,
     max_results:  int = 50,
 ) -> list[str]:
     """
@@ -354,7 +353,7 @@ def search_employees(
     return names
 
 
-def refresh_access_token() -> Optional[str]:
+def refresh_access_token() -> str | None:
     """
     Attempt to refresh the LinkedIn access token using client credentials.
 

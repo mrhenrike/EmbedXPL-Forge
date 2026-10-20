@@ -11,7 +11,6 @@ EmbedXPL port
 -------------
 Maintainer : Andre Henrique (@mrhenrike) | Uniao Geek
 """
-from __future__ import annotations
 
 import re
 from typing import Any, Dict, List, Optional
@@ -36,9 +35,9 @@ _PFSENSE_HEADER = re.compile(
 )
 
 
-def parse_pfsense_line(raw: str) -> Optional[Dict[str, Any]]:
+def parse_pfsense_line(raw: str) -> dict[str, Any] | None:
 
-    result: Dict[str, Any] = {"_raw": raw.strip()}
+    result: dict[str, Any] = {"_raw": raw.strip()}
 
     m = _PFSENSE_HEADER.match(raw.strip())
     if not m:
@@ -78,7 +77,7 @@ def parse_pfsense_line(raw: str) -> Optional[Dict[str, Any]]:
     return result
 
 
-def _parse_filterlog_message(event: Dict[str, Any], message: str) -> None:
+def _parse_filterlog_message(event: dict[str, Any], message: str) -> None:
 
     parts = message.split(",")
     if len(parts) >= 20:
@@ -95,7 +94,7 @@ def _parse_filterlog_message(event: Dict[str, Any], message: str) -> None:
         event["network.direction"] = event.get("direction", "in")
 
 
-def _parse_sshd_message(event: Dict[str, Any], message: str) -> None:
+def _parse_sshd_message(event: dict[str, Any], message: str) -> None:
 
     # Accepted/Failed password/publickey for user X from IP port N
     m = re.search(
@@ -112,7 +111,7 @@ def _parse_sshd_message(event: Dict[str, Any], message: str) -> None:
         event["event.action"] = "disconnect"
 
 
-def _parse_sudo_message(event: Dict[str, Any], message: str) -> None:
+def _parse_sudo_message(event: dict[str, Any], message: str) -> None:
 
     # user1 : TTY=pts/0 ; PWD=/root ; USER=root ; COMMAND=/bin/sh
     m = re.match(r"(\S+)\s*:\s*TTY=(\S+).*USER=(\S+)\s*;.*COMMAND=(.+)", message, re.I)
@@ -130,8 +129,8 @@ class PfsenseSyslogParser:
         self,
         path: str,
         max_lines: int = 50_000,
-        log_types: Optional[List[str]] = None,
-    ) -> List[Dict[str, Any]]:
+        log_types: list[str] | None = None,
+    ) -> list[dict[str, Any]]:
 
         events = []
         with open(path, encoding="utf-8", errors="replace") as f:

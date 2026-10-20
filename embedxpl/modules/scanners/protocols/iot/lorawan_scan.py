@@ -88,7 +88,7 @@ class Exploit(Exploit):
         except ImportError:
             raise RuntimeError("pyrtlsdr library required for SDR capture")
         except Exception as exc:
-            raise RuntimeError("Cannot initialize SDR: {}".format(exc))
+            raise RuntimeError(f"Cannot initialize SDR: {exc}")
 
     def _detect_lora_preamble(self, samples) -> list:
         """Detect LoRa chirp preamble in IQ samples."""
@@ -132,7 +132,7 @@ class Exploit(Exploit):
         major = mhdr & 0x03
         return {
             "mtype": mtype,
-            "mtype_name": _MTYPE_NAMES.get(mtype, "Unknown (0x{:02x})".format(mtype)),
+            "mtype_name": _MTYPE_NAMES.get(mtype, f"Unknown (0x{mtype:02x})"),
             "major": major,
         }
 
@@ -157,7 +157,7 @@ class Exploit(Exploit):
         fctrl = data[5]
         fcnt = struct.unpack("<H", data[6:8])[0]
         return {
-            "dev_addr": "{:08X}".format(dev_addr),
+            "dev_addr": f"{dev_addr:08X}",
             "fctrl": fctrl,
             "fcnt": fcnt,
             "ack": bool(fctrl & 0x20),
@@ -256,9 +256,7 @@ class Exploit(Exploit):
     def run(self) -> None:
         """Execute LoRaWAN gateway capture and analysis."""
         channels = _REGIONS.get(str(self.region), _EU868_CHANNELS)
-        print_status("Starting LoRaWAN capture ({} region, {} channels, {} seconds)".format(
-            self.region, len(channels), self.timeout
-        ))
+        print_status(f"Starting LoRaWAN capture ({self.region} region, {len(channels)} channels, {self.timeout} seconds)")
 
         if not self.check():
             print_error("SDR hardware not available")
@@ -268,11 +266,11 @@ class Exploit(Exploit):
         all_frames = []
 
         for freq in channels:
-            print_status("Listening on {:.1f} MHz ({:.0f}s)...".format(freq, per_channel))
+            print_status(f"Listening on {freq:.1f} MHz ({per_channel:.0f}s)...")
             frames = self._capture_channel(freq, per_channel)
             all_frames.extend(frames)
             if frames:
-                print_info("  Captured {} frame(s)".format(len(frames)))
+                print_info(f"  Captured {len(frames)} frame(s)")
 
         results = self._aggregate_results(all_frames)
         devices = results["devices"]
@@ -282,10 +280,10 @@ class Exploit(Exploit):
             print_warning("No LoRaWAN traffic captured")
             return
 
-        print_success("Discovered {} device(s)/address(es)".format(len(devices)))
+        print_success(f"Discovered {len(devices)} device(s)/address(es)")
 
         if joins:
-            print_success("Join requests captured: {}".format(len(joins)))
+            print_success(f"Join requests captured: {len(joins)}")
             for j in joins:
                 print_info("  DevEUI: {} AppEUI: {} Nonce: {}".format(
                     j["dev_eui"], j["app_eui"], j["dev_nonce"]

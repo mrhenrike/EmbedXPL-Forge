@@ -14,7 +14,6 @@ Inspired by Fluxion's connectivity response system and wifipumpkin3's captivefla
 Version: 2.0.0
 """
 
-from __future__ import annotations
 
 import http.server
 import logging

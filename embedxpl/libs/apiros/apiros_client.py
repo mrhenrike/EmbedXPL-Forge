@@ -31,7 +31,7 @@ class RouterOSTrapError(Exception):
     pass
 
 
-class ApiRosClient(object):
+class ApiRosClient:
     "RouterOS API"
 
     def __init__(self, address, port, user, password, use_ssl=False,
@@ -71,8 +71,7 @@ class ApiRosClient(object):
             self.connection = self.sock.connect(sa)
 
         except OSError:
-            raise CreateSocketError('Error: API failed to connect to socket. Host: {}, port: {}.'.format(self.address,
-                                                                                                         self.port))
+            raise CreateSocketError(f'Error: API failed to connect to socket. Host: {self.address}, port: {self.port}.')
 
         if self.use_ssl:
             self.sock = self.context.wrap_socket(self.sock)
@@ -228,7 +227,7 @@ class ApiRosClient(object):
         # If RouterOS returns error from command that was sent
         if '!trap' in reply[0][0]:
             # You can comment following line out if you don't want to raise an error in case of !trap
-            raise RouterOSTrapError("\nCommand: {}\nReturned an error: {}".format(sentence, reply))
+            raise RouterOSTrapError(f"\nCommand: {sentence}\nReturned an error: {reply}")
             pass
 
         # reply is list containing strings with RAW output form API
@@ -253,7 +252,7 @@ class ApiRosClient(object):
         try:
             self.talk('/system/identity/print')
 
-        except (socket.timeout, IndexError, BrokenPipeError):
+        except (TimeoutError, IndexError, BrokenPipeError):
             self.close()
             return False
 

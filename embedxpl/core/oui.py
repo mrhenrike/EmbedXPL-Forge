@@ -17,7 +17,6 @@ Author: André Henrique (LinkedIn/X: @mrhenrike)
 Version: 0.2.0
 """
 
-from __future__ import annotations
 
 import json
 import logging
@@ -37,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 _IEEE_OUI_URL = "https://standards-oui.ieee.org/oui/oui.txt"
 
-_ONLINE_APIS: List[Dict[str, str]] = [
+_ONLINE_APIS: list[dict[str, str]] = [
     {
         "name": "macvendors.com",
         "url": "https://api.macvendors.com/{}",
@@ -61,7 +60,7 @@ _HEX_RE = re.compile(
     r"^([0-9A-Fa-f]{2}-[0-9A-Fa-f]{2}-[0-9A-Fa-f]{2})\s+\(hex\)\s+(.+)$"
 )
 
-_VENDOR_ALIASES: Dict[str, str] = {
+_VENDOR_ALIASES: dict[str, str] = {
     "huawei technologies co.,ltd": "huawei",
     "huawei technologies co., ltd": "huawei",
     "huawei device co., ltd.": "huawei",
@@ -127,11 +126,11 @@ _VENDOR_ALIASES: Dict[str, str] = {
 # Module-level state
 # ---------------------------------------------------------------------------
 
-_local_cache: Dict[str, str] = {}
+_local_cache: dict[str, str] = {}
 _local_cache_loaded: bool = False
 _local_cache_mtime: float = 0.0
 
-_session_cache: Dict[str, str] = {}
+_session_cache: dict[str, str] = {}
 _session_cache_lock = threading.Lock()
 
 _last_api_call: float = 0.0
@@ -218,7 +217,7 @@ def normalize_vendor(vendor_raw: str) -> str:
     return re.sub(r"[^a-z0-9]", "", first_word)
 
 
-def update_oui_file(force: bool = False) -> Tuple[bool, str]:
+def update_oui_file(force: bool = False) -> tuple[bool, str]:
     """Download the latest IEEE OUI database.
 
     Args:
@@ -232,19 +231,19 @@ def update_oui_file(force: bool = False) -> Tuple[bool, str]:
     if not force and os.path.exists(_OUI_FILE):
         age_days = (time.time() - os.path.getmtime(_OUI_FILE)) / 86400
         if age_days < 30:
-            return (True, "OUI file is up-to-date ({:.0f} days old)".format(age_days))
+            return (True, f"OUI file is up-to-date ({age_days:.0f} days old)")
 
     try:
         logger.info("Downloading IEEE OUI database from %s", _IEEE_OUI_URL)
         tmp_path = _OUI_FILE + ".tmp"
         urllib.request.urlretrieve(_IEEE_OUI_URL, tmp_path)
 
-        with open(tmp_path, "r", encoding="utf-8", errors="replace") as f:
+        with open(tmp_path, encoding="utf-8", errors="replace") as f:
             content = f.read()
         count = content.count("(hex)")
         if count < 1000:
             os.remove(tmp_path)
-            return (False, "Downloaded file seems corrupted ({} entries)".format(count))
+            return (False, f"Downloaded file seems corrupted ({count} entries)")
 
         if os.path.exists(_OUI_FILE):
             os.replace(tmp_path, _OUI_FILE)
@@ -254,15 +253,15 @@ def update_oui_file(force: bool = False) -> Tuple[bool, str]:
         global _local_cache_loaded
         _local_cache_loaded = False
 
-        return (True, "OUI database updated: {} entries".format(count))
+        return (True, f"OUI database updated: {count} entries")
 
     except Exception as exc:
-        msg = "Failed to download OUI database: {}".format(exc)
+        msg = f"Failed to download OUI database: {exc}"
         logger.warning(msg)
         return (False, msg)
 
 
-def get_stats() -> Dict[str, object]:
+def get_stats() -> dict[str, object]:
     """Return stats about the OUI subsystem."""
     _load_local_cache()
     return {
@@ -417,10 +416,10 @@ def _load_local_cache() -> None:
     if _local_cache_loaded and file_mtime == _local_cache_mtime:
         return
 
-    new_cache: Dict[str, str] = {}
+    new_cache: dict[str, str] = {}
 
     try:
-        with open(_OUI_FILE, "r", encoding="utf-8", errors="replace") as f:
+        with open(_OUI_FILE, encoding="utf-8", errors="replace") as f:
             for line in f:
                 m = _HEX_RE.match(line.strip())
                 if m:

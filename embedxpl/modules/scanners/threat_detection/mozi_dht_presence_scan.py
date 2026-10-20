@@ -28,7 +28,6 @@ References:
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import hashlib
 import logging
@@ -75,7 +74,7 @@ def _make_find_node_query() -> bytes:
     return query
 
 
-def _parse_dht_response(data: bytes) -> Optional[str]:
+def _parse_dht_response(data: bytes) -> str | None:
     """Determine if a UDP response looks like a Mozi DHT node reply.
 
     A genuine DHT find_node response is bencoded and begins with ``d1:``
@@ -154,14 +153,13 @@ class Exploit(BaseExploit):
 
     def run(self) -> None:
         """Execute Mozi DHT presence probe against primary and secondary ports."""
-        print_status("[MoziScan] Probing {} for Mozi DHT presence...".format(self.target))
+        print_status(f"[MoziScan] Probing {self.target} for Mozi DHT presence...")
 
         detected = False
         for port, label in [(self.port, "primary"), (self.alt_port, "secondary")]:
             response = self._udp_probe(self.target, port)
             if response is None:
-                print_info("[MoziScan] Port {}/udp ({}) -- no response (filtered or closed).".format(
-                    port, label))
+                print_info(f"[MoziScan] Port {port}/udp ({label}) -- no response (filtered or closed).")
                 continue
 
             verdict = _parse_dht_response(response)
@@ -171,32 +169,28 @@ class Exploit(BaseExploit):
             if verdict:
                 detected = True
                 print_warning(
-                    "[MoziScan] DHT RESPONSE on {}/udp ({}): {} | hash={} | data={}".format(
-                        port, label, verdict, resp_hash, preview
-                    )
+                    f"[MoziScan] DHT RESPONSE on {port}/udp ({label}): {verdict} | hash={resp_hash} | data={preview}"
                 )
             else:
                 print_info(
-                    "[MoziScan] Port {}/udp ({}) responded but no DHT markers: hash={} | data={}".format(
-                        port, label, resp_hash, preview
-                    )
+                    f"[MoziScan] Port {port}/udp ({label}) responded but no DHT markers: hash={resp_hash} | data={preview}"
                 )
 
         if detected:
             print_warning(
-                "[MoziScan] {} may be a Mozi DHT peer. "
-                "Confirm with botnet_c2_port_scan and mirai_default_creds_sweep.".format(self.target)
+                f"[MoziScan] {self.target} may be a Mozi DHT peer. "
+                "Confirm with botnet_c2_port_scan and mirai_default_creds_sweep."
             )
             print_info("[MoziScan] Recommendation: block UDP 14836 and 48101 at perimeter; "
                        "reflash device firmware; rotate credentials.")
         else:
-            print_success("[MoziScan] No Mozi DHT response detected on {}.".format(self.target))
+            print_success(f"[MoziScan] No Mozi DHT response detected on {self.target}.")
 
     # -------------------------------------------------------------------------
     # Internal helpers
     # -------------------------------------------------------------------------
 
-    def _udp_probe(self, host: str, port: int) -> Optional[bytes]:
+    def _udp_probe(self, host: str, port: int) -> bytes | None:
         """Send a DHT find_node probe and return the raw response.
 
         Args:
@@ -214,7 +208,7 @@ class Exploit(BaseExploit):
             try:
                 data, _ = sock.recvfrom(4096)
                 return data
-            except socket.timeout:
+            except TimeoutError:
                 return None
         except OSError:
             return None

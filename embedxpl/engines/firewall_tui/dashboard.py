@@ -6,7 +6,6 @@ Activated with --dashboard flag or 'dashboard' REPL command.
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 import logging
 from typing import Any, Dict, List, Optional
@@ -26,11 +25,11 @@ class ScanDashboard:
     """Live dashboard for monitoring scan progress."""
 
     def __init__(self) -> None:
-        self._live: Optional[Any] = None
+        self._live: Any | None = None
         self._scan_progress: str = "Idle"
-        self._results: List[str] = []
-        self._system_status: Dict[str, str] = {}
-        self._queue: List[str] = []
+        self._results: list[str] = []
+        self._system_status: dict[str, str] = {}
+        self._queue: list[str] = []
 
     def start(self) -> None:
         """Start the live dashboard."""
@@ -57,11 +56,11 @@ class ScanDashboard:
             self._results = self._results[-20:]
         self._refresh()
 
-    def update_system(self, data: Dict[str, str]) -> None:
+    def update_system(self, data: dict[str, str]) -> None:
         self._system_status = data
         self._refresh()
 
-    def update_queue(self, items: List[str]) -> None:
+    def update_queue(self, items: list[str]) -> None:
         self._queue = items[:10]
         self._refresh()
 

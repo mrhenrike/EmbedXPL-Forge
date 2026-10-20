@@ -6,7 +6,6 @@ Fallback when Nmap/Masscan are not available. Limited capability
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 import asyncio
 import logging
@@ -27,7 +26,7 @@ class BuiltinEngine(ScanEngine):
     requires_root = False
     available = True
 
-    async def discover_hosts(self, target: str, options: ScanOptions) -> List[DiscoveredHost]:
+    async def discover_hosts(self, target: str, options: ScanOptions) -> list[DiscoveredHost]:
         """Discover hosts via TCP connect probe on common ports."""
         import ipaddress
         try:
@@ -40,7 +39,7 @@ class BuiltinEngine(ScanEngine):
             ips = ips[:1024]
 
         semaphore = asyncio.Semaphore(256)
-        results: List[DiscoveredHost] = []
+        results: list[DiscoveredHost] = []
 
         async def _probe(ip: str) -> None:
             async with semaphore:
@@ -53,17 +52,17 @@ class BuiltinEngine(ScanEngine):
                         await writer.wait_closed()
                         results.append(DiscoveredHost(ip=ip, open_ports=[{"port": port, "state": "open"}]))
                         return
-                    except (asyncio.TimeoutError, OSError):
+                    except (TimeoutError, OSError):
                         continue
 
         await asyncio.gather(*[_probe(ip) for ip in ips], return_exceptions=True)
         return results
 
-    async def scan_services(self, hosts: List[str], ports: str, options: ScanOptions) -> List[DiscoveredHost]:
+    async def scan_services(self, hosts: list[str], ports: str, options: ScanOptions) -> list[DiscoveredHost]:
         """Scan services with TCP connect + banner grab."""
         port_list = APPLIANCE_PORTS if ports == "appliance" else [int(p) for p in ports.split(",")]
         semaphore = asyncio.Semaphore(128)
-        results: List[DiscoveredHost] = []
+        results: list[DiscoveredHost] = []
 
         async def _scan_host(ip: str) -> DiscoveredHost:
             open_ports = []
@@ -77,7 +76,7 @@ class BuiltinEngine(ScanEngine):
                         try:
                             data = await asyncio.wait_for(reader.read(1024), timeout=2.0)
                             banner = data.decode("utf-8", errors="ignore").strip()
-                        except (asyncio.TimeoutError, Exception):
+                        except (TimeoutError, Exception):
                             pass
                         writer.close()
                         await writer.wait_closed()
@@ -85,7 +84,7 @@ class BuiltinEngine(ScanEngine):
                             "port": port, "state": "open",
                             "service": _guess_service(port), "banner": banner,
                         })
-                    except (asyncio.TimeoutError, OSError):
+                    except (TimeoutError, OSError):
                         continue
             return DiscoveredHost(ip=ip, open_ports=open_ports)
 

@@ -3,7 +3,6 @@
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 import logging
 import os
@@ -15,7 +14,7 @@ from typing import List, Optional, Tuple
 logger = logging.getLogger(__name__)
 
 
-def find_msfconsole(explicit_path: str) -> Optional[str]:
+def find_msfconsole(explicit_path: str) -> str | None:
     """Resolve ``msfconsole`` binary from explicit path, env, or PATH."""
     if explicit_path and explicit_path.strip():
         if os.path.isfile(explicit_path) and os.access(explicit_path, os.X_OK):
@@ -33,12 +32,12 @@ def build_command_sequence(
     module_ref: str,
     rhosts: str,
     action: str,
-    extra_lines: List[str],
+    extra_lines: list[str],
 ) -> str:
     """Build a single ``-x`` string for msfconsole (semicolon-separated)."""
     parts = [
-        "use {}".format(module_ref.strip()),
-        "setg RHOSTS {}".format(rhosts.strip()),
+        f"use {module_ref.strip()}",
+        f"setg RHOSTS {rhosts.strip()}",
     ]
     for line in extra_lines:
         line = line.strip()
@@ -61,9 +60,9 @@ def run_msf_batch_commands(
     action: str,
     extra_set_lines: str,
     timeout_s: int,
-) -> Tuple[int, str, str]:
+) -> tuple[int, str, str]:
     """Run msfconsole non-interactively. Returns (returncode, stdout, stderr)."""
-    extras: List[str] = []
+    extras: list[str] = []
     for raw in (extra_set_lines or "").splitlines():
         raw = raw.strip()
         if raw:
@@ -82,7 +81,7 @@ def run_msf_batch_commands(
         )
         return proc.returncode, proc.stdout or "", proc.stderr or ""
     except subprocess.TimeoutExpired as exc:
-        return -9, "", "timeout: {}".format(exc)
+        return -9, "", f"timeout: {exc}"
     except OSError as exc:
         return -1, "", str(exc)
 
@@ -101,7 +100,7 @@ def read_metasploit_rb_metadata(rb_path: str) -> dict:
     out: dict = {"name": "", "authors": [], "description": "", "references": [], "path": rb_path}
     if not os.path.isfile(rb_path):
         return out
-    with open(rb_path, "r", encoding="utf-8", errors="replace") as handle:
+    with open(rb_path, encoding="utf-8", errors="replace") as handle:
         text = handle.read()
     name_m = re.search(r"['\"]Name['\"]\s*=>\s*['\"]([^'\"]+)['\"]", text)
     if name_m:

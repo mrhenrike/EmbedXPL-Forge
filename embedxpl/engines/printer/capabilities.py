@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 
 # Author    : Andre Henrique (@mrhenrike)
@@ -65,7 +64,7 @@ if _SNMP_BACKEND is None:
         pass
 
 
-class capabilities():
+class capabilities:
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     # set defaults
     support = False
@@ -115,7 +114,7 @@ class capabilities():
         self.feedback(self.support, lang[0])
         # in safe mode, exit if unsupported
         if args.safe and not self.support:
-            print((os.linesep + "Quitting as we are in safe mode."))
+            print(os.linesep + "Quitting as we are in safe mode.")
             sys.exit()
         print("")
 
@@ -315,9 +314,9 @@ class capabilities():
     # open database of supported devices
     def get_models(self, file):
         try:
-            with open(self.rundir + "db" + os.path.sep + file, 'r') as f:
+            with open(self.rundir + "db" + os.path.sep + file) as f:
                 models = [line.strip() for line in f if line.strip()]
             return models
-        except IOError as e:
+        except OSError as e:
             output().errmsg("Cannot open file", e)
             return []

@@ -1,9 +1,8 @@
-"""Wordlist path resolvers with Python 3.8+ compatibility."""
+"""Wordlist path resolvers."""
 
 import re
 from importlib import resources
 from pathlib import Path
-from typing import List, Optional
 from urllib.parse import unquote, urlparse
 
 
@@ -30,16 +29,16 @@ def _file_uri_to_path(file_uri: str) -> str:
     return path
 
 
-def _load_entries(source: str) -> List[str]:
+def _load_entries(source: str) -> list[str]:
     """Load entries from ``file://`` URI or CSV-like inline content."""
     if source.startswith("file://"):
         path = _file_uri_to_path(source)
-        with open(path, "r") as handler:
+        with open(path) as handler:
             return [line.strip() for line in handler.readlines() if line.strip()]
     return [item.strip() for item in source.split(",") if item.strip()]
 
 
-def _infer_protocol(module_name: str) -> Optional[str]:
+def _infer_protocol(module_name: str) -> str | None:
     leaf = module_name.rsplit(".", 1)[-1].lower()
     if "ssh" in leaf:
         return "ssh"
@@ -70,7 +69,7 @@ _VENDOR_CATEGORIES = frozenset([
 ])
 
 
-def _resolve_vendor_uri(module_name: str) -> Optional[str]:
+def _resolve_vendor_uri(module_name: str) -> str | None:
     """Resolve a vendor-specific wordlist URI for any supported device category.
 
     Searches for ``{vendor}_{protocol}_defaults.txt`` then ``{vendor}_defaults.txt``
@@ -80,7 +79,7 @@ def _resolve_vendor_uri(module_name: str) -> Optional[str]:
     vendors_dir = Path(__file__).resolve().parent / "vendors"
 
     # Detect which category marker is in the module name
-    category: Optional[str] = None
+    category: str | None = None
     for cat in _VENDOR_CATEGORIES:
         marker = f".modules.creds.{cat}."
         if marker in module_name:
@@ -122,12 +121,12 @@ def _resolve_vendor_uri(module_name: str) -> Optional[str]:
     return None
 
 
-def _resolve_router_vendor_uri(module_name: str) -> Optional[str]:
+def _resolve_router_vendor_uri(module_name: str) -> str | None:
     """Legacy router-only resolver — kept for backwards compatibility."""
     return _resolve_vendor_uri(module_name)
 
 
-def resolve_default_pairs(module_name: str, current_defaults: List[str]) -> List[str]:
+def resolve_default_pairs(module_name: str, current_defaults: list[str]) -> list[str]:
     """Resolve default credential pairs from file-based sources for modules."""
     source_uri = _resolve_vendor_uri(module_name)
     if source_uri is None:

@@ -9,12 +9,12 @@ count, separators, capitalization, and optional appended digit and symbol.
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 import secrets
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 _BUILTIN = ["able", "acid", "acorn", "actor", "adapt", "agile", "album", "alert", "alien", "alloy", "amber", "anchor", "angle", "ankle", "apple", "apron", "arbor", "arrow", "aspen", "atlas", "atom", "audio", "autumn", "axis", "bacon", "badge", "baker", "balm", "bamboo", "banjo", "barn", "basil", "batch", "beach", "beam", "bean", "bear", "beaver", "bench", "berry", "birch", "bison", "black", "blade", "bloom", "board", "boat", "bolt", "bonus", "boot", "booth", "borrow", "bottle", "boxer", "brave", "bread", "brick", "bridge", "brief", "broom", "brown", "brush", "bubble", "bucket", "buffalo", "bugle", "build", "bulb", "bundle", "bunny", "burst", "butter", "cabin", "cable", "cactus", "camel", "candle", "canoe", "canvas", "canyon", "carbon", "cargo", "carol", "carpet", "carrot", "castle", "cedar", "cell", "chalk", "charm", "cheese", "cherry", "chess", "chief", "chili", "chime", "cider", "cinema", "circle", "clay", "clever", "cliff", "cloak", "clock", "cloud", "clover", "coach", "coast", "cobra", "cocoa", "comet", "copper", "coral", "cotton", "cougar", "cover", "coyote", "crane", "crate", "cream", "creek", "crisp", "crown", "crystal", "cube", "dagger", "daisy", "dance", "dawn", "deer", "delta", "denim", "depot", "desert", "diamond", "dice", "diesel", "dinner", "ditch", "dolphin", "domino", "donut", "draft", "dragon", "dream", "drift", "drum", "eagle", "earth", "ebony", "echo", "eclipse", "elder", "elk", "ember", "emerald", "engine", "ember", "evening", "fable", "falcon", "fancy", "fang", "farm", "feather", "fern", "ferry", "fiber", "fig", "finch", "flame", "flask", "fleet", "flint", "flock", "flour", "flower", "flute", "forest", "forge", "fossil", "fox", "frame", "frost", "galaxy", "garden", "garlic", "gecko", "ginger", "glacier", "glass", "globe", "glove", "goat", "golden", "goose", "grain", "grape", "grass", "gravel", "green", "grove", "guitar", "gulf", "hammer", "hamster", "harbor", "hawk", "hazel", "heart", "hedge", "helmet", "heron", "hickory", "hill", "hollow", "honey", "hornet", "horse", "hotel", "hunter", "husky", "igloo", "indigo", "iris", "iron", "island", "ivory", "jacket", "jaguar", "jasmine", "jelly", "jewel", "jungle", "kangaroo", "kayak", "kernel", "kettle", "kitten", "koala", "ladder", "lagoon", "lantern", "laptop", "laser", "lava", "leaf", "ledge", "lemon", "lentil", "leopard", "lily", "lime", "linen", "lion", "lizard", "llama", "lobster", "locket", "lodge", "lotus", "lumber", "lunar", "lynx", "magnet", "mango", "maple", "marble", "marsh", "meadow", "melon", "meteor", "mint", "mirror", "mist", "mitten", "monkey", "moose", "moss", "mother", "motor", "muffin", "mule", "mushroom", "nectar", "needle", "nickel", "noble", "noodle", "north", "oak", "oasis", "ocean", "olive", "onion", "opal", "orange", "orbit", "orchid", "otter", "owl", "oyster", "paddle", "palace", "panda", "pansy", "panther", "paper", "parrot", "pasta", "peach", "peanut", "pearl", "pebble", "pecan", "pelican", "pepper", "petal", "phoenix", "piano", "pigeon", "pillow", "pine", "pixel", "planet", "plum", "polar", "pond", "poppy", "portal", "potato", "powder", "prairie", "pretzel", "prism", "prune", "puffin", "pumpkin", "puzzle", "python", "quail", "quartz", "quilt", "rabbit", "raccoon", "radar", "radish", "rain", "ranch", "raven", "razor", "recess", "rice", "ridge", "rifle", "river", "robin", "rocket", "rope", "rose", "ruby", "rug", "saddle", "saffron", "sage", "salmon", "salt", "sand", "sapphire", "scarf", "script", "sculpt", "seal", "shadow", "shark", "sheep", "shell", "shield", "shore", "shrimp", "silver", "siren", "sketch", "sky", "slate", "sloth", "snail", "snow", "socket", "sofa", "solar", "sonar", "spark", "sparrow", "spice", "spider", "spinach", "spiral", "spring", "sprout", "spruce", "squid", "stag", "stamp", "star", "stem", "stone", "stork", "storm", "stream", "sugar", "summit", "sunset", "swan", "sword", "syrup", "table", "talon", "tandem", "tango", "teal", "temple", "thorn", "thunder", "tiger", "timber", "toast", "tomato", "topaz", "torch", "tower", "trail", "train", "trout", "tulip", "tundra", "turtle", "tusk", "twine", "ultra", "umbra", "unicorn", "valley", "vanilla", "velvet", "vine", "violet", "viper", "volcano", "vortex", "walnut", "walrus", "wander", "wasp", "water", "weasel", "whale", "wheat", "willow", "window", "winter", "wolf", "wood", "wren", "yacht", "yarn", "yeti", "zebra", "zenith", "zephyr", "zinc", "zone"]
 
 
-def _load_words(wordlist_path: Optional[str]) -> list[str]:
+def _load_words(wordlist_path: str | None) -> list[str]:
     """Load words from a file, or return the built-in list."""
     if not wordlist_path:
         return _BUILTIN
@@ -83,7 +83,7 @@ def generate(
         yield phrase
 
 
-def handle_passphrase(args, ctx: dict) -> Optional[Generator[str, None, None]]:
+def handle_passphrase(args, ctx: dict) -> Generator[str, None, None] | None:
     """CLI handler for the ``passphrase`` command."""
     words = _load_words(getattr(args, "wordlist", None))
     count = int(getattr(args, "count", 20) or 20)

@@ -57,7 +57,7 @@ class Exploit(SSHClient):
 
     def run(self) -> None:
         print_status(
-            "Trying default SSH credentials on {}:{}...".format(self.target, self.port)
+            f"Trying default SSH credentials on {self.target}:{self.port}..."
         )
         found = False
         for username, password in _DEFAULT_CREDENTIALS:
@@ -67,16 +67,16 @@ class Exploit(SSHClient):
                 if result:
                     display_pass = password if password else "(blank)"
                     print_success(
-                        "Valid credentials: {}:{}".format(username, display_pass)
+                        f"Valid credentials: {username}:{display_pass}"
                     )
                     found = True
                     if self.stop_on_success:
                         return
                 else:
                     display_pass = password if password else "(blank)"
-                    print_status("  {}:{} — failed".format(username, display_pass))
+                    print_status(f"  {username}:{display_pass} — failed")
             except Exception as e:
-                print_status("  {}:{} — error: {}".format(username, password, e))
+                print_status(f"  {username}:{password} — error: {e}")
 
         if not found:
             print_error("No default credentials accepted")

@@ -32,17 +32,14 @@ classifiers = [
     "Intended Audience :: Telecommunications Industry",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Security",
     "Topic :: System :: Networking",
     "Topic :: Utilities",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 dependencies = [
     "requests>=2.32.4",
     "paramiko>=3.0",
@@ -54,7 +51,7 @@ dependencies = [
     "aiohttp>=3.9",
     "psutil>=5.9",
     "python-nmap>=0.7.1",
-    "telnetlib3>=2.0.0; python_version >= '3.13'",
+    "telnetlib3>=2.0.0",
     "xpl-core>=0.1.0",
 ]
 
@@ -242,7 +239,7 @@ module = [
 ignore_missing_imports = true
 
 [tool.ruff]
-target-version = "py39"
+target-version = "py312"
 line-length = 120
 
 [tool.ruff.lint]

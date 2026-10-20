@@ -3,11 +3,11 @@
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 import itertools
 import time
-from typing import Dict, Iterator, Optional, Set, Tuple
+from typing import Dict, Optional, Set, Tuple
+from collections.abc import Iterator
 from urllib.parse import parse_qsl
 
 import requests
@@ -17,7 +17,7 @@ from firewallxpl.core.http.http_client import HTTPClient
 from firewallxpl.resources import wordlists
 
 
-def _parse_status_codes(raw: str) -> Optional[Set[int]]:
+def _parse_status_codes(raw: str) -> set[int] | None:
     """Parse comma-separated HTTP status codes into a set.
 
     Args:
@@ -29,7 +29,7 @@ def _parse_status_codes(raw: str) -> Optional[Set[int]]:
     text = (raw or "").strip()
     if not text:
         return None
-    out: Set[int] = set()
+    out: set[int] = set()
     for part in text.split(","):
         part = part.strip()
         if part:
@@ -137,19 +137,19 @@ class Exploit(HTTPClient):
         self.credentials = []
         self.attack()
 
-    def _static_field_dict(self) -> Dict[str, str]:
+    def _static_field_dict(self) -> dict[str, str]:
         """Parse ``extra_fields`` into a dictionary."""
         raw = (self.extra_fields or "").strip()
         if not raw:
             return {}
         return dict(parse_qsl(raw, keep_blank_values=True))
 
-    def _extra_header_dict(self) -> Dict[str, str]:
+    def _extra_header_dict(self) -> dict[str, str]:
         """Parse ``extra_headers`` into a header dict."""
         raw = (self.extra_headers or "").strip()
         if not raw:
             return {}
-        out: Dict[str, str] = {}
+        out: dict[str, str] = {}
         for line in raw.splitlines():
             line = line.strip()
             if not line or ":" not in line:
@@ -160,12 +160,12 @@ class Exploit(HTTPClient):
                 out[name] = value.strip()
         return out
 
-    def _failure_codes(self) -> Set[int]:
+    def _failure_codes(self) -> set[int]:
         """Resolved failure HTTP status codes."""
         parsed = _parse_status_codes(self.failure_status_codes)
         return parsed if parsed is not None else set()
 
-    def _success_codes(self) -> Optional[Set[int]]:
+    def _success_codes(self) -> set[int] | None:
         """Resolved success HTTP status codes, if user configured any."""
         return _parse_status_codes(self.success_status_codes)
 
@@ -183,7 +183,7 @@ class Exploit(HTTPClient):
             return True
         return False
 
-    def _response_sample(self, response: requests.Response) -> Tuple[str, str]:
+    def _response_sample(self, response: requests.Response) -> tuple[str, str]:
         """Return truncated body and Location header for matching."""
         text = response.text or ""
         limit = int(self.max_body_chars)
@@ -196,7 +196,7 @@ class Exploit(HTTPClient):
         )
         return text, loc
 
-    def credentials_match(self, response: Optional[requests.Response]) -> bool:
+    def credentials_match(self, response: requests.Response | None) -> bool:
         """Decide if HTTP response indicates valid credentials.
 
         Args:
@@ -237,19 +237,19 @@ class Exploit(HTTPClient):
 
         return False
 
-    def _build_payload(self, username: str, password: str) -> Dict[str, str]:
+    def _build_payload(self, username: str, password: str) -> dict[str, str]:
         """Merge static fields with credentials."""
         payload = dict(self._static_field_dict())
         payload[str(self.user_field)] = username
         payload[str(self.pass_field)] = password
         return payload
 
-    def _issue_login(self, username: str, password: str) -> Optional[requests.Response]:
+    def _issue_login(self, username: str, password: str) -> requests.Response | None:
         """Send one login attempt."""
         payload = self._build_payload(username, password)
         method = (self.http_method or "POST").strip().upper()
         allow = bool(self.follow_redirects)
-        headers: Dict[str, str] = {}
+        headers: dict[str, str] = {}
         if (self.user_agent or "").strip():
             headers["User-Agent"] = str(self.user_agent).strip()
         headers.update(self._extra_header_dict())
@@ -290,7 +290,7 @@ class Exploit(HTTPClient):
             allow_redirects=allow,
         )
 
-    def _pair_iterator(self) -> Iterator[Tuple[str, str]]:
+    def _pair_iterator(self) -> Iterator[tuple[str, str]]:
         """Yield (username, password) pairs according to combo_mode."""
         if self.combo_mode:
             for line in self.combos:
@@ -361,14 +361,14 @@ class Exploit(HTTPClient):
                     (self.target, self.port, self.target_protocol, username, password),
                 )
                 print_success(
-                    "Login accepted — user='{}'".format(username),
+                    f"Login accepted — user='{username}'",
                     verbose=self.verbosity,
                 )
                 if self.stop_on_success:
                     running.clear()
             else:
                 print_error(
-                    "Login rejected — user='{}'".format(username),
+                    f"Login rejected — user='{username}'",
                     verbose=self.verbosity,
                 )
 

@@ -17,13 +17,13 @@ Features:
 Author: André Henrique (@mrhenrike)
 Version: 2.0.0
 """
-from __future__ import annotations
 
 import logging
 import re
 from itertools import permutations, product
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -216,8 +216,8 @@ def clusterbomb_generate(
     patterns: list[str],
     payloads: dict[str, list[str]],
     input_vars: dict[str, str],
-    match_regex: Optional[str] = None,
-    filter_regex: Optional[str] = None,
+    match_regex: str | None = None,
+    filter_regex: str | None = None,
 ) -> Generator[str, None, None]:
     """Generate FQDNs via ClusterBomb: cartesian product of all payloads.
 
@@ -300,7 +300,7 @@ def dnscewl_mutations(
     words: list[str],
     domain: str,
     numeric_range: int = 10,
-    extension_swap: Optional[list[str]] = None,
+    extension_swap: list[str] | None = None,
 ) -> Generator[str, None, None]:
     """Generate DNSCewl-style FQDN mutations.
 
@@ -313,7 +313,7 @@ def dnscewl_mutations(
     sld = parsed.get("sld", "")
     tld = parsed.get("tld", "")
 
-    def emit(fqdn: str) -> Optional[str]:
+    def emit(fqdn: str) -> str | None:
         if fqdn in seen or not fqdn:
             return None
         seen.add(fqdn)
@@ -379,11 +379,11 @@ def estimate_output(
 def generate_subdomain_permutations(
     words: list[str],
     domain: str,
-    separators: Optional[list[str]] = None,
+    separators: list[str] | None = None,
     use_prefixes: bool = True,
     use_suffixes: bool = True,
-    match_regex: Optional[str] = None,
-    filter_regex: Optional[str] = None,
+    match_regex: str | None = None,
+    filter_regex: str | None = None,
 ) -> Generator[str, None, None]:
     """Generate subdomain permutations (legacy mode, enhanced)."""
     seps = separators or DNS_SEPARATORS
@@ -391,7 +391,7 @@ def generate_subdomain_permutations(
     filter_re = re.compile(filter_regex) if filter_regex else None
     seen: set[str] = set()
 
-    def emit(sub: str) -> Optional[str]:
+    def emit(sub: str) -> str | None:
         fqdn = f"{sub}.{domain}"
         if fqdn in seen:
             return None
@@ -492,9 +492,9 @@ def generate_from_yaml_templates(
     templates: list[str],
     words: list[str],
     domain: str,
-    match_regex: Optional[str] = None,
-    filter_regex: Optional[str] = None,
-    extra_payloads: Optional[dict[str, list[str]]] = None,
+    match_regex: str | None = None,
+    filter_regex: str | None = None,
+    extra_payloads: dict[str, list[str]] | None = None,
 ) -> Generator[str, None, None]:
     """Generate FQDNs from YAML templates using ClusterBomb engine.
 
@@ -520,11 +520,11 @@ def generate_from_yaml_templates(
 def generate_multi_domain(
     domain_list_file: str,
     words: list[str],
-    separators: Optional[list[str]] = None,
+    separators: list[str] | None = None,
     use_prefixes: bool = True,
     use_suffixes: bool = True,
-    match_regex: Optional[str] = None,
-    filter_regex: Optional[str] = None,
+    match_regex: str | None = None,
+    filter_regex: str | None = None,
 ) -> Generator[str, None, None]:
     """Process multiple domains from file."""
     domains = load_words_from_file(domain_list_file)
@@ -544,8 +544,8 @@ def generate_multi_domain(
 
 def filter_dns_output(
     generator: Generator[str, None, None],
-    match_regex: Optional[str] = None,
-    filter_regex: Optional[str] = None,
+    match_regex: str | None = None,
+    filter_regex: str | None = None,
 ) -> Generator[str, None, None]:
     """Apply regex filters to generator output."""
     match_re = re.compile(match_regex) if match_regex else None

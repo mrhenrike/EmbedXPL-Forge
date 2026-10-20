@@ -125,7 +125,7 @@ class Exploit(Exploit):
 
         # Source MAC from Ethernet header
         src_mac = frame[6:12]
-        result["mac"] = ":".join("{:02x}".format(b) for b in src_mac)
+        result["mac"] = ":".join(f"{b:02x}" for b in src_mac)
 
         # Verify EtherType
         ethertype = struct.unpack_from(">H", frame, 12)[0]
@@ -178,7 +178,7 @@ class Exploit(Exploit):
                     result["vendor_id"] = vendor_id
                     result["device_id"] = device_id
                     result["vendor_name"] = self._VENDORS.get(
-                        vendor_id, "Unknown (0x{:04X})".format(vendor_id)
+                        vendor_id, f"Unknown (0x{vendor_id:04X})"
                     )
             elif opt == 0x02 and subopt == 0x04:
                 # Device role
@@ -193,7 +193,7 @@ class Exploit(Exploit):
                         roles.append("IO-Multidevice")
                     if role & 0x08:
                         roles.append("IO-Supervisor")
-                    result["role"] = ", ".join(roles) if roles else "0x{:04X}".format(role)
+                    result["role"] = ", ".join(roles) if roles else f"0x{role:04X}"
             elif opt == 0x02 and subopt == 0x05:
                 # Device options / instance
                 if len(block_data) >= 2:
@@ -223,7 +223,7 @@ class Exploit(Exploit):
 
     def run(self) -> None:
         """Execute PROFINET DCP Identify All scan."""
-        print_status("PROFINET DCP scan on interface {}".format(self.interface))
+        print_status(f"PROFINET DCP scan on interface {self.interface}")
 
         if not self.check():
             print_error("Raw socket not available (requires root/AF_PACKET)")
@@ -264,13 +264,13 @@ class Exploit(Exploit):
                                     info.get("role", "?"),
                                 )
                             )
-                except socket.timeout:
+                except TimeoutError:
                     continue
 
             sock.close()
             print_info(
-                "Scan complete: {} PROFINET device(s) discovered".format(len(devices))
+                f"Scan complete: {len(devices)} PROFINET device(s) discovered"
             )
 
         except OSError as exc:
-            print_error("Socket error: {}".format(exc))
+            print_error(f"Socket error: {exc}")

@@ -168,7 +168,7 @@ class Exploit(Exploit):
                 try:
                     port = int(part)
                 except ValueError:
-                    print_warning("AutoPwn: ignoring invalid port {!r}".format(part))
+                    print_warning(f"AutoPwn: ignoring invalid port {part!r}")
                     continue
                 if port not in seen:
                     seen.add(port)
@@ -181,30 +181,10 @@ class Exploit(Exploit):
 
     def _print_service_ports(self):
         print_status(
-            "AutoPwn services — HTTP:{} HTTPS:{} FTP:{} SSH:{} SFTP:{} Telnet:{} SNMP:{} TCP:{} UDP:{}".format(
-                self.http_use,
-                self.https_use,
-                self.ftp_use,
-                self.ssh_use,
-                self.sftp_use,
-                self.telnet_use,
-                self.snmp_use,
-                self.tcp_use,
-                self.udp_use,
-            )
+            f"AutoPwn services — HTTP:{self.http_use} HTTPS:{self.https_use} FTP:{self.ftp_use} SSH:{self.ssh_use} SFTP:{self.sftp_use} Telnet:{self.telnet_use} SNMP:{self.snmp_use} TCP:{self.tcp_use} UDP:{self.udp_use}"
         )
         print_status(
-            "AutoPwn service ports — HTTP: {} | HTTPS: {} | FTP: {} | SSH: {} | SFTP: {} | Telnet: {} | SNMP: {} | TCP: {} | UDP: {}".format(
-                self._parse_ports_list(self.http_ports, self.http_port),
-                self._parse_ports_list(self.https_ports, self.https_port),
-                self._parse_ports_list(self.ftp_ports, self.ftp_port),
-                self._parse_ports_list(self.ssh_ports, self.ssh_port),
-                self._parse_ports_list(self.sftp_ports, self.sftp_port),
-                self._parse_ports_list(self.telnet_ports, self.telnet_port),
-                self._parse_ports_list(self.snmp_ports, self.snmp_port),
-                self._tcp_ports_resolved(),
-                self._udp_ports_resolved(),
-            )
+            f"AutoPwn service ports — HTTP: {self._parse_ports_list(self.http_ports, self.http_port)} | HTTPS: {self._parse_ports_list(self.https_ports, self.https_port)} | FTP: {self._parse_ports_list(self.ftp_ports, self.ftp_port)} | SSH: {self._parse_ports_list(self.ssh_ports, self.ssh_port)} | SFTP: {self._parse_ports_list(self.sftp_ports, self.sftp_port)} | Telnet: {self._parse_ports_list(self.telnet_ports, self.telnet_port)} | SNMP: {self._parse_ports_list(self.snmp_ports, self.snmp_port)} | TCP: {self._tcp_ports_resolved()} | UDP: {self._udp_ports_resolved()}"
         )
 
     def _resolve_tcp_ports(self):
@@ -273,7 +253,7 @@ class Exploit(Exploit):
         tail = path.rsplit(".", 1)[-1]
         for family, keys in self._PATH_SERVICE_HINTS:
             for key in keys:
-                if key in tail or "/{}/".format(key) in path:
+                if key in tail or f"/{key}/" in path:
                     return family
 
         default_port = self._exploit_default_port(exploit)
@@ -440,12 +420,12 @@ class Exploit(Exploit):
         if template.startswith("-t"):
             template = template[1:]
         if template in {"0", "1", "2", "3", "4", "5"}:
-            template = "t{}".format(template)
+            template = f"t{template}"
         template = self.PROFILE_ALIASES.get(template, template)
 
         if template not in self.TIMING_PROFILES:
             print_error(
-                "Unknown timing template '{}'. Falling back to balanced (T3).".format(self.timing_template)
+                f"Unknown timing template '{self.timing_template}'. Falling back to balanced (T3)."
             )
             template = "t3"
 
@@ -498,31 +478,23 @@ class Exploit(Exploit):
     def _validate_threads(self):
         if self.threads < self.MIN_THREADS:
             print_error(
-                "Invalid thread count {}. Minimum is {}. Applying minimum.".format(
-                    self.threads, self.MIN_THREADS
-                )
+                f"Invalid thread count {self.threads}. Minimum is {self.MIN_THREADS}. Applying minimum."
             )
             self.threads = self.MIN_THREADS
         elif self.threads > self.MAX_THREADS:
             print_error(
-                "Invalid thread count {}. Maximum is {}. Applying maximum.".format(
-                    self.threads, self.MAX_THREADS
-                )
+                f"Invalid thread count {self.threads}. Maximum is {self.MAX_THREADS}. Applying maximum."
             )
             self.threads = self.MAX_THREADS
 
     def _warn_high_thread_count(self):
         if self.threads >= 200:
             print_error(
-                "ALERT: {} threads configured. This may consume high CPU/RAM and impact scan host stability.".format(
-                    self.threads
-                )
+                f"ALERT: {self.threads} threads configured. This may consume high CPU/RAM and impact scan host stability."
             )
         elif self.threads >= 100:
             print_status(
-                "WARNING: {} threads configured. High concurrency can significantly increase CPU/RAM usage.".format(
-                    self.threads
-                )
+                f"WARNING: {self.threads} threads configured. High concurrency can significantly increase CPU/RAM usage."
             )
 
     def _profiled_check(self, exploit):
@@ -563,7 +535,7 @@ class Exploit(Exploit):
         except TimeoutError:
             future.cancel()
             raise RuntimeError(
-                "Module execution timed out after {}s (set module_timeout_s=0 to disable)".format(timeout)
+                f"Module execution timed out after {timeout}s (set module_timeout_s=0 to disable)"
             )
 
     def run(self):
@@ -587,10 +559,10 @@ class Exploit(Exploit):
                     suggested, ranked = advisor.suggest_timing_template(advisor_ctx, use_gpu=bool(self.ml_use_gpu))
                     print_status("ML advisor suggests timing: {} (probabilities: {})".format(
                         suggested.upper(),
-                        ", ".join("{}={:.1%}".format(l, p) for l, p in ranked[:3]),
+                        ", ".join(f"{l}={p:.1%}" for l, p in ranked[:3]),
                     ))
             except Exception as exc:
-                print_error("ML advisor initialization failed: {}".format(exc))
+                print_error(f"ML advisor initialization failed: {exc}")
                 advisor = None
                 advisor_ctx = None
 
@@ -602,7 +574,7 @@ class Exploit(Exploit):
             )
         elif tcls not in ("multi",):
             print_status(
-                "Device class filter active: {} (modules outside module_target_scope.json rules are skipped)".format(tcls),
+                f"Device class filter active: {tcls} (modules outside module_target_scope.json rules are skipped)",
             )
 
         # Update list of directories with specific vendor if needed
@@ -612,7 +584,7 @@ class Exploit(Exploit):
         if self.check_exploits:
             # vulnerabilities
             print_info()
-            print_status("{} Starting vulnerability check...".format(self.target))
+            print_status(f"{self.target} Starting vulnerability check...")
 
             modules = []
             for directory in self._exploits_directories:
@@ -621,7 +593,7 @@ class Exploit(Exploit):
 
             if advisor is not None and advisor_ctx is not None:
                 modules = advisor.prioritize_modules(modules, advisor_ctx)
-                print_status("ML advisor reordered {} exploit modules (higher expected yield first).".format(len(modules)))
+                print_status(f"ML advisor reordered {len(modules)} exploit modules (higher expected yield first).")
 
             data = LockedIterator(modules)
             self.run_threads(self.threads, self.exploits_target_function, data)
@@ -629,7 +601,7 @@ class Exploit(Exploit):
         if self.check_creds:
             # default creds
             print_info()
-            print_status("{} Starting default credentials check...".format(self.target))
+            print_status(f"{self.target} Starting default credentials check...")
             modules = []
             for directory in self._creds_directories:
                 for module in utils.iter_modules(directory):
@@ -637,7 +609,7 @@ class Exploit(Exploit):
 
             if advisor is not None and advisor_ctx is not None:
                 modules = advisor.prioritize_modules(modules, advisor_ctx)
-                print_status("ML advisor reordered {} credential modules (higher expected yield first).".format(len(modules)))
+                print_status(f"ML advisor reordered {len(modules)} credential modules (higher expected yield first).")
 
             data = LockedIterator(modules)
             self.run_threads(self.threads, self.creds_target_function, data)
@@ -645,37 +617,37 @@ class Exploit(Exploit):
         # results:
         print_info()
         if self.not_verified:
-            print_status("{} Could not verify exploitability:".format(self.target))
+            print_status(f"{self.target} Could not verify exploitability:")
             for v in self.not_verified:
                 print_info(" - {}:{} {} {}".format(*v))
             print_info()
 
         if self.vulnerabilities:
-            print_success("{} Device is vulnerable:".format(self.target))
+            print_success(f"{self.target} Device is vulnerable:")
             headers = ("Target", "Port", "Service", "Exploit")
             print_table(headers, *self.vulnerabilities)
             print_info()
         else:
             print_error(
-                "{} During this AutoPwn run, no exploitable weakness was confirmed by the current EmbedXPL-Forge "
+                f"{self.target} During this AutoPwn run, no exploitable weakness was confirmed by the current EmbedXPL-Forge "
                 "module base. This does not mean the target is secure, does not exclude unknown vectors/zero-days, "
-                "and does not replace broader assessment methods.".format(self.target),
+                "and does not replace broader assessment methods.",
             )
 
         if self.creds:
-            print_success("{} Found default credentials:".format(self.target))
+            print_success(f"{self.target} Found default credentials:")
             headers = ("Target", "Port", "Service", "Username", "Password")
             print_table(headers, *self.creds)
             print_info()
         else:
             print_error(
-                "{} During this AutoPwn run, no valid default credential was confirmed with the current "
-                "credential datasets and checks.".format(self.target),
+                f"{self.target} During this AutoPwn run, no valid default credential was confirmed with the current "
+                "credential datasets and checks.",
             )
 
         if self._scope_skipped and tcls != "multi":
             print_status(
-                "Skipped {} module(s) not permitted for target_device_class={}".format(self._scope_skipped, tcls),
+                f"Skipped {self._scope_skipped} module(s) not permitted for target_device_class={tcls}",
             )
 
     def _evaluate_exploit(self, exploit):
@@ -691,9 +663,7 @@ class Exploit(Exploit):
                 response = self._profiled_check(exploit)
             except Exception as err:
                 print_error(
-                    "{}:{} {} {} check failed with exception".format(
-                        exploit.target, exploit.port, protocol, exploit
-                    ),
+                    f"{exploit.target}:{exploit.port} {protocol} {exploit} check failed with exception",
                     err,
                 )
                 self.not_verified.append((exploit.target, exploit.port, protocol, str(exploit)))
@@ -705,9 +675,7 @@ class Exploit(Exploit):
                 for _ in range(max(0, self._active_profile["confirm_passes"] - 1)):
                     if self._profiled_check(exploit) is not True:
                         print_status(
-                            "{}:{} {} {} positive result was not confirmed under profile checks".format(
-                                exploit.target, exploit.port, protocol, exploit
-                            ),
+                            f"{exploit.target}:{exploit.port} {protocol} {exploit} positive result was not confirmed under profile checks",
                         )
                         self.not_verified.append((exploit.target, exploit.port, protocol, str(exploit)))
                         confirmed = False
@@ -717,15 +685,12 @@ class Exploit(Exploit):
                     continue
 
             if response is True:
-                print_success("{}:{} {} {} is vulnerable".format(
-                    exploit.target, exploit.port, protocol, exploit))
+                print_success(f"{exploit.target}:{exploit.port} {protocol} {exploit} is vulnerable")
                 self.vulnerabilities.append((exploit.target, exploit.port, protocol, str(exploit)))
             elif response is False:
-                print_error("{}:{} {} {} is not vulnerable".format(
-                    exploit.target, exploit.port, protocol, exploit))
+                print_error(f"{exploit.target}:{exploit.port} {protocol} {exploit} is not vulnerable")
             else:
-                print_status("{}:{} {} {} Could not be verified".format(
-                    exploit.target, exploit.port, protocol, exploit))
+                print_status(f"{exploit.target}:{exploit.port} {protocol} {exploit} Could not be verified")
                 self.not_verified.append((exploit.target, exploit.port, protocol, str(exploit)))
 
             self._restore_network(exploit, snapshot)
@@ -743,9 +708,7 @@ class Exploit(Exploit):
                 response = self._run_with_timeout(exploit.check_default)
             except Exception as err:
                 print_error(
-                    "{}:{} {} {} check_default failed with exception".format(
-                        exploit.target, exploit.port, protocol, exploit
-                    ),
+                    f"{exploit.target}:{exploit.port} {protocol} {exploit} check_default failed with exception",
                     err,
                 )
                 self.not_verified.append((exploit.target, exploit.port, protocol, str(exploit)))
@@ -753,13 +716,11 @@ class Exploit(Exploit):
                 continue
 
             if response:
-                print_success("{}:{} {} {} is vulnerable".format(
-                    exploit.target, exploit.port, protocol, exploit))
+                print_success(f"{exploit.target}:{exploit.port} {protocol} {exploit} is vulnerable")
                 for creds in response:
                     self.creds.append(creds)
             else:
-                print_error("{}:{} {} {} is not vulnerable".format(
-                    exploit.target, exploit.port, protocol, exploit))
+                print_error(f"{exploit.target}:{exploit.port} {protocol} {exploit} is not vulnerable")
 
             self._restore_network(exploit, snapshot)
 

@@ -9,7 +9,6 @@ channel hopping automático e ACK/resposta via Probe Requests.
 Detectável apenas por análise profunda de beacons — passa por IDS/WIDS comuns.
 """
 
-from __future__ import annotations
 
 import hashlib
 import json

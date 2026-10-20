@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 LPD (RFC 1179) security testing — native port of RUB-NDS/PRET lpd/lpdtest.py
 and lpdprint.py. Tests legacy LPD implementations for path traversal, arbitrary
 file write/delete, shell injection, and queue brute-force.
 """
 
-from __future__ import annotations
 
 import os
 import socket
@@ -52,7 +50,7 @@ def _send_job(
     ctrlfile: str = "cfA001",
     datafile: str = "dfA001",
     timeout: float = 10.0,
-) -> Tuple[bool, str]:
+) -> tuple[bool, str]:
     """RFC 1179 receive-job sequence."""
     try:
         s = _connect(host, port, timeout)
@@ -99,7 +97,7 @@ def lpd_print(
     port: int = 515,
     queue: str = _DEFAULT_QUEUE,
     timeout: float = 10.0,
-) -> Tuple[bool, str]:
+) -> tuple[bool, str]:
     """Send a local file to an LPD daemon (PRET lpdprint.py)."""
     path = Path(filepath)
     if not path.is_file():
@@ -116,7 +114,7 @@ def lpd_test(
     *,
     port: int = 515,
     queue: str = _DEFAULT_QUEUE,
-    queue_list: Optional[str] = None,
+    queue_list: str | None = None,
     timeout: float = 10.0,
 ) -> dict:
     """
@@ -193,7 +191,7 @@ def lpd_test(
     return result
 
 
-def brute_queue(host: str, port: int, list_path: str, *, timeout: float = 10.0) -> Optional[str]:
+def brute_queue(host: str, port: int, list_path: str, *, timeout: float = 10.0) -> str | None:
     """Brute-force LPD queue names from a wordlist."""
     try:
         names = Path(list_path).read_text(encoding="utf-8", errors="replace").splitlines()
@@ -225,7 +223,7 @@ def run_lpd_fuzz(
     *,
     port: int = 515,
     queue: str = _DEFAULT_QUEUE,
-    queue_list: Optional[str] = None,
+    queue_list: str | None = None,
     timeout: float = 10.0,
     verbose: bool = True,
 ) -> dict:
@@ -249,7 +247,7 @@ def run_lpd_fuzz(
     return result
 
 
-def default_queue_names() -> List[str]:
+def default_queue_names() -> list[str]:
     if _DEFAULT_QUEUE_LIST.is_file():
         return [
             ln.strip() for ln in _DEFAULT_QUEUE_LIST.read_text(errors="replace").splitlines()

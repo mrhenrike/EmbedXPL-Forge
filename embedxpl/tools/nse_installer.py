@@ -15,7 +15,6 @@ Comandos no interpreter EmbedXPL:
     exf> nse run <script> <target>   # executa via nmap
 """
 
-from __future__ import annotations
 
 import argparse
 import shutil

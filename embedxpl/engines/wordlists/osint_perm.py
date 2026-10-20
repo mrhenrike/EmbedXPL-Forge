@@ -18,16 +18,16 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import itertools
 from dataclasses import dataclass, field
-from typing import Dict, Generator, List
+from typing import Dict, List
+from collections.abc import Generator
 
 __version__ = "1.0.0"
 
 # Leet substitution map
-_LEET: Dict[str, str] = {
+_LEET: dict[str, str] = {
     "a": "4", "i": "1", "e": "3", "t": "7",
     "o": "0", "s": "5", "g": "9", "z": "2", "l": "1",
 }
@@ -42,17 +42,17 @@ _COMMON_SUFFIXES = [
 # Special chars appended to indicate common patterns
 _SPECIAL_CHARS = ["!", "@", "#", "$", "*", ".", "_", "-"]
 
-_OWASP_CHARS: List[str] = [
+_OWASP_CHARS: list[str] = [
     "!", "@", "#", "$", "%", "^", "&", "*",
     "(", ")", "-", "_", "+", "=", ".", ",", "?",
 ]
 
-_BASIC_SPECIAL: List[str] = ["!", "@", "#", "$"]
+_BASIC_SPECIAL: list[str] = ["!", "@", "#", "$"]
 
-_COMMON_YEARS: List[str] = ["2020", "2021", "2022", "2023", "2024", "2025"]
+_COMMON_YEARS: list[str] = ["2020", "2021", "2022", "2023", "2024", "2025"]
 
 
-def _make_leet(word: str) -> List[str]:
+def _make_leet(word: str) -> list[str]:
     """Generate leet variations of a word (single-substitution only for speed)."""
     variants = [word]
     for orig, replacement in _LEET.items():
@@ -61,7 +61,7 @@ def _make_leet(word: str) -> List[str]:
     return variants
 
 
-def _word_variants(word: str, level: int = 1) -> List[str]:
+def _word_variants(word: str, level: int = 1) -> list[str]:
     """Generate case/leet variants of a word.
 
     Level 1: lower + capitalized
@@ -74,7 +74,7 @@ def _word_variants(word: str, level: int = 1) -> List[str]:
     return list(dict.fromkeys(variants))  # preserve order, deduplicate
 
 
-def _date_variants(date_str: str) -> List[str]:
+def _date_variants(date_str: str) -> list[str]:
     """Generate common date format permutations from 'dd-mm-yyyy'."""
     try:
         parts = date_str.strip().split("-")
@@ -110,13 +110,13 @@ class OsintProfile:
     birth_date: str = ""          # Format: dd-mm-yyyy
     anniversary_date: str = ""    # Format: dd-mm-yyyy
     phone: str = ""               # Digits only
-    old_passwords: List[str] = field(default_factory=list)
-    keywords: List[str] = field(default_factory=list)
+    old_passwords: list[str] = field(default_factory=list)
+    keywords: list[str] = field(default_factory=list)
     level: int = 1
     complexity: int = field(default=0, repr=False)   # alias for level; 0 = unset
-    years: List[str] = field(default_factory=list)
+    years: list[str] = field(default_factory=list)
     nums_range: tuple = (0, 99)
-    special_chars: List[str] = field(default_factory=list)
+    special_chars: list[str] = field(default_factory=list)
     apply_post_leet: bool = False
 
     def __post_init__(self) -> None:
@@ -127,10 +127,10 @@ class OsintProfile:
 
 def _recipes(
     level: int,
-    years: List[str],
+    years: list[str],
     nums_range: tuple,
-    special_chars: List[str],
-) -> List[str]:
+    special_chars: list[str],
+) -> list[str]:
     """Return suffix/append recipes based on generation level.
 
     Args:
@@ -145,7 +145,7 @@ def _recipes(
     if level == 0:
         return []
 
-    recipes: List[str] = ["", "1", "12", "123"] + _COMMON_YEARS
+    recipes: list[str] = ["", "1", "12", "123"] + _COMMON_YEARS
 
     if level >= 2:
         num_start, num_end = nums_range
@@ -167,7 +167,7 @@ def _recipes(
     return list(dict.fromkeys(recipes))
 
 
-def post_leet_perm(candidates: List[str], max_per_word: int = 256) -> List[str]:
+def post_leet_perm(candidates: list[str], max_per_word: int = 256) -> list[str]:
     """Apply global cartesian leet permutation over a candidate list.
 
     Calls leet_perm_wordlist from leet_permuter for a full elpscrk-style pass.
@@ -192,7 +192,7 @@ class OsintPermGenerator:
         passwords = gen.generate(profile)
     """
 
-    def generate(self, profile: OsintProfile) -> List[str]:
+    def generate(self, profile: OsintProfile) -> list[str]:
         """Generate all password candidates from profile.
 
         Args:
@@ -216,7 +216,7 @@ class OsintPermGenerator:
 
         base_words.extend(k.strip() for k in profile.keywords if k.strip())
 
-        all_word_variants: List[str] = []
+        all_word_variants: list[str] = []
         for word in base_words:
             all_word_variants.extend(_word_variants(word, level))
 
@@ -261,7 +261,7 @@ class OsintPermGenerator:
                 candidates.append(w1 + w2)
                 candidates.append(w1 + "_" + w2)
 
-        result: List[str] = []
+        result: list[str] = []
         seen: set = set()
         for c in candidates:
             c = c.strip()

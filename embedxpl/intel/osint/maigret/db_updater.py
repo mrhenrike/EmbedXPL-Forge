@@ -11,7 +11,7 @@ import logging
 import os
 import os.path as path
 import tempfile
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 from typing import Optional
 
 import requests
@@ -65,7 +65,7 @@ def _ensure_maigret_home() -> None:
 
 def _load_state() -> dict:
     try:
-        with open(STATE_PATH, "r", encoding="utf-8") as f:
+        with open(STATE_PATH, encoding="utf-8") as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError, OSError):
         return {}
@@ -91,13 +91,13 @@ def _needs_check(state: dict, interval_hours: int) -> bool:
         return True
     try:
         last_dt = datetime.fromisoformat(last_check.replace("Z", "+00:00"))
-        elapsed = (datetime.now(timezone.utc) - last_dt).total_seconds() / 3600
+        elapsed = (datetime.now(UTC) - last_dt).total_seconds() / 3600
         return elapsed >= interval_hours
     except (ValueError, TypeError):
         return True
 
 
-def _fetch_meta(meta_url: str, timeout: int = 10) -> Optional[dict]:
+def _fetch_meta(meta_url: str, timeout: int = 10) -> dict | None:
     try:
         response = requests.get(meta_url, timeout=timeout)
         if response.status_code == 200:
@@ -120,7 +120,7 @@ def _is_update_available(meta: dict, state: dict) -> bool:
     return remote_date > cached_date
 
 
-def _download_and_verify(data_url: str, expected_sha256: str, timeout: int = 60) -> Optional[str]:
+def _download_and_verify(data_url: str, expected_sha256: str, timeout: int = 60) -> str | None:
     _ensure_maigret_home()
     tmp_fd, tmp_path = tempfile.mkstemp(dir=MAIGRET_HOME, suffix=".json")
     try:
@@ -160,7 +160,7 @@ def _best_local() -> str:
     """Return cached DB if it exists and is valid, otherwise bundled."""
     if path.isfile(CACHED_DB_PATH):
         try:
-            with open(CACHED_DB_PATH, "r", encoding="utf-8") as f:
+            with open(CACHED_DB_PATH, encoding="utf-8") as f:
                 data = json.load(f)
             if "sites" in data:
                 return CACHED_DB_PATH
@@ -170,7 +170,7 @@ def _best_local() -> str:
 
 
 def _now_iso() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def resolve_db_path(

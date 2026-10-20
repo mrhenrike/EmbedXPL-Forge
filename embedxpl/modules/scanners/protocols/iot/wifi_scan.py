@@ -85,9 +85,9 @@ class Exploit(Exploit):
             sock.bind((str(self.interface), 0))
             sock.settimeout(1.0)
             return sock
-        except (socket.error, OSError) as exc:
+        except OSError as exc:
             raise RuntimeError(
-                "Cannot open monitor socket on {}: {}".format(self.interface, exc)
+                f"Cannot open monitor socket on {self.interface}: {exc}"
             )
 
     def _parse_radiotap_length(self, frame: bytes) -> int:
@@ -98,7 +98,7 @@ class Exploit(Exploit):
 
     def _format_bssid(self, raw: bytes) -> str:
         """Format 6-byte address as BSSID string."""
-        return ":".join("{:02X}".format(b) for b in raw)
+        return ":".join(f"{b:02X}" for b in raw)
 
     def _parse_tagged_params(self, data: bytes) -> dict:
         """Parse 802.11 tagged parameters (information elements)."""
@@ -254,14 +254,12 @@ class Exploit(Exploit):
     @multi
     def run(self) -> None:
         """Execute WiFi scan in monitor mode."""
-        print_status("Starting WiFi scan on {} for {} seconds".format(
-            self.interface, self.timeout
-        ))
+        print_status(f"Starting WiFi scan on {self.interface} for {self.timeout} seconds")
 
         try:
             sock = self._open_raw_socket()
         except RuntimeError as exc:
-            print_error("{}".format(exc))
+            print_error(f"{exc}")
             return
 
         networks = {}
@@ -285,9 +283,9 @@ class Exploit(Exploit):
                     pmkid_result = self._extract_pmkid(frame, rt_len)
                     if pmkid_result:
                         pmkids.append(pmkid_result)
-                except socket.timeout:
+                except TimeoutError:
                     continue
-                except (socket.error, OSError):
+                except OSError:
                     break
         finally:
             sock.close()
@@ -296,7 +294,7 @@ class Exploit(Exploit):
             print_warning("No wireless networks discovered")
             return
 
-        print_success("Discovered {} network(s)".format(len(networks)))
+        print_success(f"Discovered {len(networks)} network(s)")
         for net in sorted(networks.values(), key=lambda n: n["ssid"]):
             print_info("{} - BSSID: {} [{}]".format(
                 net["ssid"], net["bssid"], net["security"]
@@ -307,7 +305,7 @@ class Exploit(Exploit):
                 print_info("  AKM: {}".format(", ".join(net["akm"])))
 
         if pmkids:
-            print_success("Captured {} PMKID(s):".format(len(pmkids)))
+            print_success(f"Captured {len(pmkids)} PMKID(s):")
             for p in pmkids:
                 print_info("  AP: {} STA: {} PMKID: {}".format(
                     p["bssid"], p["station"], p["pmkid"]

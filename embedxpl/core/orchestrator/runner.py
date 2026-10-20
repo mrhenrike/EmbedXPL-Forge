@@ -43,7 +43,7 @@ class RunResult:
     elapsed: float = 0.0
     timed_out: bool = False
     signal_name: str = ""
-    artifact: Optional[CompiledArtifact] = None
+    artifact: CompiledArtifact | None = None
     pid: int = 0
 
     @property
@@ -91,14 +91,14 @@ class ExploitRunner:
         """
         if not os.path.isfile(artifact.binary_path):
             raise FileNotFoundError(
-                "Binary not found: {}".format(artifact.binary_path)
+                f"Binary not found: {artifact.binary_path}"
             )
         if os.name != "nt" and not os.access(artifact.binary_path, os.X_OK):
             try:
                 os.chmod(artifact.binary_path, 0o755)
             except OSError as exc:
                 raise PermissionError(
-                    "Cannot set executable permission: {}".format(exc)
+                    f"Cannot set executable permission: {exc}"
                 )
 
     def _signal_name(self, returncode: int) -> str:
@@ -109,13 +109,13 @@ class ExploitRunner:
         try:
             return signal.Signals(sig_num).name
         except (ValueError, AttributeError):
-            return "SIG{}".format(sig_num)
+            return f"SIG{sig_num}"
 
     def run(self, artifact: CompiledArtifact,
-            args: Optional[list] = None,
-            timeout: Optional[int] = None,
-            env: Optional[dict] = None,
-            stdin_data: Optional[str] = None) -> RunResult:
+            args: list | None = None,
+            timeout: int | None = None,
+            env: dict | None = None,
+            stdin_data: str | None = None) -> RunResult:
         """Execute a compiled artifact binary.
 
         Args:
@@ -179,13 +179,13 @@ class ExploitRunner:
 
         except FileNotFoundError:
             result.exit_code = 127
-            result.stderr = "Binary not found: {}".format(artifact.binary_path)
+            result.stderr = f"Binary not found: {artifact.binary_path}"
         except PermissionError:
             result.exit_code = 126
-            result.stderr = "Permission denied: {}".format(artifact.binary_path)
+            result.stderr = f"Permission denied: {artifact.binary_path}"
         except OSError as exc:
             result.exit_code = -1
-            result.stderr = "Execution error: {}".format(exc)
+            result.stderr = f"Execution error: {exc}"
 
         result.elapsed = time.time() - start_time
         return result
@@ -203,9 +203,9 @@ class ExploitRunner:
             pass
 
     def run_with_retry(self, artifact: CompiledArtifact,
-                       args: Optional[list] = None,
+                       args: list | None = None,
                        retries: int = 2,
-                       timeout: Optional[int] = None) -> RunResult:
+                       timeout: int | None = None) -> RunResult:
         """Execute with automatic retry on failure.
 
         Args:

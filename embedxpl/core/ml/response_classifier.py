@@ -8,7 +8,6 @@ Author: André Henrique (LinkedIn/X: @mrhenrike)
 Version: 0.1.0
 """
 
-from __future__ import annotations
 
 import logging
 import re
@@ -41,7 +40,7 @@ class ClassifiedResponse:
     """Result of classifying an HTTP response."""
     label: str
     confidence: float
-    features_used: List[str] = field(default_factory=list)
+    features_used: list[str] = field(default_factory=list)
     detail: str = ""
 
 
@@ -80,10 +79,10 @@ class ResponseClassifier:
     falls back to pattern-based heuristics otherwise.
     """
 
-    def __init__(self, model_path: Optional[str] = None) -> None:
-        self._pipeline: Optional[Any] = None
+    def __init__(self, model_path: str | None = None) -> None:
+        self._pipeline: Any | None = None
         self._heuristic_only = not _SKLEARN_AVAILABLE
-        self._training_data: List[Tuple[str, str]] = []
+        self._training_data: list[tuple[str, str]] = []
         self._is_trained = False
 
         if model_path and _SKLEARN_AVAILABLE:
@@ -187,7 +186,7 @@ class ResponseClassifier:
         self,
         response_body: str,
         status_code: int = 200,
-        headers: Optional[Dict[str, str]] = None,
+        headers: dict[str, str] | None = None,
     ) -> ClassifiedResponse:
         """Classify an HTTP response.
 
@@ -207,7 +206,7 @@ class ResponseClassifier:
         self,
         body: str,
         status_code: int,
-        headers: Optional[Dict[str, str]],
+        headers: dict[str, str] | None,
     ) -> ClassifiedResponse:
         """ML-based classification using trained TF-IDF + LR pipeline."""
         combined = self._build_feature_text(body, status_code, headers)
@@ -222,7 +221,7 @@ class ResponseClassifier:
                 label=pred,
                 confidence=conf,
                 features_used=["tfidf_ml", "status_code", "headers"],
-                detail="ML classification: {} (conf={:.3f})".format(pred, conf),
+                detail=f"ML classification: {pred} (conf={conf:.3f})",
             )
         except Exception as exc:
             logger.debug("ML classification failed, falling back to heuristic: %s", exc)
@@ -232,13 +231,13 @@ class ResponseClassifier:
         self,
         body: str,
         status_code: int,
-        headers: Optional[Dict[str, str]],
+        headers: dict[str, str] | None,
     ) -> ClassifiedResponse:
         """Pattern-based heuristic classification."""
-        features_used: List[str] = []
+        features_used: list[str] = []
         combined = body
         if headers:
-            combined = " ".join("{}: {}".format(k, v) for k, v in headers.items()) + " " + body
+            combined = " ".join(f"{k}: {v}" for k, v in headers.items()) + " " + body
 
         # Honeypot check (highest priority)
         for pat in _HONEYPOT_PATTERNS:
@@ -247,7 +246,7 @@ class ResponseClassifier:
                     label=ResponseLabel.HONEYPOT,
                     confidence=0.75,
                     features_used=["honeypot_pattern"],
-                    detail="Honeypot indicator: {}".format(pat.pattern),
+                    detail=f"Honeypot indicator: {pat.pattern}",
                 )
 
         # Vulnerability indicators
@@ -255,19 +254,19 @@ class ResponseClassifier:
         for pat in _VULN_PATTERNS:
             if pat.search(combined):
                 vuln_hits += 1
-                features_used.append("vuln:{}".format(pat.pattern[:30]))
+                features_used.append(f"vuln:{pat.pattern[:30]}")
 
         # Not-vulnerable indicators
         notvuln_hits = 0
         for pat in _NOT_VULN_PATTERNS:
             if pat.search(combined):
                 notvuln_hits += 1
-                features_used.append("notvuln:{}".format(pat.pattern[:30]))
+                features_used.append(f"notvuln:{pat.pattern[:30]}")
 
         # Status code heuristics
         if status_code in (401, 403):
             notvuln_hits += 1
-            features_used.append("status:{}".format(status_code))
+            features_used.append(f"status:{status_code}")
         elif status_code == 200 and vuln_hits > 0:
             features_used.append("status:200+vuln_content")
 
@@ -287,7 +286,7 @@ class ResponseClassifier:
                 label=ResponseLabel.VULNERABLE,
                 confidence=conf,
                 features_used=features_used,
-                detail="{} vulnerability indicators found".format(vuln_hits),
+                detail=f"{vuln_hits} vulnerability indicators found",
             )
         elif vuln_hits == 1 and notvuln_hits == 0:
             return ClassifiedResponse(
@@ -302,7 +301,7 @@ class ResponseClassifier:
                 label=ResponseLabel.NOT_VULNERABLE,
                 confidence=conf,
                 features_used=features_used,
-                detail="{} not-vulnerable indicators found".format(notvuln_hits),
+                detail=f"{notvuln_hits} not-vulnerable indicators found",
             )
 
         return ClassifiedResponse(
@@ -316,19 +315,19 @@ class ResponseClassifier:
     def _build_feature_text(
         body: str,
         status_code: int,
-        headers: Optional[Dict[str, str]],
+        headers: dict[str, str] | None,
     ) -> str:
         """Combine response components into a single feature string for TF-IDF."""
-        parts = ["STATUS_{}".format(status_code)]
+        parts = [f"STATUS_{status_code}"]
         if headers:
             server = headers.get("Server", headers.get("server", ""))
             if server:
-                parts.append("SERVER_{}".format(server))
+                parts.append(f"SERVER_{server}")
             content_type = headers.get("Content-Type", headers.get("content-type", ""))
             if content_type:
                 parts.append("CTYPE_{}".format(content_type.split(";")[0].strip()))
             www_auth = headers.get("WWW-Authenticate", headers.get("www-authenticate", ""))
             if www_auth:
-                parts.append("AUTH_{}".format(www_auth))
+                parts.append(f"AUTH_{www_auth}")
         parts.append(body[:8000])
         return " ".join(parts)

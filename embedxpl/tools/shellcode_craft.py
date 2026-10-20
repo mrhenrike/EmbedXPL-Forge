@@ -12,10 +12,9 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek
 Credits: Helvio Junior (M4v3r1ck), Sec4US Training
 """
 
-from __future__ import annotations
 
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable
 
 LINUX32_SYSCALL = {
     "exit": 1, "fork": 2, "read": 3, "write": 4, "open": 5, "close": 6,

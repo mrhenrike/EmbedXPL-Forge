@@ -50,7 +50,7 @@ class Exploit(HTTPClient):
     port = OptPort(80, "HTTP port")
 
     def run(self) -> None:
-        print_status("Scanning SOHO router on {}:{}...".format(self.target, self.port))
+        print_status(f"Scanning SOHO router on {self.target}:{self.port}...")
 
         for path in ["/", "/login.html", "/login", "/index.html"]:
             resp = self.http_request(method="GET", path=path)
@@ -70,13 +70,11 @@ class Exploit(HTTPClient):
                         break
 
                 print_success(
-                    "{}:{} → Vendor: {} | Server: {} | Title: {}".format(
-                        self.target, self.port, vendor_match, server, title[:60]
-                    )
+                    f"{self.target}:{self.port} → Vendor: {vendor_match} | Server: {server} | Title: {title[:60]}"
                 )
                 return
 
-        print_error("No HTTP management interface found on {}:{}".format(self.target, self.port))
+        print_error(f"No HTTP management interface found on {self.target}:{self.port}")
 
     @mute
     def check(self) -> bool:

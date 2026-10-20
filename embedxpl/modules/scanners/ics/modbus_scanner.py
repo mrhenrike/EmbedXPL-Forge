@@ -45,7 +45,7 @@ _FC1_REQ = struct.pack(">HHHBBBBB", _TRANSACTION, _PROTOCOL_ID, 6, _UNIT_ID, 0x0
 _FC3_REQ = struct.pack(">HHHBBBBB", _TRANSACTION, _PROTOCOL_ID, 6, _UNIT_ID, 0x03, 0x00, 0x00, 0x00, 0x0A)
 
 
-def _modbus_query(host: str, port: int, request: bytes, timeout: int = 5) -> Optional[bytes]:
+def _modbus_query(host: str, port: int, request: bytes, timeout: int = 5) -> bytes | None:
     """Send a Modbus/TCP request and return the response bytes."""
     try:
         sock = socket.create_connection((host, port), timeout=timeout)
@@ -77,7 +77,7 @@ def _parse_mei_response(data: bytes) -> dict:
             obj_id = data[offset]
             obj_len = data[offset + 1]
             obj_val = data[offset + 2: offset + 2 + obj_len].decode("ascii", errors="replace")
-            label = obj_labels.get(obj_id, "Object_0x{:02X}".format(obj_id))
+            label = obj_labels.get(obj_id, f"Object_0x{obj_id:02X}")
             result[label] = obj_val
             offset += 2 + obj_len
     except Exception:
@@ -121,31 +121,31 @@ class Exploit(BaseExploit):
     timeout = OptInteger(5, "Socket timeout in seconds")
 
     def run(self) -> None:
-        print_status("Probing Modbus/TCP on {}:{}...".format(self.target, self.port))
+        print_status(f"Probing Modbus/TCP on {self.target}:{self.port}...")
 
         # FC43 — Device Identification
         resp = _modbus_query(self.target, self.port, _MEI_REQ, self.timeout)
         if resp and len(resp) > 8 and resp[7] == 0x2B:
             device_info = _parse_mei_response(resp)
-            print_success("Modbus/TCP device identified on {}:{}".format(self.target, self.port))
+            print_success(f"Modbus/TCP device identified on {self.target}:{self.port}")
             for key, val in device_info.items():
-                print_success("  {}: {}".format(key, val))
+                print_success(f"  {key}: {val}")
         elif resp and len(resp) > 7 and resp[7] & 0x80:
             exc_code = resp[8] if len(resp) > 8 else "unknown"
-            print_status("FC43 exception code {} (device may not support MEI)".format(exc_code))
+            print_status(f"FC43 exception code {exc_code} (device may not support MEI)")
             print_success("Modbus/TCP device present (FC43 not supported)")
         elif resp:
             print_success("Modbus/TCP response received — device confirmed")
         else:
-            print_error("No Modbus/TCP response on {}:{}".format(self.target, self.port))
+            print_error(f"No Modbus/TCP response on {self.target}:{self.port}")
             return
 
         # FC1 — Read Coils
         coil_resp = _modbus_query(self.target, self.port, _FC1_REQ, self.timeout)
         if coil_resp and len(coil_resp) > 8 and coil_resp[7] == 0x01:
             coil_byte = coil_resp[9] if len(coil_resp) > 9 else 0
-            coils = "{:08b}".format(coil_byte)
-            print_status("FC1 Coils (addr 0-7): {}".format(coils))
+            coils = f"{coil_byte:08b}"
+            print_status(f"FC1 Coils (addr 0-7): {coils}")
 
         # FC3 — Read Holding Registers
         reg_resp = _modbus_query(self.target, self.port, _FC3_REQ, self.timeout)

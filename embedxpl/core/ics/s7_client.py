@@ -73,7 +73,7 @@ class S7Client:
         self._rack = rack
         self._slot = slot
         self._timeout = timeout
-        self._sock: Optional[socket.socket] = None
+        self._sock: socket.socket | None = None
         self._connected = False
         self._logger = logging.getLogger(self.__class__.__name__)
 
@@ -146,7 +146,7 @@ class S7Client:
             self._logger.error("Send error: %s", exc)
             return False
 
-    def _recv(self) -> Optional[bytes]:
+    def _recv(self) -> bytes | None:
         if not self._sock:
             return None
         try:
@@ -167,7 +167,7 @@ class S7Client:
             self._logger.error("Recv error: %s", exc)
             return None
 
-    def _send_s7(self, s7_pdu: bytes) -> Optional[bytes]:
+    def _send_s7(self, s7_pdu: bytes) -> bytes | None:
         """Send an S7 PDU wrapped in COTP+TPKT and return the raw response."""
         if not self._send(_build_tpkt(_build_cotp_dt(s7_pdu))):
             return None
@@ -229,7 +229,7 @@ class S7Client:
     # SZL (System Status List) read — identity / hardware info
     # ------------------------------------------------------------------ #
 
-    def read_szl(self, szl_id: int, szl_index: int = 0) -> Optional[bytes]:
+    def read_szl(self, szl_id: int, szl_index: int = 0) -> bytes | None:
         """Read a SZL (System Status List) entry from the PLC.
 
         Args:

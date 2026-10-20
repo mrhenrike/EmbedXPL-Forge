@@ -14,14 +14,14 @@ with a clear message otherwise. Plaintext values are never logged.
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import hashlib
 import logging
 import re
 from collections import Counter
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +62,7 @@ _PREFIX_RULES = [
 ]
 
 
-def identify(digest: str) -> list[tuple[str, Optional[int]]]:
+def identify(digest: str) -> list[tuple[str, int | None]]:
     """Identify likely hash algorithms for a digest string.
 
     Args:
@@ -72,7 +72,7 @@ def identify(digest: str) -> list[tuple[str, Optional[int]]]:
         List of (name, hashcat_mode) candidates, most likely first.
     """
     digest = digest.strip()
-    out: list[tuple[str, Optional[int]]] = []
+    out: list[tuple[str, int | None]] = []
     for rx, cand in _PREFIX_RULES:
         if rx.search(digest):
             out.append(cand)
@@ -138,7 +138,7 @@ def _ntlm(pw: str) -> str:
     return _md4(pw.encode("utf-16le")).hex()
 
 
-def _hash_one(pw: str, algo: str) -> Optional[str]:
+def _hash_one(pw: str, algo: str) -> str | None:
     """Compute a single digest for a password, or None if unsupported."""
     a = algo.lower()
     if a in ("md5", "sha1", "sha224", "sha256", "sha384", "sha512"):
@@ -299,7 +299,7 @@ def handle_hash_id(args, ctx: dict):
     return iter(lines)
 
 
-def handle_hash_gen(args, ctx: dict) -> Optional[Generator[str, None, None]]:
+def handle_hash_gen(args, ctx: dict) -> Generator[str, None, None] | None:
     """CLI handler for the ``hash-gen`` command."""
     wordlist = getattr(args, "wordlist", None)
     if not wordlist:

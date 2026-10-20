@@ -17,4 +17,4 @@ class Encoder(BaseEncoder):
 
     def encode(self, payload):
         encoded_payload = codecs.encode(payload, "rot_13")
-        return "import codecs;exec(codecs.decode('{}','rot_13'))".format(encoded_payload)
+        return f"import codecs;exec(codecs.decode('{encoded_payload}','rot_13'))"

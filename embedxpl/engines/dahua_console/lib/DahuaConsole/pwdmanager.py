@@ -2,10 +2,10 @@ from dahua_logon_modes import dahua_gen1_hash, dahua_gen2_md5_hash, dahua_logon,
 from utils import *
 
 
-class PwdManager(object):
+class PwdManager:
     """ Dahua HASH / pwd Manager functions """
     def __init__(self):
-        super(PwdManager, self).__init__()
+        super().__init__()
 
     def dvrip(self, rhost=None, username=None, password=None, proto=None, query_args=None, login=None):
 
@@ -94,8 +94,8 @@ class PwdManager(object):
         try:
             with open('dhConsole.json') as fd:
                 return json.load(fd)
-        except IOError as e:
-            log.failure(color('[read_hosts] {}'.format(str(e)), RED))
+        except OSError as e:
+            log.failure(color(f'[read_hosts] {str(e)}', RED))
             return None
 
     @staticmethod
@@ -108,7 +108,7 @@ class PwdManager(object):
                 log.success(color('Host saved successfully', GREEN))
                 return True
         except Exception as e:
-            log.failure(color('[write_hosts] {}'.format(repr(e)), RED))
+            log.failure(color(f'[write_hosts] {repr(e)}', RED))
             return None
 
     def get_relay(self, rhost=None):

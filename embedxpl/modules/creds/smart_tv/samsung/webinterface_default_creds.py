@@ -107,9 +107,7 @@ class Exploit(HTTPClient):
     def run(self) -> None:
         """Execute the default-credential login sweep."""
         print_status(
-            "Attempting default credentials on {} (port {})".format(
-                self.target, self.port
-            )
+            f"Attempting default credentials on {self.target} (port {self.port})"
         )
         found_any = False
         for username, password in _DEFAULT_CREDS:
@@ -118,14 +116,12 @@ class Exploit(HTTPClient):
                 found_any = True
                 display_pass = password if password else "(empty)"
                 print_success(
-                    "VALID — {}:{} succeeded at {}".format(
-                        username, display_pass, path
-                    )
+                    f"VALID — {username}:{display_pass} succeeded at {path}"
                 )
             else:
                 display_pass = password if password else "(empty)"
                 print_status(
-                    "  {}:{} — no match".format(username, display_pass)
+                    f"  {username}:{display_pass} — no match"
                 )
         if not found_any:
             print_error(
@@ -133,7 +129,7 @@ class Exploit(HTTPClient):
                 "target does not appear to use default credentials."
             )
 
-    def _try_credentials(self, username: str, password: str) -> Optional[str]:
+    def _try_credentials(self, username: str, password: str) -> str | None:
         """Attempt to authenticate with the given credentials on all session paths.
 
         Args:

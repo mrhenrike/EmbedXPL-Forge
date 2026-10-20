@@ -10,7 +10,6 @@ module - callers are responsible for downstream storage.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 import unicodedata
@@ -23,7 +22,7 @@ logger = logging.getLogger(__name__)
 # Candidate locations for BRWordList (checked in order)
 # ---------------------------------------------------------------------------
 
-_KNOWN_BRWORDLIST_RELATIVES: List[Path] = [
+_KNOWN_BRWORDLIST_RELATIVES: list[Path] = [
     # Superproject layout: submodules/Wordlists/BRWordList
     # WFH is at submodules/Uniao-Geek/WordlistXPL-Forge
     # So we go up 3 levels to reach submodules/, then into Wordlists/BRWordList
@@ -49,7 +48,7 @@ _CATEGORY_FILES: dict[str, str] = {
 }
 
 # Built-in PT-BR web paths supplemented by BRWordList discovery files
-_BUILTIN_PTBR_PATHS: List[str] = [
+_BUILTIN_PTBR_PATHS: list[str] = [
     # Common PT-BR portal/app paths
     "acesso",
     "acesso-restrito",
@@ -134,13 +133,13 @@ class BRWordListLoader:
     iterators over its name lists and web discovery paths.
     """
 
-    def __init__(self, base_path: Optional[Path] = None) -> None:
+    def __init__(self, base_path: Path | None = None) -> None:
         """Initialise the loader.
 
         Args:
             base_path: Explicit BRWordList root. Auto-detected if None.
         """
-        self._base: Optional[Path] = base_path or self.auto_detect_path()
+        self._base: Path | None = base_path or self.auto_detect_path()
         if self._base:
             logger.debug("BRWordListLoader using: %s", self._base)
         else:
@@ -154,7 +153,7 @@ class BRWordListLoader:
     # ------------------------------------------------------------------
 
     @staticmethod
-    def auto_detect_path() -> Optional[Path]:
+    def auto_detect_path() -> Path | None:
         """Find BRWordList root directory.
 
         Checks known relative paths relative to this file. A valid root
@@ -170,7 +169,7 @@ class BRWordListLoader:
                 return resolved
         return None
 
-    def load_names(self, category: str = "all") -> List[str]:
+    def load_names(self, category: str = "all") -> list[str]:
         """Load Brazilian names from BRWordList.
 
         Args:
@@ -184,7 +183,7 @@ class BRWordListLoader:
             logger.error("BRWordList unavailable - cannot load names")
             return []
 
-        targets: List[str]
+        targets: list[str]
         if category == "all":
             targets = list(_CATEGORY_FILES.values())
         else:
@@ -199,7 +198,7 @@ class BRWordListLoader:
             targets = [rel]
 
         seen: set[str] = set()
-        result: List[str] = []
+        result: list[str] = []
         for rel_path in targets:
             fpath = self._base / rel_path
             if not fpath.exists():
@@ -221,7 +220,7 @@ class BRWordListLoader:
         logger.debug("BRWordList loaded %d unique names (category=%s)", len(result), category)
         return result
 
-    def load_web_paths(self) -> List[str]:
+    def load_web_paths(self) -> list[str]:
         """Load common PT-BR web discovery paths.
 
         Merges built-in PT-BR path list with entries from
@@ -231,7 +230,7 @@ class BRWordListLoader:
             Deduplicated list of URL path segments.
         """
         seen: set[str] = set(_BUILTIN_PTBR_PATHS)
-        result: List[str] = list(_BUILTIN_PTBR_PATHS)
+        result: list[str] = list(_BUILTIN_PTBR_PATHS)
 
         if self._base:
             candidates = [
@@ -274,9 +273,9 @@ def _strip_accents(text: str) -> str:
 
 def generate_usernames_from_br_names(
     category: str = "names",
-    base_path: Optional[Path] = None,
+    base_path: Path | None = None,
     include_leet: bool = False,
-) -> List[str]:
+) -> list[str]:
     """Generate a username list from BRWordList name files.
 
     Convenience wrapper used by update_wordlists.py phase2 integration
@@ -296,7 +295,7 @@ def generate_usernames_from_br_names(
         return []
 
     seen: set[str] = set()
-    result: List[str] = []
+    result: list[str] = []
 
     for name in names:
         _add_unique(name, seen, result)
@@ -307,7 +306,7 @@ def generate_usernames_from_br_names(
     return sorted(result)
 
 
-def _add_unique(entry: str, seen: set[str], result: List[str]) -> None:
+def _add_unique(entry: str, seen: set[str], result: list[str]) -> None:
     """Append entry to result only if not already seen."""
     if entry and entry not in seen:
         seen.add(entry)
@@ -324,7 +323,7 @@ _LEET_MAP: dict[str, str] = {
 }
 
 
-def _basic_leet(word: str) -> List[str]:
+def _basic_leet(word: str) -> list[str]:
     """Apply basic single-character leet substitution to a word.
 
     Args:
@@ -333,7 +332,7 @@ def _basic_leet(word: str) -> List[str]:
     Returns:
         List of leet variants (excludes the original).
     """
-    variants: List[str] = []
+    variants: list[str] = []
     for original, replacement in _LEET_MAP.items():
         if original in word:
             variants.append(word.replace(original, replacement))

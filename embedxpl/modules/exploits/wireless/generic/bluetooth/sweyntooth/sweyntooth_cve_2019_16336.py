@@ -12,7 +12,6 @@ L2CAP/ATT PDU that exceeds the negotiated MTU, causing stack overflow/DoS.
 HW_REQ: BLE adapter (hci0) with HCI injection capability (Linux only natively).
 Fallback: nRF52840 USB dongle with SweynTooth firmware.
 """
-from __future__ import annotations
 
 import asyncio
 import logging

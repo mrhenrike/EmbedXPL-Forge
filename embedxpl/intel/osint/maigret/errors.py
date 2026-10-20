@@ -145,7 +145,7 @@ THRESHOLD = 3  # percent — default threshold above which an error type is "imp
 #   3 dead domains in a 100-site batch produce a Windows/VPN troubleshooting
 #   suggestion that is wrong for nearly every user. Wait for ≥10% before
 #   nagging — at that rate it's clearly the user's resolver, not data rot.
-ERROR_THRESHOLDS: Dict[str, float] = {
+ERROR_THRESHOLDS: dict[str, float] = {
     'Connecting failure (DNS)': 10,
 }
 
@@ -173,8 +173,8 @@ def solution_of(err_type) -> str:
     return ERRORS_TYPES.get(err_type, '')
 
 
-def extract_and_group(search_res: Dict[str, SiteResult]) -> List[Dict[str, Any]]:
-    errors_counts: Dict[str, int] = {}
+def extract_and_group(search_res: dict[str, SiteResult]) -> list[dict[str, Any]]:
+    errors_counts: dict[str, int] = {}
     for r in search_res.values():
         if r and isinstance(r, dict) and r.get('status'):
             if not isinstance(r['status'], MaigretCheckResult):
@@ -205,8 +205,8 @@ def extract_and_group(search_res: Dict[str, SiteResult]) -> List[Dict[str, Any]]
 
 
 def notify_about_errors(
-    search_results: Dict[str, SiteResult], query_notify, show_statistics=False
-) -> List[Tuple]:
+    search_results: dict[str, SiteResult], query_notify, show_statistics=False
+) -> list[tuple]:
     """
     Prepare error notifications in search results, to be displayed by the
     notify object. Each notification is a tuple:

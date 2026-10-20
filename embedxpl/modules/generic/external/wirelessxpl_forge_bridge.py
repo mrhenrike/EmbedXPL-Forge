@@ -19,7 +19,6 @@ Maintainer : Andre Henrique (@mrhenrike) | Uniao Geek
 
 # authorized use only
 """
-from __future__ import annotations
 
 import os
 import shutil
@@ -33,7 +32,7 @@ _DEFAULT_SUBMODULE = Path(__file__).resolve().parents[6] / "submodules" / "Uniao
 _SUBMODULE_ENV_VAR = "WIRELESSXPL_PATH"
 
 
-def _find_wirelessxpl() -> Optional[Path]:
+def _find_wirelessxpl() -> Path | None:
     """Locate WirelessXPL-Forge installation or submodule."""
     # 1. Environment override
     env = os.environ.get(_SUBMODULE_ENV_VAR)
@@ -53,7 +52,7 @@ def _find_wirelessxpl() -> Optional[Path]:
     return None
 
 
-def _python_with_wirelessxpl() -> List[str]:
+def _python_with_wirelessxpl() -> list[str]:
     """Return a Python command list with WirelessXPL-Forge on the path."""
     path = _find_wirelessxpl()
     if path:
@@ -64,7 +63,7 @@ def _python_with_wirelessxpl() -> List[str]:
     return [sys.executable]
 
 
-def run_module(module_path: str, target: str = "", extra_args: Optional[List[str]] = None,
+def run_module(module_path: str, target: str = "", extra_args: list[str] | None = None,
                timeout: int = 60) -> dict[str, Any]:
     """Run a WirelessXPL-Forge module by dotted path (e.g. 'drones.dji.dji_wifi_scan').
 
@@ -109,7 +108,7 @@ def run_module(module_path: str, target: str = "", extra_args: Optional[List[str
     return result
 
 
-def run_cli(args: List[str], timeout: int = 60) -> dict[str, Any]:
+def run_cli(args: list[str], timeout: int = 60) -> dict[str, Any]:
     """Run the WirelessXPL-Forge wlf CLI with the given arguments."""
     result: dict[str, Any] = {"returncode": -1, "stdout": "", "stderr": "", "error": ""}
     wpath = _find_wirelessxpl()

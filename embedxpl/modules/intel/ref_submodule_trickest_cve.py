@@ -16,7 +16,6 @@ Maintainer : Andre Henrique (@mrhenrike) | Uniao Geek
 
 # authorized use only
 """
-from __future__ import annotations
 
 import os
 from pathlib import Path
@@ -33,7 +32,7 @@ _DEFAULT_PATHS = (
 )
 
 
-def _find_trickest() -> Optional[Path]:
+def _find_trickest() -> Path | None:
     env = os.environ.get(_TRICKEST_ENV)
     if env:
         p = Path(env)
@@ -45,7 +44,7 @@ def _find_trickest() -> Optional[Path]:
     return None
 
 
-def search_trickest(cve_id: str, base: Optional[Path] = None) -> Optional[Path]:
+def search_trickest(cve_id: str, base: Path | None = None) -> Path | None:
     """Return path to trickest/cve markdown file for a CVE ID."""
     root = base or _find_trickest()
     if not root:

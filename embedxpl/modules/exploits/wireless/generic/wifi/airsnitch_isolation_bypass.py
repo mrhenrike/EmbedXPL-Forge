@@ -12,7 +12,6 @@ Afeta: praticamente todos os APs WiFi domésticos e corporativos.
 Referência: AirSnitch (NDSS 2026) — https://github.com/vanhoefm/airsnitch
 """
 
-from __future__ import annotations
 
 import json
 import shutil

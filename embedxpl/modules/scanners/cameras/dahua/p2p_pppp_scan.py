@@ -59,7 +59,7 @@ class Exploit(HTTPClient):
     ]
 
     def run(self) -> None:
-        print_status("Scanning Dahua device at {} for PPPP P2P protocol...".format(self.target))
+        print_status(f"Scanning Dahua device at {self.target} for PPPP P2P protocol...")
         found = False
 
         resp = self.http_request(method="GET", path="/")
@@ -68,7 +68,7 @@ class Exploit(HTTPClient):
             for marker in self._P2P_MARKERS:
                 if marker in text_lower:
                     found = True
-                    print_success("P2P marker '{}' found in web interface".format(marker))
+                    print_success(f"P2P marker '{marker}' found in web interface")
 
         for p2p_port in self._PPPP_PORTS:
             try:
@@ -77,8 +77,8 @@ class Exploit(HTTPClient):
                 sock.connect((self.target, p2p_port))
                 sock.close()
                 found = True
-                print_success("PPPP port {} is OPEN".format(p2p_port))
-            except (socket.timeout, ConnectionRefusedError, OSError):
+                print_success(f"PPPP port {p2p_port} is OPEN")
+            except (TimeoutError, ConnectionRefusedError, OSError):
                 pass
 
         if found:
@@ -87,7 +87,7 @@ class Exploit(HTTPClient):
                 "(PPPP UID enumeration + session key bypass)"
             )
         else:
-            print_error("No PPPP/P2P indicators found at {}".format(self.target))
+            print_error(f"No PPPP/P2P indicators found at {self.target}")
 
     def check(self) -> bool:
         resp = self.http_request(method="GET", path="/")

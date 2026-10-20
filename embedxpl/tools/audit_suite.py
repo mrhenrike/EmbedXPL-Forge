@@ -14,7 +14,6 @@ Uso:
     python3 -m embedxpl.tools.audit_suite --json       # output JSON para CI
 """
 
-from __future__ import annotations
 
 import argparse
 import ast
@@ -53,7 +52,7 @@ def _color(s: str, c: str) -> str:
     return c + s + _RESET
 
 
-def _collect_py_files(root: Path) -> List[Path]:
+def _collect_py_files(root: Path) -> list[Path]:
     return sorted(f for f in root.rglob("*.py") if f.name != "__init__.py")
 
 
@@ -61,7 +60,7 @@ def _collect_py_files(root: Path) -> List[Path]:
 # AUDIT-STEP-1: Import health
 # ---------------------------------------------------------------------------
 
-def audit_imports(root: Path) -> List[dict]:
+def audit_imports(root: Path) -> list[dict]:
     """Try to import every module and collect ImportErrors."""
     issues = []
     files = _collect_py_files(root)
@@ -89,7 +88,7 @@ def audit_imports(root: Path) -> List[dict]:
 # AUDIT-STEP-2: Unused imports (via pyflakes if available)
 # ---------------------------------------------------------------------------
 
-def audit_unused_imports(root: Path) -> List[dict]:
+def audit_unused_imports(root: Path) -> list[dict]:
     """Detect unused imports using pyflakes."""
     issues = []
     try:
@@ -124,7 +123,7 @@ def audit_unused_imports(root: Path) -> List[dict]:
 # AUDIT-STEP-3: Missing __info__
 # ---------------------------------------------------------------------------
 
-def audit_metadata(root: Path) -> List[dict]:
+def audit_metadata(root: Path) -> list[dict]:
     """Check that every Exploit/Encoder/Payload class has __info__."""
     issues = []
     for py in _collect_py_files(root):
@@ -146,7 +145,7 @@ def audit_metadata(root: Path) -> List[dict]:
 # AUDIT-STEP-4: Missing external dependencies
 # ---------------------------------------------------------------------------
 
-def audit_deps(root: Path) -> List[dict]:
+def audit_deps(root: Path) -> list[dict]:
     """Detect imports of packages not installed and not in stdlib."""
     issues = []
     stdlib = set(sys.stdlib_module_names)
@@ -198,7 +197,7 @@ def audit_deps(root: Path) -> List[dict]:
 # AUDIT-STEP-5: Bad patterns
 # ---------------------------------------------------------------------------
 
-def audit_patterns(root: Path) -> List[dict]:
+def audit_patterns(root: Path) -> list[dict]:
     """Check for common bad patterns in module code."""
     issues = []
     BAD_PATTERNS = [
@@ -237,7 +236,7 @@ def audit_patterns(root: Path) -> List[dict]:
 # AUDIT-STEP-6: Banner stats consistency
 # ---------------------------------------------------------------------------
 
-def audit_banner_stats() -> List[dict]:
+def audit_banner_stats() -> list[dict]:
     """Validate that banner stats increment makes sense."""
     issues = []
     try:
@@ -279,7 +278,7 @@ def audit_banner_stats() -> List[dict]:
 # AUDIT-STEP-7: Git status
 # ---------------------------------------------------------------------------
 
-def audit_git() -> List[dict]:
+def audit_git() -> list[dict]:
     """Check git status for uncommitted changes."""
     issues = []
     import subprocess
@@ -335,7 +334,7 @@ def run_audit(root: Path = _MODULES, steps: list[int] | None = None,
               json_output: bool = False) -> int:
     """Run the full audit. Returns exit code (0=clean, 1=errors found)."""
     steps = steps or list(_STEP_FUNCS.keys())
-    all_issues: List[dict] = []
+    all_issues: list[dict] = []
 
     print(_color("\n  EmbedXPL Suite Auditor\n  " + "─" * 50, _CYAN))
 

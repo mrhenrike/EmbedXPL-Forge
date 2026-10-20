@@ -9,7 +9,6 @@ QCA6696, QCA6490, WCN6855, WCN7851) em smartphones, veículos e IoT.
 CVSS: 9.8 (Crítico) | Sem interação do usuário — apenas beacon/probe malformado
 """
 
-from __future__ import annotations
 
 import json
 import struct

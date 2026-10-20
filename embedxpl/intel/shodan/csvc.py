@@ -7,7 +7,7 @@ try:
     from collections.abc import MutableMapping
 except ImportError:
     # Python 2.x: Import ABC from collections
-    from collections import MutableMapping
+    from collections.abc import MutableMapping
 
 from csv import excel
 from csv import writer as csv_writer

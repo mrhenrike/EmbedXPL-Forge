@@ -14,7 +14,6 @@ Author: André Henrique (@mrhenrique) | União Geek — https://github.com/Uniao
 Version: 1.1.0
 """
 
-from __future__ import annotations
 
 import os
 import shutil

@@ -8,7 +8,7 @@ def custom_checksec(host, port, message):
     """ Some embedded devices with 'psh' will hang after checksec() """
     cache_dir = ''.join(tempfile.gettempdir() + '/pwntools-ssh-cache')
     Path(cache_dir).mkdir(parents=True, exist_ok=True)
-    fpath = ''.join(cache_dir + '/{}-{}'.format(host, port))
+    fpath = ''.join(cache_dir + f'/{host}-{port}')
     with open(fpath, 'w+') as f:
         f.write(message)
 
@@ -57,7 +57,7 @@ def init_relay(relay=None, rhost=None, rport=None, discover=False):
             )
             # return relay
         except Exception as e:
-            print('[init_relay] ssh: {}'.format(repr(e)))
+            print(f'[init_relay] ssh: {repr(e)}')
             return False
 
         if not discover:
@@ -85,11 +85,11 @@ def init_relay(relay=None, rhost=None, rport=None, discover=False):
             }
 
     else:
-        log.failure('"{}" relay proto not implemented'.format(proto))
+        log.failure(f'"{proto}" relay proto not implemented')
         return False
 
 
-class DahuaHttp(object):
+class DahuaHttp:
     def __del__(self):
         log.info('DahuaHttp DELETE')
 
@@ -97,7 +97,7 @@ class DahuaHttp(object):
     # TODO
     # Get HTTP/HTTPS working with SSH relay
     def __init__(self, rhost, rport, proto, timeout=60):
-        super(DahuaHttp, self).__init__()
+        super().__init__()
 
         self.rhost = rhost
         self.rport = rport
@@ -127,7 +127,7 @@ class DahuaHttp(object):
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
             'Accept': 'application/json, text/javascript, */*; q=0.01',
             'Accept-Language': 'en-US,en;q=0.9',
-            'Host': '{}:{}'.format(self.rhost, self.rport),
+            'Host': f'{self.rhost}:{self.rport}',
         })
         # TODO
         """To use '--relay' option"""
@@ -212,7 +212,7 @@ class DahuaHttp(object):
             })
 
     def _init_uri(self):
-        self.uri = '{proto}://{rhost}:{rport}'.format(proto=self.proto, rhost=self.rhost, rport=str(self.rport))
+        self.uri = f'{self.proto}://{self.rhost}:{str(self.rport)}'
 
     @staticmethod
     def _error(dh_error=None, code=500):
@@ -239,7 +239,7 @@ class DahuaHttp(object):
     def open_stream(self, session_id):
         """Open stream session for events and other 'client.Notify'"""
         self.stream = self.remote.get(
-            '{}/SubscribeNotify.cgi?sessionId={}'.format(self.uri, session_id),
+            f'{self.uri}/SubscribeNotify.cgi?sessionId={session_id}',
             verify=False, allow_redirects=False, stream=True
         )
 

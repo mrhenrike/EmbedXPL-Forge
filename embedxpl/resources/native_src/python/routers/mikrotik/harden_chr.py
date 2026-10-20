@@ -9,12 +9,10 @@
 
 """Apply baseline hardening controls to MikroTik CHR targets via REST API."""
 
-from __future__ import annotations
 
 import argparse
 import logging
 from dataclasses import dataclass
-from typing import Dict, List, Optional
 
 import requests
 import urllib3
@@ -48,7 +46,7 @@ class RouterOSHardener:
         self.base_url = f"{self.scheme}://{cfg.target}:{cfg.http_port}/rest"
         self.auth = (cfg.username, cfg.password)
 
-    def run(self) -> Dict[str, object]:
+    def run(self) -> dict[str, object]:
         """Run complete hardening pipeline."""
         if not self._auth_ok():
             raise RuntimeError(f"REST authentication failed for target {self.cfg.target}")
@@ -63,10 +61,10 @@ class RouterOSHardener:
             "dry_run": self.cfg.dry_run,
         }
 
-    def _harden_services(self) -> List[Dict[str, str]]:
+    def _harden_services(self) -> list[dict[str, str]]:
         services = self._get_list("/ip/service")
         by_name = {service.get("name", ""): service for service in services}
-        desired: Dict[str, Dict[str, str]] = {
+        desired: dict[str, dict[str, str]] = {
             "ftp": {"disabled": "true"},
             "telnet": {"disabled": "true"},
             "www": {"disabled": "true"},
@@ -76,7 +74,7 @@ class RouterOSHardener:
             "ssh": {"address": self.cfg.management_cidr},
             "winbox": {"address": self.cfg.management_cidr},
         }
-        changes: List[Dict[str, str]] = []
+        changes: list[dict[str, str]] = []
         for svc_name, attrs in desired.items():
             item = by_name.get(svc_name)
             if not item:
@@ -150,7 +148,7 @@ class RouterOSHardener:
         response = self._request("GET", "/system/resource")
         return response is not None and response.status_code == 200
 
-    def _request(self, method: str, endpoint: str, payload: Optional[Dict[str, str]] = None) -> Optional[requests.Response]:
+    def _request(self, method: str, endpoint: str, payload: dict[str, str] | None = None) -> requests.Response | None:
         url = f"{self.base_url}{endpoint}"
         if self.cfg.dry_run:
             LOGGER.info("[dry-run] %s %s %s", method, endpoint, payload or {})
@@ -169,7 +167,7 @@ class RouterOSHardener:
             LOGGER.error("REST request failed %s %s: %s", method, endpoint, exc)
             return None
 
-    def _get_list(self, endpoint: str) -> List[Dict[str, str]]:
+    def _get_list(self, endpoint: str) -> list[dict[str, str]]:
         response = self._request("GET", endpoint)
         if response is None:
             return []
@@ -183,25 +181,25 @@ class RouterOSHardener:
             return [data]
         return []
 
-    def _patch(self, endpoint: str, payload: Dict[str, str]) -> bool:
+    def _patch(self, endpoint: str, payload: dict[str, str]) -> bool:
         response = self._request("PATCH", endpoint, payload)
         if self.cfg.dry_run:
             return True
         return response is not None and response.status_code in {200, 201, 204}
 
-    def _post(self, endpoint: str, payload: Dict[str, str]) -> bool:
+    def _post(self, endpoint: str, payload: dict[str, str]) -> bool:
         response = self._request("POST", endpoint, payload)
         if self.cfg.dry_run:
             return True
         return response is not None and response.status_code in {200, 201, 204}
 
-    def _post_set(self, endpoint: str, payload: Dict[str, str]) -> bool:
+    def _post_set(self, endpoint: str, payload: dict[str, str]) -> bool:
         """POST helper for RouterOS `/set` and `/add` REST commands."""
         return self._post(endpoint, payload)
 
     @staticmethod
-    def _words_to_payload(words: List[str]) -> Dict[str, str]:
-        payload: Dict[str, str] = {}
+    def _words_to_payload(words: list[str]) -> dict[str, str]:
+        payload: dict[str, str] = {}
         for word in words:
             if not word.startswith("="):
                 continue

@@ -6,12 +6,11 @@ via rustup target add and cargo build --target.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 import os
 import subprocess
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from . import toolchain
 from .cache import get_cached_binary, store_binary
@@ -48,9 +47,9 @@ class RustExecutor:
         self,
         src: Path,
         arch: str = "x64",
-        flags: Optional[list[str]] = None,
+        flags: list[str] | None = None,
         force: bool = False,
-    ) -> Optional[Path]:
+    ) -> Path | None:
         """Compile a single .rs file with rustc. Returns binary path or None."""
         if not self.is_available():
             return None
@@ -89,7 +88,7 @@ class RustExecutor:
         arch: str = "x64",
         release: bool = True,
         force: bool = False,
-    ) -> Optional[Path]:
+    ) -> Path | None:
         """Build a Cargo project. Returns binary path or None."""
         if not toolchain.CARGO:
             # Fall back to rustc if cargo not available
@@ -142,7 +141,7 @@ class RustExecutor:
     def run(
         self,
         module: Any,
-        args: Optional[list[str]] = None,
+        args: list[str] | None = None,
         timeout: int = 60,
         **kwargs: Any,
     ) -> dict[str, Any]:

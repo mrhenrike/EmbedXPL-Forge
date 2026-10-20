@@ -7,12 +7,11 @@ Uses binary cache to avoid recompilation.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 import os
 import subprocess
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from . import toolchain
 from .cache import get_cached_binary, store_binary
@@ -51,9 +50,9 @@ class GoExecutor:
         src: Path,
         arch: str = "x64",
         goos: str = "linux",
-        ldflags: Optional[str] = None,
+        ldflags: str | None = None,
         force: bool = False,
-    ) -> Optional[Path]:
+    ) -> Path | None:
         """Build Go source (file or directory). Returns binary path or None."""
         if not self.is_available():
             return None
@@ -105,7 +104,7 @@ class GoExecutor:
     def run(
         self,
         module: Any,
-        args: Optional[list[str]] = None,
+        args: list[str] | None = None,
         timeout: int = 60,
         **kwargs: Any,
     ) -> dict[str, Any]:
@@ -153,7 +152,7 @@ class GoExecutor:
     def run_source_file(
         self,
         src: str | Path,
-        args: Optional[list[str]] = None,
+        args: list[str] | None = None,
         timeout: int = 30,
     ) -> dict[str, Any]:
         """Run a Go source file directly with `go run` (no caching, for dev)."""

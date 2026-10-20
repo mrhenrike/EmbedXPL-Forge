@@ -10,7 +10,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import importlib.util
 import os
@@ -23,7 +22,7 @@ from embedxpl.core.exploit import *
 __version__ = "1.0.0"
 
 
-def _find_mikrotik_bf_root() -> Optional[Path]:
+def _find_mikrotik_bf_root() -> Path | None:
     """Locate MikrotikAPI-BF installation relative to EmbedXPL."""
     # Look in superproject submodules
     candidates = [
@@ -36,7 +35,7 @@ def _find_mikrotik_bf_root() -> Optional[Path]:
     return None
 
 
-def _load_mikrotik_exploits() -> Optional[Any]:
+def _load_mikrotik_exploits() -> Any | None:
     """Dynamically load MikrotikAPI-BF exploits module."""
     root = _find_mikrotik_bf_root()
     if root is None:
@@ -114,7 +113,7 @@ class MikrotikCVEAdapter(Exploit):
         except Exception as exc:
             print(f"[-] Adapter run error: {exc}")
 
-    def _get_cve_class(self) -> Optional[Type]:
+    def _get_cve_class(self) -> type | None:
         """Load and return the CVE class from MikrotikAPI-BF."""
         module = _load_mikrotik_exploits()
         if module is None:
@@ -130,7 +129,7 @@ class MikrotikCVEAdapter(Exploit):
         return inst
 
     @classmethod
-    def list_available_cves(cls) -> List[str]:
+    def list_available_cves(cls) -> list[str]:
         """List all CVE classes available in MikrotikAPI-BF."""
         module = _load_mikrotik_exploits()
         if module is None:

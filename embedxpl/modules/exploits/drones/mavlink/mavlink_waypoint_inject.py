@@ -6,7 +6,6 @@ Clears the existing mission and uploads a new mission that redirects the drone
 to attacker-specified GPS coordinates. Uses MISSION_CLEAR_ALL + MISSION_COUNT
 + MISSION_ITEM_INT sequence.
 """
-from __future__ import annotations
 
 import logging
 import socket

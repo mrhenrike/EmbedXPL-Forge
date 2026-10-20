@@ -9,7 +9,6 @@ Affects firmware versions below 1.1.8.
 CVE-2024-52876 | CVSS 7.5 (High) | No authentication required.
 PREREQ HW: BLE adapter (hci0) or compatible Bluetooth 4.0+ adapter.
 """
-from __future__ import annotations
 
 import asyncio
 import logging

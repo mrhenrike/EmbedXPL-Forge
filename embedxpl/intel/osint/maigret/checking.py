@@ -90,7 +90,7 @@ _PROXY_SCHEME_ALIASES = {
 }
 
 
-def normalize_proxy_scheme(proxy: Optional[str], transport: str) -> Optional[str]:
+def normalize_proxy_scheme(proxy: str | None, transport: str) -> str | None:
     """Rewrite a proxy URL's scheme to the spelling `transport` understands.
 
     Only the scheme is rewritten; host, port, credentials and path are passed
@@ -130,8 +130,8 @@ BAD_CHARS = "#"
 
 
 def build_cloudflare_bypass_config(
-    settings_obj: Optional[Any], force_enable: bool = False
-) -> Optional[Dict[str, Any]]:
+    settings_obj: Any | None, force_enable: bool = False
+) -> dict[str, Any] | None:
     """Resolve Cloudflare webgate config from settings + CLI flag.
 
     Returns ``None`` when bypass is inactive or no usable module is configured.
@@ -153,7 +153,7 @@ def build_cloudflare_bypass_config(
         return None
 
     modules_raw = raw.get("modules") or []
-    valid_modules: List[Dict[str, Any]] = []
+    valid_modules: list[dict[str, Any]] = []
     for module in modules_raw:
         method = module.get("method")
         url = module.get("url")
@@ -221,7 +221,7 @@ class SimpleAiohttpChecker(CheckerBase):
 
     async def _make_request(
         self, session, url, headers, allow_redirects, timeout, method, logger, payload=None
-    ) -> Tuple[Optional[str], int, Optional[CheckError]]:
+    ) -> tuple[str | None, int, CheckError | None]:
         if method.lower() == 'get':
             request_method = session.get
         elif method.lower() == 'post':
@@ -287,7 +287,7 @@ class SimpleAiohttpChecker(CheckerBase):
 
                     return decoded_content, status_code, error
 
-            except asyncio.TimeoutError as e:
+            except TimeoutError as e:
                 return None, 0, CheckError("Request timeout", str(e))
             except ClientConnectorError as e:
                 err_type = "Connecting failure (DNS)" if _is_dns_error(e) else "Connecting failure"
@@ -323,7 +323,7 @@ class SimpleAiohttpChecker(CheckerBase):
                     logger.debug(e, exc_info=True)
                 return None, 0, CheckError("Unexpected", str(e))
 
-    async def check(self) -> Tuple[Optional[str], int, Optional[CheckError]]:
+    async def check(self) -> tuple[str | None, int, CheckError | None]:
         from aiohttp_socks import ProxyConnector
 
         # Use a real SSL context instead of ssl=False to avoid TLS fingerprinting
@@ -381,7 +381,7 @@ class AiodnsDomainResolver(CheckerBase):
         self.url = url
         return None
 
-    async def check(self) -> Tuple[Optional[str], int, Optional[CheckError]]:
+    async def check(self) -> tuple[str | None, int, CheckError | None]:
         status = 404
         error = None
         text = ''
@@ -424,7 +424,7 @@ class CurlCffiChecker(CheckerBase):
     async def close(self):
         pass
 
-    async def check(self) -> Tuple[Optional[str], int, Optional[CheckError]]:
+    async def check(self) -> tuple[str | None, int, CheckError | None]:
         session_kwargs = {}
         if self.proxy:
             session_kwargs['proxies'] = {'http': self.proxy, 'https': self.proxy}
@@ -472,7 +472,7 @@ class CurlCffiChecker(CheckerBase):
                     error = CheckError("Connection lost") if status_code == 0 else None
                     return decoded_content, status_code, error
 
-            except asyncio.TimeoutError as e:
+            except TimeoutError as e:
                 return None, 0, CheckError("Request timeout", str(e))
             except KeyboardInterrupt:
                 return None, 0, CheckError("Interrupted")
@@ -505,7 +505,7 @@ class CloudflareWebgateChecker(CheckerBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         config = kwargs.get('config') or {}
-        self._modules: List[Dict[str, Any]] = []
+        self._modules: list[dict[str, Any]] = []
         for raw in config.get('modules') or []:
             module = dict(raw)
             module.setdefault('method', 'json_api')
@@ -549,9 +549,9 @@ class CloudflareWebgateChecker(CheckerBase):
     async def close(self):
         pass
 
-    async def check(self) -> Tuple[Optional[str], int, Optional[CheckError]]:
-        attempts: List[str] = []
-        last_error: Optional[CheckError] = None
+    async def check(self) -> tuple[str | None, int, CheckError | None]:
+        attempts: list[str] = []
+        last_error: CheckError | None = None
         for module in self._modules:
             method = module.get('method')
             module_name = module.get('name', method or '?')
@@ -609,14 +609,14 @@ class CloudflareWebgateChecker(CheckerBase):
         return None, 0, CheckError("Webgate unavailable", desc)
 
     async def _check_flaresolverr(
-        self, module: Dict[str, Any]
-    ) -> Tuple[Optional[str], int, Optional[CheckError]]:
+        self, module: dict[str, Any]
+    ) -> tuple[str | None, int, CheckError | None]:
         endpoint = module.get('url') or 'http://localhost:8191/v1'
         max_timeout_ms = int(module.get('max_timeout_ms', 60000))
         post_method = self.method.lower() == 'post'
         cmd = "request.post" if post_method else "request.get"
 
-        body: Dict[str, Any] = {
+        body: dict[str, Any] = {
             "cmd": cmd,
             "url": self.url,
             "maxTimeout": max_timeout_ms,
@@ -650,7 +650,7 @@ class CloudflareWebgateChecker(CheckerBase):
                     data = await resp.json()
         except (ClientConnectorError, ServerDisconnectedError) as e:
             return None, 0, CheckError("Webgate unreachable", str(e))
-        except asyncio.TimeoutError:
+        except TimeoutError:
             return None, 0, CheckError("Webgate timeout", endpoint)
         except Exception as e:
             self.logger.debug(e, exc_info=True)
@@ -683,8 +683,8 @@ class CloudflareWebgateChecker(CheckerBase):
         return response_text, upstream_status, None
 
     async def _check_url_rewrite(
-        self, module: Dict[str, Any]
-    ) -> Tuple[Optional[str], int, Optional[CheckError]]:
+        self, module: dict[str, Any]
+    ) -> tuple[str | None, int, CheckError | None]:
         url_template = module.get('url') or ''
         if "{url}" not in url_template:
             return None, 0, CheckError(
@@ -704,7 +704,7 @@ class CloudflareWebgateChecker(CheckerBase):
                     body = await resp.text()
         except (ClientConnectorError, ServerDisconnectedError) as e:
             return None, 0, CheckError("Webgate unreachable", str(e))
-        except asyncio.TimeoutError:
+        except TimeoutError:
             return None, 0, CheckError("Webgate timeout", proxy_url)
         except Exception as e:
             self.logger.debug(e, exc_info=True)
@@ -723,7 +723,7 @@ class CheckerMock:
     def prepare(self, url, headers=None, allow_redirects=True, timeout=0, method='get', payload=None, encoding=None):
         return None
 
-    async def check(self) -> Tuple[Optional[str], int, Optional[CheckError]]:
+    async def check(self) -> tuple[str | None, int, CheckError | None]:
         await asyncio.sleep(0)
         return '', 0, None
 
@@ -731,7 +731,7 @@ class CheckerMock:
         return
 
 
-def make_protocol_checker(options: Dict[str, Any], protocol: str):
+def make_protocol_checker(options: dict[str, Any], protocol: str):
     checker_factory = options["checkers"][protocol]
     if callable(checker_factory):
         return checker_factory()
@@ -918,7 +918,7 @@ def process_site_result(
 
 
 def make_site_result(
-    site: MaigretSite, username: str, options: Dict[str, Any], logger, *args, **kwargs
+    site: MaigretSite, username: str, options: dict[str, Any], logger, *args, **kwargs
 ) -> SiteResult:
     results_site: SiteResult = {}
 
@@ -1101,8 +1101,8 @@ def make_site_result(
 
 
 async def check_site_for_username(
-    site, username, options: Dict[str, Any], logger, query_notify, *args, **kwargs
-) -> Tuple[str, SiteResult]:
+    site, username, options: dict[str, Any], logger, query_notify, *args, **kwargs
+) -> tuple[str, SiteResult]:
     keywords = kwargs.get('keywords')
     default_result = make_site_result(
         site, username, options, logger, retry=kwargs.get('retry'), keywords=keywords
@@ -1194,7 +1194,7 @@ async def debug_ip_request(checker, logger):
         logger.debug(f"IP requesting {check_error.type}: {check_error.desc}")
 
 
-def get_failed_sites(results: Dict[str, SiteResult]) -> List[str]:
+def get_failed_sites(results: dict[str, SiteResult]) -> list[str]:
     sites = []
     for sitename, r in results.items():
         status = r.get('status')
@@ -1207,7 +1207,7 @@ def get_failed_sites(results: Dict[str, SiteResult]) -> List[str]:
 
 async def maigret(
     username: str,
-    site_dict: Dict[str, MaigretSite],
+    site_dict: dict[str, MaigretSite],
     logger,
     query_notify=None,
     proxy=None,
@@ -1224,13 +1224,13 @@ async def maigret(
     cookies=None,
     retries=0,
     check_domains=False,
-    cloudflare_bypass: Optional[Dict[str, Any]] = None,
+    cloudflare_bypass: dict[str, Any] | None = None,
     keywords=None,
     dns_resolver: str = 'async',
-    output_container: Optional[Dict[str, SiteResult]] = None,
+    output_container: dict[str, SiteResult] | None = None,
     *args,
     **kwargs,
-) -> Dict[str, SiteResult]:
+) -> dict[str, SiteResult]:
     """Main search func
 
     Checks for existence of username on certain sites.
@@ -1317,7 +1317,7 @@ async def maigret(
     )
 
     # make options objects for all the requests
-    options: Dict[str, Any] = {}
+    options: dict[str, Any] = {}
     options["cookies"] = cookie_jar
     options["checkers"] = {
         '': clearweb_checker,
@@ -1338,7 +1338,7 @@ async def maigret(
     # When the caller wants to read partial results after a Ctrl+C
     # cancellation, they pass a dict; we mutate it in place so the partial
     # state remains visible after this coroutine raises CancelledError.
-    all_results: Dict[str, SiteResult] = (
+    all_results: dict[str, SiteResult] = (
         output_container if output_container is not None else {}
     )
 
@@ -1463,7 +1463,7 @@ async def site_self_check(
     cookies=None,
     auto_disable=False,
     diagnose=False,
-    cloudflare_bypass: Optional[Dict[str, Any]] = None,
+    cloudflare_bypass: dict[str, Any] | None = None,
     dns_resolver: str = 'async',
 ):
     """
@@ -1474,7 +1474,7 @@ async def site_self_check(
                      If False (default), only report issues without disabling.
         diagnose: If True, print detailed diagnosis information.
     """
-    changes: Dict[str, Any] = {
+    changes: dict[str, Any] = {
         "disabled": False,
         "issues": [],
         "recommendations": [],
@@ -1634,7 +1634,7 @@ async def self_check(
     auto_disable=False,
     diagnose=False,
     no_progressbar=False,
-    cloudflare_bypass: Optional[Dict[str, Any]] = None,
+    cloudflare_bypass: dict[str, Any] | None = None,
     dns_resolver: str = 'async',
 ) -> dict:
     """
@@ -1729,7 +1729,7 @@ async def self_check(
     }
 
 
-def extract_ids_data(html_text, logger, site) -> Dict:
+def extract_ids_data(html_text, logger, site) -> dict:
     try:
         return extract(html_text)
     except Exception as e:
@@ -1905,7 +1905,7 @@ async def run_url_mutations(checker, site, results_info, options, logger, query_
             )
 
 
-def parse_usernames(extracted_ids_data, logger) -> Dict:
+def parse_usernames(extracted_ids_data, logger) -> dict:
     new_usernames = {}
     for k, v in extracted_ids_data.items():
         if "username" in k and "usernames" not in k:

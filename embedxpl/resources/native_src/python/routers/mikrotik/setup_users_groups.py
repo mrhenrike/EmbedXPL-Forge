@@ -9,19 +9,17 @@
 
 """Create/update RouterOS groups and limited users for lab hardening."""
 
-from __future__ import annotations
 
 import argparse
 import logging
 from pathlib import Path
-from typing import Dict, List, Tuple
 
 import paramiko
 
 LOGGER = logging.getLogger("setup_users_groups")
 
 
-GROUP_POLICIES: Dict[str, str] = {
+GROUP_POLICIES: dict[str, str] = {
     "safelabs-ftp-ro": "ftp,read",
     "safelabs-ssh-rw": "ssh,read,write,test",
     "safelabs-web-rw": "web,rest-api,read,write,test",
@@ -30,9 +28,9 @@ GROUP_POLICIES: Dict[str, str] = {
 }
 
 
-def parse_lab_creds(env_path: Path) -> Dict[str, Tuple[str, str]]:
+def parse_lab_creds(env_path: Path) -> dict[str, tuple[str, str]]:
     """Parse LAB_CRED_* entries from `.env` in `user:pass` format."""
-    creds: Dict[str, Tuple[str, str]] = {}
+    creds: dict[str, tuple[str, str]] = {}
     if not env_path.exists():
         return creds
     for line in env_path.read_text(encoding="utf-8").splitlines():
@@ -47,7 +45,7 @@ def parse_lab_creds(env_path: Path) -> Dict[str, Tuple[str, str]]:
     return creds
 
 
-def build_user_mapping(creds: Dict[str, Tuple[str, str]]) -> List[Tuple[str, str, str]]:
+def build_user_mapping(creds: dict[str, tuple[str, str]]) -> list[tuple[str, str, str]]:
     """Build user->group mapping from known lab credentials."""
     required = {
         "LAB_CRED_INFO": "safelabs-ftp-ro",
@@ -56,7 +54,7 @@ def build_user_mapping(creds: Dict[str, Tuple[str, str]]) -> List[Tuple[str, str
         "LAB_CRED_USER": "safelabs-web-ro",
         "LAB_CRED_ADMINISTRATOR": "safelabs-winbox-only",
     }
-    mappings: List[Tuple[str, str, str]] = []
+    mappings: list[tuple[str, str, str]] = []
     for cred_key, group_name in required.items():
         if cred_key not in creds:
             raise RuntimeError(f"Missing required credential in .env: {cred_key}")
@@ -65,7 +63,7 @@ def build_user_mapping(creds: Dict[str, Tuple[str, str]]) -> List[Tuple[str, str
     return mappings
 
 
-def run_ssh_cmd(client: paramiko.SSHClient, command: str) -> Tuple[int, str, str]:
+def run_ssh_cmd(client: paramiko.SSHClient, command: str) -> tuple[int, str, str]:
     """Run command over SSH and return exit code/stdout/stderr."""
     _, stdout, stderr = client.exec_command(command)
     out = stdout.read().decode("utf-8", errors="replace").strip()

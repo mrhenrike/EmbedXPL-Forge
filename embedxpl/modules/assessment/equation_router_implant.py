@@ -12,7 +12,6 @@
 # simulate=True by default — set False only for authorized tests.
 # ============================================================
 
-from __future__ import annotations
 
 import socket
 import hashlib
@@ -150,7 +149,7 @@ class Exploit(_Base):
                     findings.append("JUNIPER NetScreen with SNMP open — check CVE-2015-7755 backdoor")
                 else:
                     print(f"  SNMP open: {resp[20:60]!r}")
-            except socket.timeout:
+            except TimeoutError:
                 print("  SNMP not responding or filtered")
             sock.close()
         except Exception as e:

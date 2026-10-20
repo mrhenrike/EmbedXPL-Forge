@@ -9,12 +9,12 @@ Inspired by intelligence-wordlist-generator (iwlgen).
 Author: André Henrique (@mrhenrike)
 Version: 1.1.0
 """
-from __future__ import annotations
 
 import logging
 import sys
 from itertools import permutations
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -32,15 +32,15 @@ LEET_MAP = {"a": "4", "e": "3", "i": "1", "o": "0", "s": "5", "t": "7"}
 
 def combine_keywords(
     keywords: list[str],
-    connectors: Optional[list[str]] = None,
-    num_tails: Optional[list[str]] = None,
+    connectors: list[str] | None = None,
+    num_tails: list[str] | None = None,
     max_depth: int = 0,
     use_abbreviation: bool = False,
     use_reverse: bool = False,
     use_leet: bool = False,
     use_lowercase: bool = False,
     use_titlecase: bool = False,
-    affix_specials: Optional[list[str]] = None,
+    affix_specials: list[str] | None = None,
     min_length: int = 1,
     max_length: int = 64,
 ) -> Generator[str, None, None]:
@@ -73,7 +73,7 @@ def combine_keywords(
     n = len(keywords)
     depth = max_depth if max_depth > 0 else n
 
-    def emit(s: str) -> Optional[str]:
+    def emit(s: str) -> str | None:
         # Case-sensitive dedup: "Admin" and "admin" are distinct password
         # candidates, and case variants (titlecase/lowercase) must survive.
         if s and s not in seen and min_length <= len(s) <= max_length:

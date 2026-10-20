@@ -53,7 +53,7 @@ _VULNERABLE_FW_RANGES = [
 def _parse_xml_tag(xml_str, tag):
     """Extract content from an XML tag."""
     match = re.search(
-        "<{0}>(.*?)</{0}>".format(tag), xml_str, re.DOTALL
+        f"<{tag}>(.*?)</{tag}>", xml_str, re.DOTALL
     )
     return match.group(1).strip() if match else None
 
@@ -61,13 +61,13 @@ def _parse_xml_tag(xml_str, tag):
 def _build_http_request(host, port, path):
     """Build a raw HTTP GET request string."""
     request = (
-        "GET {path} HTTP/1.1\r\n"
-        "Host: {host}:{port}\r\n"
+        f"GET {path} HTTP/1.1\r\n"
+        f"Host: {host}:{port}\r\n"
         "User-Agent: EmbedXPL/1.0\r\n"
         "Accept: */*\r\n"
         "Connection: close\r\n"
         "\r\n"
-    ).format(path=path, host=host, port=port)
+    )
     return request.encode("ascii")
 
 
@@ -88,7 +88,7 @@ def _http_get(host, port, path, timeout=_HTTP_TIMEOUT):
                 response += chunk
                 if len(response) > 65536:
                     break
-            except socket.timeout:
+            except TimeoutError:
                 break
         sock.close()
 
@@ -111,7 +111,7 @@ def _http_get(host, port, path, timeout=_HTTP_TIMEOUT):
                 headers[key.lower()] = val
 
         return status_code, headers, body
-    except (socket.error, socket.timeout, OSError):
+    except (TimeoutError, OSError):
         return 0, {}, ""
 
 
@@ -211,7 +211,7 @@ class Exploit(Exploit):
                 return "Activated"
             elif "false" in body.lower() or "not" in body.lower():
                 return "NOT Activated"
-            return "Unknown (response: {})".format(body[:80].strip())
+            return f"Unknown (response: {body[:80].strip()})"
 
         return None
 
@@ -251,7 +251,7 @@ class Exploit(Exploit):
                 if ver:
                     result["version"] = ver.group(1)
 
-        except (socket.error, socket.timeout, OSError):
+        except (TimeoutError, OSError):
             pass
 
         return result
@@ -265,16 +265,16 @@ class Exploit(Exploit):
         }
 
         sip_request = (
-            "OPTIONS sip:{host}:{port} SIP/2.0\r\n"
-            "Via: SIP/2.0/UDP {host}:{port};branch=z9hG4bK-embedxpl\r\n"
-            "From: <sip:scan@{host}>;tag=embedxpl\r\n"
-            "To: <sip:{host}:{port}>\r\n"
-            "Call-ID: embedxpl-detect@{host}\r\n"
+            f"OPTIONS sip:{host}:{sip_port} SIP/2.0\r\n"
+            f"Via: SIP/2.0/UDP {host}:{sip_port};branch=z9hG4bK-embedxpl\r\n"
+            f"From: <sip:scan@{host}>;tag=embedxpl\r\n"
+            f"To: <sip:{host}:{sip_port}>\r\n"
+            f"Call-ID: embedxpl-detect@{host}\r\n"
             "CSeq: 1 OPTIONS\r\n"
             "Max-Forwards: 0\r\n"
             "Content-Length: 0\r\n"
             "\r\n"
-        ).format(host=host, port=sip_port)
+        )
 
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -294,7 +294,7 @@ class Exploit(Exploit):
                 if ua_match:
                     result["user_agent"] = ua_match.group(1).strip()
 
-        except (socket.error, socket.timeout, OSError):
+        except (TimeoutError, OSError):
             pass
 
         return result
@@ -307,11 +307,11 @@ class Exploit(Exploit):
         }
 
         rtsp_request = (
-            "OPTIONS rtsp://{host}:{port}/ RTSP/1.0\r\n"
+            f"OPTIONS rtsp://{host}:{rtsp_port}/ RTSP/1.0\r\n"
             "CSeq: 1\r\n"
             "User-Agent: EmbedXPL/1.0\r\n"
             "\r\n"
-        ).format(host=host, port=rtsp_port)
+        )
 
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -328,7 +328,7 @@ class Exploit(Exploit):
                     data += chunk
                     if b"\r\n\r\n" in data:
                         break
-                except socket.timeout:
+                except TimeoutError:
                     break
             sock.close()
 
@@ -339,7 +339,7 @@ class Exploit(Exploit):
                 if server_match:
                     result["server"] = server_match.group(1).strip()
 
-        except (socket.error, socket.timeout, OSError):
+        except (TimeoutError, OSError):
             pass
 
         return result
@@ -387,12 +387,12 @@ class Exploit(Exploit):
                         device["reported_ip"] = ip_match.group(1)
 
                     results.append(device)
-                except socket.timeout:
+                except TimeoutError:
                     break
 
             sock.close()
-        except (socket.error, OSError) as exc:
-            print_warning("SADP probe failed: {}".format(exc))
+        except OSError as exc:
+            print_warning(f"SADP probe failed: {exc}")
 
         return results
 
@@ -420,7 +420,7 @@ class Exploit(Exploit):
 
         isapi = self._probe_isapi_device_info(host, self.port)
         if isapi["isapi_available"]:
-            result["services"].append("HTTP/ISAPI (port {})".format(self.port))
+            result["services"].append(f"HTTP/ISAPI (port {self.port})")
             if isapi["model"]:
                 result["model"] = isapi["model"]
                 result["is_r0"] = self._is_r0_model(isapi["model"])
@@ -449,7 +449,7 @@ class Exploit(Exploit):
             for sip_port in (5060, 5065):
                 sip = self._probe_sip(host, sip_port)
                 if sip["sip_available"]:
-                    svc = "SIP (port {})".format(sip_port)
+                    svc = f"SIP (port {sip_port})"
                     if sip["server"]:
                         svc += " — {}".format(sip["server"])
                     result["services"].append(svc)
@@ -480,14 +480,12 @@ class Exploit(Exploit):
             return
 
         targets = _expand_targets(self.target)
-        print_status("Scanning {} host(s) for Hikvision R0 Indoor Stations...".format(
-            len(targets)
-        ))
+        print_status(f"Scanning {len(targets)} host(s) for Hikvision R0 Indoor Stations...")
 
         all_results = []
 
         for host in targets:
-            print_status("Probing {}...".format(host))
+            print_status(f"Probing {host}...")
             result = self._scan_host(host)
             all_results.append(result)
 
@@ -504,11 +502,11 @@ class Exploit(Exploit):
         print_status("Attempting SADP discovery (UDP broadcast)...")
         sadp_results = self._probe_sadp()
         if sadp_results:
-            print_success("SADP discovered {} device(s)".format(len(sadp_results)))
+            print_success(f"SADP discovered {len(sadp_results)} device(s)")
             for dev in sadp_results:
                 ip = dev.get("reported_ip", dev.get("ip", "?"))
                 model = dev.get("model", "Unknown")
-                print_info("  SADP: {} — {}".format(ip, model))
+                print_info(f"  SADP: {ip} — {model}")
 
                 existing = None
                 for r in all_results:
@@ -523,11 +521,11 @@ class Exploit(Exploit):
                         "serial": None,
                         "activated": None,
                         "is_r0": self._is_r0_model(model),
-                        "services": ["SADP (UDP {})".format(_SADP_PORT)],
+                        "services": [f"SADP (UDP {_SADP_PORT})"],
                         "vulnerabilities": [],
                     })
                 else:
-                    existing["services"].append("SADP (UDP {})".format(_SADP_PORT))
+                    existing["services"].append(f"SADP (UDP {_SADP_PORT})")
                     if model and model != "Unknown" and not existing["model"]:
                         existing["model"] = model
 
@@ -557,7 +555,7 @@ class Exploit(Exploit):
         )
 
         if r0_devices:
-            print_success("{} R0 Indoor Station(s) detected".format(len(r0_devices)))
+            print_success(f"{len(r0_devices)} R0 Indoor Station(s) detected")
 
             vuln_rows = []
             for r in r0_devices:
@@ -577,7 +575,7 @@ class Exploit(Exploit):
             for r in r0_devices:
                 print_info("  {} :".format(r["host"]))
                 for svc in r["services"]:
-                    print_info("    - {}".format(svc))
+                    print_info(f"    - {svc}")
         else:
             print_info(
                 "No R0 Indoor Station models identified. "

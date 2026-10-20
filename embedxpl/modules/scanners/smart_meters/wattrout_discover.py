@@ -38,21 +38,19 @@ class Exploit(HTTPClient):
     _PROBE_PATHS = ["/", "/info.xml", "/status.xml", "/api/status", "/cgi-bin/info"]
 
     def run(self) -> None:
-        print_status("Scanning WATTrouter on {}:{}...".format(self.target, self.port))
+        print_status(f"Scanning WATTrouter on {self.target}:{self.port}...")
 
         for path in self._PROBE_PATHS:
             resp = self.http_request(method="GET", path=path)
             if resp and resp.status_code == 200:
                 text = resp.text or ""
-                print_success("Response on {} ({}):".format(path, len(text)))
+                print_success(f"Response on {path} ({len(text)}):")
                 print_status(text[:300])
                 if "wattrouter" in text.lower():
-                    print_success("WATTrouter device confirmed at {}:{}".format(
-                        self.target, self.port
-                    ))
+                    print_success(f"WATTrouter device confirmed at {self.target}:{self.port}")
                 break
             elif resp:
-                print_status("{} — HTTP {}".format(path, resp.status_code))
+                print_status(f"{path} — HTTP {resp.status_code}")
 
     @mute
     def check(self) -> bool:

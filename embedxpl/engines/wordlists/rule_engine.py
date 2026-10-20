@@ -17,11 +17,11 @@ John the Ripper rules documentation.
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Generator, Iterable, Optional
+from typing import Optional
+from collections.abc import Generator, Iterable
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +98,7 @@ def parse_rule(rule: str) -> list[tuple[str, str]]:
     return ops
 
 
-def _apply_op(word: str, func: str, args: str) -> Optional[str]:
+def _apply_op(word: str, func: str, args: str) -> str | None:
     """Apply a single rule function to a word.
 
     Args:
@@ -271,7 +271,7 @@ def _apply_op(word: str, func: str, args: str) -> Optional[str]:
     raise RuleError(f"unsupported rule function: {func!r}")
 
 
-def apply_rule(word: str, rule: str) -> Optional[str]:
+def apply_rule(word: str, rule: str) -> str | None:
     """Apply a full rule line (one or more functions) to a word.
 
     Args:
@@ -282,7 +282,7 @@ def apply_rule(word: str, rule: str) -> Optional[str]:
         Transformed candidate, or None if any rejection rule drops it.
     """
     ops = parse_rule(rule)
-    w: Optional[str] = word
+    w: str | None = word
     for func, args in ops:
         w = _apply_op(w, func, args)
         if w is None:
@@ -290,7 +290,7 @@ def apply_rule(word: str, rule: str) -> Optional[str]:
     return w
 
 
-def _read_rules(rule_file: Optional[str], inline: Optional[str]) -> list[str]:
+def _read_rules(rule_file: str | None, inline: str | None) -> list[str]:
     """Load rule lines from a file and/or an inline specification.
 
     Args:
@@ -339,13 +339,13 @@ def apply_rules_stream(
             compiled.append(parse_rule(r))
         except RuleError as exc:
             logger.warning("skipping rule %r: %s", r, exc)
-    seen: Optional[set[str]] = set() if dedupe else None
+    seen: set[str] | None = set() if dedupe else None
     for word in words:
         word = word.rstrip("\n\r")
         if not word:
             continue
         for ops in compiled:
-            w: Optional[str] = word
+            w: str | None = word
             for func, args in ops:
                 w = _apply_op(w, func, args)
                 if w is None:
@@ -436,7 +436,7 @@ def _iter_wordfile(path: str) -> Generator[str, None, None]:
             yield line.rstrip("\n\r")
 
 
-def handle_rules(args, ctx: dict) -> Optional[Generator[str, None, None]]:
+def handle_rules(args, ctx: dict) -> Generator[str, None, None] | None:
     """CLI handler for the ``rules`` command.
 
     Args:

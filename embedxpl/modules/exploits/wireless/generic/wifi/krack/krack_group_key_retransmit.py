@@ -7,7 +7,6 @@ to force reinstallation of the Group Temporal Key (GTK) on the client.
 GTK reinstall resets the replay counter, enabling replay of broadcast/multicast
 frames previously protected by the group key.
 """
-from __future__ import annotations
 
 import logging
 import time

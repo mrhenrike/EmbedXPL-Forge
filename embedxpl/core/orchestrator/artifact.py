@@ -127,7 +127,7 @@ class ArtifactCache:
         Returns:
             SHA-256 hex string used as directory name.
         """
-        key_input = "{}:{}:{}".format(source_hash, target_arch, compiler)
+        key_input = f"{source_hash}:{target_arch}:{compiler}"
         return hashlib.sha256(key_input.encode("utf-8")).hexdigest()[:16]
 
     def _meta_path(self, cache_dir: str) -> str:
@@ -135,7 +135,7 @@ class ArtifactCache:
         return os.path.join(cache_dir, "artifact.json")
 
     def lookup(self, source_path: str, target_arch: str,
-               compiler: str) -> Optional[CompiledArtifact]:
+               compiler: str) -> CompiledArtifact | None:
         """Look up a cached artifact by source, arch, and compiler.
 
         Args:
@@ -159,7 +159,7 @@ class ArtifactCache:
             return None
 
         try:
-            with open(meta_file, "r", encoding="utf-8") as f:
+            with open(meta_file, encoding="utf-8") as f:
                 meta = json.load(f)
         except (json.JSONDecodeError, OSError):
             return None
@@ -266,7 +266,7 @@ class ArtifactCache:
             if not os.path.isfile(meta_file):
                 continue
             try:
-                with open(meta_file, "r", encoding="utf-8") as f:
+                with open(meta_file, encoding="utf-8") as f:
                     meta = json.load(f)
                 artifact = CompiledArtifact.from_dict(meta)
                 artifact.cached = True

@@ -16,7 +16,7 @@ def load_ai_prompt() -> str:
     """Load the AI system prompt from the resources directory."""
     maigret_path = os.path.dirname(os.path.realpath(__file__))
     prompt_path = os.path.join(maigret_path, "resources", "ai_prompt.txt")
-    with open(prompt_path, "r", encoding="utf-8") as f:
+    with open(prompt_path, encoding="utf-8") as f:
         return f.read()
 
 

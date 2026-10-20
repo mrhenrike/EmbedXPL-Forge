@@ -10,7 +10,6 @@ Uso::
     show_banner("industrialxpl")     # IndustrialXPL
 """
 
-from __future__ import annotations
 
 import json
 import sys
@@ -33,7 +32,7 @@ _CACHE_TTL = 300   # segundos — recontar se cache tiver mais de 5 min
 # Mapeamento tool_name → arquivo de banner
 # ---------------------------------------------------------------------------
 
-TOOL_BANNERS: Dict[str, Path] = {
+TOOL_BANNERS: dict[str, Path] = {
     "embedxpl":     _BANNERS_DIR / "embedxpl.txt",
     "industrialxpl": _BANNERS_DIR / "industrialxpl.txt",
     "firewallxpl":  _BANNERS_DIR / "firewallxpl.txt",
@@ -57,9 +56,9 @@ _DIM    = "\033[2m"
 # Contagem de módulos
 # ---------------------------------------------------------------------------
 
-def _count_modules() -> Dict[str, int]:
+def _count_modules() -> dict[str, int]:
     """Conta módulos por categoria varrendo o pacote embedxpl."""
-    counts: Dict[str, int] = {
+    counts: dict[str, int] = {
         "exploits": 0,
         "scanners": 0,
         "payloads": 0,
@@ -151,7 +150,7 @@ def _count_modules() -> Dict[str, int]:
     return counts
 
 
-def _load_stats() -> Dict[str, int]:
+def _load_stats() -> dict[str, int]:
     """Carrega stats do cache ou recalcula se expirado."""
     _CACHE_DIR.mkdir(parents=True, exist_ok=True)
 

@@ -1,5 +1,4 @@
 """Gate-2 coverage tests for EmbedXPL-Forge core modules."""
-from __future__ import annotations
 
 import json
 import os

@@ -19,7 +19,6 @@ Inspired by wifipumpkin3's Sniffkin3 module.
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import json
 import logging

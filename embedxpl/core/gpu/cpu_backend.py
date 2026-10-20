@@ -4,7 +4,6 @@ Author: André Henrique (LinkedIn/X: @mrhenrike)
 Version: 0.1.0
 """
 
-from __future__ import annotations
 
 import numpy as np
 
@@ -21,7 +20,7 @@ class CPUBackend(ComputeBackend):
 
     def device_info(self) -> str:
         import os
-        return "CPU ({} threads, NumPy)".format(os.cpu_count() or 1)
+        return f"CPU ({os.cpu_count() or 1} threads, NumPy)"
 
     def array_from_numpy(self, arr: np.ndarray):
         return arr

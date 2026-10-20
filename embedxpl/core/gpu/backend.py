@@ -4,7 +4,6 @@ Author: André Henrique (LinkedIn/X: @mrhenrike)
 Version: 0.1.0
 """
 
-from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
@@ -59,7 +58,7 @@ class ComputeBackend(ABC):
             (N, M) NumPy array of cosine similarity scores.
         """
 
-    def hash_batch(self, data_list: List[bytes], algorithm: str = "md5") -> List[str]:
+    def hash_batch(self, data_list: list[bytes], algorithm: str = "md5") -> list[str]:
         """Hash a batch of byte strings. Default CPU implementation.
 
         GPU backends can override with parallel hashing.
@@ -75,7 +74,7 @@ class ComputeBackend(ABC):
         return [hashlib.new(algorithm, d).hexdigest() for d in data_list]
 
 
-def auto_select_backend(hw_profile: Optional[HWProfile] = None, compute_mode: str = "auto") -> ComputeBackend:
+def auto_select_backend(hw_profile: HWProfile | None = None, compute_mode: str = "auto") -> ComputeBackend:
     """Select the best available compute backend.
 
     Args:

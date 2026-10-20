@@ -1,6 +1,5 @@
 """Tests for shell tab-completion support."""
 
-from __future__ import annotations
 
 from embedxpl.core.completion import (
     build_parser,

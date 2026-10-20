@@ -15,7 +15,6 @@ Maintainer : Andre Henrique (@mrhenrike) | Uniao Geek
 
 # authorized use only — educational/lab use only
 """
-from __future__ import annotations
 
 import os
 import shutil
@@ -35,7 +34,7 @@ _DEFAULT_VULHUB_PATHS = (
 )
 
 
-def _find_vulhub() -> Optional[Path]:
+def _find_vulhub() -> Path | None:
     env = os.environ.get(_VULHUB_ENV_VAR)
     if env:
         p = Path(env)
@@ -51,7 +50,7 @@ def _docker_available() -> bool:
     return shutil.which("docker") is not None and shutil.which("docker-compose") is not None
 
 
-def list_available_labs(vulhub_path: Optional[Path] = None) -> list[str]:
+def list_available_labs(vulhub_path: Path | None = None) -> list[str]:
     """Return list of available Vulhub lab paths (relative to vulhub root)."""
     root = vulhub_path or _find_vulhub()
     if not root:
@@ -63,7 +62,7 @@ def list_available_labs(vulhub_path: Optional[Path] = None) -> list[str]:
     return sorted(labs)
 
 
-def spin_up_lab(lab: str, vulhub_path: Optional[Path] = None, timeout: int = 120) -> dict[str, Any]:
+def spin_up_lab(lab: str, vulhub_path: Path | None = None, timeout: int = 120) -> dict[str, Any]:
     """docker-compose up -d a specific Vulhub lab."""
     root = vulhub_path or _find_vulhub()
     result: dict[str, Any] = {"returncode": -1, "stdout": "", "stderr": "", "error": ""}
@@ -94,7 +93,7 @@ def spin_up_lab(lab: str, vulhub_path: Optional[Path] = None, timeout: int = 120
     return result
 
 
-def tear_down_lab(lab: str, vulhub_path: Optional[Path] = None) -> dict[str, Any]:
+def tear_down_lab(lab: str, vulhub_path: Path | None = None) -> dict[str, Any]:
     """docker-compose down a Vulhub lab."""
     root = vulhub_path or _find_vulhub()
     result: dict[str, Any] = {"returncode": -1, "stdout": "", "stderr": "", "error": ""}

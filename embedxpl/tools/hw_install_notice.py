@@ -115,7 +115,7 @@ def _collect_category_hw(category_name, categories_mod):
     try:
         module_paths = categories_mod.resolve_category(category_name)
     except ValueError as exc:
-        print("ERROR: {e}".format(e=exc))
+        print(f"ERROR: {exc}")
         sys.exit(1)
 
     by_hardware = {}
@@ -228,7 +228,7 @@ def _build_hw_summary_table(data, hw_mod):
             chipset = summary["chipset"]
             price = summary["price_usd"]
             total_cost += price
-            price_str = "${:.0f}".format(price)
+            price_str = f"${price:.0f}"
         else:
             product = "(unknown)"
             chipset = "(unknown)"
@@ -251,7 +251,7 @@ def _build_hw_summary_table(data, hw_mod):
     lines.append(sep)
     lines.append("")
     lines.append(
-        "  Estimated total hardware cost: ${t:.2f} USD".format(t=total_cost)
+        f"  Estimated total hardware cost: ${total_cost:.2f} USD"
     )
     lines.append("")
     return "\n".join(lines)
@@ -275,7 +275,7 @@ def _build_hw_detail_blocks(data, hw_mod):
     for hw_id in data["unique_hardware"]:
         summary = hw_mod.get_hardware_summary(hw_id)
         if not summary:
-            blocks.append("  [{id}] - No catalog entry".format(id=hw_id))
+            blocks.append(f"  [{hw_id}] - No catalog entry")
             blocks.append("")
             continue
 
@@ -284,7 +284,7 @@ def _build_hw_detail_blocks(data, hw_mod):
             desc, width=72, initial_indent="    ", subsequent_indent="    ",
         )
 
-        blocks.append("  [{id}]".format(id=hw_id))
+        blocks.append(f"  [{hw_id}]")
         blocks.append(wrapped)
         blocks.append(
             "    Product     : {v}".format(v=summary.get("product_name", "N/A"))
@@ -313,10 +313,10 @@ def _build_hw_detail_blocks(data, hw_mod):
 
         mod_names = data["by_hardware"].get(hw_id, [])
         blocks.append(
-            "    Used by     : {n} module(s)".format(n=len(mod_names))
+            f"    Used by     : {len(mod_names)} module(s)"
         )
         for mod_name in sorted(mod_names):
-            blocks.append("      - {m}".format(m=mod_name))
+            blocks.append(f"      - {mod_name}")
         blocks.append("")
 
     return "\n".join(blocks)
@@ -345,7 +345,7 @@ def _build_module_list(data):
         hw_str = ", ".join(entry["hardware"])
         lines.append("  {name}".format(name=entry["name"]))
         lines.append("    Path     : {p}".format(p=entry["module_path"]))
-        lines.append("    Hardware : {h}".format(h=hw_str))
+        lines.append(f"    Hardware : {hw_str}")
         lines.append("")
 
     return "\n".join(lines)
@@ -487,7 +487,7 @@ def main():
         print("Available categories:")
         print()
         for name, desc in cats.items():
-            print("  {:<20} {}".format(name, desc))
+            print(f"  {name:<20} {desc}")
         print()
         sys.exit(0)
 
@@ -509,11 +509,11 @@ def main():
         os.makedirs(str(_TMP_DIR), exist_ok=True)
         ext = ".json" if args.json_output else ".txt"
         safe_name = category.replace("-", "_")
-        filename = "hw_notice_{n}{e}".format(n=safe_name, e=ext)
+        filename = f"hw_notice_{safe_name}{ext}"
         filepath = _TMP_DIR / filename
         with open(str(filepath), "w", encoding="utf-8") as fh:
             fh.write(output)
-        print("Saved to: {p}".format(p=filepath))
+        print(f"Saved to: {filepath}")
 
 
 if __name__ == "__main__":

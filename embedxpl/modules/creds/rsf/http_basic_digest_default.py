@@ -41,7 +41,7 @@ class Exploit(HTTPClient):
         if not self.check():
             return
 
-        print_status("Starting default creds attack against {}".format(self.path))
+        print_status(f"Starting default creds attack against {self.path}")
 
         data = LockedIterator(self.defaults)
         self.run_threads(self.threads, self.target_function, data)
@@ -73,11 +73,11 @@ class Exploit(HTTPClient):
                     if self.stop_on_success:
                         running.clear()
 
-                    print_success("Authentication Succeed - Username: '{}' Password: '{}'".format(username, password), verbose=self.verbosity)
+                    print_success(f"Authentication Succeed - Username: '{username}' Password: '{password}'", verbose=self.verbosity)
                     self.credentials.append((self.target, self.port, self.target_protocol, username, password))
 
                 else:
-                    print_error("Authentication Failed - Username: '{}' Password: '{}'".format(username, password), verbose=self.verbosity)
+                    print_error(f"Authentication Failed - Username: '{username}' Password: '{password}'", verbose=self.verbosity)
 
             except StopIteration:
                 break
@@ -92,15 +92,15 @@ class Exploit(HTTPClient):
             return False
 
         if response.status_code != 401 or "WWW-Authenticate" not in response.headers.keys():
-            print_error("Resource {} is not protected by Basic/Digest Auth".format(self.path), verbose=self.verbosity)
+            print_error(f"Resource {self.path} is not protected by Basic/Digest Auth", verbose=self.verbosity)
             return False
 
         if "Basic" in response.headers["WWW-Authenticate"]:
-            print_status("Target exposes resource {} protected by Basic Auth".format(self.path), verbose=self.verbosity)
+            print_status(f"Target exposes resource {self.path} protected by Basic Auth", verbose=self.verbosity)
             self.auth_type = "basic"
             return True
         elif "Digest" in response.headers["WWW-Authenticate"]:
-            print_status("Target exposes resource {} protected by Digest Auth".format(self.path), verbose=self.verbosity)
+            print_status(f"Target exposes resource {self.path} protected by Digest Auth", verbose=self.verbosity)
             self.auth_type = "digest"
             return True
 

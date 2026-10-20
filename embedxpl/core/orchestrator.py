@@ -7,7 +7,6 @@ Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
@@ -39,8 +38,8 @@ class ScanPlan:
     target: str
     infra: str
     context: str
-    modules: List[Path] = field(default_factory=list)
-    priority_order: List[str] = field(default_factory=list)
+    modules: list[Path] = field(default_factory=list)
+    priority_order: list[str] = field(default_factory=list)
 
     def summary(self) -> str:
         """Return a human-readable summary of this scan plan.
@@ -50,10 +49,10 @@ class ScanPlan:
         """
         lines = [
             "ScanPlan Summary",
-            "  Target  : {}".format(self.target),
-            "  Infra   : {}".format(self.infra),
-            "  Context : {}".format(self.context),
-            "  Modules : {}".format(len(self.modules)),
+            f"  Target  : {self.target}",
+            f"  Infra   : {self.infra}",
+            f"  Context : {self.context}",
+            f"  Modules : {len(self.modules)}",
         ]
         if self.priority_order:
             lines.append("  Priority: {}".format(", ".join(self.priority_order)))
@@ -78,14 +77,14 @@ class InfraOrchestrator:
         print(plan.summary())
     """
 
-    def __init__(self, modules_root: Optional[Path] = None) -> None:
+    def __init__(self, modules_root: Path | None = None) -> None:
         """Initialise the orchestrator.
 
         Args:
             modules_root: Base directory for EmbedXPL module files.
                           Defaults to the ``embedxpl/modules/`` package tree.
         """
-        self._profiles: Optional[Dict] = None
+        self._profiles: dict | None = None
         if modules_root is None:
             # Resolve relative to this file: embedxpl/core/ → embedxpl/modules/
             self._modules_root = Path(__file__).parent.parent / "modules"
@@ -104,7 +103,7 @@ class InfraOrchestrator:
         """
         return Path(__file__).parent.parent / "resources" / _PROFILES_RESOURCE
 
-    def load_profiles(self) -> Dict:
+    def load_profiles(self) -> dict:
         """Load and cache the YAML taxonomy.
 
         Returns:
@@ -125,10 +124,10 @@ class InfraOrchestrator:
         path = self._profiles_path()
         if not path.exists():
             raise FileNotFoundError(
-                "infra_profiles.yaml not found at {}".format(path)
+                f"infra_profiles.yaml not found at {path}"
             )
 
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             data = yaml.safe_load(fh)
 
         self._profiles = data.get("profiles", {})
@@ -139,7 +138,7 @@ class InfraOrchestrator:
     # Public API
     # ------------------------------------------------------------------
 
-    def list_infra_types(self) -> List[str]:
+    def list_infra_types(self) -> list[str]:
         """List available infrastructure type keys.
 
         Returns:
@@ -147,7 +146,7 @@ class InfraOrchestrator:
         """
         return sorted(self.load_profiles().keys())
 
-    def list_contexts(self, infra: str) -> List[str]:
+    def list_contexts(self, infra: str) -> list[str]:
         """List operational context keys for a given infra type.
 
         Args:
@@ -162,9 +161,7 @@ class InfraOrchestrator:
         profiles = self.load_profiles()
         if infra not in profiles:
             raise KeyError(
-                "Unknown infra type '{}'. Valid: {}".format(
-                    infra, self.list_infra_types()
-                )
+                f"Unknown infra type '{infra}'. Valid: {self.list_infra_types()}"
             )
         return sorted(profiles[infra].get("contexts", {}).keys())
 
@@ -173,7 +170,7 @@ class InfraOrchestrator:
         infra: str,
         context: str,
         scope: str = "all",
-    ) -> List[Path]:
+    ) -> list[Path]:
         """Resolve module file paths for a given (infra, context) pair.
 
         Walks the module_paths defined in the taxonomy and collects all
@@ -195,17 +192,15 @@ class InfraOrchestrator:
         """
         profiles = self.load_profiles()
         if infra not in profiles:
-            raise KeyError("Unknown infra '{}'".format(infra))
+            raise KeyError(f"Unknown infra '{infra}'")
         contexts = profiles[infra].get("contexts", {})
         if context not in contexts:
             raise KeyError(
-                "Unknown context '{}' for infra '{}'. Valid: {}".format(
-                    context, infra, sorted(contexts.keys())
-                )
+                f"Unknown context '{context}' for infra '{infra}'. Valid: {sorted(contexts.keys())}"
             )
 
         raw_paths = contexts[context].get("module_paths", [])
-        results: List[Path] = []
+        results: list[Path] = []
 
         for rel in raw_paths:
             if scope != "all" and not rel.startswith(scope):
@@ -240,7 +235,7 @@ class InfraOrchestrator:
         modules = self.resolve_modules(infra, context)
 
         # High-priority paths: exploits come after scanners; creds last
-        priority: List[str] = []
+        priority: list[str] = []
         for m in modules:
             rel = str(m.relative_to(self._modules_root))
             if rel.startswith("scanners"):
@@ -277,12 +272,12 @@ class InfraOrchestrator:
         for i, key in enumerate(infra_types, 1):
             label = profiles[key].get("label", key)
             desc = profiles[key].get("description", "")
-            print("  [{}] {}  —  {}".format(i, key.upper(), label))
+            print(f"  [{i}] {key.upper()}  —  {label}")
             if desc:
-                print("      {}".format(desc))
+                print(f"      {desc}")
 
         while True:
-            raw = input("\nInfra [1-{}]: ".format(len(infra_types))).strip()
+            raw = input(f"\nInfra [1-{len(infra_types)}]: ").strip()
             if raw.isdigit() and 1 <= int(raw) <= len(infra_types):
                 infra = infra_types[int(raw) - 1]
                 break
@@ -294,13 +289,13 @@ class InfraOrchestrator:
         # Select context
         contexts = self.list_contexts(infra)
         ctx_map = profiles[infra].get("contexts", {})
-        print("\nSelect operational context for [{}]:".format(infra.upper()))
+        print(f"\nSelect operational context for [{infra.upper()}]:")
         for i, key in enumerate(contexts, 1):
             label = ctx_map[key].get("label", key)
-            print("  [{}] {}  —  {}".format(i, key, label))
+            print(f"  [{i}] {key}  —  {label}")
 
         while True:
-            raw = input("\nContext [1-{}]: ".format(len(contexts))).strip()
+            raw = input(f"\nContext [1-{len(contexts)}]: ").strip()
             if raw.isdigit() and 1 <= int(raw) <= len(contexts):
                 context = contexts[int(raw) - 1]
                 break
@@ -319,9 +314,9 @@ class InfraOrchestrator:
         print("\n" + plan.summary())
         print("\n  Module paths resolved (showing first 10):")
         for m in plan.modules[:10]:
-            print("    {}".format(m.relative_to(self._modules_root)))
+            print(f"    {m.relative_to(self._modules_root)}")
         if len(plan.modules) > 10:
-            print("    ... and {} more".format(len(plan.modules) - 10))
+            print(f"    ... and {len(plan.modules) - 10} more")
 
         return plan
 

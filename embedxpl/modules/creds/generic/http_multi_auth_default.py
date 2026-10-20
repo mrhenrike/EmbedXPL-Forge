@@ -57,7 +57,7 @@ class Exploit(HTTPClient):
         if mode == "digest":
             return self.http_request("GET", self.path, auth=HTTPDigestAuth(username, password))
         if mode == "bearer":
-            headers = {"Authorization": "{} {}".format(self.bearer_prefix, password)}
+            headers = {"Authorization": f"{self.bearer_prefix} {password}"}
             return self.http_request("GET", self.path, headers=headers)
         if mode == "header":
             header_value = self.header_template.format(**{"user": username, "pass": password})
@@ -70,7 +70,7 @@ class Exploit(HTTPClient):
 
     @multi
     def attack(self):
-        print_status("Starting {} auth validation against {}".format(self.auth_mode, self.path))
+        print_status(f"Starting {self.auth_mode} auth validation against {self.path}")
         data = LockedIterator(self.defaults)
         self.run_threads(self.threads, self.target_function, data)
 
@@ -92,14 +92,14 @@ class Exploit(HTTPClient):
             if self._is_success(response):
                 self.credentials.append((self.target, self.port, self.target_protocol, self.auth_mode, username, password))
                 print_success(
-                    "Authentication succeeded - mode={} user='{}'".format(self.auth_mode, username),
+                    f"Authentication succeeded - mode={self.auth_mode} user='{username}'",
                     verbose=self.verbosity,
                 )
                 if self.stop_on_success:
                     running.clear()
             else:
                 print_error(
-                    "Authentication failed - mode={} user='{}'".format(self.auth_mode, username),
+                    f"Authentication failed - mode={self.auth_mode} user='{username}'",
                     verbose=self.verbosity,
                 )
 

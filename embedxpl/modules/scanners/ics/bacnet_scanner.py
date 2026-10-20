@@ -63,7 +63,7 @@ _VENDOR_NAMES = {
 }
 
 
-def _parse_i_am(data: bytes) -> Optional[dict]:
+def _parse_i_am(data: bytes) -> dict | None:
     """Parse a BACnet I-Am response into device information."""
     if len(data) < 12:
         return None
@@ -103,7 +103,7 @@ def _parse_i_am(data: bytes) -> Optional[dict]:
         if offset + 3 <= len(data) and data[offset] == 0x21:
             vendor_id = data[offset + 1]
             result["VendorID"] = vendor_id
-            result["VendorName"] = _VENDOR_NAMES.get(vendor_id, "Unknown(ID={})".format(vendor_id))
+            result["VendorName"] = _VENDOR_NAMES.get(vendor_id, f"Unknown(ID={vendor_id})")
             offset += 2
     except Exception:
         pass
@@ -144,7 +144,7 @@ class Exploit(BaseExploit):
     timeout = OptInteger(5, "UDP response wait timeout in seconds")
 
     def run(self) -> None:
-        print_status("Sending BACnet Who-Is to {}:{}...".format(self.target, self.port))
+        print_status(f"Sending BACnet Who-Is to {self.target}:{self.port}...")
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         sock.settimeout(self.timeout)
@@ -165,8 +165,8 @@ class Exploit(BaseExploit):
                             )
                         )
                     else:
-                        print_success("BACnet response from {} ({} bytes)".format(addr[0], len(data)))
-                except socket.timeout:
+                        print_success(f"BACnet response from {addr[0]} ({len(data)} bytes)")
+                except TimeoutError:
                     break
             if responses == 0:
                 print_error("No BACnet devices responded — port may be filtered or no device present")

@@ -19,7 +19,6 @@ Maintainer : Andre Henrique (@mrhenrike) | Uniao Geek
 
 # authorized use only
 """
-from __future__ import annotations
 
 import json
 import re
@@ -41,7 +40,7 @@ def _ssl_ctx() -> ssl.SSLContext:
     return ctx
 
 
-def _get_json(url: str, timeout: float = 15) -> Optional[Any]:
+def _get_json(url: str, timeout: float = 15) -> Any | None:
     """GET JSON from URL, returns parsed body or None."""
     try:
         req = urllib.request.Request(url, headers={"User-Agent": _USER_AGENT})

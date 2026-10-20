@@ -9,7 +9,6 @@ connection from the same address, bypassing pairing requirements.
 Affected: Dialog DA14580/85/86 -- DH check skip / duplicate connection.
 CVE-2019-17520 covers the DH check skip leading to FIPS pairing bypass.
 """
-from __future__ import annotations
 
 import asyncio
 import logging

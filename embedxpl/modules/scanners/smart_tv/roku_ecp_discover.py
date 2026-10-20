@@ -55,7 +55,7 @@ class Exploit(HTTPClient):
     timeout = OptInteger(3, "SSDP wait timeout (seconds)")
 
     def run(self) -> None:
-        print_status("Sending SSDP M-SEARCH for roku:ecp to {}...".format(_SSDP_ADDR))
+        print_status(f"Sending SSDP M-SEARCH for roku:ecp to {_SSDP_ADDR}...")
         discovered = []
 
         try:
@@ -69,11 +69,11 @@ class Exploit(HTTPClient):
                     ip = addr[0]
                     if ip not in discovered:
                         discovered.append(ip)
-                        print_success("Roku found via SSDP: {}".format(ip))
-                except socket.timeout:
+                        print_success(f"Roku found via SSDP: {ip}")
+                except TimeoutError:
                     break
         except Exception as e:
-            print_error("SSDP probe error: {}".format(e))
+            print_error(f"SSDP probe error: {e}")
         finally:
             try:
                 sock.close()
@@ -106,16 +106,14 @@ class Exploit(HTTPClient):
                 model = self._extract_xml_tag(text, "model-name")
                 sw_ver = self._extract_xml_tag(text, "software-version")
                 print_success(
-                    "ECP OK [{}:{}] model={} serial={} sw={}".format(
-                        ip, self.port, model, serial, sw_ver
-                    )
+                    f"ECP OK [{ip}:{self.port}] model={model} serial={serial} sw={sw_ver}"
                 )
             else:
                 print_error("ECP probe failed on {}: HTTP {}".format(
                     ip, resp.status_code if resp else "no response"
                 ))
         except Exception as e:
-            print_error("ECP probe error on {}: {}".format(ip, e))
+            print_error(f"ECP probe error on {ip}: {e}")
 
     @staticmethod
     def _extract_xml_tag(text: str, tag: str) -> str:
@@ -128,8 +126,8 @@ class Exploit(HTTPClient):
         Returns:
             Tag content or empty string.
         """
-        start = text.find("<{}>".format(tag))
-        end = text.find("</{}>".format(tag))
+        start = text.find(f"<{tag}>")
+        end = text.find(f"</{tag}>")
         if start != -1 and end != -1:
             return text[start + len(tag) + 2:end].strip()
         return ""

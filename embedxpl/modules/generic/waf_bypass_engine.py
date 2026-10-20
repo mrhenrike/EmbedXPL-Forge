@@ -16,7 +16,6 @@ Covers:
 # Use only on systems you own or have explicit written permission to test.
 # Authorized use only. See embedxpl.core.exploit.DISCLAIMER for full text.
 
-from __future__ import annotations
 
 import random
 import re

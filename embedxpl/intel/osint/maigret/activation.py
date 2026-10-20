@@ -216,7 +216,7 @@ def _activation_sites(db):
     return [site for site in db.sites if site.activation]
 
 
-def load_activation_cache(db, logger) -> Dict[str, Dict[str, str]]:
+def load_activation_cache(db, logger) -> dict[str, dict[str, str]]:
     """Apply per-user cached activation headers to the sites database.
 
     Tokens minted at runtime (guest tokens, JWTs, session cookies) are user
@@ -250,7 +250,7 @@ def load_activation_cache(db, logger) -> Dict[str, Dict[str, str]]:
     return baseline
 
 
-def save_activation_cache(db, baseline: Dict[str, Dict[str, str]], logger) -> None:
+def save_activation_cache(db, baseline: dict[str, dict[str, str]], logger) -> None:
     """Persist only the header values that this run actually minted.
 
     Storing the full header set would freeze whatever the database shipped at

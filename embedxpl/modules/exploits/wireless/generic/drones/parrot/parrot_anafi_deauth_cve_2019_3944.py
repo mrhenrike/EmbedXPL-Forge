@@ -11,7 +11,6 @@ Reported by Trend Micro ZDI.
 
 PREREQ HW: WiFi adapter in monitor+injection mode.
 """
-from __future__ import annotations
 
 import logging
 import subprocess

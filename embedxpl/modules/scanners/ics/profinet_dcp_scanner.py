@@ -69,7 +69,7 @@ def _build_eth_frame(src_mac: bytes, dst_mac: bytes, ethertype: int, payload: by
     return dst_mac + src_mac + struct.pack(">H", ethertype) + payload
 
 
-def _get_local_mac(iface: str) -> Optional[bytes]:
+def _get_local_mac(iface: str) -> bytes | None:
     """Get MAC address of a local interface (Linux only)."""
     try:
         import fcntl
@@ -81,7 +81,7 @@ def _get_local_mac(iface: str) -> Optional[bytes]:
         return None
 
 
-def _parse_dcp_response(data: bytes, src_mac: str) -> Optional[dict]:
+def _parse_dcp_response(data: bytes, src_mac: str) -> dict | None:
     """Parse a received Ethernet frame for Profinet DCP Identify response."""
     if len(data) < 28:
         return None
@@ -131,7 +131,7 @@ def _parse_dcp_response(data: bytes, src_mac: str) -> Optional[dict]:
         return None
 
 
-def _scan_l2(iface: str, timeout: int) -> List[dict]:
+def _scan_l2(iface: str, timeout: int) -> list[dict]:
     """Send Profinet DCP Identify on L2 and collect responses (Linux only)."""
     results = []
     try:
@@ -160,7 +160,7 @@ def _scan_l2(iface: str, timeout: int) -> List[dict]:
                     info = _parse_dcp_response(pkt, src_mac)
                     if info and info not in results:
                         results.append(info)
-            except socket.timeout:
+            except TimeoutError:
                 break
         sock.close()
     except Exception:

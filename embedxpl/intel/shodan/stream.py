@@ -75,7 +75,7 @@ class Stream:
 
     def alert(self, aid=None, timeout=None, raw=False):
         if aid:
-            stream = self._create_stream('/shodan/alert/{}'.format(aid), timeout=timeout)
+            stream = self._create_stream(f'/shodan/alert/{aid}', timeout=timeout)
         else:
             stream = self._create_stream('/shodan/alert', timeout=timeout)
 

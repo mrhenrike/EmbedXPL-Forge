@@ -22,7 +22,6 @@ Author: André Henrique (LinkedIn/X: @mrhenrike)
 Version: 0.1.0
 """
 
-from __future__ import annotations
 
 import hashlib
 import json
@@ -51,7 +50,7 @@ def host_id(ip: str, mac: str = "") -> str:
     If MAC is empty, falls back to IP-only hashing (less unique
     but still usable).
     """
-    key = "{}|{}".format(ip.strip().lower(), mac.strip().upper())
+    key = f"{ip.strip().lower()}|{mac.strip().upper()}"
     return hashlib.sha256(key.encode()).hexdigest()[:16]
 
 
@@ -60,15 +59,15 @@ class ModuleResult:
     """Outcome of a single module execution."""
 
     module_path: str
-    vulnerable: Optional[bool] = None
-    error: Optional[str] = None
+    vulnerable: bool | None = None
+    error: str | None = None
     elapsed_s: float = 0.0
     port: int = 0
     protocol: str = ""
     timestamp: float = 0.0
     details: str = ""
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize to dict."""
         return {
             "module_path": self.module_path,
@@ -82,7 +81,7 @@ class ModuleResult:
         }
 
     @classmethod
-    def from_dict(cls, d: Dict[str, Any]) -> "ModuleResult":
+    def from_dict(cls, d: dict[str, Any]) -> "ModuleResult":
         """Deserialize from dict."""
         return cls(
             module_path=d.get("module_path", ""),
@@ -106,46 +105,46 @@ class HostSession:
     hostname: str = ""
     vendor: str = ""
     model: str = ""
-    open_ports: List[int] = field(default_factory=list)
-    banners: Dict[str, str] = field(default_factory=dict)
+    open_ports: list[int] = field(default_factory=list)
+    banners: dict[str, str] = field(default_factory=dict)
     fingerprint_confidence: float = 0.0
-    matched_modules: List[str] = field(default_factory=list)
+    matched_modules: list[str] = field(default_factory=list)
     has_wireless: bool = False
-    wireless_ssids: List[str] = field(default_factory=list)
+    wireless_ssids: list[str] = field(default_factory=list)
     wireless_recommendation: str = ""
 
-    module_results: List[ModuleResult] = field(default_factory=list)
-    vulns_found: List[str] = field(default_factory=list)
+    module_results: list[ModuleResult] = field(default_factory=list)
+    vulns_found: list[str] = field(default_factory=list)
     total_scans: int = 0
 
     first_seen: float = 0.0
     last_scanned: float = 0.0
-    notes: List[str] = field(default_factory=list)
+    notes: list[str] = field(default_factory=list)
 
-    def modules_tested(self) -> List[str]:
+    def modules_tested(self) -> list[str]:
         """Return list of module paths that have been executed."""
         return list({r.module_path for r in self.module_results})
 
-    def modules_pending(self) -> List[str]:
+    def modules_pending(self) -> list[str]:
         """Return matched modules not yet tested."""
         tested = set(self.modules_tested())
         return [m for m in self.matched_modules if m not in tested]
 
-    def modules_vulnerable(self) -> List[str]:
+    def modules_vulnerable(self) -> list[str]:
         """Return modules that confirmed vulnerability."""
         return list({
             r.module_path for r in self.module_results
             if r.vulnerable is True
         })
 
-    def modules_safe(self) -> List[str]:
+    def modules_safe(self) -> list[str]:
         """Return modules that confirmed NOT vulnerable."""
         return list({
             r.module_path for r in self.module_results
             if r.vulnerable is False
         })
 
-    def modules_errored(self) -> List[str]:
+    def modules_errored(self) -> list[str]:
         """Return modules that errored during execution."""
         return list({
             r.module_path for r in self.module_results
@@ -168,12 +167,12 @@ class HostSession:
         hostname: str = "",
         vendor: str = "",
         model: str = "",
-        open_ports: Optional[List[int]] = None,
-        banners: Optional[Dict[str, str]] = None,
+        open_ports: list[int] | None = None,
+        banners: dict[str, str] | None = None,
         fingerprint_confidence: float = 0.0,
-        matched_modules: Optional[List[str]] = None,
+        matched_modules: list[str] | None = None,
         has_wireless: bool = False,
-        wireless_ssids: Optional[List[str]] = None,
+        wireless_ssids: list[str] | None = None,
         wireless_recommendation: str = "",
     ) -> None:
         """Update session with fresh discovery data (merge, don't overwrite history)."""
@@ -228,7 +227,7 @@ class HostSession:
             vulns=vulns,
         )
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize to JSON-safe dict."""
         return {
             "host_id": self.host_id,
@@ -253,7 +252,7 @@ class HostSession:
         }
 
     @classmethod
-    def from_dict(cls, d: Dict[str, Any]) -> "HostSession":
+    def from_dict(cls, d: dict[str, Any]) -> "HostSession":
         """Deserialize from dict."""
         session = cls(
             host_id=d.get("host_id", ""),
@@ -287,17 +286,17 @@ class SessionManager:
     a lightweight index file for fast lookups.
     """
 
-    def __init__(self, sessions_dir: Optional[Path] = None):
+    def __init__(self, sessions_dir: Path | None = None):
         self._dir = sessions_dir or _SESSIONS_DIR
         self._dir.mkdir(parents=True, exist_ok=True)
         self._index_file = self._dir / "_index.json"
-        self._index: Dict[str, Dict[str, Any]] = self._load_index()
+        self._index: dict[str, dict[str, Any]] = self._load_index()
 
-    def _load_index(self) -> Dict[str, Dict[str, Any]]:
+    def _load_index(self) -> dict[str, dict[str, Any]]:
         """Load the index file."""
         if self._index_file.exists():
             try:
-                with open(self._index_file, "r", encoding="utf-8") as fh:
+                with open(self._index_file, encoding="utf-8") as fh:
                     data = json.load(fh)
                 if isinstance(data, dict):
                     return data
@@ -315,14 +314,14 @@ class SessionManager:
 
     def _session_path(self, hid: str) -> Path:
         """Return the file path for a host session."""
-        return self._dir / "{}.json".format(hid)
+        return self._dir / f"{hid}.json"
 
     def exists(self, ip: str, mac: str = "") -> bool:
         """Check if a session exists for the given host."""
         hid = host_id(ip, mac)
         return hid in self._index or self._session_path(hid).exists()
 
-    def find(self, ip: str, mac: str = "") -> Optional[str]:
+    def find(self, ip: str, mac: str = "") -> str | None:
         """Find session ID for a host. Returns host_id or None.
 
         Tries exact IP+MAC match first, then falls back to IP-only
@@ -338,7 +337,7 @@ class SessionManager:
                     return entry_id
         return None
 
-    def load(self, ip: str, mac: str = "") -> Optional[HostSession]:
+    def load(self, ip: str, mac: str = "") -> HostSession | None:
         """Load an existing session for the host, or return None."""
         hid = self.find(ip, mac)
         if hid is None:
@@ -347,7 +346,7 @@ class SessionManager:
         if not path.exists():
             return None
         try:
-            with open(path, "r", encoding="utf-8") as fh:
+            with open(path, encoding="utf-8") as fh:
                 data = json.load(fh)
             return HostSession.from_dict(data)
         except Exception as exc:
@@ -391,7 +390,7 @@ class SessionManager:
         )
         return session
 
-    def get_or_create(self, ip: str, mac: str = "") -> Tuple[HostSession, bool]:
+    def get_or_create(self, ip: str, mac: str = "") -> tuple[HostSession, bool]:
         """Load existing session or create new one.
 
         Returns:
@@ -402,7 +401,7 @@ class SessionManager:
             return existing, True
         return self.create(ip, mac), False
 
-    def list_sessions(self) -> List[Dict[str, Any]]:
+    def list_sessions(self) -> list[dict[str, Any]]:
         """Return index entries for all saved sessions."""
         result = []
         for hid, meta in sorted(
@@ -452,7 +451,7 @@ class SessionManager:
         logger.info("Purged %d session(s)", count)
         return count
 
-    def export_session(self, ip: str, mac: str = "") -> Optional[str]:
+    def export_session(self, ip: str, mac: str = "") -> str | None:
         """Export a session as formatted JSON string."""
         session = self.load(ip, mac)
         if not session:

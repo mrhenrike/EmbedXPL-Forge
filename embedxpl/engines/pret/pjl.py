@@ -19,13 +19,13 @@ Capabilities:
   - Admin password override (pre-2015 HP models)
   - Disk erasure (DoS via HDDFORMAT)
 """
-from __future__ import annotations
 
 import logging
 import socket
 import time
 from dataclasses import dataclass, field
-from typing import Optional, Generator
+from typing import Optional
+from collections.abc import Generator
 
 log = logging.getLogger(__name__)
 
@@ -63,7 +63,7 @@ class PJLClient:
         self.host = host
         self.port = port
         self.timeout = timeout
-        self._sock: Optional[socket.socket] = None
+        self._sock: socket.socket | None = None
 
     def connect(self) -> bool:
         try:
@@ -114,7 +114,7 @@ class PJLClient:
                 text = b"".join(chunks).decode("latin-1", errors="replace")
                 if "\x0c" in text or "\n\r\n" in text or (len(text) > 3 and text.endswith("\r\n")):
                     break
-        except socket.timeout:
+        except TimeoutError:
             pass
         except Exception as exc:
             log.debug("PJL recv: %s", exc)
@@ -203,7 +203,7 @@ class PJLClient:
                 if not chunk:
                     break
                 raw += chunk
-        except socket.timeout:
+        except TimeoutError:
             pass
         # Strip PJL response header
         if b"FSUPLOAD" in raw:

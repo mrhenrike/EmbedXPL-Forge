@@ -57,7 +57,7 @@ def _is_elf(path):
     try:
         with open(path, "rb") as fh:
             return fh.read(4) == _ELF_MAGIC
-    except (OSError, IOError):
+    except OSError:
         return False
 
 
@@ -126,7 +126,7 @@ class Exploit(Exploit):
             try:
                 with open(fpath, "rb") as fh:
                     data = fh.read()
-            except IOError:
+            except OSError:
                 continue
 
             des_patterns = [
@@ -140,8 +140,8 @@ class Exploit(Exploit):
                     key_hex = data[idx:idx + 24].hex()
                     self._add_finding(
                         findings, "3DES Key", "CRITICAL",
-                        "Hardcoded 3DES key in {}".format(rel),
-                        "Offset 0x{:08x}, bytes: {}".format(idx, key_hex),
+                        f"Hardcoded 3DES key in {rel}",
+                        f"Offset 0x{idx:08x}, bytes: {key_hex}",
                     )
                     return
 
@@ -151,7 +151,7 @@ class Exploit(Exploit):
                     rel = os.path.relpath(fpath, self.firmware_dir)
                     self._add_finding(
                         findings, "3DES Key", "HIGH",
-                        "3DES reference in {}".format(rel),
+                        f"3DES reference in {rel}",
                         "String '{}' found".format(ref.decode("ascii", errors="replace")),
                     )
                     break
@@ -183,7 +183,7 @@ class Exploit(Exploit):
             try:
                 with open(fpath, "rb") as fh:
                     data = fh.read()
-            except IOError:
+            except OSError:
                 continue
 
             matches = rsa_pattern.findall(data)
@@ -198,7 +198,7 @@ class Exploit(Exploit):
                 try:
                     der = base64.b64decode(raw_b64)
                     bit_len = (len(der) - 38) * 8
-                    size_label = "RSA-{}".format(bit_len) if bit_len > 0 else "RSA-?"
+                    size_label = f"RSA-{bit_len}" if bit_len > 0 else "RSA-?"
                 except Exception:
                     size_label = "RSA-?"
 
@@ -208,14 +208,14 @@ class Exploit(Exploit):
                     master_key_found = True
                     self._add_finding(
                         findings, "RSA Keys", "CRITICAL",
-                        "Known Hikvision RSA-1024 master key in {}".format(rel),
-                        "{} — EXACT MATCH to known master key".format(size_label),
+                        f"Known Hikvision RSA-1024 master key in {rel}",
+                        f"{size_label} — EXACT MATCH to known master key",
                     )
 
             if not master_key_found and matches:
                 self._add_finding(
                     findings, "RSA Keys", "HIGH",
-                    "{} RSA key(s) in {}".format(len(matches), rel),
+                    f"{len(matches)} RSA key(s) in {rel}",
                     "Keys may be extractable for offline attacks",
                 )
 
@@ -262,7 +262,7 @@ class Exploit(Exploit):
                     header = fh.read(64)
                     fh.seek(0)
                     data = fh.read()
-            except IOError:
+            except OSError:
                 continue
 
             if len(header) < 20:
@@ -317,25 +317,25 @@ class Exploit(Exploit):
         if no_pie > 0:
             self._add_finding(
                 findings, "Binary Hardening", "HIGH",
-                "{}/{} binaries lack PIE (ASLR bypass)".format(no_pie, total),
+                f"{no_pie}/{total} binaries lack PIE (ASLR bypass)",
                 "CWE-693: Protection Mechanism Failure",
             )
         if no_nx > 0:
             self._add_finding(
                 findings, "Binary Hardening", "HIGH",
-                "{}/{} binaries have executable stack (no NX)".format(no_nx, total),
+                f"{no_nx}/{total} binaries have executable stack (no NX)",
                 "Stack-based code execution possible",
             )
         if no_canary > 0:
             self._add_finding(
                 findings, "Binary Hardening", "MEDIUM",
-                "{}/{} binaries lack stack canary".format(no_canary, total),
+                f"{no_canary}/{total} binaries lack stack canary",
                 "Buffer overflow exploitation easier",
             )
         if no_pie == 0 and no_nx == 0 and no_canary == 0:
             self._add_finding(
                 findings, "Binary Hardening", "INFO",
-                "All {} binaries have PIE, NX, and canary".format(total), "",
+                f"All {total} binaries have PIE, NX, and canary", "",
             )
 
     # ------------------------------------------------------------------ #
@@ -361,9 +361,9 @@ class Exploit(Exploit):
                 if not os.path.isfile(fpath):
                     continue
                 try:
-                    with open(fpath, "r", errors="replace") as fh:
+                    with open(fpath, errors="replace") as fh:
                         content = fh.read()
-                except IOError:
+                except OSError:
                     continue
 
                 scripts_checked += 1
@@ -374,8 +374,8 @@ class Exploit(Exploit):
                     if matches:
                         self._add_finding(
                             findings, "Boot Permissions", severity,
-                            "{} in {}".format(desc, rel),
-                            "{} occurrence(s)".format(len(matches)),
+                            f"{desc} in {rel}",
+                            f"{len(matches)} occurrence(s)",
                         )
 
     # ------------------------------------------------------------------ #
@@ -388,7 +388,7 @@ class Exploit(Exploit):
 
         if os.path.isfile(shadow_path):
             try:
-                with open(shadow_path, "r", errors="replace") as fh:
+                with open(shadow_path, errors="replace") as fh:
                     for line in fh:
                         parts = line.strip().split(":")
                         if len(parts) < 2:
@@ -408,7 +408,7 @@ class Exploit(Exploit):
                             if hfield == known:
                                 self._add_finding(
                                     findings, "Password Hashes", "CRITICAL",
-                                    "Known default hash for '{}': {}".format(user, label),
+                                    f"Known default hash for '{user}': {label}",
                                     "CWE-798: Use of Hard-coded Credentials",
                                 )
                                 break
@@ -416,16 +416,16 @@ class Exploit(Exploit):
                         if hfield.startswith("$1$"):
                             self._add_finding(
                                 findings, "Password Hashes", "HIGH",
-                                "MD5-crypt hash for '{}' (weak algorithm)".format(user),
+                                f"MD5-crypt hash for '{user}' (weak algorithm)",
                                 "MD5-crypt is trivially brute-forceable",
                             )
                         elif not hfield.startswith("$"):
                             self._add_finding(
                                 findings, "Password Hashes", "MEDIUM",
-                                "Non-standard hash format for '{}'".format(user),
-                                "Hash: {}...".format(hfield[:20]),
+                                f"Non-standard hash format for '{user}'",
+                                f"Hash: {hfield[:20]}...",
                             )
-            except IOError:
+            except OSError:
                 pass
         else:
             self._add_finding(
@@ -435,7 +435,7 @@ class Exploit(Exploit):
 
         if os.path.isfile(passwd_path):
             try:
-                with open(passwd_path, "r", errors="replace") as fh:
+                with open(passwd_path, errors="replace") as fh:
                     for line in fh:
                         parts = line.strip().split(":")
                         if len(parts) < 4:
@@ -444,10 +444,10 @@ class Exploit(Exploit):
                         if uid == "0" and user != "root":
                             self._add_finding(
                                 findings, "Password Hashes", "HIGH",
-                                "Non-root user '{}' has UID 0".format(user),
+                                f"Non-root user '{user}' has UID 0",
                                 "Equivalent to root privileges",
                             )
-            except IOError:
+            except OSError:
                 pass
 
     # ------------------------------------------------------------------ #
@@ -473,13 +473,13 @@ class Exploit(Exploit):
                         with open(kpath, "rb") as fh:
                             data = fh.read()
                         sha = _sha256_hex(data)
-                    except IOError:
+                    except OSError:
                         continue
 
                     self._add_finding(
                         findings, "SSH Host Keys", "HIGH",
-                        "Static {} host key: {} ({} bytes)".format(label, kf, size),
-                        "SHA-256: {}".format(sha),
+                        f"Static {label} host key: {kf} ({size} bytes)",
+                        f"SHA-256: {sha}",
                     )
 
     # ------------------------------------------------------------------ #
@@ -495,10 +495,10 @@ class Exploit(Exploit):
         for vf in version_files:
             if os.path.isfile(vf):
                 try:
-                    with open(vf, "r", errors="replace") as fh:
+                    with open(vf, errors="replace") as fh:
                         version_str = fh.read().strip()
                         break
-                except IOError:
+                except OSError:
                     pass
 
         if not version_str:
@@ -515,7 +515,7 @@ class Exploit(Exploit):
                             if match:
                                 version_str = match.group(1).decode("ascii", errors="replace")
                                 break
-                        except IOError:
+                        except OSError:
                             continue
                 if version_str:
                     break
@@ -523,7 +523,7 @@ class Exploit(Exploit):
         if version_str:
             self._add_finding(
                 findings, "Kernel Version", "INFO",
-                "Kernel: {}".format(version_str[:100]),
+                f"Kernel: {version_str[:100]}",
                 "",
             )
             ver_match = re.search(r"(\d+)\.(\d+)\.(\d+)", version_str)
@@ -536,9 +536,7 @@ class Exploit(Exploit):
                 if major < 4 or (major == 4 and minor < 4):
                     self._add_finding(
                         findings, "Kernel Version", "HIGH",
-                        "Kernel {}.{}.{} is EOL — no security patches".format(
-                            major, minor, patch
-                        ),
+                        f"Kernel {major}.{minor}.{patch} is EOL — no security patches",
                         "Upgrade to supported LTS kernel",
                     )
         else:
@@ -566,7 +564,7 @@ class Exploit(Exploit):
                         if match:
                             libc_info = ("uClibc", match.group(1).decode())
                             break
-                    except IOError:
+                    except OSError:
                         continue
 
                 if fname.startswith("libc-") and fname.endswith(".so"):
@@ -583,7 +581,7 @@ class Exploit(Exploit):
                         if match:
                             libc_info = ("glibc", match.group(1).decode())
                             break
-                    except IOError:
+                    except OSError:
                         continue
 
                 if fname.startswith("libc.musl") or fname == "ld-musl-arm.so.1":
@@ -594,7 +592,7 @@ class Exploit(Exploit):
                         ver = match.group(1).decode() if match else "unknown"
                         libc_info = ("musl", ver)
                         break
-                    except IOError:
+                    except OSError:
                         continue
 
             if libc_info:
@@ -604,7 +602,7 @@ class Exploit(Exploit):
             lib_name, lib_ver = libc_info
             self._add_finding(
                 findings, "C Library", "INFO",
-                "{} version {}".format(lib_name, lib_ver), "",
+                f"{lib_name} version {lib_ver}", "",
             )
 
             if lib_name == "uClibc":
@@ -613,7 +611,7 @@ class Exploit(Exploit):
                     if short_ver.startswith(vuln_ver):
                         self._add_finding(
                             findings, "C Library", "HIGH",
-                            "{} {} has known CVEs".format(lib_name, lib_ver),
+                            f"{lib_name} {lib_ver} has known CVEs",
                             "Affected: {}".format(", ".join(cves)),
                         )
                         break
@@ -626,7 +624,7 @@ class Exploit(Exploit):
                     if g_major == 2 and g_minor <= 17:
                         self._add_finding(
                             findings, "C Library", "HIGH",
-                            "glibc {} is EOL with unpatched CVEs".format(lib_ver),
+                            f"glibc {lib_ver} is EOL with unpatched CVEs",
                             "Multiple known vulnerabilities in glibc <= 2.17",
                         )
         else:
@@ -661,7 +659,7 @@ class Exploit(Exploit):
                         rel = os.path.relpath(fpath, self.firmware_dir)
                         self._add_finding(
                             findings, "Debug Utilities", "HIGH",
-                            "Debug tool '{}' present: {}".format(fname, rel),
+                            f"Debug tool '{fname}' present: {rel}",
                             debug_tools[fname],
                         )
 
@@ -681,7 +679,7 @@ class Exploit(Exploit):
                 try:
                     with open(fpath, "rb") as fh:
                         data = fh.read()
-                except IOError:
+                except OSError:
                     continue
 
                 for pattern in jtag_patterns:
@@ -689,7 +687,7 @@ class Exploit(Exploit):
                         rel = os.path.relpath(fpath, self.firmware_dir)
                         self._add_finding(
                             findings, "JTAG References", "MEDIUM",
-                            "JTAG/SWD reference in {}".format(rel),
+                            f"JTAG/SWD reference in {rel}",
                             "Hardware debug interface may be accessible",
                         )
                         break
@@ -721,9 +719,9 @@ class Exploit(Exploit):
                     continue
                 fpath = os.path.join(root, fname)
                 try:
-                    with open(fpath, "r", errors="replace") as fh:
+                    with open(fpath, errors="replace") as fh:
                         content = fh.read()
-                except IOError:
+                except OSError:
                     continue
 
                 for match in nfs_pattern.finditer(content):
@@ -734,7 +732,7 @@ class Exploit(Exploit):
                     rel = os.path.relpath(fpath, self.firmware_dir)
                     self._add_finding(
                         findings, "Developer Artifacts", "CRITICAL",
-                        "NFS mount in {}: {}:{}".format(rel, nfs_ip, nfs_path),
+                        f"NFS mount in {rel}: {nfs_ip}:{nfs_path}",
                         "CWE-489: Active Debug Code",
                     )
                     um = username_pattern.search(nfs_path)
@@ -780,9 +778,9 @@ class Exploit(Exploit):
                     continue
                 fpath = os.path.join(root, fname)
                 try:
-                    with open(fpath, "r", errors="replace") as fh:
+                    with open(fpath, errors="replace") as fh:
                         content = fh.read()
-                except IOError:
+                except OSError:
                     continue
 
                 rel = os.path.relpath(fpath, self.firmware_dir)
@@ -790,14 +788,14 @@ class Exploit(Exploit):
                 if ipfwd_pattern.search(content):
                     self._add_finding(
                         findings, "System Hardening", "MEDIUM",
-                        "IP forwarding enabled in {}".format(rel),
+                        f"IP forwarding enabled in {rel}",
                         "Device acts as a router — lateral movement risk",
                     )
 
                 if wdt_pattern.search(content):
                     self._add_finding(
                         findings, "System Hardening", "HIGH",
-                        "Watchdog disabled in {}".format(rel),
+                        f"Watchdog disabled in {rel}",
                         "Device will not auto-reboot on hangs (debug behavior)",
                     )
 
@@ -809,9 +807,7 @@ class Exploit(Exploit):
             print_error("firmware_dir is not set or does not exist")
             return
 
-        print_status("Starting comprehensive firmware audit: {}".format(
-            self.firmware_dir
-        ))
+        print_status(f"Starting comprehensive firmware audit: {self.firmware_dir}")
         if self.deep_scan:
             print_info("Deep scan enabled — this may take longer")
 
@@ -833,13 +829,11 @@ class Exploit(Exploit):
         ]
 
         for label, check_fn in checks:
-            print_status("[{}/{}] {}...".format(
-                checks.index((label, check_fn)) + 1, len(checks), label
-            ))
+            print_status(f"[{checks.index((label, check_fn)) + 1}/{len(checks)}] {label}...")
             try:
                 check_fn(findings)
             except Exception as exc:
-                print_warning("Check '{}' failed: {}".format(label, exc))
+                print_warning(f"Check '{label}' failed: {exc}")
 
         if not findings:
             print_success("No vulnerabilities found in firmware")
@@ -889,24 +883,20 @@ class Exploit(Exploit):
             risk_label = "NONE"
 
         print_status("--- Overall Risk Assessment ---")
-        print_info("  CRITICAL : {}".format(critical))
-        print_info("  HIGH     : {}".format(high))
-        print_info("  MEDIUM   : {}".format(medium))
-        print_info("  LOW      : {}".format(low))
-        print_info("  Score    : {} / {} (weighted)".format(
-            total_score, (critical + high + medium + low) * 4
-        ))
+        print_info(f"  CRITICAL : {critical}")
+        print_info(f"  HIGH     : {high}")
+        print_info(f"  MEDIUM   : {medium}")
+        print_info(f"  LOW      : {low}")
+        print_info(f"  Score    : {total_score} / {(critical + high + medium + low) * 4} (weighted)")
 
         if risk_label == "CRITICAL":
-            print_error("  Overall Risk: {} — Immediate remediation required".format(
-                risk_label
-            ))
+            print_error(f"  Overall Risk: {risk_label} — Immediate remediation required")
         elif risk_label == "HIGH":
-            print_warning("  Overall Risk: {} — Significant exposure".format(risk_label))
+            print_warning(f"  Overall Risk: {risk_label} — Significant exposure")
         elif risk_label == "MEDIUM":
-            print_warning("  Overall Risk: {} — Moderate exposure".format(risk_label))
+            print_warning(f"  Overall Risk: {risk_label} — Moderate exposure")
         else:
-            print_info("  Overall Risk: {}".format(risk_label))
+            print_info(f"  Overall Risk: {risk_label}")
 
     @mute
     def check(self):

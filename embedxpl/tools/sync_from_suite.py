@@ -22,7 +22,6 @@ Workflow:
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 import argparse
 import ast
@@ -185,7 +184,7 @@ def _rewrite_imports(content: str, rewrite_map: dict[str, str]) -> str:
     return content
 
 
-def _validate_python(path: Path) -> Optional[str]:
+def _validate_python(path: Path) -> str | None:
     """Return syntax error string or None if valid."""
     try:
         ast.parse(path.read_text(encoding="utf-8", errors="replace"))
@@ -194,7 +193,7 @@ def _validate_python(path: Path) -> Optional[str]:
         return str(e)
 
 
-def _should_skip(path: Path, include_subdirs: Optional[list]) -> bool:
+def _should_skip(path: Path, include_subdirs: list | None) -> bool:
     """Return True if this file should be skipped based on include_subdirs filter."""
     if include_subdirs is None:
         return False
@@ -223,7 +222,7 @@ def sync_target(
     src: Path = config["src"]
     dst: Path = config["dst"]
     rewrite_map: dict = config.get("pkg_rewrite", {})
-    include_subdirs: Optional[list] = config.get("include_subdirs")
+    include_subdirs: list | None = config.get("include_subdirs")
     skip_subdirs: list = config.get("skip_subdirs", [])
 
     if not src.exists():

@@ -11,12 +11,11 @@ Exemplo:
 Autor: André Henrique (@mrhenrike)
 Versão: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 import re
 from pathlib import Path
-from typing import Generator
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 

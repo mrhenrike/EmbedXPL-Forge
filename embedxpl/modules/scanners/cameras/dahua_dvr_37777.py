@@ -40,13 +40,13 @@ class Exploit(HTTPClient):
     mgmt_port = OptPort(37777, "Dahua management port")
 
     def run(self) -> None:
-        print_status("Scanning Dahua DVR on {}...".format(self.target))
+        print_status(f"Scanning Dahua DVR on {self.target}...")
 
         # TCP port 37777 probe
         try:
             sock = socket.create_connection((self.target, int(self.mgmt_port)), timeout=3)
             print_success(
-                "Dahua management port {} OPEN on {}".format(self.mgmt_port, self.target)
+                f"Dahua management port {self.mgmt_port} OPEN on {self.target}"
             )
             # Send DHCP-style initial auth packet (Dahua UDP/TCP protocol)
             probe = bytes([0xa0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -57,24 +57,22 @@ class Exploit(HTTPClient):
             try:
                 data = sock.recv(256)
                 print_success(
-                    "Dahua protocol response ({} bytes)".format(len(data))
+                    f"Dahua protocol response ({len(data)} bytes)"
                 )
-            except socket.timeout:
+            except TimeoutError:
                 print_status("No immediate Dahua protocol response")
             sock.close()
         except Exception:
-            print_status("Port {} not open on {}".format(self.mgmt_port, self.target))
+            print_status(f"Port {self.mgmt_port} not open on {self.target}")
 
         # HTTP probe
         resp = self.http_request(method="GET", path="/")
         if resp and resp.status_code in (200, 302, 401):
             text = resp.text or ""
             if "dahua" in text.lower() or "dh-" in text.lower():
-                print_success("Dahua web interface confirmed on {}:{}".format(
-                    self.target, self.port
-                ))
+                print_success(f"Dahua web interface confirmed on {self.target}:{self.port}")
             else:
-                print_status("HTTP {} on port {}".format(resp.status_code, self.port))
+                print_status(f"HTTP {resp.status_code} on port {self.port}")
 
     @mute
     def check(self) -> bool:

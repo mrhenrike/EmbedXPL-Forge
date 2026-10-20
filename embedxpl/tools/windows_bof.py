@@ -11,7 +11,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek
 Credits: Sec4US Training, Eder Luis (0xffff)
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -37,7 +36,7 @@ def cyclic(length: int) -> bytes:
     return bytes(out[:length])
 
 
-def cyclic_find(pattern: bytes | str, haystack: Optional[bytes] = None) -> int:
+def cyclic_find(pattern: bytes | str, haystack: bytes | None = None) -> int:
     """Offset of 4-byte EIP value inside cyclic pattern."""
     if isinstance(pattern, str):
         token = pattern.strip()

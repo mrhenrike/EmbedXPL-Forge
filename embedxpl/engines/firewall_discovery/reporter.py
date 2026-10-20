@@ -3,7 +3,6 @@
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 import json
 import logging
@@ -19,7 +18,7 @@ if has_rich:
     from rich.table import Table
 
 
-def print_discovery_report(hosts: List[DiscoveredHost], engine: str = "") -> None:
+def print_discovery_report(hosts: list[DiscoveredHost], engine: str = "") -> None:
     """Print discovery results as a Rich table."""
     identified = [h for h in hosts if h.identification]
     in_scope = [h for h in identified if h.risk_score > 0]
@@ -59,7 +58,7 @@ def print_discovery_report(hosts: List[DiscoveredHost], engine: str = "") -> Non
                 print(f"  {i}. {host.ip} — unidentified")
 
 
-def export_json(hosts: List[DiscoveredHost], path: str) -> None:
+def export_json(hosts: list[DiscoveredHost], path: str) -> None:
     """Export discovery results to JSON."""
     data = []
     for h in hosts:

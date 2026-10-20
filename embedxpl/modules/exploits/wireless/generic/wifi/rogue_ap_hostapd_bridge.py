@@ -5,7 +5,6 @@ Open or WPA2-PSK; for evil-twin lab pair with ``dnsmasq`` / ``captive_portal_mod
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 import os
 import shutil

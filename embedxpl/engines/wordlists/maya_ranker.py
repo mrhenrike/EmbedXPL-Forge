@@ -28,7 +28,6 @@ References:
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 import math
@@ -42,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 # ── Lazy torch import ─────────────────────────────────────────────────────────
 
-_torch_available: Optional[bool] = None
+_torch_available: bool | None = None
 _torch_mod = None
 _nn_mod = None
 
@@ -416,7 +415,7 @@ def _get_patterns() -> dict[str, re.Pattern]:
 
 def score_candidates(
     words: list[str],
-    profile_hints: Optional[dict] = None,
+    profile_hints: dict | None = None,
     use_gpu: bool = False,
     backend: str = "auto",
     batch_size: int = 1024,
@@ -519,7 +518,7 @@ def rank_wordlist(
     use_gpu: bool = False,
     top_n: int = 0,
     backend: str = "auto",
-    profile_hints: Optional[dict] = None,
+    profile_hints: dict | None = None,
     chunk_size: int = 10_000,
     min_score: float = 0.0,
 ) -> RankResult:

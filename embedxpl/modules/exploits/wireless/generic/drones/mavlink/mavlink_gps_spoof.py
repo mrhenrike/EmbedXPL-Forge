@@ -6,7 +6,6 @@ Injects spoofed GPS data into a drone's EKF via MAVLink GPS_INPUT (msg_id=232).
 Only effective when drone has GPS_TYPE2=MAV (secondary MAVLink GPS configured).
 The EKF may blend or switch to spoofed GPS if it reports higher quality (more sats, lower HDOP).
 """
-from __future__ import annotations
 
 import logging
 import socket

@@ -65,9 +65,7 @@ class Exploit(BaseExploit):
 
         if not found_any:
             print_error(
-                "No RTSP service found on {} (ports {})".format(
-                    self.target, ports_to_try
-                )
+                f"No RTSP service found on {self.target} (ports {ports_to_try})"
             )
 
     def _probe_rtsp(self, host: str, port: int) -> bool:

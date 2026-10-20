@@ -87,7 +87,7 @@ class Exploit(HTTPClient):
             True if any HbbTV-related header key or value is present.
         """
         for key, val in resp.headers.items():
-            combined = "{}: {}".format(key, val).lower()
+            combined = f"{key}: {val}".lower()
             if any(m.lower() in combined for m in _HBBTV_HEADERS):
                 return True
         return False
@@ -132,7 +132,7 @@ class Exploit(HTTPClient):
             if resp.headers.get("Content-Type"):
                 print_status("  Content-Type: {}".format(resp.headers["Content-Type"]))
             if body_match and body_text:
-                print_status("  Body excerpt: {}".format(body_text[:400]))
+                print_status(f"  Body excerpt: {body_text[:400]}")
             return True
 
         return False
@@ -147,9 +147,7 @@ class Exploit(HTTPClient):
         Iterates through ``_PROBE_PATHS`` and reports any path where
         HbbTV markers are detected in the response.
         """
-        print_status("Scanning {}:{} for HbbTV service descriptors...".format(
-            self.target, self.port
-        ))
+        print_status(f"Scanning {self.target}:{self.port} for HbbTV service descriptors...")
 
         found = False
         for path in _PROBE_PATHS:
@@ -157,7 +155,7 @@ class Exploit(HTTPClient):
                 found = True
 
         if not found:
-            print_error("No HbbTV markers found on {}:{}.".format(self.target, self.port))
+            print_error(f"No HbbTV markers found on {self.target}:{self.port}.")
 
     @mute
     def check(self) -> bool:

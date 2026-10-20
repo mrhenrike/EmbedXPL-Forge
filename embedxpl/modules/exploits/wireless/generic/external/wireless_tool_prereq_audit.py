@@ -5,7 +5,6 @@ Does not install packages — orchestration only for lab prep.
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 import shutil
 

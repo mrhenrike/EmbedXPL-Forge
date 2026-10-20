@@ -1,4 +1,3 @@
-from __future__ import annotations
 
 """
 rsmangler_engine.py - Port Python do RSMangler v1.5 (Robin Wood / digininja).
@@ -36,7 +35,8 @@ import itertools
 import logging
 import zlib
 from dataclasses import dataclass
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -79,8 +79,8 @@ class ManglerOptions:
     nb: bool = True
     space: bool = False
     deduplicate: bool = True
-    min_length: Optional[int] = None
-    max_length: Optional[int] = None
+    min_length: int | None = None
+    max_length: int | None = None
     force_perms: bool = False
 
 

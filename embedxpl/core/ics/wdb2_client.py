@@ -43,7 +43,7 @@ class Wdb2Client:
         self._port = port
         self._timeout = timeout
         self._mem_buf_size = mem_buf_size
-        self._sock: Optional[socket.socket] = None
+        self._sock: socket.socket | None = None
         self._xid: int = 1
         self._logger = logging.getLogger(self.__class__.__name__)
 
@@ -109,7 +109,7 @@ class Wdb2Client:
         null_auth = struct.pack(">II", 0, 0)
         return header + null_auth + null_auth + data
 
-    def _send_recv(self, pkt: bytes) -> Optional[bytes]:
+    def _send_recv(self, pkt: bytes) -> bytes | None:
         """Send a UDP packet and return the response.
 
         Returns:
@@ -130,7 +130,7 @@ class Wdb2Client:
     # WDB procedures
     # ------------------------------------------------------------------ #
 
-    def get_target_info(self) -> Optional[dict]:
+    def get_target_info(self) -> dict | None:
         """Call WdbTgtInfoGet (proc 0x14) to retrieve system information.
 
         Returns:
@@ -154,7 +154,7 @@ class Wdb2Client:
         except struct.error:
             return None
 
-    def read_memory(self, address: int, length: int) -> Optional[bytes]:
+    def read_memory(self, address: int, length: int) -> bytes | None:
         """Read arbitrary memory from target VxWorks device.
 
         Args:

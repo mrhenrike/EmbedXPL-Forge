@@ -34,7 +34,6 @@ v1.1.0: extended with Condi-Mirai scanner.c XOR-decoded pairs
 Version: 1.1.0
 """
 
-from __future__ import annotations
 
 import logging
 import socket
@@ -61,7 +60,7 @@ logger = logging.getLogger("embedxpl.scanners.threat_detection.mirai_default_cre
 
 # Full credential table from Mirai source (scanner.c + table.c)
 # Source: https://github.com/jgamblin/Mirai-Source-Code
-_MIRAI_FULL_CREDS: List[Tuple[str, str]] = [
+_MIRAI_FULL_CREDS: list[tuple[str, str]] = [
     ("root",       "xc3511"),
     ("root",       "vizxv"),
     ("root",       "admin"),
@@ -203,16 +202,14 @@ class Exploit(BaseExploit):
 
     def run(self) -> None:
         """Sweep all Mirai default credentials against the target Telnet."""
-        print_status("[MiraiCreds] Starting credential sweep on {}:{}...".format(
-            self.target, self.port))
-        print_info("[MiraiCreds] {} credential pairs to test.".format(len(_MIRAI_FULL_CREDS)))
+        print_status(f"[MiraiCreds] Starting credential sweep on {self.target}:{self.port}...")
+        print_info(f"[MiraiCreds] {len(_MIRAI_FULL_CREDS)} credential pairs to test.")
 
         if not self._tcp_open(self.target, self.port, self.timeout):
-            print_error("[MiraiCreds] Port {}/tcp is closed or filtered on {}.".format(
-                self.port, self.target))
+            print_error(f"[MiraiCreds] Port {self.port}/tcp is closed or filtered on {self.target}.")
             return
 
-        valid: List[Tuple[str, str]] = []
+        valid: list[tuple[str, str]] = []
         stop_first = str(self.stop_on_first).lower() in ("true", "1", "yes")
 
         for idx, (user, pwd) in enumerate(_MIRAI_FULL_CREDS, start=1):
@@ -220,21 +217,17 @@ class Exploit(BaseExploit):
             if result:
                 valid.append((user, pwd))
                 print_warning(
-                    "[MiraiCreds] [{}/{}] VALID creds: {}:{} on {}:{}".format(
-                        idx, len(_MIRAI_FULL_CREDS), user, pwd, self.target, self.port
-                    )
+                    f"[MiraiCreds] [{idx}/{len(_MIRAI_FULL_CREDS)}] VALID creds: {user}:{pwd} on {self.target}:{self.port}"
                 )
                 if stop_first:
                     break
             else:
                 logger.debug("Creds %s:%s -- failed", user, pwd)
 
-        print_info("[MiraiCreds] Sweep complete. Valid pairs: {}".format(len(valid)))
+        print_info(f"[MiraiCreds] Sweep complete. Valid pairs: {len(valid)}")
         if valid:
             print_warning(
-                "[MiraiCreds] Device {}:{} accepts Mirai default credentials: {}".format(
-                    self.target, self.port, valid
-                )
+                f"[MiraiCreds] Device {self.target}:{self.port} accepts Mirai default credentials: {valid}"
             )
             print_info("[MiraiCreds] Recommendation: change default credentials immediately "
                        "and disable Telnet access from WAN.")
@@ -253,7 +246,7 @@ class Exploit(BaseExploit):
             sock.settimeout(timeout)
             sock.connect((host, port))
             return True
-        except (OSError, socket.timeout):
+        except (TimeoutError, OSError):
             return False
         finally:
             sock.close()
@@ -279,21 +272,21 @@ class Exploit(BaseExploit):
             # Drain initial banner / IAC negotiation
             try:
                 sock.recv(512)
-            except socket.timeout:
+            except TimeoutError:
                 pass
 
             sock.sendall((user + "\n").encode("latin-1", errors="replace"))
             time.sleep(0.25)
             try:
                 sock.recv(256)
-            except socket.timeout:
+            except TimeoutError:
                 pass
 
             sock.sendall((pwd + "\n").encode("latin-1", errors="replace"))
             time.sleep(0.4)
             try:
                 response = sock.recv(512)
-            except socket.timeout:
+            except TimeoutError:
                 response = b""
 
             failure_markers = (b"incorrect", b"failed", b"invalid", b"login incorrect")
@@ -306,7 +299,7 @@ class Exploit(BaseExploit):
                 return True
             # Ambiguous -- treat as failure to avoid false positives
             return False
-        except (OSError, socket.timeout):
+        except (TimeoutError, OSError):
             return False
         finally:
             sock.close()

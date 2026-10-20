@@ -18,13 +18,13 @@ Key features:
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 from collections import Counter
 from itertools import product
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -235,7 +235,7 @@ def _find_length_combos(
         current.pop()
 
 
-def handle_prince(args, ctx: dict) -> Optional[Generator[str, None, None]]:
+def handle_prince(args, ctx: dict) -> Generator[str, None, None] | None:
     """CLI handler for PRINCE attack mode.
 
     Args:

@@ -22,7 +22,6 @@ Author: André Henrique (LinkedIn/X: @mrhenrike)
 Version: 0.5.0
 """
 
-from __future__ import annotations
 
 import ipaddress
 import logging
@@ -35,11 +34,12 @@ import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
-from typing import Callable, Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set, Tuple
+from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
 
-PROBE_PORTS: List[int] = [
+PROBE_PORTS: list[int] = [
     80, 443, 8080, 8443, 8081, 8888, 8090, 8888,
     22, 23, 21, 53,
     161, 162,
@@ -48,7 +48,7 @@ PROBE_PORTS: List[int] = [
     830, 10000,
 ]
 
-PROBE_PORTS_EXTENDED: List[int] = PROBE_PORTS + [
+PROBE_PORTS_EXTENDED: list[int] = PROBE_PORTS + [
     25, 110, 143, 993, 995, 587,
     3306, 5432, 1433, 6379, 27017,
     8000, 8181, 9090, 9443, 10443,
@@ -89,7 +89,7 @@ class TimingProfile:
     timeout: float
     max_workers: int
     probe_delay: float
-    ports: List[int]
+    ports: list[int]
     nmap_extra_host: str
     nmap_extra_subnet: str
     banner_grab: bool
@@ -214,7 +214,7 @@ def _detect_oem_encoding() -> str:
         )
         m = re.search(r"(\d+)", r.stdout)
         if m:
-            cp = "cp{}".format(m.group(1))
+            cp = f"cp{m.group(1)}"
             "x".encode(cp)
             return cp
     except Exception:
@@ -232,28 +232,26 @@ class DiscoveredHost:
     ip: str
     mac: str = ""
     hostname: str = ""
-    open_ports: List[int] = field(default_factory=list)
-    banners: Dict[int, str] = field(default_factory=dict)
+    open_ports: list[int] = field(default_factory=list)
+    banners: dict[int, str] = field(default_factory=dict)
     vendor_guess: str = ""
     model_guess: str = ""
     fingerprint_confidence: float = 0.0
-    matched_modules: List[str] = field(default_factory=list)
+    matched_modules: list[str] = field(default_factory=list)
     has_wireless: bool = False
-    wireless_ssids: List[str] = field(default_factory=list)
+    wireless_ssids: list[str] = field(default_factory=list)
     wireless_recommendation: str = ""
 
     def summary(self) -> str:
         """One-line display."""
         ports = ",".join(str(p) for p in self.open_ports[:6])
         host_part = self.hostname or self.ip
-        mac_part = " ({})".format(self.mac) if self.mac else ""
-        vendor_part = " [{}]".format(self.vendor_guess) if self.vendor_guess else ""
-        model_part = " {}".format(self.model_guess) if self.model_guess else ""
-        mods = " | {} modules".format(len(self.matched_modules)) if self.matched_modules else ""
+        mac_part = f" ({self.mac})" if self.mac else ""
+        vendor_part = f" [{self.vendor_guess}]" if self.vendor_guess else ""
+        model_part = f" {self.model_guess}" if self.model_guess else ""
+        mods = f" | {len(self.matched_modules)} modules" if self.matched_modules else ""
         wifi = " | WiFi" if self.has_wireless else ""
-        return "{}{} ports:{}{}{}{}{} ".format(
-            host_part, mac_part, ports, vendor_part, model_part, mods, wifi,
-        )
+        return f"{host_part}{mac_part} ports:{ports}{vendor_part}{model_part}{mods}{wifi} "
 
 
 class NetworkDiscovery:
@@ -263,7 +261,7 @@ class NetworkDiscovery:
         self,
         target: str,
         *,
-        ports: Optional[List[int]] = None,
+        ports: list[int] | None = None,
         timeout: float = 3.0,
         max_workers: int = 50,
         use_nmap: bool = True,
@@ -290,9 +288,9 @@ class NetworkDiscovery:
         )
         self.use_nmap = use_nmap
         self.use_scapy = use_scapy
-        self._hosts: List[DiscoveredHost] = []
-        self._known_vendors: Set[str] = set()
-        self._module_index: Dict[str, List[str]] = {}
+        self._hosts: list[DiscoveredHost] = []
+        self._known_vendors: set[str] = set()
+        self._module_index: dict[str, list[str]] = {}
         logger.info(
             "Discovery initialized — timing=%s, workers=%d, timeout=%.1fs, ports=%d",
             self.timing_profile.name, self.max_workers, self.timeout,
@@ -329,9 +327,9 @@ class NetworkDiscovery:
                 self._module_index.setdefault(vendor_or_cat, []).append(mod_path)
                 self._known_vendors.add(vendor_or_cat)
 
-    def _walk_modules(self) -> List[str]:
+    def _walk_modules(self) -> list[str]:
         """Walk the modules directory to discover all exploit modules."""
-        result: List[str] = []
+        result: list[str] = []
         base = os.path.join(os.path.dirname(__file__), "..", "modules")
         base = os.path.normpath(base)
         if not os.path.isdir(base):
@@ -346,7 +344,7 @@ class NetworkDiscovery:
                     result.append(dotted)
         return result
 
-    def scan(self, callback: Optional[Callable] = None) -> List[DiscoveredHost]:
+    def scan(self, callback: Callable | None = None) -> list[DiscoveredHost]:
         """Run the full discovery pipeline.
 
         Multi-phase: ARP sweep -> Nmap -> Scapy -> Socket fallback.
@@ -361,10 +359,10 @@ class NetworkDiscovery:
         """
         self._build_module_index()
         self._hosts = []
-        seen_ips: Set[str] = set()
+        seen_ips: set[str] = set()
 
         if callback:
-            callback("scan", "Starting host discovery on {}".format(self.target))
+            callback("scan", f"Starting host discovery on {self.target}")
 
         # Phase 0: ARP sweep (fast L2, only same subnet)
         if self._is_local_subnet():
@@ -389,11 +387,11 @@ class NetworkDiscovery:
             self._scan_socket(callback, seen_ips)
 
         if callback:
-            callback("fingerprint", "Fingerprinting {} hosts".format(len(self._hosts)))
+            callback("fingerprint", f"Fingerprinting {len(self._hosts)} hosts")
         self._fingerprint_all(callback)
 
         if callback:
-            callback("match", "Matching against {} module vendors".format(len(self._known_vendors)))
+            callback("match", f"Matching against {len(self._known_vendors)} module vendors")
         self._match_catalog()
 
         self._detect_wireless_capability(callback)
@@ -409,10 +407,10 @@ class NetworkDiscovery:
         except ValueError:
             return False
 
-    def _arp_sweep(self, callback: Optional[Callable], seen_ips: Set[str]) -> None:
+    def _arp_sweep(self, callback: Callable | None, seen_ips: set[str]) -> None:
         """Phase 0: fast ARP sweep using system arp table + optional ping sweep."""
         if callback:
-            callback("scan", "Phase 0: ARP sweep on {}".format(self.target))
+            callback("scan", f"Phase 0: ARP sweep on {self.target}")
 
         try:
             network = ipaddress.ip_network(self.target, strict=False)
@@ -428,7 +426,7 @@ class NetworkDiscovery:
     def _read_arp_table(
         self,
         network: ipaddress.IPv4Network,
-        seen_ips: Set[str],
+        seen_ips: set[str],
     ) -> None:
         """Read the OS ARP table and add discovered hosts."""
         if sys.platform == "win32":
@@ -475,12 +473,12 @@ class NetworkDiscovery:
                 pass
 
         if callback:
-            callback("scan", "ARP sweep found {} hosts".format(len(self._hosts)))
+            callback("scan", f"ARP sweep found {len(self._hosts)} hosts")
 
     def _ping_sweep(
         self,
         network: ipaddress.IPv4Network,
-        callback: Optional[Callable],
+        callback: Callable | None,
     ) -> None:
         """Parallel ICMP ping sweep to populate ARP cache."""
         hosts = list(network.hosts())
@@ -488,7 +486,7 @@ class NetworkDiscovery:
             hosts = hosts[:254]
 
         if callback:
-            callback("scan", "Ping sweeping {} hosts...".format(len(hosts)))
+            callback("scan", f"Ping sweeping {len(hosts)} hosts...")
 
         def ping_one(ip_str: str) -> None:
             try:
@@ -546,7 +544,7 @@ class NetworkDiscovery:
     # Scan backends
     # ------------------------------------------------------------------
 
-    def _scan_nmap(self, callback: Optional[Callable] = None, seen_ips: Optional[Set[str]] = None) -> None:
+    def _scan_nmap(self, callback: Callable | None = None, seen_ips: set[str] | None = None) -> None:
         """Host discovery + service scan via Nmap.
 
         For single-host targets: uses ``-Pn`` (treat host as up).
@@ -582,24 +580,22 @@ class NetworkDiscovery:
             if callback:
                 callback(
                     "scan",
-                    "Nmap scanning {} ARP-confirmed hosts with -Pn".format(len(seen_ips)),
+                    f"Nmap scanning {len(seen_ips)} ARP-confirmed hosts with -Pn",
                 )
         else:
             nmap_targets = self.target
-            nmap_args = "{} -sV -sT --open -O --osscan-limit --max-retries 2".format(
-                discovery_args,
-            )
+            nmap_args = f"{discovery_args} -sV -sT --open -O --osscan-limit --max-retries 2"
             if is_single_host:
                 if callback:
-                    callback("scan", "Nmap scanning single host {} with -Pn".format(self.target))
+                    callback("scan", f"Nmap scanning single host {self.target} with -Pn")
             else:
                 if callback:
                     callback(
                         "scan",
-                        "Nmap subnet discovery on {} (multi-probe, no -Pn)".format(self.target),
+                        f"Nmap subnet discovery on {self.target} (multi-probe, no -Pn)",
                     )
 
-        nmap_args += " {}".format(self.timing_profile.nmap_flag)
+        nmap_args += f" {self.timing_profile.nmap_flag}"
 
         try:
             nm.scan(
@@ -617,7 +613,7 @@ class NetworkDiscovery:
                 nm.scan(
                     hosts=nmap_targets,
                     ports="22,23,53,80,443,8080",
-                    arguments="{} -sT -T4 --open".format(fallback_discovery),
+                    arguments=f"{fallback_discovery} -sT -T4 --open",
                     timeout=180,
                 )
             except Exception as exc2:
@@ -653,8 +649,8 @@ class NetworkDiscovery:
             if hostnames and isinstance(hostnames[0], dict):
                 hostname = hostnames[0].get("name", "")
 
-            open_ports: List[int] = []
-            banners: Dict[int, str] = {}
+            open_ports: list[int] = []
+            banners: dict[int, str] = {}
             for proto in ("tcp", "udp"):
                 proto_data = host_data.get(proto, {})
                 for port_num, port_info in proto_data.items():
@@ -696,9 +692,9 @@ class NetworkDiscovery:
                 new_hosts += 1
 
         if callback:
-            callback("scan", "Nmap found {} new hosts (total: {})".format(new_hosts, len(self._hosts)))
+            callback("scan", f"Nmap found {new_hosts} new hosts (total: {len(self._hosts)})")
 
-    def _scan_masscan(self, callback: Optional[Callable] = None, seen_ips: Optional[Set[str]] = None) -> None:
+    def _scan_masscan(self, callback: Callable | None = None, seen_ips: set[str] | None = None) -> None:
         """Fast host discovery via masscan (ideal for large subnets)."""
         if seen_ips is None:
             seen_ips = set()
@@ -714,7 +710,7 @@ class NetworkDiscovery:
         ]
 
         if callback:
-            callback("scan", "Masscan scanning {} (rate {})".format(self.target, rate))
+            callback("scan", f"Masscan scanning {self.target} (rate {rate})")
 
         logger.info("Running masscan: %s", " ".join(cmd))
         try:
@@ -747,11 +743,9 @@ class NetworkDiscovery:
                             h.open_ports.append(port)
 
         if callback:
-            callback("scan", "Masscan found {} live hosts".format(
-                len([h for h in self._hosts if h.ip in seen_ips])
-            ))
+            callback("scan", f"Masscan found {len([h for h in self._hosts if h.ip in seen_ips])} live hosts")
 
-    def _scan_scapy(self, callback: Optional[Callable] = None, seen_ips: Optional[Set[str]] = None) -> None:
+    def _scan_scapy(self, callback: Callable | None = None, seen_ips: set[str] | None = None) -> None:
         """ARP scan for same-subnet discovery via scapy."""
         if seen_ips is None:
             seen_ips = set()
@@ -789,11 +783,11 @@ class NetworkDiscovery:
                 self._hosts.append(dh)
 
         if callback:
-            callback("scan", "Scapy ARP found {} live hosts".format(len(self._hosts)))
+            callback("scan", f"Scapy ARP found {len(self._hosts)} live hosts")
 
         self._probe_ports_parallel(callback)
 
-    def _scan_socket(self, callback: Optional[Callable] = None, seen_ips: Optional[Set[str]] = None) -> None:
+    def _scan_socket(self, callback: Callable | None = None, seen_ips: set[str] | None = None) -> None:
         """TCP connect scan using raw sockets (universal fallback)."""
         if seen_ips is None:
             seen_ips = set()
@@ -808,7 +802,7 @@ class NetworkDiscovery:
             if callback:
                 callback("scan", "Limiting socket scan to first 1024 hosts")
 
-        live_ips: List[str] = []
+        live_ips: list[str] = []
         lock = threading.Lock()
 
         def probe_host(ip: str) -> None:
@@ -822,7 +816,7 @@ class NetworkDiscovery:
                         with lock:
                             live_ips.append(ip)
                         return
-                except (socket.error, OSError):
+                except OSError:
                     pass
 
         with ThreadPoolExecutor(max_workers=self.max_workers) as pool:
@@ -838,13 +832,13 @@ class NetworkDiscovery:
             self._hosts.append(DiscoveredHost(ip=ip))
 
         if callback:
-            callback("scan", "Socket scan found {} live hosts (total: {})".format(len(live_ips), len(self._hosts)))
+            callback("scan", f"Socket scan found {len(live_ips)} live hosts (total: {len(self._hosts)})")
 
         self._probe_ports_parallel(callback)
 
     def _probe_ports_parallel(self, callback=None) -> None:
         """Probe all configured ports on discovered hosts."""
-        def probe(host: DiscoveredHost, port: int) -> Optional[Tuple[DiscoveredHost, int, str]]:
+        def probe(host: DiscoveredHost, port: int) -> tuple[DiscoveredHost, int, str] | None:
             try:
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.settimeout(self.timeout)
@@ -855,7 +849,7 @@ class NetworkDiscovery:
                             s.settimeout(2.0)
                             banner = s.recv(1024).decode("utf-8", errors="replace").strip()
                         elif port in (80, 8080, 8081, 8443, 8888, 443):
-                            req = "GET / HTTP/1.0\r\nHost: {}\r\n\r\n".format(host.ip)
+                            req = f"GET / HTTP/1.0\r\nHost: {host.ip}\r\n\r\n"
                             s.sendall(req.encode())
                             s.settimeout(3.0)
                             resp = s.recv(4096).decode("utf-8", errors="replace")
@@ -872,7 +866,7 @@ class NetworkDiscovery:
                     s.close()
                     return (host, port, banner)
                 s.close()
-            except (socket.error, OSError):
+            except OSError:
                 pass
             return None
 
@@ -898,7 +892,7 @@ class NetworkDiscovery:
     # Fingerprinting
     # ------------------------------------------------------------------
 
-    def _fingerprint_all(self, callback: Optional[Callable] = None) -> None:
+    def _fingerprint_all(self, callback: Callable | None = None) -> None:
         """Run fingerprinting on all discovered hosts.
 
         Includes aggressive HTTP/HTTPS banner grabbing to extract model info
@@ -909,9 +903,9 @@ class NetworkDiscovery:
             self._fingerprint_host(host)
         if callback:
             identified = sum(1 for h in self._hosts if h.vendor_guess)
-            callback("fingerprint", "Identified {} out of {} hosts".format(identified, len(self._hosts)))
+            callback("fingerprint", f"Identified {identified} out of {len(self._hosts)} hosts")
 
-    def _deep_banner_grab(self, host: DiscoveredHost, callback: Optional[Callable] = None) -> None:
+    def _deep_banner_grab(self, host: DiscoveredHost, callback: Callable | None = None) -> None:
         """Aggressive HTTP/HTTPS banner grab to extract device model from web UI."""
         http_ports = [p for p in host.open_ports if p in (80, 8080, 8081, 8888, 8090, 443, 8443, 4567, 10000)]
         if not http_ports:
@@ -940,7 +934,7 @@ class NetworkDiscovery:
                 ctx.verify_mode = ssl.CERT_NONE
                 s = ctx.wrap_socket(s, server_hostname=ip)
 
-            req = "GET / HTTP/1.0\r\nHost: {}\r\nUser-Agent: Mozilla/5.0\r\nAccept: */*\r\n\r\n".format(ip)
+            req = f"GET / HTTP/1.0\r\nHost: {ip}\r\nUser-Agent: Mozilla/5.0\r\nAccept: */*\r\n\r\n"
             s.sendall(req.encode())
 
             chunks = []
@@ -952,7 +946,7 @@ class NetworkDiscovery:
                     chunks.append(chunk)
                     if len(b"".join(chunks)) > 32768:
                         break
-                except (socket.timeout, ssl.SSLError):
+                except (TimeoutError, ssl.SSLError):
                     break
             s.close()
 
@@ -1013,7 +1007,7 @@ class NetworkDiscovery:
         from embedxpl.core.oui import lookup
         return lookup(mac)
 
-    def _match_banner(self, banner: str) -> Tuple[str, str, float]:
+    def _match_banner(self, banner: str) -> tuple[str, str, float]:
         """Match a banner string against known patterns.
 
         Returns:
@@ -1115,7 +1109,7 @@ class NetworkDiscovery:
              vendor-agnostic (e.g. ``gpon_home_gateway_rce``).
         """
         for host in self._hosts:
-            matched: List[str] = []
+            matched: list[str] = []
             vendor = host.vendor_guess.lower()
             is_gpon = self._host_is_gpon(host)
 
@@ -1255,7 +1249,7 @@ class NetworkDiscovery:
         "fortinet", "sonicwall",
     }
 
-    def _detect_wireless_capability(self, callback: Optional[Callable] = None) -> None:
+    def _detect_wireless_capability(self, callback: Callable | None = None) -> None:
         """Identify hosts that likely have wireless/WiFi capabilities.
 
         Checks banners, model names, vendor type, and nearby SSIDs
@@ -1264,19 +1258,19 @@ class NetworkDiscovery:
         nearby_ssids = self._scan_nearby_ssids()
 
         for host in self._hosts:
-            reasons: List[str] = []
+            reasons: list[str] = []
 
             # 1. Banner analysis
             all_banners = " ".join(host.banners.values()).lower()
             for kw in self._WIRELESS_INDICATORS:
                 if kw in all_banners:
-                    reasons.append("banner:{}".format(kw))
+                    reasons.append(f"banner:{kw}")
                     break
 
             # 2. Known router/AP vendor (virtually all have WiFi)
             vendor_lower = host.vendor_guess.lower()
             if vendor_lower in self._ROUTER_VENDOR_TYPES:
-                reasons.append("vendor:{}".format(vendor_lower))
+                reasons.append(f"vendor:{vendor_lower}")
 
             # 3. Model name contains WiFi/wireless hint
             model_lower = (host.model_guess or "").lower()
@@ -1288,7 +1282,7 @@ class NetworkDiscovery:
             ]
             for pat in wifi_model_patterns:
                 if pat in model_lower:
-                    reasons.append("model:{}".format(pat))
+                    reasons.append(f"model:{pat}")
                     break
 
             # 4. BSSID/MAC correlation with nearby SSIDs
@@ -1300,7 +1294,7 @@ class NetworkDiscovery:
                         host.has_wireless = True
                         if ssid_name and ssid_name not in host.wireless_ssids:
                             host.wireless_ssids.append(ssid_name)
-                        reasons.append("bssid_match:{}".format(ssid_name or ssid_bssid))
+                        reasons.append(f"bssid_match:{ssid_name or ssid_bssid}")
 
             if reasons:
                 host.has_wireless = True
@@ -1308,12 +1302,12 @@ class NetworkDiscovery:
         if callback:
             wifi_count = sum(1 for h in self._hosts if h.has_wireless)
             if wifi_count:
-                callback("wireless", "{} host(s) with wireless capability detected".format(wifi_count))
+                callback("wireless", f"{wifi_count} host(s) with wireless capability detected")
 
     @staticmethod
-    def _scan_nearby_ssids() -> List[Tuple[str, str]]:
+    def _scan_nearby_ssids() -> list[tuple[str, str]]:
         """Return (ssid, bssid) pairs from the OS wireless scan cache."""
-        result: List[Tuple[str, str]] = []
+        result: list[tuple[str, str]] = []
         if sys.platform != "win32":
             return result
         try:
@@ -1365,20 +1359,16 @@ class NetworkDiscovery:
             if not host.matched_modules:
                 host.wireless_recommendation = (
                     "[RECOMMENDED] No wired/web exploits matched for this device, "
-                    "but it has wireless capabilities.{} {}".format(
-                        ssid_note, self._WXPL_RECOMMENDATION,
-                    )
+                    f"but it has wireless capabilities.{ssid_note} {self._WXPL_RECOMMENDATION}"
                 )
             else:
                 host.wireless_recommendation = (
-                    "[COMPLEMENTARY] This device has {} EmbedXPL module(s) for "
-                    "wired/web testing, but also exposes wireless interfaces.{} "
+                    f"[COMPLEMENTARY] This device has {len(host.matched_modules)} EmbedXPL module(s) for "
+                    f"wired/web testing, but also exposes wireless interfaces.{ssid_note} "
                     "For a comprehensive assessment, complement with "
                     "WirelessXPL-Forge for wireless-layer attacks "
                     "(WPA cracking, deauth, PMKID, evil twin, etc.). "
-                    "See: submodules/IoT/WirelessXPL-Forge".format(
-                        len(host.matched_modules), ssid_note,
-                    )
+                    "See: submodules/IoT/WirelessXPL-Forge"
                 )
 
     # ------------------------------------------------------------------
@@ -1392,15 +1382,15 @@ class NetworkDiscovery:
         return normalize_vendor(vendor_str)
 
     @property
-    def hosts(self) -> List[DiscoveredHost]:
+    def hosts(self) -> list[DiscoveredHost]:
         """Return discovered hosts."""
         return list(self._hosts)
 
-    def hosts_with_modules(self) -> List[DiscoveredHost]:
+    def hosts_with_modules(self) -> list[DiscoveredHost]:
         """Return only hosts that have matching exploit modules."""
         return [h for h in self._hosts if h.matched_modules]
 
-    def hosts_with_wireless(self) -> List[DiscoveredHost]:
+    def hosts_with_wireless(self) -> list[DiscoveredHost]:
         """Return hosts that have wireless capabilities."""
         return [h for h in self._hosts if h.has_wireless]
 
@@ -1409,9 +1399,9 @@ def scan_from_file(
     targets_file: str,
     *,
     timing: int = 3,
-    callback: Optional[Callable] = None,
+    callback: Callable | None = None,
     max_file_workers: int = 4,
-) -> Dict[str, List[DiscoveredHost]]:
+) -> dict[str, list[DiscoveredHost]]:
     """Scan multiple targets listed in a file, one IP/CIDR per line.
 
     Lines beginning with ``#`` and blank lines are skipped.  Each unique
@@ -1432,7 +1422,7 @@ def scan_from_file(
         logger.warning("scan_from_file: no targets parsed from '%s'", targets_file)
         return {}
 
-    results: Dict[str, List[DiscoveredHost]] = {}
+    results: dict[str, list[DiscoveredHost]] = {}
     lock = threading.Lock()
 
     def _scan_one(target: str) -> None:
@@ -1451,7 +1441,7 @@ def scan_from_file(
             results[target] = hosts
 
         if callback:
-            callback(target, "done", "{} host(s) found".format(len(hosts)))
+            callback(target, "done", f"{len(hosts)} host(s) found")
 
     with ThreadPoolExecutor(max_workers=max_file_workers) as pool:
         futures = {pool.submit(_scan_one, t): t for t in targets}
@@ -1464,17 +1454,17 @@ def scan_from_file(
     return results
 
 
-def _parse_targets_file(path: str) -> List[str]:
+def _parse_targets_file(path: str) -> list[str]:
     """Read a targets file and return a deduplicated list of IP/CIDR strings.
 
     Skips blank lines and lines whose first non-whitespace character is ``#``.
     Validates each entry as an IPv4/IPv6 address or network in CIDR notation.
     """
-    targets: List[str] = []
-    seen: Set[str] = set()
+    targets: list[str] = []
+    seen: set[str] = set()
 
     try:
-        with open(path, "r", encoding="utf-8", errors="replace") as fh:
+        with open(path, encoding="utf-8", errors="replace") as fh:
             for raw_line in fh:
                 line = raw_line.strip()
                 if not line or line.startswith("#"):

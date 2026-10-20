@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PrinterXPL-Forge — SSRF Pivot / Lateral Movement Module
 ======================================================
@@ -28,7 +27,6 @@ Vectors implemented:
 # LinkedIn  : https://linkedin.com/in/mrhenrike
 # X/Twitter : https://x.com/mrhenrike
 
-from __future__ import annotations
 
 import logging
 import socket
@@ -64,7 +62,7 @@ def ipp_fetch_url(
     scheme:       str   = 'https',
     timeout:      float = 15,
     dry_run:      bool  = True,
-) -> Dict:
+) -> dict:
     """
     Use IPP Print-URI (op 0x0003) to instruct the printer to fetch *target_url*.
 
@@ -152,7 +150,7 @@ def wsd_soap_ssrf(
     target_port:  int  = 80,
     target_path:  str  = '/',
     timeout:      float = 8,
-) -> Dict:
+) -> dict:
     """
     Craft a WSD (Web Services for Devices) SOAP request where the printer
     will forward a SOAP Get to *target_host:target_port*.
@@ -221,12 +219,12 @@ def ssrf_port_scan(
     printer_port: int,
     printer_path: str,
     target_host:  str,
-    ports:        List[int]  = None,
+    ports:        list[int]  = None,
     scheme:       str        = 'https',
     timeout:      float      = 6,
     workers:      int        = 5,
     verbose:      bool       = True,
-) -> Dict[int, str]:
+) -> dict[int, str]:
     """
     Scan internal ports via IPP print-by-reference SSRF timing analysis.
 
@@ -246,9 +244,9 @@ def ssrf_port_scan(
         ports = [21, 22, 23, 25, 53, 80, 110, 135, 139, 143, 389,
                  443, 445, 3306, 3389, 5432, 8080, 8443, 9100, 27017]
 
-    results: Dict[int, str] = {}
+    results: dict[int, str] = {}
 
-    def _probe(port: int) -> Tuple[int, str]:
+    def _probe(port: int) -> tuple[int, str]:
         target_url = f"http://{target_host}:{port}/"
         res = ipp_fetch_url(
             printer_host, printer_port, printer_path,
@@ -294,7 +292,7 @@ def discover_internal_hosts(
     timeout:      float = 4,
     probe_port:   int   = 80,
     verbose:      bool  = True,
-) -> List[str]:
+) -> list[str]:
     """
     Probe each host in *subnet* for a single *probe_port* to identify alive hosts.
 
@@ -324,7 +322,7 @@ def discover_internal_hosts(
         print(f"  [PIVOT] Probing {subnet or printer_host+'.0/24'} "
               f"via printer SSRF (port {probe_port}) ...")
 
-    def _check(ip: str) -> Optional[str]:
+    def _check(ip: str) -> str | None:
         if ip == printer_host:
             return None
         target_url = f"http://{ip}:{probe_port}/"
@@ -366,7 +364,7 @@ def pivot_audit(
     scheme:       str   = 'https',
     timeout:      float = 10,
     verbose:      bool  = True,
-) -> Dict:
+) -> dict:
     """
     Run a complete pivot/lateral-movement assessment using the printer as proxy.
 

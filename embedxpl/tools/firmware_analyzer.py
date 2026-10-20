@@ -52,7 +52,7 @@ def _check_tool(tool: str) -> bool:
         return False
 
 
-def run_binwalk(firmware_path: Path, output_dir: Path) -> Tuple[int, str]:
+def run_binwalk(firmware_path: Path, output_dir: Path) -> tuple[int, str]:
     """Run binwalk extraction on a firmware image.
 
     Args:
@@ -84,7 +84,7 @@ def run_binwalk(firmware_path: Path, output_dir: Path) -> Tuple[int, str]:
     return result.returncode, output
 
 
-def run_unblob(firmware_path: Path, output_dir: Path) -> Tuple[int, str]:
+def run_unblob(firmware_path: Path, output_dir: Path) -> tuple[int, str]:
     """Run unblob extraction on a firmware image.
 
     Args:
@@ -114,7 +114,7 @@ def run_unblob(firmware_path: Path, output_dir: Path) -> Tuple[int, str]:
     return result.returncode, output
 
 
-def run_firmwalker(extracted_dir: Path, output_dir: Path) -> Tuple[int, str]:
+def run_firmwalker(extracted_dir: Path, output_dir: Path) -> tuple[int, str]:
     """Run Firmwalker analysis on an extracted filesystem.
 
     Args:
@@ -144,7 +144,7 @@ def run_firmwalker(extracted_dir: Path, output_dir: Path) -> Tuple[int, str]:
     return result.returncode, output
 
 
-def _find_firmwalker() -> Optional[str]:
+def _find_firmwalker() -> str | None:
     """Locate Firmwalker shell script in common paths or PATH.
 
     Returns:
@@ -165,7 +165,7 @@ def _find_firmwalker() -> Optional[str]:
     return None
 
 
-def run_emba(firmware_path: Path, output_dir: Path) -> Tuple[int, str]:
+def run_emba(firmware_path: Path, output_dir: Path) -> tuple[int, str]:
     """Run EMBA firmware analysis on a firmware image.
 
     Args:
@@ -201,7 +201,7 @@ def run_emba(firmware_path: Path, output_dir: Path) -> Tuple[int, str]:
     return result.returncode, output
 
 
-def _find_emba() -> Optional[str]:
+def _find_emba() -> str | None:
     """Locate EMBA installation directory.
 
     Returns:
@@ -221,8 +221,8 @@ def _find_emba() -> Optional[str]:
 def analyze(
     firmware_path: Path,
     output_dir: Path,
-    tools: List[str],
-) -> Dict[str, Tuple[int, str]]:
+    tools: list[str],
+) -> dict[str, tuple[int, str]]:
     """Run selected analysis tools against a firmware image.
 
     Args:
@@ -234,7 +234,7 @@ def analyze(
         Dict mapping tool name to (return_code, output) tuple.
     """
     output_dir.mkdir(parents=True, exist_ok=True)
-    results: Dict[str, Tuple[int, str]] = {}
+    results: dict[str, tuple[int, str]] = {}
 
     if not firmware_path.exists():
         log.error("Firmware file not found: %s", firmware_path)
@@ -269,7 +269,7 @@ def analyze(
     return results
 
 
-def print_summary(results: Dict[str, Tuple[int, str]]) -> None:
+def print_summary(results: dict[str, tuple[int, str]]) -> None:
     """Print a human-readable summary of analysis results.
 
     Args:
@@ -279,11 +279,11 @@ def print_summary(results: Dict[str, Tuple[int, str]]) -> None:
     print("  Firmware Analysis Summary")
     print("=" * 60)
     for tool, (rc, output) in results.items():
-        status = "OK" if rc == 0 else ("SKIP" if rc == -1 else "ERROR({})".format(rc))
-        print("  {:15s} {}".format(tool, status))
+        status = "OK" if rc == 0 else ("SKIP" if rc == -1 else f"ERROR({rc})")
+        print(f"  {tool:15s} {status}")
         if output and rc not in (0, -1):
             for line in output.splitlines()[:5]:
-                print("    {}".format(line))
+                print(f"    {line}")
     print("=" * 60)
 
 
@@ -311,7 +311,7 @@ def main() -> None:
 
     firmware_path = Path(args.file).resolve()
     output_dir = Path(
-        args.output or "firmware_analysis_{}".format(firmware_path.stem)
+        args.output or f"firmware_analysis_{firmware_path.stem}"
     ).resolve()
 
     log.info("Starting firmware analysis pipeline...")

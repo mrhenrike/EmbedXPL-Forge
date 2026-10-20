@@ -17,4 +17,4 @@ class Encoder(BaseEncoder):
 
     def encode(self, payload):
         encoded_payload = quote(payload, safe="")
-        return "eval(urldecode('{}'));".format(encoded_payload)
+        return f"eval(urldecode('{encoded_payload}'));"

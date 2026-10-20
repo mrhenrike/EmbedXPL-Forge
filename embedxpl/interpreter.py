@@ -148,9 +148,9 @@ class BaseInterpreter:
         :return: command_handler
         """
         try:
-            command_handler = getattr(self, "command_{}".format(command))
+            command_handler = getattr(self, f"command_{command}")
         except AttributeError:
-            raise EmbedXPLException("Unknown command: '{}'".format(command))
+            raise EmbedXPLException(f"Unknown command: '{command}'")
 
         return command_handler
 
@@ -286,7 +286,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
     check                               Check if a given target is vulnerable to a selected module's exploit"""
 
     def __init__(self):
-        super(EmbedXPLInterpreter, self).__init__()
+        super().__init__()
         PrinterThread().start()
 
         self.current_module = None
@@ -369,12 +369,10 @@ class EmbedXPLInterpreter(BaseInterpreter):
             )
         except getopt.GetoptError:
             print_info(
-                "{prog} -m <module> -s \"<option> <value>\"\n"
-                "       {prog} -T <targets.txt>  (multi-target scan from file)\n"
-                "       {prog} --infra ot --context ics --target 192.168.1.0/24\n"
-                "       {prog} --infra wizard  (interactive infrastructure selection)".format(
-                    prog=argv[0]
-                )
+                f"{argv[0]} -m <module> -s \"<option> <value>\"\n"
+                f"       {argv[0]} -T <targets.txt>  (multi-target scan from file)\n"
+                f"       {argv[0]} --infra ot --context ics --target 192.168.1.0/24\n"
+                f"       {argv[0]} --infra wizard  (interactive infrastructure selection)"
             )
             printer_queue.join()
             return
@@ -382,12 +380,10 @@ class EmbedXPLInterpreter(BaseInterpreter):
         for opt, arg in opts:
             if opt in ("-h", "--help"):
                 print_info(
-                    "{prog} -m <module> -s \"<option> <value>\"\n"
-                    "       {prog} -T <targets.txt>  (multi-target scan from file)\n"
-                    "       {prog} --infra ot --context ics --target 192.168.1.0/24\n"
-                    "       {prog} --infra wizard  (interactive infrastructure selection)".format(
-                        prog=argv[0]
-                    )
+                    f"{argv[0]} -m <module> -s \"<option> <value>\"\n"
+                    f"       {argv[0]} -T <targets.txt>  (multi-target scan from file)\n"
+                    f"       {argv[0]} --infra ot --context ics --target 192.168.1.0/24\n"
+                    f"       {argv[0]} --infra wizard  (interactive infrastructure selection)"
                 )
                 printer_queue.join()
                 return
@@ -451,21 +447,19 @@ class EmbedXPLInterpreter(BaseInterpreter):
         try:
             from embedxpl.core.orchestrator import InfraOrchestrator
         except ImportError as exc:
-            print_error("InfraOrchestrator unavailable: {}".format(exc))
+            print_error(f"InfraOrchestrator unavailable: {exc}")
             return
 
         orch = InfraOrchestrator()
         try:
             plan = orch.interactive_wizard()
             print_status(
-                "Scan plan ready: {} modules for {}/{}".format(
-                    len(plan.modules), plan.infra, plan.context
-                )
+                f"Scan plan ready: {len(plan.modules)} modules for {plan.infra}/{plan.context}"
             )
         except (KeyboardInterrupt, EOFError):
             print_warning("Wizard cancelled by user.")
         except Exception as exc:
-            print_error("Wizard error: {}".format(exc))
+            print_error(f"Wizard error: {exc}")
 
     def _run_infra_scan(
         self, infra: str, context: str, target: str
@@ -484,7 +478,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         try:
             from embedxpl.core.orchestrator import InfraOrchestrator
         except ImportError as exc:
-            print_error("InfraOrchestrator unavailable: {}".format(exc))
+            print_error(f"InfraOrchestrator unavailable: {exc}")
             return
 
         orch = InfraOrchestrator()
@@ -492,7 +486,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         try:
             infra_types = orch.list_infra_types()
         except Exception as exc:
-            print_error("Failed to load infra profiles: {}".format(exc))
+            print_error(f"Failed to load infra profiles: {exc}")
             return
 
         if infra not in infra_types:
@@ -525,14 +519,12 @@ class EmbedXPLInterpreter(BaseInterpreter):
             print_error(str(exc))
             return
         except Exception as exc:
-            print_error("Plan build error: {}".format(exc))
+            print_error(f"Plan build error: {exc}")
             return
 
         print_status(plan.summary())
         print_info(
-            "Use -m <module> -s \"target {}\" to run individual modules.".format(
-                plan.target
-            )
+            f"Use -m <module> -s \"target {plan.target}\" to run individual modules."
         )
         print_info(
             "Or launch interactive shell and type 'use <module>' to explore.".format()
@@ -553,16 +545,16 @@ class EmbedXPLInterpreter(BaseInterpreter):
         from embedxpl.core.discovery import scan_from_file as _scan_from_file
 
         if not _os.path.isfile(targets_file):
-            print_error("Targets file not found: {}".format(targets_file))
+            print_error(f"Targets file not found: {targets_file}")
             return
 
-        print_status("Multi-target scan from file: {}".format(targets_file))
+        print_status(f"Multi-target scan from file: {targets_file}")
 
         def progress_cb(target: str, stage: str, detail: str) -> None:
             if stage == "done":
-                print_success("[{}] done — {}".format(target, detail))
+                print_success(f"[{target}] done — {detail}")
             else:
-                print_status("[{}] [{}] {}".format(target, stage, detail))
+                print_status(f"[{target}] [{stage}] {detail}")
 
         try:
             results = _scan_from_file(
@@ -575,27 +567,25 @@ class EmbedXPLInterpreter(BaseInterpreter):
             print_warning("Multi-target scan cancelled by user")
             return
         except Exception as exc:
-            print_error("Multi-target scan failed: {}".format(exc))
+            print_error(f"Multi-target scan failed: {exc}")
             return
 
         total_hosts = sum(len(v) for v in results.values())
         print_success(
-            "\nScan complete — {} target(s), {} total host(s) found".format(
-                len(results), total_hosts
-            )
+            f"\nScan complete — {len(results)} target(s), {total_hosts} total host(s) found"
         )
 
         for target, hosts in sorted(results.items()):
             if not hosts:
-                print_info("  {} — no live hosts".format(target))
+                print_info(f"  {target} — no live hosts")
                 continue
-            print_info("  {} — {} host(s):".format(target, len(hosts)))
+            print_info(f"  {target} — {len(hosts)} host(s):")
             for h in hosts:
-                print_info("    {}".format(h.summary()))
+                print_info(f"    {h.summary()}")
 
     @property
     def module_metadata(self):
-        return getattr(self.current_module, "_{}__info__".format(self.current_module.__class__.__name__))
+        return getattr(self.current_module, f"_{self.current_module.__class__.__name__}__info__")
 
     @property
     def prompt(self):
@@ -705,7 +695,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
     @module_required
     def command_run(self, *args, **kwargs):
-        print_status("Running module {}...".format(self.current_module))
+        print_status(f"Running module {self.current_module}...")
         import time as _time
 
 
@@ -754,10 +744,10 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
             if kwargs.get("glob", False):
                 GLOBAL_OPTS[key] = value
-            print_success("{} => {}".format(key, value))
+            print_success(f"{key} => {value}")
         else:
-            print_error("You can't set option '{}'.\n"
-                        "Available options: {}".format(key, self.current_module.options))
+            print_error(f"You can't set option '{key}'.\n"
+                        f"Available options: {self.current_module.options}")
 
     @stop_after(2)
     def complete_set(self, text, *args, **kwargs):
@@ -781,8 +771,8 @@ class EmbedXPLInterpreter(BaseInterpreter):
         try:
             del GLOBAL_OPTS[key]
         except KeyError:
-            print_error("You can't unset global option '{}'.\n"
-                        "Available global options: {}".format(key, list(GLOBAL_OPTS.keys())))
+            print_error(f"You can't unset global option '{key}'.\n"
+                        f"Available global options: {list(GLOBAL_OPTS.keys())}")
         else:
             print_success({key: value})
 
@@ -852,9 +842,9 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 evidence = info.get("evidence", "")
                 cves = info.get("cves", [])
                 if tested is True:
-                    badge = "\033[92m[TESTED — {}]\033[0m".format(evidence) if evidence else "\033[92m[TESTED]\033[0m"
+                    badge = f"\033[92m[TESTED — {evidence}]\033[0m" if evidence else "\033[92m[TESTED]\033[0m"
                     cve_str = "  CVEs: {}".format(", ".join(cves[:4])) if cves else ""
-                    print_info("Test status: {}{}".format(badge, cve_str))
+                    print_info(f"Test status: {badge}{cve_str}")
                 elif tested is False:
                     print_info("Test status: \033[93m[UNTESTED]\033[0m  (stub/theoretical)")
                 else:
@@ -907,7 +897,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 if isinstance(device, dict):
                     print_info("   {} - {}".format(i, device['name']))
                 else:
-                    print_info("   {} - {}".format(i, device))
+                    print_info(f"   {i} - {device}")
                 i += 1
             print_info()
         except KeyError:
@@ -976,11 +966,11 @@ class EmbedXPLInterpreter(BaseInterpreter):
     def command_show(self, *args, **kwargs):
         sub_command = args[0]
         try:
-            getattr(self, "_show_{}".format(sub_command))(*args, **kwargs)
+            getattr(self, f"_show_{sub_command}")(*args, **kwargs)
         except AttributeError:
-            print_error("Unknown 'show' sub-command '{}'. "
+            print_error(f"Unknown 'show' sub-command '{sub_command}'. "
                         "What do you want to show?\n"
-                        "Possible choices are: {}".format(sub_command, self.show_sub_commands))
+                        f"Possible choices are: {self.show_sub_commands}")
 
     @stop_after(2)
     def complete_show(self, text, *args, **kwargs):
@@ -1141,7 +1131,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         cpu_table.add_row("Architecture", profile.cpu_arch)
         cpu_table.add_row("Cores", str(profile.cpu_cores))
         cpu_table.add_row("Threads", str(profile.cpu_threads))
-        freq_str = "{} MHz".format(profile.cpu_freq_mhz) if profile.cpu_freq_mhz else "N/A"
+        freq_str = f"{profile.cpu_freq_mhz} MHz" if profile.cpu_freq_mhz else "N/A"
         cpu_table.add_row("Frequency", freq_str)
         _con.print(cpu_table)
 
@@ -1149,8 +1139,8 @@ class EmbedXPLInterpreter(BaseInterpreter):
                           border_style="dim", pad_edge=True)
         ram_table.add_column("Property", style="bold")
         ram_table.add_column("Value")
-        ram_table.add_row("Total", "{:,} MB".format(profile.ram_total_mb))
-        ram_table.add_row("Available", "{:,} MB".format(profile.ram_available_mb))
+        ram_table.add_row("Total", f"{profile.ram_total_mb:,} MB")
+        ram_table.add_row("Available", f"{profile.ram_available_mb:,} MB")
         _con.print(ram_table)
 
         if profile.gpus:
@@ -1164,7 +1154,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
             gpu_table.add_column("Driver")
             gpu_table.add_column("Compute Cap")
             for g in profile.gpus:
-                vram = "{:,} MB".format(g.vram_mb) if g.vram_mb else "N/A"
+                vram = f"{g.vram_mb:,} MB" if g.vram_mb else "N/A"
                 gpu_table.add_row(
                     str(g.index), g.name, g.vendor, vram,
                     g.backend, g.driver or "N/A", g.compute_cap or "N/A",
@@ -1176,14 +1166,12 @@ class EmbedXPLInterpreter(BaseInterpreter):
         mode = profile.compute_mode
         if mode == "auto":
             resolved = "hybrid" if profile.has_gpu() else "cpu"
-            mode_display = "auto -> {}".format(resolved)
+            mode_display = f"auto -> {resolved}"
         else:
             mode_display = mode
         _con.print(
-            "\n [bold]Compute mode:[/bold] [cyan]{}[/cyan]  |  "
-            "[bold]Best backend:[/bold] [cyan]{}[/cyan]\n".format(
-                mode_display, profile.best_backend
-            )
+            f"\n [bold]Compute mode:[/bold] [cyan]{mode_display}[/cyan]  |  "
+            f"[bold]Best backend:[/bold] [cyan]{profile.best_backend}[/cyan]\n"
         )
 
     def command_compute(self, *args, **kwargs):
@@ -1213,11 +1201,11 @@ class EmbedXPLInterpreter(BaseInterpreter):
             return
 
         exf_config.set_val("compute_mode", mode)
-        print_success("compute_mode => {}".format(mode))
+        print_success(f"compute_mode => {mode}")
 
         if mode == "auto":
             resolved = "hybrid" if self._hw_profile.has_gpu() else "cpu"
-            print_info("  auto resolves to: {}".format(resolved))
+            print_info(f"  auto resolves to: {resolved}")
 
     @stop_after(2)
     def complete_compute(self, text, *args, **kwargs):
@@ -1284,14 +1272,14 @@ class EmbedXPLInterpreter(BaseInterpreter):
             try:
                 ipaddress.ip_address(target)
             except ValueError:
-                print_error("Invalid target: '{}'. Use IP or CIDR notation.".format(target))
+                print_error(f"Invalid target: '{target}'. Use IP or CIDR notation.")
                 return
 
         def progress_cb(stage: str, detail: str) -> None:
-            print_status("[{}] {}".format(stage, detail))
+            print_status(f"[{stage}] {detail}")
 
         print_info()
-        print_status("Starting network discovery on {}".format(target))
+        print_status(f"Starting network discovery on {target}")
         discovery = NetworkDiscovery(target)
 
         try:
@@ -1300,11 +1288,11 @@ class EmbedXPLInterpreter(BaseInterpreter):
             print_warning("Discovery cancelled by user")
             hosts = discovery.hosts
         except Exception as exc:
-            print_error("Discovery failed: {}".format(exc))
+            print_error(f"Discovery failed: {exc}")
             return
 
         if not hosts:
-            print_warning("No live hosts found on {}".format(target))
+            print_warning(f"No live hosts found on {target}")
             return
 
         # --- Session integration: check for existing sessions ---
@@ -1335,16 +1323,14 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 pending = session.modules_pending()
                 if pending:
                     _con.print(
-                        "  [dim]{} module(s) already tested, "
-                        "{} pending — resuming from where it stopped[/dim]".format(
-                            prev_tested, len(pending),
-                        )
+                        f"  [dim]{prev_tested} module(s) already tested, "
+                        f"{len(pending)} pending — resuming from where it stopped[/dim]"
                     )
 
                 if session.vulns_found:
                     _con.print("  [bold red]Previous vulns:[/bold red]")
                     for v in session.vulns_found:
-                        _con.print("    [red]• {}[/red]".format(v))
+                        _con.print(f"    [red]• {v}[/red]")
             else:
                 sessions_new += 1
 
@@ -1367,17 +1353,15 @@ class EmbedXPLInterpreter(BaseInterpreter):
         if sessions_resumed:
             _con.print()
             print_success(
-                "{} host(s) resumed from session history, {} new".format(
-                    sessions_resumed, sessions_new,
-                )
+                f"{sessions_resumed} host(s) resumed from session history, {sessions_new} new"
             )
-            _con.print("[dim]Use 'discover {} --fresh' to ignore history and rescan from zero[/dim]".format(target))
+            _con.print(f"[dim]Use 'discover {target} --fresh' to ignore history and rescan from zero[/dim]")
         elif sessions_new:
-            print_info("{} new session(s) created".format(sessions_new))
+            print_info(f"{sessions_new} new session(s) created")
 
         # --- Results table ---
         results_table = Table(
-            title="Discovered Hosts ({})".format(len(hosts)),
+            title=f"Discovered Hosts ({len(hosts)})",
             show_header=True,
             header_style="bold cyan",
             border_style="dim",
@@ -1397,7 +1381,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
         for h in hosts:
             ports = ",".join(str(p) for p in h.open_ports[:8])
-            conf_str = "{:.0%}".format(h.fingerprint_confidence) if h.fingerprint_confidence else "-"
+            conf_str = f"{h.fingerprint_confidence:.0%}" if h.fingerprint_confidence else "-"
             mod_count = str(len(h.matched_modules)) if h.matched_modules else "-"
             wifi_flag = "Yes" if h.has_wireless else "-"
 
@@ -1425,10 +1409,10 @@ class EmbedXPLInterpreter(BaseInterpreter):
         targets_with_mods = discovery.hosts_with_modules()
         if targets_with_mods:
             print_success(
-                "\n{} host(s) matched against the exploit catalog:".format(len(targets_with_mods))
+                f"\n{len(targets_with_mods)} host(s) matched against the exploit catalog:"
             )
             for h in targets_with_mods:
-                vendor_tag = "[{}]".format(h.vendor_guess) if h.vendor_guess else ""
+                vendor_tag = f"[{h.vendor_guess}]" if h.vendor_guess else ""
                 model_tag = h.model_guess or ""
 
                 session = self._session_mgr.load(h.ip, h.mac)
@@ -1436,13 +1420,8 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 vuln_set = set(session.vulns_found) if session else set()
 
                 _con.print(
-                    "  [bold]{ip}[/bold] {vendor} {model} -- "
-                    "[yellow]{count}[/yellow] exploit module(s)".format(
-                        ip=h.ip,
-                        vendor=vendor_tag,
-                        model=model_tag,
-                        count=len(h.matched_modules),
-                    )
+                    f"  [bold]{h.ip}[/bold] {vendor_tag} {model_tag} -- "
+                    f"[yellow]{len(h.matched_modules)}[/yellow] exploit module(s)"
                 )
 
                 for mod in h.matched_modules[:15]:
@@ -1458,9 +1437,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
                     ))
                 if len(h.matched_modules) > 15:
                     _con.print(
-                        "    [dim]... and {} more[/dim]".format(
-                            len(h.matched_modules) - 15
-                        )
+                        f"    [dim]... and {len(h.matched_modules) - 15} more[/dim]"
                     )
         else:
             print_info("No discovered hosts matched the exploit catalog.")
@@ -1525,7 +1502,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 return
 
             tbl = Table(
-                title="Saved Sessions ({})".format(len(sessions)),
+                title=f"Saved Sessions ({len(sessions)})",
                 show_header=True,
                 header_style="bold cyan",
                 border_style="dim",
@@ -1570,7 +1547,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
             ip = sub_args[0]
             session = self._session_mgr.load(ip)
             if not session:
-                print_warning("No session found for {}".format(ip))
+                print_warning(f"No session found for {ip}")
                 return
 
             first_dt = datetime.fromtimestamp(session.first_seen).strftime("%Y-%m-%d %H:%M") if session.first_seen else "-"
@@ -1605,24 +1582,24 @@ class EmbedXPLInterpreter(BaseInterpreter):
             pending = session.modules_pending()
 
             _con.print("\n[bold]Module Execution Summary:[/bold]")
-            _con.print("  Matched:  [yellow]{}[/yellow]".format(len(session.matched_modules)))
-            _con.print("  Tested:   [green]{}[/green]".format(len(tested)))
-            _con.print("  Pending:  [red]{}[/red]".format(len(pending)))
-            _con.print("  Vuln:     [bold red]{}[/bold red]".format(len(vulns)))
-            _con.print("  Safe:     [green]{}[/green]".format(len(safe)))
-            _con.print("  Errored:  [yellow]{}[/yellow]".format(len(errored)))
+            _con.print(f"  Matched:  [yellow]{len(session.matched_modules)}[/yellow]")
+            _con.print(f"  Tested:   [green]{len(tested)}[/green]")
+            _con.print(f"  Pending:  [red]{len(pending)}[/red]")
+            _con.print(f"  Vuln:     [bold red]{len(vulns)}[/bold red]")
+            _con.print(f"  Safe:     [green]{len(safe)}[/green]")
+            _con.print(f"  Errored:  [yellow]{len(errored)}[/yellow]")
 
             if vulns:
                 _con.print("\n[bold red]Confirmed Vulnerabilities:[/bold red]")
                 for v in vulns:
-                    _con.print("  [red]• {}[/red]".format(v))
+                    _con.print(f"  [red]• {v}[/red]")
 
             if pending:
                 _con.print("\n[bold]Pending Modules (not yet tested):[/bold]")
                 for m in pending[:20]:
-                    _con.print("  [dim]• {}[/dim]".format(m))
+                    _con.print(f"  [dim]• {m}[/dim]")
                 if len(pending) > 20:
-                    _con.print("  [dim]... and {} more[/dim]".format(len(pending) - 20))
+                    _con.print(f"  [dim]... and {len(pending) - 20} more[/dim]")
 
             if session.module_results:
                 _con.print("\n[bold]Execution History (last 20):[/bold]")
@@ -1646,14 +1623,14 @@ class EmbedXPLInterpreter(BaseInterpreter):
                         r.module_path.split(".")[-1] if "." in r.module_path else r.module_path,
                         res_str,
                         ts,
-                        "{:.1f}s".format(r.elapsed_s),
+                        f"{r.elapsed_s:.1f}s",
                     )
                 _con.print(hist_tbl)
 
             if session.notes:
                 _con.print("\n[bold]Notes:[/bold]")
                 for note in session.notes:
-                    _con.print("  [dim]{}[/dim]".format(note))
+                    _con.print(f"  [dim]{note}[/dim]")
 
             return
 
@@ -1663,9 +1640,9 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 return
             ip = sub_args[0]
             if self._session_mgr.delete(ip):
-                print_success("Session for {} deleted".format(ip))
+                print_success(f"Session for {ip} deleted")
             else:
-                print_warning("No session found for {}".format(ip))
+                print_warning(f"No session found for {ip}")
             return
 
         if sub == "export":
@@ -1677,7 +1654,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
             if data:
                 _con.print(data)
             else:
-                print_warning("No session found for {}".format(ip))
+                print_warning(f"No session found for {ip}")
             return
 
         if sub == "purge":
@@ -1689,12 +1666,12 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 return
             if confirm == "yes":
                 count = self._session_mgr.purge_all()
-                print_success("Purged {} session(s)".format(count))
+                print_success(f"Purged {count} session(s)")
             else:
                 print_info("Cancelled")
             return
 
-        print_error("Unknown sub-command '{}'. Use: list, show, delete, export, purge".format(sub))
+        print_error(f"Unknown sub-command '{sub}'. Use: list, show, delete, export, purge")
 
     def _record_module_result(
         self,
@@ -1760,7 +1737,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         if sub in ("", "list"):
             groups = list_groups()
             tbl = Table(
-                title="APT Groups Targeting Network Devices ({})".format(len(groups)),
+                title=f"APT Groups Targeting Network Devices ({len(groups)})",
                 show_header=True, header_style="bold cyan", border_style="dim",
             )
             tbl.add_column("ID", style="bold")
@@ -1787,13 +1764,11 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 return
             group = get_group(sub_args[0])
             if not group:
-                print_error("Unknown group: {}".format(sub_args[0]))
+                print_error(f"Unknown group: {sub_args[0]}")
                 return
 
-            header = "[bold]{name}[/bold] ({country})\n{desc}".format(
-                name=group.name, country=group.country, desc=group.description,
-            )
-            _con.print(Panel(header, title="APT Profile: {}".format(group.id), border_style="red"))
+            header = f"[bold]{group.name}[/bold] ({group.country})\n{group.description}"
+            _con.print(Panel(header, title=f"APT Profile: {group.id}", border_style="red"))
 
             tbl = Table(show_header=True, header_style="bold red", border_style="dim")
             tbl.add_column("#", style="dim", width=3)
@@ -1813,7 +1788,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
                     "Yes" if atk.requires_auth else "No",
                 )
             _con.print(tbl)
-            print_info("Use 'apt run {} [attack#]' to execute".format(group.id))
+            print_info(f"Use 'apt run {group.id} [attack#]' to execute")
             return
 
         if sub == "search":
@@ -1824,11 +1799,11 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
             results = find_groups_by_device(keyword) if not keyword.upper().startswith("CVE-") else find_groups_by_cve(keyword)
             if not results:
-                print_info("No APT groups found for '{}'".format(keyword))
+                print_info(f"No APT groups found for '{keyword}'")
                 return
 
             for g in results:
-                print_success("{} ({}) — {} attacks".format(g.name, g.country, len(g.attacks)))
+                print_success(f"{g.name} ({g.country}) — {len(g.attacks)} attacks")
                 for atk in g.attacks:
                     if keyword.lower() in " ".join(atk.target_devices).lower() or keyword.upper() in atk.cves:
                         print_info("  -> {} [{}]".format(atk.name, ", ".join(atk.cves) if atk.cves else atk.phase))
@@ -1840,7 +1815,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 return
             group = get_group(sub_args[0])
             if not group:
-                print_error("Unknown group: {}".format(sub_args[0]))
+                print_error(f"Unknown group: {sub_args[0]}")
                 return
 
             attack_idx = None
@@ -1855,11 +1830,11 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
             for atk in attacks_to_run:
                 if not atk.modules:
-                    print_status("Skipping '{}' — no executable module".format(atk.name))
+                    print_status(f"Skipping '{atk.name}' — no executable module")
                     continue
 
                 module_path = atk.modules[0]
-                print_status("[{}] {} — loading {}".format(atk.phase, atk.name, module_path))
+                print_status(f"[{atk.phase}] {atk.name} — loading {module_path}")
 
                 try:
                     self.command_use(module_path)
@@ -1867,10 +1842,10 @@ class EmbedXPLInterpreter(BaseInterpreter):
                         print_status("Module loaded. Set target and run with 'run' or 'check'")
                         return
                 except Exception as exc:
-                    print_error("Failed to load {}: {}".format(module_path, exc))
+                    print_error(f"Failed to load {module_path}: {exc}")
             return
 
-        print_error("Unknown subcommand: {}. Use 'apt', 'apt list', 'apt show', 'apt search', 'apt run'".format(sub))
+        print_error(f"Unknown subcommand: {sub}. Use 'apt', 'apt list', 'apt show', 'apt search', 'apt run'")
 
     # ------------------------------------------------------------------
     # AutoPwn command

@@ -58,7 +58,7 @@ class Exploit(BaseExploit):
     timeout = OptInteger(5, "Connection timeout")
 
     def run(self) -> None:
-        print_status("Sending EIP ListIdentity to {}:{}...".format(self.target, self.port))
+        print_status(f"Sending EIP ListIdentity to {self.target}:{self.port}...")
 
         try:
             sock = socket.create_connection((self.target, self.port), timeout=self.timeout)
@@ -73,13 +73,13 @@ class Exploit(BaseExploit):
 
             cmd = struct.unpack_from("<H", data, 0)[0]
             status = struct.unpack_from("<I", data, 8)[0]
-            print_success("EIP ListIdentity response from {}".format(self.target))
-            print_status("  Command: 0x{:04X}  Status: 0x{:08X}".format(cmd, status))
+            print_success(f"EIP ListIdentity response from {self.target}")
+            print_status(f"  Command: 0x{cmd:04X}  Status: 0x{status:08X}")
 
             # Parse identity items (starts at offset 24)
             if len(data) > 26:
                 item_count = struct.unpack_from("<H", data, 24)[0]
-                print_status("  Items: {}".format(item_count))
+                print_status(f"  Items: {item_count}")
 
                 offset = 26
                 for _ in range(min(item_count, 5)):
@@ -101,14 +101,12 @@ class Exploit(BaseExploit):
                                     "ascii", errors="replace"
                                 )
                             print_success(
-                                "  Vendor={} DevType={} FW={}.{} Name={}".format(
-                                    vendor_id, device_type, fw_major, fw_minor, name
-                                )
+                                f"  Vendor={vendor_id} DevType={device_type} FW={fw_major}.{fw_minor} Name={name}"
                             )
                     offset += 4 + item_len
 
         except Exception as e:
-            print_error("EIP discovery failed: {}".format(e))
+            print_error(f"EIP discovery failed: {e}")
 
     @mute
     def check(self) -> bool:

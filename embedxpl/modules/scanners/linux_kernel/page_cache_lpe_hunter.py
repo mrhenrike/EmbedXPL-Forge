@@ -10,7 +10,6 @@ References:
   https://github.com/rafaeldtinoco/security
 """
 
-from __future__ import annotations
 
 import os
 

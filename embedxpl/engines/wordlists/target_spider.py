@@ -15,7 +15,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import re
 import time
@@ -42,7 +41,7 @@ _WORD_RE = re.compile(r"[a-zA-Z]{4,32}")  # only alpha words >= 4 chars
 _EMAIL_RE = re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}")
 
 
-def _extract_words_from_html(html: str, min_len: int = 4) -> Set[str]:
+def _extract_words_from_html(html: str, min_len: int = 4) -> set[str]:
     """Extract words from HTML text content.
 
     Args:
@@ -80,7 +79,7 @@ def _extract_words_from_html(html: str, min_len: int = 4) -> Set[str]:
     return words
 
 
-def _get_links(html: str, base_url: str) -> List[str]:
+def _get_links(html: str, base_url: str) -> list[str]:
     """Extract internal links from HTML."""
     links = []
     if not _BS4:
@@ -137,7 +136,7 @@ class TargetSpider:
         self,
         url: str,
         depth: int = 2,
-    ) -> List[str]:
+    ) -> list[str]:
         """Crawl URL and extract words.
 
         Args:
@@ -150,8 +149,8 @@ class TargetSpider:
         if not _REQUESTS:
             raise ImportError("requests required: pip install requests")
 
-        all_words: Set[str] = set()
-        visited: Set[str] = set()
+        all_words: set[str] = set()
+        visited: set[str] = set()
         queue = [(url, 0)]
         pages_crawled = 0
 
@@ -212,7 +211,7 @@ def spider_words(
     max_words: int = 500,
     depth: int = 2,
     delay_sec: float = 0.5,
-) -> List[str]:
+) -> list[str]:
     """Crawl *url* and return up to *max_words* unique words (cewl_mut helper).
 
     Args:

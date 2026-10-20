@@ -219,14 +219,14 @@ class Exploit(Exploit):
             data, _ = sock.recvfrom(1500)
             sock.close()
             return len(data) > 4
-        except (socket.timeout, socket.error):
+        except (TimeoutError, OSError):
             return False
 
     @multi
     def run(self) -> None:
         """Execute BACnet Who-Is broadcast scan."""
         print_status(
-            "BACnet Who-Is scan targeting {} on UDP/{}".format(self.target, self.port)
+            f"BACnet Who-Is scan targeting {self.target} on UDP/{self.port}"
         )
 
         try:
@@ -256,11 +256,11 @@ class Exploit(Exploit):
                                     info.get("vendor_name", "unknown"),
                                 )
                             )
-                except socket.timeout:
+                except TimeoutError:
                     continue
 
             sock.close()
-            print_info("Scan complete: {} BACnet device(s) discovered".format(len(devices)))
+            print_info(f"Scan complete: {len(devices)} BACnet device(s) discovered")
 
             for dev in devices:
                 print_info(
@@ -273,4 +273,4 @@ class Exploit(Exploit):
                 )
 
         except OSError as exc:
-            print_error("Socket error: {}".format(exc))
+            print_error(f"Socket error: {exc}")

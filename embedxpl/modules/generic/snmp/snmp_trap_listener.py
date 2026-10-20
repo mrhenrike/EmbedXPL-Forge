@@ -34,9 +34,7 @@ class Exploit(Exploit):
         sock.bind((self.listen_host, self.listen_port))
 
         print_status(
-            "SNMP trap listener started on {}:{} timeout={}s max_packets={}".format(
-                self.listen_host, self.listen_port, self.timeout, self.max_packets
-            )
+            f"SNMP trap listener started on {self.listen_host}:{self.listen_port} timeout={self.timeout}s max_packets={self.max_packets}"
         )
 
         start = time.time()
@@ -44,7 +42,7 @@ class Exploit(Exploit):
         while len(packets) < self.max_packets and (time.time() - start) < self.timeout:
             try:
                 payload, remote = sock.recvfrom(65535)
-            except socket.timeout:
+            except TimeoutError:
                 continue
 
             match = True
@@ -54,7 +52,7 @@ class Exploit(Exploit):
 
             packets.append((remote[0], remote[1], len(payload), match))
             print_info(
-                "[trap] {}:{} bytes={} match={}".format(remote[0], remote[1], len(payload), match)
+                f"[trap] {remote[0]}:{remote[1]} bytes={len(payload)} match={match}"
             )
             if self.hex_dump:
                 print_info(payload.hex())
@@ -64,6 +62,6 @@ class Exploit(Exploit):
         if packets:
             headers = ("Source", "Port", "Bytes", "MatchFilter")
             print_table(headers, *packets)
-            print_success("SNMP trap listener captured {} packets".format(len(packets)))
+            print_success(f"SNMP trap listener captured {len(packets)} packets")
         else:
             print_error("No SNMP trap packet captured during validation window")

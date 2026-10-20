@@ -11,7 +11,6 @@ Reference: Mathy Vanhoef, "Key Reinstallation Attacks: Forcing Nonce Reuse
 in WPA2", CCS 2017.
 PREREQ HW: WiFi adapter in monitor mode + injection (for AP-mode Msg3 relay).
 """
-from __future__ import annotations
 
 import logging
 import time

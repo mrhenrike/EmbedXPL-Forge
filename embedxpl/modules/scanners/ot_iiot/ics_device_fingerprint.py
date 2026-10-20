@@ -75,7 +75,7 @@ class Exploit(Exploit):
             resp = sock.recv(512)
             sock.close()
             return resp
-        except (socket.error, OSError):
+        except OSError:
             return b""
 
     def _udp_probe(self, port: int, data: bytes) -> bytes:
@@ -87,7 +87,7 @@ class Exploit(Exploit):
             resp, _ = sock.recvfrom(1500)
             sock.close()
             return resp
-        except (socket.timeout, socket.error):
+        except (TimeoutError, OSError):
             return b""
 
     def _probe_modbus_id(self) -> dict:
@@ -273,7 +273,7 @@ class Exploit(Exploit):
                         result["module_info"] = parts[:3]
 
             sock.close()
-        except (socket.error, OSError):
+        except OSError:
             pass
 
         return result
@@ -319,11 +319,11 @@ class Exploit(Exploit):
                         if fid == 0xFEFF:
                             result["status"] = "active"
                             result["device_mac"] = ":".join(
-                                "{:02x}".format(b) for b in data[6:12]
+                                f"{b:02x}" for b in data[6:12]
                             )
                             sock.close()
                             return result
-                except socket.timeout:
+                except TimeoutError:
                     break
 
             sock.close()
@@ -350,7 +350,7 @@ class Exploit(Exploit):
                 sock.connect((self.target, p))
                 sock.close()
                 return True
-            except (socket.error, OSError):
+            except OSError:
                 continue
 
         if self.probe_bacnet:
@@ -363,7 +363,7 @@ class Exploit(Exploit):
                 sock.recvfrom(64)
                 sock.close()
                 return True
-            except (socket.timeout, socket.error):
+            except (TimeoutError, OSError):
                 pass
         return False
 
@@ -371,11 +371,8 @@ class Exploit(Exploit):
     def run(self) -> None:
         """Execute multi-protocol ICS fingerprint scan."""
         print_status(
-            "ICS fingerprint scan on {} (Modbus={}, BACnet={}, DNP3={}, "
-            "S7={}, PROFINET={})".format(
-                self.target, self.probe_modbus, self.probe_bacnet,
-                self.probe_dnp3, self.probe_s7comm, self.probe_profinet,
-            )
+            f"ICS fingerprint scan on {self.target} (Modbus={self.probe_modbus}, BACnet={self.probe_bacnet}, DNP3={self.probe_dnp3}, "
+            f"S7={self.probe_s7comm}, PROFINET={self.probe_profinet})"
         )
 
         results = []
@@ -442,7 +439,7 @@ class Exploit(Exploit):
         active = [r for r in results if r.get("status") not in ("no_response", "raw_socket_unavailable")]
         protocols = [r["protocol"] for r in active]
 
-        print_info("Fingerprint summary for {}:".format(self.target))
+        print_info(f"Fingerprint summary for {self.target}:")
         print_info("  Active protocols: {}".format(
             ", ".join(protocols) if protocols else "none detected"
         ))
@@ -460,6 +457,6 @@ class Exploit(Exploit):
         elif "Modbus TCP" in protocols:
             modbus_r = next((r for r in results if r["protocol"] == "Modbus TCP"), {})
             vendor = modbus_r.get("vendor", "Unknown")
-            print_success("  Likely: PLC/RTU ({})".format(vendor))
+            print_success(f"  Likely: PLC/RTU ({vendor})")
         else:
             print_info("  Device type: inconclusive")

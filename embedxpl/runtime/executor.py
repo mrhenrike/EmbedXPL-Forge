@@ -29,9 +29,8 @@ Usage in a module::
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from .c_exec import CExecutor
 from .cpp_exec import CppExecutor
@@ -65,9 +64,9 @@ class XplRuntime:
     def execute(
         self,
         module: Any,
-        args: Optional[list[str]] = None,
+        args: list[str] | None = None,
         timeout: int = 60,
-        _db: Optional[Any] = None,       # EXFDatabase instance for auto-logging
+        _db: Any | None = None,       # EXFDatabase instance for auto-logging
         _target: str = "",               # target address for run_history
         **kwargs: Any,
     ) -> dict[str, Any]:
@@ -143,7 +142,7 @@ class XplRuntime:
 
 
 # Module-level singleton for convenience
-_runtime: Optional[XplRuntime] = None
+_runtime: XplRuntime | None = None
 
 
 def get_runtime() -> XplRuntime:

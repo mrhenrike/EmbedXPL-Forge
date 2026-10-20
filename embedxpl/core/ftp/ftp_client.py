@@ -25,7 +25,7 @@ class FTPCli:
         self.ftp_port = ftp_port
         self.verbosity = verbosity
 
-        self.peer = "{}:{}".format(self.ftp_target, ftp_port)
+        self.peer = f"{self.ftp_target}:{ftp_port}"
 
         if ssl:
             self.ftp_client = ftplib.FTP_TLS()
@@ -60,10 +60,10 @@ class FTPCli:
 
         try:
             self.ftp_client.login(username, password)
-            print_success(self.peer, "FTP Authentication Successful - Username: '{}' Password: '{}'".format(username, password), verbose=self.verbosity)
+            print_success(self.peer, f"FTP Authentication Successful - Username: '{username}' Password: '{password}'", verbose=self.verbosity)
             return True
         except Exception:
-            print_error(self.peer, "FTP Authentication Failed - Username: '{}' Password: '{}'".format(username, password), verbose=self.verbosity)
+            print_error(self.peer, f"FTP Authentication Failed - Username: '{username}' Password: '{password}'", verbose=self.verbosity)
 
         self.ftp_client.close()
         return False
@@ -89,7 +89,7 @@ class FTPCli:
 
         try:
             fp_content = io.BytesIO()
-            self.ftp_client.retrbinary("RETR {}".format(remote_file), fp_content.write)
+            self.ftp_client.retrbinary(f"RETR {remote_file}", fp_content.write)
             return fp_content.getvalue()
         except Exception as err:
             print_error(self.peer, "FTP Error while retrieving content", err, verbose=self.verbosity)

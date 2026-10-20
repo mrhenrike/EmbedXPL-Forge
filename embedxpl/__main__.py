@@ -24,9 +24,7 @@ def main() -> None:
         raise SystemExit(1)
     if sys.version_info < (3, 8):
         print(
-            "EmbedXPL requires Python 3.8+ (detected: {}).".format(
-                platform.python_version()
-            )
+            f"EmbedXPL requires Python 3.8+ (detected: {platform.python_version()})."
         )
         raise SystemExit(1)
 
@@ -42,7 +40,7 @@ def main() -> None:
     try:
         from embedxpl.interpreter import EmbedXPLInterpreter
     except ModuleNotFoundError as err:
-        print("EmbedXPL bootstrap error — missing dependency: {}".format(err))
+        print(f"EmbedXPL bootstrap error — missing dependency: {err}")
         print("Run: ./setup_venv.sh   or   .\\setup_venv.ps1")
         print("Or:  ./run.sh")
         print("Optional diagnostics: python tools/env_doctor.py")

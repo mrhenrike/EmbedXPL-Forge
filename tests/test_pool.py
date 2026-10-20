@@ -1,6 +1,5 @@
 """Tests for embedxpl.core.pool SmartPool and helpers."""
 
-from __future__ import annotations
 
 import sys
 from pathlib import Path

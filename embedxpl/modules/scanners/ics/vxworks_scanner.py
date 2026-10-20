@@ -73,7 +73,7 @@ _CPU_TYPES = {
 }
 
 
-def _wdb_probe(host: str, port: int, timeout: int) -> Optional[dict]:
+def _wdb_probe(host: str, port: int, timeout: int) -> dict | None:
     """Send WdbRPC ping and GetInfo to detect VxWorks WDB agent."""
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -83,7 +83,7 @@ def _wdb_probe(host: str, port: int, timeout: int) -> Optional[dict]:
         sock.sendto(_WDB_PING_REQ, (host, port))
         try:
             ping_resp, _ = sock.recvfrom(256)
-        except socket.timeout:
+        except TimeoutError:
             sock.close()
             return None
 
@@ -103,7 +103,7 @@ def _wdb_probe(host: str, port: int, timeout: int) -> Optional[dict]:
         sock.sendto(_WDB_INFO_REQ, (host, port))
         try:
             info_resp, _ = sock.recvfrom(512)
-        except socket.timeout:
+        except TimeoutError:
             sock.close()
             return result
 

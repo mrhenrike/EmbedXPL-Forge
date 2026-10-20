@@ -19,7 +19,6 @@ Assesses Bluetooth OBEX push exposure:
 # simulate=True by default — set False only for authorized tests.
 # ============================================================
 
-from __future__ import annotations
 
 import logging
 

@@ -24,7 +24,7 @@ class UDPCli:
         self.udp_port = udp_port
         self.verbosity = verbosity
 
-        self.peer = "{}:{}".format(self.udp_target, self.udp_port)
+        self.peer = f"{self.udp_target}:{self.udp_port}"
 
         if is_ipv4(self.udp_target):
             self.udp_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

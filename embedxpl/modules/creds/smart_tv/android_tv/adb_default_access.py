@@ -130,10 +130,10 @@ class Exploit(BaseExploit):
             )
             sock.close()
             return True
-        except (socket.timeout, ConnectionRefusedError, OSError):
+        except (TimeoutError, ConnectionRefusedError, OSError):
             return False
 
-    def _cnxn_responds(self) -> Optional[str]:
+    def _cnxn_responds(self) -> str | None:
         """Send an ADB CNXN probe and return the first 4 bytes of the response.
 
         Returns:
@@ -147,7 +147,7 @@ class Exploit(BaseExploit):
             data = sock.recv(24)
             sock.close()
             return data[:4].hex() if len(data) >= 4 else None
-        except (socket.timeout, ConnectionRefusedError, OSError):
+        except (TimeoutError, ConnectionRefusedError, OSError):
             return None
 
     def _adb_cli_check(self) -> str:
@@ -157,7 +157,7 @@ class Exploit(BaseExploit):
             A status string: ``"shell_access"``, ``"unauthorized"``,
             ``"connect_failed"``, or ``"adb_not_found"``.
         """
-        endpoint = "{}:{}".format(self.target, self.port)
+        endpoint = f"{self.target}:{self.port}"
         try:
             result = subprocess.run(
                 ["adb", "connect", endpoint],
@@ -192,18 +192,18 @@ class Exploit(BaseExploit):
         Runs TCP, CNXN, and ADB CLI checks to determine the level of
         exposure, then prints contextual remediation guidance.
         """
-        print_status("Checking ADB access patterns on {}:{}...".format(self.target, self.port))
+        print_status(f"Checking ADB access patterns on {self.target}:{self.port}...")
 
         if not self._tcp_open():
-            print_error("Port {} is closed — ADB not reachable.".format(self.port))
+            print_error(f"Port {self.port} is closed — ADB not reachable.")
             return
-        print_success("Port {} is OPEN".format(self.port))
+        print_success(f"Port {self.port} is OPEN")
 
         resp_hex = self._cnxn_responds()
         if resp_hex:
             known = {"434e584e": "CNXN", "41555448": "AUTH", "4f50454e": "OPEN"}
-            label = known.get(resp_hex.upper(), "UNKNOWN ({})".format(resp_hex))
-            print_success("ADB CNXN probe response: {} — ADB daemon is running".format(label))
+            label = known.get(resp_hex.upper(), f"UNKNOWN ({resp_hex})")
+            print_success(f"ADB CNXN probe response: {label} — ADB daemon is running")
         else:
             print_warning("Port open but no ADB response to CNXN probe.")
 

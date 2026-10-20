@@ -21,16 +21,15 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek
 Version: 2.0.0
 """
 
-from __future__ import annotations
 
 import argparse
+import builtins
 import os
 import platform
 import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional
 
 # ---------------------------------------------------------------------------
 # NSE script catalog (short-name -> filename)
@@ -38,7 +37,7 @@ from typing import Dict, List, Optional
 
 _NSE_PACKAGE_DIR = Path(__file__).parent.parent.parent / "nse"
 
-_SCRIPTS: Dict[str, str] = {
+_SCRIPTS: dict[str, str] = {
     # Cameras / NVR / RTSP
     "rtsp-discover":    "embedxpl-rtsp-discover.nse",
     "camera-identify":  "embedxpl-camera-identify.nse",
@@ -55,7 +54,7 @@ _SCRIPTS: Dict[str, str] = {
     "suite-ref":        "embedxpl-suite-ref.nse",
 }
 
-_DESCRIPTIONS: Dict[str, str] = {
+_DESCRIPTIONS: dict[str, str] = {
     "rtsp-discover":   "RTSP service discovery + banner grab + vendor fingerprint",
     "camera-identify": "IP camera deep fingerprinting (HTTP + RTSP + ONVIF multi-protocol)",
     "camera-snapshot": "Unauthenticated camera snapshot access detector (30+ endpoints)",
@@ -76,7 +75,7 @@ _PORTS_DEFAULT = "80,443,554,5554,8080,8443,8554,9100,37777,631"
 # Nmap detection -- multi-method
 # ---------------------------------------------------------------------------
 
-def _find_nmap_binary() -> Optional[str]:
+def _find_nmap_binary() -> str | None:
     """Locate the nmap binary using multiple detection strategies.
 
     Returns the absolute path string or None if nmap is not installed.
@@ -122,7 +121,7 @@ def _find_nmap_binary() -> Optional[str]:
     return None
 
 
-def _find_nmap_scripts_dir(nmap_bin: Optional[str] = None) -> Optional[Path]:
+def _find_nmap_scripts_dir(nmap_bin: str | None = None) -> Path | None:
     """Locate Nmap's scripts directory using multiple strategies.
 
     Strategy order:
@@ -134,7 +133,7 @@ def _find_nmap_scripts_dir(nmap_bin: Optional[str] = None) -> Optional[Path]:
 
     Returns the Path to the scripts directory or None.
     """
-    candidates: List[Path] = []
+    candidates: list[Path] = []
 
     # 1. Ask nmap about a known built-in script -- reveals the scripts dir
     if nmap_bin:
@@ -274,9 +273,9 @@ class NSEManager:
     Version: 2.0.0
     """
 
-    def __init__(self, scripts_dir: Optional[Path] = None) -> None:
-        self._nmap_bin: Optional[str] = _find_nmap_binary()
-        self._scripts_dir: Optional[Path] = scripts_dir or (
+    def __init__(self, scripts_dir: Path | None = None) -> None:
+        self._nmap_bin: str | None = _find_nmap_binary()
+        self._scripts_dir: Path | None = scripts_dir or (
             _find_nmap_scripts_dir(self._nmap_bin) if self._nmap_bin else None
         )
 
@@ -294,11 +293,11 @@ class NSEManager:
                     capture_output=True, text=True, timeout=8
                 )
                 version_line = result.stdout.splitlines()[0] if result.stdout else "(unknown version)"
-                print("[OK] Nmap found: {} ({})".format(self._nmap_bin, version_line.strip()))
+                print(f"[OK] Nmap found: {self._nmap_bin} ({version_line.strip()})")
             except Exception:
-                print("[OK] Nmap binary found: {}".format(self._nmap_bin))
+                print(f"[OK] Nmap binary found: {self._nmap_bin}")
             if self._scripts_dir:
-                print("[OK] Nmap scripts directory: {}".format(self._scripts_dir))
+                print(f"[OK] Nmap scripts directory: {self._scripts_dir}")
             else:
                 print("[WARN] Nmap scripts directory not found (will try at install time).")
             return True
@@ -337,7 +336,7 @@ class NSEManager:
         nse_dir = _NSE_PACKAGE_DIR
         if nse_dir.is_dir():
             example = nse_dir / "embedxpl-iot-cve-check.nse"
-            print("  nmap --script {} -p 80,443 192.168.1.0/24".format(example))
+            print(f"  nmap --script {example} -p 80,443 192.168.1.0/24")
         print("=" * 68)
         print("")
         return False
@@ -373,12 +372,12 @@ class NSEManager:
             self._print_local_nse_paths()
             return 1
 
-        print("      Target: {}".format(self._scripts_dir))
+        print(f"      Target: {self._scripts_dir}")
 
         # Step 3: check source exists
         print("[3/4] Verifying source NSE files...")
         if not _NSE_PACKAGE_DIR.is_dir():
-            print("[ERR] NSE source directory not found: {}".format(_NSE_PACKAGE_DIR))
+            print(f"[ERR] NSE source directory not found: {_NSE_PACKAGE_DIR}")
             print("      Install from source:  git clone + pip install -e .")
             return 1
 
@@ -393,9 +392,9 @@ class NSEManager:
 
         # Step 4: copy scripts
         print("[4/4] Installing scripts...")
-        installed: List[str] = []
-        skipped: List[str] = []
-        failed: List[str] = []
+        installed: list[str] = []
+        skipped: list[str] = []
+        failed: list[str] = []
 
         for name, fname in _SCRIPTS.items():
             src = _NSE_PACKAGE_DIR / fname
@@ -408,18 +407,18 @@ class NSEManager:
             try:
                 shutil.copy2(src, dst)
                 installed.append(fname)
-                print("      [OK]  {} -> {}".format(fname, dst))
+                print(f"      [OK]  {fname} -> {dst}")
             except PermissionError:
                 failed.append(fname)
-                print("      [ERR] Permission denied: {}".format(dst))
+                print(f"      [ERR] Permission denied: {dst}")
 
         print("")
         print("Results:")
-        print("  Installed  : {}".format(len(installed)))
+        print(f"  Installed  : {len(installed)}")
         if skipped:
-            print("  Skipped    : {} (already present; use --force to overwrite)".format(len(skipped)))
+            print(f"  Skipped    : {len(skipped)} (already present; use --force to overwrite)")
         if failed:
-            print("  Failed     : {} -- run with sudo/Administrator".format(len(failed)))
+            print(f"  Failed     : {len(failed)} -- run with sudo/Administrator")
             print("               sudo embedxpl-nse install")
 
         if not installed and not failed:
@@ -454,11 +453,11 @@ class NSEManager:
             if dst.exists():
                 try:
                     dst.unlink()
-                    print("  [OK] Removed: {}".format(dst))
+                    print(f"  [OK] Removed: {dst}")
                     removed += 1
                 except PermissionError:
-                    print("  [ERR] Permission denied: {}. Try with sudo.".format(dst))
-        print("\nRemoved {} script(s).".format(removed))
+                    print(f"  [ERR] Permission denied: {dst}. Try with sudo.")
+        print(f"\nRemoved {removed} script(s).")
         if self._nmap_bin:
             _run_updatedb(self._nmap_bin)
 
@@ -468,17 +467,17 @@ class NSEManager:
         scripts_ok = bool(self._scripts_dir)
 
         print("")
-        print("EmbedXPL-Forge NSE Scripts  (v2.0.0 -- {} scripts)".format(len(_SCRIPTS)))
+        print(f"EmbedXPL-Forge NSE Scripts  (v2.0.0 -- {len(_SCRIPTS)} scripts)")
         print("-" * 82)
         if nmap_ok:
-            print("Nmap binary    : {}".format(self._nmap_bin))
+            print(f"Nmap binary    : {self._nmap_bin}")
         else:
             print("Nmap binary    : NOT FOUND")
         if scripts_ok:
-            print("Scripts dir    : {}".format(self._scripts_dir))
+            print(f"Scripts dir    : {self._scripts_dir}")
         else:
             print("Scripts dir    : NOT FOUND")
-        print("Local NSE dir  : {}".format(_NSE_PACKAGE_DIR))
+        print(f"Local NSE dir  : {_NSE_PACKAGE_DIR}")
         print("-" * 82)
         print("{:<28} {:<14} {}".format("NSE Script", "Status", "Description"))
         print("-" * 82)
@@ -491,7 +490,7 @@ class NSEManager:
             else:
                 status = "nmap not found"
             desc = _DESCRIPTIONS.get(name, "")
-            print("  {:<26} {:<14} {}".format(full_name, status, desc))
+            print(f"  {full_name:<26} {status:<14} {desc}")
 
         print("")
         if not nmap_ok:
@@ -503,8 +502,8 @@ class NSEManager:
         else:
             self._print_usage_hint()
 
-    def run(self, target: str, scripts: List[str], extra_args: Optional[str] = None,
-            ports: str = _PORTS_DEFAULT, output_file: Optional[str] = None) -> int:
+    def run(self, target: str, scripts: builtins.list[str], extra_args: str | None = None,
+            ports: str = _PORTS_DEFAULT, output_file: str | None = None) -> int:
         """Run Nmap with selected EmbedXPL NSE scripts against a target."""
         if not self._nmap_bin:
             print("[ERROR] Nmap not found. Install Nmap to use this command.")
@@ -520,7 +519,7 @@ class NSEManager:
                 if name in _SCRIPTS:
                     script_names.append("embedxpl-" + name)
                 else:
-                    print("[WARN] Unknown script: {}".format(s))
+                    print(f"[WARN] Unknown script: {s}")
 
         if not script_names:
             print("[ERROR] No valid scripts specified.")
@@ -541,21 +540,21 @@ class NSEManager:
         """Show information about a specific NSE script."""
         name = script_name.replace("embedxpl-", "")
         if name not in _SCRIPTS:
-            print("Unknown script: {}".format(script_name))
+            print(f"Unknown script: {script_name}")
             print("Available: {}".format(", ".join("embedxpl-" + k for k in _SCRIPTS)))
             return
 
         fname = _SCRIPTS[name]
         src = _NSE_PACKAGE_DIR / fname
 
-        print("\nScript      : embedxpl-{}".format(name))
-        print("File        : {}".format(fname))
+        print(f"\nScript      : embedxpl-{name}")
+        print(f"File        : {fname}")
         print("Description : {}".format(_DESCRIPTIONS.get(name, "")))
-        print("Source      : {}".format(src))
+        print(f"Source      : {src}")
 
         if self._scripts_dir:
             dst = self._scripts_dir / fname
-            print("Installed   : {}".format("YES -- {}".format(dst) if dst.exists() else "NO"))
+            print("Installed   : {}".format(f"YES -- {dst}" if dst.exists() else "NO"))
 
         if src.exists():
             print("\n--- Script header (first 30 comment lines) ---")
@@ -568,7 +567,7 @@ class NSEManager:
 
     # ── CLI ────────────────────────────────────────────────────────────────
 
-    def cli(self, args: List[str]) -> None:
+    def cli(self, args: builtins.list[str]) -> None:
         """Parse and dispatch CLI subcommands."""
         parser = argparse.ArgumentParser(
             prog="embedxpl-nse",
@@ -611,7 +610,7 @@ class NSEManager:
                            help="Scripts to run: 'all' or comma-separated short names "
                                 "(e.g. hikvision-vuln,perimeter-vuln). Default: all")
         p_run.add_argument("--ports", "-p", default=_PORTS_DEFAULT, metavar="PORTS",
-                           help="Comma-separated ports. Default: {}".format(_PORTS_DEFAULT))
+                           help=f"Comma-separated ports. Default: {_PORTS_DEFAULT}")
         p_run.add_argument("--output", "-o", metavar="FILE",
                            help="Write nmap output to file (-oN)")
         p_run.add_argument("--args", metavar="ARGS",
@@ -663,12 +662,12 @@ class NSEManager:
     def _print_local_nse_paths(self) -> None:
         """Print the local path of each NSE file for manual installation."""
         if not _NSE_PACKAGE_DIR.is_dir():
-            print("  (NSE source directory not found: {})".format(_NSE_PACKAGE_DIR))
+            print(f"  (NSE source directory not found: {_NSE_PACKAGE_DIR})")
             return
         for _, fname in _SCRIPTS.items():
             path = _NSE_PACKAGE_DIR / fname
             if path.exists():
-                print("    {}".format(path))
+                print(f"    {path}")
 
     def _print_usage_hint(self) -> None:
         """Print common Nmap usage examples after install."""

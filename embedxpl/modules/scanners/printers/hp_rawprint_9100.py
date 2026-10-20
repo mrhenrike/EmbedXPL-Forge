@@ -43,7 +43,7 @@ class Exploit(BaseExploit):
     timeout = OptInteger(5, "Connection timeout")
 
     def run(self) -> None:
-        print_status("Probing raw print port on {}:{}...".format(self.target, self.port))
+        print_status(f"Probing raw print port on {self.target}:{self.port}...")
 
         try:
             sock = socket.create_connection((self.target, self.port), timeout=self.timeout)
@@ -57,29 +57,27 @@ class Exploit(BaseExploit):
                     if not chunk:
                         break
                     response += chunk
-            except socket.timeout:
+            except TimeoutError:
                 pass
             sock.close()
 
             if response:
                 text = response.decode("utf-8", errors="replace")
-                print_success("Printer responded on {}:{}".format(self.target, self.port))
+                print_success(f"Printer responded on {self.target}:{self.port}")
                 lines = [l.strip() for l in text.split("\n") if l.strip()]
                 for line in lines[:10]:
-                    print_status("  {}".format(line))
+                    print_status(f"  {line}")
                 print_status(
                     "Port 9100 is open — raw printing and PJL attacks are possible"
                 )
             else:
                 print_status(
-                    "Port {} open but no PJL response — may be non-HP or filtered".format(
-                        self.port
-                    )
+                    f"Port {self.port} open but no PJL response — may be non-HP or filtered"
                 )
         except ConnectionRefusedError:
-            print_error("Port {} is closed on {}".format(self.port, self.target))
+            print_error(f"Port {self.port} is closed on {self.target}")
         except Exception as e:
-            print_error("Probe error: {}".format(e))
+            print_error(f"Probe error: {e}")
 
     @mute
     def check(self) -> bool:

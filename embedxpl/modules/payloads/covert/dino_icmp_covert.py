@@ -12,7 +12,6 @@
 # simulate=True by default — set False only for authorized tests.
 # ============================================================
 
-from __future__ import annotations
 
 import os
 import socket
@@ -148,7 +147,7 @@ class Exploit(_Base):
                             if _PROBE_TAG in resp_payload:
                                 print("  [+] Probe payload echoed back — ICMP data channel confirmed")
                                 print("  [!] DINO-style ICMP covert channel is POSSIBLE on this host")
-                    except socket.timeout:
+                    except TimeoutError:
                         print("  [-] No ICMP reply (filtered or host down)")
                     sock.close()
                 except PermissionError:

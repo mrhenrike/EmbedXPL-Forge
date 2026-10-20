@@ -101,9 +101,9 @@ class Exploit(Exploit):
                         "st": self._extract_header(text, "ST"),
                         "usn": self._extract_header(text, "USN"),
                     })
-            except socket.timeout:
+            except TimeoutError:
                 break
-            except (socket.error, OSError):
+            except OSError:
                 break
         sock.close()
         return responses
@@ -111,7 +111,7 @@ class Exploit(Exploit):
     def _extract_header(self, response: str, header: str) -> str:
         """Extract HTTP-style header value from SSDP response."""
         pattern = re.compile(
-            r"^{}\s*:\s*(.+?)\s*$".format(re.escape(header)),
+            rf"^{re.escape(header)}\s*:\s*(.+?)\s*$",
             re.IGNORECASE | re.MULTILINE,
         )
         match = pattern.search(response)
@@ -130,9 +130,7 @@ class Exploit(Exploit):
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(float(self.timeout))
             sock.connect((host, port))
-            request = "GET {} HTTP/1.1\r\nHost: {}:{}\r\nConnection: close\r\n\r\n".format(
-                path, host, port
-            )
+            request = f"GET {path} HTTP/1.1\r\nHost: {host}:{port}\r\nConnection: close\r\n\r\n"
             sock.sendall(request.encode())
             data = b""
             while True:
@@ -173,7 +171,7 @@ class Exploit(Exploit):
                     result["igd"] = True
                     break
 
-        except (socket.error, OSError, ElementTree.ParseError, ValueError):
+        except (OSError, ElementTree.ParseError, ValueError):
             pass
         return result
 
@@ -186,14 +184,14 @@ class Exploit(Exploit):
     @multi
     def run(self) -> None:
         """Execute UPnP/SSDP discovery scan."""
-        print_status("Sending SSDP M-SEARCH on {}:{}".format(_SSDP_ADDR, self.port))
+        print_status(f"Sending SSDP M-SEARCH on {_SSDP_ADDR}:{self.port}")
 
         responses = self._send_msearch()
         if not responses:
             print_error("No UPnP devices responded")
             return
 
-        print_success("Discovered {} UPnP device(s)".format(len(responses)))
+        print_success(f"Discovered {len(responses)} UPnP device(s)")
         igd_found = False
 
         for resp in responses:
@@ -212,7 +210,7 @@ class Exploit(Exploit):
                 if desc["services"]:
                     print_info("  Services ({})".format(len(desc["services"])))
                     for svc in desc["services"][:10]:
-                        print_info("    {}".format(svc))
+                        print_info(f"    {svc}")
                 if desc["igd"]:
                     igd_found = True
                     print_warning("  IGD profile detected, external port mapping possible")

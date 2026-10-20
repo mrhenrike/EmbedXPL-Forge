@@ -10,7 +10,6 @@ Requires root/administrator privileges for raw socket access.
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 from embedxpl.core.exploit import *
 from embedxpl.core.http.http_client import HTTPClient

@@ -16,7 +16,6 @@ Adapted from RouterXPL-Forge patterns (github.com/mrhenrike/RouterXPL-Forge).
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
@@ -343,7 +342,7 @@ def auto_select_backend(
 
 # ── Session singleton ─────────────────────────────────────────────────────────
 
-_SESSION_BACKEND: Optional[ComputeBackend] = None
+_SESSION_BACKEND: ComputeBackend | None = None
 
 
 def get_backend(compute_mode: str = "auto") -> ComputeBackend:

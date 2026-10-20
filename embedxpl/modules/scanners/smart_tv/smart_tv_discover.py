@@ -14,7 +14,7 @@ from typing import Dict, List, Optional, Tuple
 from embedxpl.core.exploit import *
 from embedxpl.core.exploit.exploit import BaseExploit
 
-_SMART_TV_PORTS: List[Tuple[int, str, str]] = [
+_SMART_TV_PORTS: list[tuple[int, str, str]] = [
     (3000, "tcp",  "LG WebOS SSAP (WebSocket)"),
     (3001, "tcp",  "LG WebOS SSAP TLS (WebSocket)"),
     (8001, "tcp",  "Samsung Tizen REST API"),
@@ -37,7 +37,7 @@ _SMART_TV_PORTS: List[Tuple[int, str, str]] = [
 ]
 
 
-def _tcp_probe(host: str, port: int, timeout: float = 1.5) -> Optional[str]:
+def _tcp_probe(host: str, port: int, timeout: float = 1.5) -> str | None:
     """Attempt a TCP connection and grab a banner.
 
     Args:
@@ -119,8 +119,8 @@ class Exploit(BaseExploit):
     threads = OptInteger(20, "Concurrent probe threads")
 
     def run(self) -> None:
-        print_status("Scanning {} for Smart TV services...".format(self.target))
-        results: Dict[int, str] = {}
+        print_status(f"Scanning {self.target} for Smart TV services...")
+        results: dict[int, str] = {}
         lock = threading.Lock()
 
         def probe(port: int, proto: str, label: str) -> None:
@@ -135,7 +135,7 @@ class Exploit(BaseExploit):
             else:
                 if _udp_probe(self.target, port, float(self.timeout)):
                     with lock:
-                        results[port] = "[UDP/{:5d}] {}".format(port, label)
+                        results[port] = f"[UDP/{port:5d}] {label}"
                         print_success(results[port])
 
         workers = []
@@ -148,10 +148,10 @@ class Exploit(BaseExploit):
             t.join(timeout=float(self.timeout) + 2)
 
         if not results:
-            print_error("No Smart TV services found on {}".format(self.target))
+            print_error(f"No Smart TV services found on {self.target}")
         else:
             print_status(
-                "Found {} open Smart TV port(s) on {}".format(len(results), self.target)
+                f"Found {len(results)} open Smart TV port(s) on {self.target}"
             )
 
     @mute

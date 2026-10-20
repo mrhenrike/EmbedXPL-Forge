@@ -26,7 +26,6 @@ References:
   - https://www.cisa.gov/news-events/ics-advisories/icsa-24-256-24
 Affected: FactoryTalk Analytics LogixAI 3.00/3.01; Pavilion8/PavilionX < 5.20 / < 6.0
 """
-from __future__ import annotations
 
 import json
 import logging

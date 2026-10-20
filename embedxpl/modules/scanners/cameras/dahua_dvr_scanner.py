@@ -72,11 +72,11 @@ class Exploit(BaseExploit):
     timeout = OptInteger(8, "Socket timeout in seconds")
 
     def run(self) -> None:
-        print_status("Probing Dahua protocol on {}:{}...".format(self.target, self.port))
+        print_status(f"Probing Dahua protocol on {self.target}:{self.port}...")
         try:
             sock = socket.create_connection((self.target, self.port), timeout=self.timeout)
-        except (socket.error, OSError) as exc:
-            print_error("Connection failed: {}".format(exc))
+        except OSError as exc:
+            print_error(f"Connection failed: {exc}")
             return
 
         try:
@@ -94,14 +94,14 @@ class Exploit(BaseExploit):
             payload_len = struct.unpack("<I", header[16:20])[0]
             payload = _recv_all(sock, payload_len) if payload_len else b""
 
-            print_success("Dahua device confirmed on {}:{}".format(self.target, self.port))
+            print_success(f"Dahua device confirmed on {self.target}:{self.port}")
             if payload:
                 text = payload.decode("utf-8", errors="replace")
                 # Extract key fields
                 for field in ("DeviceType", "SerialNo", "BuildDate", "SoftWareVersion"):
                     m = re.search(rf'"{field}"\s*:\s*"([^"]+)"', text)
                     if m:
-                        print_success("{}: {}".format(field, m.group(1)))
+                        print_success(f"{field}: {m.group(1)}")
                 print_status(
                     "Run exploits/cameras/dahua/dvr_auth_bypass_cve_2013_6117.py "
                     "for full credential extraction"

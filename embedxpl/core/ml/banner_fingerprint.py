@@ -8,7 +8,6 @@ Author: André Henrique (LinkedIn/X: @mrhenrike)
 Version: 0.1.0
 """
 
-from __future__ import annotations
 
 import logging
 import re
@@ -33,7 +32,7 @@ class FingerprintMatch:
     source: str = ""  # "corpus", "regex", "oui"
 
 
-_KNOWN_SIGNATURES: List[Dict[str, str]] = [
+_KNOWN_SIGNATURES: list[dict[str, str]] = [
     {"banner": "micro_httpd", "vendor": "dlink", "model": "DIR-*", "source": "http_server"},
     {"banner": "GoAhead-Webs", "vendor": "multi", "model": "GoAhead-based", "source": "http_server"},
     {"banner": "GoAhead-http", "vendor": "multi", "model": "GoAhead-based", "source": "http_server"},
@@ -79,7 +78,7 @@ _KNOWN_SIGNATURES: List[Dict[str, str]] = [
     {"banner": "Junos", "vendor": "juniper", "model": "Junos", "source": "snmp"},
 ]
 
-_VENDOR_REGEX: List[Tuple[re.Pattern, str, str]] = [
+_VENDOR_REGEX: list[tuple[re.Pattern, str, str]] = [
     (re.compile(r"D-?Link\s+(DIR|DSL|DAP|DWR)-?(\w+)", re.IGNORECASE), "dlink", r"\1-\2"),
     (re.compile(r"TP-?Link\s+(Archer|TL-|Deco)\s*(\w+)", re.IGNORECASE), "tplink", r"\1 \2"),
     (re.compile(r"NETGEAR\s+(R|RAX|RBK|WAC|WNR|DGN)(\w+)", re.IGNORECASE), "netgear", r"\1\2"),
@@ -105,10 +104,10 @@ class BannerFingerprinter:
     3. GPU-accelerated cosine similarity for fuzzy matching (optional)
     """
 
-    def __init__(self, backend: Optional[ComputeBackend] = None) -> None:
+    def __init__(self, backend: ComputeBackend | None = None) -> None:
         self._backend = backend or auto_select_backend(compute_mode="auto")
         self._corpus = _KNOWN_SIGNATURES.copy()
-        self._corpus_vectors: Optional[np.ndarray] = None
+        self._corpus_vectors: np.ndarray | None = None
 
     @property
     def corpus_size(self) -> int:
@@ -122,7 +121,7 @@ class BannerFingerprinter:
         })
         self._corpus_vectors = None  # invalidate cache
 
-    def match(self, banner: str, source: str = "auto") -> List[FingerprintMatch]:
+    def match(self, banner: str, source: str = "auto") -> list[FingerprintMatch]:
         """Match a banner string against known signatures.
 
         Args:
@@ -135,7 +134,7 @@ class BannerFingerprinter:
         if not banner or not banner.strip():
             return []
 
-        matches: List[FingerprintMatch] = []
+        matches: list[FingerprintMatch] = []
 
         # Strategy 1: Regex extraction (highest confidence)
         regex_matches = self._match_regex(banner)
@@ -146,16 +145,16 @@ class BannerFingerprinter:
         matches.extend(corpus_matches)
 
         # Deduplicate by vendor, keep highest confidence
-        seen: Dict[str, FingerprintMatch] = {}
+        seen: dict[str, FingerprintMatch] = {}
         for m in matches:
-            key = "{}:{}".format(m.vendor, m.model)
+            key = f"{m.vendor}:{m.model}"
             if key not in seen or m.confidence > seen[key].confidence:
                 seen[key] = m
 
         result = sorted(seen.values(), key=lambda x: x.confidence, reverse=True)
         return result
 
-    def match_batch(self, banners: List[str], source: str = "auto") -> List[List[FingerprintMatch]]:
+    def match_batch(self, banners: list[str], source: str = "auto") -> list[list[FingerprintMatch]]:
         """Match multiple banners in batch.
 
         Args:
@@ -167,7 +166,7 @@ class BannerFingerprinter:
         """
         return [self.match(b, source) for b in banners]
 
-    def match_cosine(self, banners: List[str], top_k: int = 5) -> List[List[FingerprintMatch]]:
+    def match_cosine(self, banners: list[str], top_k: int = 5) -> list[list[FingerprintMatch]]:
         """GPU-accelerated fuzzy matching using character n-gram cosine similarity.
 
         Args:
@@ -191,11 +190,11 @@ class BannerFingerprinter:
         # Cosine similarity via GPU backend
         sim_matrix = self._backend.cosine_similarity_batch(query_vecs, corpus_vecs)
 
-        results: List[List[FingerprintMatch]] = []
+        results: list[list[FingerprintMatch]] = []
         for i, banner in enumerate(banners):
             scores = sim_matrix[i]
             top_indices = np.argsort(scores)[::-1][:top_k]
-            matches: List[FingerprintMatch] = []
+            matches: list[FingerprintMatch] = []
             for idx in top_indices:
                 if scores[idx] < 0.1:
                     continue
@@ -211,9 +210,9 @@ class BannerFingerprinter:
 
         return results
 
-    def _match_regex(self, banner: str) -> List[FingerprintMatch]:
+    def _match_regex(self, banner: str) -> list[FingerprintMatch]:
         """Extract vendor/model using regex patterns."""
-        matches: List[FingerprintMatch] = []
+        matches: list[FingerprintMatch] = []
         for pattern, vendor, model_group in _VENDOR_REGEX:
             m = pattern.search(banner)
             if m:
@@ -230,9 +229,9 @@ class BannerFingerprinter:
                 ))
         return matches
 
-    def _match_corpus(self, banner: str, source: str) -> List[FingerprintMatch]:
+    def _match_corpus(self, banner: str, source: str) -> list[FingerprintMatch]:
         """Substring matching against the signature corpus."""
-        matches: List[FingerprintMatch] = []
+        matches: list[FingerprintMatch] = []
         banner_lower = banner.lower()
 
         for sig in self._corpus:
@@ -251,14 +250,14 @@ class BannerFingerprinter:
         return matches
 
     @staticmethod
-    def _char_ngram_vectorize(texts: List[str], n: int = 3) -> np.ndarray:
+    def _char_ngram_vectorize(texts: list[str], n: int = 3) -> np.ndarray:
         """Simple character n-gram TF vectorization (no external deps)."""
-        vocab: Dict[str, int] = {}
-        doc_ngrams: List[Dict[int, float]] = []
+        vocab: dict[str, int] = {}
+        doc_ngrams: list[dict[int, float]] = []
 
         for text in texts:
             text_lower = text.lower()
-            ngrams: Dict[int, float] = {}
+            ngrams: dict[int, float] = {}
             for i in range(len(text_lower) - n + 1):
                 gram = text_lower[i:i + n]
                 if gram not in vocab:

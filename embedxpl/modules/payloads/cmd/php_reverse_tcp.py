@@ -16,5 +16,5 @@ class Payload(PHPReverseTCP):
 
     def generate(self):
         self.fmt = self.cmd + ' -r "{}"'
-        payload = super(Payload, self).generate()
+        payload = super().generate()
         return payload

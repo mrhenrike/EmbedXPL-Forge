@@ -56,7 +56,7 @@ _DNP3_RESET_LINK = bytes([
 ])
 
 
-def _dnp3_probe(host: str, port: int, request: bytes, udp: bool, timeout: int) -> Optional[bytes]:
+def _dnp3_probe(host: str, port: int, request: bytes, udp: bool, timeout: int) -> bytes | None:
     """Send DNP3 request over TCP or UDP and return response."""
     try:
         if udp:
@@ -84,9 +84,9 @@ def _parse_dnp3_response(data: bytes) -> str:
         fc = ctrl & 0x0F
         fc_names = {0x00: "Reset Link", 0x01: "Reset Link Ack", 0x09: "Request Link Status",
                     0x0B: "Link Status", 0x0F: "Not Supported"}
-        fc_name = fc_names.get(fc, "FC=0x{:02X}".format(fc))
-        return "Link frame from slave {} — {}".format(src, fc_name)
-    return "unknown DNP3 frame ({} bytes)".format(len(data))
+        fc_name = fc_names.get(fc, f"FC=0x{fc:02X}")
+        return f"Link frame from slave {src} — {fc_name}"
+    return f"unknown DNP3 frame ({len(data)} bytes)"
 
 
 class Exploit(BaseExploit):
@@ -126,27 +126,23 @@ class Exploit(BaseExploit):
         found = False
         for proto_name, udp in [("TCP", False), ("UDP", True)]:
             port = self.port
-            print_status("Probing DNP3 on {}:{} ({})...".format(self.target, port, proto_name))
+            print_status(f"Probing DNP3 on {self.target}:{port} ({proto_name})...")
             resp = _dnp3_probe(self.target, port, _DNP3_LINK_STATUS_REQ, udp, self.timeout)
             if resp:
                 info = _parse_dnp3_response(resp)
                 print_success(
-                    "DNP3 device confirmed on {}:{}/{} — {}".format(
-                        self.target, port, proto_name, info
-                    )
+                    f"DNP3 device confirmed on {self.target}:{port}/{proto_name} — {info}"
                 )
                 found = True
             else:
                 # Try Reset Link
                 resp2 = _dnp3_probe(self.target, port, _DNP3_RESET_LINK, udp, self.timeout)
                 if resp2:
-                    print_success("DNP3 response to Reset Link on {}/{}: {}".format(
-                        port, proto_name, _parse_dnp3_response(resp2)
-                    ))
+                    print_success(f"DNP3 response to Reset Link on {port}/{proto_name}: {_parse_dnp3_response(resp2)}")
                     found = True
 
         if not found:
-            print_error("No DNP3 response on {}:{} (TCP/UDP)".format(self.target, self.port))
+            print_error(f"No DNP3 response on {self.target}:{self.port} (TCP/UDP)")
 
     @mute
     def check(self) -> bool:

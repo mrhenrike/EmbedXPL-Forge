@@ -9,7 +9,6 @@ Specific commands can trigger takeoff, landing, and other flight operations.
 Protocol reference: HardBreak wiki, ARSDK3 protocol analysis.
 PREREQ: Connected to ANAFI WiFi network (192.168.42.1).
 """
-from __future__ import annotations
 
 import logging
 import socket

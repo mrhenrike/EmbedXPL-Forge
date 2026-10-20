@@ -16,7 +16,6 @@ CLI flag in exf.py:
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
 
-from __future__ import annotations
 
 import json
 import os
@@ -55,7 +54,7 @@ class LocalLLMBridge:
         self.timeout = timeout
         self._client = httpx.Client(timeout=timeout)
 
-    def _generate(self, prompt: str, model: Optional[str] = None) -> str:
+    def _generate(self, prompt: str, model: str | None = None) -> str:
         """Call Ollama /api/generate."""
         url = f"{OLLAMA_HOST}/api/generate"
         payload = {

@@ -3,7 +3,6 @@
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 from typing import List, Optional
 
@@ -29,7 +28,7 @@ def confirm_prompt(text: str, default: bool = True) -> bool:
     return answer in ("y", "yes", "s", "sim")
 
 
-def select_prompt(text: str, choices: List[str], default: str = "") -> str:
+def select_prompt(text: str, choices: list[str], default: str = "") -> str:
     """Display a selection prompt with choices."""
     if has_rich:
         from rich.prompt import Prompt

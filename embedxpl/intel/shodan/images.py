@@ -42,7 +42,7 @@ class ImagesConverter(Converter):
                 counter = 0
                 tmpname = filename
                 while os.path.exists(tmpname + '.jpg'):
-                    tmpname = '{}-{}'.format(filename, counter)
+                    tmpname = f'{filename}-{counter}'
                     counter += 1
                 filename = tmpname + '.jpg'
 

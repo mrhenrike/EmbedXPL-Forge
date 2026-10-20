@@ -37,7 +37,7 @@ class Data:
             return
         state_file = os.path.join(self.config.out_dir, f".{self.taskid}")
         if os.path.exists(state_file):
-            with open(state_file, "r") as f:
+            with open(state_file) as f:
                 if line := f.readline().strip():
                     _done, _found, _runned_time = line.split(",")
                     self.done = int(_done)
@@ -45,7 +45,7 @@ class Data:
                     self.runned_time = float(_runned_time)
 
     def _cal_total(self):
-        with open(self.config.in_file, "r") as f:
+        with open(self.config.in_file) as f:
             for line in f:
                 if (s := line.strip()) and not line.startswith("#"):
                     self.add_total(net.get_ip_seg_len(s))
@@ -53,7 +53,7 @@ class Data:
     def _generate_ip(self):
         current = 0
         remain_gen = None
-        with open(self.config.in_file, "r") as f:
+        with open(self.config.in_file) as f:
             if self.done:
                 for line in f:
                     if (s := line.strip()) and not line.startswith("#"):

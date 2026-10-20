@@ -17,4 +17,4 @@ class Encoder(BaseEncoder):
 
     def encode(self, payload):
         encoded_payload = str(b64encode(bytes(payload, "utf-8")), "utf-8")
-        return "use MIME::Base64;eval(decode_base64('{}'));".format(encoded_payload)
+        return f"use MIME::Base64;eval(decode_base64('{encoded_payload}'));"

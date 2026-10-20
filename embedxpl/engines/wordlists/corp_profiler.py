@@ -13,11 +13,11 @@ Usage:
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 import re
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 from embedxpl.engines.wordlists.profiler import (
     WORD_SEPARATORS,
@@ -179,7 +179,7 @@ def interactive_corp_profile() -> dict:
 
 def generate_from_corp_profile(
     profile: dict,
-    leet_mode: Optional[str] = None,
+    leet_mode: str | None = None,
     min_len: int = 6,
     max_len: int = 32,
     with_spaces: bool = False,

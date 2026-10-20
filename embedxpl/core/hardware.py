@@ -256,7 +256,7 @@ def _format_hardware_detail(hw_member):
     wrapped_desc = textwrap.fill(desc, width=72, initial_indent="    ",
                                  subsequent_indent="    ")
     lines = [
-        "  [{id}]".format(id=hw_member.value),
+        f"  [{hw_member.value}]",
         wrapped_desc,
         "    Product     : {v}".format(v=ex.get("product_name", "N/A")),
         "    Chipset     : {v}".format(v=ex.get("chipset", "N/A")),
@@ -378,12 +378,10 @@ def check_hardware_requirements(module_info, interactive=True):
     total_cost = estimate_total_cost(resolved)
 
     print("\n" + "=" * 78)
-    print("  HARDWARE REQUIREMENTS - {name}".format(name=module_name))
+    print(f"  HARDWARE REQUIREMENTS - {module_name}")
     print("=" * 78)
     print()
-    print("  This module requires {n} physical hardware adapter(s):".format(
-        n=len(resolved) + len(unrecognized)
-    ))
+    print(f"  This module requires {len(resolved) + len(unrecognized)} physical hardware adapter(s):")
     print()
 
     if resolved:
@@ -396,10 +394,10 @@ def check_hardware_requirements(module_info, interactive=True):
     if unrecognized:
         print("  Unrecognized hardware identifiers (not in HWReq catalog):")
         for item in unrecognized:
-            print("    - {v}".format(v=item))
+            print(f"    - {item}")
         print()
 
-    print("  Estimated total hardware cost: ${t:.2f} USD".format(t=total_cost))
+    print(f"  Estimated total hardware cost: ${total_cost:.2f} USD")
     print()
     print("-" * 78)
     print(
@@ -415,10 +413,8 @@ def check_hardware_requirements(module_info, interactive=True):
         if unrecognized:
             hw_list += ", " + ", ".join(unrecognized)
         raise RuntimeError(
-            "Module '{name}' requires hardware: {hw}. "
-            "Cannot proceed in non-interactive mode.".format(
-                name=module_name, hw=hw_list,
-            )
+            f"Module '{module_name}' requires hardware: {hw_list}. "
+            "Cannot proceed in non-interactive mode."
         )
 
     try:

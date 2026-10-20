@@ -3,9 +3,9 @@ from pwdmanager import PwdManager
 from utils import *
 
 
-class DahuaConnect(object):
+class DahuaConnect:
     def __init__(self):
-        super(DahuaConnect, self).__init__()
+        super().__init__()
 
         self.dh = None
         self.dhConsole = {}
@@ -17,7 +17,7 @@ class DahuaConnect(object):
 
     def restart_connection(self, host):
         """ Handle restart of connections, trying every 30sec for 10 times, if no success, stop trying """
-        log.info('Scheduling reconnect to {}'.format(host))
+        log.info(f'Scheduling reconnect to {host}')
 
         dh_data = PwdManager().find_host(host)
         times = 0
@@ -36,17 +36,17 @@ class DahuaConnect(object):
                         relay_host=dh_data.get('relay'),
                         logon=dh_data.get('logon'),
                         timeout=5):
-                    print('[restart_connection] ({})'.format(times))
+                    print(f'[restart_connection] ({times})')
                     times += 1
                 else:
                     return True
             # except Exception:
             except AttributeError:
-                log.failure('[restart_connection] ({})'.format(host))
+                log.failure(f'[restart_connection] ({host})')
                 pass
 
             if times == 10:
-                log.failure('See you in valhalla {}'.format(host))
+                log.failure(f'See you in valhalla {host}')
                 return False
 
     def connect_rhost(
@@ -65,7 +65,7 @@ class DahuaConnect(object):
 
         for session in self.dhConsole:
             if self.dhConsole.get(session).get('host') == rhost:
-                log.warning('Already connected to {}'.format(rhost))
+                log.warning(f'Already connected to {rhost}')
                 return False
 
         """ Needed for get 'self.udp_server' set """

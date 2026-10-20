@@ -1,4 +1,3 @@
-from __future__ import annotations
 
 """
 generation_engines.py - Registry de motores de geração e presets do WFH.
@@ -138,7 +137,7 @@ def _check_ram_gb() -> float:
         return 99.0
 
 
-def get_engine(engine_id: int) -> Optional[EngineSpec]:
+def get_engine(engine_id: int) -> EngineSpec | None:
     """Return an EngineSpec by numeric ID, or None if not found.
 
     Args:
@@ -257,7 +256,7 @@ def resolve_engines(
 
 
 def print_engine_menu(
-    active_ids: Optional[set[int]] = None,
+    active_ids: set[int] | None = None,
     t_func=None,
 ) -> None:
     """Print the numbered engine selection menu to stdout.

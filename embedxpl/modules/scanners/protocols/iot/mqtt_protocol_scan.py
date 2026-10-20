@@ -123,7 +123,7 @@ class Exploit(Exploit):
                 135: "Server Busy",
                 140: "Bad Authentication Method",
             }
-        return reasons.get(code, "Unknown (0x{:02x})".format(code))
+        return reasons.get(code, f"Unknown (0x{code:02x})")
 
     def _probe_version(self, packet: bytes, version: str) -> dict:
         """Probe broker with specific MQTT version."""
@@ -138,7 +138,7 @@ class Exploit(Exploit):
             if rc in (4, 5, 133, 134, 135):
                 result["auth_required"] = True
             sock.close()
-        except (socket.error, OSError, ssl.SSLError):
+        except (OSError, ssl.SSLError):
             pass
         return result
 
@@ -152,7 +152,7 @@ class Exploit(Exploit):
             if cert:
                 result["cert_size"] = len(cert)
             sock.close()
-        except (socket.error, OSError, ssl.SSLError):
+        except (OSError, ssl.SSLError):
             pass
         return result
 
@@ -193,9 +193,9 @@ class Exploit(Exploit):
                     offset += 2 + remaining
                     if len(topics) >= 50:
                         break
-            except socket.timeout:
+            except TimeoutError:
                 continue
-            except (socket.error, OSError):
+            except OSError:
                 break
         return topics
 
@@ -210,7 +210,7 @@ class Exploit(Exploit):
             topics = self._subscribe_wildcard(sock)
             sock.close()
             return topics
-        except (socket.error, OSError):
+        except OSError:
             return []
 
     @mute
@@ -222,19 +222,19 @@ class Exploit(Exploit):
             sock.connect((self.target, int(self.port)))
             sock.close()
             return True
-        except (socket.error, OSError):
+        except OSError:
             return False
 
     @multi
     def run(self) -> None:
         """Execute MQTT protocol scan."""
-        print_status("Scanning MQTT broker at {}:{}".format(self.target, self.port))
+        print_status(f"Scanning MQTT broker at {self.target}:{self.port}")
 
         if not self.check():
-            print_error("MQTT port {} not reachable".format(self.port))
+            print_error(f"MQTT port {self.port} not reachable")
             return
 
-        print_success("MQTT port {} open".format(self.port))
+        print_success(f"MQTT port {self.port} open")
 
         v311 = self._probe_version(_CONNECT_V311, "3.1.1")
         if v311.get("supported"):
@@ -259,17 +259,13 @@ class Exploit(Exploit):
             print_warning("TLS port {} not reachable".format(tls["tls_port"]))
 
         if v311.get("accepted") or v5.get("accepted"):
-            print_status("Subscribing to wildcard '#' for {} seconds...".format(
-                self.topic_listen
-            ))
+            print_status(f"Subscribing to wildcard '#' for {self.topic_listen} seconds...")
             topics = self._discover_topics()
             if topics:
-                print_success("Discovered {} public topic(s):".format(len(topics)))
+                print_success(f"Discovered {len(topics)} public topic(s):")
                 for t in topics:
-                    print_info("  {}".format(t))
+                    print_info(f"  {t}")
             else:
-                print_info("No public topics captured in {} seconds".format(
-                    self.topic_listen
-                ))
+                print_info(f"No public topics captured in {self.topic_listen} seconds")
         else:
             print_info("Anonymous access denied, skipping topic discovery")

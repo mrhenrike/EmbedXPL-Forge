@@ -15,7 +15,7 @@ from embedxpl.core.exploit import *
 from embedxpl.core.http.http_client import HTTPClient
 
 
-_VULN_MAP: List[Tuple[str, str, str, str]] = [
+_VULN_MAP: list[tuple[str, str, str, str]] = [
     (
         "CVE-2025-66173",
         "Hardcoded RSA-1024 debug key pair in firmware (private key extractable)",
@@ -49,20 +49,20 @@ _VULN_MAP: List[Tuple[str, str, str, str]] = [
 ]
 
 
-def _parse_xml_tag(xml: str, tag: str) -> Optional[str]:
-    match = re.search(r"<{0}>(.*?)</{0}>".format(tag), xml, re.DOTALL)
+def _parse_xml_tag(xml: str, tag: str) -> str | None:
+    match = re.search(rf"<{tag}>(.*?)</{tag}>", xml, re.DOTALL)
     return match.group(1).strip() if match else None
 
 
-def _version_tuple(version_str: str) -> Optional[Tuple[int, ...]]:
+def _version_tuple(version_str: str) -> tuple[int, ...] | None:
     match = re.search(r"V?(\d+(?:\.\d+)+)", version_str)
     if not match:
         return None
     return tuple(int(p) for p in match.group(1).split("."))
 
 
-def _check_cve_affected(fw_version: str, fw_date: str) -> List[Tuple[str, str, str, str]]:
-    results: List[Tuple[str, str, str, str]] = []
+def _check_cve_affected(fw_version: str, fw_date: str) -> list[tuple[str, str, str, str]]:
+    results: list[tuple[str, str, str, str]] = []
     vtup = _version_tuple(fw_version)
 
     for cve_id, desc, affected_range, cvss in _VULN_MAP:
@@ -142,8 +142,8 @@ class Exploit(HTTPClient):
     port = OptPort(80, "HTTP port")
     ssl = OptBool(False, "SSL enabled: true/false")
 
-    def _probe_isapi(self) -> Dict[str, str]:
-        info: Dict[str, str] = {}
+    def _probe_isapi(self) -> dict[str, str]:
+        info: dict[str, str] = {}
         resp = self.http_request(method="GET", path="/ISAPI/System/deviceInfo")
         if resp is None or resp.status_code not in (200, 401):
             return info
@@ -167,8 +167,8 @@ class Exploit(HTTPClient):
 
         return info
 
-    def _probe_http_headers(self) -> Dict[str, str]:
-        info: Dict[str, str] = {}
+    def _probe_http_headers(self) -> dict[str, str]:
+        info: dict[str, str] = {}
         resp = self.http_request(method="GET", path="/")
         if resp is None:
             return info
@@ -183,8 +183,8 @@ class Exploit(HTTPClient):
 
         return info
 
-    def _probe_login_page(self) -> Dict[str, str]:
-        info: Dict[str, str] = {}
+    def _probe_login_page(self) -> dict[str, str]:
+        info: dict[str, str] = {}
         resp = self.http_request(method="GET", path="/doc/page/login.asp")
         if resp is None or resp.status_code != 200:
             return info
@@ -200,9 +200,9 @@ class Exploit(HTTPClient):
         return info
 
     def run(self) -> None:
-        print_status("Fingerprinting Hikvision device at {}:{}...".format(self.target, self.port))
+        print_status(f"Fingerprinting Hikvision device at {self.target}:{self.port}...")
 
-        device_info: Dict[str, str] = {}
+        device_info: dict[str, str] = {}
 
         isapi = self._probe_isapi()
         device_info.update(isapi)
@@ -214,10 +214,10 @@ class Exploit(HTTPClient):
         device_info.update(login)
 
         if not device_info:
-            print_error("No Hikvision indicators found on {}:{}".format(self.target, self.port))
+            print_error(f"No Hikvision indicators found on {self.target}:{self.port}")
             return
 
-        print_success("Hikvision device identified on {}:{}".format(self.target, self.port))
+        print_success(f"Hikvision device identified on {self.target}:{self.port}")
 
         info_rows = [(k, v) for k, v in device_info.items()]
         print_table(("Property", "Value"), *info_rows, title="Device Information")
@@ -234,7 +234,7 @@ class Exploit(HTTPClient):
 
         affected_count = sum(1 for _, _, a, _ in cve_results if a == "LIKELY")
         if affected_count:
-            print_warning("{} potential CVE(s) affect this firmware version".format(affected_count))
+            print_warning(f"{affected_count} potential CVE(s) affect this firmware version")
         else:
             print_info("No known CVEs matched this firmware version")
 

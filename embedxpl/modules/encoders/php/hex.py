@@ -17,4 +17,4 @@ class Encoder(BaseEncoder):
 
     def encode(self, payload):
         encoded_payload = str(hexlify(bytes(payload, "utf-8")), "utf-8")
-        return "eval(hex2bin('{}'));".format(encoded_payload)
+        return f"eval(hex2bin('{encoded_payload}'));"

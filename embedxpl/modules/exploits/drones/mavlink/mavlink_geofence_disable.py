@@ -6,7 +6,6 @@ Disables the geofence on ArduPilot-based drones by sending PARAM_SET
 for the FENCE_ENABLE parameter. Allows the drone to fly into restricted
 or protected airspace after disarming the geofence protection.
 """
-from __future__ import annotations
 
 import logging
 import socket

@@ -5,7 +5,6 @@ that returned 401 during route discovery.
 
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
-from __future__ import annotations
 from dataclasses import dataclass
 from embedxpl.modules.network.rtsp.rtsp_client import RTSPClient
 

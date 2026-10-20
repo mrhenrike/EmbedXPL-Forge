@@ -23,12 +23,11 @@ Usage:
 
 Author: André Henrique (@mrhenrike)
 """
-from __future__ import annotations
 
 import re
 import unicodedata
 from itertools import product as iproduct
-from typing import Generator, Iterable
+from collections.abc import Generator, Iterable
 
 # ---------------------------------------------------------------------------
 # Defaults

@@ -12,15 +12,15 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, Generator, List, Optional
+from typing import Dict, List, Optional
+from collections.abc import Generator
 
 __version__ = "1.0.0"
 
 # Default leet map (configurable via CuppProfile.leet_map)
-_DEFAULT_LEET: Dict[str, str] = {
+_DEFAULT_LEET: dict[str, str] = {
     "a": "4", "i": "1", "e": "3", "t": "7",
     "o": "0", "s": "5", "g": "9", "z": "2",
 }
@@ -33,7 +33,7 @@ _DEFAULT_NUMS_START = 0
 _DEFAULT_NUMS_STOP = 100
 
 
-def make_leet(word: str, leet_map: Optional[Dict[str, str]] = None) -> str:
+def make_leet(word: str, leet_map: dict[str, str] | None = None) -> str:
     """Apply leet substitutions to a word.
 
     Args:
@@ -50,7 +50,7 @@ def make_leet(word: str, leet_map: Optional[Dict[str, str]] = None) -> str:
     return result
 
 
-def concats(seq: List[str], start: int, stop: int) -> Generator[str, None, None]:
+def concats(seq: list[str], start: int, stop: int) -> Generator[str, None, None]:
     """Append numbers in range [start, stop) to each word.
 
     Args:
@@ -67,8 +67,8 @@ def concats(seq: List[str], start: int, stop: int) -> Generator[str, None, None]
 
 
 def komb(
-    seq: List[str],
-    start: List[str],
+    seq: list[str],
+    start: list[str],
     special: str = "",
 ) -> Generator[str, None, None]:
     """Generate cartesian product combinations: seq x start with optional separator.
@@ -101,9 +101,9 @@ class CuppProfile:
     child_birth: str = ""
     pet_name: str = ""
     company: str = ""
-    extra_words: List[str] = field(default_factory=list)
-    leet_map: Dict[str, str] = field(default_factory=lambda: dict(_DEFAULT_LEET))
-    specials: List[str] = field(default_factory=lambda: list(_DEFAULT_SPECIALS))
+    extra_words: list[str] = field(default_factory=list)
+    leet_map: dict[str, str] = field(default_factory=lambda: dict(_DEFAULT_LEET))
+    specials: list[str] = field(default_factory=lambda: list(_DEFAULT_SPECIALS))
     num_start: int = _DEFAULT_NUMS_START
     num_stop: int = _DEFAULT_NUMS_STOP
 
@@ -125,7 +125,7 @@ class CuppEngine:
         profile: CuppProfile,
         max_output: int = 0,
         leet: bool = True,
-    ) -> List[str]:
+    ) -> list[str]:
         """Generate password candidates from profile.
 
         Args:

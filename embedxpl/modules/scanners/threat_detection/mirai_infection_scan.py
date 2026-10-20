@@ -26,7 +26,6 @@ References:
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import logging
 import socket
@@ -51,7 +50,7 @@ from embedxpl.core.exploit import (
 logger = logging.getLogger("embedxpl.scanners.threat_detection.mirai_infection_scan")
 
 # Mirai scanner default credential pairs (from mirai/bot/scanner.c table)
-_MIRAI_CREDS: List[Tuple[str, str]] = [
+_MIRAI_CREDS: list[tuple[str, str]] = [
     ("root",    "root"),
     ("admin",   "admin"),
     ("root",    "vizxv"),
@@ -139,11 +138,11 @@ class Exploit(BaseExploit):
 
     def run(self) -> None:
         """Execute multi-indicator Mirai infection scan."""
-        print_status("[MiraiScan] Scanning {} for Mirai infection indicators...".format(self.target))
+        print_status(f"[MiraiScan] Scanning {self.target} for Mirai infection indicators...")
 
         indicators: int = 0
-        open_ports: List[int] = []
-        hit_creds: List[Tuple[str, str]] = []
+        open_ports: list[int] = []
+        hit_creds: list[tuple[str, str]] = []
 
         # Indicator 1: open Telnet ports
         for port in self._parse_ports():
@@ -164,22 +163,18 @@ class Exploit(BaseExploit):
                 user, pwd, banner = result
                 hit_creds.append((user, pwd))
                 indicators += 1
-                print_success("[MiraiScan] Default creds accepted: {}:{} on port {}".format(
-                    user, pwd, port))
+                print_success(f"[MiraiScan] Default creds accepted: {user}:{pwd} on port {port}")
                 if any(m in banner for m in _BUSYBOX_MARKERS):
                     indicators += 1
                     print_success("[MiraiScan] BusyBox/shell banner detected -- "
-                                  "device likely runs IoT firmware: {!r}".format(
-                                      banner[:80]))
+                                  f"device likely runs IoT firmware: {banner[:80]!r}")
 
         # Verdict
-        print_info("[MiraiScan] Indicators: {} | Open ports: {} | Valid creds: {}".format(
-            indicators, open_ports, hit_creds))
+        print_info(f"[MiraiScan] Indicators: {indicators} | Open ports: {open_ports} | Valid creds: {hit_creds}")
 
         if indicators >= 2:
             print_warning(
-                "[MiraiScan] LIKELY INFECTED or HIGHLY VULNERABLE -- {} indicators positive on {}.".format(
-                    indicators, self.target)
+                f"[MiraiScan] LIKELY INFECTED or HIGHLY VULNERABLE -- {indicators} indicators positive on {self.target}."
             )
             print_info("[MiraiScan] Recommendation: isolate device, reflash firmware, "
                        "change all default credentials.")
@@ -190,7 +185,7 @@ class Exploit(BaseExploit):
     # Internal helpers
     # -------------------------------------------------------------------------
 
-    def _parse_ports(self) -> List[int]:
+    def _parse_ports(self) -> list[int]:
         """Parse port_list option into list of integers."""
         result = []
         for part in str(self.port_list).split(","):
@@ -206,14 +201,14 @@ class Exploit(BaseExploit):
             sock.settimeout(timeout)
             sock.connect((host, port))
             return True
-        except (OSError, socket.timeout):
+        except (TimeoutError, OSError):
             return False
         finally:
             sock.close()
 
     def _try_telnet_creds(
         self, host: str, port: int
-    ) -> Optional[Tuple[str, str, bytes]]:
+    ) -> tuple[str, str, bytes] | None:
         """Try each Mirai default credential against a Telnet service.
 
         Returns:
@@ -226,7 +221,7 @@ class Exploit(BaseExploit):
                 return user, pwd, banner
         return None
 
-    def _telnet_probe(self, host: str, port: int, user: str, pwd: str) -> Optional[bytes]:
+    def _telnet_probe(self, host: str, port: int, user: str, pwd: str) -> bytes | None:
         """Attempt a raw Telnet credential probe.
 
         Sends username + password and checks for a shell prompt or BusyBox
@@ -249,7 +244,7 @@ class Exploit(BaseExploit):
             banner = b""
             try:
                 banner = sock.recv(512)
-            except socket.timeout:
+            except TimeoutError:
                 pass
 
             # Negotiate away Telnet IAC options (strip them for simplicity)
@@ -257,7 +252,7 @@ class Exploit(BaseExploit):
             time.sleep(0.3)
             try:
                 banner += sock.recv(256)
-            except socket.timeout:
+            except TimeoutError:
                 pass
 
             sock.sendall((pwd + "\n").encode("latin-1", errors="replace"))
@@ -265,7 +260,7 @@ class Exploit(BaseExploit):
             try:
                 response = sock.recv(512)
                 banner += response
-            except socket.timeout:
+            except TimeoutError:
                 response = b""
 
             # Accept if we see a shell prompt or a known BusyBox marker
@@ -277,7 +272,7 @@ class Exploit(BaseExploit):
             if any(m in combined for m in success_markers):
                 return banner
             return None
-        except (OSError, socket.timeout):
+        except (TimeoutError, OSError):
             return None
         finally:
             sock.close()

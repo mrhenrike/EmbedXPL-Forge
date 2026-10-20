@@ -23,7 +23,7 @@ from embedxpl.core.wordlist.generator import (
 
 def _ask(prompt: str, default: str = "") -> str:
     """Prompt the user for input with an optional default."""
-    suffix = " [{}]: ".format(default) if default else ": "
+    suffix = f" [{default}]: " if default else ": "
     try:
         value = input(prompt + suffix).strip()
     except (EOFError, KeyboardInterrupt):
@@ -36,7 +36,7 @@ def _ask_bool(prompt: str, default: bool = True) -> bool:
     """Prompt the user for a yes/no answer."""
     hint = "Y/n" if default else "y/N"
     try:
-        value = input("{} [{}]: ".format(prompt, hint)).strip().lower()
+        value = input(f"{prompt} [{hint}]: ").strip().lower()
     except (EOFError, KeyboardInterrupt):
         print("")
         return default
@@ -138,18 +138,18 @@ class Exploit(Exploit):
 
         result = generate_wordlist(profile)
 
-        print_info("Profile type     : {}".format(profile_type))
-        print_info("Base seed words  : {}".format(result.base_words_used))
-        print_info("Mutations applied: {}".format(result.mutations_applied))
-        print_info("Passwords generated: {}".format(len(result.passwords)))
-        print_info("Usernames generated: {}".format(len(result.usernames)))
-        print_info("Estimated file size: {}".format(estimate_size_human(result.estimated_size_bytes)))
-        print_info("Password length range: {}-{} chars".format(profile.min_length, profile.max_length))
+        print_info(f"Profile type     : {profile_type}")
+        print_info(f"Base seed words  : {result.base_words_used}")
+        print_info(f"Mutations applied: {result.mutations_applied}")
+        print_info(f"Passwords generated: {len(result.passwords)}")
+        print_info(f"Usernames generated: {len(result.usernames)}")
+        print_info(f"Estimated file size: {estimate_size_human(result.estimated_size_bytes)}")
+        print_info(f"Password length range: {profile.min_length}-{profile.max_length} chars")
 
         if len(result.passwords) >= 10000:
             print_status("")
-            print_status("WARNING: Large wordlist ({} entries). Bruteforce may take "
-                         "significant time depending on target service.".format(len(result.passwords)))
+            print_status(f"WARNING: Large wordlist ({len(result.passwords)} entries). Bruteforce may take "
+                         "significant time depending on target service.")
 
         print_status("")
         if not _ask_bool("Proceed with generation and save to files?"):
@@ -162,8 +162,8 @@ class Exploit(Exploit):
 
         out_dir = self.output_dir if self.output_dir else os.getcwd()
 
-        pwd_filename = "exf_generated_passwords_{}.txt".format(profile_type)
-        usr_filename = "exf_generated_usernames_{}.txt".format(profile_type)
+        pwd_filename = f"exf_generated_passwords_{profile_type}.txt"
+        usr_filename = f"exf_generated_usernames_{profile_type}.txt"
 
         pwd_path = save_wordlist(result.passwords, os.path.join(out_dir, pwd_filename), "passwords")
         result.passwords_file = str(pwd_path)
@@ -175,27 +175,22 @@ class Exploit(Exploit):
         print_status("")
         print_success("Wordlists generated successfully!")
         print_status("")
-        print_info("Passwords: {} ({} entries, {})".format(
-            result.passwords_file, len(result.passwords),
-            estimate_size_human(result.estimated_size_bytes),
-        ))
+        print_info(f"Passwords: {result.passwords_file} ({len(result.passwords)} entries, {estimate_size_human(result.estimated_size_bytes)})")
         if result.usernames_file:
-            print_info("Usernames: {} ({} entries)".format(
-                result.usernames_file, len(result.usernames),
-            ))
+            print_info(f"Usernames: {result.usernames_file} ({len(result.usernames)} entries)")
 
         print_status("")
         print_status("To use in bruteforce modules, set:")
-        print_info("  set passwords file://{}".format(result.passwords_file))
+        print_info(f"  set passwords file://{result.passwords_file}")
         if result.usernames_file:
-            print_info("  set usernames file://{}".format(result.usernames_file))
+            print_info(f"  set usernames file://{result.usernames_file}")
 
         print_status("")
         print_info("Sample passwords (first 15):")
         for pwd in result.passwords[:15]:
-            print_info("  {}".format(pwd))
+            print_info(f"  {pwd}")
         if len(result.passwords) > 15:
-            print_info("  ... and {} more".format(len(result.passwords) - 15))
+            print_info(f"  ... and {len(result.passwords) - 15} more")
 
     def _ask_corporate(self, profile: TargetProfile) -> None:
         """Collect corporate-specific profile fields."""

@@ -14,7 +14,7 @@ class SFTPCli:
         self.sftp_target = sftp_target
         self.sftp_port = sftp_port
         self.verbosity = verbosity
-        self.peer = "{}:{}".format(self.sftp_target, self.sftp_port)
+        self.peer = f"{self.sftp_target}:{self.sftp_port}"
 
         self.transport = None
         self.sftp_client = None
@@ -41,14 +41,14 @@ class SFTPCli:
                 self.sftp_client = paramiko.SFTPClient.from_transport(self.transport)
                 print_success(
                     self.peer,
-                    "SFTP Authentication Successful - Username: '{}' Password: '{}'".format(username, password),
+                    f"SFTP Authentication Successful - Username: '{username}' Password: '{password}'",
                     verbose=self.verbosity,
                 )
                 return True
             except paramiko.AuthenticationException:
                 print_error(
                     self.peer,
-                    "SFTP Authentication Failed - Username: '{}' Password: '{}'".format(username, password),
+                    f"SFTP Authentication Failed - Username: '{username}' Password: '{password}'",
                     verbose=self.verbosity,
                 )
                 self.close()

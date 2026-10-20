@@ -16,5 +16,5 @@ class Payload(PerlReverseTCP):
 
     def generate(self):
         self.fmt = self.cmd + " -MIO -e \"{}\""
-        payload = super(Payload, self).generate()
+        payload = super().generate()
         return payload

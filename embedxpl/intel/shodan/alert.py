@@ -38,7 +38,7 @@ def aggregate_facet(api, networks, facets):
     query = 'net:'
 
     for net in networks:
-        query += '{},'.format(net)
+        query += f'{net},'
 
         # Start running API queries if the query length is getting long
         if len(query) > MAX_QUERY_LENGTH:
@@ -90,7 +90,7 @@ def alert_clear():
     try:
         alerts = api.alerts()
         for alert in alerts:
-            click.echo(u'Removing {} ({})'.format(alert['name'], alert['id']))
+            click.echo('Removing {} ({})'.format(alert['name'], alert['id']))
             api.delete_alert(alert['id'])
     except shodan.APIError as e:
         raise click.ClickException(e.value)
@@ -144,7 +144,7 @@ def alert_domain(domain, triggers):
 
         # Create the actual alert
         click.secho('Creating alert...', dim=True)
-        alert = api.create_alert('__domain: {}'.format(domain), list(domain_ips))
+        alert = api.create_alert(f'__domain: {domain}', list(domain_ips))
 
         # Enable the triggers so it starts getting managed by Shodan Monitor
         click.secho('Enabling triggers...', dim=True)
@@ -221,7 +221,7 @@ def alert_download(filename, alert_id):
                 try:
                     counter = 0
                     click.echo(net)
-                    for banner in api.search_cursor('net:{}'.format(net)):
+                    for banner in api.search_cursor(f'net:{net}'):
                         write_banner(fout, banner)
 
                         # Slow down a bit to make sure we don't hit the rate limit
@@ -233,7 +233,7 @@ def alert_download(filename, alert_id):
     except shodan.APIError as e:
         raise click.ClickException(e.value)
 
-    click.secho('Successfully downloaded results into: {}'.format(filename), fg='green')
+    click.secho(f'Successfully downloaded results into: {filename}', fg='green')
 
 
 @alert.command(name='export')
@@ -250,7 +250,7 @@ def alert_export(filename):
         alerts = api.alerts()
 
         # Create the output file
-        click.echo('Writing alerts to file: {}'.format(filename))
+        click.echo(f'Writing alerts to file: {filename}')
         with gzip.open(filename, 'wt', encoding='utf-8') as fout:
             json.dump(alerts, fout)
     except Exception as e:
@@ -272,7 +272,7 @@ def alert_import(filename):
 
     try:
         # Loading the alerts
-        click.echo('Loading alerts from: {}'.format(filename))
+        click.echo(f'Loading alerts from: {filename}')
         with gzip.open(filename, 'rt', encoding='utf-8') as fin:
             alerts = json.load(fin)
 
@@ -343,13 +343,13 @@ def alert_info(alert):
     click.secho('Network Range(s):', dim=True)
 
     for network in info['filters']['ip']:
-        click.echo(u' > {}'.format(click.style(network, fg='yellow')))
+        click.echo(' > {}'.format(click.style(network, fg='yellow')))
 
     click.echo('')
     if info.get('triggers'):
         click.secho('Triggers:', dim=True)
         for trigger in info['triggers']:
-            click.echo(u' > {}'.format(click.style(trigger, fg='yellow')))
+            click.echo(' > {}'.format(click.style(trigger, fg='yellow')))
         click.echo('')
 
 
@@ -367,11 +367,11 @@ def alert_list(expired):
         raise click.ClickException(e.value)
 
     if len(results) > 0:
-        click.echo(u'# {:14} {:<21} {:<15s}'.format('Alert ID', 'Name', 'IP/ Network'))
+        click.echo('# {:14} {:<21} {:<15s}'.format('Alert ID', 'Name', 'IP/ Network'))
 
         for alert in results:
             click.echo(
-                u'{:16} {:<30} {:<35} '.format(
+                '{:16} {:<30} {:<35} '.format(
                     click.style(alert['id'], fg='yellow'),
                     click.style(alert['name'], fg='cyan'),
                     click.style(', '.join(alert['filters']['ip']), fg='white')
@@ -430,10 +430,10 @@ def alert_stats(limit, filename, facets):
 
         for item in results['facets'][facet]:
             # Force the value to be a string - necessary because some facet values are numbers
-            value = u'{}'.format(item['value'])
+            value = '{}'.format(item['value'])
 
-            click.echo(click.style(u'{:28s}'.format(value), fg='cyan'), nl=False)
-            click.echo(click.style(u'{:12,d}'.format(item['count']), fg='green'))
+            click.echo(click.style(f'{value:28s}', fg='cyan'), nl=False)
+            click.echo(click.style('{:12,d}'.format(item['count']), fg='green'))
 
         click.echo('')
 
@@ -540,7 +540,7 @@ def alert_enable_trigger(alert_id, trigger):
     except shodan.APIError as e:
         raise click.ClickException(e.value)
 
-    click.secho('Successfully enabled the trigger: {}'.format(trigger), fg='green')
+    click.secho(f'Successfully enabled the trigger: {trigger}', fg='green')
 
 
 @alert.command(name='disable')
@@ -557,4 +557,4 @@ def alert_disable_trigger(alert_id, trigger):
     except shodan.APIError as e:
         raise click.ClickException(e.value)
 
-    click.secho('Successfully disabled the trigger: {}'.format(trigger), fg='green')
+    click.secho(f'Successfully disabled the trigger: {trigger}', fg='green')

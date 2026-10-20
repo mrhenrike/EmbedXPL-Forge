@@ -6,7 +6,7 @@ from utils import *
 
 class DahuaEvents(DahuaConnect):
     def __init__(self):
-        super(DahuaEvents, self).__init__()
+        super().__init__()
 
     def internal_event_manager(self, dh_data):
         """ JSON fixing part, then feed 'local_event_handler()' """
@@ -16,7 +16,7 @@ class DahuaEvents(DahuaConnect):
             for event in events:
                 self.local_event_handler(event)
         except Exception as e:
-            log.failure('[internal_event_manager] {}'.format(repr(e)))
+            log.failure(f'[internal_event_manager] {repr(e)}')
 
     def local_event_handler(self, dh_data):
         """ Local event handler """
@@ -229,5 +229,5 @@ class DahuaEvents(DahuaConnect):
                         ))
 
         except Exception as e:
-            log.failure('[local_event_handler] {}'.format(repr(e)))
+            log.failure(f'[local_event_handler] {repr(e)}')
             pass

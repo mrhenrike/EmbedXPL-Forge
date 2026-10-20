@@ -6,7 +6,6 @@ nos quatro locales suportados: en, pt-br, pt-pt, es.
 
 Author: André Henrique (@mrhenrike)
 """
-from __future__ import annotations
 
 from typing import Optional
 
@@ -197,7 +196,7 @@ def get_zodiac_alts(locale: str, sign_index: int) -> list[str]:
     return []
 
 
-def sign_index_from_day_month(day: int, month: int) -> Optional[int]:
+def sign_index_from_day_month(day: int, month: int) -> int | None:
     """
     Retorna índice do signo (0-11) dado dia e mês.
     Retorna None se inválido.
@@ -217,7 +216,7 @@ def sign_index_from_day_month(day: int, month: int) -> Optional[int]:
     return None
 
 
-def sign_index_from_name(name: str, locale: str = DEFAULT_LOCALE) -> Optional[int]:
+def sign_index_from_name(name: str, locale: str = DEFAULT_LOCALE) -> int | None:
     """
     Retorna índice do signo a partir do nome no locale dado.
     Busca case-insensitive, também nos aliases.
@@ -238,7 +237,7 @@ def sign_index_from_name(name: str, locale: str = DEFAULT_LOCALE) -> Optional[in
     return None
 
 
-def get_element_for_sign(sign_index: int, locale: str = DEFAULT_LOCALE) -> Optional[str]:
+def get_element_for_sign(sign_index: int, locale: str = DEFAULT_LOCALE) -> str | None:
     """Retorna nome do elemento para o signo no locale dado."""
     if not 0 <= sign_index < 12:
         return None
@@ -247,7 +246,7 @@ def get_element_for_sign(sign_index: int, locale: str = DEFAULT_LOCALE) -> Optio
     return elements[el_idx]
 
 
-def get_planet_for_sign(sign_index: int, locale: str = DEFAULT_LOCALE) -> Optional[str]:
+def get_planet_for_sign(sign_index: int, locale: str = DEFAULT_LOCALE) -> str | None:
     """Retorna nome do regente planetário para o signo no locale dado."""
     if not 0 <= sign_index < 12:
         return None
@@ -258,7 +257,7 @@ def get_planet_for_sign(sign_index: int, locale: str = DEFAULT_LOCALE) -> Option
     return None
 
 
-def detect_locale_from_text(text: str) -> Optional[str]:
+def detect_locale_from_text(text: str) -> str | None:
     """
     Tenta detectar o locale a partir de palavras-chave no texto.
     Heurística leve: verifica presença de meses/signos em cada locale.

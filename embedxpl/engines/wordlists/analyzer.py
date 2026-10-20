@@ -16,7 +16,6 @@ Metrics:
 Author: André Henrique (@mrhenrike)
 Version: 2.0.0
 """
-from __future__ import annotations
 
 import csv
 import io
@@ -427,7 +426,7 @@ def analyze_char_position_frequency(
     return {pos: dict(cnt.most_common(20)) for pos, cnt in pos_freq.items() if cnt}
 
 
-def export_stats_json(metrics: dict, filepath: str, mask_data: Optional[dict] = None) -> str:
+def export_stats_json(metrics: dict, filepath: str, mask_data: dict | None = None) -> str:
     """
     Exporta métricas de análise em formato JSON.
 
@@ -474,7 +473,7 @@ def export_stats_json(metrics: dict, filepath: str, mask_data: Optional[dict] = 
     return json.dumps(export, ensure_ascii=False, indent=2)
 
 
-def export_stats_csv(metrics: dict, mask_data: Optional[dict] = None) -> str:
+def export_stats_csv(metrics: dict, mask_data: dict | None = None) -> str:
     """
     Exporta distribuição de comprimento e top senhas em formato CSV.
 
@@ -523,7 +522,7 @@ def export_stats_csv(metrics: dict, mask_data: Optional[dict] = None) -> str:
 def export_stats_markdown(
     metrics: dict,
     filepath: str,
-    mask_data: Optional[dict] = None,
+    mask_data: dict | None = None,
 ) -> str:
     """
     Export analysis metrics as Markdown tables.
@@ -744,7 +743,7 @@ def maskgen_optindex(
 
 def export_masks_csv_pack(
     mask_optindex: list[dict],
-    filepath: Optional[str] = None,
+    filepath: str | None = None,
 ) -> str:
     """Export maskgen_optindex result as PACK-compatible CSV.
 

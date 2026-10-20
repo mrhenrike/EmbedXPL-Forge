@@ -3,7 +3,6 @@
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 from typing import Dict, List
 
@@ -28,8 +27,8 @@ ASCII_ART = r"""
 
 def render_banner(
     version: str,
-    module_counts: Dict[str, int],
-    hw_summary: List[str] = None,
+    module_counts: dict[str, int],
+    hw_summary: list[str] = None,
 ) -> None:
     """Render the FXF startup banner."""
     if has_rich:

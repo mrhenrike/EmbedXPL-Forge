@@ -35,21 +35,19 @@ class Exploit(HTTPClient):
     port = OptPort(80, "HTTP port (try 80 or 8080)")
 
     def run(self) -> None:
-        print_status("Scanning TVIP device on {}:{}...".format(self.target, self.port))
+        print_status(f"Scanning TVIP device on {self.target}:{self.port}...")
 
         for path in ["/", "/index.html", "/cgi-bin/index.cgi", "/api/info"]:
             resp = self.http_request(method="GET", path=path)
             if resp and resp.status_code in (200, 302):
                 text = resp.text or ""
                 print_success(
-                    "HTTP {} on {} — {} bytes".format(resp.status_code, path, len(text))
+                    f"HTTP {resp.status_code} on {path} — {len(text)} bytes"
                 )
                 if any(kw in text.lower() for kw in ["tvip", "s-box", "iptv", "multimedia"]):
-                    print_success("TVIP device confirmed at {}:{}".format(
-                        self.target, self.port
-                    ))
+                    print_success(f"TVIP device confirmed at {self.target}:{self.port}")
                 if text:
-                    print_status("Preview: {}".format(text[:200]))
+                    print_status(f"Preview: {text[:200]}")
                 break
 
     @mute

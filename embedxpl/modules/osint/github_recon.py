@@ -11,7 +11,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import os
 import time
@@ -27,7 +26,7 @@ except ImportError:
     _REQUESTS = False
 
 # Pre-defined search queries by device vertical
-QUERIES: Dict[str, List[str]] = {
+QUERIES: dict[str, list[str]] = {
     "mikrotik": [
         "mikrotik password extension:rsc",
         "routeros api token site:github.com",
@@ -81,7 +80,7 @@ class GitHubReconResult:
     """Results from a GitHub recon search."""
     vertical: str
     total_found: int = 0
-    snippets: List[CodeSnippet] = field(default_factory=list)
+    snippets: list[CodeSnippet] = field(default_factory=list)
     error: str = ""
 
 
@@ -123,7 +122,7 @@ class GitHubRecon:
         self,
         vertical: str,
         limit: int = 10,
-        custom_queries: Optional[List[str]] = None,
+        custom_queries: list[str] | None = None,
     ) -> GitHubReconResult:
         """Search GitHub for code related to the specified device vertical.
 
@@ -194,7 +193,7 @@ class GitHubRecon:
 
         return result
 
-    def extract_credentials(self, snippet: CodeSnippet) -> List[str]:
+    def extract_credentials(self, snippet: CodeSnippet) -> list[str]:
         """Attempt to extract credentials from a code snippet.
 
         Args:

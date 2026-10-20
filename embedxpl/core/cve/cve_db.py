@@ -10,7 +10,6 @@ module tree's __info__ metadata.
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 import json
 import logging
@@ -39,7 +38,7 @@ class CVEEntry:
     access_vector: str = "REMOTE"  # REMOTE | LOCAL | PHYSICAL | ADJACENT
     exploit_available: bool = False
     exf_module: str = ""  # EmbedXPL-Forge module path if available
-    references: List[str] = field(default_factory=list)
+    references: list[str] = field(default_factory=list)
 
     @property
     def is_remote(self) -> bool:
@@ -55,14 +54,14 @@ class CVEEntry:
             return "EXPLOITABLE (exf module available)"
         if self.is_remote:
             return "REMOTE (no exf module yet)"
-        return "{} access required".format(self.access_vector.upper())
+        return f"{self.access_vector.upper()} access required"
 
 
 # =====================================================================
 # Embedded CVE catalog — curated for in-scope devices
 # =====================================================================
 
-_EMBEDDED_CVES: List[Dict[str, Any]] = [
+_EMBEDDED_CVES: list[dict[str, Any]] = [
     # --- Netgear ---
     {"cve_id": "CVE-2017-5521", "vendor": "netgear", "product": "multiple", "affected_versions": "R6250, R6400, R6700, R7000, R7100LG, R7300, R7900, R8000, R8300, R8500", "description": "Authentication bypass on Netgear routers via crafted request to passwordrecovered.cgi", "cvss_score": 8.1, "access_vector": "REMOTE"},
     {"cve_id": "CVE-2017-6077", "vendor": "netgear", "product": "dgn2200", "affected_versions": "DGN2200v1-v4", "description": "Remote command execution via ping CGI", "cvss_score": 9.8, "access_vector": "REMOTE"},
@@ -151,7 +150,7 @@ def _version_in_range(actual: str, affected: str) -> bool:
 # Database loader
 # =====================================================================
 
-def _entry_from_mapping(raw: Dict[str, Any]) -> CVEEntry:
+def _entry_from_mapping(raw: dict[str, Any]) -> CVEEntry:
     """Build CVEEntry from dict (embedded list or JSON catalog)."""
     return CVEEntry(
         cve_id=raw["cve_id"],
@@ -166,12 +165,12 @@ def _entry_from_mapping(raw: Dict[str, Any]) -> CVEEntry:
     )
 
 
-def _load_embedded() -> List[CVEEntry]:
+def _load_embedded() -> list[CVEEntry]:
     """Load the embedded CVE catalog."""
     return [_entry_from_mapping(raw) for raw in _EMBEDDED_CVES]
 
 
-def _load_poc_intel_cve_hints(repo_root: Path) -> List[CVEEntry]:
+def _load_poc_intel_cve_hints(repo_root: Path) -> list[CVEEntry]:
     """Load CVE IDs discovered in local third-party PoC mirrors (thin hints, lowest priority)."""
 
     path = repo_root / "resources" / "catalogs" / "embedded_third_party_poc_intel.json"
@@ -190,14 +189,14 @@ def _load_poc_intel_cve_hints(repo_root: Path) -> List[CVEEntry]:
             "exploit-database__exploitdb-bin-sploits",
         }
     )
-    cve_set: Set[str] = set()
+    cve_set: set[str] = set()
     for repo in data.get("repositories") or []:
         if repo.get("local_slug") in skip_slugs:
             continue
         for cid in repo.get("cves_found") or []:
             if isinstance(cid, str) and cid.upper().startswith("CVE-"):
                 cve_set.add(cid.upper())
-    entries: List[CVEEntry] = []
+    entries: list[CVEEntry] = []
     for cid in sorted(cve_set):
         entries.append(
             CVEEntry(
@@ -215,7 +214,7 @@ def _load_poc_intel_cve_hints(repo_root: Path) -> List[CVEEntry]:
     return entries
 
 
-def _load_extended_json_catalog(repo_root: Path) -> List[CVEEntry]:
+def _load_extended_json_catalog(repo_root: Path) -> list[CVEEntry]:
     """Load additional CVE rows from resources/catalogs/cve_extended_catalog.json."""
     path = repo_root / "resources" / "catalogs" / "cve_extended_catalog.json"
     if not path.exists():
@@ -225,7 +224,7 @@ def _load_extended_json_catalog(repo_root: Path) -> List[CVEEntry]:
     except (OSError, json.JSONDecodeError) as exc:
         logger.warning("cve_extended_catalog.json unreadable: %s", exc)
         return []
-    entries: List[CVEEntry] = []
+    entries: list[CVEEntry] = []
     for raw in data.get("entries", []):
         if not raw.get("cve_id"):
             continue
@@ -236,9 +235,9 @@ def _load_extended_json_catalog(repo_root: Path) -> List[CVEEntry]:
     return entries
 
 
-def _merge_cve_entries(repo_root: Path) -> List[CVEEntry]:
+def _merge_cve_entries(repo_root: Path) -> list[CVEEntry]:
     """Merge embedded CVEs with JSON extended catalog; extended overrides on same ID."""
-    by_id: Dict[str, CVEEntry] = {}
+    by_id: dict[str, CVEEntry] = {}
     for entry in _load_embedded():
         by_id[entry.cve_id.upper()] = entry
     for entry in _load_extended_json_catalog(repo_root):
@@ -249,9 +248,9 @@ def _merge_cve_entries(repo_root: Path) -> List[CVEEntry]:
     return list(by_id.values())
 
 
-def _load_module_cves(modules_root: Path) -> Dict[str, str]:
+def _load_module_cves(modules_root: Path) -> dict[str, str]:
     """Scan module __info__ references for CVE IDs and map to module paths."""
-    cve_to_module: Dict[str, str] = {}
+    cve_to_module: dict[str, str] = {}
     if not modules_root.exists():
         return cve_to_module
 
@@ -272,10 +271,10 @@ def _load_module_cves(modules_root: Path) -> Dict[str, str]:
 class CVEDatabase:
     """Offline CVE database with vendor/product/version lookup."""
 
-    def __init__(self, modules_root: Optional[Path] = None):
+    def __init__(self, modules_root: Path | None = None):
         repo_root = Path(__file__).resolve().parents[2]
         self._entries = _merge_cve_entries(repo_root)
-        self._module_map: Dict[str, str] = {}
+        self._module_map: dict[str, str] = {}
 
         if modules_root is None:
             candidate = repo_root / "modules"
@@ -311,7 +310,7 @@ class CVEDatabase:
         version: str = "",
         banner: str = "",
         remote_only: bool = False,
-    ) -> List[CVEEntry]:
+    ) -> list[CVEEntry]:
         """Search CVE entries matching vendor/product/version or banner text.
 
         Args:
@@ -328,7 +327,7 @@ class CVEDatabase:
         norm_product = _normalize(product)
         norm_banner = _normalize(banner)
 
-        results: List[CVEEntry] = []
+        results: list[CVEEntry] = []
 
         for entry in self._entries:
             if remote_only and not entry.is_remote:
@@ -382,14 +381,14 @@ class CVEDatabase:
         results.sort(key=lambda e: e.cvss_score, reverse=True)
         return results
 
-    def lookup_by_banner(self, banner: str, remote_only: bool = False) -> List[CVEEntry]:
+    def lookup_by_banner(self, banner: str, remote_only: bool = False) -> list[CVEEntry]:
         """Convenience method: extract vendor/product tokens from banner and lookup."""
         return self.lookup(banner=banner, remote_only=remote_only)
 
-    def summary(self) -> Dict[str, Any]:
+    def summary(self) -> dict[str, Any]:
         """Return database statistics."""
-        vectors: Dict[str, int] = {}
-        vendors: Set[str] = set()
+        vectors: dict[str, int] = {}
+        vendors: set[str] = set()
         for e in self._entries:
             vectors[e.access_vector] = vectors.get(e.access_vector, 0) + 1
             vendors.add(e.vendor)

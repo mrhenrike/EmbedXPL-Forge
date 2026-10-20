@@ -10,7 +10,6 @@ Uso básico:
 
 Author: André Henrique (@mrhenrike)
 """
-from __future__ import annotations
 
 import logging
 import threading
@@ -63,7 +62,7 @@ def get_session_locale() -> str:
     return getattr(_session, "locale", DEFAULT_LOCALE)
 
 
-def t(key: str, locale: Optional[str] = None, **kwargs) -> str:
+def t(key: str, locale: str | None = None, **kwargs) -> str:
     """
     Traduz uma chave do catálogo para o locale ativo (ou o fornecido).
 

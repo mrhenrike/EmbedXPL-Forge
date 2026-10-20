@@ -26,7 +26,6 @@ CLI (python -m embedxpl):
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 import importlib
 import inspect
@@ -34,9 +33,10 @@ import json
 import pkgutil
 import re
 import sys
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterator, Optional
+from typing import Optional
 
 _EMBEDXPL_ROOT = Path(__file__).resolve().parents[2]
 _MODULES_ROOT = _EMBEDXPL_ROOT / "embedxpl" / "modules"
@@ -59,7 +59,7 @@ class ModuleRecord:
     category: str = ""          # routers / cameras / firewalls / ics / printers / wireless
     file_path: str = ""
     rank: int = 0               # relevance score for display order
-    tested: Optional[bool] = None       # True=tested, False=untested, None=unknown
+    tested: bool | None = None       # True=tested, False=untested, None=unknown
     test_evidence: str = ""             # e.g. 'kev', 'rsf_public_framework', ...
 
     def display_path(self) -> str:
@@ -101,7 +101,7 @@ def _iter_modules(base_pkg: str = "embedxpl.modules") -> Iterator[str]:
         yield name
 
 
-def _extract_info(module_path: str) -> Optional[ModuleRecord]:
+def _extract_info(module_path: str) -> ModuleRecord | None:
     """Import a module and extract its metadata."""
     try:
         mod = importlib.import_module(module_path)
@@ -182,8 +182,8 @@ def _extract_info(module_path: str) -> Optional[ModuleRecord]:
 # Search API
 # ---------------------------------------------------------------------------
 
-_MODULE_CACHE: Optional[list[ModuleRecord]] = None
-_TEST_STATUS_CACHE: Optional[dict] = None
+_MODULE_CACHE: list[ModuleRecord] | None = None
+_TEST_STATUS_CACHE: dict | None = None
 
 
 def _load_test_status() -> dict:
@@ -270,7 +270,7 @@ def _get_cache(rebuild: bool = False, use_db_cache: bool = True) -> list[ModuleR
 def search(
     query: str,
     limit: int = 50,
-    category: Optional[str] = None,
+    category: str | None = None,
 ) -> list[ModuleRecord]:
     """
     MSF-style search. Supports:

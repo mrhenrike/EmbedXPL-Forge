@@ -42,7 +42,6 @@ Subclassing::
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 import json
 import sqlite3
@@ -162,7 +161,7 @@ class XplDatabase:
     _DB_FILE: str  = "exf.db"
     _TOOL:    str  = "EmbedXPL"
 
-    def __init__(self, db_path: Optional[Path] = None) -> None:
+    def __init__(self, db_path: Path | None = None) -> None:
         self._path = db_path or (self._DB_DIR / self._DB_FILE)
         self._path.parent.mkdir(parents=True, exist_ok=True)
         self._conn = sqlite3.connect(str(self._path))
@@ -170,7 +169,7 @@ class XplDatabase:
         self._conn.executescript(_SCHEMA)
         self._conn.commit()
         self._apply_migrations()
-        self._workspace_id: Optional[int] = None
+        self._workspace_id: int | None = None
 
     # ------------------------------------------------------------------
     # Workspace management
@@ -264,7 +263,7 @@ class XplDatabase:
             (host_id, port, proto),
         ).fetchone()["id"]
 
-    def hosts(self, workspace: Optional[str] = None) -> list[dict]:
+    def hosts(self, workspace: str | None = None) -> list[dict]:
         """List hosts in current (or named) workspace."""
         ws_id = self._get_ws_id(workspace) or self._ws()
         rows = self._conn.execute(
@@ -285,7 +284,7 @@ class XplDatabase:
         self,
         address: str,
         module_path: str = "",
-        cve_ids: Optional[list[str]] = None,
+        cve_ids: list[str] | None = None,
         severity: str = "",
         detail: str = "",
     ) -> int:
@@ -299,7 +298,7 @@ class XplDatabase:
         self._conn.commit()
         return cursor.lastrowid  # type: ignore[return-value]
 
-    def vulns(self, address: Optional[str] = None) -> list[dict]:
+    def vulns(self, address: str | None = None) -> list[dict]:
         """List all vulns in workspace, optionally filtered by host address."""
         ws_id = self._ws()
         if address:
@@ -337,7 +336,7 @@ class XplDatabase:
         password: str,
         cred_type: str = "password",
         source: str = "",
-        port: Optional[int] = None,
+        port: int | None = None,
         proto: str = "tcp",
     ) -> int:
         """Record a captured credential."""
@@ -353,7 +352,7 @@ class XplDatabase:
         self._conn.commit()
         return cursor.lastrowid  # type: ignore[return-value]
 
-    def creds(self, address: Optional[str] = None) -> list[dict]:
+    def creds(self, address: str | None = None) -> list[dict]:
         """List all captured credentials, optionally filtered by host."""
         ws_id = self._ws()
         if address:
@@ -403,10 +402,10 @@ class XplDatabase:
         path: str,
         name: str = "",
         description: str = "",
-        cves: Optional[list[str]] = None,
-        vendors: Optional[list[str]] = None,
+        cves: list[str] | None = None,
+        vendors: list[str] | None = None,
         category: str = "",
-        tested: Optional[bool] = None,
+        tested: bool | None = None,
         test_evidence: str = "",
     ) -> None:
         """Upsert a module into the cache (used by search engine)."""
@@ -428,7 +427,7 @@ class XplDatabase:
     def update_module_test_status(
         self,
         path: str,
-        tested: Optional[bool],
+        tested: bool | None,
         test_evidence: str = "",
     ) -> None:
         """Update only the tested/test_evidence fields for a cached module."""
@@ -482,7 +481,7 @@ class XplDatabase:
         self._conn.commit()
         return cursor.lastrowid  # type: ignore[return-value]
 
-    def runs(self, module_path: Optional[str] = None, limit: int = 50) -> list[dict]:
+    def runs(self, module_path: str | None = None, limit: int = 50) -> list[dict]:
         ws_id = self._ws()
         if module_path:
             rows = self._conn.execute(
@@ -548,7 +547,7 @@ class XplDatabase:
     # Helpers
     # ------------------------------------------------------------------
 
-    def _get_ws_id(self, name: Optional[str]) -> Optional[int]:
+    def _get_ws_id(self, name: str | None) -> int | None:
         if name is None:
             return None
         row = self._conn.execute("SELECT id FROM workspaces WHERE name=?", (name,)).fetchone()

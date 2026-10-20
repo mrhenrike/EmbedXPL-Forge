@@ -1,7 +1,6 @@
 # Author: André Henrique (@mrhenrike) | União Geek
 """Resolve paths into the mirrored ``incorporated_third_party`` PoC tree."""
 
-from __future__ import annotations
 
 import os
 from pathlib import Path
@@ -27,7 +26,7 @@ def incorporated_poc_root(*, must_exist: bool = False) -> Path:
     return root
 
 
-def path_for_slug(slug: str) -> Optional[Path]:
+def path_for_slug(slug: str) -> Path | None:
     """Return ``<root>/<slug>`` if present."""
 
     root = incorporated_poc_root()

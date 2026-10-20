@@ -189,7 +189,7 @@ def image2elf(filename, output_file, verbose=False):
 
 def add_elf_symbols(elf):
 
-    fh = open("symbols_dump.txt", "r")
+    fh = open("symbols_dump.txt")
     lines = fh.readlines()
 
     bind_map = {"LOCAL" : STB.STB_LOCAL, "GLOBAL" : STB.STB_GLOBAL}

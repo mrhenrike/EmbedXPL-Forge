@@ -11,7 +11,6 @@ Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-
 Version: 0.2.0
 """
 
-from __future__ import annotations
 
 import json
 import logging
@@ -21,7 +20,8 @@ import time
 from dataclasses import dataclass, field
 from importlib import resources
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple, Type
+from typing import Any, Dict, List, Optional, Tuple, Type
+from collections.abc import Mapping, Sequence
 
 from embedxpl.core.exploit.exploit import Protocol
 
@@ -33,7 +33,7 @@ _CVSS_HIGH = 7.0
 _CVSS_MEDIUM = 4.0
 
 # Attack type weights (RCE is the most impactful)
-_ATTACK_TYPE_WEIGHTS: Dict[str, float] = {
+_ATTACK_TYPE_WEIGHTS: dict[str, float] = {
     "rce": 50.0,
     "remote_code_execution": 50.0,
     "command_injection": 45.0,
@@ -93,7 +93,7 @@ class ScanOutcome:
     timestamp: float = field(default_factory=time.time)
 
 
-def _load_default_config() -> Dict[str, Any]:
+def _load_default_config() -> dict[str, Any]:
     """Load bundled JSON config from package resources."""
     ml_pkg = "embedxpl.resources.ml"
     if hasattr(resources, "files"):
@@ -108,7 +108,7 @@ def _load_default_config() -> Dict[str, Any]:
         return json.load(handle)
 
 
-def _softmax(logits: Sequence[float]) -> List[float]:
+def _softmax(logits: Sequence[float]) -> list[float]:
     """Numerically stable softmax over a sequence of logits."""
     if not logits:
         return []
@@ -124,7 +124,7 @@ def _dot(a: Sequence[float], b: Sequence[float]) -> float:
     return sum(x * y for x, y in zip(a, b))
 
 
-def build_feature_vector(ctx: AdvisorContext) -> List[float]:
+def build_feature_vector(ctx: AdvisorContext) -> list[float]:
     """Build a fixed-length feature vector for the timing head."""
     vendor_spec = 1.0 if str(ctx.vendor).strip().lower() not in ("", "any") else 0.0
     enabled = [
@@ -148,7 +148,7 @@ def logits_for_timing(
     features: Sequence[float],
     timing_cfg: Mapping[str, Any],
     use_gpu: bool,
-) -> List[float]:
+) -> list[float]:
     """Compute class logits (one per timing template).
 
     Uses ComputeBackend when use_gpu=True, with torch.cuda fallback.
@@ -178,13 +178,13 @@ def logits_for_timing(
         except Exception as exc:
             logger.debug("GPU timing logits fallback: %s", exc)
 
-    out: List[float] = []
+    out: list[float] = []
     for k, row in enumerate(rows):
         out.append(_dot(f, row[:width]) + float(bias[k]))
     return out
 
 
-def _extract_cvss(info: Dict[str, Any]) -> float:
+def _extract_cvss(info: dict[str, Any]) -> float:
     """Extract CVSS score from module __info__ metadata.
 
     Looks for 'cvss', 'cvss_score', or 'severity' keys.
@@ -202,7 +202,7 @@ def _extract_cvss(info: Dict[str, Any]) -> float:
     return severity_map.get(severity, 0.0)
 
 
-def _extract_cve_year(info: Dict[str, Any]) -> int:
+def _extract_cve_year(info: dict[str, Any]) -> int:
     """Extract the CVE year from module references or name."""
     refs = info.get("references", ())
     if isinstance(refs, (list, tuple)):
@@ -219,7 +219,7 @@ def _extract_cve_year(info: Dict[str, Any]) -> int:
     return 0
 
 
-def _extract_attack_type(info: Dict[str, Any]) -> str:
+def _extract_attack_type(info: dict[str, Any]) -> str:
     """Infer attack type from module name/description."""
     name = str(info.get("name", "")).lower()
     desc = str(info.get("description", "")).lower()
@@ -243,12 +243,12 @@ class AttackAdvisor:
     and auto-tuning from scan history.
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(self, config: dict[str, Any] | None = None) -> None:
         self._config = config or _load_default_config()
-        self._scan_history: List[ScanOutcome] = []
-        self._timing_stats: Dict[str, Dict[str, float]] = {}
+        self._scan_history: list[ScanOutcome] = []
+        self._timing_stats: dict[str, dict[str, float]] = {}
 
-    def suggest_timing_template(self, ctx: AdvisorContext, use_gpu: bool) -> Tuple[str, List[Tuple[str, float]]]:
+    def suggest_timing_template(self, ctx: AdvisorContext, use_gpu: bool) -> tuple[str, list[tuple[str, float]]]:
         """Return best timing key (t0..t5) and softmax probabilities.
 
         If auto-tuning data is available for this vendor, applies learned
@@ -256,7 +256,7 @@ class AttackAdvisor:
         """
         feats = build_feature_vector(ctx)
         timing = self._config["timing"]
-        labels: List[str] = list(timing["labels"])
+        labels: list[str] = list(timing["labels"])
         logits = logits_for_timing(feats, timing, use_gpu=use_gpu)
 
         # Auto-tuning adjustment from scan history
@@ -285,7 +285,7 @@ class AttackAdvisor:
 
     def _recompute_timing_stats(self) -> None:
         """Recompute timing template adjustments from scan history."""
-        vendor_template_scores: Dict[str, Dict[str, List[float]]] = {}
+        vendor_template_scores: dict[str, dict[str, list[float]]] = {}
 
         for outcome in self._scan_history:
             vendor = outcome.vendor.lower()
@@ -312,7 +312,7 @@ class AttackAdvisor:
                     avg = sum(scores) / len(scores)
                     self._timing_stats[vendor][template] = avg * 0.5
 
-    def score_exploit_class(self, exploit_class: Type[Any], ctx: AdvisorContext) -> float:
+    def score_exploit_class(self, exploit_class: type[Any], ctx: AdvisorContext) -> float:
         """Enhanced heuristic score: higher = run earlier in AutoPwn.
 
         Now includes CVSS severity, CVE recency, and attack type weighting.
@@ -392,11 +392,11 @@ class AttackAdvisor:
 
     def prioritize_modules(
         self,
-        modules: Sequence[Type[Any]],
+        modules: Sequence[type[Any]],
         ctx: AdvisorContext,
-    ) -> List[Type[Any]]:
+    ) -> list[type[Any]]:
         """Stable sort: higher advisor score first, preserve original order on ties."""
-        indexed: List[Tuple[int, Type[Any]]] = list(enumerate(modules))
+        indexed: list[tuple[int, type[Any]]] = list(enumerate(modules))
         indexed.sort(
             key=lambda t: (-self.score_exploit_class(t[1], ctx), t[0]),
         )
@@ -408,7 +408,7 @@ class AttackAdvisor:
         return len(self._scan_history)
 
     @property
-    def tuned_vendors(self) -> List[str]:
+    def tuned_vendors(self) -> list[str]:
         """Vendors with auto-tuning data available."""
         return list(self._timing_stats.keys())
 
