@@ -158,16 +158,16 @@ include = ["embedxpl*"]
 ]
 
 [tool.mypy]
-python_version = "3.10"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = false
-check_untyped_defs = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-no_implicit_reexport = true
+python_version = "3.12"
+strict = true
 mypy_path = "."
+exclude = [
+    "embedxpl/malware_research/ics_apt/trisis/decompiled_code/",
+    "embedxpl/malware_research/ics_apt/blackenergy/v2/",
+    "embedxpl/malware_research/symbolic_execution/",
+]
 
+# Third-party stubs: ignore missing imports
 [[tool.mypy.overrides]]
 module = [
     "scapy.*",
@@ -240,6 +240,37 @@ module = [
     "xpl_core.*",
 ]
 ignore_missing_imports = true
+
+# Gradual strict rollout: modules with large untyped codebases
+# Remove overrides as each subpackage is fully annotated
+[[tool.mypy.overrides]]
+module = [
+    "embedxpl.modules.*",
+    "embedxpl.engines.*",
+    "embedxpl.malware_research.*",
+    "embedxpl.native_src.*",
+    "embedxpl.libs.*",
+    "embedxpl.tools.*",
+    "embedxpl.nse.*",
+]
+disallow_untyped_defs = false
+disallow_untyped_calls = false
+disallow_incomplete_defs = false
+disallow_untyped_decorators = false
+warn_return_any = false
+
+# Core, intel, runtime, registry: strict but relaxed on untyped defs for now
+[[tool.mypy.overrides]]
+module = [
+    "embedxpl.core.*",
+    "embedxpl.intel.*",
+    "embedxpl.runtime.*",
+    "embedxpl.registry.*",
+    "embedxpl.interpreter",
+]
+disallow_untyped_defs = false
+disallow_untyped_calls = false
+disallow_incomplete_defs = false
 
 [tool.ruff]
 target-version = "py39"
