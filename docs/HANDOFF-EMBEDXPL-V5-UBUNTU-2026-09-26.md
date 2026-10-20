@@ -539,11 +539,11 @@ gh auth status
 | Malware samples | `D:\Projects\Labs\malware-samples` | `~/projects/Labs/malware-samples` |
 | Submodulos | `D:\Projects\Submodulos` | `~/projects/Submodulos` |
 | Pruva repros | `D:\Projects\Labs\pruva-repros` | `~/projects/Labs/pruva-repros` |
-| Plan file | `C:\Users\mrhen\.cursor\plans\embedxpl_arsenal_absorption_ef488eca.plan.md` | `~/projects/XPL-Suite/docs/PLAN-EMBEDXPL-V5.md` |
+| Plan file | (migrado para Linux) | `~/projects/XPL-Suite/docs/PLAN-EMBEDXPL-V5.md` |
 
 ---
 
-## Phase Gate Protocol (copy this to AI assistant)
+## Phase Gate Protocol
 
 ```
 IMPORTANT — PHASE GATES:

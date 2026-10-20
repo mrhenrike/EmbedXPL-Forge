@@ -856,7 +856,7 @@ trellix (+2), vyos (+2), moxa (+1), hirschmann (+2), phoenix/phoenix_contact (+2
 ## [2026-08-13 16:20] -- Authorship cleanup + sync
 
 ### Estado ao encerrar
-- Trailers Cursor/Copilot removidos do historico da default branch (onde aplicavel)
+- Trailers de coautoria de terceiros removidos do historico da default branch (onde aplicavel)
 - Hook `.githooks/commit-msg` ativo via `core.hooksPath=.githooks`
 - Remoto alinhado apos force-with-lease / push
 
