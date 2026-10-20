@@ -38,7 +38,7 @@ def _is_elf(path: str) -> bool:
     try:
         with open(path, "rb") as fh:
             return fh.read(4) == _ELF_MAGIC
-    except (OSError, IOError):
+    except OSError:
         return False
 
 
@@ -48,11 +48,11 @@ class _ELFInfo:
     def __init__(self, path: str) -> None:
         self.path = path
         self.name = os.path.basename(path)
-        self.pie: Optional[bool] = None
-        self.nx: Optional[bool] = None
+        self.pie: bool | None = None
+        self.nx: bool | None = None
         self.relro: str = "None"
         self.canary: bool = False
-        self.dangerous: List[str] = []
+        self.dangerous: list[str] = []
         self._parse()
 
     def _parse(self) -> None:
@@ -128,7 +128,7 @@ class _ELFInfo:
             self.canary = "__stack_chk_fail" in dynsyms
             found = set()
             for sym in _DANGEROUS_IMPORTS:
-                if re.search(r"\b{}\b".format(re.escape(sym)), dynsyms):
+                if re.search(rf"\b{re.escape(sym)}\b", dynsyms):
                     found.add(sym)
             self.dangerous = sorted(found)
         except (OSError, subprocess.SubprocessError):
@@ -144,7 +144,7 @@ class _ELFInfo:
             pass
 
 
-def _find_glibc_version(firmware_dir: str) -> Optional[str]:
+def _find_glibc_version(firmware_dir: str) -> str | None:
     for root, _dirs, files in os.walk(firmware_dir):
         for fname in files:
             if fname.startswith("libc-") and fname.endswith(".so"):
@@ -157,7 +157,7 @@ def _find_glibc_version(firmware_dir: str) -> Optional[str]:
                     )
                     if match:
                         return match.group(1).decode()
-                except (OSError, IOError):
+                except OSError:
                     continue
             if fname == "libc.so.6":
                 fpath = os.path.join(root, fname)
@@ -200,8 +200,8 @@ class Exploit(Exploit):
     firmware_dir = OptString("", "Path to extracted firmware rootfs directory")
     check_libs = OptBool(True, "Also check shared libraries (.so)")
 
-    def _collect_elfs(self) -> List[str]:
-        elfs: List[str] = []
+    def _collect_elfs(self) -> list[str]:
+        elfs: list[str] = []
         for root, _dirs, files in os.walk(self.firmware_dir):
             for fname in files:
                 fpath = os.path.join(root, fname)
@@ -218,20 +218,20 @@ class Exploit(Exploit):
             print_error("firmware_dir is not set or does not exist")
             return
 
-        print_status("Scanning ELF binaries in {}...".format(self.firmware_dir))
+        print_status(f"Scanning ELF binaries in {self.firmware_dir}...")
 
         elf_paths = self._collect_elfs()
         if not elf_paths:
-            print_error("No ELF binaries found in {}".format(self.firmware_dir))
+            print_error(f"No ELF binaries found in {self.firmware_dir}")
             return
 
-        print_status("Found {} ELF files".format(len(elf_paths)))
+        print_status(f"Found {len(elf_paths)} ELF files")
 
-        results: List[_ELFInfo] = []
+        results: list[_ELFInfo] = []
         for path in elf_paths:
             results.append(_ELFInfo(path))
 
-        rows: List[Tuple[str, str, str, str, str, str]] = []
+        rows: list[tuple[str, str, str, str, str, str]] = []
         for r in results:
             rel_path = os.path.relpath(r.path, self.firmware_dir)
             rows.append((
@@ -257,18 +257,15 @@ class Exploit(Exploit):
         canary_count = sum(1 for r in results if r.canary)
         dangerous_count = sum(1 for r in results if r.dangerous)
 
-        print_info("Summary: {}/{} PIE, {}/{} NX, {}/{} Full RELRO, "
-                   "{}/{} Partial RELRO, {}/{} Stack Canary".format(
-                       pie_count, total, nx_count, total, full_relro, total,
-                       partial_relro, total, canary_count, total))
+        print_info(f"Summary: {pie_count}/{total} PIE, {nx_count}/{total} NX, {full_relro}/{total} Full RELRO, "
+                   f"{partial_relro}/{total} Partial RELRO, {canary_count}/{total} Stack Canary")
 
         if dangerous_count:
-            print_warning("{}/{} binaries import dangerous functions".format(
-                dangerous_count, total))
+            print_warning(f"{dangerous_count}/{total} binaries import dangerous functions")
 
         glibc_ver = _find_glibc_version(self.firmware_dir)
         if glibc_ver:
-            print_info("Detected glibc version: {}".format(glibc_ver))
+            print_info(f"Detected glibc version: {glibc_ver}")
 
         risk = "LOW"
         if pie_count < total // 2 or nx_count < total // 2:
@@ -278,4 +275,4 @@ class Exploit(Exploit):
         elif dangerous_count > total // 3:
             risk = "MEDIUM"
 
-        print_status("Overall hardening risk assessment: {}".format(risk))
+        print_status(f"Overall hardening risk assessment: {risk}")

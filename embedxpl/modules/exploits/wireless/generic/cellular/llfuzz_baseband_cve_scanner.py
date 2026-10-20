@@ -33,7 +33,6 @@ References:
   - https://github.com/SysSec-KAIST/LLFuzz
   - USENIX Security 2025: LLFuzz paper
 """
-from __future__ import annotations
 
 import logging
 import subprocess

@@ -278,9 +278,7 @@ def resolve_category(category_name):
     if normalized not in CATEGORY_MODULES:
         valid = ", ".join(sorted(CATEGORY_MODULES.keys()))
         raise ValueError(
-            "Unknown category '{cat}'. Valid categories: {v}".format(
-                cat=category_name, v=valid,
-            )
+            f"Unknown category '{category_name}'. Valid categories: {valid}"
         )
 
     globs = CATEGORY_MODULES[normalized]

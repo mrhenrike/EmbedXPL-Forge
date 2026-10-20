@@ -133,8 +133,8 @@ class Exploit(Exploit):
         vendor = (data[6], data[7])
         guid_prefix = data[8:20]
         return {
-            "version": "{}.{}".format(version[0], version[1]),
-            "vendor": _VENDOR_IDS.get(vendor, "Unknown ({},{})".format(vendor[0], vendor[1])),
+            "version": f"{version[0]}.{version[1]}",
+            "vendor": _VENDOR_IDS.get(vendor, f"Unknown ({vendor[0]},{vendor[1]})"),
             "vendor_raw": vendor,
             "guid_prefix": guid_prefix.hex(),
         }
@@ -175,7 +175,7 @@ class Exploit(Exploit):
                     if kind == 1:
                         ip_bytes = value[20:24]
                         ip_str = ".".join(str(b) for b in ip_bytes)
-                        params["unicast_locator"] = "{}:{}".format(ip_str, loc_port)
+                        params["unicast_locator"] = f"{ip_str}:{loc_port}"
 
             offset += 4 + length
             if length % 4 != 0:
@@ -242,9 +242,9 @@ class Exploit(Exploit):
                         break
 
                 participants[guid] = entry
-            except socket.timeout:
+            except TimeoutError:
                 continue
-            except (socket.error, OSError):
+            except OSError:
                 break
         return list(participants.values())
 
@@ -255,21 +255,19 @@ class Exploit(Exploit):
             sock = self._join_multicast()
             sock.close()
             return True
-        except (socket.error, OSError):
+        except OSError:
             return False
 
     @multi
     def run(self) -> None:
         """Execute DDS RTPS participant discovery."""
         disc_port = self._discovery_port()
-        print_status("Scanning DDS Domain {} (multicast {}:{}, {} seconds)".format(
-            self.domain_id, _SPDP_MULTICAST_ADDR, disc_port, self.timeout
-        ))
+        print_status(f"Scanning DDS Domain {self.domain_id} (multicast {_SPDP_MULTICAST_ADDR}:{disc_port}, {self.timeout} seconds)")
 
         try:
             sock = self._join_multicast()
-        except (socket.error, OSError) as exc:
-            print_error("Cannot join multicast: {}".format(exc))
+        except OSError as exc:
+            print_error(f"Cannot join multicast: {exc}")
             return
 
         try:
@@ -281,7 +279,7 @@ class Exploit(Exploit):
             print_warning("No DDS participants discovered")
             return
 
-        print_success("Discovered {} DDS participant(s)".format(len(participants)))
+        print_success(f"Discovered {len(participants)} DDS participant(s)")
         for p in participants:
             name = p["participant_name"] or "(unnamed)"
             print_info("Participant: {} [{}]".format(name, p["vendor"]))
@@ -294,5 +292,5 @@ class Exploit(Exploit):
                 print_info("  Topics ({}):".format(len(p["topics"])))
                 for i, topic in enumerate(p["topics"]):
                     ttype = p["types"][i] if i < len(p["types"]) else ""
-                    suffix = " [{}]".format(ttype) if ttype else ""
-                    print_info("    {}{}".format(topic, suffix))
+                    suffix = f" [{ttype}]" if ttype else ""
+                    print_info(f"    {topic}{suffix}")

@@ -1,6 +1,5 @@
 """Tests for embedxpl.core.config persistent user configuration."""
 
-from __future__ import annotations
 
 import json
 import sys

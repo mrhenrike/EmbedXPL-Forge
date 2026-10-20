@@ -70,9 +70,9 @@ class Exploit(Exploit):
 
     firmware_dir = OptString("", "Path to extracted firmware rootfs")
 
-    def _find_init_scripts(self) -> List[str]:
+    def _find_init_scripts(self) -> list[str]:
         """Find all init/boot scripts in the firmware rootfs."""
-        scripts: List[str] = []
+        scripts: list[str] = []
         search_dirs = [
             "etc/rcS.d", "etc/init.d", "etc/rc.d",
             "etc/rc.local", "init", "sbin",
@@ -97,14 +97,14 @@ class Exploit(Exploit):
 
         return scripts
 
-    def _scan_script(self, filepath: str) -> List[Tuple[int, str, str, str]]:
+    def _scan_script(self, filepath: str) -> list[tuple[int, str, str, str]]:
         """Scan a single script file for security issues. Returns list of (line, finding, severity, detail)."""
-        findings: List[Tuple[int, str, str, str]] = []
+        findings: list[tuple[int, str, str, str]] = []
 
         try:
-            with open(filepath, "r", errors="replace") as f:
+            with open(filepath, errors="replace") as f:
                 lines = f.readlines()
-        except IOError:
+        except OSError:
             return findings
 
         for line_num, line in enumerate(lines, start=1):
@@ -158,16 +158,16 @@ class Exploit(Exploit):
 
         return findings
 
-    def _check_passwd_shadow(self) -> List[Tuple[str, str, str, str]]:
+    def _check_passwd_shadow(self) -> list[tuple[str, str, str, str]]:
         """Check /etc/passwd and /etc/shadow for credential issues."""
-        findings: List[Tuple[str, str, str, str]] = []
+        findings: list[tuple[str, str, str, str]] = []
 
         passwd_path = os.path.join(self.firmware_dir, "etc", "passwd")
         shadow_path = os.path.join(self.firmware_dir, "etc", "shadow")
 
         if os.path.isfile(passwd_path):
             try:
-                with open(passwd_path, "r", errors="replace") as f:
+                with open(passwd_path, errors="replace") as f:
                     for line in f:
                         parts = line.strip().split(":")
                         if len(parts) < 7:
@@ -183,12 +183,12 @@ class Exploit(Exploit):
                         if passwd_field == "":
                             sev, desc = _SEVERITY_MAP["root_no_pass"]
                             findings.append(("etc/passwd", user, sev, desc))
-            except IOError:
+            except OSError:
                 pass
 
         if os.path.isfile(shadow_path):
             try:
-                with open(shadow_path, "r", errors="replace") as f:
+                with open(shadow_path, errors="replace") as f:
                     for line in f:
                         parts = line.strip().split(":")
                         if len(parts) < 2:
@@ -206,11 +206,11 @@ class Exploit(Exploit):
                                 sev, desc = _SEVERITY_MAP["default_hash"]
                                 findings.append((
                                     "etc/shadow",
-                                    "{} ({})".format(user, known_desc),
+                                    f"{user} ({known_desc})",
                                     sev,
                                     desc,
                                 ))
-            except IOError:
+            except OSError:
                 pass
 
         return findings
@@ -220,15 +220,15 @@ class Exploit(Exploit):
             print_error("firmware_dir is not set or does not exist")
             return
 
-        print_status("Scanning boot scripts in {}...".format(self.firmware_dir))
+        print_status(f"Scanning boot scripts in {self.firmware_dir}...")
 
         scripts = self._find_init_scripts()
         if not scripts:
             print_warning("No init/boot scripts found")
         else:
-            print_status("Found {} scripts to analyze".format(len(scripts)))
+            print_status(f"Found {len(scripts)} scripts to analyze")
 
-        all_findings: List[Tuple[str, int, str, str, str]] = []
+        all_findings: list[tuple[str, int, str, str, str]] = []
 
         for script_path in scripts:
             rel_path = os.path.relpath(script_path, self.firmware_dir)
@@ -261,9 +261,7 @@ class Exploit(Exploit):
         high = sum(1 for _, _, _, s, _ in all_findings if s == "HIGH")
         medium = sum(1 for _, _, _, s, _ in all_findings if s == "MEDIUM")
 
-        print_status("Summary: {} CRITICAL, {} HIGH, {} MEDIUM findings".format(
-            critical, high, medium
-        ))
+        print_status(f"Summary: {critical} CRITICAL, {high} HIGH, {medium} MEDIUM findings")
 
         if critical > 0:
             print_warning(

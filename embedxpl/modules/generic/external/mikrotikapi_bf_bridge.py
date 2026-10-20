@@ -6,7 +6,6 @@ or to a checkout of ``mikrotikapi-bf.py``. Up MIT license / credits stay with th
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 import os
 import shlex
@@ -53,7 +52,7 @@ class Exploit(Exploit):
     timeout_s = OptInteger(600, "Subprocess timeout seconds")
     verbosity = OptBool(True, "Print stdout/stderr")
 
-    def _split_args(self, raw: str) -> List[str]:
+    def _split_args(self, raw: str) -> list[str]:
         """Split passthrough for Windows/POSIX."""
         raw = (raw or "").strip()
         if not raw:
@@ -67,7 +66,7 @@ class Exploit(Exploit):
         if script:
             py = str(self.python_executable).strip() or sys.executable
             if not os.path.isfile(script):
-                print_error("script_path is not a file: {}".format(script), verbose=True)
+                print_error(f"script_path is not a file: {script}", verbose=True)
                 return
             cmd = [py, script, "-t", str(self.target)] + extra
         else:
@@ -90,7 +89,7 @@ class Exploit(Exploit):
                 check=False,
             )
         except subprocess.TimeoutExpired as exc:
-            print_error("MikrotikAPI-BF timeout: {}".format(exc), verbose=True)
+            print_error(f"MikrotikAPI-BF timeout: {exc}", verbose=True)
             return
         except OSError as exc:
             print_error(str(exc), verbose=True)
@@ -103,4 +102,4 @@ class Exploit(Exploit):
         if proc.returncode == 0:
             print_success("MikrotikAPI-BF exited 0", verbose=self.verbosity)
         else:
-            print_error("MikrotikAPI-BF exit code {}".format(proc.returncode))
+            print_error(f"MikrotikAPI-BF exit code {proc.returncode}")

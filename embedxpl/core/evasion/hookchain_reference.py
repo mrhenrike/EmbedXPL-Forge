@@ -21,7 +21,6 @@ should be cross-compiled. This module provides the research layer.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
 
-from __future__ import annotations
 
 import os
 import shutil
@@ -65,7 +64,7 @@ SYSCALL_BYTES = b"\x0f\x05\xc3"
 class HookChainAnalyzer:
     """Analyze EDR hooks in ntdll for red team payload development."""
 
-    def __init__(self, ntdll_path: Optional[str] = None) -> None:
+    def __init__(self, ntdll_path: str | None = None) -> None:
         """Initialize with path to ntdll.dll.
 
         Args:
@@ -88,7 +87,7 @@ class HookChainAnalyzer:
         with open(self.ntdll_path, "rb") as f:
             return f.read()
 
-    def find_ssn(self, function_name: str, ntdll_bytes: Optional[bytes] = None) -> Optional[int]:
+    def find_ssn(self, function_name: str, ntdll_bytes: bytes | None = None) -> int | None:
         """Extract System Service Number (SSN) from ntdll function stub.
 
         The SSN is the 4-byte value after 'mov eax, <SSN>' (B8 XX XX XX XX)
@@ -124,7 +123,7 @@ class HookChainAnalyzer:
             return None
         return ssn
 
-    def _export_rva(self, function_name: str, data: bytes) -> Optional[int]:
+    def _export_rva(self, function_name: str, data: bytes) -> int | None:
         """Resolve export RVA from the PE export directory (not a string scan)."""
         if data[:2] != b"MZ":
             return None
@@ -160,7 +159,7 @@ class HookChainAnalyzer:
                 return struct.unpack_from("<I", data, funcs + ordinal * 4)[0]
         return None
 
-    def _rva_to_offset(self, data: bytes, rva: int) -> Optional[int]:
+    def _rva_to_offset(self, data: bytes, rva: int) -> int | None:
         e_lfanew = struct.unpack_from("<I", data, 0x3C)[0]
         nsections = struct.unpack_from("<H", data, e_lfanew + 6)[0]
         opt_size = struct.unpack_from("<H", data, e_lfanew + 20)[0]
@@ -172,7 +171,7 @@ class HookChainAnalyzer:
             sec += 40
         return None
 
-    def detect_hook(self, function_name: str, ntdll_bytes: Optional[bytes] = None) -> dict:
+    def detect_hook(self, function_name: str, ntdll_bytes: bytes | None = None) -> dict:
         """Detect if an NT API function is hooked by an EDR.
 
         A hook is detected when the first byte of the function stub
@@ -292,7 +291,7 @@ class HookChainLoaderGen:
         )
         return stub
 
-    def generate_c_header(self, ssn_map: Optional[dict[str, int]] = None) -> str:
+    def generate_c_header(self, ssn_map: dict[str, int] | None = None) -> str:
         """Generate C header file with SSN defines for loader development.
 
         Args:
@@ -363,7 +362,7 @@ _HOOKCHAIN_HINTS = (
 )
 
 
-def hookchain_source_dir() -> Optional[Path]:
+def hookchain_source_dir() -> Path | None:
     for candidate in _HOOKCHAIN_HINTS:
         if (candidate / "enum" / "hookchain_finder64.c").is_file():
             return candidate
@@ -445,7 +444,7 @@ def _embedxpl_bin_dir() -> Path:
     return Path(__file__).resolve().parents[2] / "resources" / "bin"
 
 
-def implant_binary() -> Optional[Path]:
+def implant_binary() -> Path | None:
     """Locate the compiled HookChain implant (MSVC + MASM)."""
     names = ("hookchain_msg.exe", "HookChain_msg.exe")
     candidates: list[Path] = []

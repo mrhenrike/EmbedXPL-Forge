@@ -24,7 +24,7 @@ class TCPCli:
         self.tcp_port = tcp_port
         self.verbosity = verbosity
 
-        self.peer = "{}:{}".format(self.tcp_target, self.tcp_port)
+        self.peer = f"{self.tcp_target}:{self.tcp_port}"
 
         if is_ipv4(self.tcp_target):
             self.tcp_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -70,7 +70,7 @@ _VENDOR_IDS = {
 }
 
 
-def _send_list_identity_udp(target: str, port: int, timeout: int) -> Optional[bytes]:
+def _send_list_identity_udp(target: str, port: int, timeout: int) -> bytes | None:
     """Send ListIdentity over UDP and return raw response."""
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -83,7 +83,7 @@ def _send_list_identity_udp(target: str, port: int, timeout: int) -> Optional[by
         return None
 
 
-def _send_list_identity_tcp(target: str, port: int, timeout: int) -> Optional[bytes]:
+def _send_list_identity_tcp(target: str, port: int, timeout: int) -> bytes | None:
     """Send ListIdentity over TCP and return raw response."""
     try:
         sock = socket.create_connection((target, port), timeout=timeout)

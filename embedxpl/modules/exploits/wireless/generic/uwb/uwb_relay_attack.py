@@ -9,7 +9,6 @@ handshake Bluetooth/NFC via UWB e varredura de dispositivos UWB.
 Requer: dongle UWB (Decawave DWM1001, Qorvo DW3120, BeaconZone UWB devkit).
 """
 
-from __future__ import annotations
 
 import json
 import shutil

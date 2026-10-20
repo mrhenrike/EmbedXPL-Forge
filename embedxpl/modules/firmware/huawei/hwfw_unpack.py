@@ -20,7 +20,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import os
 import struct
@@ -161,7 +160,7 @@ class HuaweiFirmware:
 
     header: FirmwareHeader = field(default_factory=FirmwareHeader)
     extra_header: bytes = b""
-    items: List[FirmwareItem] = field(default_factory=list)
+    items: list[FirmwareItem] = field(default_factory=list)
 
     @classmethod
     def from_bytes(cls, data: bytes) -> "HuaweiFirmware":
@@ -214,7 +213,7 @@ class HuaweiFirmware:
 
         return fw
 
-    def unpack(self, directory: str) -> Dict[str, int]:
+    def unpack(self, directory: str) -> dict[str, int]:
         """Unpack firmware into directory, one file per item.
 
         Args:

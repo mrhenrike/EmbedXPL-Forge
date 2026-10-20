@@ -18,7 +18,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import os
 import time
@@ -45,38 +44,38 @@ class ShodanService:
     product: str = ""
     version: str = ""
     banner: str = ""
-    cpe: List[str] = field(default_factory=list)
-    vulns: List[str] = field(default_factory=list)
+    cpe: list[str] = field(default_factory=list)
+    vulns: list[str] = field(default_factory=list)
 
 
 @dataclass
 class ShodanHostProfile:
     """Complete Shodan profile for a target IP."""
     ip: str
-    hostnames: List[str] = field(default_factory=list)
+    hostnames: list[str] = field(default_factory=list)
     org: str = ""
     asn: str = ""
     country: str = ""
     city: str = ""
     os: str = ""
-    services: List[ShodanService] = field(default_factory=list)
+    services: list[ShodanService] = field(default_factory=list)
     total_vulns: int = 0
-    all_vulns: List[str] = field(default_factory=list)
+    all_vulns: list[str] = field(default_factory=list)
     last_update: str = ""
     error: str = ""
 
     @property
-    def open_ports(self) -> List[int]:
+    def open_ports(self) -> list[int]:
         return [s.port for s in self.services]
 
     @property
-    def products(self) -> List[str]:
+    def products(self) -> list[str]:
         return [s.product for s in self.services if s.product]
 
-    def get_services_on_port(self, port: int) -> List[ShodanService]:
+    def get_services_on_port(self, port: int) -> list[ShodanService]:
         return [s for s in self.services if s.port == port]
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "ip": self.ip,
             "hostnames": self.hostnames,
@@ -162,7 +161,7 @@ class ShodanEnricher:
         except Exception as exc:
             return ShodanHostProfile(ip=ip, error=str(exc))
 
-    def _parse_response(self, ip: str, data: Dict[str, Any]) -> ShodanHostProfile:
+    def _parse_response(self, ip: str, data: dict[str, Any]) -> ShodanHostProfile:
         """Parse Shodan API response into ShodanHostProfile."""
         profile = ShodanHostProfile(
             ip=ip,
@@ -202,7 +201,7 @@ class ShodanEnricher:
 
         return profile
 
-    def suggest_modules(self, profile: ShodanHostProfile) -> List[str]:
+    def suggest_modules(self, profile: ShodanHostProfile) -> list[str]:
         """Suggest relevant XPL-Forge modules based on Shodan profile.
 
         Args:

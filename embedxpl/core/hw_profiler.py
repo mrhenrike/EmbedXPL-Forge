@@ -7,7 +7,6 @@ Author: André Henrique (LinkedIn/X: @mrhenrike)
 Version: 0.1.0
 """
 
-from __future__ import annotations
 
 import logging
 import os
@@ -34,9 +33,9 @@ class GPUDevice:
 
     def summary(self) -> str:
         """One-line summary for display."""
-        vram = "{} MB".format(self.vram_mb) if self.vram_mb else "unknown VRAM"
-        cc = " ({})".format(self.compute_cap) if self.compute_cap else ""
-        return "{} [{}] {} {}{}".format(self.name, self.backend, vram, self.driver, cc)
+        vram = f"{self.vram_mb} MB" if self.vram_mb else "unknown VRAM"
+        cc = f" ({self.compute_cap})" if self.compute_cap else ""
+        return f"{self.name} [{self.backend}] {vram} {self.driver}{cc}"
 
 
 @dataclass
@@ -49,7 +48,7 @@ class HWProfile:
     cpu_freq_mhz: int = 0
     ram_total_mb: int = 0
     ram_available_mb: int = 0
-    gpus: List[GPUDevice] = field(default_factory=list)
+    gpus: list[GPUDevice] = field(default_factory=list)
     best_backend: str = "cpu"
     compute_mode: str = "auto"  # cpu | gpu | hybrid | auto
 
@@ -63,25 +62,25 @@ class HWProfile:
             return "No GPU detected"
         parts = []
         for g in self.gpus:
-            vram = " {}MB".format(g.vram_mb) if g.vram_mb else ""
-            parts.append("{}{}".format(g.name, vram))
+            vram = f" {g.vram_mb}MB" if g.vram_mb else ""
+            parts.append(f"{g.name}{vram}")
         return " | ".join(parts)
 
     def one_liner(self) -> str:
         """Single-line system summary for startup display."""
-        cpu = "{} ({}T)".format(self.cpu_model, self.cpu_threads)
-        ram = "{}MB RAM".format(self.ram_total_mb) if self.ram_total_mb else "? RAM"
+        cpu = f"{self.cpu_model} ({self.cpu_threads}T)"
+        ram = f"{self.ram_total_mb}MB RAM" if self.ram_total_mb else "? RAM"
         gpu = self.gpu_summary()
         mode = self.compute_mode
         if mode == "auto":
             mode = "auto->{}".format("hybrid" if self.has_gpu() else "cpu")
-        return "{} | {} | {} | compute_mode: {}".format(cpu, ram, gpu, mode)
+        return f"{cpu} | {ram} | {gpu} | compute_mode: {mode}"
 
 
 class HWProfiler:
     """Detects CPU, RAM, and GPU hardware on the current host."""
 
-    _cached: Optional[HWProfile] = None
+    _cached: HWProfile | None = None
 
     @classmethod
     def detect(cls, force: bool = False) -> HWProfile:
@@ -187,7 +186,7 @@ class HWProfiler:
     def _detect_cpu_linux(profile: HWProfile) -> None:
         """CPU detection via /proc/cpuinfo on Linux."""
         try:
-            with open("/proc/cpuinfo", "r") as f:
+            with open("/proc/cpuinfo") as f:
                 content = f.read()
             model_match = re.search(r"model name\s*:\s*(.+)", content)
             if model_match:
@@ -260,7 +259,7 @@ class HWProfiler:
     def _detect_ram_linux(profile: HWProfile) -> None:
         """RAM via /proc/meminfo."""
         try:
-            with open("/proc/meminfo", "r") as f:
+            with open("/proc/meminfo") as f:
                 content = f.read()
             total_match = re.search(r"MemTotal:\s+(\d+)\s+kB", content)
             avail_match = re.search(r"MemAvailable:\s+(\d+)\s+kB", content)
@@ -422,7 +421,7 @@ class HWProfiler:
                 # PyTorch >=2.11 renamed total_mem -> total_memory
                 raw_mem = getattr(props, "total_memory", None) or getattr(props, "total_mem", 0)
                 vram = int(raw_mem / (1024 * 1024))
-                cc = "{}.{}".format(props.major, props.minor)
+                cc = f"{props.major}.{props.minor}"
                 gpu = GPUDevice(
                     name=name, vendor="nvidia", vram_mb=vram,
                     compute_cap=cc, backend="cuda", index=i,

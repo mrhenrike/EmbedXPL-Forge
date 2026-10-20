@@ -433,7 +433,7 @@ def dahua_onvif_sha1_hash(dh_random=None, password=None, device_random=False, sa
         dh_random = os.urandom(20)
 
     hash_digest = hashlib.sha1()
-    hash_digest.update((dh_random + authority_info + password.encode('ascii')))
+    hash_digest.update(dh_random + authority_info + password.encode('ascii'))
 
     return {
         "authorityInfo": b64e(authority_info),
@@ -500,7 +500,7 @@ Homepage: http://twhiteman.netfirms.com/des.html
 """
 
 
-class _BaseDes(object):
+class _BaseDes:
     """ The base class shared by des and triple des """
 
     def __init__(self):

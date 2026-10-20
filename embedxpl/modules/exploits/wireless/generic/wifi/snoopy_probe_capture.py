@@ -19,7 +19,6 @@ Captures IEEE 802.11 probe requests in monitor mode to:
 # simulate=True by default — set False only for authorized tests.
 # ============================================================
 
-from __future__ import annotations
 
 import logging
 import time

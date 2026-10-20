@@ -107,7 +107,7 @@ class Exploit(Exploit):
             data, _ = sock.recvfrom(4096)
             sock.close()
             return data
-        except (socket.error, OSError):
+        except OSError:
             return b""
 
     def _send_encap_tcp(self, command: int) -> bytes:
@@ -121,7 +121,7 @@ class Exploit(Exploit):
             data = sock.recv(4096)
             sock.close()
             return data
-        except (socket.error, OSError):
+        except OSError:
             return b""
 
     def _send_encap(self, command: int) -> bytes:
@@ -170,7 +170,7 @@ class Exploit(Exploit):
         sock_family = struct.unpack(">H", identity[2:4])[0]
         sock_port = struct.unpack(">H", identity[4:6])[0]
         sock_addr = ".".join(str(b) for b in identity[6:10])
-        result["socket_addr"] = "{}:{}".format(sock_addr, sock_port)
+        result["socket_addr"] = f"{sock_addr}:{sock_port}"
 
         result["vendor_id"] = struct.unpack("<H", identity[16:18])[0]
         result["device_type"] = struct.unpack("<H", identity[18:20])[0]
@@ -238,9 +238,7 @@ class Exploit(Exploit):
     def run(self) -> None:
         """Execute EtherNet/IP CIP discovery scan."""
         transport = "UDP" if self.use_udp else "TCP"
-        print_status("Scanning EtherNet/IP at {}:{} ({})".format(
-            self.target, self.port, transport
-        ))
+        print_status(f"Scanning EtherNet/IP at {self.target}:{self.port} ({transport})")
 
         identity_resp = self._send_encap(_ENCAP_LIST_IDENTITY)
         if not identity_resp or len(identity_resp) < _ENCAP_HEADER_SIZE:
@@ -268,7 +266,7 @@ class Exploit(Exploit):
         if services_resp and len(services_resp) >= _ENCAP_HEADER_SIZE:
             services = self._parse_list_services(services_resp)
             if services:
-                print_success("Available services ({})".format(len(services)))
+                print_success(f"Available services ({len(services)})")
                 for svc in services:
                     cap = svc.get("capability", 0)
                     tcp_ok = bool(cap & 0x0020)

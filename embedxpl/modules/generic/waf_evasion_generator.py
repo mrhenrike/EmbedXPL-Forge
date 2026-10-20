@@ -18,7 +18,6 @@ Maintainer : Andre Henrique (@mrhenrike) | Uniao Geek
 
 # authorized use only
 """
-from __future__ import annotations
 
 import random
 import re
@@ -49,7 +48,7 @@ _BLOCKED_KEYWORDS = (
 )
 
 
-def _extract_blocked_uas_from_blocklist(blocklist_path: Path) -> List[str]:
+def _extract_blocked_uas_from_blocklist(blocklist_path: Path) -> list[str]:
     """Extract blocked UA patterns from Apache/Nginx blocklist config."""
     blocked = []
     if not blocklist_path.exists():

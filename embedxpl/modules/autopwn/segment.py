@@ -6,7 +6,6 @@ for a given device segment.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 import importlib
 import time
@@ -111,7 +110,7 @@ class SegmentAutoPwn:
         verbose: bool = True,
         timeout: int = 30,
         max_modules: int = 0,
-        db: Optional[Any] = None,        # EXFDatabase instance for persistence
+        db: Any | None = None,        # EXFDatabase instance for persistence
     ) -> None:
         self.segment = segment.lower()
         self.category = self.SEGMENT_MAP.get(self.segment, self.segment)

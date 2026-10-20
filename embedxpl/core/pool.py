@@ -19,7 +19,8 @@ from concurrent.futures import (
     as_completed,
 )
 from enum import Enum
-from typing import Any, Callable, Iterable, List, Optional
+from typing import Any, List, Optional
+from collections.abc import Callable, Iterable
 
 logger = logging.getLogger(__name__)
 
@@ -136,9 +137,9 @@ class SmartPool:
         fn: Callable,
         items: Iterable,
         timeout_per_item: float = 0,
-        on_result: Optional[Callable] = None,
-        on_error: Optional[Callable] = None,
-    ) -> List[Any]:
+        on_result: Callable | None = None,
+        on_error: Callable | None = None,
+    ) -> list[Any]:
         """Execute fn for each item, collecting results as they complete.
 
         Args:
@@ -212,7 +213,7 @@ class SmartPool:
                 target=target_function,
                 args=tuple(iterchain((stop_event,), args)),
                 kwargs=kwargs,
-                name="{}-{}".format(self._thread_prefix, tid),
+                name=f"{self._thread_prefix}-{tid}",
             )
             thread.daemon = True
             threads.append(thread)
@@ -252,6 +253,4 @@ class SmartPool:
         self.shutdown(wait=False)
 
     def __repr__(self) -> str:
-        return "<SmartPool strategy={} workers={} cpus={}>".format(
-            self._resolved_strategy.value, self._max_workers, self._cpus,
-        )
+        return f"<SmartPool strategy={self._resolved_strategy.value} workers={self._max_workers} cpus={self._cpus}>"

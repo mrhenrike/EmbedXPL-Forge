@@ -123,7 +123,7 @@ class CrossCompiler:
             if not provided.
     """
 
-    def __init__(self, cache: Optional[ArtifactCache] = None):
+    def __init__(self, cache: ArtifactCache | None = None):
         self._cache = cache or ArtifactCache()
         self._detected = {}
 
@@ -205,14 +205,14 @@ class CrossCompiler:
             cmd.extend(["--target", target])
         opt_map = {"-O0": "0", "-O1": "1", "-O2": "2", "-O3": "3", "-Os": "s"}
         opt_level = opt_map.get(profile.optimization, "2")
-        cmd.extend(["-C", "opt-level={}".format(opt_level)])
+        cmd.extend(["-C", f"opt-level={opt_level}"])
         if profile.strip_symbols:
             cmd.extend(["-C", "debuginfo=0"])
         cmd.extend(profile.extra_flags)
         return cmd
 
     def compile(self, source_path: str,
-                profile: Optional[BuildProfile] = None) -> CompiledArtifact:
+                profile: BuildProfile | None = None) -> CompiledArtifact:
         """Compile source file to target architecture.
 
         Checks the artifact cache first. On cache miss, runs the
@@ -233,7 +233,7 @@ class CrossCompiler:
         """
         source_path = os.path.abspath(source_path)
         if not os.path.isfile(source_path):
-            raise FileNotFoundError("Source file not found: {}".format(source_path))
+            raise FileNotFoundError(f"Source file not found: {source_path}")
 
         if profile is None:
             lang = self._detect_language(source_path)
@@ -246,9 +246,7 @@ class CrossCompiler:
         compiler = self._resolve_compiler(profile)
         if not compiler or compiler not in self._detected:
             raise RuntimeError(
-                "Compiler '{}' not found for {}/{}".format(
-                    compiler, profile.target_arch, profile.language
-                )
+                f"Compiler '{compiler}' not found for {profile.target_arch}/{profile.language}"
             )
 
         cached = self._cache.lookup(source_path, profile.target_arch, compiler)
@@ -258,7 +256,7 @@ class CrossCompiler:
         output_dir = os.path.join(_PROJECT_TMP, "builds", "staging")
         os.makedirs(output_dir, exist_ok=True)
         base_name = os.path.splitext(os.path.basename(source_path))[0]
-        output_path = os.path.join(output_dir, "{}_{}".format(base_name, profile.target_arch))
+        output_path = os.path.join(output_dir, f"{base_name}_{profile.target_arch}")
 
         if profile.language in ("c", "cpp"):
             cmd = self._build_gcc_command(
@@ -278,7 +276,7 @@ class CrossCompiler:
         except subprocess.TimeoutExpired:
             raise RuntimeError("Compilation timed out after 120 seconds")
         except FileNotFoundError:
-            raise RuntimeError("Compiler binary not found: {}".format(compiler))
+            raise RuntimeError(f"Compiler binary not found: {compiler}")
 
         build_time = time.time() - build_start
 
@@ -298,9 +296,7 @@ class CrossCompiler:
 
         if result.returncode != 0:
             raise RuntimeError(
-                "Compilation failed (exit {}): {}".format(
-                    result.returncode, result.stderr.strip()[:500]
-                )
+                f"Compilation failed (exit {result.returncode}): {result.stderr.strip()[:500]}"
             )
 
         artifact = self._cache.store(artifact)

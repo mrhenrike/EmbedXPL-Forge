@@ -25,7 +25,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek
 
 # authorized use only — offline/air-gap context intended
 """
-from __future__ import annotations
 
 import json
 import os
@@ -36,7 +35,8 @@ import ssl
 import urllib.request
 import urllib.error
 from pathlib import Path
-from typing import Any, Iterator, Optional
+from typing import Any, Optional
+from collections.abc import Iterator
 
 from embedxpl.core.exploit import *
 

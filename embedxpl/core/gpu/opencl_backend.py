@@ -4,7 +4,6 @@ Author: André Henrique (LinkedIn/X: @mrhenrike)
 Version: 0.1.0
 """
 
-from __future__ import annotations
 
 import logging
 
@@ -49,7 +48,7 @@ class OpenCLBackend(ComputeBackend):
         if self._ctx:
             dev = self._ctx.devices[0]
             vram = dev.global_mem_size // (1024 * 1024)
-            return "OpenCL [{}] {}MB".format(dev.name.strip(), vram)
+            return f"OpenCL [{dev.name.strip()}] {vram}MB"
         return "OpenCL (not available)"
 
     def array_from_numpy(self, arr: np.ndarray):

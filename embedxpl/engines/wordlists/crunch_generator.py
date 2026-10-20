@@ -5,7 +5,7 @@ Crunch-style charset wordlist generator
 import itertools
 import string
 import sys
-from typing import Iterator
+from collections.abc import Iterator
 
 CHARSETS = {
     "lower": string.ascii_lowercase,

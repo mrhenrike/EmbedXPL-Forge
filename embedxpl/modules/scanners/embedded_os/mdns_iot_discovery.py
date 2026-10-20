@@ -50,7 +50,7 @@ DEFAULT_SERVICE_TYPES = (
     "_workstation._tcp.local",
 )
 
-SERVICE_LABELS: Dict[str, str] = {
+SERVICE_LABELS: dict[str, str] = {
     "_hap._tcp":        "HomeKit",
     "_matter._tcp":     "Matter",
     "_ipp._tcp":        "Printer (IPP)",
@@ -100,7 +100,7 @@ def _build_mdns_query(service: str, tx_id: int = 0) -> bytes:
     return header + question
 
 
-def _decode_dns_name(data: bytes, offset: int) -> Tuple[str, int]:
+def _decode_dns_name(data: bytes, offset: int) -> tuple[str, int]:
     """Decode a DNS name from wire format, handling compression pointers.
 
     Args:
@@ -110,7 +110,7 @@ def _decode_dns_name(data: bytes, offset: int) -> Tuple[str, int]:
     Returns:
         Tuple of (decoded dotted name, new offset past the name).
     """
-    labels: List[str] = []
+    labels: list[str] = []
     jumped = False
     resume_offset = offset
     seen_offsets = set()
@@ -146,7 +146,7 @@ def _decode_dns_name(data: bytes, offset: int) -> Tuple[str, int]:
     return ".".join(labels), resume_offset
 
 
-def _parse_txt_record(rdata: bytes) -> Dict[str, str]:
+def _parse_txt_record(rdata: bytes) -> dict[str, str]:
     """Parse a DNS TXT record into key-value pairs.
 
     Args:
@@ -155,7 +155,7 @@ def _parse_txt_record(rdata: bytes) -> Dict[str, str]:
     Returns:
         Dictionary of decoded TXT key-value pairs.
     """
-    result: Dict[str, str] = {}
+    result: dict[str, str] = {}
     pos = 0
     while pos < len(rdata):
         tlen = rdata[pos]
@@ -172,7 +172,7 @@ def _parse_txt_record(rdata: bytes) -> Dict[str, str]:
     return result
 
 
-def _parse_mdns_response(data: bytes) -> List[dict]:
+def _parse_mdns_response(data: bytes) -> list[dict]:
     """Parse a full mDNS response packet and extract all resource records.
 
     Args:
@@ -184,7 +184,7 @@ def _parse_mdns_response(data: bytes) -> List[dict]:
     if len(data) < 12:
         return []
 
-    records: List[dict] = []
+    records: list[dict] = []
     try:
         (tx_id, flags, qd_count, an_count,
          ns_count, ar_count) = struct.unpack_from(">HHHHHH", data, 0)
@@ -314,7 +314,7 @@ class Exploit(BaseExploit):
         "Comma-separated service types to query (empty = all defaults)",
     )
 
-    def _get_service_list(self) -> Tuple[str, ...]:
+    def _get_service_list(self) -> tuple[str, ...]:
         """Resolve the effective service type list from user options."""
         custom = str(self.service_types).strip()
         if custom:
@@ -323,7 +323,7 @@ class Exploit(BaseExploit):
             )
         return DEFAULT_SERVICE_TYPES
 
-    def _create_multicast_socket(self) -> Optional[socket.socket]:
+    def _create_multicast_socket(self) -> socket.socket | None:
         """Create and configure a UDP socket for mDNS multicast.
 
         Returns:
@@ -344,10 +344,10 @@ class Exploit(BaseExploit):
             sock.settimeout(float(self.timeout))
             return sock
         except OSError as exc:
-            print_error("Failed to create multicast socket: {}".format(exc))
+            print_error(f"Failed to create multicast socket: {exc}")
             return None
 
-    def _send_queries(self, sock: socket.socket, services: Tuple[str, ...]) -> None:
+    def _send_queries(self, sock: socket.socket, services: tuple[str, ...]) -> None:
         """Send mDNS PTR queries for each service type.
 
         Args:
@@ -359,9 +359,9 @@ class Exploit(BaseExploit):
             try:
                 sock.sendto(pkt, (MDNS_ADDR, MDNS_PORT))
             except OSError as exc:
-                print_warning("Failed to send query for {}: {}".format(svc, exc))
+                print_warning(f"Failed to send query for {svc}: {exc}")
 
-    def _collect_responses(self, sock: socket.socket) -> List[dict]:
+    def _collect_responses(self, sock: socket.socket) -> list[dict]:
         """Listen for mDNS responses until timeout expires.
 
         Args:
@@ -370,7 +370,7 @@ class Exploit(BaseExploit):
         Returns:
             Aggregated list of parsed resource records from all responses.
         """
-        all_records: List[dict] = []
+        all_records: list[dict] = []
         deadline = time.time() + float(self.timeout)
 
         while time.time() < deadline:
@@ -385,14 +385,14 @@ class Exploit(BaseExploit):
                 for rr in records:
                     rr["src_ip"] = src_ip
                 all_records.extend(records)
-            except socket.timeout:
+            except TimeoutError:
                 break
             except OSError:
                 break
 
         return all_records
 
-    def _aggregate_devices(self, records: List[dict]) -> Dict[str, dict]:
+    def _aggregate_devices(self, records: list[dict]) -> dict[str, dict]:
         """Group raw DNS records into per-IP device summaries.
 
         Args:
@@ -401,13 +401,13 @@ class Exploit(BaseExploit):
         Returns:
             Dict keyed by IP address with aggregated device information.
         """
-        devices: Dict[str, dict] = {}
-        name_to_ip: Dict[str, str] = {}
-        ip_services: Dict[str, set] = defaultdict(set)
-        ip_txt: Dict[str, Dict[str, str]] = defaultdict(dict)
-        ip_hostnames: Dict[str, set] = defaultdict(set)
-        ip_ports: Dict[str, set] = defaultdict(set)
-        ip_ipv6: Dict[str, set] = defaultdict(set)
+        devices: dict[str, dict] = {}
+        name_to_ip: dict[str, str] = {}
+        ip_services: dict[str, set] = defaultdict(set)
+        ip_txt: dict[str, dict[str, str]] = defaultdict(dict)
+        ip_hostnames: dict[str, set] = defaultdict(set)
+        ip_ports: dict[str, set] = defaultdict(set)
+        ip_ipv6: dict[str, set] = defaultdict(set)
 
         for rr in records:
             src = rr.get("src_ip", "")
@@ -493,12 +493,10 @@ class Exploit(BaseExploit):
         """
         services = self._get_service_list()
         print_status(
-            "Starting mDNS/DNS-SD discovery ({} service types, timeout {}s)...".format(
-                len(services), self.timeout
-            )
+            f"Starting mDNS/DNS-SD discovery ({len(services)} service types, timeout {self.timeout}s)..."
         )
         for svc in services:
-            print_info("  Query: {}".format(svc))
+            print_info(f"  Query: {svc}")
 
         sock = self._create_multicast_socket()
         if sock is None:
@@ -519,7 +517,7 @@ class Exploit(BaseExploit):
             print_info("Ensure you are on the same network segment as the target devices.")
             return
 
-        print_success("Received {} DNS record(s). Aggregating devices...".format(len(records)))
+        print_success(f"Received {len(records)} DNS record(s). Aggregating devices...")
         devices = self._aggregate_devices(records)
 
         if not devices:
@@ -541,13 +539,13 @@ class Exploit(BaseExploit):
                 dev["ipv6"][:40],
             ))
 
-        print_success("Discovered {} device(s):".format(len(rows)))
+        print_success(f"Discovered {len(rows)} device(s):")
         print_table(headers, *rows)
 
         for ip, dev in sorted(devices.items()):
             txt_services = dev["services"]
             if txt_services != "-":
-                print_info("{} - {}".format(ip, txt_services))
+                print_info(f"{ip} - {txt_services}")
 
     @mute
     def check(self) -> bool:

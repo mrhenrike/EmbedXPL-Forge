@@ -17,7 +17,6 @@ Author: André Henrique (@mrhenrike) | União Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import json
 import logging
@@ -37,7 +36,7 @@ _DEFAULT_ROUTES_FILE = _DEFAULT_RESOURCES / "routes.txt"
 _DEFAULT_CREDS_FILE = _DEFAULT_RESOURCES / "credentials.json"
 
 
-def _load_routes(path: Optional[Path] = None) -> List[str]:
+def _load_routes(path: Path | None = None) -> list[str]:
     """Load RTSP route dictionary from file."""
     fpath = path or _DEFAULT_ROUTES_FILE
     if not fpath.exists():
@@ -50,7 +49,7 @@ def _load_routes(path: Optional[Path] = None) -> List[str]:
     return routes
 
 
-def _load_credentials(path: Optional[Path] = None) -> Tuple[List[str], List[str]]:
+def _load_credentials(path: Path | None = None) -> tuple[list[str], list[str]]:
     """Load RTSP credential dictionary from JSON file."""
     fpath = path or _DEFAULT_CREDS_FILE
     if not fpath.exists():
@@ -84,8 +83,8 @@ class RTSPAttacker:
 
     def __init__(
         self,
-        routes_file: Optional[Path] = None,
-        credentials_file: Optional[Path] = None,
+        routes_file: Path | None = None,
+        credentials_file: Path | None = None,
         attack_interval: float = 0.05,
         timeout: float = 5.0,
         max_workers: int = 8,
@@ -112,7 +111,7 @@ class RTSPAttacker:
 
     # ── Public API ────────────────────────────────────────────────────────────
 
-    def attack(self, targets: List[str]) -> List[RTSPStream]:
+    def attack(self, targets: list[str]) -> list[RTSPStream]:
         """Run the full attack pipeline against a list of targets.
 
         Each target is ``"ip:port"`` or ``"ip"`` (defaults to port 554).
@@ -143,27 +142,27 @@ class RTSPAttacker:
 
     # ── Pipeline Phases ───────────────────────────────────────────────────────
 
-    def _attack_routes_phase(self, streams: List[RTSPStream]) -> List[RTSPStream]:
+    def _attack_routes_phase(self, streams: list[RTSPStream]) -> list[RTSPStream]:
         """Phase 1: Discover valid stream routes via dictionary brute-force."""
         self._log("Phase 1: Route discovery")
         return self._parallel(streams, self._attack_routes_for_stream)
 
-    def _detect_auth_phase(self, streams: List[RTSPStream]) -> List[RTSPStream]:
+    def _detect_auth_phase(self, streams: list[RTSPStream]) -> list[RTSPStream]:
         """Phase 2: Detect authentication type for each stream."""
         self._log("Phase 2: Auth detection")
         return self._parallel(streams, self._detect_auth_for_stream)
 
-    def _attack_credentials_phase(self, streams: List[RTSPStream]) -> List[RTSPStream]:
+    def _attack_credentials_phase(self, streams: list[RTSPStream]) -> list[RTSPStream]:
         """Phase 3: Brute-force credentials for streams with auth."""
         self._log("Phase 3: Credential attack")
         return self._parallel(streams, self._attack_credentials_for_stream)
 
-    def _validate_phase(self, streams: List[RTSPStream]) -> List[RTSPStream]:
+    def _validate_phase(self, streams: list[RTSPStream]) -> list[RTSPStream]:
         """Phase 4: Validate accessibility of discovered streams."""
         self._log("Phase 4: Stream validation")
         return self._parallel(streams, self._validate_stream)
 
-    def _reattack_routes(self, streams: List[RTSPStream]) -> List[RTSPStream]:
+    def _reattack_routes(self, streams: list[RTSPStream]) -> list[RTSPStream]:
         """Phase 5: Re-attack routes for streams not yet fully discovered."""
         self._log("Phase 5: Re-attacking routes (quirky camera heuristic)")
         updated = self._parallel(streams, self._attack_routes_for_stream)
@@ -306,9 +305,9 @@ class RTSPAttacker:
                           timeout=self.timeout, use_tls=use_tls)
 
     def _parallel(
-        self, streams: List[RTSPStream],
+        self, streams: list[RTSPStream],
         fn,
-    ) -> List[RTSPStream]:
+    ) -> list[RTSPStream]:
         """Execute fn(stream) for all streams in parallel."""
         if not streams:
             return streams
@@ -328,7 +327,7 @@ class RTSPAttacker:
         return [r for r in results if r is not None]
 
     @staticmethod
-    def _needs_reattack(streams: List[RTSPStream]) -> bool:
+    def _needs_reattack(streams: list[RTSPStream]) -> bool:
         """Check if any stream needs re-attack (mirrors cameradar heuristic)."""
         for stream in streams:
             if stream.route_found and stream.credentials_found and stream.available:
@@ -344,7 +343,7 @@ class RTSPAttacker:
 
     # ── Output Helpers ────────────────────────────────────────────────────────
 
-    def generate_m3u(self, streams: List[RTSPStream]) -> str:
+    def generate_m3u(self, streams: list[RTSPStream]) -> str:
         """Generate M3U playlist from accessible streams.
 
         Args:
@@ -359,7 +358,7 @@ class RTSPAttacker:
                 lines.append(stream.to_m3u_entry())
         return "\n".join(lines)
 
-    def print_summary(self, streams: List[RTSPStream]) -> None:
+    def print_summary(self, streams: list[RTSPStream]) -> None:
         """Print a formatted summary of all discovered streams."""
         accessible = [s for s in streams if s.available]
         route_only = [s for s in streams if s.route_found and not s.available]

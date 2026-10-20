@@ -5,7 +5,6 @@ Combines in-tree Scapy parsing with optional ``hcxpcapngtool`` conversion checks
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 import os
 import shutil

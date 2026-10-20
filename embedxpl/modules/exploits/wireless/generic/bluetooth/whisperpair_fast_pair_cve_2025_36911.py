@@ -25,7 +25,6 @@ References:
   - https://github.com/ap425q/whisper-pair
   - https://whisperpair.eu
 """
-from __future__ import annotations
 
 import asyncio
 import logging

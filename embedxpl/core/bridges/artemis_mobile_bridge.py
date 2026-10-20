@@ -22,7 +22,6 @@ Setup:
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
 
-from __future__ import annotations
 
 import json
 import subprocess
@@ -41,7 +40,7 @@ class ArtemisMobileBridge:
     def __init__(
         self,
         artemis_host: str = ARTEMIS_HOST,
-        device: Optional[str] = None,
+        device: str | None = None,
     ) -> None:
         """Initialize bridge.
 
@@ -145,7 +144,7 @@ class ArtemisMobileBridge:
         except Exception as exc:
             return {"error": str(exc)}
 
-    def run_task(self, task: str, app: Optional[str] = None) -> dict:
+    def run_task(self, task: str, app: str | None = None) -> dict:
         """Send a natural language task to Artemis for execution.
 
         Args:
@@ -235,7 +234,7 @@ class ArtemisMobileBridge:
         )
         return rc == 0
 
-    def run_artemis_task(self, task: str, app: Optional[str] = None) -> dict:
+    def run_artemis_task(self, task: str, app: str | None = None) -> dict:
         """Execute natural language task via Artemis (requires MCP server).
 
         Falls back to raw ADB if Artemis is not running.

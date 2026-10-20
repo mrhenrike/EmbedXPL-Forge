@@ -24,7 +24,7 @@ def data_list(dataset):
         files = api.data.list_files(dataset)
 
         for file in files:
-            click.echo(click.style(u'{:20s}'.format(file['name']), fg='cyan'), nl=False)
+            click.echo(click.style('{:20s}'.format(file['name']), fg='cyan'), nl=False)
             click.echo(click.style('{:10s}'.format(helpers.humanize_bytes(file['size'])), fg='yellow'), nl=False)
 
             # Show the SHA1 checksum if available
@@ -82,7 +82,7 @@ def data_download(chunksize, filename, dataset, name):
 
     # Create a default filename based on the dataset and the filename within that dataset
     if not filename:
-        filename = '{}-{}'.format(dataset, name)
+        filename = f'{dataset}-{name}'
 
     # Open the output file and start writing to it in chunks
     with open(filename, 'wb') as fout:
@@ -91,4 +91,4 @@ def data_download(chunksize, filename, dataset, name):
                 if chunk:
                     fout.write(chunk)
 
-    click.echo(click.style('Download completed: {}'.format(filename), 'green'))
+    click.echo(click.style(f'Download completed: {filename}', 'green'))

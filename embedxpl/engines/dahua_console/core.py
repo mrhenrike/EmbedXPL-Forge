@@ -28,7 +28,7 @@ class Core:
         results_file = os.path.join(self.config.out_dir, self.config.vulnerable)
         if not os.path.exists(results_file):
             return
-        with open(results_file, "r") as f:
+        with open(results_file) as f:
             items = [l.strip().split(",") for l in f if l.strip()]
         if not items:
             return

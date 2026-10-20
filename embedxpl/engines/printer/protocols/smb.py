@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 SMB Protocol Support for PrinterXPL-Forge
 ========================================
@@ -25,7 +24,6 @@ Usage example::
 # LinkedIn  : https://linkedin.com/in/mrhenrike
 # X/Twitter : https://x.com/mrhenrike
 
-from __future__ import annotations
 
 import io
 import os
@@ -63,7 +61,7 @@ class SMBProtocol:
     def __init__(
         self,
         host:     str,
-        port:     Optional[int]  = None,
+        port:     int | None  = None,
         timeout:  float          = 30.0,
         share:    str            = 'print$',
         username: str            = 'guest',
@@ -78,7 +76,7 @@ class SMBProtocol:
         self.password = password
         self.domain   = domain
 
-        self._conn: Optional[_SMBConnection] = None
+        self._conn: _SMBConnection | None = None
         self._connected: bool = False
         self._server_name: str = ''
         self._os_info: str = ''
@@ -148,7 +146,7 @@ class SMBProtocol:
     # Enumeration
     # ------------------------------------------------------------------
 
-    def list_shares(self) -> List[Dict[str, str]]:
+    def list_shares(self) -> list[dict[str, str]]:
         """
         List all SMB shares on the target.
 
@@ -174,7 +172,7 @@ class SMBProtocol:
         # No pysmb — try smbclient binary
         return self._smbclient_list_shares()
 
-    def list_printers(self) -> List[Dict[str, str]]:
+    def list_printers(self) -> list[dict[str, str]]:
         """
         Filter shares that are printer shares (type 0x00000001 in SMB).
 
@@ -189,7 +187,7 @@ class SMBProtocol:
                 printers.append(s)
         return printers
 
-    def list_files(self, path: str = '/') -> List[str]:
+    def list_files(self, path: str = '/') -> list[str]:
         """List files in a share path (requires an active pysmb connection)."""
         if not self._conn:
             raise RuntimeError("pysmb backend required for file listing")
@@ -207,7 +205,7 @@ class SMBProtocol:
         self,
         remote_filename: str,
         data: bytes,
-        print_share: Optional[str] = None,
+        print_share: str | None = None,
     ) -> bool:
         """
         Send *data* as a print job to the SMB printer share.
@@ -266,7 +264,7 @@ class SMBProtocol:
     # Fingerprinting
     # ------------------------------------------------------------------
 
-    def get_info(self) -> Dict[str, str]:
+    def get_info(self) -> dict[str, str]:
         """
         Return basic SMB session information.
 

@@ -10,7 +10,6 @@ amplifiers against third parties.
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 import socket
 import struct
@@ -34,7 +33,7 @@ __info__ = {
 }
 
 # Minimal probes: (port, name, payload_hex)
-_PROBES: Dict[str, Tuple[int, bytes]] = {
+_PROBES: dict[str, tuple[int, bytes]] = {
     "DNS": (53, bytes.fromhex(
         "0001010000010000000000000377777703777777036e657400001c0001"
     )),
@@ -101,7 +100,7 @@ class Exploit(HTTPClient):
         name: str,
         port: int,
         payload: bytes,
-    ) -> Optional[Tuple[int, int, float]]:
+    ) -> tuple[int, int, float] | None:
         """Send one UDP probe and return (req_size, resp_size, factor) or None."""
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.settimeout(int(self.timeout))
@@ -111,7 +110,7 @@ class Exploit(HTTPClient):
             req = len(payload)
             resp = len(data)
             return req, resp, resp / max(req, 1)
-        except socket.timeout:
+        except TimeoutError:
             return None
         except Exception:
             return None

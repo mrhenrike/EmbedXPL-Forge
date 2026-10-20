@@ -5,7 +5,7 @@ CIMBAR_SRC = realpath(join(dirname(realpath(__file__)), '..', '..'))
 BIN_DIR = join(CIMBAR_SRC, 'dist', 'bin')
 
 
-class TestDirMixin():
+class TestDirMixin:
     def setUp(self):
         self.working_dir = TemporaryDirectory()
         super().setUp()

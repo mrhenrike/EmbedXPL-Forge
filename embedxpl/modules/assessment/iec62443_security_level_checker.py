@@ -17,7 +17,6 @@ Maintainer : Andre Henrique (@mrhenrike) | Uniao Geek
 
 # authorized use only
 """
-from __future__ import annotations
 
 from embedxpl.core.exploit import *
 

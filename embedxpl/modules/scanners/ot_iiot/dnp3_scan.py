@@ -165,7 +165,7 @@ class Exploit(Exploit):
             resp = sock.recv(292)
             if resp:
                 return self._parse_link_response(resp)
-        except socket.timeout:
+        except TimeoutError:
             pass
         return {}
 
@@ -178,23 +178,21 @@ class Exploit(Exploit):
             sock.connect((self.target, self.port))
             sock.close()
             return True
-        except (socket.error, OSError):
+        except OSError:
             return False
 
     @multi
     def run(self) -> None:
         """Scan for DNP3 outstations by probing address range."""
         print_status(
-            "DNP3 link-layer scan on {}:{} (addresses {}-{})".format(
-                self.target, self.port, self.scan_start, self.scan_end
-            )
+            f"DNP3 link-layer scan on {self.target}:{self.port} (addresses {self.scan_start}-{self.scan_end})"
         )
 
         if not self.check():
             print_error("DNP3 TCP port not accessible")
             return
 
-        print_success("TCP/{} open - starting DNP3 address scan".format(self.port))
+        print_success(f"TCP/{self.port} open - starting DNP3 address scan")
 
         found_stations = []
         try:
@@ -216,16 +214,16 @@ class Exploit(Exploit):
                     )
                 elif result:
                     print_info(
-                        "Addr {} - response with invalid CRC".format(addr)
+                        f"Addr {addr} - response with invalid CRC"
                     )
 
             sock.close()
 
-        except socket.error as exc:
-            print_error("Connection error: {}".format(exc))
+        except OSError as exc:
+            print_error(f"Connection error: {exc}")
 
         print_info(
-            "Scan complete: {} active outstation(s) found".format(len(found_stations))
+            f"Scan complete: {len(found_stations)} active outstation(s) found"
         )
 
         if found_stations:

@@ -13,7 +13,6 @@
 # simulate=True by default — set False only for authorized tests.
 # ============================================================
 
-from __future__ import annotations
 
 import socket
 import struct
@@ -131,7 +130,7 @@ class Exploit(_Base):
                 if resp:
                     findings.append("WARNING: SNMP responding (check write access with 'private' community)")
                     print("    [!] SNMP port responding — verify write community is restricted")
-            except socket.timeout:
+            except TimeoutError:
                 print("    SNMP: no response (filtered — good)")
             sock.close()
         except Exception as e:

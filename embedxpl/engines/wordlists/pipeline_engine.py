@@ -14,14 +14,14 @@ Pipeline padrão (profile OSINT):
 
 Author: André Henrique (@mrhenrike)
 """
-from __future__ import annotations
 
 import logging
 import time
 import zlib
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -154,7 +154,7 @@ class ProfilePipeline:
         pipeline.finalize()       # archive export
     """
 
-    def __init__(self, profile: dict, config: Optional[PipelineConfig] = None) -> None:
+    def __init__(self, profile: dict, config: PipelineConfig | None = None) -> None:
         self.profile = profile
         self.config = config or PipelineConfig.from_profile(profile)
         self._dedup = CRC32Deduplicator()
@@ -179,7 +179,7 @@ class ProfilePipeline:
             return False
         return True
 
-    def _emit(self, word: str) -> Optional[str]:
+    def _emit(self, word: str) -> str | None:
         """Filtra por len e dedup; retorna a palavra ou None."""
         word = word.strip()
         if not word:
@@ -999,7 +999,7 @@ class ProfilePipeline:
             self._dedup.count_duped,
         )
 
-    def run_to_file(self, output_path: Optional[str] = None) -> dict:
+    def run_to_file(self, output_path: str | None = None) -> dict:
         """
         Executa o pipeline e escreve saída em arquivo.
 
@@ -1048,7 +1048,7 @@ class ProfilePipeline:
 
         return result
 
-    def run_feedback(self, wordlist_path: Optional[str] = None) -> dict:
+    def run_feedback(self, wordlist_path: str | None = None) -> dict:
         """
         Executa feedback loop: benchmark vs known_targets.
 
@@ -1231,8 +1231,8 @@ def _suggest_engines_for_misses(
 
 def run_profile_pipeline(
     profile: dict,
-    config: Optional[PipelineConfig] = None,
-    output_path: Optional[str] = None,
+    config: PipelineConfig | None = None,
+    output_path: str | None = None,
 ) -> dict:
     """
     Executa o pipeline completo para um perfil e retorna estatísticas.

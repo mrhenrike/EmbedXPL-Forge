@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 IPP Protocol Support for PrinterXPL-Forge
 ======================================
@@ -132,7 +131,7 @@ class IPPProtocol:
                 response += chunk
                 if b'\\r\\n\\r\\n' in response and len(response) > 100:
                     break
-            except socket.timeout:
+            except TimeoutError:
                 break
         
         return response

@@ -50,7 +50,7 @@ def _ensure_project_on_path() -> None:
         sys.path.insert(0, _PROJECT_ROOT)
 
 
-def _walk_packages(root_pkg: str) -> List[Tuple[str, str]]:
+def _walk_packages(root_pkg: str) -> list[tuple[str, str]]:
     """Recursively discover all sub-modules under *root_pkg*.
 
     Args:
@@ -60,7 +60,7 @@ def _walk_packages(root_pkg: str) -> List[Tuple[str, str]]:
         List of (dotted_module_name, category_label) tuples.
     """
     _ensure_project_on_path()
-    results: List[Tuple[str, str]] = []
+    results: list[tuple[str, str]] = []
 
     try:
         pkg = importlib.import_module(root_pkg)
@@ -87,7 +87,7 @@ def _walk_packages(root_pkg: str) -> List[Tuple[str, str]]:
     return results
 
 
-def _import_module_info(dotted_name: str) -> Optional[Dict[str, Any]]:
+def _import_module_info(dotted_name: str) -> dict[str, Any] | None:
     """Import a module and extract its ``__info__`` dict.
 
     The metaclass ``ExploitOptionsAggregator`` renames ``__info__`` to
@@ -125,7 +125,7 @@ def _import_module_info(dotted_name: str) -> Optional[Dict[str, Any]]:
     return None
 
 
-def _collect_options(dotted_name: str) -> List[Dict[str, str]]:
+def _collect_options(dotted_name: str) -> list[dict[str, str]]:
     """Extract Option descriptors from a module's Exploit class.
 
     Args:
@@ -145,7 +145,7 @@ def _collect_options(dotted_name: str) -> List[Dict[str, str]]:
 
     from embedxpl.core.exploit.option import Option
 
-    params: List[Dict[str, str]] = []
+    params: list[dict[str, str]] = []
     for name in sorted(dir(exploit_cls)):
         if name.startswith("_"):
             continue
@@ -249,14 +249,14 @@ def _bullet_list(items: Any) -> str:
     if not items:
         return "- N/A"
     if isinstance(items, str):
-        return "- {}".format(items)
-    return "\n".join("- {}".format(item) for item in items)
+        return f"- {items}"
+    return "\n".join(f"- {item}" for item in items)
 
 
 def _build_module_doc(
     dotted_name: str,
-    info: Dict[str, Any],
-    options: List[Dict[str, str]],
+    info: dict[str, Any],
+    options: list[dict[str, str]],
 ) -> str:
     """Build a Markdown document for a single module.
 
@@ -281,7 +281,7 @@ def _build_module_doc(
     if hw_list:
         hw_lines = ["This module requires physical hardware:\n"]
         for hw_id in hw_list:
-            hw_lines.append("- `{}`".format(hw_id))
+            hw_lines.append(f"- `{hw_id}`")
         hardware_section = "\n".join(hw_lines)
     else:
         hardware_section = "No special hardware required. Network access only."
@@ -290,7 +290,7 @@ def _build_module_doc(
     if refs:
         ref_lines = []
         for r in refs:
-            ref_lines.append("- <{}>".format(r))
+            ref_lines.append(f"- <{r}>")
         references = "\n".join(ref_lines)
     else:
         references = "- No external references listed."
@@ -339,7 +339,7 @@ def _build_module_doc(
 
 def _build_index(
     category: str,
-    entries: List[Tuple[str, Dict[str, Any]]],
+    entries: list[tuple[str, dict[str, Any]]],
 ) -> str:
     """Build an INDEX.md for a module category.
 
@@ -363,10 +363,8 @@ def _build_index(
         cvss = info.get("cvss", "N/A")
         status = info.get("status", "unverified")
         severity = info.get("severity", "N/A")
-        link = "[{}](./{}.md)".format(name, mod_file)
-        lines.append("| {} | {} | {} | {} | {} |".format(
-            link, cve, cvss, status, severity,
-        ))
+        link = f"[{name}](./{mod_file}.md)"
+        lines.append(f"| {link} | {cve} | {cvss} | {status} | {severity} |")
     lines.append("")
     return "\n".join(lines)
 
@@ -441,8 +439,8 @@ def _build_hardware_doc() -> str:
 # ---------------------------------------------------------------------------
 
 def _compute_stats(
-    all_modules: List[Tuple[str, str, Optional[Dict[str, Any]]]],
-) -> Dict[str, Any]:
+    all_modules: list[tuple[str, str, dict[str, Any] | None]],
+) -> dict[str, Any]:
     """Compute aggregate statistics from discovered modules.
 
     Args:
@@ -494,7 +492,7 @@ def _compute_stats(
     }
 
 
-def _print_stats_table(stats: Dict[str, Any]) -> None:
+def _print_stats_table(stats: dict[str, Any]) -> None:
     """Print an ASCII table with module statistics to stdout.
 
     Args:
@@ -516,8 +514,8 @@ def _print_stats_table(stats: Dict[str, Any]) -> None:
     print(fmt.format("Metric", "Value"))
     print(sep)
     print(fmt.format("Total Modules", str(total)))
-    print(fmt.format("CONFIRMED", "{} ({:.1f}%)".format(confirmed, conf_pct)))
-    print(fmt.format("UNTESTED-PROD", "{} ({:.1f}%)".format(untested, unt_pct)))
+    print(fmt.format("CONFIRMED", f"{confirmed} ({conf_pct:.1f}%)"))
+    print(fmt.format("UNTESTED-PROD", f"{untested} ({unt_pct:.1f}%)"))
     print(fmt.format("Import Errors", str(errors)))
     print(fmt.format("Categories", str(len(stats["categories"]))))
     print(fmt.format("Protocol Coverage", ", ".join(stats["protocols"]) or "N/A"))
@@ -548,7 +546,7 @@ def _safe_write(filepath: str, content: str) -> bool:
             fh.write(content)
         return True
     except OSError as exc:
-        print("[ERROR] Failed to write {}: {}".format(filepath, exc),
+        print(f"[ERROR] Failed to write {filepath}: {exc}",
               file=sys.stderr)
         return False
 
@@ -557,7 +555,7 @@ def _safe_write(filepath: str, content: str) -> bool:
 # Main generation pipeline
 # ---------------------------------------------------------------------------
 
-def generate_docs(output_dir: str, lang: str = "en-US") -> Dict[str, Any]:
+def generate_docs(output_dir: str, lang: str = "en-US") -> dict[str, Any]:
     """Run the full documentation generation pipeline.
 
     Args:
@@ -573,10 +571,10 @@ def generate_docs(output_dir: str, lang: str = "en-US") -> Dict[str, Any]:
     modules_dir = os.path.join(output_dir, "modules")
     os.makedirs(modules_dir, exist_ok=True)
 
-    all_modules: List[Tuple[str, str, Optional[Dict[str, Any]]]] = []
-    category_map: Dict[str, List[Tuple[str, Dict[str, Any]]]] = OrderedDict()
+    all_modules: list[tuple[str, str, dict[str, Any] | None]] = []
+    category_map: dict[str, list[tuple[str, dict[str, Any]]]] = OrderedDict()
     generated = 0
-    error_modules: List[str] = []
+    error_modules: list[str] = []
 
     for root_pkg in _MODULE_ROOTS:
         discovered = _walk_packages(root_pkg)
@@ -586,7 +584,7 @@ def generate_docs(output_dir: str, lang: str = "en-US") -> Dict[str, Any]:
 
             if info is None:
                 error_modules.append(dotted_name)
-                print("[WARN] Could not import: {}".format(dotted_name),
+                print(f"[WARN] Could not import: {dotted_name}",
                       file=sys.stderr)
                 continue
 
@@ -655,7 +653,7 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: Optional[List[str]] = None) -> int:
+def main(argv: list[str] | None = None) -> int:
     """CLI entry point for the documentation generator.
 
     Args:
@@ -670,7 +668,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     _ensure_project_on_path()
 
     if args.stats:
-        all_modules: List[Tuple[str, str, Optional[Dict[str, Any]]]] = []
+        all_modules: list[tuple[str, str, dict[str, Any] | None]] = []
         for root_pkg in _MODULE_ROOTS:
             for dotted_name, category in _walk_packages(root_pkg):
                 info = _import_module_info(dotted_name)
@@ -688,14 +686,14 @@ def main(argv: Optional[List[str]] = None) -> int:
         else:
             output_dir = os.path.join(_PROJECT_ROOT, "docs", lang)
 
-        print("[*] Generating docs for '{}' -> {}".format(lang, output_dir))
+        print(f"[*] Generating docs for '{lang}' -> {output_dir}")
         result = generate_docs(output_dir, lang=lang)
         print("[+] Generated: {} module docs".format(result["generated"]))
 
         if result["errors"]:
             print("[!] {} modules failed to import:".format(len(result["errors"])))
             for err_mod in result["errors"]:
-                print("    - {}".format(err_mod))
+                print(f"    - {err_mod}")
             exit_code = 1
 
         _print_stats_table(result["stats"])

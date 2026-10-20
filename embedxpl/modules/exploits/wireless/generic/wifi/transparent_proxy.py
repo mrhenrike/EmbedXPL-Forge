@@ -19,7 +19,6 @@ Inspired by wifipumpkin3's PumpkinProxy.
 Version: 1.1.0
 """
 
-from __future__ import annotations
 
 import logging
 import os

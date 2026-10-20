@@ -178,7 +178,7 @@ class Exploit(Exploit):
             while time.monotonic() < deadline:
                 try:
                     data, addr = sock.recvfrom(4096)
-                except socket.timeout:
+                except TimeoutError:
                     continue
                 names = self._parse_mdns_response(data)
                 device_type = "Smart Home Device"
@@ -194,8 +194,8 @@ class Exploit(Exploit):
                         "detail": "; ".join(names[:3]),
                     })
             sock.close()
-        except (OSError, socket.error) as exc:
-            print_error("mDNS scan error: {}".format(exc))
+        except OSError as exc:
+            print_error(f"mDNS scan error: {exc}")
         return results
 
     def _discover_ssdp(self):
@@ -206,13 +206,13 @@ class Exploit(Exploit):
         """
         results = []
         msearch = (
-            "M-SEARCH * HTTP/1.1\r\n"
-            "HOST: 239.255.255.250:1900\r\n"
-            "MAN: \"ssdp:discover\"\r\n"
-            "MX: 3\r\n"
-            "ST: ssdp:all\r\n"
-            "\r\n"
-        ).encode("utf-8")
+            b"M-SEARCH * HTTP/1.1\r\n"
+            b"HOST: 239.255.255.250:1900\r\n"
+            b"MAN: \"ssdp:discover\"\r\n"
+            b"MX: 3\r\n"
+            b"ST: ssdp:all\r\n"
+            b"\r\n"
+        )
 
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
@@ -225,7 +225,7 @@ class Exploit(Exploit):
             while time.monotonic() < deadline:
                 try:
                     data, addr = sock.recvfrom(4096)
-                except socket.timeout:
+                except TimeoutError:
                     continue
 
                 if addr[0] in seen:
@@ -251,8 +251,8 @@ class Exploit(Exploit):
                         "detail": server or "UPnP response",
                     })
             sock.close()
-        except (OSError, socket.error) as exc:
-            print_error("SSDP scan error: {}".format(exc))
+        except OSError as exc:
+            print_error(f"SSDP scan error: {exc}")
         return results
 
     def _probe_http_banners(self, targets):
@@ -271,9 +271,7 @@ class Exploit(Exploit):
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     sock.settimeout(2.0)
                     sock.connect((ip, port))
-                    request = "GET {} HTTP/1.1\r\nHost: {}\r\nConnection: close\r\n\r\n".format(
-                        path, ip
-                    ).encode("utf-8")
+                    request = f"GET {path} HTTP/1.1\r\nHost: {ip}\r\nConnection: close\r\n\r\n".encode()
                     sock.sendall(request)
                     response = b""
                     while True:
@@ -284,7 +282,7 @@ class Exploit(Exploit):
                             response += chunk
                             if len(response) > 8192:
                                 break
-                        except socket.timeout:
+                        except TimeoutError:
                             break
                     sock.close()
 
@@ -296,7 +294,7 @@ class Exploit(Exploit):
                     status = int(status_match.group(1)) if status_match else 0
 
                     if status in (200, 301, 302, 401, 403):
-                        detail = "{} port {} - HTTP {}".format(label, port, status)
+                        detail = f"{label} port {port} - HTTP {status}"
 
                         model_match = re.search(
                             r'"(?:name|model|device_name)"\s*:\s*"([^"]+)"', text
@@ -306,9 +304,9 @@ class Exploit(Exploit):
                             text,
                         )
                         if model_match:
-                            detail += " | Model: {}".format(model_match.group(1))
+                            detail += f" | Model: {model_match.group(1)}"
                         if fw_match:
-                            detail += " | FW: {}".format(fw_match.group(1))
+                            detail += f" | FW: {fw_match.group(1)}"
 
                         results.append({
                             "ip": ip,
@@ -316,7 +314,7 @@ class Exploit(Exploit):
                             "type": label,
                             "detail": detail,
                         })
-                except (OSError, socket.error):
+                except OSError:
                     continue
         return results
 
@@ -330,7 +328,7 @@ class Exploit(Exploit):
                 sock.connect((self.target, 8008))
                 sock.close()
                 return True
-            except (OSError, socket.error):
+            except OSError:
                 pass
         return False
 
@@ -339,7 +337,7 @@ class Exploit(Exploit):
         """Execute smart home assistant discovery scan."""
         print_status("Smart Home Assistant Discovery Scanner")
         if self.target:
-            print_info("Target: {}".format(self.target))
+            print_info(f"Target: {self.target}")
         else:
             print_info("Mode: broadcast discovery (all local network)")
 
@@ -353,7 +351,7 @@ class Exploit(Exploit):
                 for r in mdns_results:
                     discovered_ips.add(r["ip"])
                 all_results.extend(mdns_results)
-                print_success("mDNS: {} device(s) found".format(len(mdns_results)))
+                print_success(f"mDNS: {len(mdns_results)} device(s) found")
             else:
                 print_info("mDNS: no responses received")
 
@@ -364,7 +362,7 @@ class Exploit(Exploit):
                 for r in ssdp_results:
                     discovered_ips.add(r["ip"])
                 all_results.extend(ssdp_results)
-                print_success("SSDP: {} device(s) found".format(len(ssdp_results)))
+                print_success(f"SSDP: {len(ssdp_results)} device(s) found")
             else:
                 print_info("SSDP: no responses received")
 
@@ -372,15 +370,11 @@ class Exploit(Exploit):
             discovered_ips.add(self.target)
 
         if self.http_probe and discovered_ips:
-            print_status("Probing HTTP banners on {} host(s)...".format(
-                len(discovered_ips)
-            ))
+            print_status(f"Probing HTTP banners on {len(discovered_ips)} host(s)...")
             http_results = self._probe_http_banners(discovered_ips)
             if http_results:
                 all_results.extend(http_results)
-                print_success("HTTP: {} service(s) identified".format(
-                    len(http_results)
-                ))
+                print_success(f"HTTP: {len(http_results)} service(s) identified")
 
         if all_results:
             unique = {}
@@ -395,7 +389,7 @@ class Exploit(Exploit):
                 for r in unique.values()
             ]
             print_table(headers, *rows)
-            print_success("Total: {} unique device(s) discovered".format(len(unique)))
+            print_success(f"Total: {len(unique)} unique device(s) discovered")
         else:
             print_warning("No smart home assistants discovered on the network")
 

@@ -72,14 +72,14 @@ class RTSPClient:
         self.host = host
         self.port = port
         self.timeout = timeout
-        self._sock: Optional[socket.socket] = None
+        self._sock: socket.socket | None = None
         self._cseq = self._CSEQ_START
-        self._session_id: Optional[str] = None
-        self._username: Optional[str] = None
-        self._password: Optional[str] = None
-        self._realm: Optional[str] = None
-        self._nonce: Optional[str] = None
-        self._auth_type: Optional[str] = None
+        self._session_id: str | None = None
+        self._username: str | None = None
+        self._password: str | None = None
+        self._realm: str | None = None
+        self._nonce: str | None = None
+        self._auth_type: str | None = None
 
     def connect(self) -> None:
         """Open TCP connection to the RTSP server.
@@ -196,7 +196,7 @@ class RTSPClient:
             SdpInfo dataclass with session and stream details.
         """
         info = SdpInfo()
-        current_stream: Optional[SdpStream] = None
+        current_stream: SdpStream | None = None
 
         for line in sdp_text.splitlines():
             line = line.strip()
@@ -236,7 +236,7 @@ class RTSPClient:
         self,
         method: str,
         path: str,
-        extra_headers: Optional[dict[str, str]] = None,
+        extra_headers: dict[str, str] | None = None,
         retry_auth: bool = True,
     ) -> RtspResponse:
         """Build and send an RTSP request, handling 401 auth challenges.
@@ -321,7 +321,7 @@ class RTSPClient:
                 if not chunk:
                     break
                 data += chunk
-            except socket.timeout:
+            except TimeoutError:
                 break
 
         header_part, _, body_part = data.partition(b"\r\n\r\n")

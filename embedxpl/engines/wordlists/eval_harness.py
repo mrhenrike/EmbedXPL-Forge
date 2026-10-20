@@ -12,11 +12,11 @@ Two capabilities in the spirit of the MAYA benchmark and weakpass ranking:
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -40,8 +40,8 @@ def _load_set(path: str, max_lines: int = 0) -> set[str]:
 def evaluate_candidates(
     candidate_paths: list[str],
     reference_path: str,
-    labels: Optional[list[str]] = None,
-    cutoffs: Optional[list[int]] = None,
+    labels: list[str] | None = None,
+    cutoffs: list[int] | None = None,
     max_candidates: int = 0,
     max_reference: int = 0,
 ) -> dict:

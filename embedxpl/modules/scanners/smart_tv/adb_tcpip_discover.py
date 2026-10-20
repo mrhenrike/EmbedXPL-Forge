@@ -114,10 +114,10 @@ class Exploit(BaseExploit):
             sock = socket.create_connection((str(self.target), int(self.port)), timeout=self.timeout)
             sock.close()
             return True
-        except (socket.timeout, ConnectionRefusedError, OSError):
+        except (TimeoutError, ConnectionRefusedError, OSError):
             return False
 
-    def _adb_cnxn_probe(self) -> Optional[str]:
+    def _adb_cnxn_probe(self) -> str | None:
         """Send an ADB CNXN packet and read the first 24 response bytes.
 
         Returns:
@@ -131,7 +131,7 @@ class Exploit(BaseExploit):
             sock.close()
             if len(data) >= 4:
                 return data[:4].hex()
-        except (socket.timeout, ConnectionRefusedError, OSError):
+        except (TimeoutError, ConnectionRefusedError, OSError):
             pass
         return None
 
@@ -146,13 +146,13 @@ class Exploit(BaseExploit):
         Prints a success banner if ADB responds, or an error if the host
         is unreachable or does not speak ADB.
         """
-        print_status("Probing {}:{} for ADB TCP/IP...".format(self.target, self.port))
+        print_status(f"Probing {self.target}:{self.port} for ADB TCP/IP...")
 
         if not self._tcp_connect():
-            print_error("TCP connect failed — port {} is closed or filtered.".format(self.port))
+            print_error(f"TCP connect failed — port {self.port} is closed or filtered.")
             return
 
-        print_success("TCP port {} is OPEN on {}".format(self.port, self.target))
+        print_success(f"TCP port {self.port} is OPEN on {self.target}")
 
         response_hex = self._adb_cnxn_probe()
         if response_hex is None:
@@ -162,11 +162,9 @@ class Exploit(BaseExploit):
         # ADB command words (little-endian bytes):
         #   CNXN = 43 4e 58 4e  AUTH = 41 55 54 48  OPEN = 4f 50 45 4e
         known = {"434e584e": "CNXN", "41555448": "AUTH", "4f50454e": "OPEN"}
-        label = known.get(response_hex.upper(), "UNKNOWN ({})".format(response_hex))
+        label = known.get(response_hex.upper(), f"UNKNOWN ({response_hex})")
         print_success(
-            "ADB response on {}:{} — command={} → Device likely has ADB over TCP ENABLED".format(
-                self.target, self.port, label
-            )
+            f"ADB response on {self.target}:{self.port} — command={label} → Device likely has ADB over TCP ENABLED"
         )
 
     @mute

@@ -9,7 +9,6 @@ specific TTPs for security testing.
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
@@ -23,10 +22,10 @@ class APTAttack:
     """Single attack/technique within an APT campaign."""
     name: str
     description: str
-    cves: List[str] = field(default_factory=list)
-    modules: List[str] = field(default_factory=list)
-    mitre_techniques: List[str] = field(default_factory=list)
-    target_devices: List[str] = field(default_factory=list)
+    cves: list[str] = field(default_factory=list)
+    modules: list[str] = field(default_factory=list)
+    mitre_techniques: list[str] = field(default_factory=list)
+    target_devices: list[str] = field(default_factory=list)
     phase: str = ""
     requires_auth: bool = False
 
@@ -36,16 +35,16 @@ class APTGroup:
     """APT group profile with associated attacks reproducible by EmbedXPL."""
     id: str
     name: str
-    aliases: List[str]
+    aliases: list[str]
     country: str
     description: str
-    campaigns: List[str] = field(default_factory=list)
-    attacks: List[APTAttack] = field(default_factory=list)
-    references: List[str] = field(default_factory=list)
+    campaigns: list[str] = field(default_factory=list)
+    attacks: list[APTAttack] = field(default_factory=list)
+    references: list[str] = field(default_factory=list)
     mitre_id: str = ""
 
 
-APT_CATALOG: Dict[str, APTGroup] = {}
+APT_CATALOG: dict[str, APTGroup] = {}
 
 
 def _build_catalog() -> None:
@@ -1275,25 +1274,25 @@ def _build_catalog() -> None:
     )
 
 
-def get_catalog() -> Dict[str, APTGroup]:
+def get_catalog() -> dict[str, APTGroup]:
     """Return the full APT catalog, building it on first access."""
     if not APT_CATALOG:
         _build_catalog()
     return APT_CATALOG
 
 
-def get_group(group_id: str) -> Optional[APTGroup]:
+def get_group(group_id: str) -> APTGroup | None:
     """Retrieve a specific APT group by ID."""
     catalog = get_catalog()
     return catalog.get(group_id.lower().replace("-", "_").replace(" ", "_"))
 
 
-def list_groups() -> List[APTGroup]:
+def list_groups() -> list[APTGroup]:
     """Return all APT groups sorted by name."""
     return sorted(get_catalog().values(), key=lambda g: g.name)
 
 
-def find_groups_by_device(device_keyword: str) -> List[APTGroup]:
+def find_groups_by_device(device_keyword: str) -> list[APTGroup]:
     """Find APT groups that target devices matching a keyword."""
     keyword = device_keyword.lower()
     results = []
@@ -1305,7 +1304,7 @@ def find_groups_by_device(device_keyword: str) -> List[APTGroup]:
     return results
 
 
-def find_groups_by_cve(cve_id: str) -> List[APTGroup]:
+def find_groups_by_cve(cve_id: str) -> list[APTGroup]:
     """Find APT groups associated with a specific CVE."""
     cve_upper = cve_id.upper()
     results = []

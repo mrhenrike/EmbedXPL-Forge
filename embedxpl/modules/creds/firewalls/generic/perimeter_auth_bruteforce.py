@@ -19,7 +19,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import base64
 import logging
@@ -95,7 +94,7 @@ _SMB_NEGOTIATE_PROTO = (
 # SMB helpers
 # ---------------------------------------------------------------------------
 
-def _smb_probe_signing(host: str, port: int = 445, timeout: int = 5) -> Optional[bool]:
+def _smb_probe_signing(host: str, port: int = 445, timeout: int = 5) -> bool | None:
     """Return True if SMB signing is required, False if not, None on error.
 
     Uses a raw socket to send an SMB Negotiate Protocol frame and parses the
@@ -127,7 +126,7 @@ def _smb_auth_impacket(
     lm_hash: str,
     nt_hash: str,
     timeout: int,
-) -> Tuple[bool, str]:
+) -> tuple[bool, str]:
     """Attempt SMB authentication via impacket (password or PTH)."""
     if not _IMPACKET_AVAILABLE:
         return False, "impacket not installed; SMB auth unavailable"
@@ -142,10 +141,10 @@ def _smb_auth_impacket(
         try:
             shares = conn.listShares()
             conn.logoff()
-            return True, "SMB {} auth succeeded - {} shares found".format(label, len(shares))
+            return True, f"SMB {label} auth succeeded - {len(shares)} shares found"
         except Exception:
             conn.logoff()
-            return True, "SMB {} auth succeeded".format(label)
+            return True, f"SMB {label} auth succeeded"
     except SessionError as exc:
         msg = str(exc)
         if "STATUS_LOGON_FAILURE" in msg:
@@ -154,19 +153,19 @@ def _smb_auth_impacket(
             return False, "SMB account locked out"
         if "STATUS_ACCESS_DENIED" in msg:
             return False, "SMB access denied"
-        return False, "SMB error: {}".format(msg[:120])
+        return False, f"SMB error: {msg[:120]}"
     except Exception as exc:
-        return False, "SMB connection error: {}".format(str(exc)[:120])
+        return False, f"SMB connection error: {str(exc)[:120]}"
 
 
-def _smb_auth_socket_fallback(host: str, port: int, timeout: int) -> Tuple[bool, str]:
+def _smb_auth_socket_fallback(host: str, port: int, timeout: int) -> tuple[bool, str]:
     """Socket-level SMB port reachability probe (impacket absent fallback)."""
     try:
         sock = socket.create_connection((host, port), timeout=timeout)
         sock.close()
         return True, "SMB port reachable (impacket absent - auth not attempted)"
     except Exception as exc:
-        return False, "SMB port unreachable: {}".format(str(exc)[:80])
+        return False, f"SMB port unreachable: {str(exc)[:80]}"
 
 
 # ---------------------------------------------------------------------------
@@ -188,7 +187,7 @@ def _winrm_ntlm_challenge(
     password: str,
     timeout: int,
     use_tls: bool,
-) -> Tuple[bool, str]:
+) -> tuple[bool, str]:
     """Attempt WinRM auth via NTLM Negotiate/Challenge/Authenticate using requests.
 
     This implements a minimal two-step NTLM handshake over HTTP(S) without
@@ -200,14 +199,14 @@ def _winrm_ntlm_challenge(
         from requests.auth import AuthBase  # type: ignore
 
         scheme = "https" if use_tls else "http"
-        url = "{}://{}:{}/wsman".format(scheme, host, port)
+        url = f"{scheme}://{host}:{port}/wsman"
         session = requests.Session()
         session.verify = False
 
         # Step 1: send NEGOTIATE
         neg_token = _build_ntlm_negotiate_b64()
         headers_step1 = {
-            "Authorization": "Negotiate {}".format(neg_token),
+            "Authorization": f"Negotiate {neg_token}",
             "Content-Type": "application/soap+xml;charset=UTF-8",
             "User-Agent": "Microsoft WinRM Client",
         }
@@ -218,9 +217,7 @@ def _winrm_ntlm_challenge(
 
         www_auth = resp1.headers.get("WWW-Authenticate", "")
         if resp1.status_code != 401 or "Negotiate" not in www_auth:
-            return False, "WinRM unexpected response {}: {}".format(
-                resp1.status_code, www_auth[:80]
-            )
+            return False, f"WinRM unexpected response {resp1.status_code}: {www_auth[:80]}"
 
         # Step 2: extract challenge token and build AUTHENTICATE via requests-ntlm
         try:
@@ -240,16 +237,16 @@ def _winrm_ntlm_challenge(
             )
             if resp2.status_code in (200, 400, 500):
                 # 400/500 may still indicate auth passed; body would reveal more
-                return True, "WinRM NTLM auth accepted (status {})".format(resp2.status_code)
+                return True, f"WinRM NTLM auth accepted (status {resp2.status_code})"
             if resp2.status_code == 401:
                 return False, "WinRM NTLM auth rejected (401)"
-            return False, "WinRM unexpected status {}".format(resp2.status_code)
+            return False, f"WinRM unexpected status {resp2.status_code}"
         except ImportError:
             # requests-ntlm absent: report challenge detection only
             return False, "WinRM NTLM challenge confirmed (requests-ntlm absent; auth not completed)"
 
     except Exception as exc:
-        return False, "WinRM error: {}".format(str(exc)[:120])
+        return False, f"WinRM error: {str(exc)[:120]}"
 
 
 # ---------------------------------------------------------------------------
@@ -262,16 +259,16 @@ def _rdp_xfreerdp(
     username: str,
     password: str,
     timeout: int,
-) -> Tuple[bool, str]:
+) -> tuple[bool, str]:
     """Attempt RDP authentication via xfreerdp subprocess."""
     cmd = [
         "xfreerdp",
-        "/v:{}:{}".format(host, port),
-        "/u:{}".format(username),
-        "/p:{}".format(password),
+        f"/v:{host}:{port}",
+        f"/u:{username}",
+        f"/p:{password}",
         "/cert-ignore",
         "/sec:nla",
-        "/timeout:{}".format(timeout * 1000),
+        f"/timeout:{timeout * 1000}",
         "/log-level:ERROR",
         "+auth-only",
         "/log-filters:com.freerdp.core=WARN",
@@ -287,17 +284,17 @@ def _rdp_xfreerdp(
             return True, "RDP NLA auth succeeded via xfreerdp"
         stderr_txt = proc.stderr.decode("utf-8", errors="replace")[:300]
         if any(kw in stderr_txt.lower() for kw in ("logon failure", "authentication error", "password")):
-            return False, "RDP auth rejected: {}".format(stderr_txt[:120])
-        return False, "xfreerdp exit {}: {}".format(proc.returncode, stderr_txt[:120])
+            return False, f"RDP auth rejected: {stderr_txt[:120]}"
+        return False, f"xfreerdp exit {proc.returncode}: {stderr_txt[:120]}"
     except FileNotFoundError:
         return False, "xfreerdp not installed"
     except subprocess.TimeoutExpired:
         return False, "xfreerdp timed out"
     except Exception as exc:
-        return False, "xfreerdp error: {}".format(str(exc)[:80])
+        return False, f"xfreerdp error: {str(exc)[:80]}"
 
 
-def _rdp_port_probe(host: str, port: int, timeout: int) -> Tuple[bool, str]:
+def _rdp_port_probe(host: str, port: int, timeout: int) -> tuple[bool, str]:
     """Fallback RDP port reachability check."""
     try:
         sock = socket.create_connection((host, port), timeout=timeout)
@@ -309,16 +306,16 @@ def _rdp_port_probe(host: str, port: int, timeout: int) -> Tuple[bool, str]:
             pass
         sock.close()
         banner_hex = banner.hex()[:32]
-        return True, "RDP port reachable (banner hex: {})".format(banner_hex)
+        return True, f"RDP port reachable (banner hex: {banner_hex})"
     except Exception as exc:
-        return False, "RDP unreachable: {}".format(str(exc)[:80])
+        return False, f"RDP unreachable: {str(exc)[:80]}"
 
 
 # ---------------------------------------------------------------------------
 # WebDAV helpers
 # ---------------------------------------------------------------------------
 
-def _webdav_ntlm_challenge(host: str, port: int, timeout: int) -> Tuple[bool, str]:
+def _webdav_ntlm_challenge(host: str, port: int, timeout: int) -> tuple[bool, str]:
     """Simulate WebDAV NTLM forced-auth challenge detection via requests.
 
     Sends a PROPFIND request with NTLM NEGOTIATE to confirm the endpoint
@@ -328,9 +325,9 @@ def _webdav_ntlm_challenge(host: str, port: int, timeout: int) -> Tuple[bool, st
     try:
         import requests  # type: ignore
 
-        url = "http://{}:{}/".format(host, port)
+        url = f"http://{host}:{port}/"
         headers = {
-            "Authorization": "NTLM {}".format(_build_ntlm_negotiate_b64()),
+            "Authorization": f"NTLM {_build_ntlm_negotiate_b64()}",
             "User-Agent": "Microsoft-WebDAV-MiniRedir/10.0.19041",
             "Translate": "f",
             "Depth": "0",
@@ -341,12 +338,12 @@ def _webdav_ntlm_challenge(host: str, port: int, timeout: int) -> Tuple[bool, st
             # Extract NTLM challenge token if present
             match = re.search(r"(?:NTLM|Negotiate)\s+([A-Za-z0-9+/=]+)", www_auth)
             token_info = "challenge token present" if match else "challenge token absent"
-            return True, "WebDAV NTLM challenge confirmed ({})".format(token_info)
+            return True, f"WebDAV NTLM challenge confirmed ({token_info})"
         if resp.status_code == 207:
             return False, "WebDAV PROPFIND succeeded without auth (no NTLM required)"
-        return False, "WebDAV returned {} (no NTLM challenge)".format(resp.status_code)
+        return False, f"WebDAV returned {resp.status_code} (no NTLM challenge)"
     except Exception as exc:
-        return False, "WebDAV error: {}".format(str(exc)[:120])
+        return False, f"WebDAV error: {str(exc)[:120]}"
 
 
 # ---------------------------------------------------------------------------
@@ -415,7 +412,7 @@ class Exploit(Exploit):
         """
         proto = self.protocol.lower().strip()
         if proto not in self._ALLOWED_PROTOCOLS:
-            print_error("Unknown protocol '{}'. Valid: smb, winrm, rdp, webdav".format(proto))
+            print_error(f"Unknown protocol '{proto}'. Valid: smb, winrm, rdp, webdav")
             return False
 
         port = self._resolved_port()
@@ -425,10 +422,10 @@ class Exploit(Exploit):
             sock = socket.create_connection((host, port), timeout=int(self.timeout))
             sock.close()
         except Exception as exc:
-            print_error("Target {}:{} unreachable - {}".format(host, port, exc))
+            print_error(f"Target {host}:{port} unreachable - {exc}")
             return False
 
-        print_status("Target {}:{} is reachable ({})".format(host, port, proto.upper()))
+        print_status(f"Target {host}:{port} is reachable ({proto.upper()})")
 
         if proto == "smb":
             signing = _smb_probe_signing(host, port, timeout=int(self.timeout))
@@ -458,9 +455,7 @@ class Exploit(Exploit):
         simulating = (str(self.simulate).lower() == "true" or self.simulate is True)
 
         print_status(
-            "Protocol: {} | Target: {}:{} | User: {} | Simulate: {}".format(
-                proto.upper(), host, port, username, simulating
-            )
+            f"Protocol: {proto.upper()} | Target: {host}:{port} | User: {username} | Simulate: {simulating}"
         )
 
         success, message = self._dispatch(
@@ -468,9 +463,9 @@ class Exploit(Exploit):
         )
 
         if success:
-            print_success("{} auth result: {}".format(proto.upper(), message))
+            print_success(f"{proto.upper()} auth result: {message}")
         else:
-            print_error("{} auth result: {}".format(proto.upper(), message))
+            print_error(f"{proto.upper()} auth result: {message}")
 
     def _dispatch(
         self,
@@ -484,7 +479,7 @@ class Exploit(Exploit):
         domain: str,
         timeout: int,
         simulating: bool,
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         if proto == "smb":
             return self._run_smb(host, port, username, password, nt_hash, lm_hash, domain, timeout, simulating)
         if proto == "winrm":
@@ -493,7 +488,7 @@ class Exploit(Exploit):
             return self._run_rdp(host, port, username, password, timeout, simulating)
         if proto == "webdav":
             return self._run_webdav(host, port, timeout, simulating)
-        return False, "Unknown protocol: {}".format(proto)
+        return False, f"Unknown protocol: {proto}"
 
     def _run_smb(
         self,
@@ -506,11 +501,11 @@ class Exploit(Exploit):
         domain: str,
         timeout: int,
         simulating: bool,
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         if simulating:
             signing = _smb_probe_signing(host, port, timeout=timeout)
             label = {True: "REQUIRED", False: "NOT required", None: "unknown"}.get(signing, "unknown")
-            return signing is not None, "SMB simulate: signing {}".format(label)
+            return signing is not None, f"SMB simulate: signing {label}"
 
         if not _IMPACKET_AVAILABLE:
             return _smb_auth_socket_fallback(host, port, timeout)
@@ -525,7 +520,7 @@ class Exploit(Exploit):
         password: str,
         timeout: int,
         simulating: bool,
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         use_tls = (str(self.use_tls).lower() == "true" or self.use_tls is True)
         if simulating:
             # Challenge detection only: send NEGOTIATE, check for 401 + NTLM header
@@ -533,11 +528,11 @@ class Exploit(Exploit):
                 import requests  # type: ignore
 
                 scheme = "https" if use_tls else "http"
-                url = "{}://{}:{}/wsman".format(scheme, host, port)
+                url = f"{scheme}://{host}:{port}/wsman"
                 neg_token = _build_ntlm_negotiate_b64()
                 resp = requests.post(
                     url,
-                    headers={"Authorization": "Negotiate {}".format(neg_token)},
+                    headers={"Authorization": f"Negotiate {neg_token}"},
                     data=b"",
                     timeout=timeout,
                     verify=False,
@@ -545,9 +540,9 @@ class Exploit(Exploit):
                 www = resp.headers.get("WWW-Authenticate", "")
                 if "Negotiate" in www or "NTLM" in www:
                     return True, "WinRM simulate: NTLM challenge detected (401 with Negotiate)"
-                return False, "WinRM simulate: no NTLM challenge (status {})".format(resp.status_code)
+                return False, f"WinRM simulate: no NTLM challenge (status {resp.status_code})"
             except Exception as exc:
-                return False, "WinRM simulate error: {}".format(str(exc)[:100])
+                return False, f"WinRM simulate error: {str(exc)[:100]}"
 
         return _winrm_ntlm_challenge(host, port, username, password, timeout, use_tls)
 
@@ -559,7 +554,7 @@ class Exploit(Exploit):
         password: str,
         timeout: int,
         simulating: bool,
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         if simulating:
             return _rdp_port_probe(host, port, timeout)
         return _rdp_xfreerdp(host, port, username, password, timeout)
@@ -570,6 +565,6 @@ class Exploit(Exploit):
         port: int,
         timeout: int,
         simulating: bool,
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         # WebDAV check is always challenge-only (no credential submission)
         return _webdav_ntlm_challenge(host, port, timeout)

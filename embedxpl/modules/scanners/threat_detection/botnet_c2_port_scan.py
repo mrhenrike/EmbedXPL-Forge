@@ -34,7 +34,6 @@ References:
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import hashlib
 import logging
@@ -60,7 +59,7 @@ from embedxpl.core.exploit import (
 logger = logging.getLogger("embedxpl.scanners.threat_detection.botnet_c2_port_scan")
 
 # Known C2 ports with associated botnet family labels
-_C2_PORTS: Dict[int, str] = {
+_C2_PORTS: dict[int, str] = {
     23:    "Telnet — Mirai/Gafgyt propagation",
     2323:  "Alt-Telnet — Mirai/Gafgyt/Condi",
     3778:  "Mirai/Condi CnC bot listener (table.c decoded)",
@@ -77,7 +76,7 @@ _C2_PORTS: Dict[int, str] = {
 }
 
 # Partial banner strings that correlate with known C2 or botnet binaries
-_C2_BANNER_SIGNATURES: Dict[bytes, str] = {
+_C2_BANNER_SIGNATURES: dict[bytes, str] = {
     b"mirai":     "Mirai binary string",
     b"gafgyt":    "Gafgyt binary string",
     b"condi":     "Condi botnet binary",
@@ -139,15 +138,15 @@ class Exploit(BaseExploit):
 
     def run(self) -> None:
         """Scan all C2 ports and fingerprint banners."""
-        print_status("[C2Scan] Scanning {} for botnet C2 ports...".format(self.target))
+        print_status(f"[C2Scan] Scanning {self.target} for botnet C2 ports...")
 
         open_count = 0
-        findings: List[str] = []
+        findings: list[str] = []
 
         for port, label in _C2_PORTS.items():
             if not self._tcp_open(self.target, port, self.timeout):
                 if self.verbose:
-                    print_info("[C2Scan] Port {}/tcp CLOSED ({})".format(port, label))
+                    print_info(f"[C2Scan] Port {port}/tcp CLOSED ({label})")
                 continue
 
             open_count += 1
@@ -171,15 +170,14 @@ class Exploit(BaseExploit):
             else:
                 print_success(finding)
 
-        print_info("[C2Scan] Summary: {}/{} C2 ports open on {}".format(
-            open_count, len(_C2_PORTS), self.target))
+        print_info(f"[C2Scan] Summary: {open_count}/{len(_C2_PORTS)} C2 ports open on {self.target}")
 
         if open_count == 0:
             print_status("[C2Scan] No known C2 ports open -- host likely clean or firewalled.")
         elif open_count >= 3:
             print_warning(
-                "[C2Scan] {} C2 ports open -- elevated risk of C2 channel or exposed "
-                "Telnet/UPnP management. Investigate immediately.".format(open_count)
+                f"[C2Scan] {open_count} C2 ports open -- elevated risk of C2 channel or exposed "
+                "Telnet/UPnP management. Investigate immediately."
             )
 
     # -------------------------------------------------------------------------
@@ -193,12 +191,12 @@ class Exploit(BaseExploit):
             sock.settimeout(timeout)
             sock.connect((host, port))
             return True
-        except (OSError, socket.timeout):
+        except (TimeoutError, OSError):
             return False
         finally:
             sock.close()
 
-    def _grab_banner(self, host: str, port: int) -> Optional[bytes]:
+    def _grab_banner(self, host: str, port: int) -> bytes | None:
         """Connect and read the initial banner from a port.
 
         Args:
@@ -215,9 +213,9 @@ class Exploit(BaseExploit):
             time.sleep(0.2)
             try:
                 return sock.recv(self.banner_bytes)
-            except socket.timeout:
+            except TimeoutError:
                 return b""
-        except (OSError, socket.timeout):
+        except (TimeoutError, OSError):
             return None
         finally:
             sock.close()

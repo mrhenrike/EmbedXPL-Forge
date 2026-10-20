@@ -7,7 +7,6 @@ API (fallback 2).
 CLI: embedxpl fcc-id XXXXXX
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
-from __future__ import annotations
 import re
 import time
 from dataclasses import dataclass, field

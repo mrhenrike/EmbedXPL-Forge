@@ -8,7 +8,6 @@ Usage in shell:
     register-python-argcomplete --shell fish exf | source (fish)
 """
 
-from __future__ import annotations
 
 import argparse
 from typing import List, Optional
@@ -43,7 +42,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def enable_completion(parser: Optional[argparse.ArgumentParser] = None) -> None:
+def enable_completion(parser: argparse.ArgumentParser | None = None) -> None:
     """Activate argcomplete on the given parser if available."""
     if parser is None:
         parser = build_parser()
@@ -55,6 +54,6 @@ def enable_completion(parser: Optional[argparse.ArgumentParser] = None) -> None:
         pass
 
 
-def get_module_completions(prefix: str, modules: List[str]) -> List[str]:
+def get_module_completions(prefix: str, modules: list[str]) -> list[str]:
     """Filter module paths matching a prefix for completion."""
     return [m for m in modules if m.startswith(prefix)]

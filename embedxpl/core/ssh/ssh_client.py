@@ -31,7 +31,7 @@ class SSHCli:
         self.ssh_port = ssh_port
         self.verbosity = verbosity
 
-        self.peer = "{}:{}".format(self.ssh_target, self.ssh_port)
+        self.peer = f"{self.ssh_target}:{self.ssh_port}"
 
         self.ssh_client = paramiko.SSHClient()
         self.ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -88,13 +88,13 @@ class SSHCli:
                     allow_agent=False,
                 )
             except paramiko.AuthenticationException:
-                print_error(self.peer, "SSH Authentication Failed - Username: '{}' Password: '{}'".format(username, password), verbose=self.verbosity)
+                print_error(self.peer, f"SSH Authentication Failed - Username: '{username}' Password: '{password}'", verbose=self.verbosity)
                 self.ssh_client.close()
                 break
             except Exception as err:
                 print_error(self.peer, "SSH Error while authenticating", err, verbose=self.verbosity)
             else:
-                print_success(self.peer, "SSH Authentication Successful - Username: '{}' Password: '{}'".format(username, password), verbose=self.verbosity)
+                print_success(self.peer, f"SSH Authentication Successful - Username: '{username}' Password: '{password}'", verbose=self.verbosity)
                 return True
 
             self.ssh_client.close()
@@ -128,11 +128,11 @@ class SSHCli:
                     allow_agent=False,
                 )
             except paramiko.AuthenticationException:
-                print_error(self.peer, "SSH Authentication Failed - Username: '{}' auth with private key".format(username), verbose=self.verbosity)
+                print_error(self.peer, f"SSH Authentication Failed - Username: '{username}' auth with private key", verbose=self.verbosity)
             except Exception as err:
                 print_error(self.peer, "SSH Error while authenticated by using private key", err, verbose=self.verbosity)
             else:
-                print_success(self.peer, "SSH Authentication Successful - Username: '{}' with private key".format(username), verbose=self.verbosity)
+                print_success(self.peer, f"SSH Authentication Successful - Username: '{username}' with private key", verbose=self.verbosity)
                 return True
 
             self.ssh_client.close()
@@ -290,7 +290,7 @@ class SSHCli:
 
                         sys.stdout.write(x)
                         sys.stdout.flush()
-                    except socket.timeout:
+                    except TimeoutError:
                         pass
 
                 if sys.stdin in r:

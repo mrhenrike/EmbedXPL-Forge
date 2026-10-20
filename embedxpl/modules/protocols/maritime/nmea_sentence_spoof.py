@@ -15,7 +15,6 @@ Maintainer : Andre Henrique (@mrhenrike) | Uniao Geek
 
 # authorized use only
 """
-from __future__ import annotations
 
 import socket
 

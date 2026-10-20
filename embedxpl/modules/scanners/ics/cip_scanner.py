@@ -72,7 +72,7 @@ def _cip_get_attribute_all() -> bytes:
     return bytes([0x01, 0x02, 0x20, 0x01, 0x24, 0x01])
 
 
-def _scan_target(host: str, port: int, timeout: int) -> Optional[dict]:
+def _scan_target(host: str, port: int, timeout: int) -> dict | None:
     """Connect, register session, and perform CIP GetAttributeAll on Identity Object."""
     try:
         sock = socket.create_connection((host, port), timeout=timeout)

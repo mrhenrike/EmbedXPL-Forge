@@ -107,7 +107,7 @@ class ExploitOrchestrator:
         default_arch: Default target architecture for compilation.
     """
 
-    def __init__(self, cache: Optional[ArtifactCache] = None,
+    def __init__(self, cache: ArtifactCache | None = None,
                  default_timeout: int = 30,
                  default_arch: str = "x86_64"):
         self._cache = cache or ArtifactCache()
@@ -176,13 +176,13 @@ class ExploitOrchestrator:
         runner = self._registry.get(normalized)
         if not runner:
             raise ValueError(
-                "No runner registered for '{}'. "
-                "Available: {}".format(language, self._registry.available_languages())
+                f"No runner registered for '{language}'. "
+                f"Available: {self._registry.available_languages()}"
             )
         return runner
 
     def run_exploit(self, source_path: str,
-                    target_opts: Optional[dict] = None) -> RunResult:
+                    target_opts: dict | None = None) -> RunResult:
         """Execute an exploit from source through the full pipeline.
 
         Detects the source language, selects the appropriate runner,
@@ -209,7 +209,7 @@ class ExploitOrchestrator:
         """
         source_path = os.path.abspath(source_path)
         if not os.path.isfile(source_path):
-            raise FileNotFoundError("Source not found: {}".format(source_path))
+            raise FileNotFoundError(f"Source not found: {source_path}")
 
         opts = target_opts or {}
         language = opts.get("language") or self.detect_language(source_path)
@@ -278,7 +278,7 @@ class ExploitOrchestrator:
         except (FileNotFoundError, OSError) as exc:
             return RunResult(
                 exit_code=-1,
-                stderr="Python execution error: {}".format(exc),
+                stderr=f"Python execution error: {exc}",
             )
 
     def _run_asm(self, source_path: str, opts: dict) -> RunResult:
@@ -298,7 +298,7 @@ class ExploitOrchestrator:
             os.path.dirname(os.path.abspath(__file__)), "..", "..", ".tmp", "builds"
         )
         os.makedirs(tmp_dir, exist_ok=True)
-        obj_path = os.path.join(tmp_dir, "{}.o".format(base))
+        obj_path = os.path.join(tmp_dir, f"{base}.o")
         bin_path = os.path.join(tmp_dir, base)
 
         arch = opts.get("arch", self._default_arch)

@@ -9,7 +9,6 @@ abrir fechaduras, alterar setpoint de termostatos, etc.).
 CVSS: 8.8 (Alto) | Afeta: Ksix Smart Plugs, múltiplos dispositivos Tuya/eWeLink
 """
 
-from __future__ import annotations
 
 import json
 import shutil

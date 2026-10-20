@@ -7,7 +7,6 @@ Requires authorized testing targets only.
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 from embedxpl.core.exploit import *
 from embedxpl.core.integrations.msf_cli import find_msfconsole, run_msf_batch_commands
@@ -66,8 +65,8 @@ class Exploit(Exploit):
             )
             return
 
-        print_status("Using msfconsole: {}".format(bin_path), verbose=self.verbosity)
-        print_status("Module: {} | action: {}".format(self.msf_module, self.msf_action), verbose=self.verbosity)
+        print_status(f"Using msfconsole: {bin_path}", verbose=self.verbosity)
+        print_status(f"Module: {self.msf_module} | action: {self.msf_action}", verbose=self.verbosity)
 
         code, out, err = run_msf_batch_commands(
             bin_path,
@@ -79,11 +78,11 @@ class Exploit(Exploit):
         )
 
         if out and self.verbosity:
-            print_status("--- msfconsole stdout ---\n{}".format(out))
+            print_status(f"--- msfconsole stdout ---\n{out}")
         if err and self.verbosity:
-            print_error("--- msfconsole stderr ---\n{}".format(err))
+            print_error(f"--- msfconsole stderr ---\n{err}")
 
         if code == 0:
             print_success("msfconsole finished with exit code 0", verbose=self.verbosity)
         else:
-            print_error("msfconsole exit code {}".format(code))
+            print_error(f"msfconsole exit code {code}")

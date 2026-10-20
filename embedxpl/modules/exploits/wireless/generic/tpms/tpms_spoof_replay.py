@@ -13,7 +13,6 @@ veículo próprio.
 Requer: RTL-SDR para RX (sniff); HackRF ou YARD Stick One para TX (spoof).
 """
 
-from __future__ import annotations
 
 import json
 import shutil

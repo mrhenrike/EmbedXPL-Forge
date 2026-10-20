@@ -30,7 +30,6 @@ References:
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import base64
 import datetime
@@ -454,7 +453,7 @@ class Exploit(BaseExploit):
 
         print_info("Discovery credit: c3l3r1on (github.com/c3l3r1on)")
         print_status(
-            "Scanning {} host(s) on port {} for Herospeed/Longsee NVR...".format(len(hosts), port)
+            f"Scanning {len(hosts)} host(s) on port {port} for Herospeed/Longsee NVR..."
         )
 
         found = 0
@@ -464,7 +463,7 @@ class Exploit(BaseExploit):
                 continue
 
             found += 1
-            print_success("FOUND: {}:{}".format(host, port))
+            print_success(f"FOUND: {host}:{port}")
 
             if result["oem_markers"]:
                 print_info("  OEM markers: {}".format(", ".join(set(result["oem_markers"]))))
@@ -486,24 +485,24 @@ class Exploit(BaseExploit):
             elif result["login_capabilities_exposed"]:
                 print_info(
                     "  => Run: exploits/cameras/herospeed/herospeed_nvr_unauth_account_enum "
-                    "target={}".format(host)
+                    f"target={host}"
                 )
             # Backdoor ports (c3l3r1on NVR_192.168.9.31.md)
             if result.get("open_backdoor_ports"):
                 for bp, bp_desc in result["open_backdoor_ports"]:
-                    print_warning("  [CRIT] Backdoor port {} OPEN: {} (c3l3r1on)".format(bp, bp_desc))
+                    print_warning(f"  [CRIT] Backdoor port {bp} OPEN: {bp_desc} (c3l3r1on)")
             if result.get("paramconfig_bypass"):
                 print_warning("  [CRIT] /paramconfig MI1YSANORQ4NAELR bypass WORKS (c3l3r1on)")
             # Date-based master password hint
             date_pwd = result.get("date_master_pwd", "")
             if date_pwd:
-                print_info("  [INFO] Longse date master pwd (today): {} (formula: sum_digits*8.8)".format(date_pwd))
+                print_info(f"  [INFO] Longse date master pwd (today): {date_pwd} (formula: sum_digits*8.8)")
 
         if found == 0:
             print_status("No Herospeed/Longsee NVR devices found in the target range")
         else:
             print_success(
-                "Scan complete — {} Herospeed/Longsee NVR device(s) detected".format(found)
+                f"Scan complete — {found} Herospeed/Longsee NVR device(s) detected"
             )
 
     @mute

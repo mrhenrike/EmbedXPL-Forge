@@ -10,7 +10,6 @@ BLE stack.
 Affected: Cypress CYW20735, CYW20719 (WICED SDK), Broadcom BCM43xxx.
 CVE-2019-17517: Zero-length LLID crash (overlaps with DLE overflow in WICED).
 """
-from __future__ import annotations
 
 import asyncio
 import logging

@@ -9,7 +9,6 @@ e replay de frames de chamada via RTL-SDR.
 Requer: RTL-SDR (RX passivo). Para TX/clone: HackRF One ou YARD Stick One.
 """
 
-from __future__ import annotations
 
 import json
 import shutil

@@ -28,7 +28,6 @@ References:
   - v4.0 (Apr 2026): PUSCH Allocation Type B sniffing
   - v3.0 (Nov 2025): Uplink injection support
 """
-from __future__ import annotations
 
 import logging
 import subprocess

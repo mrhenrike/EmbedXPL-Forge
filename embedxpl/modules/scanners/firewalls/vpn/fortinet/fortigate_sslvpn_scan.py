@@ -1,6 +1,5 @@
 """Banner and CVE correlation scan for FortiGate SSL-VPN / management web UI."""
 
-from __future__ import annotations
 
 import re
 from typing import List
@@ -54,7 +53,7 @@ class Exploit(HTTPClient):
             snippet = (response.text or "")[:12000]
             combined += "\n" + snippet
             if response.status_code:
-                print_status("{} -> HTTP {}".format(path, response.status_code))
+                print_status(f"{path} -> HTTP {response.status_code}")
 
         if not combined.strip():
             print_error("No HTTP response from target (check ssl/port/firewall).")
@@ -66,30 +65,24 @@ class Exploit(HTTPClient):
 
         version_guess = self._extract_fortios_version(combined)
         if version_guess:
-            print_success("Possible FortiOS build string: {}".format(version_guess))
+            print_success(f"Possible FortiOS build string: {version_guess}")
 
         cves = db.lookup(vendor="fortinet", product="fortigate", version=version_guess or "", banner=combined)
         if not cves:
             cves = db.lookup_by_banner(combined, remote_only=False)
 
-        fortinets: List = [e for e in cves if e.vendor.lower() == "fortinet"]
+        fortinets: list = [e for e in cves if e.vendor.lower() == "fortinet"]
         if fortinets:
             cves = fortinets
 
-        print_success("CVE matches (Fortinet-focused, sorted by CVSS): {}".format(len(cves)))
+        print_success(f"CVE matches (Fortinet-focused, sorted by CVSS): {len(cves)}")
         for entry in cves[:40]:
             mod = entry.rxf_module or "—"
             print_status(
-                "{} | {} | {} | {} | rxf: {}".format(
-                    entry.cve_id,
-                    entry.cvss_score,
-                    entry.access_vector,
-                    entry.status_label,
-                    mod,
-                )
+                f"{entry.cve_id} | {entry.cvss_score} | {entry.access_vector} | {entry.status_label} | rxf: {mod}"
             )
         if len(cves) > 40:
-            print_status("... {} more (use generic/cve/cve_lookup)".format(len(cves) - 40))
+            print_status(f"... {len(cves) - 40} more (use generic/cve/cve_lookup)")
 
     @staticmethod
     def _extract_fortios_version(text: str) -> str:

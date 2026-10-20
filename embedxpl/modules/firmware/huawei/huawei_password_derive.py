@@ -17,7 +17,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import os
 import struct
@@ -199,7 +198,7 @@ def decrypt_format1(encrypted: str) -> str:
 # Auto-detect and dispatch
 # ---------------------------------------------------------------------------
 
-def decrypt_password(encrypted: str) -> Optional[str]:
+def decrypt_password(encrypted: str) -> str | None:
     """Auto-detect format and decrypt Huawei router password.
 
     Args:

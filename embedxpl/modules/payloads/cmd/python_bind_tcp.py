@@ -16,5 +16,5 @@ class Payload(PythonBindTCP):
 
     def generate(self):
         self.fmt = self.cmd + ' -c "{}"'
-        payload = super(Payload, self).generate()
+        payload = super().generate()
         return payload

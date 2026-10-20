@@ -6,7 +6,6 @@ Accepts ISO codes, English/local names, and common aliases in any casing
 
 Author: André Henrique (@mrhenrike)
 """
-from __future__ import annotations
 
 import re
 from typing import Optional
@@ -298,7 +297,7 @@ def _build_alias_index() -> dict[str, str]:
 _ALIAS_INDEX = _build_alias_index()
 
 
-def resolve_country(raw: str) -> Optional[str]:
+def resolve_country(raw: str) -> str | None:
     """
     Resolve free-text country input to a canonical registry key.
 

@@ -3,7 +3,6 @@
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 from typing import Any, Dict, List
 
@@ -14,7 +13,7 @@ if has_rich:
     from rich.text import Text
 
 
-def show_system_panel(data: Dict[str, Any]) -> None:
+def show_system_panel(data: dict[str, Any]) -> None:
     """Display system information panel."""
     if has_rich:
         lines = []
@@ -28,7 +27,7 @@ def show_system_panel(data: Dict[str, Any]) -> None:
         console.print(f"[System] Python: {data.get('python')} | Modules: {data.get('modules')}")
 
 
-def show_gpu_panel(backends: List[str], mode: str = "cpu") -> None:
+def show_gpu_panel(backends: list[str], mode: str = "cpu") -> None:
     """Display GPU/compute backends panel."""
     if has_rich:
         lines = []
@@ -41,7 +40,7 @@ def show_gpu_panel(backends: List[str], mode: str = "cpu") -> None:
         console.print(f"[GPU] Backends: {', '.join(backends)} | Mode: {mode}")
 
 
-def show_ml_panel(status: Dict[str, bool]) -> None:
+def show_ml_panel(status: dict[str, bool]) -> None:
     """Display ML engine status panel."""
     if has_rich:
         lines = []

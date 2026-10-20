@@ -30,7 +30,6 @@ References:
   - https://www.cisa.gov/ics-advisories/ (Rockwell Automation CompactLogix)
 Affected: CompactLogix 5370/5380/5480 (unpatched June 2026 firmware)
 """
-from __future__ import annotations
 
 import ftplib
 import logging

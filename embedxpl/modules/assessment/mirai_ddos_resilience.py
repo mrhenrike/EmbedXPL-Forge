@@ -11,7 +11,6 @@
 # simulate=True by default — set False only for authorized tests.
 # ============================================================
 
-from __future__ import annotations
 
 import socket
 import struct
@@ -205,7 +204,7 @@ class Exploit(_Base):
             try:
                 data = s.recv(64)
                 result["responds"] = True
-            except socket.timeout:
+            except TimeoutError:
                 pass
             s.close()
         except Exception:

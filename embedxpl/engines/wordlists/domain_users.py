@@ -24,14 +24,14 @@ Usage:
 Author: André Henrique (@mrhenrike)
 Version: 1.1.0
 """
-from __future__ import annotations
 
 import logging
 import os
 import re
 import time
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -266,11 +266,11 @@ NUMERIC_SUFFIXES = [
 def generate_usernames_from_name(
     full_name: str,
     domain: str,
-    separators: Optional[list[str]] = None,
-    patterns: Optional[list[str]] = None,
+    separators: list[str] | None = None,
+    patterns: list[str] | None = None,
     with_at_domain: bool = True,
-    subdomain: Optional[str] = None,
-    company_abbr: Optional[str] = None,
+    subdomain: str | None = None,
+    company_abbr: str | None = None,
 ) -> Generator[str, None, None]:
     """
     Generate all corporate username variations for a single person's name.
@@ -319,7 +319,7 @@ def generate_usernames_from_name(
 
     suffix = "@" + domain if with_at_domain else ""
 
-    def _emit(user: str) -> Optional[str]:
+    def _emit(user: str) -> str | None:
         if not user or user in seen:
             return None
         if not re.search(r"[a-z0-9]", user):
@@ -377,11 +377,11 @@ def generate_usernames_from_name(
 def generate_usernames_from_list(
     names: list[str],
     domain: str,
-    separators: Optional[list[str]] = None,
-    patterns: Optional[list[str]] = None,
+    separators: list[str] | None = None,
+    patterns: list[str] | None = None,
     with_at_domain: bool = True,
-    subdomain: Optional[str] = None,
-    company_abbr: Optional[str] = None,
+    subdomain: str | None = None,
+    company_abbr: str | None = None,
 ) -> Generator[str, None, None]:
     """
     Generate username variations for a list of employee names.
@@ -579,7 +579,7 @@ def _filter_names(candidates: list[str]) -> list[str]:
 
 def search_names_google_dorks(
     company_name: str,
-    domain: Optional[str] = None,
+    domain: str | None = None,
     max_results: int = 50,
     delay: float = 2.0,
 ) -> list[str]:
@@ -725,7 +725,7 @@ def search_names_linkedin_api(
 
 def collect_names_online(
     company_name: str,
-    domain: Optional[str] = None,
+    domain: str | None = None,
     max_results: int = 50,
     use_linkedin_api: bool = True,
     delay: float = 2.0,
@@ -994,7 +994,7 @@ def generate_passwords_for_person(
     full_name: str,
     company_name: str,
     domain: str,
-    year_range: Optional[range] = None,
+    year_range: range | None = None,
 ) -> Generator[str, None, None]:
     """
     Generate password candidates for a person in a company context.
@@ -1018,7 +1018,7 @@ def generate_passwords_for_person(
 
     seen: set[str] = set()
 
-    def _emit(s: str) -> Optional[str]:
+    def _emit(s: str) -> str | None:
         if s and s not in seen and len(s) >= 6:
             seen.add(s)
             return s
@@ -1097,8 +1097,8 @@ def generate_combo_list(
     names: list[str],
     company_name: str,
     domain: str,
-    separators: Optional[list[str]] = None,
-    year_range: Optional[range] = None,
+    separators: list[str] | None = None,
+    year_range: range | None = None,
     with_passwords: bool = True,
 ) -> Generator[str, None, None]:
     """

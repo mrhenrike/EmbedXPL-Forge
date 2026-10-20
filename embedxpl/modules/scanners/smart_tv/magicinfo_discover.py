@@ -25,7 +25,7 @@ _VERSION_PATTERNS = (
 )
 
 
-def _extract_version(text: str) -> Optional[str]:
+def _extract_version(text: str) -> str | None:
     """Search text for a MagicINFO version string.
 
     Args:
@@ -91,7 +91,7 @@ class Exploit(HTTPClient):
     def run(self) -> None:
         """Execute the MagicINFO discovery scan across all known ports."""
         print_status(
-            "Starting Samsung MagicINFO discovery on {}".format(self.target)
+            f"Starting Samsung MagicINFO discovery on {self.target}"
         )
         found_any = False
 
@@ -106,7 +106,7 @@ class Exploit(HTTPClient):
                     )
                     print_success(msg)
                     if banner_snippet:
-                        print_status("  Banner excerpt: {}".format(banner_snippet[:120]))
+                        print_status(f"  Banner excerpt: {banner_snippet[:120]}")
                     break
 
         if not found_any:
@@ -116,7 +116,7 @@ class Exploit(HTTPClient):
                 )
             )
 
-    def _probe(self, probe_port: int, path: str) -> Optional[Tuple[Optional[str], str]]:
+    def _probe(self, probe_port: int, path: str) -> tuple[str | None, str] | None:
         """Send a single HTTP GET probe to the given port and path.
 
         Args:

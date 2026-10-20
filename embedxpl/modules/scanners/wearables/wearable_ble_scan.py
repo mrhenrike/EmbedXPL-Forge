@@ -144,7 +144,7 @@ class Exploit(Exploit):
 
             return sock
         except (OSError, PermissionError, ValueError) as exc:
-            print_error("Cannot initialize BLE scan: {}".format(exc))
+            print_error(f"Cannot initialize BLE scan: {exc}")
             return None
 
     def _stop_ble_scan(self, sock):
@@ -177,7 +177,7 @@ class Exploit(Exploit):
 
         try:
             addr_bytes = pkt[7:13] if len(pkt) > 13 else pkt[3:9]
-            bdaddr = ":".join("{:02X}".format(b) for b in reversed(addr_bytes))
+            bdaddr = ":".join(f"{b:02X}" for b in reversed(addr_bytes))
             name = ""
             company_id = None
             company_name = None
@@ -230,7 +230,7 @@ class Exploit(Exploit):
                 "bdaddr": bdaddr,
                 "name": name or "(no name)",
                 "vendor": vendor or "Unknown",
-                "company_id": "0x{:04X}".format(company_id) if company_id is not None else "-",
+                "company_id": f"0x{company_id:04X}" if company_id is not None else "-",
                 "company": company_name or "-",
                 "services": ", ".join(services) if services else "-",
                 "model_hint": model_hint,
@@ -255,17 +255,13 @@ class Exploit(Exploit):
     def run(self) -> None:
         """Execute BLE advertisement scan for wearable devices."""
         print_status("Wearable BLE Advertisement Scanner")
-        print_info("Adapter: {} | Duration: {} sec".format(
-            self.adapter, self.scan_duration
-        ))
+        print_info(f"Adapter: {self.adapter} | Duration: {self.scan_duration} sec")
 
         sock = self._start_ble_scan()
         if not sock:
             print_error(
-                "BLE scan initialization failed. Ensure adapter {} is "
-                "available and run with appropriate privileges.".format(
-                    self.adapter
-                )
+                f"BLE scan initialization failed. Ensure adapter {self.adapter} is "
+                "available and run with appropriate privileges."
             )
             return
 
@@ -295,13 +291,13 @@ class Exploit(Exploit):
                         existing["vendor"] = dev["vendor"]
 
         self._stop_ble_scan(sock)
-        print_info("Processed {} advertisement packets".format(pkt_count))
+        print_info(f"Processed {pkt_count} advertisement packets")
 
         wearables = {k: v for k, v in devices.items() if v["vendor"] != "Unknown"}
         unknown = {k: v for k, v in devices.items() if v["vendor"] == "Unknown"}
 
         if wearables:
-            print_success("{} wearable device(s) identified:".format(len(wearables)))
+            print_success(f"{len(wearables)} wearable device(s) identified:")
             headers = ("BLE Address", "Vendor", "Name", "Company ID", "Services", "RSSI")
             rows = [
                 (d["bdaddr"], d["vendor"], d["name"], d["company_id"],
@@ -320,7 +316,7 @@ class Exploit(Exploit):
             print_warning("No identified wearable devices found")
 
         if unknown and self.show_unknown:
-            print_info("{} unidentified BLE device(s):".format(len(unknown)))
+            print_info(f"{len(unknown)} unidentified BLE device(s):")
             unk_headers = ("BLE Address", "Name", "Company ID", "RSSI")
             unk_rows = [
                 (d["bdaddr"], d["name"], d["company_id"],

@@ -91,7 +91,7 @@ class Exploit(BaseExploit):
         """Fuzz all Unit IDs and report responding devices."""
         print_status(f"[Modbus ID Fuzzer] Scanning {self.target}:{self.port} Unit IDs {self.start_id}–{self.end_id}...")
 
-        found: List[int] = []
+        found: list[int] = []
         total = self.end_id - self.start_id + 1
 
         for unit_id in range(self.start_id, self.end_id + 1):

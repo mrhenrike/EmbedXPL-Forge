@@ -14,7 +14,6 @@ Author: André Henrique (@mrhenrike) | União Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import ipaddress
 import logging
@@ -63,7 +62,7 @@ def _parse_octet_range(value: str):
     return None
 
 
-def _expand_ipv4_multirange(target: str) -> List[str]:
+def _expand_ipv4_multirange(target: str) -> list[str]:
     """Expand multi-octet IPv4 range (e.g. ``192.168.1-2.0-255``).
 
     Mirrors cameradar's parseIPv4Range logic from internal/scan/skip/skip.go.
@@ -95,7 +94,7 @@ def _expand_ipv4_multirange(target: str) -> List[str]:
     return ips
 
 
-def _expand_target(target: str) -> List[str]:
+def _expand_target(target: str) -> list[str]:
     """Expand a target spec into individual IP addresses.
 
     Supports all formats from cameradar:
@@ -180,7 +179,7 @@ class RTSPScanner:
     """
 
     @staticmethod
-    def parse_ports(ports_spec) -> List[int]:
+    def parse_ports(ports_spec) -> list[int]:
         """Parse port specification string or list.
 
         Mirrors cameradar's parsePorts (internal/scan/skip/skip.go).
@@ -255,7 +254,7 @@ class RTSPScanner:
         self.scan_speed = scan_speed
         self.scanner = scanner
 
-    def scan(self, targets: List[str]) -> List[RTSPStream]:
+    def scan(self, targets: list[str]) -> list[RTSPStream]:
         """Discover RTSP hosts on the given targets.
 
         Args:
@@ -279,7 +278,7 @@ class RTSPScanner:
             return self._scan_masscan(targets)
         return self._scan_direct(targets)
 
-    def skip_scan(self, targets: List[str]) -> List[RTSPStream]:
+    def skip_scan(self, targets: list[str]) -> list[RTSPStream]:
         """Skip discovery — treat every target:port as an RTSP stream candidate.
 
         Mirrors cameradar's --skip-scan mode (internal/scan/skip/skip.go).
@@ -297,7 +296,7 @@ class RTSPScanner:
         seen: set = set()
         for target in targets:
             # Support "host:port" notation in skip-scan
-            port_override: Optional[int] = None
+            port_override: int | None = None
             if target.count(":") == 1 and not target.startswith("["):
                 host_part, port_part = target.rsplit(":", 1)
                 try:
@@ -318,7 +317,7 @@ class RTSPScanner:
 
     # ── Scanner Backends ──────────────────────────────────────────────────────
 
-    def _scan_nmap(self, targets: List[str]) -> List[RTSPStream]:
+    def _scan_nmap(self, targets: list[str]) -> list[RTSPStream]:
         """Discover RTSP streams via nmap with service identification."""
         if not shutil.which("nmap"):
             logger.warning("[RTSPScanner] nmap not found, falling back to direct scan")
@@ -347,7 +346,7 @@ class RTSPScanner:
             logger.error("[RTSPScanner] nmap error: %s", exc)
             return []
 
-    def _parse_nmap_xml(self, xml: str) -> List[RTSPStream]:
+    def _parse_nmap_xml(self, xml: str) -> list[RTSPStream]:
         """Parse nmap XML output and extract RTSP streams."""
         streams = []
         # Extract hosts and open ports
@@ -404,7 +403,7 @@ class RTSPScanner:
         logger.info("[RTSPScanner] nmap: found %d RTSP streams", len(streams))
         return streams
 
-    def _scan_masscan(self, targets: List[str]) -> List[RTSPStream]:
+    def _scan_masscan(self, targets: list[str]) -> list[RTSPStream]:
         """Discover RTSP streams via masscan (faster for large networks)."""
         if not shutil.which("masscan"):
             logger.warning("[RTSPScanner] masscan not found, falling back to direct scan")
@@ -424,7 +423,7 @@ class RTSPScanner:
             logger.error("[RTSPScanner] masscan error: %s", exc)
             return []
 
-    def _parse_masscan_output(self, output: str) -> List[RTSPStream]:
+    def _parse_masscan_output(self, output: str) -> list[RTSPStream]:
         """Parse masscan -oL output."""
         streams = []
         for line in output.splitlines():
@@ -437,7 +436,7 @@ class RTSPScanner:
         logger.info("[RTSPScanner] masscan: found %d open ports", len(streams))
         return streams
 
-    def _scan_direct(self, targets: List[str]) -> List[RTSPStream]:
+    def _scan_direct(self, targets: list[str]) -> list[RTSPStream]:
         """Discover RTSP streams via direct TCP socket probes."""
         all_targets = []
         for target in targets:
@@ -466,7 +465,7 @@ class RTSPScanner:
         logger.info("[RTSPScanner] direct: found %d RTSP hosts", len(streams))
         return streams
 
-    def _probe_rtsp(self, ip: str, port: int) -> Optional[RTSPStream]:
+    def _probe_rtsp(self, ip: str, port: int) -> RTSPStream | None:
         """Probe a single IP:port for RTSP service."""
         from embedxpl.core.rtsp.client import RTSPClient
         client = RTSPClient(ip, port, timeout=self.timeout)

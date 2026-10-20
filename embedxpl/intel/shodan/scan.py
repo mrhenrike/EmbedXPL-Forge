@@ -30,12 +30,12 @@ def scan_list():
         raise click.ClickException(e.value)
 
     if len(scans) > 0:
-        click.echo(u'# {} Scans Total - Showing 10 most recent scans:'.format(scans['total']))
-        click.echo(u'# {:20} {:<15} {:<10} {:<15s}'.format('Scan ID', 'Status', 'Size', 'Timestamp'))
+        click.echo('# {} Scans Total - Showing 10 most recent scans:'.format(scans['total']))
+        click.echo('# {:20} {:<15} {:<10} {:<15s}'.format('Scan ID', 'Status', 'Size', 'Timestamp'))
         # click.echo('#' * 65)
         for scan in scans['matches'][:10]:
             click.echo(
-                u'{:31} {:<24} {:<10} {:<15s}'.format(
+                '{:31} {:<24} {:<10} {:<15s}'.format(
                     click.style(scan['id'], fg='yellow'),
                     click.style(scan['status'], fg='cyan'),
                     scan['size'],
@@ -69,10 +69,10 @@ def scan_internet(quiet, port, protocol):
             click.echo('The requested port is already indexed by Shodan. A new scan for the port has been launched, please subscribe to the real-time stream for results.')
         else:
             # Create the output file
-            filename = '{0}-{1}.json.gz'.format(port, protocol)
+            filename = f'{port}-{protocol}.json.gz'
             counter = 0
             with helpers.open_file(filename, 'w') as fout:
-                click.echo('Saving results to file: {0}'.format(filename))
+                click.echo(f'Saving results to file: {filename}')
 
                 # Start listening for results
                 done = False
@@ -100,7 +100,7 @@ def scan_internet(quiet, port, protocol):
                         scan = api.scan_status(scan['id'])
                         if scan['status'] == 'DONE':
                             done = True
-                    except socket.timeout:
+                    except TimeoutError:
                         # We stop waiting for results if the scan has been processed by the crawlers and
                         # there haven't been new results in a while
                         if done:
@@ -111,7 +111,7 @@ def scan_internet(quiet, port, protocol):
                             done = True
                     except Exception as e:
                         raise click.ClickException(repr(e))
-            click.echo('Scan finished: {0} devices found'.format(counter))
+            click.echo(f'Scan finished: {counter} devices found')
     except shodan.APIError as e:
         raise click.ClickException(e.value)
 
@@ -125,7 +125,7 @@ def scan_protocols():
         protocols = api.protocols()
 
         for name, description in iter(protocols.items()):
-            click.echo(click.style('{0:<30}'.format(name), fg='cyan') + description)
+            click.echo(click.style(f'{name:<30}', fg='cyan') + description)
     except shodan.APIError as e:
         raise click.ClickException(e.value)
 
@@ -224,7 +224,7 @@ def scan_submit(wait, filename, force, verbose, netblocks):
 
                     if verbose:
                         click.echo('# Scan status: {}'.format(scan['status']))
-                except socket.timeout:
+                except TimeoutError:
                     # If the connection timed out before the timeout, that means the streaming server
                     # that the user tried to reach is down. In that case, lets wait a second and try
                     # to connect again!
@@ -241,7 +241,7 @@ def scan_submit(wait, filename, force, verbose, netblocks):
             progress_bar_thread.join()
 
             def print_field(name, value):
-                click.echo('  {:25s}{}'.format(name, value))
+                click.echo(f'  {name:25s}{value}')
 
             def print_banner(banner):
                 click.echo('    {:20s}'.format(click.style(str(banner['port']), fg='green') + '/' + banner['transport']), nl=False)

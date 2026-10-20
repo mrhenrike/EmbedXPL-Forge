@@ -5,7 +5,6 @@ accessible streams without credentials.
 
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
-from __future__ import annotations
 from embedxpl.modules.network.rtsp.rtsp_client import RTSPClient
 
 COMMON_RTSP_PATHS: list[str] = [

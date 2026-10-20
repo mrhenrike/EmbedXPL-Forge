@@ -7,7 +7,6 @@ Author: André Henrique (@mrhenrike) | União Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import IntEnum
@@ -49,7 +48,7 @@ class RTSPStream:
     device: str = ""
     username: str = ""
     password: str = ""
-    routes: List[str] = field(default_factory=list)
+    routes: list[str] = field(default_factory=list)
     scheme: str = "rtsp"
     auth_type: AuthType = AuthType.UNKNOWN
     route_found: bool = False

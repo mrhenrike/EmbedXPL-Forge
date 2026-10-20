@@ -39,7 +39,7 @@ class KmlConverter(Converter):
             ip = host.get('ip_str', host.get('ipv6', None))
             lat, lon = host['location']['latitude'], host['location']['longitude']
 
-            placemark = '<Placemark><name><![CDATA[<h1 style="margin-bottom:0;padding-bottom:0;font-size:1.5em">{}</h1>]]></name>'.format(ip)
+            placemark = f'<Placemark><name><![CDATA[<h1 style="margin-bottom:0;padding-bottom:0;font-size:1.5em">{ip}</h1>]]></name>'
             placemark += '<description><![CDATA['
 
             if host.get('hostnames'):
@@ -48,7 +48,7 @@ class KmlConverter(Converter):
             placemark += '<h2>Ports</h2><ul>'
 
             for port in host['ports']:
-                placemark += """
+                placemark += f"""
                     <li style="background-color: #1CA8DD;
                     color: #FFF;
                     float: left;
@@ -64,14 +64,14 @@ class KmlConverter(Converter):
                     position: absolute;
                     text-align: center;
                     top: 30%;
-                    width: 48px;">{}</span>
+                    width: 48px;">{port}</span>
                         </li>
-                """.format(port)
+                """
 
             placemark += '</ul><div style="clear:both"></div>'
 
-            placemark += """
-                <div style="text-align:center"><a href="https://www.shodan.io/host/{0}" style="display: inline-block;
+            placemark += f"""
+                <div style="text-align:center"><a href="https://www.shodan.io/host/{ip}" style="display: inline-block;
                     padding: 4px 10px;
                     margin-bottom: 0px;
                     font-size: 13px;
@@ -95,10 +95,10 @@ class KmlConverter(Converter):
                     border-radius: 4px;
                     box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2) inset, 0px 1px 2px rgba(0, 0, 0, 0.05);" target="_blank">View Details</a></div>
                     <div>powered by <a href="https://www.shodan.io" target="_blank">Shodan</a></div>
-            """.format(ip)
+            """
 
             placemark += ']]></description>'
-            placemark += '<Point><coordinates>{},{}</coordinates></Point>'.format(lon, lat)
+            placemark += f'<Point><coordinates>{lon},{lat}</coordinates></Point>'
             placemark += '</Placemark>'
 
             self.fout.write(placemark.encode('utf-8'))

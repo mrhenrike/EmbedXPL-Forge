@@ -11,7 +11,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import re
 from typing import Dict, List, Set
@@ -51,7 +50,7 @@ def _extract_base_seq(hostname: str) -> tuple:
     return hostname.lower(), None
 
 
-def mutate(hostnames: List[str], seq_range: int = 10) -> List[str]:
+def mutate(hostnames: list[str], seq_range: int = 10) -> list[str]:
     """Generate hostname mutations from observed hostnames.
 
     For each hostname:
@@ -66,7 +65,7 @@ def mutate(hostnames: List[str], seq_range: int = 10) -> List[str]:
     Returns:
         Sorted list of unique mutations.
     """
-    results: Set[str] = set(hostnames)
+    results: set[str] = set(hostnames)
 
     for hostname in hostnames:
         h_lower = hostname.lower()
@@ -101,7 +100,7 @@ def mutate(hostnames: List[str], seq_range: int = 10) -> List[str]:
     return sorted(set(filtered))
 
 
-def mine_patterns(observed: List[str]) -> List[str]:
+def mine_patterns(observed: list[str]) -> list[str]:
     """Discover naming patterns from observed hostnames.
 
     Identifies:
@@ -115,7 +114,7 @@ def mine_patterns(observed: List[str]) -> List[str]:
         List of inferred pattern templates.
     """
     patterns = []
-    bases: Dict[str, List[int]] = {}
+    bases: dict[str, list[int]] = {}
 
     for h in observed:
         base, seq = _extract_base_seq(h)

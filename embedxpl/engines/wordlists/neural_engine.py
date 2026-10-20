@@ -18,11 +18,11 @@ Pasquini et al. (Dynamic Password Guessing).
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -260,7 +260,7 @@ def _load_model(torch, model_path: str, compute_mode: str):
     return model, vocab, device, cfg
 
 
-def _mask_allowed_indices(vocab: CharVocab, klass: str) -> Optional[list[int]]:
+def _mask_allowed_indices(vocab: CharVocab, klass: str) -> list[int] | None:
     """Return the vocab indices allowed for a mask class, or None for free."""
     chars = _MASK_CLASSES.get(klass)
     if chars is None:
@@ -337,7 +337,7 @@ def generate(
                 logits, state = model(x, state)
                 logits = logits[0, -1] / max(1e-6, temperature)
 
-                allowed: Optional[list[int]] = None
+                allowed: list[int] | None = None
                 if mask_tokens:
                     if pos >= len(mask_tokens):
                         break

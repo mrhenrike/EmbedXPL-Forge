@@ -49,19 +49,19 @@ class Exploit(HTTPClient):
 
     def run(self) -> None:
         print_status(
-            "Probing for Boa web server on {}:{}...".format(self.target, self.port)
+            f"Probing for Boa web server on {self.target}:{self.port}..."
         )
 
         resp = self.http_request(method="GET", path="/")
         if resp is None:
-            print_error("No HTTP response from {}:{}".format(self.target, self.port))
+            print_error(f"No HTTP response from {self.target}:{self.port}")
             return
 
         server = resp.headers.get("Server", "")
         boa_detected = "boa" in server.lower()
 
         if boa_detected:
-            print_success("Boa web server detected: {}".format(server))
+            print_success(f"Boa web server detected: {server}")
             print_success("WARNING: Boa is END-OF-LIFE since February 2005")
             print_success("Known CVEs: CVE-2005-2970 (DoS), CVE-2009-4496 (traversal)")
             print_status(
@@ -76,14 +76,12 @@ class Exploit(HTTPClient):
                 text = resp2.text or ""
                 if "boa" in text.lower():
                     print_success(
-                        "Boa reference found in {} response body".format(path)
+                        f"Boa reference found in {path} response body"
                     )
                     boa_detected = True
 
         if not boa_detected:
-            print_status("Boa web server NOT detected on {}:{}".format(
-                self.target, self.port
-            ))
+            print_status(f"Boa web server NOT detected on {self.target}:{self.port}")
 
     @mute
     def check(self) -> bool:

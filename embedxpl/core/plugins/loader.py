@@ -1,6 +1,5 @@
 """Entry-point discovery and loading helpers."""
 
-from __future__ import annotations
 
 import sys
 from typing import List, Type
@@ -28,12 +27,12 @@ def _entry_points(group: str):
     return all_eps.get(group, [])
 
 
-def discover_entry_points(group: str) -> List[str]:
+def discover_entry_points(group: str) -> list[str]:
     """Return names of all entry points in *group*."""
     return [ep.name for ep in _entry_points(group)]
 
 
-def load_plugin_class(name: str, group: str) -> Type[PluginBase]:
+def load_plugin_class(name: str, group: str) -> type[PluginBase]:
     """Load a single entry-point by *name* and validate it."""
     eps = [ep for ep in _entry_points(group) if ep.name == name]
     if not eps:

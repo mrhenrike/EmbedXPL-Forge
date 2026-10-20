@@ -90,7 +90,7 @@ class Exploit(Exploit):
         except ImportError:
             raise RuntimeError("pyrtlsdr library required for SDR capture")
         except Exception as exc:
-            raise RuntimeError("Cannot initialize SDR: {}".format(exc))
+            raise RuntimeError(f"Cannot initialize SDR: {exc}")
 
     def _demodulate_fsk(self, samples) -> bytes:
         """Demodulate 2-FSK Z-Wave signal from IQ samples."""
@@ -149,7 +149,7 @@ class Exploit(Exploit):
         if len(frame) > 11:
             cc = frame[10]
             result["command_class"] = cc
-            result["cc_name"] = _COMMAND_CLASSES.get(cc, "0x{:02X}".format(cc))
+            result["cc_name"] = _COMMAND_CLASSES.get(cc, f"0x{cc:02X}")
 
         return result
 
@@ -208,14 +208,12 @@ class Exploit(Exploit):
     @multi
     def run(self) -> None:
         """Execute Z-Wave RF capture and analysis."""
-        print_status("Starting Z-Wave capture at {:.2f} MHz for {} seconds".format(
-            float(self.frequency), self.timeout
-        ))
+        print_status(f"Starting Z-Wave capture at {float(self.frequency):.2f} MHz for {self.timeout} seconds")
 
         try:
             sdr = self._init_sdr()
         except RuntimeError as exc:
-            print_error("{}".format(exc))
+            print_error(f"{exc}")
             return
 
         all_frames = []
@@ -242,7 +240,7 @@ class Exploit(Exploit):
             print_warning("No Z-Wave networks discovered")
             return
 
-        print_success("Discovered {} Z-Wave network(s)".format(len(networks)))
+        print_success(f"Discovered {len(networks)} Z-Wave network(s)")
         for net in networks.values():
             security = self._determine_security(all_frames, net["home_id"])
             sorted_nodes = sorted(net["nodes"])
@@ -251,7 +249,7 @@ class Exploit(Exploit):
                 len(sorted_nodes),
                 ", ".join(str(n) for n in sorted_nodes)
             ))
-            print_info("  Security: {}".format(security))
+            print_info(f"  Security: {security}")
             print_info("  Command classes: {}".format(
                 ", ".join(sorted(net["command_classes"]))
             ))

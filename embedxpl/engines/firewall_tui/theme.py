@@ -3,7 +3,6 @@
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 DARK_THEME = {
     "success": "bold green",

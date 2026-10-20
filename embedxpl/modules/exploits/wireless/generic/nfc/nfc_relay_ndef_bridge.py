@@ -9,7 +9,6 @@ Classic/Ultralight e emulação de cartão.
 Requer: leitor NFC (ACR122U ou PN532 via USB), nfcpy, pyscard.
 """
 
-from __future__ import annotations
 
 import json
 import shutil

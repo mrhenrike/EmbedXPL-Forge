@@ -3,7 +3,6 @@
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 import asyncio
 import logging
@@ -44,7 +43,7 @@ class DiscoveryEngine:
         self._scan_engine = BuiltinEngine()
         logger.info("Using builtin TCP connect engine (install Nmap for better results)")
 
-    async def discover(self, target: str, options: Optional[ScanOptions] = None) -> List[DiscoveredHost]:
+    async def discover(self, target: str, options: ScanOptions | None = None) -> list[DiscoveredHost]:
         """Run full discovery pipeline: hosts -> services -> identify -> vuln map."""
         if not self._scan_engine:
             self._select_engine()
@@ -73,7 +72,7 @@ class DiscoveryEngine:
 
         return scanned
 
-    def discover_sync(self, target: str, options: Optional[ScanOptions] = None) -> List[DiscoveredHost]:
+    def discover_sync(self, target: str, options: ScanOptions | None = None) -> list[DiscoveredHost]:
         """Synchronous wrapper for discover()."""
         return asyncio.run(self.discover(target, options))
 

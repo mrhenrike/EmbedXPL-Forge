@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PrinterXPL-Forge — Network Mapper (Printer-Perspective)
 =====================================================
@@ -35,7 +34,6 @@ Attack surface extensions from printer position:
 # LinkedIn  : https://linkedin.com/in/mrhenrike
 # X/Twitter : https://x.com/mrhenrike
 
-from __future__ import annotations
 
 import ipaddress
 import logging
@@ -62,8 +60,8 @@ class NetworkHost:
     ip:         str
     hostname:   str   = ''
     mac:        str   = ''
-    open_ports: List[int]        = field(default_factory=list)
-    services:   Dict[str, str]   = field(default_factory=dict)
+    open_ports: list[int]        = field(default_factory=list)
+    services:   dict[str, str]   = field(default_factory=dict)
     device_type: str             = ''    # printer, router, server, camera, etc.
     os_hint:    str              = ''
     via:        str              = ''    # discovery method
@@ -79,13 +77,13 @@ class NetworkMap:
     printer_ip:     str
     printer_iface:  str   = ''    # interface/subnet the printer is on
     gateway:        str   = ''
-    dns_servers:    List[str]       = field(default_factory=list)
-    ntp_servers:    List[str]       = field(default_factory=list)
+    dns_servers:    list[str]       = field(default_factory=list)
+    ntp_servers:    list[str]       = field(default_factory=list)
     netmask:        str   = ''
-    hosts:          List[NetworkHost] = field(default_factory=list)
-    subnets:        List[str]       = field(default_factory=list)
-    other_printers: List[str]       = field(default_factory=list)
-    attack_paths:   List[str]       = field(default_factory=list)
+    hosts:          list[NetworkHost] = field(default_factory=list)
+    subnets:        list[str]       = field(default_factory=list)
+    other_printers: list[str]       = field(default_factory=list)
+    attack_paths:   list[str]       = field(default_factory=list)
 
     def summary(self) -> str:
         return (f"Printer: {self.printer_ip} | Gateway: {self.gateway} | "
@@ -186,7 +184,7 @@ def _snmp_get(host: str, oid: str, community: str = 'public',
 
 
 def _snmp_walk(host: str, base_oid: str, community: str = 'public',
-               timeout: float = 3, max_rows: int = 200) -> Dict[str, str]:
+               timeout: float = 3, max_rows: int = 200) -> dict[str, str]:
     """Walk SNMP subtree and return {oid: value}."""
     result = {}
     try:
@@ -214,7 +212,7 @@ def _snmp_walk(host: str, base_oid: str, community: str = 'public',
     return result
 
 
-def snmp_network_info(host: str, timeout: float = 5) -> Dict:
+def snmp_network_info(host: str, timeout: float = 5) -> dict:
     """
     Extract all network configuration from printer via SNMP.
 
@@ -243,7 +241,7 @@ def snmp_network_info(host: str, timeout: float = 5) -> Dict:
 
     # Interfaces
     ifaces = _snmp_walk(host, '1.3.6.1.2.1.2.2.1', timeout=timeout)
-    seen_ifaces: Set[str] = set()
+    seen_ifaces: set[str] = set()
     for oid, val in ifaces.items():
         if '1.3.6.1.2.1.2.2.1.6.' in oid and len(val) > 2:  # ifPhysAddress (MAC)
             mac = ':'.join(val[i:i+2] for i in range(0, len(val.replace(' ', '')), 2)
@@ -299,7 +297,7 @@ PJL_NETWORK_VARS = [
 ]
 
 
-def pjl_network_info(host: str, timeout: float = 10) -> Dict[str, str]:
+def pjl_network_info(host: str, timeout: float = 10) -> dict[str, str]:
     """
     Extract network configuration from printer via PJL network variables.
 
@@ -311,7 +309,7 @@ def pjl_network_info(host: str, timeout: float = 10) -> Dict[str, str]:
     # Build query for all network variables
     cmds = [UEL + b'@PJL\r\n']
     for var in PJL_NETWORK_VARS:
-        cmds.append('@PJL INFO VARIABLES\r\n'.encode())
+        cmds.append(b'@PJL INFO VARIABLES\r\n')
         cmds.append(f'@PJL ECHO "{var}"\r\n'.encode())
 
     # Also query specific well-known PJL variables
@@ -335,7 +333,7 @@ def pjl_network_info(host: str, timeout: float = 10) -> Dict[str, str]:
                 data += chunk
                 if len(data) > 65536:
                     break
-            except (socket.timeout, BlockingIOError):
+            except (TimeoutError, BlockingIOError):
                 break
         s.close()
 
@@ -374,7 +372,7 @@ IP_PATTERN = re.compile(
 )
 
 
-def web_network_info(host: str, timeout: float = 8) -> Dict:
+def web_network_info(host: str, timeout: float = 8) -> dict:
     """
     Scrape network configuration from printer web interface.
 
@@ -469,7 +467,7 @@ def _banner_grab(ip: str, port: int, timeout: float = 2) -> str:
         return ''
 
 
-def _guess_device_type(open_ports: List[int]) -> str:
+def _guess_device_type(open_ports: list[int]) -> str:
     """Guess device type from open ports."""
     port_set = set(open_ports)
     if port_set & {9100, 631, 515}:
@@ -489,9 +487,9 @@ def _guess_device_type(open_ports: List[int]) -> str:
 
 def scan_host(
     ip:      str,
-    ports:   List[int] = None,
+    ports:   list[int] = None,
     timeout: float     = 1.5,
-) -> Optional[NetworkHost]:
+) -> NetworkHost | None:
     """
     Probe a single host for open ports and return a NetworkHost or None.
     """
@@ -526,11 +524,11 @@ def scan_host(
 def discover_network(
     printer_ip:  str,
     subnet:      str        = None,
-    ports:       List[int]  = None,
+    ports:       list[int]  = None,
     timeout:     float      = 0.8,
     workers:     int        = 50,
     verbose:     bool       = True,
-) -> List[NetworkHost]:
+) -> list[NetworkHost]:
     """
     Scan the printer's subnet for live hosts and open services.
 
@@ -582,7 +580,7 @@ def discover_network(
 
 # ── E. WSD neighbor discovery ─────────────────────────────────────────────────
 
-def wsd_discover(host: str, timeout: float = 5) -> List[Dict]:
+def wsd_discover(host: str, timeout: float = 5) -> list[dict]:
     """
     Send WSD Probe (UDP multicast or unicast) to discover WSD-enabled devices.
 
@@ -627,7 +625,7 @@ def wsd_discover(host: str, timeout: float = 5) -> List[Dict]:
                     if m:
                         device[tag] = m.group(1).strip()[:60]
                 devices.append(device)
-            except (socket.timeout, OSError):
+            except (TimeoutError, OSError):
                 pass
             sock.close()
         except Exception:
@@ -644,7 +642,7 @@ def generate_xsp_payload(
     attack_type:   str  = 'info',
     callback_url:  str  = '',
     exfil_url:     str  = '',
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """
     Generate Cross-Site Printing (XSP) + CORS spoofing payloads.
 
@@ -835,7 +833,7 @@ def build_network_map(
     printer_host: str,
     subnet:       str   = None,
     timeout:      float = 5,
-    scan_ports:   List[int] = None,
+    scan_ports:   list[int] = None,
     workers:      int   = 60,
     verbose:      bool  = True,
 ) -> NetworkMap:

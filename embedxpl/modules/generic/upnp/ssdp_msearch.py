@@ -24,7 +24,7 @@ class Exploit(UDPClient):
     def run(self):
         request = (
             "M-SEARCH * HTTP/1.1\r\n" +
-            "HOST: {}:{}\r\n".format(self.target, self.port) +
+            f"HOST: {self.target}:{self.port}\r\n" +
             "MAN: \"ssdp:discover\"\r\n" +
             "MX: 2\r\n" +
             "ST: upnp:rootdevice\r\n\r\n"

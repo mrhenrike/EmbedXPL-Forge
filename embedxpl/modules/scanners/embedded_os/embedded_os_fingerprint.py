@@ -9,7 +9,6 @@ Version: 1.0.0
 """
 # Author: Andre Henrique (LinkedIn/X: @mrhenrike)
 
-from __future__ import annotations
 
 import re
 import socket
@@ -102,7 +101,7 @@ def _tcp_connect(host: str, port: int, timeout: int) -> socket.socket | None:
         sock = socket.create_connection((host, port), timeout=timeout)
         sock.settimeout(timeout)
         return sock
-    except (OSError, socket.error):
+    except OSError:
         return None
 
 
@@ -112,7 +111,7 @@ def _grab_banner(host: str, port: int, timeout: int) -> str:
         return ""
     try:
         if port == 80:
-            request = "HEAD / HTTP/1.0\r\nHost: {}\r\n\r\n".format(host)
+            request = f"HEAD / HTTP/1.0\r\nHost: {host}\r\n\r\n"
             sock.sendall(request.encode("ascii", errors="replace"))
         banner = b""
         deadline = time.monotonic() + timeout
@@ -122,7 +121,7 @@ def _grab_banner(host: str, port: int, timeout: int) -> str:
                 if not chunk:
                     break
                 banner += chunk
-            except socket.timeout:
+            except TimeoutError:
                 break
             except OSError:
                 break
@@ -156,7 +155,7 @@ def _guess_os_from_ttl(ttl: int) -> str:
     for (low, high), label in _TTL_MAP.items():
         if low <= ttl <= high:
             return label
-    return "Unknown (TTL={})".format(ttl)
+    return f"Unknown (TTL={ttl})"
 
 
 def _parse_http_server(banner: str) -> str:
@@ -193,12 +192,12 @@ def _identify_ftp_os(banner: str) -> str:
 def _send_ssdp_discover(host: str, timeout: int) -> str:
     msearch = (
         "M-SEARCH * HTTP/1.1\r\n"
-        "HOST: {}:{}\r\n"
+        f"HOST: {_SSDP_ADDR}:{_SSDP_PORT}\r\n"
         "MAN: \"ssdp:discover\"\r\n"
         "MX: 2\r\n"
         "ST: ssdp:all\r\n"
         "\r\n"
-    ).format(_SSDP_ADDR, _SSDP_PORT)
+    )
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         sock.settimeout(timeout)
@@ -206,7 +205,7 @@ def _send_ssdp_discover(host: str, timeout: int) -> str:
         data, _ = sock.recvfrom(4096)
         sock.close()
         return data.decode("latin-1", errors="replace")
-    except (OSError, socket.error):
+    except OSError:
         return ""
 
 
@@ -227,7 +226,7 @@ def _snmp_get_sysdescr(host: str, timeout: int) -> str:
         decoded = data.decode("latin-1", errors="replace")
         printable = re.sub(r"[^\x20-\x7e]", " ", decoded)
         return printable.strip()
-    except (OSError, socket.error):
+    except OSError:
         return ""
 
 
@@ -249,7 +248,7 @@ def _mdns_query(host: str, timeout: int) -> str:
         decoded = data.decode("latin-1", errors="replace")
         printable = re.sub(r"[^\x20-\x7e]", " ", decoded)
         return printable.strip()
-    except (OSError, socket.error):
+    except OSError:
         return ""
 
 
@@ -343,30 +342,30 @@ class Exploit(Exploit):
         http_port = int(self.port)
         tout = int(self.timeout)
 
-        print_banner("Embedded OS Fingerprint - {}".format(host))
-        print_status("Starting fingerprint probes against {}".format(host))
+        print_banner(f"Embedded OS Fingerprint - {host}")
+        print_status(f"Starting fingerprint probes against {host}")
 
         findings = []
         os_candidates = []
 
         # 1. TTL probe
-        print_status("Probing TCP/IP stack TTL on port {}...".format(http_port))
+        print_status(f"Probing TCP/IP stack TTL on port {http_port}...")
         ttl = _probe_ttl(host, http_port, tout)
         if ttl > 0:
             ttl_guess = _guess_os_from_ttl(ttl)
-            findings.append(("TCP TTL", "Port {}".format(http_port), str(ttl), ttl_guess))
+            findings.append(("TCP TTL", f"Port {http_port}", str(ttl), ttl_guess))
             if "Unknown" not in ttl_guess:
                 os_candidates.append(ttl_guess)
-            print_success("TTL={} -> {}".format(ttl, ttl_guess))
+            print_success(f"TTL={ttl} -> {ttl_guess}")
         else:
-            print_warning("TTL probe failed (port {} unreachable)".format(http_port))
+            print_warning(f"TTL probe failed (port {http_port} unreachable)")
 
         # 2. HTTP Server header
-        print_status("Probing HTTP Server header on port {}...".format(http_port))
+        print_status(f"Probing HTTP Server header on port {http_port}...")
         http_result = self._probe_http(host, http_port, tout)
         if http_result["server_header"]:
             findings.append((
-                "HTTP Server", "Port {}".format(http_port),
+                "HTTP Server", f"Port {http_port}",
                 http_result["server_header"],
                 http_result["os_guess"] or "Unrecognized",
             ))
@@ -377,7 +376,7 @@ class Exploit(Exploit):
                 http_result["os_guess"] or "Unrecognized",
             ))
         else:
-            print_info("No HTTP Server header retrieved on port {}".format(http_port))
+            print_info(f"No HTTP Server header retrieved on port {http_port}")
 
         # 3. SSH banner
         print_status("Probing SSH banner on port 22...")
@@ -423,18 +422,18 @@ class Exploit(Exploit):
         snmp_resp = _snmp_get_sysdescr(host, tout)
         if snmp_resp and len(snmp_resp) > 4:
             findings.append(("SNMP sysDescr", "Port 161/UDP", snmp_resp[:128], "-"))
-            print_success("SNMP sysDescr: {}".format(snmp_resp[:128]))
+            print_success(f"SNMP sysDescr: {snmp_resp[:128]}")
         else:
             print_info("SNMP not available or community rejected")
 
         # 7. UPnP/SSDP
-        print_status("Sending SSDP M-SEARCH to {}:{}...".format(host, _SSDP_PORT))
+        print_status(f"Sending SSDP M-SEARCH to {host}:{_SSDP_PORT}...")
         ssdp_resp = _send_ssdp_discover(host, tout)
         if ssdp_resp:
             ssdp_server = _parse_ssdp_server(ssdp_resp)
             if ssdp_server:
                 findings.append(("SSDP/UPnP Server", "Port 1900/UDP", ssdp_server, "-"))
-                print_success("SSDP Server: {}".format(ssdp_server))
+                print_success(f"SSDP Server: {ssdp_server}")
             else:
                 print_info("SSDP response received but no Server header found")
         else:
@@ -445,7 +444,7 @@ class Exploit(Exploit):
         mdns_resp = _mdns_query(host, tout)
         if mdns_resp and len(mdns_resp) > 8:
             findings.append(("mDNS Response", "Port 5353/UDP", mdns_resp[:128], "-"))
-            print_success("mDNS: {}".format(mdns_resp[:80]))
+            print_success(f"mDNS: {mdns_resp[:80]}")
         else:
             print_info("No mDNS response")
 
@@ -454,7 +453,7 @@ class Exploit(Exploit):
             print_table(
                 ("Probe", "Source", "Value", "OS Guess"),
                 *findings,
-                title="Fingerprint Results - {}".format(host),
+                title=f"Fingerprint Results - {host}",
             )
         else:
             print_error("No probes returned data. Target may be offline or heavily filtered.")

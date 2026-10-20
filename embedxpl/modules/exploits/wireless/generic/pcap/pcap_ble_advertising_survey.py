@@ -6,7 +6,6 @@ Authorised RF capture / lab only.
 Author: André Henrique (@mrhenrique) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 import os
 from collections import Counter

@@ -3,7 +3,6 @@
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 import logging
 import shutil
@@ -18,8 +17,8 @@ logger = logging.getLogger("firewallxpl.discovery.tool_detector")
 class ToolInfo:
     """Information about a detected tool."""
     name: str
-    path: Optional[str] = None
-    version: Optional[str] = None
+    path: str | None = None
+    version: str | None = None
     available: bool = False
     root_capable: bool = False
 

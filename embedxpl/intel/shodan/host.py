@@ -9,19 +9,19 @@ def host_print_pretty(host, history=False):
     # General info
     click.echo(click.style(get_ip(host), fg='green'))
     if len(host['hostnames']) > 0:
-        click.echo(u'{:25s}{}'.format('Hostnames:', ';'.join(host['hostnames'])))
+        click.echo('{:25s}{}'.format('Hostnames:', ';'.join(host['hostnames'])))
 
     if host.get('city'):
-        click.echo(u'{:25s}{}'.format('City:', host['city']))
+        click.echo('{:25s}{}'.format('City:', host['city']))
 
     if host.get('country_name'):
-        click.echo(u'{:25s}{}'.format('Country:', host['country_name']))
+        click.echo('{:25s}{}'.format('Country:', host['country_name']))
 
     if host.get('os'):
-        click.echo(u'{:25s}{}'.format('Operating System:', host['os']))
+        click.echo('{:25s}{}'.format('Operating System:', host['os']))
 
     if host.get('org'):
-        click.echo(u'{:25s}{}'.format('Organization:', host['org']))
+        click.echo('{:25s}{}'.format('Organization:', host['org']))
 
     if host.get('last_update'):
         click.echo('{:25s}{}'.format('Updated:', host['last_update']))
@@ -82,12 +82,12 @@ def host_print_pretty(host, history=False):
         if 'transport' in banner:
             click.echo('/', nl=False)
             click.echo(click.style('{} '.format(banner['transport']), fg='yellow'), nl=False)
-        click.echo('{} {}'.format(product, version), nl=False)
+        click.echo(f'{product} {version}', nl=False)
 
         if history:
             # Format the timestamp to only show the year-month-day
             date = banner['timestamp'][:10]
-            click.echo(click.style('\t\t({})'.format(date), fg='white', dim=True), nl=False)
+            click.echo(click.style(f'\t\t({date})', fg='white', dim=True), nl=False)
         click.echo('')
 
         # Show optional HTTP information
@@ -99,11 +99,11 @@ def host_print_pretty(host, history=False):
         if 'ssl' in banner:
             if 'cert' in banner['ssl'] and banner['ssl']['cert']:
                 if 'issuer' in banner['ssl']['cert'] and banner['ssl']['cert']['issuer']:
-                    issuer = ', '.join(['{}={}'.format(key, value) for key, value in banner['ssl']['cert']['issuer'].items()])
-                    click.echo('\t|-- Cert Issuer: {}'.format(issuer))
+                    issuer = ', '.join([f'{key}={value}' for key, value in banner['ssl']['cert']['issuer'].items()])
+                    click.echo(f'\t|-- Cert Issuer: {issuer}')
                 if 'subject' in banner['ssl']['cert'] and banner['ssl']['cert']['subject']:
-                    subject = ', '.join(['{}={}'.format(key, value) for key, value in banner['ssl']['cert']['subject'].items()])
-                    click.echo('\t|-- Cert Subject: {}'.format(subject))
+                    subject = ', '.join([f'{key}={value}' for key, value in banner['ssl']['cert']['subject'].items()])
+                    click.echo(f'\t|-- Cert Subject: {subject}')
             if 'versions' in banner['ssl'] and banner['ssl']['versions']:
                 click.echo('\t|-- SSL Versions: {}'.format(', '.join([item for item in sorted(banner['ssl']['versions']) if not version.startswith('-')])))
             if 'dhparams' in banner['ssl'] and banner['ssl']['dhparams']:
@@ -123,7 +123,7 @@ def host_print_tsv(host, history=False):
         if history:
             # Format the timestamp to only show the year-month-day
             date = banner['timestamp'][:10]
-            click.echo(click.style('\t({})'.format(date), fg='white', dim=True), nl=False)
+            click.echo(click.style(f'\t({date})', fg='white', dim=True), nl=False)
         click.echo('')
 
 

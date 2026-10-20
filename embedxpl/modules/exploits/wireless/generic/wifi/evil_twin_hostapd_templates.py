@@ -6,7 +6,6 @@ OWE lab sketch, enterprise/EAP pointer (not runnable without RADIUS).
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 from pathlib import Path
 

@@ -100,7 +100,7 @@ class Exploit(HTTPClient):
                         if len(data) > 16:
                             payload = data[16:].replace(b"\x00", b" ").decode("ascii", errors="replace")
                             print_info(f"[PAPI-SCAN] Payload hint: {payload[:80]}")
-                except socket.timeout:
+                except TimeoutError:
                     print_info(f"[PAPI-SCAN] No UDP response from {self.target}:{self.papi_port}")
         except Exception as exc:
             print_error(f"[PAPI-SCAN] UDP probe error: {exc}")

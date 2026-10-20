@@ -54,7 +54,7 @@ _S7PLUS_SESSION_SETUP = bytes.fromhex(
 )
 
 
-def _recv_tpkt(sock: socket.socket, timeout: int = 5) -> Optional[bytes]:
+def _recv_tpkt(sock: socket.socket, timeout: int = 5) -> bytes | None:
     """Receive a full TPKT-framed packet (blocking, with timeout)."""
     sock.settimeout(timeout)
     try:
@@ -79,7 +79,7 @@ def _recv_tpkt(sock: socket.socket, timeout: int = 5) -> Optional[bytes]:
         return None
 
 
-def _s7plus_scan(host: str, port: int, timeout: int) -> Optional[dict]:
+def _s7plus_scan(host: str, port: int, timeout: int) -> dict | None:
     """Connect to S7-1200/1500 via S7comm+ and extract identity information."""
     try:
         sock = socket.create_connection((host, port), timeout=timeout)

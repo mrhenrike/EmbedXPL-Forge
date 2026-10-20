@@ -37,7 +37,7 @@ class Exploit(HTTPClient):
     port = OptPort(8006, "Proxmox web UI port (default 8006)")
 
     def run(self) -> None:
-        print_status("Probing Proxmox VE on {}:{}...".format(self.target, self.port))
+        print_status(f"Probing Proxmox VE on {self.target}:{self.port}...")
 
         # Version check (unauthenticated)
         resp = self.http_request(method="GET", path="/api2/json/version")
@@ -49,15 +49,13 @@ class Exploit(HTTPClient):
                 release = data.get("release", "?")
                 repoid = data.get("repoid", "?")
                 print_success(
-                    "Proxmox VE detected on {}:{} — version={} release={} repoid={}".format(
-                        self.target, self.port, version, release, repoid
-                    )
+                    f"Proxmox VE detected on {self.target}:{self.port} — version={version} release={release} repoid={repoid}"
                 )
             except Exception:
-                print_success("Proxmox VE API responded on {}:{}".format(self.target, self.port))
+                print_success(f"Proxmox VE API responded on {self.target}:{self.port}")
         elif resp:
             print_status(
-                "HTTP {} on /api2/json/version — may require auth".format(resp.status_code)
+                f"HTTP {resp.status_code} on /api2/json/version — may require auth"
             )
 
         # Check login page

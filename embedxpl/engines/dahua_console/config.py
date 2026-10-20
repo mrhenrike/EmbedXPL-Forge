@@ -40,7 +40,7 @@ def get_config(args=None):
     # Load fingerprint rules from rules.csv
     Rule = namedtuple('Rule', ['product', 'path', 'val'])
     rules_file = os.path.join(os.path.dirname(__file__), 'rules.csv')
-    with open(rules_file, 'r', encoding='utf-8') as f:
+    with open(rules_file, encoding='utf-8') as f:
         for line in f:
             line = line.strip()
             if not line or line.startswith('#'):

@@ -190,26 +190,24 @@ def _print_ascii_table(audit):
         example = modules[0].rsplit(".", 1)[-1] if modules else ""
         if len(example) > 38:
             example = example[:35] + "..."
-        print("| {:<24} | {:<6} | {:<38} |".format(
-            hw_id, len(modules), example,
-        ))
+        print(f"| {hw_id:<24} | {len(modules):<6} | {example:<38} |")
     print(sep)
     print()
 
     if audit["unrecognized"]:
         print("  Unrecognized hardware identifiers:")
         for hw_id, paths in sorted(audit["unrecognized"].items()):
-            print("    {id} ({n} module(s))".format(id=hw_id, n=len(paths)))
+            print(f"    {hw_id} ({len(paths)} module(s))")
         print()
 
     print("  Detail by hardware type:")
     print()
     for hw_id in sorted(audit["by_hardware"].keys()):
         modules = audit["by_hardware"][hw_id]
-        print("  [{id}] - {n} module(s):".format(id=hw_id, n=len(modules)))
+        print(f"  [{hw_id}] - {len(modules)} module(s):")
         for mod_path in sorted(modules):
             short = mod_path.replace("embedxpl.modules.", "")
-            print("    - {p}".format(p=short))
+            print(f"    - {short}")
         print()
 
 
@@ -222,7 +220,7 @@ def _save_json(audit):
     os.makedirs(str(_TMP_DIR), exist_ok=True)
     with open(str(_AUDIT_OUTPUT), "w", encoding="utf-8") as fh:
         json.dump(audit, fh, indent=2, ensure_ascii=False, sort_keys=True)
-    print("  JSON report saved to: {p}".format(p=_AUDIT_OUTPUT))
+    print(f"  JSON report saved to: {_AUDIT_OUTPUT}")
 
 
 def main():

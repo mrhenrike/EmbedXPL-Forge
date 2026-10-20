@@ -57,7 +57,7 @@ MAPS = {
 }
 
 
-class AsciiMap(object):
+class AsciiMap:
     """
     Helper class for handling map drawing and coordinate calculations
     """
@@ -165,7 +165,7 @@ class AsciiMap(object):
                 attrs |= curses.color_pair(self.colors[color])
             self.window.addstr(char_y, char_x, char, attrs)
             if desc:
-                det_show = "{} {}".format(char, desc)
+                det_show = f"{char} {desc}"
             else:
                 det_show = None
 
@@ -181,7 +181,7 @@ class AsciiMap(object):
         self.window.leaveok(True)
 
 
-class MapApp(object):
+class MapApp:
     """ Virus World Map ncurses application """
     def __init__(self, api):
         self.api = api

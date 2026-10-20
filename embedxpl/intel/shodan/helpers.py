@@ -20,7 +20,7 @@ def create_facet_string(facets):
         if isinstance(facet, basestring):
             facet_str += facet
         else:
-            facet_str += '{}:{}'.format(facet[0], facet[1])
+            facet_str += f'{facet[0]}:{facet[1]}'
         facet_str += ','
     return facet_str[:-1]
 
@@ -110,7 +110,7 @@ def iterate_files(files, fast=False):
         if filename.endswith('.gz'):
             fin = gzip.open(filename, 'r')
         else:
-            fin = open(filename, 'r')
+            fin = open(filename)
 
         for line in fin:
             # Ensure the line has been decoded into a string to prevent errors w/ Python3

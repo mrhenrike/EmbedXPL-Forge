@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PrinterXPL-Forge — Attack Orchestrator
 =====================================
@@ -40,7 +39,6 @@ Attack Matrix (from BlackHat 2017 paper, extended):
 # LinkedIn  : https://linkedin.com/in/mrhenrike
 # X/Twitter : https://x.com/mrhenrike
 
-from __future__ import annotations
 
 import logging
 import socket
@@ -81,14 +79,14 @@ class CampaignReport:
     make:          str = ''
     model:         str = ''
     firmware:      str = ''
-    printer_langs: List[str] = field(default_factory=list)
-    open_ports:    List[int] = field(default_factory=list)
+    printer_langs: list[str] = field(default_factory=list)
+    open_ports:    list[int] = field(default_factory=list)
 
-    results:       List[AttackResult] = field(default_factory=list)
+    results:       list[AttackResult] = field(default_factory=list)
     network_map:   object              = None   # NetworkMap instance
 
     @property
-    def critical_findings(self) -> List[AttackResult]:
+    def critical_findings(self) -> list[AttackResult]:
         return [r for r in self.results if r.severity in ('critical', 'high') and r.vulnerable]
 
     @property
@@ -123,7 +121,7 @@ def _send_raw(host: str, port: int, data: bytes, timeout: float = 8,
                 if not chunk:
                     break
                 resp += chunk
-            except (socket.timeout, BlockingIOError):
+            except (TimeoutError, BlockingIOError):
                 break
         s.close()
         return resp
@@ -769,8 +767,8 @@ def run_campaign(
     make:          str        = '',
     model:         str        = '',
     firmware:      str        = '',
-    printer_langs: List[str]  = None,
-    open_ports:    List[int]  = None,
+    printer_langs: list[str]  = None,
+    open_ports:    list[int]  = None,
     dry_run:       bool       = True,
     timeout:       float      = 8,
     run_netmap:    bool       = False,
@@ -1003,7 +1001,7 @@ def print_campaign_report(report: CampaignReport) -> None:
                 print(f"      Note: {r.note[:80]}")
 
     # Category summary
-    cats: Dict[str, List[AttackResult]] = {}
+    cats: dict[str, list[AttackResult]] = {}
     for r in report.results:
         cats.setdefault(r.category, []).append(r)
 

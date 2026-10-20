@@ -3,7 +3,6 @@
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 import logging
 import os
@@ -20,14 +19,14 @@ class ModuleMatch:
     """A module applicable to a discovered device."""
     module_path: str
     severity: str = "medium"
-    cve_ids: List[str] = field(default_factory=list)
+    cve_ids: list[str] = field(default_factory=list)
 
 
 @dataclass
 class VulnMapResult:
     """Vulnerability mapping result for a device."""
-    applicable_exploits: List[ModuleMatch] = field(default_factory=list)
-    applicable_creds: List[ModuleMatch] = field(default_factory=list)
+    applicable_exploits: list[ModuleMatch] = field(default_factory=list)
+    applicable_creds: list[ModuleMatch] = field(default_factory=list)
     risk_score: float = 0.0
     recommendation: str = ""
 
@@ -73,7 +72,7 @@ class VulnMapper:
         )
 
     @staticmethod
-    def _extract_cves(module_path: str) -> List[str]:
+    def _extract_cves(module_path: str) -> list[str]:
         """Extract CVE IDs from module path name."""
         import re
         return re.findall(r"cve_\d{4}_\d+", module_path)

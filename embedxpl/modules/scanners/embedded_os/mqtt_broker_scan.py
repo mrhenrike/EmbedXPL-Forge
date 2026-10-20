@@ -167,7 +167,7 @@ class Exploit(Exploit):
                     break
                 payload += chunk
             return packet_type, payload
-        except (socket.timeout, ConnectionError, OSError):
+        except (TimeoutError, ConnectionError, OSError):
             return None, None
 
     def _parse_publish(self, payload, header_byte=0x30):
@@ -218,7 +218,7 @@ class Exploit(Exploit):
         try:
             sock = self._create_socket()
             sock.connect((host, port_num))
-        except (socket.timeout, ConnectionRefusedError, OSError) as exc:
+        except (TimeoutError, ConnectionRefusedError, OSError) as exc:
             print_error(f"Connection failed: {exc}")
             return None, None, None
 

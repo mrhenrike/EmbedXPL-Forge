@@ -15,7 +15,7 @@ from typing import Dict, List, Optional, Tuple
 from embedxpl.core.exploit import *
 
 
-_GLIBC_CVES: List[Tuple[str, str, str, str, str]] = [
+_GLIBC_CVES: list[tuple[str, str, str, str, str]] = [
     (
         "CVE-2015-0235",
         "GHOST: heap overflow in gethostbyname_r",
@@ -75,7 +75,7 @@ _GLIBC_CVES: List[Tuple[str, str, str, str, str]] = [
 ]
 
 
-def _version_in_range(version: Tuple[int, ...], range_str: str) -> bool:
+def _version_in_range(version: tuple[int, ...], range_str: str) -> bool:
     """Check if version falls within a CVE-affected range like '2.2-2.17'."""
     match = re.match(r"(\d+)\.(\d+)-(\d+)\.(\d+)", range_str)
     if not match:
@@ -118,7 +118,7 @@ class Exploit(Exploit):
     firmware_dir = OptString("", "Path to extracted firmware rootfs")
     libc_path = OptString("", "Direct path to libc.so binary (overrides firmware_dir)")
 
-    def _find_libc(self) -> Optional[str]:
+    def _find_libc(self) -> str | None:
         """Locate libc binary in firmware directory."""
         if self.libc_path and os.path.isfile(self.libc_path):
             return self.libc_path
@@ -139,12 +139,12 @@ class Exploit(Exploit):
 
         return candidates[0] if candidates else None
 
-    def _extract_version(self, libc_path: str) -> Optional[Tuple[int, ...]]:
+    def _extract_version(self, libc_path: str) -> tuple[int, ...] | None:
         """Extract glibc version string from binary."""
         try:
             with open(libc_path, "rb") as f:
                 data = f.read()
-        except IOError:
+        except OSError:
             return None
 
         match = re.search(rb"release version (\d+)\.(\d+)(?:\.(\d+))?", data)
@@ -161,10 +161,10 @@ class Exploit(Exploit):
             with open(libc_path, "rb") as f:
                 data = f.read()
             return b"EGLIBC" in data
-        except IOError:
+        except OSError:
             return False
 
-    def _extract_compiler_info(self, libc_path: str) -> Optional[str]:
+    def _extract_compiler_info(self, libc_path: str) -> str | None:
         """Extract compiler version from libc binary."""
         try:
             with open(libc_path, "rb") as f:
@@ -174,14 +174,14 @@ class Exploit(Exploit):
                 return match.group(1).decode("ascii", errors="replace").strip()
             match = re.search(rb"GCC: \(.*?\) (\d+\.\d+\.\d+)", data)
             if match:
-                return "GCC {}".format(match.group(1).decode())
-        except IOError:
+                return f"GCC {match.group(1).decode()}"
+        except OSError:
             pass
         return None
 
-    def _extract_build_info(self, libc_path: str) -> Dict[str, str]:
+    def _extract_build_info(self, libc_path: str) -> dict[str, str]:
         """Extract build metadata from libc binary."""
-        info: Dict[str, str] = {}
+        info: dict[str, str] = {}
         try:
             with open(libc_path, "rb") as f:
                 data = f.read()
@@ -198,13 +198,13 @@ class Exploit(Exploit):
             if platform:
                 info["Platform"] = platform.group(1).decode()
 
-        except IOError:
+        except OSError:
             pass
         return info
 
-    def _check_patched_symbols(self, libc_path: str) -> Dict[str, bool]:
+    def _check_patched_symbols(self, libc_path: str) -> dict[str, bool]:
         """Check for presence of symbols indicating patches."""
-        results: Dict[str, bool] = {}
+        results: dict[str, bool] = {}
 
         try:
             output = subprocess.check_output(
@@ -227,7 +227,7 @@ class Exploit(Exploit):
                                      "__gconv_translit_find"]:
                         results[sym_name] = sym_name.encode() in data
                     return results
-                except IOError:
+                except OSError:
                     return results
 
         for cve_id, _, _, _, check_sym in _GLIBC_CVES:
@@ -244,7 +244,7 @@ class Exploit(Exploit):
             )
             return
 
-        print_status("Analyzing: {}".format(libc_path))
+        print_status(f"Analyzing: {libc_path}")
 
         version = self._extract_version(libc_path)
         if not version:
@@ -255,7 +255,7 @@ class Exploit(Exploit):
         is_eglibc = self._check_eglibc(libc_path)
         lib_name = "EGLIBC" if is_eglibc else "glibc"
 
-        print_success("Detected {} version {}".format(lib_name, ver_str))
+        print_success(f"Detected {lib_name} version {ver_str}")
 
         build_info = self._extract_build_info(libc_path)
         compiler = self._extract_compiler_info(libc_path)
@@ -272,10 +272,10 @@ class Exploit(Exploit):
         print_table(("Property", "Value"), *info_rows, title="Library Information")
 
         # CVE mapping
-        print_status("Mapping version {} to known CVEs...".format(ver_str))
+        print_status(f"Mapping version {ver_str} to known CVEs...")
         symbols = self._check_patched_symbols(libc_path)
 
-        cve_rows: List[Tuple[str, str, str, str, str]] = []
+        cve_rows: list[tuple[str, str, str, str, str]] = []
         affected_count = 0
 
         for cve_id, desc, cvss, affected_range, check_sym in _GLIBC_CVES:
@@ -307,27 +307,21 @@ class Exploit(Exploit):
             age_years = 2026 - 2012
             risk = "CRITICAL"
             print_warning(
-                "{} {} is {} years old — end-of-life, no security patches. "
-                "Risk: {}".format(lib_name, ver_str, age_years, risk)
+                f"{lib_name} {ver_str} is {age_years} years old — end-of-life, no security patches. "
+                f"Risk: {risk}"
             )
         elif version[:2] <= (2, 22):
             risk = "HIGH"
             print_warning(
-                "{} {} is outdated — limited security support. Risk: {}".format(
-                    lib_name, ver_str, risk
-                )
+                f"{lib_name} {ver_str} is outdated — limited security support. Risk: {risk}"
             )
         else:
             risk = "MEDIUM"
             print_info(
-                "{} {} — check specific CVE patches. Risk: {}".format(
-                    lib_name, ver_str, risk
-                )
+                f"{lib_name} {ver_str} — check specific CVE patches. Risk: {risk}"
             )
 
-        print_status("CVEs potentially affecting this version: {}/{}".format(
-            affected_count, len(_GLIBC_CVES)
-        ))
+        print_status(f"CVEs potentially affecting this version: {affected_count}/{len(_GLIBC_CVES)}")
         print_info(
             "Recommendation: Upgrade to glibc 2.38+ or musl libc for embedded systems"
         )

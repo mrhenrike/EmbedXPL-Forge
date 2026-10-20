@@ -20,7 +20,6 @@ Usage::
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 import argparse
 import importlib

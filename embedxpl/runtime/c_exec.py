@@ -9,11 +9,10 @@ Binary output is cached by source hash to avoid recompilation.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 import subprocess
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from .cache import get_cached_binary, store_binary
 from .crosscompile import get_target
@@ -40,10 +39,10 @@ class CExecutor:
         self,
         src_path: Path,
         arch: str = "x64",
-        cflags: Optional[list[str]] = None,
-        extra_libs: Optional[list[str]] = None,
+        cflags: list[str] | None = None,
+        extra_libs: list[str] | None = None,
         force: bool = False,
-    ) -> Optional[Path]:
+    ) -> Path | None:
         """Compile src_path for the given arch. Returns binary path or None."""
         src = Path(src_path)
         if not src.exists():
@@ -84,7 +83,7 @@ class CExecutor:
     def run(
         self,
         module: Any,
-        args: Optional[list[str]] = None,
+        args: list[str] | None = None,
         timeout: int = 30,
         **kwargs: Any,
     ) -> dict[str, Any]:
@@ -130,8 +129,8 @@ class CExecutor:
         self,
         src: str | Path,
         arch: str = "x64",
-        args: Optional[list[str]] = None,
-        cflags: Optional[list[str]] = None,
+        args: list[str] | None = None,
+        cflags: list[str] | None = None,
         timeout: int = 30,
     ) -> dict[str, Any]:
         """Convenience: compile a .c file and run it (no module needed)."""

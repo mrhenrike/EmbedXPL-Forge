@@ -9,7 +9,6 @@ After forced disarm the motors stop immediately -- do NOT use on airborne drones
 PREREQ: Network access to drone on UDP 14550.
 LEGAL: Authorized penetration testing only. Interference with aircraft is a criminal offense.
 """
-from __future__ import annotations
 
 import logging
 import socket

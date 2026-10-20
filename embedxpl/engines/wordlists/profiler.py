@@ -12,7 +12,6 @@ Inspired by CUPP, elpscrk, and BEWGor - absorbs their best mutation strategies.
 Author: André Henrique (@mrhenrike)
 Version: 2.4.0
 """
-from __future__ import annotations
 
 import json
 import logging
@@ -23,11 +22,12 @@ from datetime import date, datetime
 from itertools import permutations as _permutations
 from itertools import product as _product
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 _MODULE_DIR = Path(__file__).resolve().parent
 _REPO_ROOT = _MODULE_DIR.parent
-_BEHAVIOR_DB: Optional[dict] = None
+_BEHAVIOR_DB: dict | None = None
 
 
 class _SeenSet:
@@ -664,7 +664,7 @@ def normalize_profile_output_path(
     return str(target)
 
 
-def resolve_profile_output(cli_output: Optional[str], profile: dict) -> Optional[str]:
+def resolve_profile_output(cli_output: str | None, profile: dict) -> str | None:
     """CLI -o wins; else interactive output_path; else None (stdout)."""
     fmt = (profile.get("output") or {}).get("format", "lst")
     if cli_output:
@@ -698,7 +698,7 @@ def estimate_birth_year(age: int) -> int:
     return datetime.now().year - age
 
 
-def parse_date_input(raw: str) -> Optional[tuple[int, int, int]]:
+def parse_date_input(raw: str) -> tuple[int, int, int] | None:
     """
     Parse a date from user input in multiple formats.
 
@@ -1679,7 +1679,7 @@ def _emit_profile_relationship_combos(
     children↔dates, _NOME@year#Pet, _CORP@year#Dept, _leet@year#SIGLA, etc.
     Respects ``include_specials``, ``with_spaces``, and ``leet_mode``.
     """
-    def _try_emit(s: str) -> Optional[str]:
+    def _try_emit(s: str) -> str | None:
         if s and s not in seen and min_len <= len(s) <= max_len:
             seen.add(s)
             return s
@@ -1914,7 +1914,7 @@ def _emit_all(
     if with_spaces and " " not in seps:
         seps.append(" ")
 
-    def _try_emit(s: str) -> Optional[str]:
+    def _try_emit(s: str) -> str | None:
         if s and s not in seen and min_len <= len(s) <= max_len:
             seen.add(s)
             return s
@@ -2428,7 +2428,7 @@ def _generate_from_behavior(
     if not db:
         return
 
-    def _try(s: str) -> Optional[str]:
+    def _try(s: str) -> str | None:
         s = s.strip()
         if s and s not in seen and min_len <= len(s) <= max_len:
             seen.add(s)
@@ -2615,7 +2615,7 @@ def _generate_from_behavior(
 
 def generate_from_profile(
     profile: dict,
-    leet_mode: Optional[str] = None,
+    leet_mode: str | None = None,
     min_len: int = 6,
     max_len: int = 32,
     with_spaces: bool = False,
@@ -3043,7 +3043,7 @@ def improve_wordlist(
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     written = 0
-    with open(source_path, "r", encoding="utf-8", errors="ignore") as src, \
+    with open(source_path, encoding="utf-8", errors="ignore") as src, \
             open(out_path, "w", encoding="utf-8") as dst:
 
         for raw_line in src:

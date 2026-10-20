@@ -8,7 +8,6 @@ back to aireplay-ng subprocess.
 
 PREREQ HW: WiFi adapter in monitor mode with packet injection support.
 """
-from __future__ import annotations
 
 import logging
 import subprocess

@@ -50,7 +50,7 @@ def _udp_allshare_probe(host: str, timeout: float = 2.0) -> bool:
         return False
 
 
-def _extract_device_info(body: str) -> Optional[dict]:
+def _extract_device_info(body: str) -> dict | None:
     """Parse the Tizen REST API JSON response for device info fields.
 
     Args:
@@ -110,7 +110,7 @@ class Exploit(HTTPClient):
     def run(self) -> None:
         """Execute the Tizen device-info discovery scan."""
         print_status(
-            "Discovering Samsung Tizen TV at {}".format(self.target)
+            f"Discovering Samsung Tizen TV at {self.target}"
         )
         found = False
 
@@ -120,29 +120,25 @@ class Exploit(HTTPClient):
                 if info:
                     found = True
                     print_success(
-                        "Tizen REST API found at {}:{}{}".format(
-                            self.target, api_port, path
-                        )
+                        f"Tizen REST API found at {self.target}:{api_port}{path}"
                     )
                     for field, value in info.items():
                         if value != "N/A":
-                            print_status("  {:20s}: {}".format(field, value))
+                            print_status(f"  {field:20s}: {value}")
                     break
 
         if _udp_allshare_probe(self.target, float(self.timeout)):
             found = True
             print_success(
-                "AllShare/DLNA service responding on {}:{}".format(
-                    self.target, _ALLSHARE_PORT
-                )
+                f"AllShare/DLNA service responding on {self.target}:{_ALLSHARE_PORT}"
             )
 
         if not found:
             print_error(
-                "No Samsung Tizen services detected on {}".format(self.target)
+                f"No Samsung Tizen services detected on {self.target}"
             )
 
-    def _query_api(self, api_port: int, path: str) -> Optional[dict]:
+    def _query_api(self, api_port: int, path: str) -> dict | None:
         """Query the Tizen REST API on a specific port.
 
         Args:

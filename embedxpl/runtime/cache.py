@@ -6,12 +6,10 @@ Avoids recompilation on every run for C/C++/Go/Rust modules.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 import hashlib
 import shutil
 from pathlib import Path
-from typing import Optional
 
 _WORKSPACE_ROOT = Path(__file__).resolve().parents[3]
 _CACHE_DIR = _WORKSPACE_ROOT / ".tmp" / "runtime_cache"
@@ -39,7 +37,7 @@ def _hash_dir(src_dir: Path) -> str:
     return h.hexdigest()[:16]
 
 
-def get_cached_binary(src: Path, arch: str = "x64", ext: str = "") -> Optional[Path]:
+def get_cached_binary(src: Path, arch: str = "x64", ext: str = "") -> Path | None:
     """Return path to cached binary if it exists and is up to date."""
     try:
         if src.is_dir():

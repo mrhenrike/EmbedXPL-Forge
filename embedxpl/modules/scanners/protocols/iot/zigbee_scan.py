@@ -81,7 +81,7 @@ class Exploit(Exploit):
         except ImportError:
             raise RuntimeError("pyserial library required for Zigbee sniffing")
         except Exception as exc:
-            raise RuntimeError("Cannot open sniffer at {}: {}".format(self.interface, exc))
+            raise RuntimeError(f"Cannot open sniffer at {self.interface}: {exc}")
 
     def _set_channel(self, sniffer, channel: int) -> None:
         """Send channel-set command to sniffer firmware."""
@@ -129,15 +129,15 @@ class Exploit(Exploit):
         result["sequence"] = seq
 
         src_pan = struct.unpack("<H", frame[3:5])[0]
-        result["pan_id"] = "0x{:04X}".format(src_pan)
+        result["pan_id"] = f"0x{src_pan:04X}"
 
         if info["src_mode"] == 2:
             src_addr = struct.unpack("<H", frame[5:7])[0]
-            result["coordinator_short"] = "0x{:04X}".format(src_addr)
+            result["coordinator_short"] = f"0x{src_addr:04X}"
             beacon_offset = 7
         elif info["src_mode"] == 3:
             src_addr = frame[5:13]
-            result["coordinator_ext"] = ":".join("{:02X}".format(b) for b in reversed(src_addr))
+            result["coordinator_ext"] = ":".join(f"{b:02X}" for b in reversed(src_addr))
             beacon_offset = 13
         else:
             return result
@@ -166,14 +166,14 @@ class Exploit(Exploit):
         if info["dst_mode"] == 2:
             if offset + 4 <= len(frame):
                 dst_pan = struct.unpack("<H", frame[offset:offset + 2])[0]
-                result["dst_pan"] = "0x{:04X}".format(dst_pan)
+                result["dst_pan"] = f"0x{dst_pan:04X}"
                 dst_addr = struct.unpack("<H", frame[offset + 2:offset + 4])[0]
-                result["dst_short"] = "0x{:04X}".format(dst_addr)
+                result["dst_short"] = f"0x{dst_addr:04X}"
                 offset += 4
         elif info["dst_mode"] == 3:
             if offset + 10 <= len(frame):
                 dst_pan = struct.unpack("<H", frame[offset:offset + 2])[0]
-                result["dst_pan"] = "0x{:04X}".format(dst_pan)
+                result["dst_pan"] = f"0x{dst_pan:04X}"
                 offset += 10
 
         return result
@@ -246,12 +246,12 @@ class Exploit(Exploit):
     @multi
     def run(self) -> None:
         """Execute Zigbee PAN discovery scan."""
-        print_status("Starting Zigbee scan on {}".format(self.interface))
+        print_status(f"Starting Zigbee scan on {self.interface}")
 
         try:
             sniffer = self._open_sniffer()
         except RuntimeError as exc:
-            print_error("{}".format(exc))
+            print_error(f"{exc}")
             return
 
         channels = [int(self.channel)] if int(self.channel) in _CHANNELS else _CHANNELS
@@ -260,7 +260,7 @@ class Exploit(Exploit):
 
         try:
             for ch in channels:
-                print_status("Scanning channel {} ({:.1f}s)...".format(ch, per_channel))
+                print_status(f"Scanning channel {ch} ({per_channel:.1f}s)...")
                 frames = self._scan_channel(sniffer, ch, per_channel)
                 all_frames.extend(frames)
         finally:
@@ -271,7 +271,7 @@ class Exploit(Exploit):
             print_warning("No Zigbee PANs discovered")
             return
 
-        print_success("Discovered {} PAN(s)".format(len(pans)))
+        print_success(f"Discovered {len(pans)} PAN(s)")
         for pan in pans.values():
             ch_list = sorted(pan["channels"])
             print_info("PAN {} on channel(s) {}".format(

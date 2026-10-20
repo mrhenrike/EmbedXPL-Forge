@@ -65,7 +65,7 @@ class Exploit(HTTPClient):
     ]
 
     def run(self) -> None:
-        print_status("Scanning Dahua CCTV at {}...".format(self.target))
+        print_status(f"Scanning Dahua CCTV at {self.target}...")
         detected = False
         info = {}
 
@@ -79,7 +79,7 @@ class Exploit(HTTPClient):
                 if marker in combined:
                     detected = True
                     print_success(
-                        "Dahua device detected — marker '{}' in HTTP response".format(marker)
+                        f"Dahua device detected — marker '{marker}' in HTTP response"
                     )
                     break
 
@@ -106,22 +106,20 @@ class Exploit(HTTPClient):
             response = sock.recv(1024)
             sock.close()
             if response:
-                info["dahua_37777"] = "open ({}B response)".format(len(response))
+                info["dahua_37777"] = f"open ({len(response)}B response)"
                 detected = True
                 print_success(
-                    "Dahua binary protocol active on TCP/37777 ({}B response)".format(
-                        len(response)
-                    )
+                    f"Dahua binary protocol active on TCP/37777 ({len(response)}B response)"
                 )
-        except (socket.timeout, ConnectionRefusedError, OSError):
+        except (TimeoutError, ConnectionRefusedError, OSError):
             pass
 
         if detected:
-            print_success("Dahua device confirmed at {}".format(self.target))
+            print_success(f"Dahua device confirmed at {self.target}")
             for k, v in info.items():
-                print_info("  {}: {}".format(k, v))
+                print_info(f"  {k}: {v}")
         else:
-            print_error("No Dahua indicators found at {}".format(self.target))
+            print_error(f"No Dahua indicators found at {self.target}")
 
     def check(self) -> bool:
         resp = self.http_request(method="GET", path="/")

@@ -3,7 +3,6 @@
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
@@ -14,15 +13,15 @@ from typing import Any, Dict, List, Optional
 class DiscoveredHost:
     """Result from host/service discovery."""
     ip: str
-    mac: Optional[str] = None
-    mac_vendor: Optional[str] = None
-    hostname: Optional[str] = None
-    open_ports: List[Dict[str, Any]] = field(default_factory=list)
-    os_guess: Optional[str] = None
+    mac: str | None = None
+    mac_vendor: str | None = None
+    hostname: str | None = None
+    open_ports: list[dict[str, Any]] = field(default_factory=list)
+    os_guess: str | None = None
     response_time_ms: float = 0.0
-    identification: Optional[Any] = None
-    applicable_modules: List[str] = field(default_factory=list)
-    applicable_cves: List[str] = field(default_factory=list)
+    identification: Any | None = None
+    applicable_modules: list[str] = field(default_factory=list)
+    applicable_cves: list[str] = field(default_factory=list)
     risk_score: float = 0.0
 
 
@@ -44,11 +43,11 @@ class ScanEngine(ABC):
     available: bool = False
 
     @abstractmethod
-    async def discover_hosts(self, target: str, options: ScanOptions) -> List[DiscoveredHost]:
+    async def discover_hosts(self, target: str, options: ScanOptions) -> list[DiscoveredHost]:
         """Discover live hosts in target range."""
         ...
 
     @abstractmethod
-    async def scan_services(self, hosts: List[str], ports: str, options: ScanOptions) -> List[DiscoveredHost]:
+    async def scan_services(self, hosts: list[str], ports: str, options: ScanOptions) -> list[DiscoveredHost]:
         """Scan services on discovered hosts."""
         ...

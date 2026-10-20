@@ -13,7 +13,6 @@ usernames.txt, passwords.txt).
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Optional
@@ -171,7 +170,7 @@ def lookup_by_product(product: str) -> list[IcsCredential]:
     return [c for c in ICS_DEFAULT_CREDENTIALS if product_lower in c.product.lower()]
 
 
-def lookup_by_protocol(protocol: str, port: Optional[int] = None) -> list[IcsCredential]:
+def lookup_by_protocol(protocol: str, port: int | None = None) -> list[IcsCredential]:
     """Return credential entries for a given protocol, optionally filtered by port.
 
     Args:
@@ -188,7 +187,7 @@ def lookup_by_protocol(protocol: str, port: Optional[int] = None) -> list[IcsCre
     return results
 
 
-def to_wordlist(credentials: Optional[list[IcsCredential]] = None) -> list[str]:
+def to_wordlist(credentials: list[IcsCredential] | None = None) -> list[str]:
     """Convert credential entries to ``username:password`` wordlist lines.
 
     Args:
@@ -202,7 +201,7 @@ def to_wordlist(credentials: Optional[list[IcsCredential]] = None) -> list[str]:
     seen: set[str] = set()
     lines: list[str] = []
     for cred in source:
-        entry = "{}:{}".format(cred.username, cred.password)
+        entry = f"{cred.username}:{cred.password}"
         if entry not in seen:
             seen.add(entry)
             lines.append(entry)

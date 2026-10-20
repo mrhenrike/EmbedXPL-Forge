@@ -13,12 +13,12 @@ Inspired by CeWL, cewlai and WordForge.
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 import os
 import re
-from typing import Generator, Iterable, Optional
+from typing import Optional
+from collections.abc import Generator, Iterable
 from urllib.parse import unquote, urlparse
 
 logger = logging.getLogger(__name__)
@@ -151,7 +151,7 @@ def collect_github_org(org: str, max_repos: int = 200,
     return extract_entities(texts)
 
 
-def enrich_local(words: set[str], years: Optional[list[int]] = None) -> set[str]:
+def enrich_local(words: set[str], years: list[int] | None = None) -> set[str]:
     """Enrich a word set with common human mutations, without any network call.
 
     Applies capitalization, a few leet substitutions and year suffixes. This is
@@ -247,7 +247,7 @@ def enrich_llm(words: set[str], provider: str, model: str,
     return out
 
 
-def handle_osint(args, ctx: dict) -> Optional[Generator[str, None, None]]:
+def handle_osint(args, ctx: dict) -> Generator[str, None, None] | None:
     """CLI handler for the ``osint`` command.
 
     Args:

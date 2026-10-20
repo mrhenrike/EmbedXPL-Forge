@@ -15,12 +15,12 @@ Usage:
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 from collections import Counter
 from itertools import product as iterproduct
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -127,7 +127,7 @@ class PasswordGene:
     def _detect_leet(self) -> bool:
         return any(c in _LEET_REVERSE for c in self.raw)
 
-    def _detect_year(self) -> Optional[str]:
+    def _detect_year(self) -> str | None:
         for seg in self.segments:
             if seg["type"] == "D" and len(seg["value"]) == 4 and seg["value"].startswith("20"):
                 return seg["value"]
@@ -242,7 +242,7 @@ def generate_from_dna(
     min_len = dna.length_min
     max_len = dna.length_max
 
-    def emit(s: str) -> Optional[str]:
+    def emit(s: str) -> str | None:
         if s and s not in seen and min_len <= len(s) <= max_len:
             seen.add(s)
             return s

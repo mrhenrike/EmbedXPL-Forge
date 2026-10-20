@@ -18,7 +18,6 @@ Maintainer : Andre Henrique (@mrhenrike) | Uniao Geek
 
 # authorized use only
 """
-from __future__ import annotations
 
 import os
 import shutil
@@ -40,7 +39,7 @@ _DEFAULT_PATHS = (
 )
 
 
-def _find_tool(env_var: str, extra_paths: tuple = ()) -> Optional[Path]:
+def _find_tool(env_var: str, extra_paths: tuple = ()) -> Path | None:
     env = os.environ.get(env_var)
     if env:
         p = Path(env)

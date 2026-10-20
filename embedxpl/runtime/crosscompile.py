@@ -6,10 +6,8 @@ Supports: ARM32, ARM64, MIPS BE, MIPS LE, x86, x64.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional
 
 from . import toolchain
 
@@ -18,13 +16,13 @@ from . import toolchain
 class CrossTarget:
     """Describes a cross-compilation target."""
     arch: str
-    c_compiler: Optional[str]
-    cpp_compiler: Optional[str]
+    c_compiler: str | None
+    cpp_compiler: str | None
     cflags: list[str] = field(default_factory=list)
     ldflags: list[str] = field(default_factory=list)
-    go_goarch: Optional[str] = None
+    go_goarch: str | None = None
     go_goos: str = "linux"
-    rust_target: Optional[str] = None
+    rust_target: str | None = None
     available: bool = False
 
     def __post_init__(self) -> None:

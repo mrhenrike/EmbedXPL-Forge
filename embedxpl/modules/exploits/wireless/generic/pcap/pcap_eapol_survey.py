@@ -6,7 +6,6 @@ for KRACK-era reinstall patterns. Use authorised lab captures only.
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 import os
 

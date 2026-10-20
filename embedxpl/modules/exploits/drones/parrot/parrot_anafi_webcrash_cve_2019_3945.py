@@ -9,7 +9,6 @@ CVE-2019-3945: Parrot ANAFI SDK webserver stack overflow via date field.
 Reported by Trend Micro ZDI. CVSS 5.3 (Medium).
 PREREQ: Connected to ANAFI WiFi network (192.168.42.1).
 """
-from __future__ import annotations
 
 import json
 import logging

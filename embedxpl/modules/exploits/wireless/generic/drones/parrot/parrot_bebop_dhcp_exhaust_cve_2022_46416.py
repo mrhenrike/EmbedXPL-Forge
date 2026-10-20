@@ -9,7 +9,6 @@ the pool, preventing legitimate devices from connecting.
 CVE-2022-46416: DHCP pool exhaustion in Parrot Bebop 2.
 PREREQ: WiFi adapter connected to Bebop 2 network.
 """
-from __future__ import annotations
 
 import logging
 import random

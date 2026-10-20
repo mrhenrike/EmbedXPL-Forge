@@ -8,7 +8,6 @@ Uso:
 
 Author: André Henrique (@mrhenrike)
 """
-from __future__ import annotations
 
 # ── Catalog de traduções ───────────────────────────────────────────────────────
 # Chaves hierárquicas com ponto. Valor por locale.

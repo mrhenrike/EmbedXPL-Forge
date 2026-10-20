@@ -6,7 +6,6 @@ Supports SNMPv1 and SNMPv2c. Uses pysnmp for protocol handling.
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 from typing import List
 
@@ -25,7 +24,7 @@ __info__ = {
     ),
 }
 
-_DEFAULT_COMMUNITIES: List[str] = [
+_DEFAULT_COMMUNITIES: list[str] = [
     "public", "private", "community", "admin", "manager",
     "monitor", "default", "cisco", "router", "switch",
     "secret", "password", "read", "write", "snmp",
@@ -42,7 +41,7 @@ class Exploit(HTTPClient):
     wordlist   = OptString("", "Path to community string wordlist (empty = built-in list)")
     timeout    = OptPort(3, "UDP response timeout (seconds)")
 
-    def _load_communities(self) -> List[str]:
+    def _load_communities(self) -> list[str]:
         """Load community strings from wordlist or use defaults."""
         if self.wordlist:
             try:
@@ -116,7 +115,7 @@ class Exploit(HTTPClient):
             if data:
                 print_success("SNMP port responding")
                 return True
-        except socket.timeout:
+        except TimeoutError:
             print_error("No response on UDP 161")
         except Exception as e:
             print_error(f"Check error: {e}")

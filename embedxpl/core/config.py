@@ -7,7 +7,6 @@ Author: André Henrique (LinkedIn/X: @mrhenrike)
 Version: 0.1.0
 """
 
-from __future__ import annotations
 
 import json
 import logging
@@ -19,23 +18,23 @@ logger = logging.getLogger(__name__)
 
 _CONFIG_FILE = Path(os.path.expanduser("~/.exf_config.json"))
 
-_DEFAULTS: Dict[str, Any] = {
+_DEFAULTS: dict[str, Any] = {
     "compute_mode": "auto",
 }
 
-_cache: Optional[Dict[str, Any]] = None
+_cache: dict[str, Any] | None = None
 
 
-def _load() -> Dict[str, Any]:
+def _load() -> dict[str, Any]:
     """Load config from disk, merging with defaults."""
     global _cache
     if _cache is not None:
         return _cache
 
-    data: Dict[str, Any] = dict(_DEFAULTS)
+    data: dict[str, Any] = dict(_DEFAULTS)
     if _CONFIG_FILE.exists():
         try:
-            with open(_CONFIG_FILE, "r", encoding="utf-8") as fh:
+            with open(_CONFIG_FILE, encoding="utf-8") as fh:
                 disk = json.load(fh)
             if isinstance(disk, dict):
                 data.update(disk)
@@ -84,7 +83,7 @@ def set_val(key: str, value: Any, *, persist: bool = True) -> None:
         _save()
 
 
-def all_values() -> Dict[str, Any]:
+def all_values() -> dict[str, Any]:
     """Return a copy of the full config dict."""
     return dict(_load())
 

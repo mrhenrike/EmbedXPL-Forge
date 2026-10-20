@@ -6,7 +6,6 @@ documentation / cataloging. The file on disk is unchanged (ipsi litteris).
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 import os
 
@@ -57,14 +56,14 @@ class Exploit(Exploit):
             return
 
         meta = read_metasploit_rb_metadata(path)
-        print_success("File: {}".format(path))
+        print_success(f"File: {path}")
         print_status("Name: {}".format(meta.get("name") or "(not detected)"))
         print_status("Authors: {}".format(", ".join(meta.get("authors") or []) or "(not detected)"))
         desc = (meta.get("description") or "").strip()
         if desc:
-            print_status("Description snippet: {}…".format(desc[:400]))
+            print_status(f"Description snippet: {desc[:400]}…")
         refs = meta.get("references") or []
         if refs:
             print_status("References:")
             for r in refs:
-                print_status("  - {}".format(r))
+                print_status(f"  - {r}")

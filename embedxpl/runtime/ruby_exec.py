@@ -6,11 +6,10 @@ Supports both standalone ruby scripts and MSF-format modules.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 import subprocess
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from . import toolchain
 
@@ -28,8 +27,8 @@ class RubyExecutor:
     def run(
         self,
         module: Any,
-        args: Optional[list[str]] = None,
-        use_msf: Optional[bool] = None,
+        args: list[str] | None = None,
+        use_msf: bool | None = None,
         timeout: int = 60,
         **kwargs: Any,
     ) -> dict[str, Any]:
@@ -72,9 +71,9 @@ class RubyExecutor:
     def run_script(
         self,
         src: str | Path,
-        args: Optional[list[str]] = None,
+        args: list[str] | None = None,
         timeout: int = 60,
-        env: Optional[dict] = None,
+        env: dict | None = None,
     ) -> dict[str, Any]:
         """Run any Ruby script directly (no module needed)."""
         if not self.is_available():
@@ -101,7 +100,7 @@ class RubyExecutor:
     def run_msf_module(
         self,
         src: str | Path,
-        options: Optional[dict[str, str]] = None,
+        options: dict[str, str] | None = None,
         timeout: int = 120,
     ) -> dict[str, Any]:
         """Execute an MSF module via msfconsole -r with options set."""

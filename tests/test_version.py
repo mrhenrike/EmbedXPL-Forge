@@ -1,6 +1,5 @@
 """Version consistency checks for EmbedXPL-Forge."""
 
-from __future__ import annotations
 
 import re
 import sys

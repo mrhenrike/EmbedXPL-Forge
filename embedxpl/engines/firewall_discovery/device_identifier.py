@@ -3,7 +3,6 @@
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 import json
 import logging
@@ -19,11 +18,11 @@ class DeviceIdentification:
     """Result of device identification."""
     vendor: str = ""
     product: str = ""
-    model: Optional[str] = None
-    version: Optional[str] = None
+    model: str | None = None
+    version: str | None = None
     device_class: str = ""
     confidence: float = 0.0
-    evidence: List[str] = field(default_factory=list)
+    evidence: list[str] = field(default_factory=list)
     method: str = "heuristic"
 
 
@@ -81,14 +80,14 @@ SIGNATURES = [
 class DeviceIdentifier:
     """Matches scan fingerprints against FXF's supported device catalog."""
 
-    def identify(self, host: Any) -> Optional[DeviceIdentification]:
+    def identify(self, host: Any) -> DeviceIdentification | None:
         """Identify a discovered host against the FXF catalog."""
         evidence_text = self._collect_evidence(host)
         if not evidence_text:
             return None
 
         lower = evidence_text.lower()
-        best: Optional[DeviceIdentification] = None
+        best: DeviceIdentification | None = None
         best_score = 0.0
 
         for sig in SIGNATURES:

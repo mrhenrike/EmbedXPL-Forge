@@ -10,7 +10,6 @@ Dissectors: avalue_uwb.lua, sewio_uwb.lua, ubisense_uwb.lua
 # Research: Nozomi Networks -- BlackHat USA 2022
 # AUTHORIZED USE ONLY -- deploy only on networks you own or control.
 """
-from __future__ import annotations
 
 import logging
 import os

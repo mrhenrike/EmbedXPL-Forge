@@ -9,7 +9,6 @@ passive capture approach using rtl-sdr + dji_droneid decoder.
 Reference: "SkyTrack: Research into DJI DroneID" (NDSS 2023).
 Active decoder requires GNU Radio + compatible SDR hardware.
 """
-from __future__ import annotations
 
 import logging
 

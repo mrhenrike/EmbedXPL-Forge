@@ -35,7 +35,7 @@ _SOURCES_FILE = _RESOURCES_DIR / "firmware_sources.yaml"
 _DEFAULT_OUTPUT_DIR = Path.cwd() / "firmware_downloads"
 
 
-def load_sources() -> Dict[str, Any]:
+def load_sources() -> dict[str, Any]:
     """Load firmware_sources.yaml.
 
     Returns:
@@ -45,12 +45,12 @@ def load_sources() -> Dict[str, Any]:
         FileNotFoundError: If firmware_sources.yaml cannot be found.
         yaml.YAMLError: If the YAML is malformed.
     """
-    with open(_SOURCES_FILE, "r", encoding="utf-8") as fh:
+    with open(_SOURCES_FILE, encoding="utf-8") as fh:
         data = yaml.safe_load(fh)
     return data.get("vendors", {})
 
 
-def list_vendors(sources: Dict[str, Any]) -> None:
+def list_vendors(sources: dict[str, Any]) -> None:
     """Print all available vendor entries.
 
     Args:
@@ -69,7 +69,7 @@ def list_vendors(sources: Dict[str, Any]) -> None:
         )
 
 
-def resolve_vendor(sources: Dict[str, Any], vendor_key: str) -> Optional[Dict[str, Any]]:
+def resolve_vendor(sources: dict[str, Any], vendor_key: str) -> dict[str, Any] | None:
     """Find a vendor entry by key (case-insensitive).
 
     Args:
@@ -82,7 +82,7 @@ def resolve_vendor(sources: Dict[str, Any], vendor_key: str) -> Optional[Dict[st
     return sources.get(vendor_key.lower())
 
 
-def download_firmware(url: str, dest_dir: Path, filename: Optional[str] = None) -> Path:
+def download_firmware(url: str, dest_dir: Path, filename: str | None = None) -> Path:
     """Download a firmware file from a URL to disk.
 
     Args:
@@ -127,9 +127,7 @@ def download_firmware(url: str, dest_dir: Path, filename: Optional[str] = None) 
                     downloaded += len(chunk)
                     if total:
                         pct = downloaded * 100 // total
-                        sys.stdout.write("\r  Progress: {}% ({}/{} bytes)".format(
-                            pct, downloaded, total
-                        ))
+                        sys.stdout.write(f"\r  Progress: {pct}% ({downloaded}/{total} bytes)")
                         sys.stdout.flush()
         print()
         log.info("Download complete: %s (%d bytes)", dest_path, downloaded)

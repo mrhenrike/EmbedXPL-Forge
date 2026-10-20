@@ -47,7 +47,7 @@ def info():
     click.secho('Administrators:', dim=True)
 
     for admin in organization['admins']:
-        click.echo(u' > {:30}\t{:30}'.format(
+        click.echo(' > {:30}\t{:30}'.format(
             click.style(admin['username'], fg='yellow'),
             admin['email'])
         )
@@ -56,7 +56,7 @@ def info():
     if organization['members']:
         click.secho('Members:', dim=True)
         for member in organization['members']:
-            click.echo(u' > {:30}\t{:30}'.format(
+            click.echo(' > {:30}\t{:30}'.format(
                 click.style(member['username'], fg='yellow'),
                 member['email'])
             )

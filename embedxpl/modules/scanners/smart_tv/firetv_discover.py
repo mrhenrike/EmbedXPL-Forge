@@ -71,10 +71,10 @@ class Exploit(HTTPClient):
             )
             sock.close()
             return True
-        except (socket.timeout, ConnectionRefusedError, OSError):
+        except (TimeoutError, ConnectionRefusedError, OSError):
             return False
 
-    def _probe_dial(self) -> Optional[str]:
+    def _probe_dial(self) -> str | None:
         """Fetch the DIAL app-list endpoint.
 
         Sends ``GET /apps/`` to port 8008 and returns the response body
@@ -110,29 +110,25 @@ class Exploit(HTTPClient):
         Prints the ADB port status and parses the DIAL app list to
         confirm or deny a Fire TV identity.
         """
-        print_status("Probing Amazon Fire TV on {}...".format(self.target))
+        print_status(f"Probing Amazon Fire TV on {self.target}...")
 
         adb_open = self._probe_adb()
         if adb_open:
-            print_success("ADB port {}  OPEN — device may have debugging enabled.".format(
-                self.adb_port
-            ))
+            print_success(f"ADB port {self.adb_port}  OPEN — device may have debugging enabled.")
         else:
-            print_status("ADB port {} is closed or filtered.".format(self.adb_port))
+            print_status(f"ADB port {self.adb_port} is closed or filtered.")
 
-        print_status("Probing DIAL app list at http://{}:{}/apps/...".format(
-            self.target, self.port
-        ))
+        print_status(f"Probing DIAL app list at http://{self.target}:{self.port}/apps/...")
         dial_body = self._probe_dial()
         if dial_body is None:
-            print_error("DIAL endpoint did not respond on port {}.".format(self.port))
+            print_error(f"DIAL endpoint did not respond on port {self.port}.")
         else:
             is_firetv = self._fingerprint_dial(dial_body)
             if is_firetv:
                 print_success("Fire TV confirmed via DIAL app fingerprint!")
             else:
                 print_warning("DIAL responded but no Amazon app identifiers found.")
-            print_status("DIAL app list preview:\n{}".format(dial_body[:1000]))
+            print_status(f"DIAL app list preview:\n{dial_body[:1000]}")
 
     @mute
     def check(self) -> bool:

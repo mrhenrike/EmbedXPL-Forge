@@ -3,9 +3,9 @@
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
-from typing import Any, List, Sequence, Tuple
+from typing import Any, List, Tuple
+from collections.abc import Sequence
 
 from firewallxpl.core.tui.console import console, has_rich
 
@@ -15,7 +15,7 @@ if has_rich:
 
 def render_results_table(
     headers: Sequence[str],
-    rows: List[Tuple[Any, ...]],
+    rows: list[tuple[Any, ...]],
     title: str = "",
 ) -> None:
     """Render a results table with colored severity."""
@@ -36,7 +36,7 @@ def render_results_table(
             print(" | ".join(str(c) for c in row))
 
 
-def render_options_table(options: List[Tuple[str, str, str, str]]) -> None:
+def render_options_table(options: list[tuple[str, str, str, str]]) -> None:
     """Render module options table (name, current, required, description)."""
     if has_rich:
         table = Table(title="Module Options", border_style="blue")
@@ -53,7 +53,7 @@ def render_options_table(options: List[Tuple[str, str, str, str]]) -> None:
             print(f"  {name:20s} = {current:15s} [{required}] {desc}")
 
 
-def render_module_list(modules: List[Tuple[str, str]], title: str = "Modules") -> None:
+def render_module_list(modules: list[tuple[str, str]], title: str = "Modules") -> None:
     """Render a list of modules with paths and descriptions."""
     if has_rich:
         table = Table(title=title, border_style="magenta")

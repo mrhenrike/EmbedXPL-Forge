@@ -37,7 +37,6 @@ MITRE ATT&CK:
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import hashlib
 import logging
@@ -76,7 +75,7 @@ _MIRAI_SCAN_CB_PORT: int = 9555
 _MIRAI_CNC_PING: bytes = b"\x00\x00\x00\x00\x01\x00"
 
 # MySQL banner markers consistent with a Mirai CnC server
-_MYSQL_MIRAI_MARKERS: Tuple[bytes, ...] = (
+_MYSQL_MIRAI_MARKERS: tuple[bytes, ...] = (
     b"mirai",
     b"5.7.",    # MySQL 5.7 common in Mirai CnC setups
     b"5.6.",
@@ -85,7 +84,7 @@ _MYSQL_MIRAI_MARKERS: Tuple[bytes, ...] = (
 )
 
 # Attack vector opcodes from lion001am-condi/bot/attack.h
-MIRAI_ATTACK_VECTORS: Dict[int, str] = {
+MIRAI_ATTACK_VECTORS: dict[int, str] = {
     0:  "ATK_VEC_STOMP",
     1:  "ATK_VEC_UDP_PLAIN",
     2:  "ATK_VEC_STD",
@@ -106,7 +105,7 @@ MIRAI_ATTACK_VECTORS: Dict[int, str] = {
 }
 
 # MySQL C2 schema table names (jgamblin-mirai-source/scripts/db.sql)
-MIRAI_DB_SCHEMA: Dict[str, List[str]] = {
+MIRAI_DB_SCHEMA: dict[str, list[str]] = {
     "database": ["mirai"],
     "tables":   ["history", "users", "whitelist"],
     "users_cols": ["id", "username", "password", "duration_limit", "cooldown",
@@ -163,10 +162,9 @@ class Exploit(BaseExploit):
 
     def run(self) -> None:
         """Execute three-channel Mirai CnC infrastructure probe."""
-        print_status("[CnCDetect] Probing {} for Mirai/Condi CnC infrastructure...".format(
-            self.target))
+        print_status(f"[CnCDetect] Probing {self.target} for Mirai/Condi CnC infrastructure...")
 
-        findings: List[str] = []
+        findings: list[str] = []
         score: int = 0
 
         # Channel 1: CnC bot listener port 3778
@@ -174,18 +172,18 @@ class Exploit(BaseExploit):
         if result_cnc:
             score += 3
             findings.append(result_cnc)
-            print_warning("[CnCDetect] [+3] {}".format(result_cnc))
+            print_warning(f"[CnCDetect] [+3] {result_cnc}")
         elif self.verbose:
-            print_info("[CnCDetect] TCP {} closed/no response.".format(_MIRAI_CNC_PORT))
+            print_info(f"[CnCDetect] TCP {_MIRAI_CNC_PORT} closed/no response.")
 
         # Channel 2: Scan-callback port 9555
         result_cb = self._probe_scan_callback()
         if result_cb:
             score += 2
             findings.append(result_cb)
-            print_warning("[CnCDetect] [+2] {}".format(result_cb))
+            print_warning(f"[CnCDetect] [+2] {result_cb}")
         elif self.verbose:
-            print_info("[CnCDetect] TCP {} closed/no response.".format(_MIRAI_SCAN_CB_PORT))
+            print_info(f"[CnCDetect] TCP {_MIRAI_SCAN_CB_PORT} closed/no response.")
 
         # Channel 3: MySQL 3306
         if self.probe_mysql:
@@ -193,38 +191,35 @@ class Exploit(BaseExploit):
             if result_mysql:
                 score += 2
                 findings.append(result_mysql)
-                print_warning("[CnCDetect] [+2] {}".format(result_mysql))
+                print_warning(f"[CnCDetect] [+2] {result_mysql}")
             elif self.verbose:
                 print_info("[CnCDetect] TCP 3306 closed/no MySQL banner.")
 
         # Verdict
-        print_info("[CnCDetect] Detection score: {}/7 | Findings: {}".format(
-            score, len(findings)))
+        print_info(f"[CnCDetect] Detection score: {score}/7 | Findings: {len(findings)}")
 
         if score >= 5:
             print_warning(
-                "[CnCDetect] HIGH CONFIDENCE Mirai/Condi CnC on {} (score={}/7).".format(
-                    self.target, score)
+                f"[CnCDetect] HIGH CONFIDENCE Mirai/Condi CnC on {self.target} (score={score}/7)."
             )
         elif score >= 2:
             print_warning(
-                "[CnCDetect] POSSIBLE Mirai/Condi CnC infrastructure on {} (score={}/7). "
-                "Investigate further.".format(self.target, score)
+                f"[CnCDetect] POSSIBLE Mirai/Condi CnC infrastructure on {self.target} (score={score}/7). "
+                "Investigate further."
             )
         else:
-            print_success("[CnCDetect] No strong CnC indicators detected on {}.".format(
-                self.target))
+            print_success(f"[CnCDetect] No strong CnC indicators detected on {self.target}.")
 
         if findings:
             print_info("[CnCDetect] Summary of positive indicators:")
             for f in findings:
-                print_info("[CnCDetect]   * {}".format(f))
+                print_info(f"[CnCDetect]   * {f}")
 
     # -------------------------------------------------------------------------
     # Channel probes
     # -------------------------------------------------------------------------
 
-    def _probe_cnc_port(self) -> Optional[str]:
+    def _probe_cnc_port(self) -> str | None:
         """Probe TCP 3778 for Mirai CnC bot listener.
 
         Returns:
@@ -241,7 +236,7 @@ class Exploit(BaseExploit):
             _MIRAI_CNC_PORT, "Condi", repr(banner[:32]), banner_hash)
         return finding
 
-    def _probe_scan_callback(self) -> Optional[str]:
+    def _probe_scan_callback(self) -> str | None:
         """Probe TCP 9555 for Mirai scan-callback (loader result) listener.
 
         Returns:
@@ -254,7 +249,7 @@ class Exploit(BaseExploit):
         return "TCP {} (Mirai scan-callback / loader) OPEN | banner={} | md5={}".format(
             _MIRAI_SCAN_CB_PORT, repr(banner[:32] if banner else b""), banner_hash)
 
-    def _probe_mysql(self) -> Optional[str]:
+    def _probe_mysql(self) -> str | None:
         """Probe TCP 3306 for MySQL and check banner for Mirai CnC indicators.
 
         Returns:
@@ -284,14 +279,14 @@ class Exploit(BaseExploit):
             sock.settimeout(timeout)
             sock.connect((host, port))
             return True
-        except (OSError, socket.timeout):
+        except (TimeoutError, OSError):
             return False
         finally:
             sock.close()
 
     def _grab_banner(
-        self, host: str, port: int, send: Optional[bytes] = None
-    ) -> Optional[bytes]:
+        self, host: str, port: int, send: bytes | None = None
+    ) -> bytes | None:
         """Connect, optionally send bytes, and return the response banner.
 
         Args:
@@ -311,9 +306,9 @@ class Exploit(BaseExploit):
             time.sleep(0.3)
             try:
                 return sock.recv(512)
-            except socket.timeout:
+            except TimeoutError:
                 return b""
-        except (OSError, socket.timeout):
+        except (TimeoutError, OSError):
             return None
         finally:
             sock.close()

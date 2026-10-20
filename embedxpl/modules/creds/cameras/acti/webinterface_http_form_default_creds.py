@@ -70,7 +70,7 @@ class Exploit(HTTPClient):
                     if self.stop_on_success:
                         running.clear()
                 else:
-                    print_error("Authentication Failed - Username: '{}' Password: '{}'".format(username, password), verbose=self.verbosity)
+                    print_error(f"Authentication Failed - Username: '{username}' Password: '{password}'", verbose=self.verbosity)
             except StopIteration:
                 break
 

@@ -6,7 +6,6 @@ Runs the module's run() method directly in-process.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 from typing import Any
 

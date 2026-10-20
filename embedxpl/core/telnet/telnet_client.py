@@ -26,7 +26,7 @@ class TelnetCli:
         self.telnet_port = telnet_port
         self.verbosity = verbosity
 
-        self.peer = "{}:{}".format(self.telnet_target, self.telnet_port)
+        self.peer = f"{self.telnet_target}:{self.telnet_port}"
 
         self.telnet_client = None
 
@@ -67,10 +67,10 @@ class TelnetCli:
                 (i, obj, res) = self.telnet_client.expect([b"Incorrect", b"incorrect"], 5)
 
                 if (i == -1 and any([x in res for x in [b"#", b"$", b">"]])) or len(res) > 500:  # big banner e.g. mikrotik
-                    print_success(self.peer, "Telnet Authentication Successful - Username: '{}' Password: '{}'".format(username, password), verbose=self.verbosity)
+                    print_success(self.peer, f"Telnet Authentication Successful - Username: '{username}' Password: '{password}'", verbose=self.verbosity)
                     return True
                 else:
-                    print_error(self.peer, "Telnet Authentication Failed - Username: '{}' Password: '{}'".format(username, password), verbose=self.verbosity)
+                    print_error(self.peer, f"Telnet Authentication Failed - Username: '{username}' Password: '{password}'", verbose=self.verbosity)
                     break
             except Exception as err:
                 print_error(self.peer, "Telnet Error while authenticating to the server", err, verbose=self.verbosity)

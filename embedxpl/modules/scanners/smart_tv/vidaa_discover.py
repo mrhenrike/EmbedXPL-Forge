@@ -58,7 +58,7 @@ class Exploit(HTTPClient):
     # Internal helpers
     # ------------------------------------------------------------------
 
-    def _http_probe(self, probe_port: int) -> Optional[str]:
+    def _http_probe(self, probe_port: int) -> str | None:
         """Send GET / to a specific port and return the response text.
 
         Args:
@@ -72,16 +72,16 @@ class Exploit(HTTPClient):
             import urllib3
             urllib3.disable_warnings()
             scheme = "http"
-            url    = "{}://{}:{}/".format(scheme, self.target, probe_port)
+            url    = f"{scheme}://{self.target}:{probe_port}/"
             resp   = requests.get(url, timeout=self.timeout, verify=False, allow_redirects=False)
             header_str = " ".join(
-                "{}: {}".format(k, v) for k, v in resp.headers.items()
+                f"{k}: {v}" for k, v in resp.headers.items()
             )
             return header_str + " " + (resp.text[:1000] if resp.text else "")
         except Exception:
             return None
 
-    def _tcp_banner(self, probe_port: int) -> Optional[str]:
+    def _tcp_banner(self, probe_port: int) -> str | None:
         """Grab a TCP banner by sending a minimal HTTP GET.
 
         Args:
@@ -98,7 +98,7 @@ class Exploit(HTTPClient):
             data = sock.recv(512)
             sock.close()
             return data.decode(errors="replace")
-        except (socket.timeout, ConnectionRefusedError, OSError):
+        except (TimeoutError, ConnectionRefusedError, OSError):
             return None
 
     def _has_vidaa_marker(self, text: str) -> bool:
@@ -124,23 +124,23 @@ class Exploit(HTTPClient):
         banner grabs on ports 4444 and 8081.  Reports whether each port
         contains a Hisense/VIDAA fingerprint.
         """
-        print_status("Scanning {} for Hisense VIDAA OS...".format(self.target))
+        print_status(f"Scanning {self.target} for Hisense VIDAA OS...")
 
         for probe_port in (int(self.port),) + tuple(
             p for p in _PROBE_PORTS if p != int(self.port)
         ):
-            print_status("Probing port {}...".format(probe_port))
+            print_status(f"Probing port {probe_port}...")
             text = self._http_probe(probe_port) or self._tcp_banner(probe_port)
             if text is None:
-                print_status("Port {} — no response.".format(probe_port))
+                print_status(f"Port {probe_port} — no response.")
                 continue
             if self._has_vidaa_marker(text):
                 print_success(
-                    "Hisense / VIDAA OS fingerprint found on port {}!".format(probe_port)
+                    f"Hisense / VIDAA OS fingerprint found on port {probe_port}!"
                 )
-                print_status("Banner excerpt: {}".format(text[:300]))
+                print_status(f"Banner excerpt: {text[:300]}")
             else:
-                print_status("Port {} responded — no VIDAA marker detected.".format(probe_port))
+                print_status(f"Port {probe_port} responded — no VIDAA marker detected.")
 
     @mute
     def check(self) -> bool:

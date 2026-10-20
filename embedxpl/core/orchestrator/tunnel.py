@@ -93,14 +93,14 @@ class TunnelHandle:
     """
 
     tunnel_id: str = ""
-    config: Optional[TunnelConfig] = None
+    config: TunnelConfig | None = None
     local_port: int = 0
     pid: int = 0
-    thread: Optional[threading.Thread] = None
+    thread: threading.Thread | None = None
     active: bool = False
     created_at: float = 0.0
-    _process: Optional[subprocess.Popen] = field(default=None, repr=False)
-    _stop_event: Optional[threading.Event] = field(default=None, repr=False)
+    _process: subprocess.Popen | None = field(default=None, repr=False)
+    _stop_event: threading.Event | None = field(default=None, repr=False)
 
 
 class TunnelManager:
@@ -128,7 +128,7 @@ class TunnelManager:
         """Generate unique tunnel ID."""
         with self._lock:
             self._counter += 1
-            return "tun-{:04d}".format(self._counter)
+            return f"tun-{self._counter:04d}"
 
     def _find_free_port(self, bind_addr: str = "127.0.0.1") -> int:
         """Find a free TCP port on the specified interface."""
@@ -156,7 +156,7 @@ class TunnelManager:
         with self._lock:
             if len(self._tunnels) >= self._max_tunnels:
                 raise RuntimeError(
-                    "Maximum tunnel count reached ({})".format(self._max_tunnels)
+                    f"Maximum tunnel count reached ({self._max_tunnels})"
                 )
 
         if config.local_port == 0:
@@ -181,7 +181,7 @@ class TunnelManager:
         elif config.tunnel_type in ("icmp_tunnel", "dns_tunnel"):
             self._start_external_tunnel(handle)
         else:
-            raise RuntimeError("Tunnel type not implemented: {}".format(config.tunnel_type))
+            raise RuntimeError(f"Tunnel type not implemented: {config.tunnel_type}")
 
         handle.active = True
         with self._lock:
@@ -196,7 +196,7 @@ class TunnelManager:
             remote_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             remote_sock.settimeout(10)
             remote_sock.connect((remote_host, remote_port))
-        except (socket.error, OSError):
+        except OSError:
             client_sock.close()
             return
 
@@ -207,7 +207,7 @@ class TunnelManager:
                     if not data:
                         break
                     dst.sendall(data)
-            except (socket.error, OSError):
+            except OSError:
                 pass
             finally:
                 try:
@@ -245,9 +245,9 @@ class TunnelManager:
                         args=(client, cfg.remote_host, cfg.remote_port, stop_event),
                         daemon=True,
                     ).start()
-                except socket.timeout:
+                except TimeoutError:
                     continue
-                except (socket.error, OSError):
+                except OSError:
                     break
             server_sock.close()
 
@@ -275,12 +275,12 @@ class TunnelManager:
                     try:
                         resp, _ = remote.recvfrom(65535)
                         sock.sendto(resp, addr)
-                    except socket.timeout:
+                    except TimeoutError:
                         pass
                     remote.close()
-                except socket.timeout:
+                except TimeoutError:
                     continue
-                except (socket.error, OSError):
+                except OSError:
                     break
             sock.close()
 
@@ -293,9 +293,8 @@ class TunnelManager:
         cfg = handle.config
         cmd = [
             "ssh", "-N", "-L",
-            "{}:{}:{}:{}".format(cfg.bind_addr, cfg.local_port,
-                                 cfg.remote_host, cfg.remote_port),
-            "{}@{}".format(cfg.ssh_user, cfg.remote_host),
+            f"{cfg.bind_addr}:{cfg.local_port}:{cfg.remote_host}:{cfg.remote_port}",
+            f"{cfg.ssh_user}@{cfg.remote_host}",
             "-o", "StrictHostKeyChecking=no",
             "-o", "UserKnownHostsFile=/dev/null",
             "-o", "ConnectTimeout=10",
@@ -313,7 +312,7 @@ class TunnelManager:
             handle._process = proc
             handle.pid = proc.pid
         except (FileNotFoundError, OSError) as exc:
-            raise RuntimeError("Failed to start SSH tunnel: {}".format(exc))
+            raise RuntimeError(f"Failed to start SSH tunnel: {exc}")
 
     def _start_http_tunnel(self, handle: TunnelHandle) -> None:
         """Start HTTP CONNECT-based tunnel."""
@@ -323,10 +322,7 @@ class TunnelManager:
 
         def http_connect_relay(client_sock):
             try:
-                connect_req = "CONNECT {}:{} HTTP/1.1\r\nHost: {}:{}\r\n\r\n".format(
-                    cfg.remote_host, cfg.remote_port,
-                    cfg.remote_host, cfg.remote_port,
-                )
+                connect_req = f"CONNECT {cfg.remote_host}:{cfg.remote_port} HTTP/1.1\r\nHost: {cfg.remote_host}:{cfg.remote_port}\r\n\r\n"
                 proxy_host, _, proxy_port = (cfg.http_proxy or "").partition(":")
                 proxy_port = int(proxy_port) if proxy_port else 8080
                 proxy_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -339,7 +335,7 @@ class TunnelManager:
                     client_sock.close()
                     return
                 self._tcp_relay(client_sock, cfg.remote_host, cfg.remote_port, stop_event)
-            except (socket.error, OSError, ValueError):
+            except (OSError, ValueError):
                 try:
                     client_sock.close()
                 except OSError:
@@ -358,9 +354,9 @@ class TunnelManager:
                     threading.Thread(
                         target=http_connect_relay, args=(client,), daemon=True,
                     ).start()
-                except socket.timeout:
+                except TimeoutError:
                     continue
-                except (socket.error, OSError):
+                except OSError:
                     break
             server_sock.close()
 
@@ -371,9 +367,9 @@ class TunnelManager:
     def _start_external_tunnel(self, handle: TunnelHandle) -> None:
         """Placeholder for ICMP/DNS tunnels requiring external tools."""
         raise RuntimeError(
-            "Tunnel type '{}' requires external tooling. "
+            f"Tunnel type '{handle.config.tunnel_type}' requires external tooling. "
             "Use a dedicated tool (e.g., iodine for DNS, ptunnel for ICMP) "
-            "and configure the local port manually.".format(handle.config.tunnel_type)
+            "and configure the local port manually."
         )
 
     def destroy(self, tunnel_id: str) -> bool:
@@ -423,7 +419,7 @@ class TunnelManager:
         with self._lock:
             return list(self._tunnels.values())
 
-    def get(self, tunnel_id: str) -> Optional[TunnelHandle]:
+    def get(self, tunnel_id: str) -> TunnelHandle | None:
         """Get a tunnel handle by ID."""
         with self._lock:
             return self._tunnels.get(tunnel_id)

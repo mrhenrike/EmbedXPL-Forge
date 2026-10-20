@@ -112,7 +112,7 @@ class Exploit(Exploit):
             resp = sock.recv(260)
             sock.close()
             return resp
-        except (socket.error, OSError):
+        except OSError:
             return b""
 
     def _parse_server_id(self, resp: bytes) -> dict:
@@ -132,7 +132,7 @@ class Exploit(Exploit):
                     result["run_status"] = "ON" if resp[9 + byte_count] == 0xFF else "OFF"
         elif fc == (self._FC_REPORT_SERVER_ID | 0x80):
             exc = resp[8] if len(resp) > 8 else 0
-            result["error"] = "Exception code {}".format(exc)
+            result["error"] = f"Exception code {exc}"
 
         return result
 
@@ -170,12 +170,12 @@ class Exploit(Exploit):
                 if offset + obj_len > len(resp):
                     break
                 obj_val = resp[offset:offset + obj_len].decode("ascii", errors="replace")
-                key = obj_names.get(obj_id, "object_0x{:02x}".format(obj_id))
+                key = obj_names.get(obj_id, f"object_0x{obj_id:02x}")
                 result[key] = obj_val
                 offset += obj_len
         elif fc == (self._FC_MEI | 0x80):
             exc = resp[8] if len(resp) > 8 else 0
-            result["error"] = "Exception code {}".format(exc)
+            result["error"] = f"Exception code {exc}"
 
         return result
 
@@ -206,14 +206,14 @@ class Exploit(Exploit):
             sock.connect((self.target, self.port))
             sock.close()
             return True
-        except (socket.error, OSError):
+        except OSError:
             return False
 
     @multi
     def run(self) -> None:
         """Execute Modbus device identification scan."""
         print_status(
-            "Scanning Modbus TCP at {}:{}".format(self.target, self.port)
+            f"Scanning Modbus TCP at {self.target}:{self.port}"
         )
 
         if not self.check():
@@ -230,7 +230,7 @@ class Exploit(Exploit):
                 if "vendor_name" in info or "server_id" in info:
                     found += 1
                     self._print_device_info(info)
-            print_info("Scan complete: {} device(s) found".format(found))
+            print_info(f"Scan complete: {found} device(s) found")
         else:
             info = self._scan_unit(self.unit_id)
             if "error" in info and not any(

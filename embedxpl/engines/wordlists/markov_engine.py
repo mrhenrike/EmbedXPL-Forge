@@ -15,7 +15,6 @@ Key differences from classic Markov:
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import heapq
 import json
@@ -23,7 +22,8 @@ import logging
 import math
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -254,7 +254,7 @@ class MarkovModel:
         return "\n".join(lines)
 
 
-def handle_markov(args, ctx: dict) -> Optional[Generator[str, None, None]]:
+def handle_markov(args, ctx: dict) -> Generator[str, None, None] | None:
     """CLI handler: train or generate using Markov model.
 
     Args:

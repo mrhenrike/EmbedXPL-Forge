@@ -5,7 +5,6 @@
 Scans visible WiFi networks for DJI drone SSIDs and estimates the drone
 model from the SSID prefix. Attempts basic connectivity info.
 """
-from __future__ import annotations
 
 import logging
 import re

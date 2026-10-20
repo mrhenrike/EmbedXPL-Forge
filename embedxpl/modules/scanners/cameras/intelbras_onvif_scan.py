@@ -65,7 +65,7 @@ class Exploit(HTTPClient):
 
     def run(self) -> None:
         print_status(
-            "Probing ONVIF endpoints on {}:{}...".format(self.target, self.port)
+            f"Probing ONVIF endpoints on {self.target}:{self.port}..."
         )
 
         found_endpoints = []
@@ -73,7 +73,7 @@ class Exploit(HTTPClient):
             resp = self.http_request(method="GET", path=path)
             if resp and resp.status_code in (200, 405):
                 found_endpoints.append(path)
-                print_success("ONVIF endpoint active: {}".format(path))
+                print_success(f"ONVIF endpoint active: {path}")
 
         if found_endpoints:
             print_status("Attempting GetDeviceInformation SOAP request...")
@@ -90,14 +90,14 @@ class Exploit(HTTPClient):
                     import re
                     for tag in ("Manufacturer", "Model", "FirmwareVersion", "SerialNumber"):
                         m = re.search(
-                            r"<(?:\w+:)?{0}>(.*?)</(?:\w+:)?{0}>".format(tag), text
+                            rf"<(?:\w+:)?{tag}>(.*?)</(?:\w+:)?{tag}>", text
                         )
                         if m:
-                            print_success("{}: {}".format(tag, m.group(1)))
+                            print_success(f"{tag}: {m.group(1)}")
                 elif "NotAuthorized" in text or "Sender" in text:
                     print_status("ONVIF requires authentication (expected)")
                 else:
-                    print_status("ONVIF response: {}".format(text[:200]))
+                    print_status(f"ONVIF response: {text[:200]}")
         else:
             print_status("No active ONVIF endpoints found")
 

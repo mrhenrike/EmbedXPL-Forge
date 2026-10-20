@@ -64,16 +64,16 @@ class Exploit(TCPClient):
             output = apiros.login()
 
             if output[0][0] == "!done":
-                print_success("Authentication Succeed - Username: '{}' Password: '{}'".format(username, password), verbose=self.verbosity)
+                print_success(f"Authentication Succeed - Username: '{username}' Password: '{password}'", verbose=self.verbosity)
                 self.credentials.append((self.target, self.port, self.target_protocol, username, password))
                 apiros.close()
                 return True
             else:
-                print_error("Unexpected Response - Username: '{}' Password: '{}'".format(username, password), verbose=self.verbossity)
+                print_error(f"Unexpected Response - Username: '{username}' Password: '{password}'", verbose=self.verbossity)
 
         except LoginError:
             apiros.close()
-            print_error("Authentication Failed - Username: '{}' Password: '{}'".format(username, password), verbose=self.verbosity)
+            print_error(f"Authentication Failed - Username: '{username}' Password: '{password}'", verbose=self.verbosity)
         except ssl.SSLError:
             apiros.close()
             print_error("SSL Error, retrying...")
@@ -94,7 +94,7 @@ class Exploit(TCPClient):
                 print_error("Connection closed by remote end")
                 break
 
-            except socket.timeout:
+            except TimeoutError:
                 print_error("Timeout waiting for the response")
                 break
 

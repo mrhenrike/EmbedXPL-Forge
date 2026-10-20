@@ -9,17 +9,17 @@
 
 """Run full RouterOS security suite across hardened and default VMs."""
 
-from __future__ import annotations
 
 import argparse
 import json
 import logging
 import socket
 import sys
+from collections.abc import Iterable
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Tuple
+from typing import Any
 
 import requests
 import urllib3
@@ -74,17 +74,17 @@ def tcp_open(ip: str, port: int, timeout: float = 1.5) -> bool:
         sock.close()
 
 
-def detect_open_ports(ip: str) -> List[int]:
+def detect_open_ports(ip: str) -> list[int]:
     """Detect relevant service ports."""
     ports = [21, 22, 23, 53, 80, 161, 443, 8291, 8728, 8729, 20561]
     return [port for port in ports if tcp_open(ip, port)]
 
 
-def auth_service_matrix(target: TargetConfig, users: List[Tuple[str, str]]) -> List[Dict[str, Any]]:
+def auth_service_matrix(target: TargetConfig, users: list[tuple[str, str]]) -> list[dict[str, Any]]:
     """Build exhaustive channel/user authentication matrix."""
-    matrix: List[Dict[str, Any]] = []
+    matrix: list[dict[str, Any]] = []
     for username, password in users:
-        row: Dict[str, Any] = {"username": username}
+        row: dict[str, Any] = {"username": username}
         row["api"] = auth_api(target.ip, username, password)
         row["rest"] = auth_rest(target.ip, username, password)
         row["ssh"] = auth_ssh(target.ip, username, password)
@@ -96,7 +96,7 @@ def auth_service_matrix(target: TargetConfig, users: List[Tuple[str, str]]) -> L
     return matrix
 
 
-def auth_api(ip: str, username: str, password: str) -> Dict[str, Any]:
+def auth_api(ip: str, username: str, password: str) -> dict[str, Any]:
     """Authenticate via RouterOS API."""
     if not tcp_open(ip, 8728):
         return {"reachable": False, "ok": False, "error": "port_closed"}
@@ -112,7 +112,7 @@ def auth_api(ip: str, username: str, password: str) -> Dict[str, Any]:
         return {"reachable": True, "ok": False, "error": str(exc)[:150]}
 
 
-def auth_rest(ip: str, username: str, password: str) -> Dict[str, Any]:
+def auth_rest(ip: str, username: str, password: str) -> dict[str, Any]:
     """Authenticate via REST API."""
     if not tcp_open(ip, 80):
         return {"reachable": False, "ok": False, "error": "port_closed"}
@@ -128,7 +128,7 @@ def auth_rest(ip: str, username: str, password: str) -> Dict[str, Any]:
         return {"reachable": True, "ok": False, "error": str(exc)[:150]}
 
 
-def auth_ssh(ip: str, username: str, password: str) -> Dict[str, Any]:
+def auth_ssh(ip: str, username: str, password: str) -> dict[str, Any]:
     """Authenticate via SSH."""
     if not tcp_open(ip, 22):
         return {"reachable": False, "ok": False, "error": "port_closed"}
@@ -153,7 +153,7 @@ def auth_ssh(ip: str, username: str, password: str) -> Dict[str, Any]:
         return {"reachable": True, "ok": False, "error": str(exc)[:150]}
 
 
-def auth_ftp(ip: str, username: str, password: str) -> Dict[str, Any]:
+def auth_ftp(ip: str, username: str, password: str) -> dict[str, Any]:
     """Authenticate via FTP."""
     if not tcp_open(ip, 21):
         return {"reachable": False, "ok": False, "error": "port_closed"}
@@ -168,7 +168,7 @@ def auth_ftp(ip: str, username: str, password: str) -> Dict[str, Any]:
         return {"reachable": True, "ok": False, "error": str(exc)[:150]}
 
 
-def auth_telnet(ip: str, username: str, password: str) -> Dict[str, Any]:
+def auth_telnet(ip: str, username: str, password: str) -> dict[str, Any]:
     """Authenticate via Telnet using prompt-based check."""
     if not tcp_open(ip, 23):
         return {"reachable": False, "ok": False, "error": "port_closed"}
@@ -200,12 +200,12 @@ def auth_telnet(ip: str, username: str, password: str) -> Dict[str, Any]:
         sock.close()
 
 
-def probe_only(ip: str, port: int) -> Dict[str, Any]:
+def probe_only(ip: str, port: int) -> dict[str, Any]:
     """Simple TCP reachability probe."""
     return {"reachable": tcp_open(ip, port), "ok": False}
 
 
-def snmp_full(target: TargetConfig, mib_path: Path) -> Dict[str, Any]:
+def snmp_full(target: TargetConfig, mib_path: Path) -> dict[str, Any]:
     """Run complete SNMP checks: communities, GET/SET, and MIB validation."""
     scanner = SNMPScanner(target.ip, port=161, timeout=2.5)
     result = scanner.run(
@@ -225,12 +225,12 @@ def snmp_full(target: TargetConfig, mib_path: Path) -> Dict[str, Any]:
     return result
 
 
-def web_full(target: TargetConfig) -> Dict[str, Any]:
+def web_full(target: TargetConfig) -> dict[str, Any]:
     """Run dedicated web security checks."""
     tester = WebSecurityTester(target.ip, http_port=80, https_port=443, timeout=5.0)
     result = tester.run(username=target.username, password=target.password)
 
-    cookie_checks: List[Dict[str, Any]] = []
+    cookie_checks: list[dict[str, Any]] = []
     for endpoint in ["/", "/webfig/", "/rest/system/resource", "/rest/ip/service", "/rest/user"]:
         if not tcp_open(target.ip, 80):
             cookie_checks.append({"endpoint": endpoint, "reachable": False, "error": "port_closed"})
@@ -256,13 +256,13 @@ def web_full(target: TargetConfig) -> Dict[str, Any]:
     return result
 
 
-def neighbor_matrix(target: TargetConfig, iface_ip: str) -> Dict[str, Any]:
+def neighbor_matrix(target: TargetConfig, iface_ip: str) -> dict[str, Any]:
     """Run MNDP/neighbor checks."""
     discovery = MNDPDiscovery(timeout=3.0, iface_ip=iface_ip)
     devices = discovery.discover()
     target_view = [device for device in devices if device.get("ip") == target.ip]
 
-    rest_data: Dict[str, Any] = {}
+    rest_data: dict[str, Any] = {}
     if tcp_open(target.ip, 80):
         for endpoint in ["/rest/ip/neighbor", "/rest/ip/neighbor/discovery-settings"]:
             try:
@@ -288,7 +288,7 @@ def neighbor_matrix(target: TargetConfig, iface_ip: str) -> Dict[str, Any]:
     }
 
 
-def cve_exposure(target: TargetConfig) -> Dict[str, Any]:
+def cve_exposure(target: TargetConfig) -> dict[str, Any]:
     """Estimate CVE exposure by version hint and service posture."""
     all_cves = get_all_cves()
     version_cves = get_cves_for_version(target.version_hint)
@@ -302,11 +302,11 @@ def cve_exposure(target: TargetConfig) -> Dict[str, Any]:
     }
 
 
-def lateralization_matrix(targets: List[TargetConfig]) -> Dict[str, Any]:
+def lateralization_matrix(targets: list[TargetConfig]) -> dict[str, Any]:
     """Validate east-west reachability using RouterOS `/ping` from each VM."""
-    matrix: Dict[str, Any] = {}
+    matrix: dict[str, Any] = {}
     for source in targets:
-        row: Dict[str, Any] = {}
+        row: dict[str, Any] = {}
         if not auth_api(source.ip, source.username, source.password).get("ok"):
             matrix[source.label] = {"error": "api_login_failed"}
             continue
@@ -329,7 +329,7 @@ def lateralization_matrix(targets: List[TargetConfig]) -> Dict[str, Any]:
     return matrix
 
 
-def ensure_timing_user(target: TargetConfig, username: str, password: str) -> Dict[str, Any]:
+def ensure_timing_user(target: TargetConfig, username: str, password: str) -> dict[str, Any]:
     """Ensure dedicated timing user exists on default targets."""
     for attempt in range(1, 4):
         if not auth_api(target.ip, target.username, target.password).get("ok"):
@@ -359,7 +359,7 @@ def ensure_timing_user(target: TargetConfig, username: str, password: str) -> Di
     return {"created": False, "error": "admin_api_login_failed_or_reset"}
 
 
-def timing_char_by_char(target: TargetConfig, username: str, password: str) -> Dict[str, Any]:
+def timing_char_by_char(target: TargetConfig, username: str, password: str) -> dict[str, Any]:
     """Run timing oracle and determine if char-by-char appears feasible."""
     attacker = TimingOracleAttacker(target.ip, username=username, timeout=2.5)
     try:
@@ -403,9 +403,9 @@ def timing_char_by_char(target: TargetConfig, username: str, password: str) -> D
     }
 
 
-def compare_before_after(before_targets: Iterable[Dict[str, Any]], after_targets: Iterable[Dict[str, Any]]) -> Dict[str, Any]:
+def compare_before_after(before_targets: Iterable[dict[str, Any]], after_targets: Iterable[dict[str, Any]]) -> dict[str, Any]:
     """Build high-level pass/fail comparison for requested domains."""
-    def status(items: Iterable[Dict[str, Any]], key: str) -> str:
+    def status(items: Iterable[dict[str, Any]], key: str) -> str:
         subset = list(items)
         if not subset:
             return "unknown"
@@ -425,13 +425,13 @@ def compare_before_after(before_targets: Iterable[Dict[str, Any]], after_targets
 
 def run_suite(
     hardened_target: TargetConfig,
-    default_targets: List[TargetConfig],
+    default_targets: list[TargetConfig],
     mib_path: Path,
     iface_ip: str,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Execute full suite and return structured result."""
     all_targets = [hardened_target] + default_targets
-    per_target: List[Dict[str, Any]] = []
+    per_target: list[dict[str, Any]] = []
 
     for target in all_targets:
         LOGGER.info("Running suite for %s (%s)", target.label, target.ip)
@@ -461,7 +461,7 @@ def run_suite(
         }
         per_target.append(target_result)
 
-    timing_results: List[Dict[str, Any]] = []
+    timing_results: list[dict[str, Any]] = []
     for target in default_targets:
         ensure_status = ensure_timing_user(target, username="oracletest", password="C0C0D3GR120")
         if ensure_status.get("created"):
@@ -484,7 +484,7 @@ def run_suite(
     comparison = compare_before_after(before_targets=before, after_targets=after)
 
     return {
-        "executed_at": datetime.now(timezone.utc).isoformat(),
+        "executed_at": datetime.now(UTC).isoformat(),
         "targets": per_target,
         "lateralization": lateralization_matrix(all_targets),
         "char_by_char": timing_results,

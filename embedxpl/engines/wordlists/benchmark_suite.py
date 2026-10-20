@@ -18,7 +18,6 @@ Inspired by MAYA (IEEE S&P 2026) benchmarking framework.
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import json
 import logging
@@ -27,7 +26,8 @@ import re
 import time
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -603,7 +603,7 @@ def mergeability_index(matches_a: set[str], matches_b: set[str]) -> float:
 def matches_per_pattern(
     wordlist_path: str,
     reference_path: str,
-    patterns: Optional[dict[str, re.Pattern]] = None,
+    patterns: dict[str, re.Pattern] | None = None,
     max_candidates: int = 0,
     max_reference: int = 0,
 ) -> dict[str, dict]:
@@ -778,7 +778,7 @@ def multi_model_greedy_rank(
 
 def format_maya_report(
     per_pattern: dict[str, dict],
-    greedy_rank: Optional[list[dict]] = None,
+    greedy_rank: list[dict] | None = None,
 ) -> str:
     """Format matches_per_pattern and multi_model_greedy_rank as a text report."""
     lines = [
@@ -974,7 +974,7 @@ def format_compare_report(results: dict[str, dict]) -> str:
     return "\n".join(lines)
 
 
-def handle_benchmark(args, ctx: dict) -> Optional[Generator[str, None, None]]:
+def handle_benchmark(args, ctx: dict) -> Generator[str, None, None] | None:
     """CLI handler for wordlist benchmarking.
 
     Args:

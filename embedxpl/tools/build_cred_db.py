@@ -20,7 +20,6 @@ Uso:
     python3 -m embedxpl.tools.build_cred_db [--output PATH] [--stats]
 """
 
-from __future__ import annotations
 
 import json
 import re

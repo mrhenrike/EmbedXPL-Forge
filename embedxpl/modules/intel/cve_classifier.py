@@ -16,7 +16,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
@@ -28,7 +27,7 @@ __version__ = "1.0.0"
 # CWE category mapping (adapted from Harpia agent-usecase)
 # ---------------------------------------------------------------------------
 
-CWE_CATEGORIES: Dict[str, List[str]] = {
+CWE_CATEGORIES: dict[str, list[str]] = {
     "injection": ["CWE-77", "CWE-78", "CWE-79", "CWE-89", "CWE-90", "CWE-94", "CWE-611"],
     "auth_bypass": ["CWE-287", "CWE-288", "CWE-290", "CWE-294", "CWE-303", "CWE-306", "CWE-307", "CWE-384"],
     "memory_corruption": ["CWE-119", "CWE-120", "CWE-121", "CWE-122", "CWE-125", "CWE-416", "CWE-787"],
@@ -43,7 +42,7 @@ CWE_CATEGORIES: Dict[str, List[str]] = {
 }
 
 # Product category mapping
-PRODUCT_CATEGORIES: Dict[str, List[str]] = {
+PRODUCT_CATEGORIES: dict[str, list[str]] = {
     "network_device": ["router", "switch", "firewall", "vpn", "gateway", "access point", "routeros"],
     "iot": ["camera", "nvr", "dvr", "thermostat", "sensor", "iot", "embedded", "firmware"],
     "ics_ot": ["plc", "scada", "hmi", "rtu", "dcs", "modbus", "s7", "profinet", "iec"],
@@ -81,8 +80,8 @@ CVSS_PRIVILEGES = {
 class CveClassification:
     """CVE classification result."""
     cve_id: str
-    cwe_categories: List[str] = field(default_factory=list)
-    product_categories: List[str] = field(default_factory=list)
+    cwe_categories: list[str] = field(default_factory=list)
+    product_categories: list[str] = field(default_factory=list)
     attack_vector: str = "UNKNOWN"
     attack_complexity: str = "UNKNOWN"
     privileges_required: str = "UNKNOWN"
@@ -90,10 +89,10 @@ class CveClassification:
     is_low_complexity: bool = False
     is_no_auth: bool = False
     priority_score: float = 0.0
-    tags: List[str] = field(default_factory=list)
+    tags: list[str] = field(default_factory=list)
 
 
-def categorize_cwe(cwe_id: str) -> List[str]:
+def categorize_cwe(cwe_id: str) -> list[str]:
     """Return category names for a given CWE ID."""
     categories = []
     for cat, cwes in CWE_CATEGORIES.items():
@@ -102,7 +101,7 @@ def categorize_cwe(cwe_id: str) -> List[str]:
     return categories
 
 
-def categorize_products(description: str) -> List[str]:
+def categorize_products(description: str) -> list[str]:
     """Return product categories based on CVE description keywords."""
     desc_lower = description.lower()
     categories = []
@@ -112,7 +111,7 @@ def categorize_products(description: str) -> List[str]:
     return categories
 
 
-def extract_attack_vectors(cvss_vector: str) -> Dict[str, str]:
+def extract_attack_vectors(cvss_vector: str) -> dict[str, str]:
     """Parse CVSS v2/v3 vector string and extract attack properties.
 
     Args:
@@ -137,7 +136,7 @@ def extract_attack_vectors(cvss_vector: str) -> Dict[str, str]:
 
 def classify_cve(
     cve_id: str,
-    cwe_ids: Optional[List[str]] = None,
+    cwe_ids: list[str] | None = None,
     description: str = "",
     cvss_vector: str = "",
     cvss_score: float = 0.0,
@@ -154,7 +153,7 @@ def classify_cve(
     Returns:
         CveClassification with categories and priority score.
     """
-    cwe_cats: List[str] = []
+    cwe_cats: list[str] = []
     if cwe_ids:
         for cwe in cwe_ids:
             cwe_cats.extend(categorize_cwe(cwe))
@@ -209,8 +208,8 @@ def classify_cve(
 
 def prioritize_modules(
     target_product: str,
-    cve_catalog: List[Dict[str, Any]],
-) -> List[Tuple[str, float]]:
+    cve_catalog: list[dict[str, Any]],
+) -> list[tuple[str, float]]:
     """Suggest XPL modules to try first based on CVE catalog and target product.
 
     Args:
@@ -221,7 +220,7 @@ def prioritize_modules(
         List of (module_path, priority_score) tuples, sorted by priority.
     """
     product_lower = target_product.lower()
-    scored: List[Tuple[str, float]] = []
+    scored: list[tuple[str, float]] = []
 
     for entry in cve_catalog:
         description = entry.get("description", "")

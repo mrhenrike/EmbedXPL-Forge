@@ -20,7 +20,6 @@ by learned probability - it does NOT reproduce training samples.
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import csv
 import json
@@ -254,7 +253,7 @@ class PatternModel:
         userid_col:      str = "userid",
         employeeid_col:  str = "employeeid",
         workemail_col:   str = "workemail",
-        domain_col:      Optional[str] = None,
+        domain_col:      str | None = None,
         max_rows:        int = 0,
     ) -> dict:
         """
@@ -426,7 +425,7 @@ class PatternModel:
 
     # ── Serialization ─────────────────────────────────────────────────────────
 
-    def save(self, path: Optional[str] = None) -> str:
+    def save(self, path: str | None = None) -> str:
         """
         Serialize model to JSON.
 
@@ -523,7 +522,7 @@ class PatternModel:
                     out, self._total_uid_samples, self._total_pwd_samples)
         return str(out)
 
-    def load(self, path: Optional[str] = None) -> None:
+    def load(self, path: str | None = None) -> None:
         """
         Load a previously saved model from JSON.
 
@@ -822,7 +821,7 @@ def _classify_uid_to_pattern(local: str, classifiers: list[tuple]) -> str:
     return "?"
 
 
-def _extract_separator(local: str, seps: set) -> Optional[str]:
+def _extract_separator(local: str, seps: set) -> str | None:
     """Extract the first separator found in a username local-part."""
     for sep in (".", "_", "-"):
         if sep in local and sep in seps:
@@ -832,10 +831,10 @@ def _extract_separator(local: str, seps: set) -> Optional[str]:
 
 # ── Convenience singleton ──────────────────────────────────────────────────────
 
-_MODEL_SINGLETON: Optional[PatternModel] = None
+_MODEL_SINGLETON: PatternModel | None = None
 
 
-def get_model(model_path: Optional[str] = None) -> PatternModel:
+def get_model(model_path: str | None = None) -> PatternModel:
     """
     Return the global PatternModel singleton, loading from disk if available.
 

@@ -96,26 +96,25 @@ class Exploit(BaseExploit):
         return ips
 
     def run(self) -> None:
-        print_status("DNS Hijack Scan: {} (target) vs {} (trusted)".format(
-            self.target, self.trusted_dns))
+        print_status(f"DNS Hijack Scan: {self.target} (target) vs {self.trusted_dns} (trusted)")
 
         compromised = []
         for domain in self._DOMAINS:
             tgt = self._query(domain, str(self.target), int(self.port))
             ref = self._query(domain, str(self.trusted_dns))
             if not tgt:
-                print_status("  {} — no response".format(domain))
+                print_status(f"  {domain} — no response")
                 continue
             if set(tgt) == set(ref) or set(tgt) & set(ref):
                 print_status("  {} — OK ({})".format(domain, ", ".join(tgt)))
             else:
                 compromised.append((domain, tgt, ref))
-                print_error("  {} — HIJACKED! {} (expected {})".format(domain, tgt, ref))
+                print_error(f"  {domain} — HIJACKED! {tgt} (expected {ref})")
 
         if compromised:
-            print_error("ALERT: {} domain(s) hijacked — matches APT28 TTP".format(len(compromised)))
+            print_error(f"ALERT: {len(compromised)} domain(s) hijacked — matches APT28 TTP")
         else:
-            print_success("No DNS hijack detected on {} domains".format(len(self._DOMAINS)))
+            print_success(f"No DNS hijack detected on {len(self._DOMAINS)} domains")
 
     @mute
     def check(self) -> bool:

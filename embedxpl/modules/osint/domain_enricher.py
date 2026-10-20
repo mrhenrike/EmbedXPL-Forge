@@ -11,7 +11,6 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import socket
 import struct
@@ -37,12 +36,12 @@ except ImportError:
 class DomainProfile:
     """Domain/IP OSINT profile."""
     domain: str
-    a_records: List[str] = field(default_factory=list)
-    mx_records: List[str] = field(default_factory=list)
-    ns_records: List[str] = field(default_factory=list)
-    aaaa_records: List[str] = field(default_factory=list)
-    subdomains: List[str] = field(default_factory=list)
-    reverse_ips: List[str] = field(default_factory=list)
+    a_records: list[str] = field(default_factory=list)
+    mx_records: list[str] = field(default_factory=list)
+    ns_records: list[str] = field(default_factory=list)
+    aaaa_records: list[str] = field(default_factory=list)
+    subdomains: list[str] = field(default_factory=list)
+    reverse_ips: list[str] = field(default_factory=list)
     blacklisted: bool = False
     error: str = ""
 
@@ -109,7 +108,7 @@ class DomainEnricher:
 
         return profile
 
-    def reverse_ip(self, ip: str) -> List[str]:
+    def reverse_ip(self, ip: str) -> list[str]:
         """Find hostnames that resolve to this IP (reverse DNS + sonar).
 
         Args:
@@ -144,7 +143,7 @@ class DomainEnricher:
 
         return list(set(results))
 
-    def subdomains(self, domain: str) -> List[str]:
+    def subdomains(self, domain: str) -> list[str]:
         """Discover subdomains using Sonar API.
 
         Args:

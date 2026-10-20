@@ -17,7 +17,7 @@ class DebugConsole(Servers):
     """ main init and loop for console I/O """
     """ If multiple Consoles is attached to one device, all attached Consoles will receive same output from device """
     def __init__(self, dargs):
-        super(DebugConsole, self).__init__()
+        super().__init__()
 
         self.dargs = dargs
 
@@ -295,7 +295,7 @@ class DebugConsole(Servers):
         memory = getrusage(RUSAGE_SELF).ru_maxrss
         if sys.platform == 'darwin':
             memory = memory / 1024
-        log.info("Memory usage: {}".format(size(memory)))
+        log.info(f"Memory usage: {size(memory)}")
 
     def set_config(self, key, table):
         method_name = 'configManager'
@@ -375,7 +375,7 @@ class DebugConsole(Servers):
             self.dh.logout()
             return None
         else:
-            log.error('No such dump: {}'.format(self.dargs.dump))
+            log.error(f'No such dump: {self.dargs.dump}')
             return None
 
     def quit_host(self, quit_all=False, msg=None):
@@ -488,18 +488,18 @@ class DebugConsole(Servers):
 
         if len(cmd) == 2 and cmd[1] == '-h':
 
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return True
 
         elif len(cmd) == 3 and cmd[1] == 'kill':
 
             if len(cmd) == 2:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
             try:
                 tmp = self.dhConsole.get(cmd[2]).get('instance')
             except AttributeError:
-                log.failure('Console ({}) do not exist'.format(cmd[2]))
+                log.failure(f'Console ({cmd[2]}) do not exist')
                 return False
 
             self.dhConsole.pop(cmd[2])
@@ -516,7 +516,7 @@ class DebugConsole(Servers):
         elif len(cmd) >= 2 and cmd[1] == 'conn':
 
             if len(cmd) > 2 and cmd[2] == '-h':
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return False
 
             if len(cmd) == 2 or len(cmd) == 3:
@@ -534,7 +534,7 @@ class DebugConsole(Servers):
                                 if dh_data[host].get('host') == self.dhConsole.get(session).get('host')
                             ), None)
                         log.info('{} {}'.format(
-                            dh_data[host].get('host'), 'Connected ({})'.format(color(conn, GREEN)) if conn else ''))
+                            dh_data[host].get('host'), f'Connected ({color(conn, GREEN)})' if conn else ''))
 
                     return True
 
@@ -558,7 +558,7 @@ class DebugConsole(Servers):
                 host = check_host(cmd[2])
 
                 if not host:
-                    log.failure('"{}" not valid host'.format(cmd[2]))
+                    log.failure(f'"{cmd[2]}" not valid host')
                     return False
 
                 dh_data = PwdManager().get_host(host=host)
@@ -597,10 +597,10 @@ class DebugConsole(Servers):
                 proto = cmd[5]
                 rport = cmd[6] if len(cmd) == 7 else 37777
             else:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return False
 
-            log.info('Connecting with "{}" to {}:{}'.format(proto, rhost, rport))
+            log.info(f'Connecting with "{proto}" to {rhost}:{rport}')
             if not self.connect_rhost(
                     # rhost=cmd[4],
                     rhost=rhost,
@@ -618,13 +618,13 @@ class DebugConsole(Servers):
         elif len(cmd) == 2:
 
             if cmd[1] == '-h':
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return False
 
             try:
                 self.dh = self.dhConsole.get(cmd[1]).get('instance')
             except AttributeError:
-                log.failure("Console [{}] do not exist".format(cmd[1]))
+                log.failure(f"Console [{cmd[1]}] do not exist")
                 return
 
         if not self.dh_instance(show=True):
@@ -644,7 +644,7 @@ class DebugConsole(Servers):
             "test": "test"
         }
         if not len(cmd) > 1:
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return
 
         if cmd[1] == 'object':
@@ -658,9 +658,9 @@ class DebugConsole(Servers):
 
         elif cmd[1] == 'instance':
             for dh in self.dhConsole:
-                dh_data = '{}'.format(help_msg(dh))
+                dh_data = f'{help_msg(dh)}'
                 for key in self.dhConsole.get(dh):
-                    dh_data += '[{}] = {}\n'.format(key, self.dhConsole.get(dh).get(key))
+                    dh_data += f'[{key}] = {self.dhConsole.get(dh).get(key)}\n'
                 log.info(dh_data)
             return True
 
@@ -674,20 +674,20 @@ class DebugConsole(Servers):
             }
 
             if len(cmd) == 2 or (len(cmd) == 3 and cmd[2] == '-h'):
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
 
             else:
                 try:
                     if int(cmd[2]) < 0 or int(cmd[2]) > 1:
-                        log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                        log.info(f'{help_all(msg=msg, usage=usage)}')
                         return False
                     self.dh.debugCalls = int(cmd[2])
 
-                    log.info('{} {}: {}'.format(cmd[0], cmd[1], self.dh.debugCalls))
+                    log.info(f'{cmd[0]} {cmd[1]}: {self.dh.debugCalls}')
 
                 except ValueError:
-                    log.failure("Not valid debug code: {}".format(cmd[2]))
+                    log.failure(f"Not valid debug code: {cmd[2]}")
                     return False
                 return True
 
@@ -703,23 +703,23 @@ class DebugConsole(Servers):
 
             if len(cmd) == 2 or (len(cmd) == 3 and cmd[2] == '-h'):
                 if len(cmd) <= 3:
-                    log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                    log.info(f'{help_all(msg=msg, usage=usage)}')
                     return True
             else:
                 try:
                     if int(cmd[2]) < 0 or int(cmd[2]) > 3:
-                        log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                        log.info(f'{help_all(msg=msg, usage=usage)}')
                         return False
                     self.dh.debug = int(cmd[2])
 
-                    log.info('{} {}: {}'.format(cmd[0], cmd[1], self.dh.debug))
+                    log.info(f'{cmd[0]} {cmd[1]}: {self.dh.debug}')
                 except ValueError:
-                    log.failure("Not valid debug code: {}".format(cmd[2]))
+                    log.failure(f"Not valid debug code: {cmd[2]}")
                     return False
                 return True
 
         else:
-            log.failure('No such command ({})'.format(msg))
+            log.failure(f'No such command ({msg})')
             return True
 
 
@@ -877,7 +877,7 @@ def main():
                 """ Broadcast """
                 dargs.rhost = '255.255.255.255'
         dh = DahuaFunctions(rhost=dargs.rhost, relay_host=dargs.relay, dargs=dargs)
-        dh.dh_discover("ldiscover {} {}".format(dargs.discover, dargs.rhost))
+        dh.dh_discover(f"ldiscover {dargs.discover} {dargs.rhost}")
     else:
         DebugConsole(dargs=dargs)
 

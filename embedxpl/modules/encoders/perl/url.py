@@ -17,4 +17,4 @@ class Encoder(BaseEncoder):
 
     def encode(self, payload):
         encoded_payload = quote(payload, safe="")
-        return "use URI::Escape;eval(uri_unescape('{}'));".format(encoded_payload)
+        return f"use URI::Escape;eval(uri_unescape('{encoded_payload}'));"

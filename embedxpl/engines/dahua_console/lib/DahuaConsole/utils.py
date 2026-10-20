@@ -24,7 +24,7 @@ EventOutServerPort = 43211		# TCP listener port, delivery of events
 
 
 def color(dtext, dcolor):
-	return "{}{}\033[0m".format(dcolor, dtext)
+	return f"{dcolor}{dtext}\033[0m"
 
 
 def fix_json(mess):
@@ -59,7 +59,7 @@ def fix_json(mess):
 
 def help_msg(dh_data):
 	""" print help function """
-	return '\033[92m[\033[91m{}\033[92m]\033[0m\n'.format(dh_data)
+	return f'\033[92m[\033[91m{dh_data}\033[92m]\033[0m\n'
 
 
 def help_all(msg, usage):
@@ -116,11 +116,11 @@ def help_all(msg, usage):
 			elif isinstance(usage.get(key) if not len(cmd) > 1 else key, str):
 				dh_data += '{} {} {}\n'.format(
 					cmd[0],
-					'{} {}'.format(cmd[1], key) if len(cmd) > 1 else key,
+					f'{cmd[1]} {key}' if len(cmd) > 1 else key,
 					usage.get(
-						key, '(Not defined: {})'.format(key)
+						key, f'(Not defined: {key})'
 						) if len(cmd) == 1 else usage.get(
-						cmd[1]).get(key, '(Not defined: {})'.format(key))
+						cmd[1]).get(key, f'(Not defined: {key})')
 					)
 			else:
 				print('[else]')

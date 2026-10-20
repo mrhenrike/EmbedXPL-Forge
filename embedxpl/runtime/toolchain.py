@@ -6,14 +6,12 @@ Results are cached as module-level constants so detection runs only once.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 import shutil
 import subprocess
-from typing import Optional
 
 
-def _version(cmd: str) -> Optional[str]:
+def _version(cmd: str) -> str | None:
     """Return first line of `cmd --version`, or None if not found."""
     binary = shutil.which(cmd)
     if not binary:
@@ -33,16 +31,16 @@ def _version(cmd: str) -> Optional[str]:
 # Native compilers
 # ---------------------------------------------------------------------------
 
-GCC: Optional[str] = shutil.which("gcc")
-GPP: Optional[str] = shutil.which("g++")
-CLANG: Optional[str] = shutil.which("clang")
-CLANGPP: Optional[str] = shutil.which("clang++")
+GCC: str | None = shutil.which("gcc")
+GPP: str | None = shutil.which("g++")
+CLANG: str | None = shutil.which("clang")
+CLANGPP: str | None = shutil.which("clang++")
 
 # ---------------------------------------------------------------------------
 # Cross-compilers
 # ---------------------------------------------------------------------------
 
-CROSS_COMPILERS: dict[str, Optional[str]] = {
+CROSS_COMPILERS: dict[str, str | None] = {
     "arm":    shutil.which("arm-linux-gnueabi-gcc"),
     "armhf":  shutil.which("arm-linux-gnueabihf-gcc"),
     "arm64":  shutil.which("aarch64-linux-gnu-gcc"),
@@ -54,7 +52,7 @@ CROSS_COMPILERS: dict[str, Optional[str]] = {
     "musl":   shutil.which("musl-gcc"),
 }
 
-CROSS_CPP_COMPILERS: dict[str, Optional[str]] = {
+CROSS_CPP_COMPILERS: dict[str, str | None] = {
     "arm":    shutil.which("arm-linux-gnueabi-g++"),
     "arm64":  shutil.which("aarch64-linux-gnu-g++"),
     "mips":   shutil.which("mips-linux-gnu-g++"),
@@ -67,12 +65,12 @@ CROSS_CPP_COMPILERS: dict[str, Optional[str]] = {
 # Language runtimes
 # ---------------------------------------------------------------------------
 
-GO: Optional[str] = shutil.which("go")
-RUSTC: Optional[str] = shutil.which("rustc")
-CARGO: Optional[str] = shutil.which("cargo")
-RUBY: Optional[str] = shutil.which("ruby")
-PYTHON: Optional[str] = shutil.which("python3") or shutil.which("python")
-MSFCONSOLE: Optional[str] = shutil.which("msfconsole")
+GO: str | None = shutil.which("go")
+RUSTC: str | None = shutil.which("rustc")
+CARGO: str | None = shutil.which("cargo")
+RUBY: str | None = shutil.which("ruby")
+PYTHON: str | None = shutil.which("python3") or shutil.which("python")
+MSFCONSOLE: str | None = shutil.which("msfconsole")
 
 # ---------------------------------------------------------------------------
 # Public API
@@ -96,13 +94,13 @@ def available() -> dict[str, bool]:
     }
 
 
-def get_c_compiler(arch: str = "x64") -> Optional[str]:
+def get_c_compiler(arch: str = "x64") -> str | None:
     """Return the best C compiler for the requested architecture."""
     cc = CROSS_COMPILERS.get(arch)
     return cc or GCC or CLANG
 
 
-def get_cpp_compiler(arch: str = "x64") -> Optional[str]:
+def get_cpp_compiler(arch: str = "x64") -> str | None:
     """Return the best C++ compiler for the requested architecture."""
     cc = CROSS_CPP_COMPILERS.get(arch)
     return cc or GPP or CLANGPP

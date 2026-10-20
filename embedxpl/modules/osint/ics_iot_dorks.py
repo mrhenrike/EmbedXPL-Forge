@@ -13,7 +13,6 @@ Usage:
 
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
-from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
@@ -39,13 +38,13 @@ class DorkResult:
     category: str
     dork: str
     description: str
-    country: Optional[str] = None
+    country: str | None = None
     estimated_results: str = "varies"
     legal_note: str = "Authorized passive intelligence only. Do not interact with discovered systems without permission."
 
 
 # Curated dork database
-_DORKS: List[DorkResult] = [
+_DORKS: list[DorkResult] = [
     # ============ SHODAN BRAZIL-SPECIFIC ============
     DorkResult(
         platform="shodan",
@@ -220,7 +219,7 @@ class ICSIOTDorks:
     def __init__(self) -> None:
         self._dorks = _DORKS
 
-    def all(self) -> List[DorkResult]:
+    def all(self) -> list[DorkResult]:
         """Return all dorks.
 
         Returns:
@@ -228,7 +227,7 @@ class ICSIOTDorks:
         """
         return self._dorks
 
-    def by_platform(self, platform: str) -> List[DorkResult]:
+    def by_platform(self, platform: str) -> list[DorkResult]:
         """Return dorks for a specific platform.
 
         Args:
@@ -239,7 +238,7 @@ class ICSIOTDorks:
         """
         return [d for d in self._dorks if d.platform.lower() == platform.lower()]
 
-    def by_category(self, category: str) -> List[DorkResult]:
+    def by_category(self, category: str) -> list[DorkResult]:
         """Return dorks matching a category substring.
 
         Args:
@@ -250,7 +249,7 @@ class ICSIOTDorks:
         """
         return [d for d in self._dorks if category.lower() in d.category.lower()]
 
-    def brazil_only(self) -> List[DorkResult]:
+    def brazil_only(self) -> list[DorkResult]:
         """Return only Brazil-specific dorks.
 
         Returns:
@@ -290,7 +289,7 @@ class ICSIOTDorks:
             return results[0].dork
         return "\n".join(f"{d.category}: {d.dork}" for d in results)
 
-    def summary_table(self) -> List[tuple]:
+    def summary_table(self) -> list[tuple]:
         """Return summary as list of tuples for print_table.
 
         Returns:

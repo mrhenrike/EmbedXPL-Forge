@@ -3,7 +3,6 @@
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from __future__ import annotations
 
 import asyncio
 import logging
@@ -30,14 +29,14 @@ class NmapEngine(ScanEngine):
         self.available = _HAS_NMAP
         self._scanner = nmap.PortScanner() if _HAS_NMAP else None
 
-    async def discover_hosts(self, target: str, options: ScanOptions) -> List[DiscoveredHost]:
+    async def discover_hosts(self, target: str, options: ScanOptions) -> list[DiscoveredHost]:
         """Host discovery via Nmap -sn."""
         if not self._scanner:
             return []
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self._sync_discover, target, options)
 
-    def _sync_discover(self, target: str, options: ScanOptions) -> List[DiscoveredHost]:
+    def _sync_discover(self, target: str, options: ScanOptions) -> list[DiscoveredHost]:
         args = f"-sn -PE -PS443,22,80 -{options.timing}"
         try:
             self._scanner.scan(hosts=target, arguments=args)
@@ -57,14 +56,14 @@ class NmapEngine(ScanEngine):
             hosts.append(host)
         return hosts
 
-    async def scan_services(self, hosts: List[str], ports: str, options: ScanOptions) -> List[DiscoveredHost]:
+    async def scan_services(self, hosts: list[str], ports: str, options: ScanOptions) -> list[DiscoveredHost]:
         """Service scan via Nmap -sV."""
         if not self._scanner:
             return []
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self._sync_service_scan, hosts, ports, options)
 
-    def _sync_service_scan(self, hosts: List[str], ports: str, options: ScanOptions) -> List[DiscoveredHost]:
+    def _sync_service_scan(self, hosts: list[str], ports: str, options: ScanOptions) -> list[DiscoveredHost]:
         target_str = " ".join(hosts)
         port_arg = ports if ports != "appliance" else "22,23,53,80,161,443,541,830,4443,8080,8443,9090,10443"
         args = f"-sV -{options.timing} -p {port_arg}"

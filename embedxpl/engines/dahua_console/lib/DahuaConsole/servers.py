@@ -8,7 +8,7 @@ from utils import *
 
 class Servers(DahuaEvents):
     def __init__(self):
-        super(Servers, self).__init__()
+        super().__init__()
 
     #
     # Will terminate and restart instances in case of some failure
@@ -51,7 +51,7 @@ class Servers(DahuaEvents):
                         return False
 
             except (Exception, PwnlibException) as e:
-                status.failure('{}'.format(repr(e)))
+                status.failure(f'{repr(e)}')
                 return False
 
     #
@@ -79,7 +79,7 @@ class Servers(DahuaEvents):
         except OSError as e:
             self.udp_server = False
             self.tcp_server = False
-            status.failure(color("{}".format(e), RED))
+            status.failure(color(f"{e}", RED))
             return False
 
         inputs = [self.tcp_server, self.udp_server]
@@ -143,5 +143,5 @@ class Servers(DahuaEvents):
                     del message_queues[s]
 
         except Exception as e:
-            status.failure('{}'.format(repr(e)))
+            status.failure(f'{repr(e)}')
             return False

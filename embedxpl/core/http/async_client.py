@@ -52,7 +52,7 @@ class AsyncHTTPClient:
         verify_ssl: bool = False,
         allow_redirects: bool = False,
         **kwargs,
-    ) -> Optional[Any]:
+    ) -> Any | None:
         """Non-blocking HTTP request via aiohttp.
 
         Args:
@@ -71,7 +71,7 @@ class AsyncHTTPClient:
             return getattr(self, "http_request", lambda *a, **k: None)(method, path, **kwargs)
 
         scheme = "https" if getattr(self, "ssl", False) else "http"
-        url = "{}://{}:{}{}".format(scheme, self.target, self.port, path)
+        url = f"{scheme}://{self.target}:{self.port}{path}"
 
         ssl_ctx: Any = False
         if scheme == "https" and not verify_ssl:

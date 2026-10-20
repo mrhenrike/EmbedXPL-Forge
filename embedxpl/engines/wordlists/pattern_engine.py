@@ -23,13 +23,13 @@ Exemplos de uso:
 Autor: André Henrique (@mrhenrike)
 Versão: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 import re
 from itertools import product
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -146,8 +146,8 @@ def render_template(template: str, variables: dict[str, list[str]]) -> Generator
 
 def generate_company_patterns(
     empresa: str,
-    anos: Optional[list[str]] = None,
-    separators: Optional[list[str]] = None,
+    anos: list[str] | None = None,
+    separators: list[str] | None = None,
 ) -> Generator[str, None, None]:
     """
     Gera variações de senha baseadas em nome de empresa e anos.
@@ -198,9 +198,9 @@ def generate_company_patterns(
 
 
 def generate_pharma_patterns(
-    store_codes: Optional[list[str]] = None,
-    cnpjs: Optional[list[str]] = None,
-    anos: Optional[list[str]] = None,
+    store_codes: list[str] | None = None,
+    cnpjs: list[str] | None = None,
+    anos: list[str] | None = None,
 ) -> Generator[str, None, None]:
     """
     Gera variações de senha baseadas nos padrões identificados via OCR.
@@ -289,7 +289,7 @@ def generate_from_template_file(
 
 def generate_pymangler_masks(
     words: list[str],
-    masks: Optional[list[str]] = None,
+    masks: list[str] | None = None,
     use_gpu: bool = False,
     target_time_hrs: float = 0.0,
     pps: int = 0,

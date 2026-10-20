@@ -214,7 +214,7 @@ class Exploit(Exploit):
             manufacturer_id = resp_data[3]
             result["manufacturer_id"] = manufacturer_id
             result["manufacturer"] = _HART_MANUFACTURERS.get(
-                manufacturer_id, "ID 0x{:02X}".format(manufacturer_id)
+                manufacturer_id, f"ID 0x{manufacturer_id:02X}"
             )
             result["device_type"] = struct.unpack(">H", resp_data[4:6])[0]
             result["preambles_required"] = resp_data[6]
@@ -241,19 +241,17 @@ class Exploit(Exploit):
                 sock = self._tcp_connect()
                 sock.close()
             return True
-        except (socket.error, OSError):
+        except OSError:
             return False
 
     @multi
     def run(self) -> None:
         """Execute HART-IP discovery and Command 0 scan."""
         transport = "UDP" if self.use_udp else "TCP"
-        print_status("Scanning HART-IP at {}:{} ({})".format(
-            self.target, self.port, transport
-        ))
+        print_status(f"Scanning HART-IP at {self.target}:{self.port} ({transport})")
 
         if not self.check():
-            print_error("HART-IP port {} not reachable".format(self.port))
+            print_error(f"HART-IP port {self.port} not reachable")
             return
 
         sock = None
@@ -293,8 +291,8 @@ class Exploit(Exploit):
             print_info("Software rev: {}".format(device.get("software_rev", "N/A")))
             print_info("Hardware rev: {}".format(device.get("hardware_rev", "N/A")))
 
-        except (socket.error, OSError) as exc:
-            print_error("Communication error: {}".format(exc))
+        except OSError as exc:
+            print_error(f"Communication error: {exc}")
         finally:
             if sock:
                 sock.close()

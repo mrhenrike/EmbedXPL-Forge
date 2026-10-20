@@ -58,7 +58,7 @@ class Exploit(BaseExploit):
     timeout = OptInteger(2, "Port probe timeout")
 
     def run(self) -> None:
-        print_status("Scanning BMS/SCADA on {}...".format(self.target))
+        print_status(f"Scanning BMS/SCADA on {self.target}...")
 
         for port, proto, desc in _BMS_PORTS:
             if proto == "udp":
@@ -71,9 +71,7 @@ class Exploit(BaseExploit):
                         sock.sendto(b"\x00", (self.target, port))
                     data, _ = sock.recvfrom(256)
                     if data:
-                        print_success("UDP/{} open — {} (BACnet response: {} bytes)".format(
-                            port, desc, len(data)
-                        ))
+                        print_success(f"UDP/{port} open — {desc} (BACnet response: {len(data)} bytes)")
                 except Exception:
                     pass
             else:
@@ -81,7 +79,7 @@ class Exploit(BaseExploit):
                     with socket.create_connection(
                         (self.target, port), timeout=float(self.timeout)
                     ):
-                        print_success("TCP/{} open — {}".format(port, desc))
+                        print_success(f"TCP/{port} open — {desc}")
                 except Exception:
                     pass
 

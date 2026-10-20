@@ -13,9 +13,8 @@ common, and kept lowercase. Callers decide casing and joining strategy.
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
-from typing import Iterable
+from collections.abc import Iterable
 
 # Supported languages mapped to their common linking words. Kept intentionally
 # small: only high-frequency articles, prepositions and conjunctions that show

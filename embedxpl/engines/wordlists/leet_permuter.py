@@ -11,12 +11,11 @@ Referência: C code permutation engine (GeekUniao), CUPP 1337 mode.
 Autor: André Henrique (@mrhenrike)
 Versão: 1.0.0
 """
-from __future__ import annotations
 
 import logging
 import zlib
 from itertools import product
-from typing import Generator, Iterable
+from collections.abc import Generator, Iterable
 
 logger = logging.getLogger(__name__)
 

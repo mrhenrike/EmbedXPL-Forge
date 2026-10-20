@@ -14,7 +14,6 @@ Uso:
     python3 -m embedxpl.tools.sync_routersploit [--dry-run] [--creds-only] [--cameras-only]
 """
 
-from __future__ import annotations
 
 import argparse
 import ast

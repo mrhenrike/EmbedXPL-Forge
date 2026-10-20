@@ -11,13 +11,13 @@ Inspired by rling, duplicut and the hashcat-utils family (splitlen, rli).
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import hashlib
 import logging
 import math
 from pathlib import Path
-from typing import Generator, Iterable, Optional
+from typing import Optional
+from collections.abc import Generator, Iterable
 
 logger = logging.getLogger(__name__)
 
@@ -255,7 +255,7 @@ _MASK_CHARSETS = {
 }
 
 
-def mask_keyspace(mask: str, custom: Optional[dict[str, int]] = None) -> int:
+def mask_keyspace(mask: str, custom: dict[str, int] | None = None) -> int:
     """Compute the number of candidates for a hashcat mask.
 
     Args:
@@ -360,7 +360,7 @@ def _count_lines(path: str) -> int:
     return n
 
 
-def handle_dedup(args, ctx: dict) -> Optional[Generator[str, None, None]]:
+def handle_dedup(args, ctx: dict) -> Generator[str, None, None] | None:
     """CLI handler for the ``dedup`` command."""
     wordlist = getattr(args, "wordlist", None)
     if not wordlist:
@@ -376,7 +376,7 @@ def handle_dedup(args, ctx: dict) -> Optional[Generator[str, None, None]]:
     return dedup_stream(words, use_bloom=use_bloom, capacity=capacity)
 
 
-def handle_subtract(args, ctx: dict) -> Optional[Generator[str, None, None]]:
+def handle_subtract(args, ctx: dict) -> Generator[str, None, None] | None:
     """CLI handler for the ``subtract`` command."""
     wordlist = getattr(args, "wordlist", None)
     remove = getattr(args, "remove", None) or []

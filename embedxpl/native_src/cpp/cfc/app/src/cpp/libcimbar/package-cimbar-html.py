@@ -11,7 +11,7 @@ def get_path(name):
 
 
 def read_file(name):
-    with open(get_path(name), 'rt') as f:
+    with open(get_path(name)) as f:
         return f.read()
 
 
@@ -30,7 +30,7 @@ def main():
     contents = contents.replace('<script src="main.js">', main_js)
     contents = contents.replace('<script src="cimbar_js.js">', cimbar_js)
 
-    with open(get_path('output'), 'wt') as f:
+    with open(get_path('output'), 'w') as f:
         f.write(contents)
 
 

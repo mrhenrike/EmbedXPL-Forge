@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Payloads Package for PrinterXPL-Forge
 =========================================
@@ -53,7 +52,7 @@ def load_payload(payload_name, substitutions=None):
     if not os.path.exists(payload_path):
         raise FileNotFoundError(f"Payload not found: {payload_name}")
     
-    with open(payload_path, 'r', encoding='utf-8') as f:
+    with open(payload_path, encoding='utf-8') as f:
         content = f.read()
     
     # Apply substitutions if provided

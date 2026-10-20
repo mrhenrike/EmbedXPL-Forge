@@ -12,7 +12,6 @@ from PCFG Cracker v4.x.
 Author: André Henrique (@mrhenrike)
 Version: 1.0.0
 """
-from __future__ import annotations
 
 import heapq
 import json
@@ -21,7 +20,8 @@ import math
 import re
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Generator, Optional
+from typing import Optional
+from collections.abc import Generator
 
 logger = logging.getLogger(__name__)
 
@@ -558,7 +558,7 @@ class PCFGGrammar:
         return "\n".join(lines)
 
 
-def handle_pcfg(args, ctx: dict) -> Optional[Generator[str, None, None]]:
+def handle_pcfg(args, ctx: dict) -> Generator[str, None, None] | None:
     """CLI handler: train or generate using PCFG grammar.
 
     Args:

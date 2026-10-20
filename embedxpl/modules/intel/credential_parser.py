@@ -20,12 +20,12 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import base64
 import re
 from dataclasses import dataclass, field
-from typing import Generator, List, Optional
+from typing import List, Optional
+from collections.abc import Generator
 
 __version__ = "1.0.0"
 
@@ -103,7 +103,7 @@ class StealerCredentialParser:
         content: str,
         target_filter: str = "",
         device_only: bool = False,
-    ) -> List[CredentialMatch]:
+    ) -> list[CredentialMatch]:
         """Parse credential dump content.
 
         Args:
@@ -221,7 +221,7 @@ class StealerCredentialParser:
 def extract_device_credentials(
     content: str,
     target_ip_prefix: str = "",
-) -> List[CredentialMatch]:
+) -> list[CredentialMatch]:
     """Convenience function: parse and filter device-only credentials.
 
     Args:

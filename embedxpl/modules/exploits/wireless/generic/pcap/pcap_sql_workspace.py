@@ -8,7 +8,6 @@ structured query workflows for packet-analysis sessions.
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import logging
 import sqlite3

@@ -46,7 +46,7 @@ class Exploit(HTTPClient):
     ipmi_port = OptPort(623, "IPMI UDP port")
 
     def run(self) -> None:
-        print_status("Scanning BMC/IPMI on {}...".format(self.target))
+        print_status(f"Scanning BMC/IPMI on {self.target}...")
 
         # IPMI UDP probe
         try:
@@ -55,9 +55,7 @@ class Exploit(HTTPClient):
             sock.sendto(_IPMI_PROBE, (self.target, int(self.ipmi_port)))
             data, _ = sock.recvfrom(256)
             if data:
-                print_success("IPMI service active on {}:{} ({} bytes)".format(
-                    self.target, self.ipmi_port, len(data)
-                ))
+                print_success(f"IPMI service active on {self.target}:{self.ipmi_port} ({len(data)} bytes)")
         except Exception:
             pass
 
@@ -76,9 +74,7 @@ class Exploit(HTTPClient):
                     vendor = vend
                     break
             print_success(
-                "Redfish API detected on {}:{} — Vendor: {}".format(
-                    self.target, self.port, vendor
-                )
+                f"Redfish API detected on {self.target}:{self.port} — Vendor: {vendor}"
             )
 
     @mute

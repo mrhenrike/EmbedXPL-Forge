@@ -52,20 +52,20 @@ class Exploit(BaseExploit):
     def run(self) -> None:
         network = self.target
         if "/" not in network:
-            network = "{}/32".format(network)
+            network = f"{network}/32"
 
         try:
             net = ipaddress.ip_network(network, strict=False)
         except ValueError as e:
-            print_error("Invalid network: {}".format(e))
+            print_error(f"Invalid network: {e}")
             return
 
         hosts = list(net.hosts())
         print_status(
-            "Scanning {} hosts for ADB on port {}...".format(len(hosts), self.port)
+            f"Scanning {len(hosts)} hosts for ADB on port {self.port}..."
         )
 
-        found: List[str] = []
+        found: list[str] = []
         lock = threading.Lock()
         semaphore = threading.Semaphore(int(self.threads))
 
@@ -75,7 +75,7 @@ class Exploit(BaseExploit):
                     with socket.create_connection((ip, self.port), timeout=float(self.timeout)):
                         with lock:
                             found.append(ip)
-                            print_success("ADB open: {}:{}".format(ip, self.port))
+                            print_success(f"ADB open: {ip}:{self.port}")
                 except Exception:
                     pass
 
@@ -89,13 +89,11 @@ class Exploit(BaseExploit):
             t.join(timeout=float(self.timeout) + 5)
 
         print_status(
-            "Scan complete. {} ADB-accessible device(s) found.".format(len(found))
+            f"Scan complete. {len(found)} ADB-accessible device(s) found."
         )
         if found:
             for ip in found:
-                print_success("  {}:{} — try: adb connect {}:{}".format(
-                    ip, self.port, ip, self.port
-                ))
+                print_success(f"  {ip}:{self.port} — try: adb connect {ip}:{self.port}")
 
     @mute
     def check(self) -> bool:

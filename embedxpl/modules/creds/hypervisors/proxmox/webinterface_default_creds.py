@@ -48,9 +48,7 @@ class Exploit(HTTPClient):
 
     def run(self) -> None:
         print_status(
-            "Brute-forcing Proxmox VE credentials on {}:{}...".format(
-                self.target, self.port
-            )
+            f"Brute-forcing Proxmox VE credentials on {self.target}:{self.port}..."
         )
         found = False
         for username, password in _DEFAULT_CREDENTIALS:
@@ -72,16 +70,14 @@ class Exploit(HTTPClient):
                     ticket = ""
                 if ticket:
                     print_success(
-                        "Valid credentials: {}:{} — ticket: {}...".format(
-                            username, password, ticket[:40]
-                        )
+                        f"Valid credentials: {username}:{password} — ticket: {ticket[:40]}..."
                     )
                     found = True
                     if self.stop_on_success:
                         return
             else:
                 code = resp.status_code if resp else "no response"
-                print_status("  {}:{} — {}".format(username, password, code))
+                print_status(f"  {username}:{password} — {code}")
 
         if not found:
             print_error("No default credentials accepted")

@@ -4,7 +4,6 @@ Author: André Henrique (LinkedIn/X: @mrhenrike)
 Version: 0.1.0
 """
 
-from __future__ import annotations
 
 import logging
 
@@ -70,11 +69,11 @@ class CUDABackend(ComputeBackend):
             props = torch.cuda.get_device_properties(0)
             raw_mem = getattr(props, "total_memory", None) or getattr(props, "total_mem", 0)
             vram = raw_mem // (1024 * 1024)
-            return "CUDA [PyTorch] {} ({}MB)".format(dev, vram)
+            return f"CUDA [PyTorch] {dev} ({vram}MB)"
         cupy = _try_cupy()
         if cupy:
             dev = cupy.cuda.Device(0)
-            return "CUDA [CuPy] Device {}".format(dev.id)
+            return f"CUDA [CuPy] Device {dev.id}"
         return "CUDA (not available)"
 
     def array_from_numpy(self, arr: np.ndarray):

@@ -10,7 +10,6 @@ Source: github.com/NozomiNetworks/upx-recovery-tool
 YARA rules: embedxpl/resources/yara/upx/ (ARM, MIPS, x86-64, PPC, i386)
 Author: NozomiNetworks Research | Andre Henrique (@mrhenrike) — EmbedXPL port
 """
-from __future__ import annotations
 
 import hashlib
 import shutil

@@ -96,7 +96,7 @@ class Exploit(Exploit):
 
     def _build_hello(self) -> bytes:
         """Build OPC UA Hello message."""
-        url = "opc.tcp://{}:{}".format(self.target, self.port)
+        url = f"opc.tcp://{self.target}:{self.port}"
         url_bytes = url.encode("utf-8")
 
         body = struct.pack("<IIIII",
@@ -155,7 +155,7 @@ class Exploit(Exploit):
         req += struct.pack("<I", 10000)
         req += struct.pack("<BBB", 0x00, 0x00, 0x00)
 
-        url = "opc.tcp://{}:{}".format(self.target, self.port)
+        url = f"opc.tcp://{self.target}:{self.port}"
         body = self._encode_string(url)
         body += struct.pack("<i", -1)  # locale IDs (null array)
         body += struct.pack("<i", -1)  # profile URIs (null array)
@@ -237,13 +237,13 @@ class Exploit(Exploit):
             resp = self._recv_msg(sock)
             sock.close()
             return bool(resp and resp[:3] == self._ACK)
-        except (socket.error, OSError):
+        except OSError:
             return False
 
     def run(self) -> None:
         """Discover OPC UA endpoints and security configuration."""
         print_status(
-            "OPC UA endpoint scan on {}:{}".format(self.target, self.port)
+            f"OPC UA endpoint scan on {self.target}:{self.port}"
         )
 
         if not self.check():
@@ -280,7 +280,7 @@ class Exploit(Exploit):
             if not osc or osc[:3] != self._OPN:
                 if osc and osc[:3] == self._ERR:
                     err_code = struct.unpack_from("<I", osc, 8)[0] if len(osc) > 12 else 0
-                    print_error("Server error: 0x{:08X}".format(err_code))
+                    print_error(f"Server error: 0x{err_code:08X}")
                 else:
                     print_error("OpenSecureChannel failed")
                 sock.close()
@@ -290,7 +290,7 @@ class Exploit(Exploit):
             token_id = 1
             if len(osc) > 60:
                 token_id = struct.unpack_from("<I", osc, 56)[0]
-            print_success("Channel opened (ID: {})".format(channel_id))
+            print_success(f"Channel opened (ID: {channel_id})")
 
             # GetEndpoints
             print_info("Requesting endpoint descriptions...")
@@ -299,14 +299,14 @@ class Exploit(Exploit):
 
             if ep_resp and len(ep_resp) > 24:
                 print_success(
-                    "GetEndpoints response: {} bytes".format(len(ep_resp))
+                    f"GetEndpoints response: {len(ep_resp)} bytes"
                 )
                 endpoints = self._parse_endpoints(ep_resp)
 
                 if endpoints:
-                    print_success("{} endpoint(s) discovered:".format(len(endpoints)))
+                    print_success(f"{len(endpoints)} endpoint(s) discovered:")
                     for i, ep in enumerate(endpoints):
-                        print_info("  Endpoint {}:".format(i + 1))
+                        print_info(f"  Endpoint {i + 1}:")
                         print_info("    Security Policy: {}".format(
                             ep.get("security_policy", "unknown")
                         ))
@@ -325,5 +325,5 @@ class Exploit(Exploit):
 
             sock.close()
 
-        except socket.error as exc:
-            print_error("Connection error: {}".format(exc))
+        except OSError as exc:
+            print_error(f"Connection error: {exc}")

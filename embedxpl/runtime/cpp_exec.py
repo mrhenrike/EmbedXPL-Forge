@@ -6,11 +6,10 @@ Follows the same cache + cross-compile pattern as c_exec.py.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 # authorized use only
 """
-from __future__ import annotations
 
 import subprocess
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from .cache import get_cached_binary, store_binary
 from .crosscompile import get_target
@@ -37,10 +36,10 @@ class CppExecutor:
         self,
         src_path: Path,
         arch: str = "x64",
-        cxxflags: Optional[list[str]] = None,
+        cxxflags: list[str] | None = None,
         std: str = "c++17",
         force: bool = False,
-    ) -> Optional[Path]:
+    ) -> Path | None:
         """Compile C++ src for arch. Returns binary path or None."""
         src = Path(src_path)
         if not src.exists():
@@ -75,7 +74,7 @@ class CppExecutor:
     def run(
         self,
         module: Any,
-        args: Optional[list[str]] = None,
+        args: list[str] | None = None,
         timeout: int = 30,
         **kwargs: Any,
     ) -> dict[str, Any]:

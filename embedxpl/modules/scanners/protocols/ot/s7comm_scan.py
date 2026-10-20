@@ -174,7 +174,7 @@ class Exploit(Exploit):
         if len(data) < 28:
             return result
         result["order_number"] = data[2:22].decode("ascii", errors="replace").strip("\x00 ")
-        result["firmware_version"] = "V{}.{}.{}".format(data[24], data[25], data[26])
+        result["firmware_version"] = f"V{data[24]}.{data[25]}.{data[26]}"
         return result
 
     def _parse_component_id(self, data: bytes) -> dict:
@@ -191,7 +191,7 @@ class Exploit(Exploit):
             return "Unknown"
         state_byte = data[2]
         states = {0x00: "Unknown", 0x01: "Stop", 0x02: "Startup", 0x04: "Run", 0x08: "Hold"}
-        return states.get(state_byte, "Unknown (0x{:02x})".format(state_byte))
+        return states.get(state_byte, f"Unknown (0x{state_byte:02x})")
 
     def _parse_protection(self, data: bytes) -> str:
         """Parse SZL 0x0132 for CPU protection level."""
@@ -204,7 +204,7 @@ class Exploit(Exploit):
             0x02: "Read/write protection",
             0x03: "Full protection",
         }
-        return levels.get(level, "Level {} (0x{:02x})".format(level, level))
+        return levels.get(level, f"Level {level} (0x{level:02x})")
 
     @mute
     def check(self) -> bool:
@@ -213,24 +213,22 @@ class Exploit(Exploit):
             sock = self._tcp_connect()
             sock.close()
             return True
-        except (socket.error, OSError):
+        except OSError:
             return False
 
     @multi
     def run(self) -> None:
         """Execute S7comm device information scan."""
-        print_status("Scanning S7comm at {}:{} (rack={}, slot={})".format(
-            self.target, self.port, self.rack, self.slot
-        ))
+        print_status(f"Scanning S7comm at {self.target}:{self.port} (rack={self.rack}, slot={self.slot})")
 
         if not self.check():
-            print_error("S7comm port {} not reachable".format(self.port))
+            print_error(f"S7comm port {self.port} not reachable")
             return
 
         try:
             sock = self._tcp_connect()
-        except (socket.error, OSError) as exc:
-            print_error("Connection failed: {}".format(exc))
+        except OSError as exc:
+            print_error(f"Connection failed: {exc}")
             return
 
         try:
@@ -260,11 +258,11 @@ class Exploit(Exploit):
 
             state_data = self._read_szl(sock, 0x0019)
             cpu_state = self._parse_cpu_state(state_data) if state_data else "N/A"
-            print_info("CPU state: {}".format(cpu_state))
+            print_info(f"CPU state: {cpu_state}")
 
             prot_data = self._read_szl(sock, 0x0132)
             protection = self._parse_protection(prot_data) if prot_data else "N/A"
-            print_info("Protection: {}".format(protection))
+            print_info(f"Protection: {protection}")
 
         finally:
             sock.close()

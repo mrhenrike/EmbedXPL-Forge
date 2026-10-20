@@ -63,7 +63,7 @@ class Exploit(HTTPClient):
     ]
 
     def run(self) -> None:
-        print_status("Scanning Intelbras CCTV at {}...".format(self.target))
+        print_status(f"Scanning Intelbras CCTV at {self.target}...")
         detected = False
 
         resp = self.http_request(method="GET", path="/")
@@ -76,17 +76,17 @@ class Exploit(HTTPClient):
                 if marker in combined:
                     detected = True
                     print_success(
-                        "Intelbras/Dahua OEM detected — marker '{}' in response".format(marker)
+                        f"Intelbras/Dahua OEM detected — marker '{marker}' in response"
                     )
                     break
 
             if server:
-                print_status("Server header: {}".format(server))
+                print_status(f"Server header: {server}")
 
             if resp.status_code == 401:
                 realm = resp.headers.get("WWW-Authenticate", "")
                 if realm:
-                    print_status("Auth realm: {}".format(realm))
+                    print_status(f"Auth realm: {realm}")
                     if any(m in realm.lower() for m in self._INTELBRAS_MARKERS):
                         detected = True
                         print_success("Intelbras identified via auth realm")
@@ -98,9 +98,7 @@ class Exploit(HTTPClient):
             if len(header) >= 4 and header[:4] == _DAHUA_MAGIC:
                 detected = True
                 print_success(
-                    "Dahua protocol confirmed on port {} (Intelbras OEM)".format(
-                        _DAHUA_PORT
-                    )
+                    f"Dahua protocol confirmed on port {_DAHUA_PORT} (Intelbras OEM)"
                 )
                 payload_len = struct.unpack("<I", header[16:20])[0] if len(header) >= 20 else 0
                 if payload_len:
@@ -110,17 +108,17 @@ class Exploit(HTTPClient):
                         import re
                         m = re.search(r'"DeviceType"\s*:\s*"([^"]+)"', text)
                         if m:
-                            print_success("Device type: {}".format(m.group(1)))
+                            print_success(f"Device type: {m.group(1)}")
             sock.close()
         except Exception:
-            print_status("Dahua protocol port {} not responding".format(_DAHUA_PORT))
+            print_status(f"Dahua protocol port {_DAHUA_PORT} not responding")
 
         try:
             rtsp_sock = socket.create_connection((self.target, 554), timeout=3)
             rtsp_req = (
-                "OPTIONS rtsp://{}:554/ RTSP/1.0\r\n"
+                f"OPTIONS rtsp://{self.target}:554/ RTSP/1.0\r\n"
                 "CSeq: 1\r\n\r\n"
-            ).format(self.target)
+            )
             rtsp_sock.sendall(rtsp_req.encode())
             rtsp_resp = rtsp_sock.recv(1024).decode("utf-8", errors="replace")
             if "RTSP" in rtsp_resp:
@@ -131,7 +129,7 @@ class Exploit(HTTPClient):
             pass
 
         if not detected:
-            print_error("No Intelbras CCTV device identified at {}".format(self.target))
+            print_error(f"No Intelbras CCTV device identified at {self.target}")
 
     @mute
     def check(self) -> bool:

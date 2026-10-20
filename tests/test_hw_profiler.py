@@ -1,6 +1,5 @@
 """Tests for embedxpl.core.hw_profiler hardware detection."""
 
-from __future__ import annotations
 
 import sys
 from pathlib import Path

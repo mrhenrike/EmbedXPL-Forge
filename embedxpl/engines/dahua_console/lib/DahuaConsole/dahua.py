@@ -15,7 +15,7 @@ class DahuaFunctions(Network):
             self, rhost=None, rport=None, proto=None, events=False, ssl=False,
             relay_host=None, timeout=5, udp_server=True, dargs=None
     ):
-        super(DahuaFunctions, self).__init__()
+        super().__init__()
 
         self.rhost = rhost
         self.rport = rport
@@ -61,7 +61,7 @@ class DahuaFunctions(Network):
                 try:
                     dh_data = json.loads(dh_data)
                 except (json.decoder.JSONDecodeError, AttributeError) as e:
-                    log.failure('[runCmd]: {}'.format(repr(e)))
+                    log.failure(f'[runCmd]: {repr(e)}')
                     print(dh_data)
                     return False
 
@@ -86,7 +86,7 @@ class DahuaFunctions(Network):
         }
         if not len(cmd) == 1:
             if cmd[1] == '-h':
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
 
         if len(cmd) == 3 and cmd[1] == 'help':
@@ -197,7 +197,7 @@ class DahuaFunctions(Network):
 
             return True
         else:
-            log.failure("[listService] {}".format(self.RemoteServicesCache))
+            log.failure(f"[listService] {self.RemoteServicesCache}")
             return False
 
     #
@@ -208,14 +208,14 @@ class DahuaFunctions(Network):
         if not self.args.force:
             path = Path(file_name)
             if path.exists():
-                log.failure("[saveToFile] File {} exist (force with -f at startup)".format(file_name))
+                log.failure(f"[saveToFile] File {file_name} exist (force with -f at startup)")
                 return False
         try:
             with open(file_name, 'w') as fd:
                 fd.write(json.dumps(dh_data))
-            log.success("[saveToFile] Saved to: {}".format(file_name))
-        except IOError as e:
-            log.failure("[saveToFile] Save {} fail: {}".format(file_name, e))
+            log.success(f"[saveToFile] Saved to: {file_name}")
+        except OSError as e:
+            log.failure(f"[saveToFile] Save {file_name} fail: {e}")
             return False
         return True
 
@@ -298,7 +298,7 @@ class DahuaFunctions(Network):
 
         dh_data = self.send_call(query_args)
         if not dh_data:
-            log.failure("[logout] global.logout: {}".format(dh_data))
+            log.failure(f"[logout] global.logout: {dh_data}")
             self.remote.close()
             if self.relay:
                 self.relay.close()
@@ -322,7 +322,7 @@ class DahuaFunctions(Network):
             "": "(Use 'ceconfig' in Console to set/get)",
         }
         if len(cmd) == 1 or cmd[1] == '-h':
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return False
 
         if cmd[1] == 'members':
@@ -374,7 +374,7 @@ class DahuaFunctions(Network):
             }
         }
         if len(cmd) != 3 or cmd[1] == '-h':
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return True
 
         method_name = 'accessControl'
@@ -382,7 +382,7 @@ class DahuaFunctions(Network):
         try:
             door = int(cmd[1])
         except ValueError:
-            log.failure("[open_door] Invalid door number {}".format(cmd[1]))
+            log.failure(f"[open_door] Invalid door number {cmd[1]}")
             self.instance_service(method_name, stop=True)
             return False
 
@@ -518,7 +518,7 @@ class DahuaFunctions(Network):
             "0": "(disable)",
         }
         if len(cmd) == 1 or cmd[1] == '-h':
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
 
             return True
 
@@ -527,7 +527,7 @@ class DahuaFunctions(Network):
         elif cmd[1] == '0':
             enable = False
         else:
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return False
 
         query_args = {
@@ -546,7 +546,7 @@ class DahuaFunctions(Network):
                 log.failure("{} already: {}".format(cmd[0], "Enabled" if enable else "Disabled"))
                 return
         else:
-            log.failure("Failure: {}".format(dh_data))
+            log.failure(f"Failure: {dh_data}")
             return
 
         dh_data['method'] = "configManager.setConfig"
@@ -560,7 +560,7 @@ class DahuaFunctions(Network):
         if dh_data.get('result'):
             log.success("{}: {}".format(cmd[0], "Enabled" if enable else "Disabled"))
         else:
-            log.failure("Failure: {}".format(dh_data))
+            log.failure(f"Failure: {dh_data}")
             return
 
     @staticmethod
@@ -594,7 +594,7 @@ class DahuaFunctions(Network):
         try:
             banned.index(msg)
             dh_data = help_msg('Banned Match')
-            dh_data += '{}\n'.format(msg)
+            dh_data += f'{msg}\n'
             log.info(dh_data)
             # print('Banned Match: {}'.format(msg))
             return True
@@ -616,7 +616,7 @@ class DahuaFunctions(Network):
             "factory": "(fuzz factory)"
         }
         if not len(cmd) >= 2 or cmd[1] == '-h':
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
 
             return True
 
@@ -751,8 +751,7 @@ class DahuaFunctions(Network):
                         self.attach_only.append(key)
 
                 check.success(
-                    'Factory: {}, Attach: {}, attach_only: {}\n'.format(
-                        len(self.fuzz_factory), len(self.Attach), len(self.attach_only)))
+                    f'Factory: {len(self.fuzz_factory)}, Attach: {len(self.Attach)}, attach_only: {len(self.attach_only)}\n')
 
                 dh_data = '{}'.format(help_msg('Summary'))
                 dh_data += '{}{}\n'.format(help_msg('Factory'), ', '.join(self.fuzz_factory))
@@ -768,7 +767,7 @@ class DahuaFunctions(Network):
                         log.failure('Factory is Empty')
                         return False
                 except AttributeError:
-                    log.failure('Firstly run {} check'.format(cmd[0]))
+                    log.failure(f'Firstly run {cmd[0]} check')
                     return False
 
                 fuzz_factory = []
@@ -778,7 +777,7 @@ class DahuaFunctions(Network):
                     if cmd[2] in self.fuzz_factory:
                         fuzz_factory.append(cmd[2])
                     else:
-                        log.failure('"{}" do not exist in factory'.format(cmd[2]))
+                        log.failure(f'"{cmd[2]}" do not exist in factory')
                         return False
 
                 for method_name in fuzz_factory:
@@ -883,7 +882,7 @@ class DahuaFunctions(Network):
                 return
 
             else:
-                log.failure('No such command "{}"'.format(msg))
+                log.failure(f'No such command "{msg}"')
 
         except KeyboardInterrupt:  # [Main TRY]
             return False
@@ -1089,7 +1088,7 @@ class DahuaFunctions(Network):
                 log.success(
                     "\033[92m[\033[91mPublic Key\033[92m]\033[0m\n"
                     "{}".format(crypto.dump_publickey(crypto.FILETYPE_PEM, x509.get_pubkey()).decode('latin-1')))
-                print('{:X}'.format(x509.get_pubkey().to_cryptography_key().public_numbers().n))
+                print(f'{x509.get_pubkey().to_cryptography_key().public_numbers().n:X}')
             else:
                 log.failure(
                     "\033[92m[\033[91mRoot Certificate\033[92m]\033[0m\n{}".format(
@@ -1212,7 +1211,7 @@ class DahuaFunctions(Network):
             "del": "(Delete config in device)",
         }
         if len(cmd) == 1 or (len(cmd) == 2 and cmd[1] == '-h'):
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return True
 
         method_name = 'configManager'
@@ -1236,7 +1235,7 @@ class DahuaFunctions(Network):
                 print(json.dumps(query_args, indent=4))
                 return
 
-            log.info("query: {} ".format(query_args))
+            log.info(f"query: {query_args} ")
 
             dh_data = self.send_call(query_args)
             if not dh_data:
@@ -1252,7 +1251,7 @@ class DahuaFunctions(Network):
                 "object": object_id,
             }
 
-            log.info("query: {} ".format(query_args))
+            log.info(f"query: {query_args} ")
 
             dh_data = self.send_call(query_args)
             if not dh_data:
@@ -1269,7 +1268,7 @@ class DahuaFunctions(Network):
                 "object": object_id,
             }
 
-            log.info("query: {} ".format(query_args))
+            log.info(f"query: {query_args} ")
 
             dh_data = self.send_call(query_args)
             if not dh_data:
@@ -1278,7 +1277,7 @@ class DahuaFunctions(Network):
             print(json.dumps(dh_data, indent=4))
 
         else:
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return True
 
         self.instance_service(method_name, stop=True)
@@ -1388,7 +1387,7 @@ class DahuaFunctions(Network):
             "getenv": "<variable>"
         }
         if len(cmd) == 1:
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return True
 
         method_name = 'magicBox'
@@ -1400,7 +1399,7 @@ class DahuaFunctions(Network):
 
         if cmd[1] == 'setenv':
             if not len(cmd) == 4:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
 
             query_args = {
@@ -1548,7 +1547,7 @@ class DahuaFunctions(Network):
 
         elif cmd[1] == 'getenv':
             if not len(cmd) == 3:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
             # method = "magicBox.getEnv"  # should be
             method = "magicBox.getBootParameter"  # working too
@@ -1561,7 +1560,7 @@ class DahuaFunctions(Network):
                 "object": object_id,
             }
         else:
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return True
 
         dh_data = self.send_call(query_args, errorcodes=True)
@@ -1591,7 +1590,7 @@ class DahuaFunctions(Network):
             "info": "(info about remote pcap)"
         }
         if len(cmd) == 1 or (cmd[1] == 'start' and not len(cmd) >= 4) or cmd[1] == '-h':
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return True
 
         method_name = 'NetworkSnifferManager'
@@ -1681,7 +1680,7 @@ class DahuaFunctions(Network):
 
             self.networkSnifferID = sniffer_infos[0].get('NetworkSnifferID')
             self.networkSnifferPath = sniffer_infos[1].get('Path')
-            log.info("({}) Info: ID: {}, Path: {}".format(cmd[0], self.networkSnifferID, self.networkSnifferPath))
+            log.info(f"({cmd[0]}) Info: ID: {self.networkSnifferID}, Path: {self.networkSnifferPath}")
 
             return True
 
@@ -1709,10 +1708,10 @@ class DahuaFunctions(Network):
                 return False
 
             self.instance_service(method_name, stop=True)
-            log.info("({}) Stopped: ID: {}, Path: {}".format(cmd[0], self.networkSnifferID, self.networkSnifferPath))
+            log.info(f"({cmd[0]}) Stopped: ID: {self.networkSnifferID}, Path: {self.networkSnifferPath}")
 
         else:
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
 
         return
 
@@ -1748,7 +1747,7 @@ class DahuaFunctions(Network):
             }
         }
         if len(cmd) < 2 or (len(cmd) == 3 and cmd[1] == '-h'):
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return True
 
         if not self.check_for_service('InterimRemoteDiagnose'):
@@ -1757,7 +1756,7 @@ class DahuaFunctions(Network):
         if cmd[1] == 'nfs':
 
             if not len(cmd) >= 3:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
 
             if cmd[2] == 'status':
@@ -1795,10 +1794,10 @@ class DahuaFunctions(Network):
 
                 if len(cmd) >= 4:
                     if not check_ip(cmd[3]):
-                        log.failure('"{}" is not valid host'.format(cmd[3]))
+                        log.failure(f'"{cmd[3]}" is not valid host')
                         return False
                     if len(cmd) == 5 and not cmd[4][0] == '/':
-                        log.failure('path must start with "/"'.format(cmd[4]))
+                        log.failure('path must start with "/"')
                         return False
 
                 query_args = {
@@ -1836,13 +1835,13 @@ class DahuaFunctions(Network):
                 log.info("NFS {}: {}".format('mount' if cmd[2] == 'mount' else 'umount', dh_data.get('result')))
                 return True
             else:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
 
         elif cmd[1] == 'usb':
 
             if not len(cmd) == 3:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
 
             if cmd[2] == 'get':
@@ -1874,21 +1873,21 @@ class DahuaFunctions(Network):
                 dh_data = self.send_call(query_args)
                 if not dh_data:
                     return False
-                log.info("USB Storage: {}".format(dh_data))
+                log.info(f"USB Storage: {dh_data}")
                 return True
             else:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return False
 
         elif cmd[1] == 'pcap':
 
             if not len(cmd) >= 3:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
 
             if cmd[2] == 'filter':
                 if not len(cmd) >= 4:
-                    log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                    log.info(f'{help_all(msg=msg, usage=usage)}')
                     return False
 
                 if cmd[3] == 'get':
@@ -1944,7 +1943,7 @@ class DahuaFunctions(Network):
                     dh_data = self.send_call(query_args)
                     if not dh_data:
                         return False
-                    log.info("PCAP Filter: {}".format(debug_config))
+                    log.info(f"PCAP Filter: {debug_config}")
                     return True
 
             elif cmd[2] == 'start':
@@ -1990,17 +1989,17 @@ class DahuaFunctions(Network):
                 log.info("PCAP Stop: {}".format(dh_data.get('result')))
                 return True
             else:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
 
         elif cmd[1] == 'coredump':
 
             if not self.args.force:
-                log.failure("({}) will reboot NVR (force with -f)".format(cmd[1]))
+                log.failure(f"({cmd[1]}) will reboot NVR (force with -f)")
                 return False
 
             if not len(cmd) >= 3:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
 
             if cmd[2] == 'start' or cmd[2] == 'stop':
@@ -2020,13 +2019,13 @@ class DahuaFunctions(Network):
                 log.info("CoreDump {}: {}".format("Start" if cmd[2] == 'start' else "Stop", dh_data.get('result')))
                 return True
             else:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return False
 
         elif cmd[1] == 'logs':
 
             if not len(cmd) == 3:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
 
             if not self.interim_remote_diagnose("diag nfs status"):
@@ -2052,11 +2051,11 @@ class DahuaFunctions(Network):
                 log.info("Logs {}: {}".format("Start" if cmd[2] == 'start' else "Stop", dh_data.get('result')))
                 return True
             else:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
 
         else:
-            log.failure('No such command: {}'.format(msg))
+            log.failure(f'No such command: {msg}')
             # log.info('{}'.format(help_all(msg=msg,usage=usage)))
             return True
 
@@ -2092,7 +2091,7 @@ class DahuaFunctions(Network):
         }
 
         if not len(cmd) >= 2 or cmd[1] == '-h':
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
             return True
 
         method_name = 'netApp'
@@ -2115,7 +2114,7 @@ class DahuaFunctions(Network):
         if cmd[1] == 'wifi':
 
             if not len(cmd) >= 3 or cmd[1] == '-h':
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 self.instance_service(method_name, stop=True)
                 return True
 
@@ -2207,7 +2206,7 @@ class DahuaFunctions(Network):
                 }
                 dh_data = self.send_call(query_args, multicall=True, multicallsend=True)
                 if not dh_data:
-                    log.failure("(WLan) {}".format(dh_data))
+                    log.failure(f"(WLan) {dh_data}")
                     return False
 
                 wlan = dh_data.get('WLan').get('params').get('table').get(wireless_nic)
@@ -2263,7 +2262,7 @@ class DahuaFunctions(Network):
 
                 if not dh_data or not dh_data.get('result'):
                     log.failure('TimeOut for "{}" (wrong pwd?)'.format(wlan.get('SSID')))
-                    log.failure("dh_data: {}".format(dh_data))
+                    log.failure(f"dh_data: {dh_data}")
                     return False
 
                 if (cmd[2] == 'conn' and wlan.get('Enable'))\
@@ -2295,7 +2294,7 @@ class DahuaFunctions(Network):
             # ConfigManager.getConfig("WLan")
 
             else:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 return True
         elif cmd[1] == 'info':
 
@@ -2405,7 +2404,7 @@ class DahuaFunctions(Network):
         elif cmd[1] == 'upnp':
 
             if not len(cmd) == 3:
-                log.info('{}'.format(help_all(msg=msg, usage=usage)))
+                log.info(f'{help_all(msg=msg, usage=usage)}')
                 self.instance_service(method_name, stop=True)
                 return False
 
@@ -2505,7 +2504,7 @@ class DahuaFunctions(Network):
                 return False
 
         else:
-            log.info('{}'.format(help_all(msg=msg, usage=usage)))
+            log.info(f'{help_all(msg=msg, usage=usage)}')
 
         self.instance_service(method_name, stop=True)
 
@@ -2528,7 +2527,7 @@ class DahuaFunctions(Network):
             try:
                 dlog_count = int(cmd[1])
             except ValueError:
-                log.failure('({}) not valid number'.format(cmd[1]))
+                log.failure(f'({cmd[1]}) not valid number')
                 return False
 
         query_args = {
@@ -2590,7 +2589,7 @@ class DahuaFunctions(Network):
         dlogs = dh_data.get('params').get('items')
         found = dh_data.get('params').get('found')
 
-        log.info('Found: {}'.format(found))
+        log.info(f'Found: {found}')
 
         for dlog in dlogs:
             print('{}Detail: {}\nUser: {}, Device: {}, Type: {}, Level: {}'.format(

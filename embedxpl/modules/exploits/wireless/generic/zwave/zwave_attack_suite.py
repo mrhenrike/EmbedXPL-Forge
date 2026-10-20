@@ -9,7 +9,6 @@ Requer: dongle Z-Wave USB (UZB, ZWave.me UZB7, Aeotec Z-Stick Gen5+).
 Hardware sem suporte resulta em gate de fase bloqueando a execução.
 """
 
-from __future__ import annotations
 
 import json
 import shutil

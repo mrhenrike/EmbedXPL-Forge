@@ -60,7 +60,7 @@ def _is_bravia_response(body: str, headers: str) -> bool:
     return any(ind.lower() in combined for ind in _SONY_INDICATORS)
 
 
-def _extract_system_info(body: str) -> Optional[dict]:
+def _extract_system_info(body: str) -> dict | None:
     """Parse a Sony REST API JSON response for device information fields.
 
     Args:
@@ -122,7 +122,7 @@ class Exploit(HTTPClient):
     def run(self) -> None:
         """Execute the Sony Bravia discovery scan."""
         print_status(
-            "Discovering Sony Bravia TV at {}".format(self.target)
+            f"Discovering Sony Bravia TV at {self.target}"
         )
         found = False
 
@@ -132,13 +132,11 @@ class Exploit(HTTPClient):
                 if info:
                     found = True
                     print_success(
-                        "Sony Bravia REST API at {}:{}{}".format(
-                            self.target, probe_port, path
-                        )
+                        f"Sony Bravia REST API at {self.target}:{probe_port}{path}"
                     )
                     for field, value in info.items():
                         if value != "N/A":
-                            print_status("  {:22s}: {}".format(field, value))
+                            print_status(f"  {field:22s}: {value}")
                     break
 
         for probe_port in _PROBE_PORTS:
@@ -147,18 +145,16 @@ class Exploit(HTTPClient):
                 if resp_info:
                     found = True
                     print_success(
-                        "Photo Sharing Plus service at {}:{}{}".format(
-                            self.target, probe_port, path
-                        )
+                        f"Photo Sharing Plus service at {self.target}:{probe_port}{path}"
                     )
                     break
 
         if not found:
             print_error(
-                "No Sony Bravia services detected on {}".format(self.target)
+                f"No Sony Bravia services detected on {self.target}"
             )
 
-    def _query_system_api(self, probe_port: int, path: str) -> Optional[dict]:
+    def _query_system_api(self, probe_port: int, path: str) -> dict | None:
         """POST a system-info request to the Bravia REST API.
 
         Args:
@@ -196,7 +192,7 @@ class Exploit(HTTPClient):
             return None
         return _extract_system_info(body)
 
-    def _probe_path(self, probe_port: int, path: str) -> Optional[str]:
+    def _probe_path(self, probe_port: int, path: str) -> str | None:
         """Perform a GET probe to a given port/path combination.
 
         Args:

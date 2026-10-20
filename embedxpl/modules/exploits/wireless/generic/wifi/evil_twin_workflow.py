@@ -6,7 +6,6 @@ Includes optional verify-on-capture mode to validate captured passphrases.
 Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
-from __future__ import annotations
 
 import shutil
 import subprocess

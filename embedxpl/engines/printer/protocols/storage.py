@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 PrinterXPL-Forge — Printer Storage / Filesystem Module
 =====================================================
@@ -25,7 +24,6 @@ Operations:
 # LinkedIn  : https://linkedin.com/in/mrhenrike
 # X/Twitter : https://x.com/mrhenrike
 
-from __future__ import annotations
 
 import ftplib
 import io
@@ -118,7 +116,7 @@ def _ftp_default_port() -> int:
 def ftp_list(
     host: str, port: int = 0, timeout: float = 8,
     username: str = 'anonymous', password: str = 'pentest@example.com',
-) -> Dict:
+) -> dict:
     """
     List FTP directory contents on a printer.
 
@@ -197,7 +195,7 @@ def ftp_download(
     timeout:   float= 10,
     username:  str  = 'anonymous',
     password:  str  = 'pentest@example.com',
-) -> Optional[bytes]:
+) -> bytes | None:
     """
     Download *remote* file from printer FTP.
 
@@ -252,7 +250,7 @@ def web_enumerate(
     host:    str,
     timeout: float = 8,
     verbose: bool  = True,
-) -> Dict:
+) -> dict:
     """
     Enumerate accessible web pages/files on a printer's HTTP interface.
 
@@ -346,9 +344,9 @@ def snmp_dump(
     host:      str,
     community: str   = 'public',
     timeout:   float = 5,
-    output_file: Optional[str] = None,
+    output_file: str | None = None,
     verbose:   bool  = True,
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """
     Perform a full SNMP MIB walk on the printer.
 
@@ -361,7 +359,7 @@ def snmp_dump(
 
     Returns dict {OID: value}. Also writes to *output_file* if specified.
     """
-    result: Dict[str, str] = {}
+    result: dict[str, str] = {}
 
     try:
         from pysnmp.hlapi import (
@@ -467,7 +465,7 @@ def get_saved_jobs(
     host:    str,
     timeout: float = 10,
     verbose: bool  = True,
-) -> List[Dict]:
+) -> list[dict]:
     """
     Attempt to retrieve saved/stored print jobs from the printer.
 
@@ -532,7 +530,7 @@ def storage_audit(
     timeout: float = 10,
     outdir:  str   = '.log',
     verbose: bool  = True,
-) -> Dict:
+) -> dict:
     """
     Run a comprehensive printer storage audit.
 

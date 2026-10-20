@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 
 # Author    : Andre Henrique (@mrhenrike)
@@ -64,7 +63,7 @@ def _detect_editor() -> str:
     return 'vi'  # POSIX mandates vi
 
 
-class printer(cmd.Cmd, object):
+class printer(cmd.Cmd):
     # cmd module config and customization
     intro = "Welcome to the PrinterXPL-Forge shell. Type help or ? to list commands.\nType 'exit' to quit. Type 'discover' to scan for printers on your local network.\nNote: Not all commands will work on every printer — support depends on the device's manufacturer, model, and firmware language implementation."
     doc_header = "Available commands (type help <topic>):"
@@ -221,7 +220,7 @@ class printer(cmd.Cmd, object):
             output().errmsg("Connection lost - printer may have disconnected")
             self.current_command = None
             return False
-        except socket.timeout as e:
+        except TimeoutError as e:
             output().errmsg("Command timed out - printer may be busy")
             self.current_command = None
             return False
@@ -895,7 +894,7 @@ class printer(cmd.Cmd, object):
 
     def size_mismatch(self, size1, size2):
         size1, size2 = str(size1), str(size2)
-        print(("Size mismatch (should: " + size1 + ", is: " + size2 + ")."))
+        print("Size mismatch (should: " + size1 + ", is: " + size2 + ").")
 
     def help_download(self):
         """Download a file from the printer"""
@@ -1524,7 +1523,7 @@ class printer(cmd.Cmd, object):
             return
         
         try:
-            with open(arg, 'r') as f:
+            with open(arg) as f:
                 commands = f.readlines()
             
             for cmd in commands:
