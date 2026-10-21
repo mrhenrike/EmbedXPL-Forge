@@ -64,9 +64,9 @@ def _find_nmap() -> tuple[str | None, Path | None]:
             [nmap_bin, "--version"],
             capture_output=True, text=True, timeout=10,
         )
-        output = result.stdout + result.stderr
+        result.stdout + result.stderr
     except Exception:
-        output = ""
+        pass
 
     # Common platform paths
     candidates: list[Path] = []

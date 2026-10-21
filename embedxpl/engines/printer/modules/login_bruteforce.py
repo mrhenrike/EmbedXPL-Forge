@@ -514,13 +514,13 @@ def _parse_login_form(html: str, base_url: str) -> Tuple[str, str, str]:
 
     uf = ''
     pf = ''
-    for field in _FORM_USER_FIELDS:
-        if re.search(rf'name=["\']{re.escape(field)}["\']', form_tag, re.I):
-            uf = field
+    for form_field in _FORM_USER_FIELDS:
+        if re.search(rf'name=["\']{re.escape(form_field)}["\']', form_tag, re.I):
+            uf = form_field
             break
-    for field in _FORM_PASS_FIELDS:
-        if re.search(rf'name=["\']{re.escape(field)}["\']', form_tag, re.I):
-            pf = field
+    for pass_field in _FORM_PASS_FIELDS:
+        if re.search(rf'name=["\']{re.escape(pass_field)}["\']', form_tag, re.I):
+            pf = pass_field
             break
 
     if not uf:
@@ -1232,7 +1232,7 @@ def bruteforce(
         all_results.extend(r)
 
     # ── SNMP (always try unless explicitly excluded)
-    if test_snmp and (not ports or _snmp_port in ports or True):
+    if test_snmp and (True):
         r = bruteforce_snmp(
             host, _snmp_port, vendor, serial, mac,
             timeout, enable_variations, stop_on_first=False, extra_creds=extra_creds,

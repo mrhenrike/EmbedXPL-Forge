@@ -22,7 +22,7 @@ AUTOPWN_MODULES = [
 @pytest.mark.parametrize("module_name", AUTOPWN_MODULES)
 def test_autopwn_importable(module_name):
     try:
-        mod = importlib.import_module(module_name)
+        importlib.import_module(module_name)
     except ImportError:
         pytest.skip(f"Missing dependency for {module_name}")
 
