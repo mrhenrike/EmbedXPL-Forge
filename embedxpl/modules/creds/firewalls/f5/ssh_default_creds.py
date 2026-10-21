@@ -16,7 +16,7 @@ class Exploit(SSHDefault):
             "Dictionary attack with default credentials against F5 BIG-IP SSH. "
             "Covers lower-end SMB models (BIG-IP LTM 2000s/4000s) often deployed "
             "in branch/SMB environments. F5 BIG-IP ships with known default credentials "
-            "on the management interface. Cherry-picked from FirewallXPL-Forge."
+            "on the management interface. "
         ),
         "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (

@@ -14,7 +14,7 @@ class Exploit(HTTPDefault):
         "name": "Fortinet FortiGate Default Web Interface Credentials",
         "description": (
             "Dictionary attack with default credentials against Fortinet FortiGate "
-            "HTTPS management interface (port 443/8080). Cherry-picked from FirewallXPL-Forge."
+            "HTTPS management interface (port 443/8080). "
         ),
         "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (

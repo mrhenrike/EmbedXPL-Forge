@@ -15,7 +15,7 @@ class Exploit(HTTPDefault):
         "description": (
             "Dictionary attack with default credentials against the pfSense HTTPS "
             "web management interface. Default admin:pfsense is well-known. "
-            "Cherry-picked from FirewallXPL-Forge."
+            ""
         ),
         "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (

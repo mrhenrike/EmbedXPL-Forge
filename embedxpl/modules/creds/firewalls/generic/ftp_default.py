@@ -1,6 +1,6 @@
-from firewallxpl.core.exploit import *
-from firewallxpl.core.ftp.ftp_client import FTPClient
-from firewallxpl.resources import wordlists
+from embedxpl.core.exploit import *
+from embedxpl.core.ftp.ftp_client import FTPClient
+from embedxpl.resources import wordlists
 
 
 class Exploit(FTPClient):

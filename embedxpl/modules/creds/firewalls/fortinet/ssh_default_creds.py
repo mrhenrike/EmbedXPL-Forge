@@ -15,7 +15,7 @@ class Exploit(SSHDefault):
         "description": (
             "Dictionary attack with default credentials against Fortinet FortiGate SSH. "
             "Covers FortiGate 60E/80E/100E (SOHO/SMB) and FortiOS default accounts. "
-            "Cherry-picked from FirewallXPL-Forge."
+            ""
         ),
         "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (

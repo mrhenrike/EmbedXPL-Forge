@@ -16,7 +16,7 @@ class Exploit(SSHDefault):
             "Dictionary attack with default credentials against Juniper NetScreen "
             "legacy appliances (ScreenOS). NetScreen 5GT and 5XT are common SOHO/SMB "
             "firewalls with well-known default credentials. "
-            "Cherry-picked from FirewallXPL-Forge."
+            ""
         ),
         "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (

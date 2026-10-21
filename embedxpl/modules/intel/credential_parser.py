@@ -1,5 +1,5 @@
 """
-firewallxpl/modules/intel/credential_parser.py - Stealer Log Credential Parser.
+embedxpl/modules/intel/credential_parser.py - Stealer Log Credential Parser.
 
 Parses leaked credential dumps in various stealer formats to find
 device admin panel credentials (routers, firewalls, printers, VPN gateways).

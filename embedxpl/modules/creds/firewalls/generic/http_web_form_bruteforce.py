@@ -1,6 +1,6 @@
 """HTTP(S) web login bruteforce with configurable success/failure matchers (Hydra-style).
 
-Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations
@@ -12,9 +12,9 @@ from urllib.parse import parse_qsl
 
 import requests
 
-from firewallxpl.core.exploit import *
-from firewallxpl.core.http.http_client import HTTPClient
-from firewallxpl.resources import wordlists
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
+from embedxpl.resources import wordlists
 
 
 def _parse_status_codes(raw: str) -> Optional[Set[int]]:
@@ -43,7 +43,7 @@ class Exploit(HTTPClient):
     __info__ = {
         "name": "HTTP Web Form Bruteforce (Hydra-style)",
         "description": "Dictionary attack against HTTP/HTTPS login forms. Set failure/success "
-        "body substrings, status codes, or Location fragments - similar to Hydra/JtR web modules. "
+        "body substrings, status codes, or Location fragments—similar to Hydra/JtR web modules. "
         "Respect rate limits and authorization; for lab targets only.",
         "authors": (
             "André Henrique (@mrhenrike) | União Geek",
@@ -328,7 +328,7 @@ class Exploit(HTTPClient):
             return
 
         print_status(
-            "Starting HTTP form bruteforce  -  {} attempts, path={} method={}".format(
+            "Starting HTTP form bruteforce — {} attempts, path={} method={}".format(
                 len(pairs),
                 self.login_path,
                 (self.http_method or "POST").upper(),
@@ -361,14 +361,14 @@ class Exploit(HTTPClient):
                     (self.target, self.port, self.target_protocol, username, password),
                 )
                 print_success(
-                    "Login accepted  -  user='{}'".format(username),
+                    "Login accepted — user='{}'".format(username),
                     verbose=self.verbosity,
                 )
                 if self.stop_on_success:
                     running.clear()
             else:
                 print_error(
-                    "Login rejected  -  user='{}'".format(username),
+                    "Login rejected — user='{}'".format(username),
                     verbose=self.verbosity,
                 )
 

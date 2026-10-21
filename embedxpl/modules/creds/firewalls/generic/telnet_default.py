@@ -1,6 +1,6 @@
-from firewallxpl.core.exploit import *
-from firewallxpl.core.telnet.telnet_client import TelnetClient
-from firewallxpl.resources import wordlists
+from embedxpl.core.exploit import *
+from embedxpl.core.telnet.telnet_client import TelnetClient
+from embedxpl.resources import wordlists
 
 
 class Exploit(TelnetClient):

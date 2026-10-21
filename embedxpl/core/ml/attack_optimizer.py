@@ -15,7 +15,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-logger = logging.getLogger("embedxpl.core.ml.attack_optimizer")
+logger = logging.getLogger("embedxpl.ml.attack_optimizer")
 
 
 class AttackOptimizer:

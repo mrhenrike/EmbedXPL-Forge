@@ -15,7 +15,7 @@ import string
 from pathlib import Path
 from typing import Dict, Generator, List, Optional, Tuple
 
-logger = logging.getLogger("embedxpl.core.ml.credential_mutator")
+logger = logging.getLogger("embedxpl.ml.credential_mutator")
 
 
 class CredentialMutator:

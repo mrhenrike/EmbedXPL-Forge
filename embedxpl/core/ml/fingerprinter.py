@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional
 
-logger = logging.getLogger("embedxpl.core.ml.fingerprinter")
+logger = logging.getLogger("embedxpl.ml.fingerprinter")
 
 
 @dataclass

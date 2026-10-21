@@ -16,7 +16,7 @@ class Exploit(SSHDefault):
             "Dictionary attack with default credentials against IPFire SSH service. "
             "IPFire is a Linux-based open-source firewall popular in SMB environments. "
             "Default root password is set during installation wizard  -  often left as default. "
-            "Cherry-picked from FirewallXPL-Forge."
+            ""
         ),
         "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (
