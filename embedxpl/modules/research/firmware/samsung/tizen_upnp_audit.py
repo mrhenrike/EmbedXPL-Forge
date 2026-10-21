@@ -225,7 +225,7 @@ def audit_target(target: str, verbose: bool = False) -> dict:
     }
 
     # SSDP Amplification test
-    print(f"  [*] SSDP amplification test (TIZEN-2026-004)...")
+    print("  [*] SSDP amplification test (TIZEN-2026-004)...")
     amp = measure_amplification(target)
     result["amplification"] = amp
     if amp["vulnerable"]:
@@ -237,7 +237,7 @@ def audit_target(target: str, verbose: bool = False) -> dict:
         })
         print(f"  [+] SSDP amplification: {amp['amplification_factor']}x")
     else:
-        print(f"  [-] No SSDP amplification detected")
+        print("  [-] No SSDP amplification detected")
 
     # Find UPnP description URL
     desc_url = None
@@ -278,7 +278,7 @@ def audit_target(target: str, verbose: bool = False) -> dict:
                     host_url = f"{parsed.scheme}://{parsed.netloc}"
                     port_url = parsed.port or 80
                     path_url = ctrl_url if ctrl_url.startswith("/") else f"/{ctrl_url}"
-                    print(f"  [*] Testing XML injection on ContentDirectory...")
+                    print("  [*] Testing XML injection on ContentDirectory...")
                     inj_results = test_injection(parsed.hostname, port_url, path_url)
                     result["injection_tests"] = inj_results
                     for r in inj_results:

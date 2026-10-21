@@ -239,10 +239,10 @@ class SmartHubAuditor:
             info = self.results["device_info"] or {}
             print(f"  [+] Device: {info.get('modelName','?')} | FW: {info.get('firmwareVersion','?')}")
 
-        print(f"  [*] Testing WebSocket key injection...")
+        print("  [*] Testing WebSocket key injection...")
         self.test_ws_key_inject("KEY_MUTE")
 
-        print(f"  [*] Probing app list...")
+        print("  [*] Probing app list...")
         apps = self.probe_apps()
         if apps:
             print(f"  [+] {len(apps)} apps enumerated without auth")

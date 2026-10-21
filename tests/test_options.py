@@ -10,13 +10,13 @@ from embedxpl.core.exploit.exceptions import OptionValidationError
 from embedxpl.core.exploit.option import (
     OptBool,
     OptFloat,
-    OptIP,
     OptInteger,
+    Option,
+    OptIP,
     OptMAC,
     OptPort,
     OptString,
     OptWordlist,
-    Option,
 )
 
 
@@ -52,7 +52,7 @@ class TestOptIP:
         assert o.value == "192.168.1.1"
 
     def test_valid_ipv6(self):
-        o = OptIP("::1%lo", "IP")
+        OptIP("::1%lo", "IP")
 
     def test_file_uri(self):
         o = OptIP("", "IP")

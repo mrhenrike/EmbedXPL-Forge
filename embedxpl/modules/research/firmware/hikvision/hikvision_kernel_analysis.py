@@ -43,7 +43,7 @@ def analyze_shell_script():
     content = path.read_bytes().decode("ascii", errors="replace")
 
     print(f"\n  Size: {len(content)} bytes")
-    print(f"\n  === CONTENT ===")
+    print("\n  === CONTENT ===")
     print(content[:5000])
 
     # Security issues
@@ -109,7 +109,7 @@ def analyze_kernel(name: str):
         ih_comp = data[31]
         ih_name = data[32:64].split(b"\x00")[0].decode("ascii", errors="replace")
 
-        print(f"\n  uImage Header:")
+        print("\n  uImage Header:")
         print(f"    Name: {ih_name}")
         print(f"    Size: {ih_size:,} bytes")
         print(f"    Load addr: 0x{ih_load:08X}")

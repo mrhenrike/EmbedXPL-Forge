@@ -124,7 +124,7 @@ def verify_camera_access(cam_ip, user, password):
             return "TIMEOUT"
             
     except Exception as e:
-        print(f"    [-] ERROR: {str(e)}")
+        print(f"    [-] ERROR: {e!s}")
         return "ERROR"
 
 def harvest_and_verify(target_ip):

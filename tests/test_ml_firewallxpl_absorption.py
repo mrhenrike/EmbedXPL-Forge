@@ -6,8 +6,6 @@ credential_mutator, and fingerprinter are importable and functional.
 
 from __future__ import annotations
 
-import pytest
-
 
 class TestAnomalyDetector:
     def test_import(self) -> None:

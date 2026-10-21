@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """SSDP probe to identify 192.168.18.193."""
-import socket, time, requests
+import socket
+import time
+import requests
 
 SSDP_MSG = (
     "M-SEARCH * HTTP/1.1\r\n"

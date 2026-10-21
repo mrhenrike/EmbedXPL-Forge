@@ -225,7 +225,7 @@ def test_vuln3_ssrf(target, attacker_ip, listen_port):
                         "control/AVTransport")
     print(f"  [TRIGGER] Play: HTTP {code_play}")
 
-    print(f"  [*] Waiting 12s for TV callback...")
+    print("  [*] Waiting 12s for TV callback...")
     deadline = time.time() + 12
     while time.time() < deadline and not SSRF_HITS:
         time.sleep(0.5)
@@ -369,7 +369,7 @@ def test_vuln5_eventsub(target, attacker_ip, listen_port):
         except Exception as e:
             results[name] = {"error": str(e)}
 
-    print(f"  [*] Waiting 5s for NOTIFY events...")
+    print("  [*] Waiting 5s for NOTIFY events...")
     time.sleep(5)
     srv.shutdown()
 

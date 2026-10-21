@@ -4,8 +4,16 @@ Slideshow attack: cycle through hacktivist JPEG slides on the TV indefinitely.
 Each slide is served as a JPEG image via UPnP AVTransport injection.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
-import os, tempfile, time, threading, json, datetime, re, sys
-import http.server, socketserver
+import os
+import tempfile
+import time
+import threading
+import json
+import datetime
+import re
+import sys
+import http.server
+import socketserver
 import numpy as np
 import requests
 from PIL import Image, ImageDraw, ImageFont
@@ -256,7 +264,7 @@ def main():
     with open(out, "w") as f:
         json.dump(evidence, f, indent=2)
 
-    print(f"\n=== SLIDESHOW COMPLETE ===")
+    print("\n=== SLIDESHOW COMPLETE ===")
     print(f"  Injections: {len(results)}")
     print(f"  Successful downloads: {sum(1 for r in results if r['downloaded'])}")
     print(f"  Total TV requests: {len(HITS)}")

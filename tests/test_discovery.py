@@ -1,18 +1,16 @@
 """Tests for embedxpl.core.discovery."""
 from __future__ import annotations
 
-import tempfile
 import os
-
-import pytest
+import tempfile
 
 from embedxpl.core.discovery import (
+    PROBE_PORTS,
+    PROBE_PORTS_EXTENDED,
     DiscoveredHost,
     NetworkDiscovery,
     TimingProfile,
     _parse_targets_file,
-    PROBE_PORTS,
-    PROBE_PORTS_EXTENDED,
 )
 
 

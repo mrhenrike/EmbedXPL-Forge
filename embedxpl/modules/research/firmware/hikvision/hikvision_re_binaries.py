@@ -59,7 +59,7 @@ def analyze_binary(name: str):
     print(f"  PIE: {is_pie}")
 
     # Sections
-    print(f"\n  Sections:")
+    print("\n  Sections:")
     for sec in binary.sections:
         print(f"    {sec.name:20s} addr=0x{sec.virtual_address:08X} "
               f"size={sec.size:8d} flags=0x{sec.flags:X}")
@@ -86,7 +86,7 @@ def analyze_binary(name: str):
 
     # Disassembly of entry point (first 64 instructions)
     if HAS_CAPSTONE:
-        print(f"\n  Entry point disassembly (first 32 instructions):")
+        print("\n  Entry point disassembly (first 32 instructions):")
         if arch == "ARM":
             md = capstone.Cs(capstone.CS_ARCH_ARM, capstone.CS_MODE_ARM)
         else:

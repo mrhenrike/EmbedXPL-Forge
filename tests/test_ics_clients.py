@@ -2,13 +2,11 @@
 from __future__ import annotations
 
 import struct
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
-import pytest
-
+from embedxpl.core.ics.cip_client import CIPClient
 from embedxpl.core.ics.modbus_client import ModbusClient
 from embedxpl.core.ics.s7_client import S7Client
-from embedxpl.core.ics.cip_client import CIPClient
 from embedxpl.core.ics.wdb2_client import Wdb2Client as WDB2Client
 
 

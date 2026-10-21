@@ -229,7 +229,7 @@ def main():
         # Check if canary file was created
         rc, out, _ = ssh_exec("ls -la /tmp/DHCP_HOSTNAME_PWNED_* 2>&1")
         if "No such file" in out or rc != 0:
-            print(f"  CANARY: NOT created -- injection DID NOT execute")
+            print("  CANARY: NOT created -- injection DID NOT execute")
             add_finding(
                 f"F-OW-DHCP-{label.upper()}-SAFE", "INFO",
                 f"Hostname payload '{label}' did NOT execute",
@@ -237,7 +237,7 @@ def main():
                 "by dhcp.sh, but the command did NOT execute. This confirms "
                 "that proto_run_command serializes args via JSON/ubus and "
                 "netifd uses execvp(), preventing shell interpretation.",
-                f"Canary file not created",
+                "Canary file not created",
             )
         else:
             print(f"  !!! CANARY CREATED: {out.strip()}")
@@ -279,7 +279,7 @@ def main():
         'echo "---"; '
         'ls -la /tmp/DHCP_RX_PWNED 2>&1',
         timeout=15)
-    print(f"  dhcp.script simulation result:")
+    print("  dhcp.script simulation result:")
     for line in out.strip().split("\n"):
         print(f"    {line}")
 

@@ -246,4 +246,4 @@ doc.save(OUTPUT)
 sz = os.path.getsize(OUTPUT) // 1024
 print(f"[+] Saved: {OUTPUT}")
 print(f"    Size : {sz} KB")
-print(f"    Ready to PGP-encrypt and send to secbugbounty@samsung.com")
+print("    Ready to PGP-encrypt and send to secbugbounty@samsung.com")

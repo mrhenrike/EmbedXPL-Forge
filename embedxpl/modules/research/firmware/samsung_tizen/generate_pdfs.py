@@ -194,7 +194,8 @@ def generate_pdf(md_path: str, pdf_path: str) -> None:
 
 
 def create_poc_zip(base_dir: str) -> str:
-    import zipfile, hashlib
+    import zipfile
+    import hashlib
 
     poc_dir    = os.path.join(base_dir, "pocs")
     zip_name   = "Samsung_Tizen_ZeroDay_PoC_TIZEN-2026_UniaoGeek.zip"

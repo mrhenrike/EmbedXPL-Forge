@@ -236,7 +236,7 @@ def ensure_download(meta: dict[str, str], dest: Path) -> dict[str, Any]:
             "bytes": total,
             "sha256": sha256_file(dest),
         }
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         if tmp.exists():
             tmp.unlink(missing_ok=True)
         return {"status": "error", "url": url, "error": str(exc)}
@@ -419,7 +419,7 @@ def analyze_one(path: Path, meta: dict[str, str], dl: dict[str, Any]) -> dict[st
         try:
             zf = open_zip_bytes(raw_holder)
             report["container"]["type"] = "zip_or_dh_zip"
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             report["errors"].append(f"zip_open: {exc}")
             report["container"]["type"] = "unknown_non_zip"
             head = raw_holder[: 8 * 1024 * 1024]
@@ -473,7 +473,7 @@ def analyze_one(path: Path, meta: dict[str, str], dl: dict[str, Any]) -> dict[st
                     continue
 
                 data = zf.read(name)
-            except Exception as exc:  # noqa: BLE001
+            except Exception as exc:
                 report["errors"].append(f"read {name}: {exc}")
                 continue
 

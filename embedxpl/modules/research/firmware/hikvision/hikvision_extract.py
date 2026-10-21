@@ -408,9 +408,9 @@ def phase4_binary_analysis(all_files, categories):
         else:
             # Basic analysis without LIEF
             if b"system\x00" in elf_data:
-                print(f"    Contains 'system' call")
+                print("    Contains 'system' call")
             if b"strcpy\x00" in elf_data:
-                print(f"    Contains 'strcpy' (buffer overflow risk)")
+                print("    Contains 'strcpy' (buffer overflow risk)")
 
         results.append(r)
 
