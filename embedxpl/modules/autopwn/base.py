@@ -17,14 +17,14 @@ class AutoPwnReport:
         return f"\n{'='*60}\n  AutoPwn {self.segment.upper()} | {self.modules_run} modules | {self.modules_vulnerable} vulnerable\n{'='*60}"
 
 class SegmentAutoPwn:
-    """Base AutoPwn for firewallxpl."""
+    """Base AutoPwn for embedxpl firewalls."""
     def __init__(self, segment, targets, check_only=True, verbose=True, **kw):
         self.segment = segment.lower()
         self.targets = [targets] if isinstance(targets, str) else list(targets)
         self.check_only = check_only; self.verbose = verbose
     def _get_modules(self):
         try:
-            from firewallxpl.tools.search import search_category
+            from embedxpl.tools.search import search_category
             return search_category(self.segment)
         except Exception: return []
     def run(self):

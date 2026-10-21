@@ -9,13 +9,13 @@ import asyncio
 import logging
 from typing import List, Optional
 
-from firewallxpl.core.discovery.scan_engines.base import DiscoveredHost, ScanOptions
-from firewallxpl.core.discovery.scan_engines.builtin_engine import BuiltinEngine
-from firewallxpl.core.discovery.device_identifier import DeviceIdentifier
-from firewallxpl.core.discovery.vuln_mapper import VulnMapper
-from firewallxpl.core.discovery.tool_detector import detect_nmap
+from embedxpl.core.discovery.scan_engines.base import DiscoveredHost, ScanOptions
+from embedxpl.core.discovery.scan_engines.builtin_engine import BuiltinEngine
+from embedxpl.core.discovery.device_identifier import DeviceIdentifier
+from embedxpl.core.discovery.vuln_mapper import VulnMapper
+from embedxpl.core.discovery.tool_detector import detect_nmap
 
-logger = logging.getLogger("firewallxpl.discovery.engine")
+logger = logging.getLogger("embedxpl.discovery.engine")
 
 
 class DiscoveryEngine:
@@ -33,7 +33,7 @@ class DiscoveryEngine:
             nmap_info = detect_nmap()
             if nmap_info.available:
                 try:
-                    from firewallxpl.core.discovery.scan_engines.nmap_engine import NmapEngine
+                    from embedxpl.core.discovery.scan_engines.nmap_engine import NmapEngine
                     self._scan_engine = NmapEngine()
                     if self._scan_engine.available:
                         logger.info("Using Nmap engine: %s", nmap_info.version)

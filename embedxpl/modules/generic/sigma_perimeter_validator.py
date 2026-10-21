@@ -358,7 +358,7 @@ class Exploit(Exploit):
         """Locate the Sigma rules directory.
 
         Searches in order:
-        1. Packaged resources (firewallxpl/resources/sigma/), including
+        1. Packaged resources (embedxpl/resources/sigma/), including
            the windows/ subdirectory.
         2. FraudDetection sigma submodule (legacy path).
         3. Harpia purple-sigma-rules (superproject path).

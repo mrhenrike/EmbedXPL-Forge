@@ -82,9 +82,9 @@ SYNC_MAP: dict[str, dict] = {
         "src":  _SUITE_ROOT / "FirewallXPL-Forge" / "firewallxpl" / "modules",
         "dst":  _EMBEDXPL  / "embedxpl" / "modules" / "exploits" / "firewalls",
         "pkg_rewrite": {
-            "firewallxpl.core":    "embedxpl.core",
-            "firewallxpl.modules": "embedxpl.modules",
-            "firewallxpl.libs":    "embedxpl.libs",
+            "embedxpl.core":    "embedxpl.core",
+            "embedxpl.modules": "embedxpl.modules",
+            "embedxpl.libs":    "embedxpl.libs",
             "from firewallxpl":    "from embedxpl",
             "import firewallxpl":  "import embedxpl",
         },

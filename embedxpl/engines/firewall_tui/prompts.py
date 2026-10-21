@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import List, Optional
 
-from firewallxpl.core.tui.console import console, has_rich
+from embedxpl.core.tui.console import console, has_rich
 
 
 def styled_prompt(text: str, default: str = "") -> str:

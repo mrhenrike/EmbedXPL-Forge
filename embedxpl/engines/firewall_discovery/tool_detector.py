@@ -11,7 +11,7 @@ import subprocess
 from dataclasses import dataclass
 from typing import Optional
 
-logger = logging.getLogger("firewallxpl.discovery.tool_detector")
+logger = logging.getLogger("embedxpl.discovery.tool_detector")
 
 
 @dataclass

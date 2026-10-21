@@ -5,10 +5,10 @@ from __future__ import annotations
 import re
 from typing import List
 
-from firewallxpl.core.cve.cve_db import CVEDatabase
-from firewallxpl.core.exploit.option import OptBool, OptIP, OptPort
-from firewallxpl.core.exploit.printer import print_error, print_status, print_success
-from firewallxpl.core.http.http_client import HTTPClient
+from embedxpl.core.cve.cve_db import CVEDatabase
+from embedxpl.core.exploit.option import OptBool, OptIP, OptPort
+from embedxpl.core.exploit.printer import print_error, print_status, print_success
+from embedxpl.core.http.http_client import HTTPClient
 
 # Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 

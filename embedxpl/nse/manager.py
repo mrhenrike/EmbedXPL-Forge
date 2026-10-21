@@ -684,5 +684,5 @@ class NSEManager:
         print("")
         print("Exploit after NSE detection:")
         print("  pip install embedxpl && embedxpl")
-        print("  pip install firewallxpl && fxf")
+        print("  pip install embedxpl && exf")
         print("")

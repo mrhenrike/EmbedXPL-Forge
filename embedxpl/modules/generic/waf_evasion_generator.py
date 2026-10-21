@@ -42,10 +42,10 @@ __version__ = "1.0.0"
 # SOC submodule auto-discovery anchored to the repo root
 # ---------------------------------------------------------------------------
 _MODULE_FILE = Path(__file__).resolve()
-# Walk up to find the firewallxpl package root, then the workspace root
+# Walk up to find the embedxpl package root, then the workspace root
 _REPO_ROOT = _MODULE_FILE.parent
 for _ in range(8):
-    if (_REPO_ROOT / "firewallxpl").is_dir():
+    if (_REPO_ROOT / "embedxpl").is_dir():
         break
     _REPO_ROOT = _REPO_ROOT.parent
 

@@ -6,6 +6,6 @@ an optional full-screen dashboard. Falls back to ANSI if Rich is absent.
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from firewallxpl.core.tui.console import console, has_rich
+from embedxpl.core.tui.console import console, has_rich
 
 __all__ = ["console", "has_rich"]

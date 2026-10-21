@@ -10,9 +10,9 @@ import os
 from dataclasses import dataclass, field
 from typing import Any, List, Optional
 
-from firewallxpl.core.exploit.utils import index_modules, MODULES_DIR
+from embedxpl.core.exploit.utils import index_modules, MODULES_DIR
 
-logger = logging.getLogger("firewallxpl.discovery.vuln_mapper")
+logger = logging.getLogger("embedxpl.discovery.vuln_mapper")
 
 
 @dataclass
