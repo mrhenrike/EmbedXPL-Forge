@@ -1,6 +1,6 @@
-from firewallxpl.core.exploit import *
-from firewallxpl.core.snmp.snmp_client import SNMPClient
-from firewallxpl.resources import wordlists
+from embedxpl.core.exploit import *
+from embedxpl.core.snmp.snmp_client import SNMPClient
+from embedxpl.resources import wordlists
 
 
 class Exploit(SNMPClient):

@@ -1,7 +1,7 @@
 import itertools
-from firewallxpl.core.exploit import *
-from firewallxpl.core.ssh.ssh_client import SSHClient
-from firewallxpl.resources import wordlists
+from embedxpl.core.exploit import *
+from embedxpl.core.ssh.ssh_client import SSHClient
+from embedxpl.resources import wordlists
 
 
 class Exploit(SSHClient):

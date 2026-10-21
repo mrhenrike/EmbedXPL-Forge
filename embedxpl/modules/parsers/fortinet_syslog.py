@@ -1,17 +1,23 @@
-"""FortiGate Syslog Parser  -  EmbedXPL port of FirewallXPL-Forge.
-
-Original research / PoC credits
---------------------------------
-Title   : FortiGate Syslog Log Parser
-Source  : FirewallXPL-Forge firewallxpl/modules/parsers/fortinet_syslog.py
-Author  : Andre Henrique (@mrhenrike) | Uniao Geek
-Version : 1.0.0
-
-EmbedXPL port
--------------
-Maintainer : Andre Henrique (@mrhenrike) | Uniao Geek
-Notes      : Adapted from FirewallXPL-Forge parsers. No functional changes.
 """
+embedxpl/modules/parsers/fortinet_syslog.py - FortiGate Syslog Log Parser.
+
+Native Python parser for Fortinet FortiGate syslog messages in key=value format.
+No Logstash, Filebeat, or external pipeline required.
+
+Supports FortiGate log formats:
+  - System events (type=event subtype=system): admin login, config change
+  - Traffic logs (type=traffic): firewall policy actions
+  - VPN logs (type=event subtype=vpn): SSL-VPN, IPsec events
+  - User logs (type=event subtype=user): user authentication
+
+Sources:
+  - Harpia purple-sigma-rules/sigma/network/fortinet/fortigate/ (13 Sigma rules)
+  - FortiOS Log Message Reference 7.6.1
+
+Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
+Version: 1.0.0
+"""
+
 from __future__ import annotations
 
 import re
@@ -70,7 +76,17 @@ _LOGID_CATEGORIES: Dict[str, str] = {
 
 
 def parse_fortigate_kv(raw: str) -> Dict[str, Any]:
+    """Parse a FortiGate key=value syslog line.
 
+    FortiGate logs use space-separated key=value format.
+    Values may be quoted with double quotes.
+
+    Args:
+        raw: Raw syslog line from FortiGate.
+
+    Returns:
+        Dict of parsed fields with normalized ECS-like names.
+    """
     result: Dict[str, Any] = {"_raw": raw}
 
     # Extract key=value pairs (handle quoted values)
@@ -91,7 +107,14 @@ def parse_fortigate_kv(raw: str) -> Dict[str, Any]:
 
 
 def parse_fortinet_log_batch(log_lines: List[str]) -> List[Dict[str, Any]]:
+    """Parse a batch of FortiGate log lines.
 
+    Args:
+        log_lines: List of raw syslog lines.
+
+    Returns:
+        List of parsed event dicts.
+    """
     events = []
     for line in log_lines:
         line = line.strip()
@@ -109,7 +132,14 @@ def parse_fortinet_log_batch(log_lines: List[str]) -> List[Dict[str, Any]]:
 
 
 def classify_fortigate_event(event: Dict[str, Any]) -> str:
+    """Classify a FortiGate event by category.
 
+    Args:
+        event: Parsed FortiGate event dict.
+
+    Returns:
+        Category string: "admin", "traffic", "vpn", "threat", "config", "other".
+    """
     subtype = str(event.get("subtype", "")).lower()
     event_type = str(event.get("type", event.get("fortigate.type", ""))).lower()
     logid = str(event.get("logid", event.get("fortigate.logid", "")))
@@ -130,7 +160,13 @@ def classify_fortigate_event(event: Dict[str, Any]) -> str:
 
 
 class FortigateSyslogParser:
+    """High-level FortiGate syslog parser for XPL-Forge.
 
+    Usage:
+        parser = FortigateSyslogParser()
+        events = parser.parse_file("/var/log/fortigate.log")
+        admin_events = parser.filter_by_category(events, "admin")
+    """
 
     def parse_file(
         self,
@@ -138,7 +174,16 @@ class FortigateSyslogParser:
         max_lines: int = 50_000,
         encoding: str = "utf-8",
     ) -> List[Dict[str, Any]]:
+        """Parse a FortiGate log file.
 
+        Args:
+            path: Path to log file.
+            max_lines: Maximum lines to parse.
+            encoding: File encoding.
+
+        Returns:
+            List of parsed event dicts.
+        """
         lines = []
         with open(path, encoding=encoding, errors="replace") as f:
             for i, line in enumerate(f):
@@ -152,18 +197,26 @@ class FortigateSyslogParser:
         events: List[Dict[str, Any]],
         category: str,
     ) -> List[Dict[str, Any]]:
+        """Filter events by category.
 
+        Args:
+            events: Parsed event list.
+            category: Category to filter ("admin", "traffic", "vpn", etc.)
+
+        Returns:
+            Filtered event list.
+        """
         return [e for e in events if classify_fortigate_event(e) == category]
 
     def extract_admin_events(self, events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-
+        """Extract admin authentication events (login/logout/lockout)."""
         return [
             e for e in events
             if e.get("action") in ("login", "logout") or "login" in str(e.get("message", "")).lower()
         ]
 
     def extract_config_changes(self, events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-
+        """Extract configuration change events."""
         return [
             e for e in events
             if "config" in str(e.get("message", "")).lower()

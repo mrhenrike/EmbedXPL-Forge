@@ -1,5 +1,5 @@
 """
-firewallxpl/modules/intel/cve_classifier.py - CVE Intelligence Classifier.
+embedxpl/modules/intel/cve_classifier.py - CVE Intelligence Classifier.
 
 Classifies CVE entries by category (CWE type, product type, attack vector)
 to help prioritize which exploit modules to run against a given target.

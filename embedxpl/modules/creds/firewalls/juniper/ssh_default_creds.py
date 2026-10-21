@@ -15,7 +15,7 @@ class Exploit(SSHDefault):
         "description": (
             "Dictionary attack with default credentials against Juniper SRX "
             "and legacy SSG series SSH. Covers SOHO/SMB models: SRX100/210/220/300. "
-            "Cherry-picked from FirewallXPL-Forge."
+            ""
         ),
         "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (

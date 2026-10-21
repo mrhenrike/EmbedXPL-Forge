@@ -1,6 +1,6 @@
-from firewallxpl.core.exploit import *
-from firewallxpl.core.http.http_client import HTTPClient
-from firewallxpl.resources import wordlists
+from embedxpl.core.exploit import *
+from embedxpl.core.http.http_client import HTTPClient
+from embedxpl.resources import wordlists
 from requests.auth import HTTPDigestAuth
 
 

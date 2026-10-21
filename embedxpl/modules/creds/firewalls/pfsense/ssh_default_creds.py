@@ -16,7 +16,7 @@ class Exploit(SSHDefault):
             "Dictionary attack with default credentials against pfSense SSH service. "
             "pfSense is widely deployed as a SOHO/SMB firewall/router on x86 hardware. "
             "Default credentials admin:pfsense persist when first-time wizard is skipped. "
-            "Cherry-picked from FirewallXPL-Forge."
+            ""
         ),
         "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (

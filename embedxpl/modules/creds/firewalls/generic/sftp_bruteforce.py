@@ -1,8 +1,8 @@
 import itertools
 
-from firewallxpl.core.exploit import *
-from firewallxpl.core.sftp.sftp_client import SFTPClient
-from firewallxpl.resources import wordlists
+from embedxpl.core.exploit import *
+from embedxpl.core.sftp.sftp_client import SFTPClient
+from embedxpl.resources import wordlists
 
 
 class Exploit(SFTPClient):

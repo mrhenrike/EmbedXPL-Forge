@@ -1,16 +1,13 @@
-"""pfSense / OPNsense Syslog Parser  -  EmbedXPL port of FirewallXPL-Forge.
-
-Original research / PoC credits
---------------------------------
-Title   : pfSense/OPNsense Syslog Parser
-Source  : FirewallXPL-Forge firewallxpl/modules/parsers/pfsense_syslog.py
-Author  : Andre Henrique (@mrhenrike) | Uniao Geek
-Version : 1.0.0
-
-EmbedXPL port
--------------
-Maintainer : Andre Henrique (@mrhenrike) | Uniao Geek
 """
+embedxpl/modules/parsers/pfsense_syslog.py - pfSense/OPNsense Syslog Parser.
+
+Native Python parser for pfSense/OPNsense syslog output.
+Supports filterlog (firewall) and authpriv (auth) log formats.
+
+Author: Andre Henrique (@mrhenrike) | Uniao Geek - https://github.com/Uniao-Geek
+Version: 1.0.0
+"""
+
 from __future__ import annotations
 
 import re
@@ -37,7 +34,20 @@ _PFSENSE_HEADER = re.compile(
 
 
 def parse_pfsense_line(raw: str) -> Optional[Dict[str, Any]]:
+    """Parse a single pfSense syslog line.
 
+    Handles:
+      - filterlog: CSV firewall events
+      - php/php-fpm: GUI/API access
+      - sshd: SSH auth events
+      - sudo: privilege escalation
+
+    Args:
+        raw: Raw syslog line.
+
+    Returns:
+        Parsed event dict or None if unrecognized.
+    """
     result: Dict[str, Any] = {"_raw": raw.strip()}
 
     m = _PFSENSE_HEADER.match(raw.strip())
@@ -79,7 +89,7 @@ def parse_pfsense_line(raw: str) -> Optional[Dict[str, Any]]:
 
 
 def _parse_filterlog_message(event: Dict[str, Any], message: str) -> None:
-
+    """Parse filterlog CSV message into event dict."""
     parts = message.split(",")
     if len(parts) >= 20:
         field_names = _FILTERLOG_FIELDS[:len(parts)]
@@ -96,7 +106,7 @@ def _parse_filterlog_message(event: Dict[str, Any], message: str) -> None:
 
 
 def _parse_sshd_message(event: Dict[str, Any], message: str) -> None:
-
+    """Extract SSH auth fields from sshd message."""
     # Accepted/Failed password/publickey for user X from IP port N
     m = re.search(
         r"(Accepted|Failed|Invalid|error:)\s+(\w+).*for\s+(\S+)\s+from\s+(\S+)\s+port\s+(\d+)",
@@ -113,7 +123,7 @@ def _parse_sshd_message(event: Dict[str, Any], message: str) -> None:
 
 
 def _parse_sudo_message(event: Dict[str, Any], message: str) -> None:
-
+    """Extract sudo privilege escalation fields."""
     # user1 : TTY=pts/0 ; PWD=/root ; USER=root ; COMMAND=/bin/sh
     m = re.match(r"(\S+)\s*:\s*TTY=(\S+).*USER=(\S+)\s*;.*COMMAND=(.+)", message, re.I)
     if m:
@@ -124,7 +134,13 @@ def _parse_sudo_message(event: Dict[str, Any], message: str) -> None:
 
 
 class PfsenseSyslogParser:
+    """pfSense/OPNsense syslog parser.
 
+    Usage:
+        parser = PfsenseSyslogParser()
+        events = parser.parse_file("/var/log/filter.log")
+        blocked = [e for e in events if e.get("action") == "block"]
+    """
 
     def parse_file(
         self,
@@ -132,7 +148,16 @@ class PfsenseSyslogParser:
         max_lines: int = 50_000,
         log_types: Optional[List[str]] = None,
     ) -> List[Dict[str, Any]]:
+        """Parse a pfSense log file.
 
+        Args:
+            path: Path to syslog file.
+            max_lines: Maximum lines to read.
+            log_types: Filter to specific types ("firewall", "ssh", "sudo", "webgui").
+
+        Returns:
+            List of parsed event dicts.
+        """
         events = []
         with open(path, encoding="utf-8", errors="replace") as f:
             for i, line in enumerate(f):
