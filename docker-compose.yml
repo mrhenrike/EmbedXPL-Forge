@@ -1,9 +1,0 @@
-services:
-  embedxpl:
-    build: .
-    container_name: embedxpl
-    network_mode: host
-    volumes:
-      - ./output:/opt/embedxpl/output
-    environment:
-      - TERM=xterm-256color
