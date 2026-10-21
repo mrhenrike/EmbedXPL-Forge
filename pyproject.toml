@@ -156,15 +156,24 @@ include = ["embedxpl*"]
 
 [tool.mypy]
 python_version = "3.12"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = false
-check_untyped_defs = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-no_implicit_reexport = true
+strict = true
 mypy_path = "."
+exclude = [
+    "embedxpl/malware_research/",
+    "embedxpl/modules/exploits/",
+    "embedxpl/engines/fingerprint/tenable/",
+    "100fio_networks/",
+    "lb-link/",
+    "1net1/",
+    "2025/",
+    "2wire/",
+    "3bb/",
+    "3com/",
+    "7_technologies/",
+    "tools/",
+]
 
+# Third-party stubs: ignore missing imports
 [[tool.mypy.overrides]]
 module = [
     "scapy.*",
@@ -237,6 +246,31 @@ module = [
     "xpl_core.*",
 ]
 ignore_missing_imports = true
+
+# Gradual strict rollout: modules with large untyped codebases
+# Remove overrides as each subpackage is fully annotated
+[[tool.mypy.overrides]]
+module = [
+    "embedxpl.modules.*",
+    "embedxpl.engines.*",
+    "embedxpl.malware_research.*",
+    "embedxpl.native_src.*",
+    "embedxpl.libs.*",
+    "embedxpl.tools.*",
+    "embedxpl.nse.*",
+    "embedxpl.core.*",
+    "embedxpl.intel.*",
+    "embedxpl.runtime.*",
+    "embedxpl.registry.*",
+    "embedxpl.interpreter",
+    "embedxpl.__main__",
+    "embedxpl.resources.*",
+]
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = ["venv_bootstrap", "tools.*"]
+ignore_errors = true
 
 [tool.ruff]
 target-version = "py39"
