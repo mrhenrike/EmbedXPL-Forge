@@ -1,0 +1,1177 @@
+{
+  "catalog_note": "Wave 12 research references for EmbedXPL. Sources pending full integration.",
+  "entry_count": 117,
+  "last_updated": "2026-10-21",
+  "entries": [
+    {
+      "src_id": "SRC-024",
+      "url": "https://thehackernews.com/2026/10/nextjs-ships-out-of-band-patch-for-two.html",
+      "forge": "ADXPL|EmbedXPL/DependencyAudit",
+      "priority": "Alta",
+      "action": "F",
+      "cve": null,
+      "summary": "Next.js 14/10: advisories GHSA e versões corrigidas v16.4.1/15.5.28; criar verificação SBOM não exploratória.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-054",
+      "url": "https://aws.amazon.com/pt/blogs/security/defense-in-depth-open-firewalls-reverse-proxies-ssrf-vulnerabilities-ec2-instance-metadata-service/",
+      "forge": "ADXPL|CloudXPL|FirewallXPL|MalwareXPL/SSRF Defense",
+      "priority": "Alta",
+      "action": "P",
+      "cve": null,
+      "summary": "AWS defesa IMDS: material para validadores SSRF/cloud metadata e hardening.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-162",
+      "url": "https://github.com/SnailSploit/Claude-Red",
+      "forge": "ADXPL|EmbedXPL|TupaXPL/Skills",
+      "priority": "Alta",
+      "action": "Q",
+      "cve": null,
+      "summary": "Claude-Red: biblioteca de skills ofensivas para Claude; 7604 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-272",
+      "url": "https://github.com/assetnote/nowafpls",
+      "forge": "ADXPL|FirewallXPL/Firewall/WAF",
+      "priority": "Alta",
+      "action": "Q",
+      "cve": null,
+      "summary": "Burp Plugin to Bypass WAFs through the insertion of Junk Data; 1520 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-664",
+      "url": "https://github.com/V33RU/IoTSecurity101",
+      "forge": "EmbedXPL|IndustrialXPL/IoT/Security",
+      "priority": "Alta",
+      "action": "Q",
+      "cve": null,
+      "summary": "IoTSecurity101: lista curada de recursos de segurança IoT/connected things",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-665",
+      "url": "https://github.com/hexsecs/awesome-embedded-security",
+      "forge": "EmbedXPL/Embedded/Security",
+      "priority": "Alta",
+      "action": "Q",
+      "cve": null,
+      "summary": "Curated list: firmware analysis; RE; hardware hacking; IoT security; fuzzing; secure boot; side-channel; SDR",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-690",
+      "url": "https://github.com/tkmru/awesome-edr-bypass",
+      "forge": "ADXPL|FirewallXPL/Evasion",
+      "priority": "Alta",
+      "action": "Q",
+      "cve": null,
+      "summary": "Awesome EDR Bypass: curated resources para ethical hacking; atualizado 2026",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-1052",
+      "url": "https://www.bleepingcomputer.com/news/security/f5-releases-out-of-band-patches-for-critical-nginx-vulnerabilities/",
+      "forge": "EmbedXPL/NGINX-F5",
+      "priority": "Alta",
+      "action": "Q",
+      "cve": null,
+      "summary": "F5 NGINX: vulnerabilidades criticas com patches out-of-band. Avaliar CVEs especificos para modulos de exploit NGINX em EmbedXPL (load balancers, reverse proxies).",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-1053",
+      "url": "https://cybersecuritynews.com/palo-alto-vpn-flaw-exploited/",
+      "forge": "EmbedXPL/PaloAlto-PAN-OS",
+      "priority": "Alta",
+      "action": "Q",
+      "cve": "CVE-2026-0257",
+      "summary": "Referencia adicional para CVE-2026-0257 (SRC-1045). Cobertura CyberSecurityNews sobre exploracao ativa do GlobalProtect VPN flaw.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-1054",
+      "url": "https://thehackernews.com/2026/10/critical-fortisiem-flaw-gets-public.html",
+      "forge": "EmbedXPL/Fortinet-FortiSIEM",
+      "priority": "Alta",
+      "action": "Q",
+      "cve": "CVE-2026-106173",
+      "summary": "CVE-2026-106173: FortiSIEM RCE via path traversal + NUL-byte injection + file overwrite. Unauth. PoC publico. Referencia THN.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-001",
+      "url": "https://hackers-arise.com/bypass-web-application-firewall-waf-with-evilwaf/",
+      "forge": "EmbedXPL|FirewallXPL/Web",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "WAF: estudar taxonomia de normalização, HTTP e falsos negativos, não transportar evasões para execução automática.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-015",
+      "url": "https://github.com/HORKimhab/CVE-2026-61511",
+      "forge": "ADXPL|EmbedXPL/Web",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Terceira fonte vBulletin: README descreve draft/TODO; baixa evidência de PoC funcional.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-028",
+      "url": "https://github.com/abraxas/pfsense-qinq-parent-if",
+      "forge": "ADXPL|EmbedXPL/pfSense",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-qinq-parent-if: condição específica de pfSense CE 2.9.0-DEVELOPMENT, geralmente com sessão WebGUI/permissões. Reconstruir casos negativos e assessor read-only.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-029",
+      "url": "https://github.com/abraxas/pfsense-openvpn-wizard-crlf",
+      "forge": "ADXPL|EmbedXPL/pfSense",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-openvpn-wizard-crlf: condição específica de pfSense CE 2.9.0-DEVELOPMENT, geralmente com sessão WebGUI/permissões. Reconstruir casos negativos e assessor read-only.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-030",
+      "url": "https://github.com/abraxas/pfsense-carp-vhid",
+      "forge": "ADXPL|EmbedXPL/pfSense",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-carp-vhid: condição específica de pfSense CE 2.9.0-DEVELOPMENT, geralmente com sessão WebGUI/permissões. Reconstruir casos negativos e assessor read-only.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-031",
+      "url": "https://github.com/abraxas/pfsense-limiter-number",
+      "forge": "ADXPL|EmbedXPL/pfSense",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-limiter-number: condição específica de pfSense CE 2.9.0-DEVELOPMENT, geralmente com sessão WebGUI/permissões. Reconstruir casos negativos e assessor read-only.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-032",
+      "url": "https://github.com/abraxas/pfsense-ipsec-login-banner",
+      "forge": "ADXPL|EmbedXPL/pfSense",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-ipsec-login-banner: condição específica de pfSense CE 2.9.0-DEVELOPMENT, geralmente com sessão WebGUI/permissões. Reconstruir casos negativos e assessor read-only.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-033",
+      "url": "https://abraxaslabs.tech/research/pfsense-qinq-parent-if",
+      "forge": "EmbedXPL/pfSense",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Artigo Abraxas pfsense-qinq-parent-if: referência complementar do item de mesma família, indisponível na ferramenta de navegação; não verificar sem acesso.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-034",
+      "url": "https://abraxaslabs.tech/research/pfsense-openvpn-wizard-crlf",
+      "forge": "EmbedXPL/pfSense",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Artigo Abraxas pfsense-openvpn-wizard-crlf: referência complementar do item de mesma família, indisponível na ferramenta de navegação; não verificar sem acesso.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-035",
+      "url": "https://abraxaslabs.tech/research/pfsense-carp-vhid",
+      "forge": "EmbedXPL/pfSense",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Artigo Abraxas pfsense-carp-vhid: referência complementar do item de mesma família, indisponível na ferramenta de navegação; não verificar sem acesso.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-036",
+      "url": "https://abraxaslabs.tech/research/pfsense-limiter-number",
+      "forge": "EmbedXPL/pfSense",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Artigo Abraxas pfsense-limiter-number: referência complementar do item de mesma família, indisponível na ferramenta de navegação; não verificar sem acesso.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-037",
+      "url": "https://abraxaslabs.tech/research/pfsense-ipsec-login-banner",
+      "forge": "EmbedXPL/pfSense",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Artigo Abraxas pfsense-ipsec-login-banner: referência complementar do item de mesma família, indisponível na ferramenta de navegação; não verificar sem acesso.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-045",
+      "url": "https://www.bleepingcomputer.com/news/security/anthropic-warns-self-replicating-ai-could-spread-to-your-smart-devices/",
+      "forge": "ADXPL|EmbedXPL|IndustrialXPL|WirelessXPL/IoT Defense",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Autorreprodução em IoT é hipótese de risco; experimento não demonstrou worm fim a fim; foco em detecção de movimentação.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-047",
+      "url": "https://www.youtube.com/watch?v=PcFcKGWfgcg",
+      "forge": "ADXPL|EmbedXPL/Web",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Vídeo SSRF: item didático; a transcrição completa não foi validada.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-048",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
+      "forge": "ADXPL|EmbedXPL/Web Defense",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "OWASP SSRF Prevention: use como modelo de controles e testes de regressão de validadores.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-049",
+      "url": "https://portswigger.net/web-security/ssrf",
+      "forge": "EmbedXPL|MobileXPL/Web",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "PortSwigger SSRF Academy: casos de teste em laboratório e critérios de detecção.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-050",
+      "url": "https://portswigger.net/web-security/ssrf/blind",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "PortSwigger blind SSRF: padrões de confirmação OAST autorizada e falsos positivos.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-051",
+      "url": "https://www.slcyber.io/research/novel-ssrf-technique-involving-http-redirect-loops",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "SL Cyber redirect-loops: reproduzir fenômeno de parser/redirect com simulador local.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-052",
+      "url": "https://portswigger.net/research/top-10-web-hacking-techniques-of-2025",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Ranking PortSwigger 2025: priorizar temas e regressões, não copiar técnicas sem atribuição.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-060",
+      "url": "https://github.com/abraxas/pfsense-api-enroll-json-ssh",
+      "forge": "ADXPL|EmbedXPL/pfSense Plus",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-api-enroll-json-ssh: auditoria de controle de acesso, confidencialidade de chaves, identidade TLS ou autorização MIM. Distinguir mock de pfSense real.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-061",
+      "url": "https://github.com/abraxas/pfsense-api-enroll-autoadd",
+      "forge": "ADXPL|EmbedXPL/pfSense Plus",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-api-enroll-autoadd: auditoria de controle de acesso, confidencialidade de chaves, identidade TLS ou autorização MIM. Distinguir mock de pfSense real.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-062",
+      "url": "https://github.com/abraxas/pfsense-api-unix-sock-noauth",
+      "forge": "ADXPL|EmbedXPL/pfSense Plus",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-api-unix-sock-noauth: auditoria de controle de acesso, confidencialidade de chaves, identidade TLS ou autorização MIM. Distinguir mock de pfSense real.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-063",
+      "url": "https://github.com/abraxas/pfsense-api-export-key-get",
+      "forge": "ADXPL|EmbedXPL/pfSense Plus",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-api-export-key-get: auditoria de controle de acesso, confidencialidade de chaves, identidade TLS ou autorização MIM. Distinguir mock de pfSense real.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-064",
+      "url": "https://github.com/abraxas/pfsense-api-acme-key-dump",
+      "forge": "ADXPL|EmbedXPL/pfSense Plus",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-api-acme-key-dump: auditoria de controle de acesso, confidencialidade de chaves, identidade TLS ou autorização MIM. Distinguir mock de pfSense real.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-065",
+      "url": "https://github.com/abraxas/pfsense-api-fleet-jwt",
+      "forge": "ADXPL|EmbedXPL/pfSense Plus",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-api-fleet-jwt: auditoria de controle de acesso, confidencialidade de chaves, identidade TLS ou autorização MIM. Distinguir mock de pfSense real.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-066",
+      "url": "https://github.com/abraxas/pfsense-api-acb-userkey",
+      "forge": "ADXPL|EmbedXPL/pfSense Plus",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-api-acb-userkey: auditoria de controle de acesso, confidencialidade de chaves, identidade TLS ou autorização MIM. Distinguir mock de pfSense real.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-067",
+      "url": "https://github.com/abraxas/pfsense-api-snort-file-join",
+      "forge": "ADXPL|EmbedXPL/pfSense Plus",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-api-snort-file-join: auditoria de controle de acesso, confidencialidade de chaves, identidade TLS ou autorização MIM. Distinguir mock de pfSense real.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-068",
+      "url": "https://github.com/abraxas/pfsense-api-example-ssl-verify",
+      "forge": "ADXPL|EmbedXPL/pfSense Plus",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-api-example-ssl-verify: auditoria de controle de acesso, confidencialidade de chaves, identidade TLS ou autorização MIM. Distinguir mock de pfSense real.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-069",
+      "url": "https://abraxaslabs.tech/research/pfsense-api-nexus-mim",
+      "forge": "ADXPL|EmbedXPL/pfSense Plus",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Série Abraxas pfSense Plus MIM/API: artigo indisponível; validar resultados nos repos e produto correto.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-070",
+      "url": "https://github.com/abraxas/pfsense-wireless-clone",
+      "forge": "ADXPL|EmbedXPL|WirelessXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-wireless-clone: investigar validação de configuração/sink em pfSense CE 2.9.0-DEVELOPMENT, autenticação e permissões, com simulador local. Sem importar exploit executável.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-071",
+      "url": "https://github.com/abraxas/pfsense-assign-if-add",
+      "forge": "ADXPL|EmbedXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-assign-if-add: investigar validação de configuração/sink em pfSense CE 2.9.0-DEVELOPMENT, autenticação e permissões, com simulador local. Sem importar exploit executável.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-072",
+      "url": "https://github.com/abraxas/pfsense-gw-ipv6-zone",
+      "forge": "ADXPL|EmbedXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-gw-ipv6-zone: investigar validação de configuração/sink em pfSense CE 2.9.0-DEVELOPMENT, autenticação e permissões, com simulador local. Sem importar exploit executável.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-073",
+      "url": "https://github.com/abraxas/pfsense-timezone-phpini",
+      "forge": "ADXPL|EmbedXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-timezone-phpini: investigar validação de configuração/sink em pfSense CE 2.9.0-DEVELOPMENT, autenticação e permissões, com simulador local. Sem importar exploit executável.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-074",
+      "url": "https://github.com/abraxas/pfsense-sshguard-crlf",
+      "forge": "ADXPL|EmbedXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-sshguard-crlf: investigar validação de configuração/sink em pfSense CE 2.9.0-DEVELOPMENT, autenticação e permissões, com simulador local. Sem importar exploit executável.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-075",
+      "url": "https://github.com/abraxas/pfsense-l2tp-radius-mpd",
+      "forge": "ADXPL|EmbedXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-l2tp-radius-mpd: investigar validação de configuração/sink em pfSense CE 2.9.0-DEVELOPMENT, autenticação e permissões, com simulador local. Sem importar exploit executável.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-076",
+      "url": "https://github.com/abraxas/pfsense-pppoe-cron",
+      "forge": "ADXPL|EmbedXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-pppoe-cron: investigar validação de configuração/sink em pfSense CE 2.9.0-DEVELOPMENT, autenticação e permissões, com simulador local. Sem importar exploit executável.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-077",
+      "url": "https://github.com/abraxas/pfsense-pppoe-secret-bang",
+      "forge": "ADXPL|EmbedXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-pppoe-secret-bang: investigar validação de configuração/sink em pfSense CE 2.9.0-DEVELOPMENT, autenticação e permissões, com simulador local. Sem importar exploit executável.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-078",
+      "url": "https://github.com/abraxas/pfsense-cp-ha-pfctl",
+      "forge": "ADXPL|EmbedXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-cp-ha-pfctl: investigar validação de configuração/sink em pfSense CE 2.9.0-DEVELOPMENT, autenticação e permissões, com simulador local. Sem importar exploit executável.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-079",
+      "url": "https://github.com/abraxas/pfsense-unbound-sock-timeout",
+      "forge": "ADXPL|EmbedXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-unbound-sock-timeout: investigar validação de configuração/sink em pfSense CE 2.9.0-DEVELOPMENT, autenticação e permissões, com simulador local. Sem importar exploit executável.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-080",
+      "url": "https://github.com/abraxas/pfsense-unbound-acl-crlf",
+      "forge": "ADXPL|EmbedXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-unbound-acl-crlf: investigar validação de configuração/sink em pfSense CE 2.9.0-DEVELOPMENT, autenticação e permissões, com simulador local. Sem importar exploit executável.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-081",
+      "url": "https://github.com/abraxas/pfsense-ovpn-connect-eval",
+      "forge": "ADXPL|EmbedXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-ovpn-connect-eval: investigar validação de configuração/sink em pfSense CE 2.9.0-DEVELOPMENT, autenticação e permissões, com simulador local. Sem importar exploit executável.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-082",
+      "url": "https://github.com/abraxas/pfsense-ovpn-learn-cn",
+      "forge": "ADXPL|EmbedXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Abraxas pfsense-ovpn-learn-cn: investigar validação de configuração/sink em pfSense CE 2.9.0-DEVELOPMENT, autenticação e permissões, com simulador local. Sem importar exploit executável.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-085",
+      "url": "https://abraxaslabs.tech/research/pfsense-ce-leftovers",
+      "forge": "EmbedXPL/pfSense CE",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "Hub Abraxas pfSense CE: índice citado no texto; conteúdo do site indisponível na navegação.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-087",
+      "url": "https://403.brutelogic.net/access/rproxy",
+      "forge": "EmbedXPL/Web Lab",
+      "priority": "Média",
+      "action": "P",
+      "cve": null,
+      "summary": "403.brutelogic.net: testbed externo, usar somente sob termos do mantenedor; preferência por clone local.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-215",
+      "url": "https://github.com/toxydose/Duckyspark",
+      "forge": "ADXPL|EmbedXPL|IndustrialXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "Translator from USB-Rubber-Ducky payloads to a Digispark code.; 233 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-226",
+      "url": "https://github.com/HORKimhab/CVE-Ubiquiti",
+      "forge": "ADXPL|EmbedXPL/Router",
+      "priority": "Média",
+      "action": "Q",
+      "cve": "CVE-2026-77542",
+      "summary": "CVE-2026-77542; CVE-2026-77543; CVE-2026-77545; CVE-2026-77550; CVE-2026-77551; CVE-2026-77552; CVE-2026-77553; CVE-2026; 0 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-235",
+      "url": "https://github.com/0x4m4/m0xblood-ctfd-theme",
+      "forge": "ADXPL|EmbedXPL|IndustrialXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "A dark; cyberpunk-inspired CTFd theme with red accents and animated elements; 5 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-248",
+      "url": "https://github.com/digininja/nosqlilab",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "A lab for playing with NoSQL Injection; 138 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-259",
+      "url": "https://github.com/OPCUAUniCT/OPCUA-OCF-Information-Models-Mapping",
+      "forge": "EmbedXPL|IndustrialXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "Mapping of Information Models between OPC UA and OCF; 6 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-312",
+      "url": "https://github.com/morluto/rea-embedded-security",
+      "forge": "ADXPL|EmbedXPL|IndustrialXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "F",
+      "cve": null,
+      "summary": "Curated list of embedded security tools and resources: firmware analysis; reverse engineering; hardware hacking; IoT sec; 1 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-321",
+      "url": "https://github.com/assetnote/newtowner",
+      "forge": "FirewallXPL/Firewall/WAF",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "Abuse trust-boundaries to bypass firewalls and network controls; 433 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-334",
+      "url": "https://github.com/MarginResearch/mikrotik_authentication",
+      "forge": "EmbedXPL/Router",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "Proofs of concept which successfully authenticate with MikroTik Winbox and MAC Telnet servers running on RouterOS versio; 87 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-336",
+      "url": "https://github.com/JustVugg/loomabase",
+      "forge": "EmbedXPL|IndustrialXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "Offline-first synchronization engine for  SQLite and PostgreSQL; built in Rust with column-level  CRDTs; authoritative p; 83 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-387",
+      "url": "https://github.com/assetnote/ghostbuster",
+      "forge": "CloudXPL|FirewallXPL/Firewall/WAF",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "Eliminate dangling elastic IPs by performing analysis on your resources within all your AWS accounts.; 279 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-391",
+      "url": "https://github.com/Mebus/restatic",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "Restatic - A Boring Open Source GUI for Restic Backup; 194 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-400",
+      "url": "https://github.com/RUB-SysSec/SiemensS7-Bootloader",
+      "forge": "EmbedXPL|IndustrialXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "Client utility for Siemens S7 bootloader special access feature; 91 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-404",
+      "url": "https://github.com/S12cybersecurity/NinjaInjector",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "Classic Process Injection with Memory Evasion Techniques implemantation; 73 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-405",
+      "url": "https://github.com/dinosn/mariadb-13-rce-lab",
+      "forge": "EmbedXPL|MobileXPL/Web",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "MariaDB 13.0.1-rc RCE lab  -  priv-esc + heap UAF + JOP chain to system() as uid 999(mysql) on stock Docker image. Found w; 68 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-406",
+      "url": "https://github.com/JustVugg/gonk",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "Ultra-lightweight; edge-native API Gateway for Go; 67 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-407",
+      "url": "https://github.com/dinosn/leaklens",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "Bug bounty focused JavaScript security analysis for crawling web assets; source maps; and secret discovery; 66 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-529",
+      "url": "https://github.com/adron-s/openwrt-rb5009",
+      "forge": "EmbedXPL/Router",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "This is OpenWrt for Mikrotik RB5009; 56 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-649",
+      "url": "https://github.com/a101e-lab/FirmVulLinker",
+      "forge": "EmbedXPL/Firmware/Vuln",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "FirmVulLinker: linking de vulnerabilidades em firmware; HTML; 4 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-652",
+      "url": "https://github.com/a101e-lab/IoTFirmware",
+      "forge": "EmbedXPL/Firmware/Dataset",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "IoTFirmware: coleção de firmwares IoT para lab e emulação",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-662",
+      "url": "https://github.com/enhansome/enhansome-iot-and-hardware-security",
+      "forge": "EmbedXPL|IndustrialXPL/IoT/Hardware",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "Curated IoT and hardware security resources",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-663",
+      "url": "https://github.com/IamAlch3mist/Awesome-Embedded-Systems-Vulnerability-Research",
+      "forge": "EmbedXPL/Embedded/VulnResearch",
+      "priority": "Média",
+      "action": "Q",
+      "cve": null,
+      "summary": "Resources para vuln research em IoT/embedded devices",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-1041",
+      "url": "https://github.com/nicknamenope/dev-manager-desktop",
+      "forge": "EmbedXPL/SmartTV-LG-webOS",
+      "priority": "Media",
+      "action": "Q",
+      "cve": null,
+      "summary": "dev-manager-desktop: referencia documental de developer mode management. Nao e Python; referencia de superficie de ataque.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-1042",
+      "url": "https://github.com/nicknamenope/NuvioTVSmart",
+      "forge": "EmbedXPL/SmartTV-P2P",
+      "priority": "Media",
+      "action": "Q",
+      "cve": null,
+      "summary": "NuvioTVSmart: superficie de ataque P2P interessante. Avaliar para pesquisa de integracao.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-1043",
+      "url": "https://github.com/nicknamenope/pylgtv",
+      "forge": "EmbedXPL/SmartTV-LG-webOS",
+      "priority": "Media",
+      "action": "Q",
+      "cve": null,
+      "summary": "pylgtv: biblioteca Python webOS. Arquivado; LGWebOSRemote e superior. Manter como referencia.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-1044",
+      "url": "https://github.com/nicknamenope/FreeMyTvWebOS",
+      "forge": "EmbedXPL/SmartTV-LG-webOS",
+      "priority": "Media",
+      "action": "Q",
+      "cve": null,
+      "summary": "FreeMyTvWebOS: exemplo de deployment .ipk para webOS. Referencia para sideloading.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-1051",
+      "url": "https://github.com/simbasjungles/free-my-tv",
+      "forge": "EmbedXPL/SmartTV-MultiVendor",
+      "priority": "Media",
+      "action": "Q",
+      "cve": null,
+      "summary": "free-my-tv (simbasjungles): home screen replacement ad-free para Google TV + LG + Samsung. Diferente do free-my-tv nicknamenope (ADB debloat). Superficie de ataque: sideloading ADB, launcher stock, AP",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-1056",
+      "url": "https://shieldsec.com.br/malware-infecta-centrais-multimidia-android-de-veiculos-e-transforma-dispositivos-em-proxies/",
+      "forge": "EmbedXPL/Automotive-Android",
+      "priority": "Media",
+      "action": "Q",
+      "cve": null,
+      "summary": "Malware infecta centrais multimidia Android automotivas e transforma em proxies. Superficie de ataque: head units Android, sideloading, firmware inseguro. Referencia para modulos automotive em EmbedXP",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-006",
+      "url": "https://github.com/morluto/rea",
+      "forge": "EmbedXPL|MalwareXPL|MobileXPL|TupaXPL/MalwareXPL",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "REA: análise local MCP/CLI de binários, APK, firmware, tráfego, JS/.NET com evidência. Criar adaptador provenance-first.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-053",
+      "url": "https://github.com/assetnote/blind-ssrf-chains",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "Assetnote blind-ssrf-chains: casos de teste controlados e base de exemplos, rever licença e impacto.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-086",
+      "url": "http://github.com/brutelogic/unkover",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "unKover v1.3: comparação de casos 401/403 em lab com autor BRuteLogic; revisar versão e licenciamento.",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-152",
+      "url": "https://github.com/iamj0ker/bypass-403",
+      "forge": "ADXPL|EmbedXPL/Web",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "Bypass 403 via headers/paths/verbs; 2275 stars; útil para recon web",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-222",
+      "url": "https://github.com/tc4dy/ironshell-x86",
+      "forge": "ADXPL|EmbedXPL|IndustrialXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "Bare-metal x86 shellcode execution & analysis environment in pure 16-bit Assembly. 2-stage bootloader; TUI shell; 8 inje; 5 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-225",
+      "url": "https://github.com/shinthink/CVE-2026-66066",
+      "forge": "ADXPL|FirewallXPL/Firewall/WAF",
+      "priority": "Média",
+      "action": "A",
+      "cve": "CVE-2026-66066",
+      "summary": "CVE-2026-66066  -  KindaRails2Shell: Rails Active Storage/libvips Arbitrary File Read → RCE. MATLAB/HDF5 dual-identity fil; 1 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-228",
+      "url": "https://github.com/dinosn/mikrotrick-poc",
+      "forge": "ADXPL|EmbedXPL/Router",
+      "priority": "Média",
+      "action": "A",
+      "cve": "CVE-2026-67276",
+      "summary": "CVE-2026-67276 RouterOS SSH public-key authentication bypass lab PoC; 100 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-249",
+      "url": "https://github.com/Armur-Ai/vibescan",
+      "forge": "ADXPL|FirewallXPL/Firewall/WAF",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "Security scanner for AI-generated ('vibe-coded') code. Runs    SAST; DAST; and sandboxed exploit simulation across 15+  ; 92 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-252",
+      "url": "https://github.com/SnailSploit/AATMF-Adversarial-AI-Threat-Modeling-Framework",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "AATMF | An Open Source - Adversarial AI Threat Modeling Framework; 45 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-255",
+      "url": "https://github.com/SnailSploit/Awesome-Snail-OSINT",
+      "forge": "ADXPL|EmbedXPL/Web",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "an Awesome List of OSINT Resources; 17 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-261",
+      "url": "https://github.com/tc4dy/BlindEye",
+      "forge": "ADXPL|EmbedXPL|IndustrialXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": " Advanced-Scan; Basic OSINT tool scanning 580+ platforms with 50+ username variations. Multi-threaded; bilingual support; 3 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-298",
+      "url": "https://github.com/SnailSploit/justdastit",
+      "forge": "ADXPL|EmbedXPL/Web",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "The Burp You Can Afford  -  Open-source CLI DAST toolkit; 6 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-324",
+      "url": "https://github.com/skraft9/vulnerability-research",
+      "forge": "FirewallXPL/Firewall/WAF",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "Collection of documentation; tools; and tips related to vulnerability research.; 275 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-408",
+      "url": "https://github.com/JustVugg/tools-factory",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "From any API surface to verified AI agent tools: Go CLI + MCP + skills + SQLite + policy + proofs.; 59 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-521",
+      "url": "https://github.com/mukul975/claude-team-dashboard",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "📊 Real-time monitoring dashboard for Claude Code agent teams; 76 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-646",
+      "url": "https://github.com/0xuserpag3/HuaweiFirmwareTool",
+      "forge": "EmbedXPL/Firmware",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "Tools para modificar firmware Huawei HG8245; C++; 25 stars",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-691",
+      "url": "https://github.com/0xHossam/Killer",
+      "forge": "ADXPL|FirewallXPL/Evasion",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "Killer: tool bypass AV/EDR com técnicas evasivas; usado por Patchwork group",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-708",
+      "url": "https://github.com/attilaszia/linux-iot-cves",
+      "forge": "EmbedXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "linux-iot-cves em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-824",
+      "url": "https://github.com/Koenkk/firmware_oneplus",
+      "forge": "EmbedXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "firmware_oneplus em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-828",
+      "url": "https://github.com/Koenkk/OpenThread-TexasInstruments-firmware",
+      "forge": "EmbedXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "OpenThread-TexasInstruments-firmware em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-848",
+      "url": "https://github.com/Koenkk/Z-Stack-firmware",
+      "forge": "EmbedXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "Z-Stack-firmware em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-852",
+      "url": "https://github.com/LaPhilosophie/IoT-vulnerable",
+      "forge": "EmbedXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "IoT-vulnerable em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-863",
+      "url": "https://github.com/mrhenrike/EmbedXPL-Forge",
+      "forge": "EmbedXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "EmbedXPL-Forge em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-864",
+      "url": "https://github.com/mrhenrike/EmbedXPL-Forge.wik",
+      "forge": "EmbedXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "EmbedXPL-Forge.wik em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-865",
+      "url": "https://github.com/mrhenrike/FirewallXPL-Forge",
+      "forge": "FirewallXPL/Firewall",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "FirewallXPL-Forge em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-866",
+      "url": "https://github.com/mrhenrike/FirewallXPL-Forge.wik",
+      "forge": "FirewallXPL/Firewall",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "FirewallXPL-Forge.wik em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-869",
+      "url": "https://github.com/mrhenrike/MikrotikAPI-BF",
+      "forge": "EmbedXPL/Router",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "MikrotikAPI-BF em $RECYCLE.BIN/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-922",
+      "url": "https://github.com/rapid7/embedded-tools",
+      "forge": "EmbedXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "embedded-tools em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-928",
+      "url": "https://github.com/s0md3v/XSStrike",
+      "forge": "EmbedXPL/Web",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "XSStrike em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-949",
+      "url": "https://github.com/skraft9/pfsense-security-research",
+      "forge": "EmbedXPL/Router",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "pfsense-security-research em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-956",
+      "url": "https://github.com/tenable/router_badusb",
+      "forge": "EmbedXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "router_badusb em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-957",
+      "url": "https://github.com/tenable/routeros",
+      "forge": "EmbedXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "routeros em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-960",
+      "url": "https://github.com/TTTJJJWWW/AHU-IoT-vulnerable",
+      "forge": "EmbedXPL/IoT/Embedded",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "AHU-IoT-vulnerable em Projects/",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-1003",
+      "url": "https://github.com/acecilia/OpenWRTInvasion",
+      "forge": "EmbedXPL/Router",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "OpenWRTInvasion: root shell em Xiaomi routers via firmware exploit",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-1004",
+      "url": "https://github.com/justinbeatz/Stockpile",
+      "forge": "EmbedXPL/Router",
+      "priority": "Média",
+      "action": "A",
+      "cve": null,
+      "summary": "Stockpile: router hacking repo com exploits múltiplos vendors",
+      "wave": "12"
+    },
+    {
+      "src_id": "SRC-1015",
+      "url": "https://github.com/loiklo/huawei-onu-to-graphite",
+      "forge": "EmbedXPL/Huawei-ONT|TupaXPL/Telemetry",
+      "priority": "Media",
+      "action": "A",
+      "cve": null,
+      "summary": "huawei-onu-to-graphite: monitoramento de metricas de ONU Huawei via web login; usar como base para coleta continua de telemetria do alvo; reproduzir com a mesma receita single-connection para validar ",
+      "wave": "12"
+    }
+  ]
+}
