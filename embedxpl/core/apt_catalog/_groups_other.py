@@ -1,112 +1,14 @@
 # Author: Andre Henrique (LinkedIn/X: @mrhenrike)
-"""APT catalog data: additional groups and botnets (Part 2)."""
+"""APT catalog: Iran, DPRK, and botnet threat actors."""
 
 from embedxpl.core.apt_catalog._models import APT_CATALOG, APTGroup, APTAttack
 
 
-def _build_catalog_part2() -> None:
-    """Populate APT catalog with additional groups and botnets (part 2)."""
-    APT_CATALOG["cyclops_blink"] = APTGroup(
-        id="cyclops_blink",
-        name="Cyclops Blink (Sandworm subgroup)",
-        aliases=["FROZENBARENTS sub-op", "VPNFilter successor"],
-        country="Russia",
-        mitre_id="G0034",
-        description=(
-            "Cyclops Blink is a Sandworm (GRU) campaign targeting WatchGuard Firebox appliances "
-            "and ASUS routers with persistent firmware-level malware. Successor to VPNFilter. "
-            "Malware survives factory resets via /etc/init.d/ RC script modification."
-        ),
-        campaigns=["Cyclops Blink (2019–2022)", "VPNFilter (2016–2018)"],
-        references=[
-            "https://www.cisa.gov/sites/default/files/publications/AA22-054A%20New%20Sandworm%20Malware%20Cyclops%20Blink%20Replaces%20VPN%20Filter.pdf",
-            "https://nvd.nist.gov/vuln/detail/CVE-2022-26776",
-        ],
-        attacks=[
-            APTAttack(
-                name="WatchGuard Firebox Authentication Bypass (CVE-2022-26776)",
-                description=(
-                    "Authentication bypass in WatchGuard Firebox management interface used by "
-                    "Cyclops Blink for initial access to recruit devices into botnet."
-                ),
-                cves=["CVE-2022-26776"],
-                modules=["exploits/firewalls/watchguard/firebox_auth_bypass_cve_2022_26776"],
-                mitre_techniques=["T1190", "T1601.001"],
-                target_devices=["WatchGuard Firebox", "WatchGuard XTM"],
-                phase="Initial Access",
-                requires_auth=False,
-            ),
-            APTAttack(
-                name="VPNFilter Stage-1 — Multi-vendor SOHO Router Compromise",
-                description=(
-                    "VPNFilter Stage-1 persistence module targeting Linksys, MikroTik, Netgear, "
-                    "TP-Link, QNAP, ASUS, D-Link, Huawei, Ubiquiti, ZTE devices. "
-                    "CVE-2016-6277 Netgear RCE and CVE-2018-14847 MikroTik Winbox."
-                ),
-                cves=["CVE-2016-6277", "CVE-2018-14847"],
-                modules=[
-                    "exploits/routers/netgear/cig_bin_rce_cve_2016_6277",
-                    "exploits/routers/mikrotik/winbox_auth_bypass_creds_disclosure",
-                ],
-                mitre_techniques=["T1190", "T1601", "T1584.005"],
-                target_devices=["Linksys E-series", "MikroTik RouterOS", "Netgear R7000/R6400", "TP-Link", "QNAP NAS"],
-                phase="Initial Access → Persistence",
-                requires_auth=False,
-            ),
-        ],
-    )
+def _register_other() -> None:
+    """APT catalog: Iran, DPRK, and botnet threat actors."""
 
     # ------------------------------------------------------------------ #
-    # APT29 / Midnight Blizzard (Russia — SVR)                           #
-    # ------------------------------------------------------------------ #
-    APT_CATALOG["apt29"] = APTGroup(
-        id="apt29",
-        name="APT29 / Midnight Blizzard",
-        aliases=["Cozy Bear", "NOBELIUM", "The Dukes", "UNC2452", "Dark Halo"],
-        country="Russia",
-        mitre_id="G0016",
-        description=(
-            "Russia SVR APT responsible for SolarWinds Orion supply chain compromise (2020), "
-            "giving access to network management planes of thousands of organizations. "
-            "Also exploits VPN appliance vulnerabilities for initial access."
-        ),
-        campaigns=["SolarWinds Orion SUNBURST (2020)", "Teamviewer Compromise (2024)", "Pulse Secure Mass Exploitation (2021)"],
-        references=[
-            "https://attack.mitre.org/groups/G0016/",
-            "https://nvd.nist.gov/vuln/detail/CVE-2019-11510",
-        ],
-        attacks=[
-            APTAttack(
-                name="Pulse Connect Secure Path Traversal / Auth Bypass (CVE-2019-11510)",
-                description=(
-                    "CVSS 10.0 unauthenticated path traversal in Pulse Connect Secure allowing "
-                    "credential and session file theft. Extensively used by APT29 for initial access."
-                ),
-                cves=["CVE-2019-11510"],
-                modules=["exploits/vpn/pulse/pulse_connect_secure_path_traversal_cve_2019_11510"],
-                mitre_techniques=["T1190"],
-                target_devices=["Pulse Connect Secure", "Pulse Policy Secure"],
-                phase="Initial Access",
-                requires_auth=False,
-            ),
-            APTAttack(
-                name="Ivanti Connect Secure Chain (CVE-2023-46805 + CVE-2024-21887)",
-                description="APT29 adopted Ivanti exploitation from 2024 onwards for initial access.",
-                cves=["CVE-2023-46805", "CVE-2024-21887"],
-                modules=[
-                    "exploits/vpn/ivanti/connect_secure_auth_bypass_cve_2023_46805",
-                    "exploits/vpn/ivanti/connect_secure_cmd_injection_cve_2024_21887",
-                ],
-                mitre_techniques=["T1190"],
-                target_devices=["Ivanti Connect Secure"],
-                phase="Initial Access",
-                requires_auth=False,
-            ),
-        ],
-    )
-
-    # ------------------------------------------------------------------ #
-    # APT33 / Elfin (Iran — IRGC)                                        #
+    # APT33 / Elfin (Iran -- IRGC)                                        #
     # ------------------------------------------------------------------ #
     APT_CATALOG["apt33"] = APTGroup(
         id="apt33",
@@ -140,7 +42,7 @@ def _build_catalog_part2() -> None:
     )
 
     # ------------------------------------------------------------------ #
-    # APT34 / OilRig (Iran — MOIS)                                       #
+    # APT34 / OilRig (Iran -- MOIS)                                       #
     # ------------------------------------------------------------------ #
     APT_CATALOG["apt34"] = APTGroup(
         id="apt34",
@@ -176,7 +78,7 @@ def _build_catalog_part2() -> None:
     )
 
     # ------------------------------------------------------------------ #
-    # MuddyWater (Iran — MOIS)                                           #
+    # MuddyWater (Iran -- MOIS)                                           #
     # ------------------------------------------------------------------ #
     APT_CATALOG["muddywater"] = APTGroup(
         id="muddywater",
@@ -214,39 +116,6 @@ def _build_catalog_part2() -> None:
     )
 
     # ------------------------------------------------------------------ #
-    # EMBER BEAR / GRU Unit 29155 (Russia)                                #
-    # ------------------------------------------------------------------ #
-    APT_CATALOG["ember_bear"] = APTGroup(
-        id="ember_bear",
-        name="Ember Bear / GRU Unit 29155",
-        aliases=["UAC-0028", "UNC4166", "Cadet Blizzard", "Frozenvista"],
-        country="Russia",
-        mitre_id="G1003",
-        description=(
-            "Russia GRU Unit 29155 conducting espionage and sabotage operations against NATO states, "
-            "Ukraine, and Georgia. Deploys WhisperGate wiper. Exploits perimeter network devices "
-            "for initial access coordinated with kinetic operations."
-        ),
-        campaigns=["WhisperGate Ukraine (2022)", "NATO Infrastructure Espionage (2020–2025)"],
-        references=["https://www.cisa.gov/sites/default/files/2024-09/aa24-249a-russian-military-cyber-actors-target-us-and-global-critical-infrastructure.pdf"],
-        attacks=[
-            APTAttack(
-                name="Perimeter Network Device Initial Access (FortiGate, Cisco)",
-                description=(
-                    "Ember Bear exploits N-day vulnerabilities in FortiGate and Cisco perimeter devices "
-                    "to establish initial access beachheads coordinated with GRU kinetic operations."
-                ),
-                cves=["CVE-2023-27997"],
-                modules=["exploits/firewalls/fortinet/fortigate_ssl_vpn_heap_overflow_cve_2023_27997"],
-                mitre_techniques=["T1190", "T1485"],
-                target_devices=["FortiGate SSL-VPN", "Cisco IOS edge routers"],
-                phase="Initial Access",
-                requires_auth=False,
-            ),
-        ],
-    )
-
-    # ------------------------------------------------------------------ #
     # LAZARUS GROUP / APT38 (North Korea)                                 #
     # ------------------------------------------------------------------ #
     APT_CATALOG["lazarus"] = APTGroup(
@@ -260,7 +129,7 @@ def _build_catalog_part2() -> None:
             "espionage. Uses compromised SOHO routers and NAS devices as proxy C2 infrastructure "
             "to obscure DPRK attribution."
         ),
-        campaigns=["TraderTraitor Crypto Heists (2021–2025)", "3CX Supply Chain (2023)", "AppleJeus Crypto Exchange Attacks"],
+        campaigns=["TraderTraitor Crypto Heists (2021-2025)", "3CX Supply Chain (2023)", "AppleJeus Crypto Exchange Attacks"],
         references=["https://us-cert.cisa.gov/ncas/alerts/aa22-108a"],
         attacks=[
             APTAttack(
@@ -284,7 +153,7 @@ def _build_catalog_part2() -> None:
     )
 
     # ------------------------------------------------------------------ #
-    # KIMSUKY (North Korea — RGB)                                         #
+    # KIMSUKY (North Korea -- RGB)                                         #
     # ------------------------------------------------------------------ #
     APT_CATALOG["kimsuky"] = APTGroup(
         id="kimsuky",
@@ -309,68 +178,15 @@ def _build_catalog_part2() -> None:
                 cves=["CVE-2021-44228"],
                 modules=["exploits/misc/multi/log4shell_rce_cve_2021_44228"],
                 mitre_techniques=["T1190"],
-                target_devices=["Any Java application server with Log4j 2.0–2.14.1"],
+                target_devices=["Any Java application server with Log4j 2.0-2.14.1"],
                 phase="Initial Access",
                 requires_auth=False,
             ),
         ],
     )
 
-    # ------------------------------------------------------------------ #
-    # XENOTIME / Chernovite (Russia — TsNIIKhM / ICS-targeting)          #
-    # ------------------------------------------------------------------ #
-    APT_CATALOG["xenotime"] = APTGroup(
-        id="xenotime",
-        name="XENOTIME / Chernovite",
-        aliases=["TEMP.Veles", "RASPITE", "Chernovite (Dragos)", "TRITON/TRISIS operators"],
-        country="Russia",
-        mitre_id="G0088",
-        description=(
-            "Russia TsNIIKhM-linked APT responsible for TRITON/TRISIS — the first-ever attack "
-            "on Safety Instrumented Systems (SIS). Targeted Schneider Electric Triconex SIS at "
-            "a Saudi petrochemical facility (2017). Chernovite (Dragos 2022) developed INCONTROLLER/"
-            "PIPEDREAM toolkit targeting Schneider Modicon, Omron Sysmac, OPC-UA servers."
-        ),
-        campaigns=["TRITON/TRISIS — Saudi Petro Rabigh (2017)", "INCONTROLLER/PIPEDREAM Toolkit (2022)", "XENOTIME ICS Scanning (2019)"],
-        references=[
-            "https://www.dragos.com/threat/xenotime",
-            "https://cloud.google.com/blog/topics/threat-intelligence/incontroller-state-sponsored-ics-tool",
-            "https://nvd.nist.gov/vuln/detail/CVE-2015-5374",
-        ],
-        attacks=[
-            APTAttack(
-                name="Siemens SIPROTEC Relay DoS (CVE-2015-5374) — Industroyer/Sandworm",
-                description=(
-                    "Denial-of-service against Siemens SIPROTEC 4 and 5 protective relays via "
-                    "specially crafted EN50022 packet on UDP/2404. Used in Industroyer Ukraine power grid attack. "
-                    "Disables protective relays enabling physical damage to electrical equipment."
-                ),
-                cves=["CVE-2015-5374"],
-                modules=["exploits/ics/siemens/siprotec_relay_dos_cve_2015_5374"],
-                mitre_techniques=["T0835", "T0813"],
-                target_devices=["Siemens SIPROTEC 4", "Siemens SIPROTEC 5"],
-                phase="Impact — Denial of Safety",
-                requires_auth=False,
-            ),
-            APTAttack(
-                name="INCONTROLLER/PIPEDREAM — Modbus Protocol Abuse (Schneider Modicon)",
-                description=(
-                    "EVILSCHOLAR component of INCONTROLLER abuses Modbus/TCP and UMAS protocol "
-                    "to read/write control logic in Schneider Electric Modicon M340/M580 PLCs. "
-                    "No CVE — exploits design weaknesses in unauthenticated ICS protocols."
-                ),
-                cves=[],
-                modules=["exploits/ics/schneider/modicon_modbus_control_cve_2018_7841"],
-                mitre_techniques=["T0866", "T0839", "T0820"],
-                target_devices=["Schneider Electric Modicon M340", "Modicon M580", "Modicon TM251/TM241"],
-                phase="Impact — Control Logic Manipulation",
-                requires_auth=False,
-            ),
-        ],
-    )
-
     # -----------------------------------------------------------------------
-    # Botnet threat actors — Mirai, Condi, Mozi
+    # Botnet threat actors -- Mirai, Condi, Mozi
     # -----------------------------------------------------------------------
 
     APT_CATALOG["mirai_botnet"] = APTGroup(
@@ -579,5 +395,3 @@ def _build_catalog_part2() -> None:
             ),
         ],
     )
-
-

@@ -1,15 +1,17 @@
-# Author: Andre Henrique (LinkedIn/X: @mrhenrike)
-"""Corporate domain username and password generation."""
+"""Corporate username generation from employee names."""
 from __future__ import annotations
 
 import logging
+import re
+from typing import Generator, Optional
+
+from ._normalize import _clean, parse_full_name
+from ._patterns import CORPORATE_PATTERNS, DOMAIN_SEPARATORS, NUMERIC_SUFFIXES
 
 logger = logging.getLogger(__name__)
 
-from embedxpl.engines.wordlists.domain_users._utils import (
-    _norm, _clean, parse_full_name,
-)
 
+def generate_usernames_from_name(
     full_name: str,
     domain: str,
     separators: Optional[list[str]] = None,
@@ -199,7 +201,3 @@ def generate_subdomain_admin_users(
                 seen.add(c)
                 yield c + suffix
 
-
-# ── Name collection from file ──────────────────────────────────────────────────
-
-def collect_names_from_file(filepath: str) -> list[str]:

@@ -5,15 +5,17 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional
 
-from embedxpl.core.apt_catalog._models import APT_CATALOG, APTGroup
-from embedxpl.core.apt_catalog._data_part1 import _build_catalog_part1
-from embedxpl.core.apt_catalog._data_part2 import _build_catalog_part2
+from ._models import APT_CATALOG, APTGroup
+from ._groups_russia import _register_russia
+from ._groups_china import _register_china
+from ._groups_other import _register_other
 
 
 def _build_catalog() -> None:
-    """Build the full APT catalog from both parts."""
-    _build_catalog_part1()
-    _build_catalog_part2()
+    """Build the full APT catalog from all regional data modules."""
+    _register_russia()
+    _register_china()
+    _register_other()
 
 
 def get_catalog() -> Dict[str, APTGroup]:

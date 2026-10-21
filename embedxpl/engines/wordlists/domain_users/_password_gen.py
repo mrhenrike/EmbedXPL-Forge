@@ -1,18 +1,175 @@
-# Author: Andre Henrique (LinkedIn/X: @mrhenrike)
-"""Corporate domain username and password generation."""
+"""Corporate password generation and combo list builder."""
 from __future__ import annotations
 
 import logging
+import re
+from typing import Generator, Optional
+
+from ._normalize import _clean, parse_full_name
+from ._username_gen import generate_usernames_from_name
 
 logger = logging.getLogger(__name__)
 
-from typing import Generator, Optional
 
-from embedxpl.engines.wordlists.domain_users._utils import _norm
-from embedxpl.engines.wordlists.domain_users._generators import (
-    generate_usernames_from_list,
-)
+CORPORATE_PASSWORD_PATTERNS: list[str] = [
+    # ── Global standards ──────────────────────────────────────
+    "{fn}@{year}",
+    "{fn}{year}!",
+    "{fn}{year}@",
+    "{fn}{year}#",
+    "{fn}.{ln}@{year}",
+    "{fn}{ln}{year}",
+    "{fn}{ln}!",
+    "{fn}{ln}@",
+    "{ln}{fn}{year}",
+    "{ln}@{year}",
+    "{company}{year}",
+    "{company}@{year}",
+    "{company}#{year}",
+    "{company}!",
+    "{company}123",
+    "{company}1234",
+    "{company}@123",
+    "{company}_{year}",
+    "Welcome{year}!",
+    "Welcome@{year}",
+    "Welcome1!",
+    "{company}2024",
+    "{company}2025",
+    "{company}2026",
+    # ── Brazilian patterns ────────────────────────────────────
+    "{fn}@corp",
+    "{fn}123456",
+    "{fn}12345",
+    "{fn}1234",
+    "{fn}123",
+    "{company}@{year}!",
+    "{company}Mudar{year}",
+    "{company}mudar{year}",
+    "Mudar{year}!",
+    "Mudar@{year}",
+    "mudar{year}",
+    "{fn}Mudar{year}",
+    "{fn}mudar{year}",
+    "{fn}@mudar",
+    "P@ssw0rd{year}",
+    "S3nh@{year}",
+    "Senha{year}!",
+    "senha{year}",
+    "{fn}_{ln}@{year}",
+    "{fn}.{ln}@{company}",
+    "{fn}.{ln}{year}",
+    # ── IT-role patterns ──────────────────────────────────────
+    "Admin{year}!",
+    "admin{year}@",
+    "root{year}!",
+    "{company}vpn{year}",
+    "{company}VPN{year}",
+    "{company}local{year}",
+    "{company}corp{year}",
+    "{company}adm{year}",
+    "{company}admin!",
+    "{company}admin{year}",
+    # ── Vault behavioral patterns (observed in Brazilian corp environments) ──
+    # Pattern: {Company}${Year} and variants with ### suffix (MSSP analysis)
+    "{company}${year}",
+    "{company}${year}!",
+    "{company}${year}###",
+    # Pattern: @{Company}{Year} / @{Company}{digits}
+    "@{company}{year}",
+    "@{company}{year}#",
+    "@{company}123",
+    "@{company}1234",
+    # Pattern: #{Company}@{Year} - observed in vault
+    "#{company}@{year}",
+    "#{company}@{year}#",
+    "#{company}{year}#",
+    # Pattern: {Company}#{Year}### - vault sample Corp#2026 variants
+    "{company}#{year}!",
+    "{company}@{year}#{y2}",
+    "{company}&{year}",
+    "{company}+{year}!",
+    # Pattern: {Company}{2-digit year} - cartel2030 → cartel30
+    "{company}{y2}",
+    "{company}{y2}!",
+    "{fn}{y2}",
+    "{ln}{y2}",
+    # Pattern: {Role}{Company}{Year}! - UGAdmin2025!, AdminCorp2024!
+    "Admin{company}{year}!",
+    "admin{company}{year}",
+    "Admin{company}!",
+    "{company}Admin{year}!",
+    "{company}Admin!",
+    "Root{company}{year}!",
+    "root{company}{year}",
+    "Dev{company}{year}!",
+    "dev{company}{year}",
+    # Pattern: {fn}@{Company} / {fn}.{Company} - user@init123
+    "{fn}@{company}",
+    "{fn}@{company}{y2}",
+    "{fn}@{company}{year}",
+    "{fn}.{company}",
+    "{fn}.{company}{year}",
+    # Pattern: {Company}@{Year}#{word} - BrandX@2022#xpto
+    "{company}@{year}#brasil",
+    "{company}@{year}#brazil",
+    # Pattern: {Company}{Word}{Year} - CorpX2020!, XptoInc1
+    "{company}mudar@{year}",
+    "{company}Acesso{year}",
+    "{company}acesso{year}",
+    "{company}acesso@{year}",
+    # Pattern: {word}+digits suffix (word+01, word+2025, word+88)
+    "{fn}{year}01",
+    "{fn}{year}00",
+    "{fn}{ln}01",
+    "{fn}{ln}2025",
+    "{ln}{fn}01",
+    # Pattern: {Company}{year}! with capital
+    # e.g. CorpX2020! → {CompanyCap}{year}!
+    "{company}{year}!",
+    "{fn}{year}!!",
+    # Pattern: passphrase-like {word}-{word}-{word}-{NNN}
+    # These require compound generation - added as static suffixed templates:
+    "{company}-{fn}-{ln}-{y2}",
+    "{fn}-{ln}-{company}-{y2}",
+    # Pattern: Date-based 29/01/2018 (rare but observed)
+    "{fn}01{year}",
+    "{fn}01{y2}",
+    # Pattern: leet in password - base templates (leet expansion in generator)
+    "S3nh@{year}!",
+    "Acss0@{year}",
+    "Acc3ss@{year}",
+    "4dm1n{year}!",
+    "4dm1n{year}@",
+    "P4ssw0rd{year}!",
+    "P@$$word{year}!",
+    "Mudar@{year}!",
+    "Tr0c4r{year}!",
+    # Pattern: numeric suffixes on company (seen in vault)
+    "{company}88",
+    "{company}99",
+    "{company}01",
+    "{company}00",
+    "{company}02",
+]
 
+
+# Leet substitution map for password generation
+_LEET_MAP: dict[str, list[str]] = {
+    "a": ["@", "4"],
+    "e": ["3"],
+    "i": ["1", "!"],
+    "o": ["0"],
+    "s": ["$", "5"],
+    "A": ["@", "4"],
+    "E": ["3"],
+    "I": ["1", "!"],
+    "O": ["0"],
+    "S": ["$", "5"],
+}
+
+
+def _leet_variants(word: str, max_variants: int = 6) -> list[str]:
     """
     Generate leet-speak variants of a word by substituting 1-2 characters.
 
@@ -204,7 +361,3 @@ def generate_combo_list(
             for pw in passwords:
                 yield f"{user}:{pw}"
 
-
-# ── Interactive wizard ─────────────────────────────────────────────────────────
-
-def interactive_domain_users_wizard() -> dict:

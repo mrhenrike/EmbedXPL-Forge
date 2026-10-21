@@ -1,100 +1,11 @@
 # Author: Andre Henrique (LinkedIn/X: @mrhenrike)
-"""APT catalog data: state-sponsored groups (Part 1)."""
+"""APT catalog: China-affiliated groups."""
 
 from embedxpl.core.apt_catalog._models import APT_CATALOG, APTGroup, APTAttack
 
 
-def _build_catalog_part1() -> None:
-    """Populate APT catalog with state-sponsored groups (part 1)."""
-
-    APT_CATALOG["apt28"] = APTGroup(
-        id="apt28",
-        name="APT28 / Forest Blizzard",
-        aliases=["Fancy Bear", "Sofacy", "Pawn Storm", "Sednit", "Storm-2754", "STRONTIUM", "GRU Unit 26165"],
-        country="Russia",
-        description=(
-            "Russian GRU Military Unit 26165. Since Aug 2025, exploits SOHO routers "
-            "to hijack DNS and conduct AiTM attacks stealing Outlook/OAuth credentials. "
-            "200+ orgs and 5,000+ devices compromised per Microsoft/NCSC (Apr 2026)."
-        ),
-        campaigns=["DNS Hijack Campaign (2025-2026)", "Quad 7 Botnet Infrastructure"],
-        mitre_id="G0007",
-        references=[
-            "https://attack.mitre.org/groups/G0007/",
-            "https://www.microsoft.com/en-us/security/blog/2026/04/07/soho-router-compromise-leads-to-dns-hijacking-and-adversary-in-the-middle-attacks/",
-        ],
-        attacks=[
-            APTAttack(
-                name="TP-Link WR841N Credential Disclosure",
-                description="Unauthenticated extraction of admin credentials via /loginFs/ path bypass",
-                cves=["CVE-2023-50224"],
-                modules=["exploits/routers/tplink/wr841n_credential_disclosure_cve_2023_50224"],
-                mitre_techniques=["T1190", "T1552.001"],
-                target_devices=["TP-Link TL-WR841N"],
-                phase="Initial Access",
-            ),
-            APTAttack(
-                name="TP-Link Parental Control RCE",
-                description="Post-auth command injection via url_0 in Parental Control page",
-                cves=["CVE-2025-9377"],
-                modules=["exploits/routers/tplink/wr841n_parental_control_rce_cve_2025_9377"],
-                mitre_techniques=["T1059.004", "T1190"],
-                target_devices=["TP-Link TL-WR841N"],
-                phase="Execution",
-                requires_auth=True,
-            ),
-            APTAttack(
-                name="TP-Link DNS Hijack (20+ models)",
-                description="Rewrite DHCP DNS settings to attacker-controlled resolver",
-                cves=[],
-                modules=["exploits/routers/tplink/multi_dns_hijack_apt28"],
-                mitre_techniques=["T1584.008", "T1557"],
-                target_devices=[
-                    "TP-Link Archer C5/C7", "TP-Link WDR3500/3600/4300",
-                    "TP-Link WR740N-WR941ND", "TP-Link MR3420/MR6400",
-                ],
-                phase="Impact",
-                requires_auth=True,
-            ),
-            APTAttack(
-                name="MikroTik DNS Hijack",
-                description="Rewrite DNS on MikroTik via REST API or RouterOS API (port 8728)",
-                cves=[],
-                modules=["exploits/routers/mikrotik/routeros_dns_hijack_apt28"],
-                mitre_techniques=["T1584.008", "T1557"],
-                target_devices=["MikroTik RouterOS"],
-                phase="Impact",
-                requires_auth=True,
-            ),
-            APTAttack(
-                name="DNS Hijack Detection",
-                description="Defensive: detect if router DNS has been hijacked by comparing Outlook domain resolution",
-                cves=[],
-                modules=["generic/dns_hijack_detector"],
-                mitre_techniques=["T1557"],
-                target_devices=["Any router/gateway"],
-                phase="Detection",
-            ),
-            APTAttack(
-                name="AITM Credential Interceptor",
-                description="Lab tool: malicious DNS + HTTP capture for Outlook/O365 credential harvesting",
-                cves=[],
-                modules=["generic/aitm_credential_interceptor"],
-                mitre_techniques=["T1557.002", "T1556"],
-                target_devices=["Lab infrastructure"],
-                phase="Collection",
-            ),
-            APTAttack(
-                name="Full Chain AutoPwn",
-                description="Automated: CVE-2023-50224 -> auth -> DNS hijack -> verify -> optional RCE persistence",
-                cves=["CVE-2023-50224", "CVE-2025-9377"],
-                modules=["exploits/routers/tplink/apt28_full_chain_autopwn"],
-                mitre_techniques=["T1190", "T1584.008", "T1557"],
-                target_devices=["TP-Link TL-WR841N", "TP-Link multi-model"],
-                phase="Full Kill Chain",
-            ),
-        ],
-    )
+def _register_china() -> None:
+    """APT catalog: China-affiliated groups."""
 
     APT_CATALOG["volt_typhoon"] = APTGroup(
         id="volt_typhoon",
@@ -150,56 +61,6 @@ def _build_catalog_part1() -> None:
         ],
     )
 
-    APT_CATALOG["sandworm"] = APTGroup(
-        id="sandworm",
-        name="Sandworm / APT44",
-        aliases=["Voodoo Bear", "IRIDIUM", "Electrum", "Telebots", "GRU Unit 74455"],
-        country="Russia",
-        description=(
-            "Russian GRU Unit 74455. Known for destructive attacks (Ukraine power grid, "
-            "NotPetya). Since 2022, pivoted to exploiting misconfigured edge devices "
-            "(routers, VPNs) instead of zero-days. Cyclops Blink targeted ASUS/WatchGuard."
-        ),
-        campaigns=["Cyclops Blink (2022)", "Edge Device Misconfiguration Campaign (2021-2025)"],
-        mitre_id="G0034",
-        references=[
-            "https://attack.mitre.org/groups/G0034/",
-        ],
-        attacks=[
-            APTAttack(
-                name="ASUS Router Exploitation (Cyclops Blink)",
-                description="Cyclops Blink malware targeting ASUS routers with default/weak configs",
-                cves=[],
-                modules=[
-                    "creds/routers/asus/ssh_default_creds",
-                    "exploits/routers/asus/rt_n66u_remote_command_execution",
-                    "exploits/routers/asus/rt_n16_admin_password_disclosure",
-                ],
-                mitre_techniques=["T1078.001", "T1059.004"],
-                target_devices=["ASUS RT-N16", "ASUS RT-N66U", "ASUS RT-AC66U"],
-                phase="Initial Access",
-            ),
-            APTAttack(
-                name="Cisco SNMP RCE",
-                description="Remote code execution via SNMP on Cisco IOS routers",
-                cves=["CVE-2017-6742"],
-                modules=["generic/snmp/snmp_bruteforce"],
-                mitre_techniques=["T1190"],
-                target_devices=["Cisco IOS routers"],
-                phase="Initial Access",
-            ),
-            APTAttack(
-                name="MikroTik Router Jailbreak",
-                description="RouterOS jailbreak for persistent access",
-                cves=[],
-                modules=["exploits/routers/mikrotik/routeros_jailbreak"],
-                mitre_techniques=["T1542"],
-                target_devices=["MikroTik RouterOS"],
-                phase="Persistence",
-            ),
-        ],
-    )
-
     APT_CATALOG["quad7"] = APTGroup(
         id="quad7",
         name="Quad7 / CovertNetwork-1658",
@@ -236,43 +97,6 @@ def _build_catalog_part1() -> None:
                 modules=["exploits/routers/zyxel/zywall_usg_config_hash_extraction"],
                 mitre_techniques=["T1190"],
                 target_devices=["Zyxel ZyWALL USG series"],
-                phase="Initial Access",
-            ),
-        ],
-    )
-
-    APT_CATALOG["turla"] = APTGroup(
-        id="turla",
-        name="Turla",
-        aliases=["Snake", "Venomous Bear", "Uroburos", "Waterbug", "KRYPTON"],
-        country="Russia",
-        description=(
-            "Russian FSB-linked group. Has hijacked other groups' C2 infrastructure "
-            "through compromised routers. Known to co-opt Ubiquiti EdgeRouters and "
-            "deploy reverse SSH tunnels through compromised network devices."
-        ),
-        campaigns=["Snake/Uroburos", "EdgeRouter Hijack"],
-        mitre_id="G0010",
-        references=["https://attack.mitre.org/groups/G0010/"],
-        attacks=[
-            APTAttack(
-                name="Ubiquiti AirOS Command Execution",
-                description="Pre-auth command injection on Ubiquiti AirOS devices",
-                cves=[],
-                modules=["exploits/routers/ubiquiti/airos_pre_auth_command_execution"],
-                mitre_techniques=["T1059.004"],
-                target_devices=["Ubiquiti AirOS"],
-                phase="Initial Access",
-            ),
-            APTAttack(
-                name="Default Credential Access",
-                description="Access network devices via factory default credentials",
-                cves=[],
-                modules=[
-                    "creds/routers/ubiquiti/ssh_default_creds",
-                ],
-                mitre_techniques=["T1078.001"],
-                target_devices=["Ubiquiti EdgeRouter"],
                 phase="Initial Access",
             ),
         ],
@@ -317,7 +141,7 @@ def _build_catalog_part1() -> None:
     )
 
     # ------------------------------------------------------------------ #
-    # SALT TYPHOON / RedMike (China — MSS-linked)                         #
+    # SALT TYPHOON / RedMike (China -- MSS-linked)                         #
     # ------------------------------------------------------------------ #
     APT_CATALOG["salt_typhoon"] = APTGroup(
         id="salt_typhoon",
@@ -327,11 +151,11 @@ def _build_catalog_part1() -> None:
         mitre_id="G1040",
         description=(
             "China MSS-linked APT responsible for the most significant telecom infrastructure breach in US history "
-            "(2021–2025). Compromised AT&T, Verizon, Lumen Technologies, and 600+ orgs worldwide, including "
-            "CALEA lawful-intercept infrastructure. Mass-exploited Cisco IOS XE in Dec 2024–Jan 2025 "
+            "(2021-2025). Compromised AT&T, Verizon, Lumen Technologies, and 600+ orgs worldwide, including "
+            "CALEA lawful-intercept infrastructure. Mass-exploited Cisco IOS XE in Dec 2024-Jan 2025 "
             "against 1,000+ telecom and university devices."
         ),
-        campaigns=["Operation RedMike (2021–2025)", "Cisco IOS XE Mass Exploitation (Dec 2024)", "FamousSparrow Hotels (2020)"],
+        campaigns=["Operation RedMike (2021-2025)", "Cisco IOS XE Mass Exploitation (Dec 2024)", "FamousSparrow Hotels (2020)"],
         references=[
             "https://nvd.nist.gov/vuln/detail/CVE-2023-20198",
             "https://nvd.nist.gov/vuln/detail/CVE-2023-20273",
@@ -413,7 +237,7 @@ def _build_catalog_part1() -> None:
             "2025 campaign focused on RMM providers to gain downstream customer access. "
             "Known for rapid weaponization of CVEs and mass exploitation of Ivanti, Palo Alto, and Exchange."
         ),
-        campaigns=["IT Supply Chain (2024–2025)", "Exchange ProxyLogon (2021)", "Edge Device Reconnaissance (2025)"],
+        campaigns=["IT Supply Chain (2024-2025)", "Exchange ProxyLogon (2021)", "Edge Device Reconnaissance (2025)"],
         references=[
             "https://www.microsoft.com/en-us/security/blog/2025/03/05/silk-typhoon-targeting-it-supply-chain/",
             "https://nvd.nist.gov/vuln/detail/CVE-2025-0282",
@@ -459,7 +283,7 @@ def _build_catalog_part1() -> None:
             "(NAS, IP cameras, DVRs, routers, firewalls). FBI court-authorized disruption September 2024. "
             "Used 66 CVEs to compromise devices and deploy Nosedive (Mirai variant) C2 via 'Sparrow' app."
         ),
-        campaigns=["Raptor Train Botnet (2021–2024)", "SOCKS5 Proxy Infrastructure for PRC APT groups"],
+        campaigns=["Raptor Train Botnet (2021-2024)", "SOCKS5 Proxy Infrastructure for PRC APT groups"],
         references=[
             "https://www.ic3.gov/CSA/2024/240918.pdf",
             "https://nvd.nist.gov/vuln/detail/CVE-2022-1388",
@@ -536,7 +360,7 @@ def _build_catalog_part1() -> None:
             "Deployed VELVETSHELL backdoor inside Cisco Nexus switch OS (CVE-2024-20399) and "
             "maintained multi-year F5 BIG-IP footholds that survived factory resets."
         ),
-        campaigns=["F5 BIG-IP Persistent Espionage (2021–2024)", "Cisco Nexus Zero-Day (2024)"],
+        campaigns=["F5 BIG-IP Persistent Espionage (2021-2024)", "Cisco Nexus Zero-Day (2024)"],
         references=[
             "https://www.sygnia.co/blog/china-threat-group-velvet-ant-cisco-zero-day/",
             "https://nvd.nist.gov/vuln/detail/CVE-2024-20399",
@@ -629,11 +453,11 @@ def _build_catalog_part1() -> None:
         country="China",
         mitre_id="G0045",
         description=(
-            "China MSS-linked APT responsible for Operation Cloud Hopper — systematic compromise of MSPs "
+            "China MSS-linked APT responsible for Operation Cloud Hopper -- systematic compromise of MSPs "
             "to gain transitive access to downstream clients in 45+ countries. "
             "Network device exploitation used for lateral movement between MSP client environments."
         ),
-        campaigns=["Operation Cloud Hopper (2014–2018+)"],
+        campaigns=["Operation Cloud Hopper (2014-2018+)"],
         references=["https://attack.mitre.org/groups/G0045/"],
         attacks=[
             APTAttack(

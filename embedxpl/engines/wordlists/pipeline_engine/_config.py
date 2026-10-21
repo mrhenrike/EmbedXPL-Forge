@@ -139,7 +139,3 @@ class CRC32Deduplicator:
         self.count_emitted = 0
         self.count_duped = 0
 
-
-# ── Orquestrador principal ─────────────────────────────────────────────────────
-
-class ProfilePipeline:

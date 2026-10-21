@@ -1,28 +1,26 @@
-# Author: Andre Henrique (LinkedIn/X: @mrhenrike)
-"""Corporate domain username and password generation."""
+"""Interactive wizard and runner for domain user generation."""
 from __future__ import annotations
 
-import logging
-
-logger = logging.getLogger(__name__)
-
+import os
 from typing import Generator
 
-from embedxpl.engines.wordlists.domain_users._utils import parse_full_name
-from embedxpl.engines.wordlists.domain_users._generators import (
-    generate_usernames_from_name,
-    generate_usernames_from_list,
-    generate_subdomain_admin_users,
-)
-from embedxpl.engines.wordlists.domain_users._collectors import (
+from ._normalize import _clean
+from ._patterns import DOMAIN_SEPARATORS, ALL_DOMAIN_SEPARATORS
+from ._username_gen import generate_usernames_from_list, generate_subdomain_admin_users
+from ._name_collect import (
     collect_names_from_file,
-    collect_names_online,
+    search_names_google_dorks,
+    search_names_linkedin_api,
 )
-from embedxpl.engines.wordlists.domain_users._passwords import (
+from ._password_gen import (
     generate_passwords_for_person,
     generate_combo_list,
 )
 
+
+# ── Interactive wizard ─────────────────────────────────────────────────────────
+
+def interactive_domain_users_wizard() -> dict:
     """
     Interactive wizard to collect parameters for domain username generation.
 
@@ -182,3 +180,4 @@ def run_domain_users(params: dict) -> Generator[str, None, None]:
     # ── Combo user:pass ────────────────────────────────────────
     if gen_combo and names:
         yield from generate_combo_list(names, company_name, domain, separators, year_range)
+
