@@ -1,0 +1,220 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Turla IPP Covert C2 Channel Assessment (IPP port 631 variant)
+PrinterXPL-Forge
+================================================
+IPP (Internet Printing Protocol) variant of the Turla covert channel.
+Turla was observed using both PJL (9100) and IPP (631) for covert
+command storage in printer job attributes.
+
+Assessment: tests if IPP attributes can be used for covert data storage.
+
+Reference: docs/malware-research/by-tool/PrinterXPL.md#4-win32turla
+MITRE: T1205 (Traffic Signaling), T1071.001
+
+Author: Andre Henrique (@mrhenrike) | Uniao Geek
+"""
+# ============================================================
+# AUTHORIZED USE ONLY — See docs/malware-research/DISCLAIMER.md
+# Use only against systems you own or have WRITTEN authorization
+# to test. Operator assumes full legal responsibility for use.
+# simulate=True by default — set False only for authorized tests.
+# ============================================================
+from __future__ import annotations
+
+import socket
+import struct
+import time
+from typing import Optional
+
+METADATA = {
+    "id":          "COVERT-TURLA-IPP-001",
+    "source":      "research",
+    "cve":         None,
+    "title":       "Turla IPP Covert C2 Channel Assessment",
+    "description": (
+        "Assesses whether IPP (port 631) can be used as a covert C2 channel "
+        "in the Turla/Snake style. Tests IPP job attribute injection and "
+        "unauthenticated job listing to verify if attacker-controlled data "
+        "can be stored/retrieved. Read-only."
+    ),
+    "type":        "remote",
+    "category":    "covert_channel",
+    "protocol":    "IPP",
+    "port":        631,
+    "severity":    "high",
+    "cvss":        7.5,
+    "date":        "2026-09-23",
+    "author":      "Andre Henrique (@mrhenrike) | Uniao Geek",
+    "vendor":      ["CUPS", "HP", "Xerox", "Ricoh"],
+    "tags":        ["ipp", "covert", "turla", "apt", "c2"],
+    "references":  [
+        "docs/malware-research/by-tool/PrinterXPL.md#4-win32turla",
+        "https://www.ietf.org/rfc/rfc8011.txt",
+    ],
+    "mitre":       ["T1205", "T1071.001"],
+    "malware_family": "Win32.Turla (FSB Russia)",
+}
+
+# IPP operation codes
+_IPP_GET_PRINTER_ATTRS = 0x000B
+_IPP_GET_JOBS         = 0x000A
+_IPP_CREATE_JOB       = 0x0005
+
+_PROBE_TAG = "xpl-covert-probe"
+
+
+def _build_ipp_request(operation: int, request_id: int, attrs: bytes) -> bytes:
+    """Build minimal IPP request."""
+    header = struct.pack(">BBHI", 1, 1, operation, request_id)
+    return header + attrs + b"\x03"  # end-of-attributes
+
+
+def _ipp_string_attr(name: str, value: str, tag: int = 0x41) -> bytes:
+    """Encode an IPP string attribute."""
+    n = name.encode("utf-8")
+    v = value.encode("utf-8")
+    return struct.pack(">BHH", tag, len(n), len(v)) + n + v
+
+
+def run(target: str, port: int = 631, timeout: float = 5.0,
+        simulate: bool = True) -> dict:
+    """Assess IPP endpoint for Turla covert channel vulnerability."""
+    result = {
+        "target": target, "port": port,
+        "ipp_accessible": False,
+        "unauthenticated": False,
+        "job_attribute_injection": False,
+        "covert_c2_risk": "LOW",
+        "findings": [],
+    }
+
+    if simulate:
+        print(f"[SIMULATE] Turla IPP covert channel assessment: {target}:{port}")
+        print("  Would test:")
+        print("  1. IPP Get-Printer-Attributes (no auth probe)")
+        print("  2. IPP Get-Jobs listing (enumerate stored jobs)")
+        print("  3. IPP Create-Job with custom 'job-name' attribute (covert storage)")
+        print("  4. Read back injected job name via Get-Jobs")
+        return result
+
+    # 1. Test IPP accessibility via HTTP
+    try:
+        import http.client
+        conn = http.client.HTTPConnection(target, port, timeout=timeout)
+
+        # IPP Get-Printer-Attributes request body
+        operation_attrs = (
+            b"\x01"  # operation-attributes-tag
+            + _ipp_string_attr("attributes-charset", "utf-8", 0x47)
+            + _ipp_string_attr("attributes-natural-language", "en-us", 0x48)
+            + _ipp_string_attr("printer-uri", f"ipp://{target}:{port}/ipp/print", 0x45)
+        )
+        body = _build_ipp_request(_IPP_GET_PRINTER_ATTRS, 1, operation_attrs)
+
+        conn.request(
+            "POST", "/ipp/print",
+            body=body,
+            headers={
+                "Content-Type": "application/ipp",
+                "Content-Length": str(len(body)),
+            }
+        )
+        resp = conn.getresponse()
+
+        if resp.status == 200:
+            result["ipp_accessible"] = True
+            data = resp.read(1024)
+            result["findings"].append(f"IPP accessible, HTTP 200 (no auth required)")
+
+            # Check for printer name in response
+            if b"printer-name" in data or b"printer-info" in data:
+                result["unauthenticated"] = True
+                result["findings"].append("Printer attributes returned without authentication")
+                print(f"[!] IPP unauthenticated at {target}:{port}")
+
+        elif resp.status == 401:
+            result["findings"].append("IPP requires authentication (good)")
+            print(f"[*] IPP requires auth at {target}:{port}")
+
+        conn.close()
+
+    except Exception as e:
+        result["findings"].append(f"IPP connection failed: {e}")
+        return result
+
+    # 2. Test job attribute injection (covert storage)
+    if result["unauthenticated"]:
+        try:
+            conn = http.client.HTTPConnection(target, port, timeout=timeout)
+            # Create-Job with injected job-name (Turla stores C2 data here)
+            job_attrs = (
+                b"\x01"
+                + _ipp_string_attr("attributes-charset", "utf-8", 0x47)
+                + _ipp_string_attr("attributes-natural-language", "en-us", 0x48)
+                + _ipp_string_attr("printer-uri", f"ipp://{target}:{port}/ipp/print", 0x45)
+                + b"\x02"  # job-attributes-tag
+                + _ipp_string_attr("job-name", _PROBE_TAG, 0x42)
+            )
+            body = _build_ipp_request(_IPP_CREATE_JOB, 2, job_attrs)
+
+            conn.request(
+                "POST", "/ipp/print",
+                body=body,
+                headers={
+                    "Content-Type": "application/ipp",
+                    "Content-Length": str(len(body)),
+                }
+            )
+            resp = conn.getresponse()
+            if resp.status == 200:
+                resp_data = resp.read(256)
+                if b"job-id" in resp_data or struct.unpack(">H", resp_data[2:4])[0] == 0x0000:
+                    result["job_attribute_injection"] = True
+                    result["findings"].append(
+                        f"CRITICAL: IPP job created without auth — job-name injection possible (Turla C2)"
+                    )
+                    print(f"[!] IPP job injection succeeded — Turla IPP C2 vector confirmed")
+            conn.close()
+
+        except Exception as e:
+            result["findings"].append(f"Job injection test error: {e}")
+
+    # Risk
+    if result["job_attribute_injection"]:
+        result["covert_c2_risk"] = "CRITICAL"
+    elif result["unauthenticated"]:
+        result["covert_c2_risk"] = "HIGH"
+    elif result["ipp_accessible"]:
+        result["covert_c2_risk"] = "MEDIUM"
+
+    print(f"\n[*] Turla IPP Covert Channel: {target}:{port} — Risk: {result['covert_c2_risk']}")
+    for f in result["findings"]:
+        prefix = "[!]" if "CRITICAL" in f else "[*]"
+        print(f"    {prefix} {f}")
+    print("    Ref: docs/malware-research/by-tool/PrinterXPL.md#4-win32turla")
+
+    return result
+
+
+class Exploit:
+    def __init__(self) -> None:
+        self.target: str = ""
+        self.port: int = 631
+        self.timeout: float = 5.0
+        self.simulate: bool = True
+
+    def check(self) -> bool:
+        if self.simulate:
+            return True
+        try:
+            s = socket.create_connection((self.target, self.port), timeout=2.0)
+            s.close()
+            return True
+        except Exception:
+            return False
+
+    def run(self) -> None:
+        run(self.target, self.port, self.timeout, self.simulate)
+

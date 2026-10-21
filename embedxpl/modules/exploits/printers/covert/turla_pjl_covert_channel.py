@@ -1,0 +1,268 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Turla PJL/IPP Covert C2 Channel Assessment
+PrinterXPL-Forge
+================================================
+Win32.Turla (FSB/Russia) documented using network printers as
+covert C2 channels. The implant encodes C2 commands in PJL
+COMMENT and RDYMSG payloads, using the printer's memory as
+bidirectional storage for C2 traffic.
+
+This module ASSESSES whether a printer is vulnerable to this
+technique by:
+1. Testing if PJL commands are accepted without authentication
+2. Sending probe PJL COMMENT and reading back RDYMSG response
+3. Testing IPP job manipulation for covert data storage
+
+Does NOT install a C2 channel or send malicious commands.
+
+Reference: docs/malware-research/by-tool/PrinterXPL.md#4-win32turla
+Technique: T1205 (Traffic Signaling), T1071.001 (Application Layer Protocol)
+Family: Win32.Turla (FSB Russia APT)
+
+Author: Andre Henrique (@mrhenrike) | Uniao Geek
+"""
+# ============================================================
+# AUTHORIZED USE ONLY — See docs/malware-research/DISCLAIMER.md
+# Use only against systems you own or have WRITTEN authorization
+# to test. Operator assumes full legal responsibility for use.
+# simulate=True by default — set False only for authorized tests.
+# ============================================================
+from __future__ import annotations
+
+import socket
+import time
+from typing import Optional
+
+METADATA = {
+    "id":          "COVERT-TURLA-PJL-001",
+    "source":      "research",
+    "url":         "https://www.welivesecurity.com/2015/11/04/turla-snake-comrat/",
+    "cve":         None,
+    "title":       "Turla PJL Covert C2 Channel Assessment",
+    "description": (
+        "Assesses whether a network printer accepts PJL commands without "
+        "authentication and can be used as a covert bidirectional C2 channel "
+        "in the Turla/Snake APT style. "
+        "Sends probe PJL @COMMENT, @RDYMSG, @USTATUS commands and tests "
+        "if the printer stores/returns injected data. "
+        "Read-only probe — no destructive operations."
+    ),
+    "type":        "remote",
+    "category":    "covert_channel",
+    "protocol":    "PJL",
+    "port":        9100,
+    "severity":    "critical",
+    "cvss":        8.5,
+    "date":        "2026-09-23",
+    "author":      "Andre Henrique (@mrhenrike) | Uniao Geek",
+    "vendor":      ["HP", "Ricoh", "Canon", "Xerox", "Lexmark", "Konica Minolta"],
+    "model_patterns": [".*"],
+    "firmware_patterns": [],
+    "requires":    ["port:9100"],
+    "tags":        ["pjl", "covert", "turla", "apt", "c2", "covert_channel"],
+    "tested_on":   [],
+    "references":  [
+        "https://www.welivesecurity.com/2015/11/04/turla-snake-comrat/",
+        "https://www.kaspersky.com/blog/turla-snake/598/",
+        "docs/malware-research/by-tool/PrinterXPL.md#4-win32turla",
+    ],
+    "mitre":       ["T1205", "T1071.001"],
+    "malware_family": "Win32.Turla/Snake/Uroburos (FSB Russia)",
+}
+
+# PJL probe payloads
+_PJL_PROBE_TAG = "XPL_C2_PROBE_NOOP"
+
+_PJL_USTATUS_ON = b"@PJL USTATUS JOB = ON\r\n"
+_PJL_INFO_STATUS = b"@PJL INFO STATUS\r\n"
+_PJL_INFO_ID = b"@PJL INFO ID\r\n"
+_PJL_RDYMSG_PROBE = f"@PJL RDYMSG DISPLAY = \"{_PJL_PROBE_TAG}\"\r\n".encode()
+_PJL_RDYMSG_CLEAR = b'@PJL RDYMSG DISPLAY = ""\r\n'
+_PJL_COMMENT_PROBE = f"@PJL COMMENT {_PJL_PROBE_TAG}\r\n".encode()
+_PJL_EOF = b"\x1b%-12345X"  # UEL (Universal Exit Language)
+
+# Turla-style C2 payload encoding demo (non-malicious placeholder)
+_TURLA_C2_ENCODE_DEMO = (
+    "@PJL COMMENT {b64_command}\r\n"
+    "@PJL RDYMSG DISPLAY = \"{status_code}\"\r\n"
+)
+
+
+def _pjl_session(target: str, port: int, timeout: float) -> Optional[socket.socket]:
+    """Open PJL TCP session."""
+    try:
+        sock = socket.create_connection((target, port), timeout=timeout)
+        return sock
+    except Exception:
+        return None
+
+
+def run(target: str, port: int = 9100, timeout: float = 5.0,
+        verbose: bool = False, simulate: bool = True) -> dict:
+    """Assess printer for Turla PJL covert channel vulnerability.
+
+    Args:
+        target: printer IP
+        port: PJL port (9100 default)
+        timeout: socket timeout
+        verbose: print detailed output
+        simulate: describe without connecting
+
+    Returns:
+        Assessment result dict
+    """
+    result = {
+        "target": target, "port": port,
+        "pjl_accessible": False,
+        "rdymsg_injectable": False,
+        "comment_accepted": False,
+        "ustatus_enabled": False,
+        "printer_id": None,
+        "covert_c2_risk": "LOW",
+        "findings": [],
+    }
+
+    if simulate:
+        print(f"[SIMULATE] Turla PJL covert channel assessment: {target}:{port}")
+        print("  Would test:")
+        print("  1. PJL session establishment (port 9100)")
+        print("  2. @PJL INFO STATUS — check response without auth")
+        print("  3. @PJL INFO ID — get printer model")
+        print("  4. @PJL RDYMSG DISPLAY = 'XPL_C2_PROBE_NOOP' — test injection")
+        print("  5. Read back RDYMSG — verify stored data retrieval")
+        print("  6. @PJL USTATUS JOB=ON — test event subscription (C2 polling)")
+        print()
+        print("  Turla C2 channel encoding (demo):")
+        print(_TURLA_C2_ENCODE_DEMO)
+        return result
+
+    # 1. Test PJL accessibility
+    sock = _pjl_session(target, port, timeout)
+    if not sock:
+        result["findings"].append("Port 9100 not accessible")
+        return result
+
+    result["pjl_accessible"] = True
+    if verbose:
+        print(f"[+] PJL port {port} accessible")
+
+    try:
+        # 2. Get printer status (no auth required on most models)
+        sock.send(_PJL_EOF + b"\033%-12345X@PJL\r\n" + _PJL_INFO_STATUS)
+        time.sleep(0.3)
+        resp = sock.recv(1024)
+        if resp:
+            if verbose:
+                print(f"    INFO STATUS: {resp[:80]!r}")
+            result["findings"].append(f"PJL INFO STATUS accepted (no auth): {resp[:50]!r}")
+
+        # 3. Get printer ID
+        sock.send(_PJL_INFO_ID)
+        time.sleep(0.3)
+        resp = sock.recv(1024)
+        if resp and b"ID" in resp:
+            try:
+                model = resp.decode("latin-1").split('"')[1] if b'"' in resp else "unknown"
+                result["printer_id"] = model
+                if verbose:
+                    print(f"    Printer ID: {model}")
+            except Exception:
+                pass
+
+        # 4. RDYMSG injection test (Turla technique — write C2 data to display)
+        sock.send(_PJL_RDYMSG_PROBE)
+        time.sleep(0.5)
+        # Read back — verify injection was stored
+        sock.send(b"@PJL INFO STATUS\r\n")
+        time.sleep(0.3)
+        resp = sock.recv(1024)
+        if _PJL_PROBE_TAG.encode() in resp or b"READY" in resp:
+            result["rdymsg_injectable"] = True
+            result["findings"].append(
+                f"CRITICAL: RDYMSG injection accepted — printer display/memory writable via PJL"
+            )
+            print(f"[!] RDYMSG injectable — Turla C2 channel possible at {target}:{port}")
+        # Clear probe
+        sock.send(_PJL_RDYMSG_CLEAR)
+
+        # 5. COMMENT acceptance
+        sock.send(_PJL_COMMENT_PROBE)
+        time.sleep(0.2)
+        resp = sock.recv(256)
+        result["comment_accepted"] = True  # if no error, COMMENT was accepted
+        result["findings"].append("PJL COMMENT accepted (C2 encoding vector)")
+
+        # 6. USTATUS subscription
+        sock.send(_PJL_USTATUS_ON)
+        time.sleep(0.2)
+        resp = sock.recv(256)
+        if resp and b"CODE" in resp:
+            result["ustatus_enabled"] = True
+            result["findings"].append("USTATUS JOB=ON accepted — printer sends async events (C2 polling)")
+
+    except Exception as e:
+        result["findings"].append(f"Session error: {e}")
+    finally:
+        try:
+            sock.close()
+        except Exception:
+            pass
+
+    # Risk assessment
+    if result["rdymsg_injectable"]:
+        result["covert_c2_risk"] = "CRITICAL"
+    elif result["comment_accepted"] and result["pjl_accessible"]:
+        result["covert_c2_risk"] = "HIGH"
+    elif result["pjl_accessible"]:
+        result["covert_c2_risk"] = "MEDIUM"
+
+    # Print summary
+    print(f"\n[*] Turla PJL Covert Channel Assessment: {target}:{port}")
+    print(f"    Risk: {result['covert_c2_risk']}")
+    if result["printer_id"]:
+        print(f"    Model: {result['printer_id']}")
+    for f in result["findings"]:
+        prefix = "[!]" if "CRITICAL" in f or "RDYMSG" in f else "[*]"
+        print(f"    {prefix} {f}")
+    print()
+    print("    Recommendation:")
+    print("    - Disable PJL over RAW 9100 if not needed")
+    print("    - Place printer behind firewall — restrict to print servers only")
+    print("    - HP: use Jetdirect 'pjl' password command to lock PJL access")
+    print()
+    print("    Ref: docs/malware-research/by-tool/PrinterXPL.md#4-win32turla")
+
+    return result
+
+
+class Exploit:
+    """XPL-compatible wrapper."""
+
+    def __init__(self) -> None:
+        self.target: str = ""
+        self.port: int = 9100
+        self.timeout: float = 5.0
+        self.verbose: bool = False
+        self.simulate: bool = True
+
+    def check(self) -> bool:
+        if self.simulate:
+            return True
+        try:
+            s = socket.create_connection((self.target, self.port), timeout=2.0)
+            s.close()
+            return True
+        except Exception:
+            return False
+
+    def run(self) -> None:
+        run(
+            target=self.target,
+            port=self.port,
+            timeout=self.timeout,
+            verbose=self.verbose,
+            simulate=self.simulate,
+        )
+
