@@ -1,7 +1,7 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 550,
-  "last_updated": "2026-09-23",
+  "entry_count": 557,
+  "last_updated": "2026-10-21",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
     {
@@ -6790,6 +6790,90 @@
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2026-24858"
       ]
+    },
+    {
+      "cve_id": "CVE-2026-106173",
+      "vendor": "fortinet",
+      "modules": [
+        "exploits/appliances/fortinet/cve_2026_106173_cve2026106173_deep_dive_horizon3.py"
+      ],
+      "devices": [
+        "See module docstring"
+      ],
+      "exploit_available": false,
+      "wave": "12"
+    },
+    {
+      "cve_id": "CVE-2026-21589",
+      "vendor": "various",
+      "modules": [
+        "exploits/firewalls/cve_2026_21589_cve202621589_atlassian_data_center.py"
+      ],
+      "devices": [
+        "See module docstring"
+      ],
+      "exploit_available": false,
+      "wave": "12"
+    },
+    {
+      "cve_id": "CVE-2026-6875",
+      "vendor": "various",
+      "modules": [
+        "exploits/firewalls/cve_2026_6875_cve20266875_servicenow_preauth_rce.py"
+      ],
+      "devices": [
+        "See module docstring"
+      ],
+      "exploit_available": false,
+      "wave": "12"
+    },
+    {
+      "cve_id": "CVE-2026-82329",
+      "vendor": "various",
+      "modules": [
+        "exploits/firewalls/cve_2026_82329_cve202682329_jfrog_artifactory_auth.py"
+      ],
+      "devices": [
+        "See module docstring"
+      ],
+      "exploit_available": false,
+      "wave": "12"
+    },
+    {
+      "cve_id": "CVE-2026-53921",
+      "vendor": "various",
+      "modules": [
+        "exploits/iot/cve_2026_53921_cve202653921_odhcpd_stack_overflow.py"
+      ],
+      "devices": [
+        "See module docstring"
+      ],
+      "exploit_available": false,
+      "wave": "12"
+    },
+    {
+      "cve_id": "CVE-2026-67276",
+      "vendor": "mikrotik",
+      "modules": [
+        "exploits/routers/mikrotik/cve_2026_67276_cve202667276_mikrotik_routeros_ssh.py"
+      ],
+      "devices": [
+        "See module docstring"
+      ],
+      "exploit_available": false,
+      "wave": "12"
+    },
+    {
+      "cve_id": "CVE-2026-67279",
+      "vendor": "mikrotik",
+      "modules": [
+        "exploits/routers/mikrotik/cve_2026_67279_cve202667279_cve202686060_mikrotrick_mikrotik.py"
+      ],
+      "devices": [
+        "See module docstring"
+      ],
+      "exploit_available": false,
+      "wave": "12"
     }
   ]
 }
