@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""HbbTV Scanner — HTTP probe for HbbTV service descriptor.
+"""HbbTV Scanner  -  HTTP probe for HbbTV service descriptor.
 
 Probes the target HTTP server for HbbTV-related markers in response
 headers and body, and checks for Application Information Table (AIT)
@@ -38,7 +38,7 @@ _PROBE_PATHS = (
 
 
 class Exploit(HTTPClient):
-    """HbbTV Service Scanner — HTTP header and AIT XML probe.
+    """HbbTV Service Scanner  -  HTTP header and AIT XML probe.
 
     Iterates over common HbbTV and AIT paths, inspecting HTTP response
     headers for ``HbbTV`` or ``application/vnd.dvb.ait+xml`` content-type
@@ -57,7 +57,7 @@ class Exploit(HTTPClient):
         ),
         "authors": (
             "HbbTV Association",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "references": (
             "https://www.hbbtv.org/",

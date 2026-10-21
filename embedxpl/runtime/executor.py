@@ -1,4 +1,4 @@
-"""EmbedXPL Runtime — Main Executor (XplRuntime).
+"""EmbedXPL Runtime  -  Main Executor (XplRuntime).
 
 Central orchestrator: detects module language and dispatches to the
 correct language executor. Supports:
@@ -44,7 +44,7 @@ from .rust_exec import RustExecutor
 class XplRuntime:
     """Main runtime orchestrator for multi-language EmbedXPL modules.
 
-    Instantiate once and reuse — executors are stateless but toolchain
+    Instantiate once and reuse  -  executors are stateless but toolchain
     detection happens at construction time.
     """
 

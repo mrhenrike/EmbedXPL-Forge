@@ -5329,7 +5329,7 @@ E89526     (base 16)		Luxshare Precision Industry CO., LTD.
 
 10-41-21   (hex)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
 104121     (base 16)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
-				Av. Buriti, 1900 – Setor B – Distrito Industrial
+				Av. Buriti, 1900 - Setor B - Distrito Industrial
 				Manaus  Amazonas  69075-000
 				BR
 
@@ -5395,7 +5395,7 @@ FC4265     (base 16)		Zhejiang Tmall Technology Co., Ltd.
 
 18-77-58   (hex)		Audoo Limited (UK)
 187758     (base 16)		Audoo Limited (UK)
-				Unit 23 – Tileyard London, Tileyard Road
+				Unit 23 - Tileyard London, Tileyard Road
 				London  UK  N7 9AH
 				GB
 
@@ -13186,7 +13186,7 @@ E078A3     (base 16)		Shanghai Winner Information Technology Co.,Inc
 
 94-7B-BE   (hex)		Ubicquia LLC
 947BBE     (base 16)		Ubicquia LLC
-				BoA Building–Suite 1750, 401 E. Las Olas Boulevard
+				BoA Building-Suite 1750, 401 E. Las Olas Boulevard
 				Fort Lauderdale  FL  33301
 				US
 
@@ -17707,19 +17707,19 @@ DC446D     (base 16)		Allwinner Technology Co., Ltd
 
 00-23-45   (hex)		Sony Corporation
 002345     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 6C-0E-0D   (hex)		Sony Corporation
 6C0E0D     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 6C-23-B9   (hex)		Sony Corporation
 6C23B9     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
@@ -17749,13 +17749,13 @@ DC446D     (base 16)		Allwinner Technology Co., Ltd
 
 30-17-C8   (hex)		Sony Corporation
 3017C8     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 20-54-76   (hex)		Sony Corporation
 205476     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
@@ -22021,7 +22021,7 @@ DCCEBC     (base 16)		Shenzhen JSR Technology Co.,Ltd.
 
 9C-A1-0A   (hex)		SCLE SFE
 9CA10A     (base 16)		SCLE SFE
-				Parc des Aygalades – Bât 10
+				Parc des Aygalades - Bât 10
 				MARSEILLE  PACA  13014
 				FR
 
@@ -27586,7 +27586,7 @@ A09805     (base 16)		OpenVox Communication Co Ltd
 
 00-22-E6   (hex)		Intelligent Data
 0022E6     (base 16)		Intelligent Data
-				Edf. Inverinnova – Avda. Punto Mobi, 4. Parque Científico Tecnológico
+				Edf. Inverinnova - Avda. Punto Mobi, 4. Parque Científico Tecnológico
 				Alcalá de Henares  Madrid  28805
 				ES
 
@@ -37000,7 +37000,7 @@ A09805     (base 16)		OpenVox Communication Co Ltd
 
 00-10-09   (hex)		HORANET
 001009     (base 16)		HORANET
-				 ZI Route de Niort – BP 70328
+				 ZI Route de Niort - BP 70328
 				FONTENAY LE COMTE CEDEX  VENDEE   85206
 				FR
 
@@ -46420,7 +46420,7 @@ E4FAE4     (base 16)		Shenzhen SDMC Technology CP,.LTD
 
 B8-1E-61   (hex)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
 B81E61     (base 16)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
-				Av. Buriti, 1900 – Setor B – Distrito Industrial
+				Av. Buriti, 1900 - Setor B - Distrito Industrial
 				Manaus  Amazonas  69075-000
 				BR
 
@@ -64633,7 +64633,7 @@ C0FFD4     (base 16)		NETGEAR
 
 00-23-F1   (hex)		Sony Corporation
 0023F1     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
@@ -64663,7 +64663,7 @@ C0FFD4     (base 16)		NETGEAR
 
 94-CE-2C   (hex)		Sony Corporation
 94CE2C     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
@@ -69976,7 +69976,7 @@ D819CE     (base 16)		Telesquare
 
 D8-D5-B9   (hex)		Rainforest Automation, Inc.
 D8D5B9     (base 16)		Rainforest Automation, Inc.
-				200 – 311 Pender St. W
+				200 - 311 Pender St. W
 				Vancouver  British Columbia  V6B 1T3
 				CA
 
@@ -88879,7 +88879,7 @@ BCCD7F     (base 16)		Huawei Device Co., Ltd.
 
 44-89-6D   (hex)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
 44896D     (base 16)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
-				Av. Buriti, 1900 – Setor B – Distrito Industrial
+				Av. Buriti, 1900 - Setor B - Distrito Industrial
 				Manaus  Amazonas  69075-000
 				BR
 
@@ -108340,7 +108340,7 @@ B81DAA     (base 16)		LG Electronics (Mobile Communications)
 
 54-2F-8A   (hex)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
 542F8A     (base 16)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
-				Av. Buriti, 1900 – Setor B – Distrito Industrial
+				Av. Buriti, 1900 - Setor B - Distrito Industrial
 				Manaus  Amazonas  69075-000
 				BR
 
@@ -111550,25 +111550,25 @@ E874E6     (base 16)		ADB Broadband Italia
 
 5C-B5-24   (hex)		Sony Corporation
 5CB524     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 90-C1-15   (hex)		Sony Corporation
 90C115     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 D0-51-62   (hex)		Sony Corporation
 D05162     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 18-00-2D   (hex)		Sony Corporation
 18002D     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
@@ -111586,19 +111586,19 @@ D05162     (base 16)		Sony Corporation
 
 00-24-EF   (hex)		Sony Corporation
 0024EF     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 00-25-E7   (hex)		Sony Corporation
 0025E7     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 58-17-0C   (hex)		Sony Corporation
 58170C     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
@@ -122483,8 +122483,8 @@ B4B5AF     (base 16)		Minsung Electronics
 				Kanazawa  Ishikawa  920-0367
 				JP
 
-00-1D-40   (hex)		 Intel – GE Care Innovations LLC
-001D40     (base 16)		 Intel – GE Care Innovations LLC
+00-1D-40   (hex)		 Intel - GE Care Innovations LLC
+001D40     (base 16)		 Intel - GE Care Innovations LLC
 				3721 Douglas Blvd
 				Roseville  CA  95661
 				US
@@ -137140,7 +137140,7 @@ C4D6D3     (base 16)		Dell Inc.
 
 30-0A-9D   (hex)		Axino Solutions AG
 300A9D     (base 16)		Axino Solutions AG
-				Glutz – Blotzheim – Strasse 1
+				Glutz - Blotzheim - Strasse 1
 				Solothurn    4500
 				CH
 
@@ -145352,7 +145352,7 @@ C44F96     (base 16)		Alps Alpine
 B4-BA-02   (hex)		Agatel Ltd
 B4BA02     (base 16)		Agatel Ltd
 				Apex House, Calthrope Road
-				Birmingham  —  B15 1TR
+				Birmingham   -   B15 1TR
 				GB
 
 D4-79-54   (hex)		Huawei Device Co., Ltd.
@@ -149167,7 +149167,7 @@ C8BCE5     (base 16)		Sense Things Japan INC.
 
 F4-54-20   (hex)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
 F45420     (base 16)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
-				Av. Buriti, 1900 – Setor B – Distrito Industrial
+				Av. Buriti, 1900 - Setor B - Distrito Industrial
 				Manaus  Amazonas  69075-000
 				BR
 
@@ -151909,7 +151909,7 @@ F4D108     (base 16)		Intel Corporate
 
 94-EA-EA   (hex)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
 94EAEA     (base 16)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
-				Av. Buriti, 1900 – Setor B – Distrito Industrial
+				Av. Buriti, 1900 - Setor B - Distrito Industrial
 				Manaus  Amazonas  69075-000
 				BR
 
@@ -156557,8 +156557,8 @@ C0C976     (base 16)		Shenzhen TINNO Mobile Technology Corp.
 				Dongguan    523808
 				CN
 
-C8-77-8B   (hex)		Mercury Systems – Trusted Mission Solutions, Inc. 
-C8778B     (base 16)		Mercury Systems – Trusted Mission Solutions, Inc. 
+C8-77-8B   (hex)		Mercury Systems - Trusted Mission Solutions, Inc. 
+C8778B     (base 16)		Mercury Systems - Trusted Mission Solutions, Inc. 
 				47200 Bayside Pkwy
 				Fremont  CA  94538
 				US
@@ -157717,31 +157717,31 @@ FCB4E6     (base 16)		ASKEY COMPUTER CORP
 
 00-1B-59   (hex)		Sony Corporation
 001B59     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 00-22-98   (hex)		Sony Corporation
 002298     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 24-21-AB   (hex)		Sony Corporation
 2421AB     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 B8-F9-34   (hex)		Sony Corporation
 B8F934     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 8C-64-22   (hex)		Sony Corporation
 8C6422     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
@@ -157789,7 +157789,7 @@ E0B2F1     (base 16)		FN-LINK TECHNOLOGY LIMITED
 
 E0-63-E5   (hex)		Sony Corporation
 E063E5     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
@@ -160310,8 +160310,8 @@ ACBC32     (base 16)		Apple, Inc.
 				GUANGDONG  N/A  518000
 				CN
 
-08-0A-4E   (hex)		Planet Bingo® — 3rd Rock Gaming®
-080A4E     (base 16)		Planet Bingo® — 3rd Rock Gaming®
+08-0A-4E   (hex)		Planet Bingo®  -  3rd Rock Gaming®
+080A4E     (base 16)		Planet Bingo®  -  3rd Rock Gaming®
 				75190 Gerald Ford Dr.
 				Palm Desert  CA  92211
 				US
@@ -161804,8 +161804,8 @@ BC14EF     (base 16)		ITON Technology Limited
 				Montrouge    92120
 				FR
 
-20-0E-95   (hex)		IEC – TC9 WG43
-200E95     (base 16)		IEC – TC9 WG43
+20-0E-95   (hex)		IEC - TC9 WG43
+200E95     (base 16)		IEC - TC9 WG43
 				3, rue de Varembé
 				Geneva  GE  1211
 				CH
@@ -166160,7 +166160,7 @@ F0B6EB     (base 16)		Poslab Technology Co., Ltd.
 FC-CC-E4   (hex)		Ascon Ltd.
 FCCCE4     (base 16)		Ascon Ltd.
 				1-15-27 Minato-machi
-				Fukuyama –shi  Hiroshima-ken  721-0964
+				Fukuyama -shi  Hiroshima-ken  721-0964
 				JP
 
 60-B3-C4   (hex)		Elber Srl
@@ -183637,7 +183637,7 @@ C85309     (base 16)		LCFC(Hefei) Electronics Technology co., ltd
 
 78-A4-BA   (hex)		Marquardt India Pvt Ltd
 78A4BA     (base 16)		Marquardt India Pvt Ltd
-				Plot No.21/3, Rajiv Gandhi Infotech Park (SEZ),Hinjewadi phase 3, “Hinjewadi – Maan”, Village –Maan, Taluka – Mulshi, Dist. - Pune,  
+				Plot No.21/3, Rajiv Gandhi Infotech Park (SEZ),Hinjewadi phase 3, “Hinjewadi - Maan”, Village -Maan, Taluka - Mulshi, Dist. - Pune,  
 				Pune  Maharashtra  411057
 				IN
 
@@ -191053,7 +191053,7 @@ C870D4     (base 16)		IBO Technology Co,Ltd
 
 68-D4-0C   (hex)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
 68D40C     (base 16)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
-				Av. Buriti, 1900 – Setor B – Distrito Industrial
+				Av. Buriti, 1900 - Setor B - Distrito Industrial
 				Manaus  Amazonas  69075-000
 				BR
 
@@ -193423,7 +193423,7 @@ FC1D2A     (base 16)		vivo Mobile Communication Co., Ltd.
 
 78-E9-CF   (hex)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
 78E9CF     (base 16)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
-				Av. Buriti, 1900 – Setor B – Distrito Industrial
+				Av. Buriti, 1900 - Setor B - Distrito Industrial
 				Manaus  Amazonas  69075-000
 				BR
 
@@ -199847,8 +199847,8 @@ B05365     (base 16)		China Mobile IOT Company Limited
 				Seoul    KS013
 				KR
 
-00-80-B6   (hex)		Mercury Systems – Trusted Mission Solutions, Inc. 
-0080B6     (base 16)		Mercury Systems – Trusted Mission Solutions, Inc. 
+00-80-B6   (hex)		Mercury Systems - Trusted Mission Solutions, Inc. 
+0080B6     (base 16)		Mercury Systems - Trusted Mission Solutions, Inc. 
 				6681 OWENS DRIVE
 				PLEASONTON  CA  94588
 				US
@@ -202915,7 +202915,7 @@ A4C64F     (base 16)		HUAWEI TECHNOLOGIES CO.,LTD
 
 10-72-23   (hex)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
 107223     (base 16)		TELLESCOM INDUSTRIA E COMERCIO EM TELECOMUNICACAO 
-				Av. Buriti, 1900 – Setor B – Distrito Industrial
+				Av. Buriti, 1900 - Setor B - Distrito Industrial
 				Manaus  Amazonas  69075-000
 				BR
 
@@ -205687,37 +205687,37 @@ B00594     (base 16)		Liteon Technology Corporation
 
 00-1E-DC   (hex)		Sony Corporation
 001EDC     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 00-1D-28   (hex)		Sony Corporation
 001D28     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 84-00-D2   (hex)		Sony Corporation
 8400D2     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 30-39-26   (hex)		Sony Corporation
 303926     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 00-EB-2D   (hex)		Sony Corporation
 00EB2D     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
 B4-52-7D   (hex)		Sony Corporation
 B4527D     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 
@@ -205765,7 +205765,7 @@ B4527D     (base 16)		Sony Corporation
 
 40-2B-A1   (hex)		Sony Corporation
 402BA1     (base 16)		Sony Corporation
-				4-12-3 Higashi – Shinagawa
+				4-12-3 Higashi - Shinagawa
 				Shinagawa-ku  Tokyo  140-0002
 				JP
 

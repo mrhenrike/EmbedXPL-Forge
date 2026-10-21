@@ -1,4 +1,4 @@
-"""EmbedXPL AutoPwn — Generic Segment Autopwn Engine.
+"""EmbedXPL AutoPwn  -  Generic Segment Autopwn Engine.
 
 Discovers and runs all applicable exploit/scanner modules against a target
 for a given device segment.
@@ -45,7 +45,7 @@ class AutoPwnReport:
         lines = [
             "",
             f"{'='*70}",
-            f"  EmbedXPL AutoPwn — {self.segment.upper()} Segment",
+            f"  EmbedXPL AutoPwn  -  {self.segment.upper()} Segment",
             f"  Target(s): {', '.join(self.targets)}",
             f"  Modules run: {self.modules_run}",
             f"  Vulnerable: {self.modules_vulnerable}",
@@ -74,10 +74,10 @@ class SegmentAutoPwn:
     """Run all relevant modules against target(s) for a device segment.
 
     Args:
-        segment:    Device category — "router", "printer", "firewall",
+        segment:    Device category  -  "router", "printer", "firewall",
                     "camera", "ics", "wireless", "nas", "smart_tv"
         targets:    List of IP/host targets, or single string
-        check_only: If True, only run check() — no exploitation
+        check_only: If True, only run check()  -  no exploitation
         verbose:    Print each module result
         timeout:    Per-module timeout in seconds
         max_modules: Max modules to run (0 = all)
@@ -194,7 +194,7 @@ class SegmentAutoPwn:
 
         mode = "check" if self.check_only else "exploit"
         if self.verbose:
-            print(f"\n[*] AutoPwn {self.segment.upper()} — {len(modules)} modules, "
+            print(f"\n[*] AutoPwn {self.segment.upper()}  -  {len(modules)} modules, "
                   f"{len(self.targets)} target(s), mode={mode}")
             print(f"[*] Targets: {', '.join(self.targets)}")
             print()

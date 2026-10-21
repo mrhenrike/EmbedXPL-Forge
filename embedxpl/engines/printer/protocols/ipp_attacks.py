@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PrinterXPL-Forge — IPP Attack Module
+PrinterXPL-Forge  -  IPP Attack Module
 ===================================
 Internet Printing Protocol (RFC 2910/2911/8011) attack operations.
 
@@ -262,15 +262,15 @@ def _make_escpr_job(text: str = 'PrinterXPL-Forge') -> bytes:
     """
     esc = b'\x1b'
     init = (
-        esc + b'@'                           # ESC @ — initialize printer
+        esc + b'@'                           # ESC @  -  initialize printer
         + esc + b'(G\x01\x00\x01'           # Select graphics mode
-        + esc + b'(R\x08\x00\x00'           # Remote mode — job start
+        + esc + b'(R\x08\x00\x00'           # Remote mode  -  job start
         + text.encode('ascii', 'replace')[:32]
         + esc + b'(K\x02\x00\x00\x00'      # Set color space
         + esc + b'(S\x08\x00'               # Set page size (A4)
         + struct.pack('<IIH', 595, 842, 0)
         + b'\x0c'                            # Form feed (page eject)
-        + esc + b'(R\x08\x00\x01' + b'\x00' * 7  # Remote mode — job end
+        + esc + b'(R\x08\x00\x01' + b'\x00' * 7  # Remote mode  -  job end
     )
     return init
 
@@ -308,7 +308,7 @@ def submit_job(
         'status_code': None, 'auth_required': False, 'message': '',
     }
 
-    # Step 1: Create-Job (op 0x0005) — test anonymous acceptance
+    # Step 1: Create-Job (op 0x0005)  -  test anonymous acceptance
     attrs = [
         _attr(0x42, 'job-name', job_name, value_tag=0x42),
         _attr(0x44, 'job-priority', '', value_tag=0x21),
@@ -410,7 +410,7 @@ def purge_all_jobs(
     """
     Send IPP Purge-Jobs (op 0x0012) to clear all queued/held jobs.
 
-    This is a DoS vector — all pending print jobs are lost.
+    This is a DoS vector  -  all pending print jobs are lost.
     Returns dict with status and number of jobs cancelled.
     """
     printer_uri = f"ipp://{host}{path}"
@@ -576,7 +576,7 @@ def audit(
             print(f"  [IPP] \033[1;31m[VULN]\033[0m Anonymous job accepted! {job_res['message']}")
     elif job_res['auth_required']:
         if verbose:
-            print("  [IPP] Auth required — anonymous print blocked")
+            print("  [IPP] Auth required  -  anonymous print blocked")
     else:
         if verbose:
             print(f"  [IPP] Job submit: {job_res['message']}")

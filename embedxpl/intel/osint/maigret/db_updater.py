@@ -190,7 +190,7 @@ def resolve_db_path(
 
     default_db_name = "resources/data.json"
 
-    # User specified a custom DB — skip auto-update
+    # User specified a custom DB  -  skip auto-update
     is_url = db_file_arg.startswith("http://") or db_file_arg.startswith("https://")
     is_default = db_file_arg == default_db_name
     if is_url:

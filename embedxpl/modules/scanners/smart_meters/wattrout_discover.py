@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""WATTrouter Solar Inverter / Energy Manager — HTTP Discovery Scanner.
+"""WATTrouter Solar Inverter / Energy Manager  -  HTTP Discovery Scanner.
 
 Discovers WATTrouter devices via HTTP probe on ports 8081 and 50000.
 
@@ -52,7 +52,7 @@ class Exploit(HTTPClient):
                     ))
                 break
             elif resp:
-                print_status("{} — HTTP {}".format(path, resp.status_code))
+                print_status("{}  -  HTTP {}".format(path, resp.status_code))
 
     @mute
     def check(self) -> bool:

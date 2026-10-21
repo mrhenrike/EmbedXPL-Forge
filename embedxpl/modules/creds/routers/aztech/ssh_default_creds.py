@@ -4,7 +4,7 @@ from embedxpl.modules.creds.generic.ssh_default import Exploit as SSHDefault
 
 
 class Exploit(SSHDefault):
-    """Aztech Router — Default SSH Credentials.
+    """Aztech Router  -  Default SSH Credentials.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -18,7 +18,7 @@ class Exploit(SSHDefault):
             "If valid credentials are found, they are displayed to the user."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "devices": (
             "Aztech Router",

@@ -10,7 +10,7 @@ Checks that required governance documents are present and non-empty:
   - README.md
   - CHANGELOG.md
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations
@@ -57,7 +57,7 @@ def main() -> int:
         print(f"[INFO] {fname}: {status}")
 
     if failed:
-        print("\nGovernance baseline FAILED — add missing files.")
+        print("\nGovernance baseline FAILED  -  add missing files.")
         return 1
 
     print("\nGovernance baseline OK.")

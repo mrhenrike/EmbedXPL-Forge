@@ -62,10 +62,10 @@ Infrastructure context taxonomy for the `--infra` / `--context` orchestrator mod
 
 | File | Purpose |
 |------|---------|
-| `market_priority_devices_2010_2026.json` | Market-priority device coverage matrix — device models ranked by deployment volume and CVE density for module prioritization |
-| `module_target_scope.json` | Module-to-target-scope mapping — specifies which target device classes each module addresses |
-| `cve_extended_catalog.json` | Extended CVE reference data — CVSS scores, CWE, affected firmware versions, MITRE ATT&CK techniques, and associated EmbedXPL module paths |
-| `arsenal_layout.json` | Arsenal layout descriptor — describes the visual grouping of modules by attack phase for the arsenal index tool |
+| `market_priority_devices_2010_2026.json` | Market-priority device coverage matrix  -  device models ranked by deployment volume and CVE density for module prioritization |
+| `module_target_scope.json` | Module-to-target-scope mapping  -  specifies which target device classes each module addresses |
+| `cve_extended_catalog.json` | Extended CVE reference data  -  CVSS scores, CWE, affected firmware versions, MITRE ATT&CK techniques, and associated EmbedXPL module paths |
+| `arsenal_layout.json` | Arsenal layout descriptor  -  describes the visual grouping of modules by attack phase for the arsenal index tool |
 
 ---
 
@@ -73,9 +73,9 @@ Infrastructure context taxonomy for the `--infra` / `--context` orchestrator mod
 
 | Script | Role |
 |--------|------|
-| `phase_gate.py` | Automated quality gate — validates modules before release across 7 sequential gate phases |
-| `env_doctor.py` | Environment diagnostics — reports Python version, dependency status, missing optionals |
-| `compat_smoke.py` | Compatibility smoke checks — quick import and interface test for all modules |
+| `phase_gate.py` | Automated quality gate  -  validates modules before release across 7 sequential gate phases |
+| `env_doctor.py` | Environment diagnostics  -  reports Python version, dependency status, missing optionals |
+| `compat_smoke.py` | Compatibility smoke checks  -  quick import and interface test for all modules |
 | `gen_wiki_module_index.py` | Regenerate wiki module annex from live module metadata |
 | `generate_coverage_matrix.py` | Build HTML/JSON coverage matrix artifacts from device catalog |
 | `generate_full_catalog.py` | Generate full catalog outputs (JSON + Markdown) for all modules |
@@ -83,9 +83,9 @@ Infrastructure context taxonomy for the `--infra` / `--context` orchestrator mod
 | `validate_market_priority_minimums.py` | Assert that high-priority device models have at least one module |
 | `build_arsenal_index.py` | Build arsenal index JSON from module metadata |
 | `sync_scope_wordlists.py` | Synchronize scope-related wordlists with device catalog |
-| `audit_modules.py` | Audit module metadata completeness — reports missing `__info__` fields |
+| `audit_modules.py` | Audit module metadata completeness  -  reports missing `__info__` fields |
 | `run_scoped_tests.py` | Run test suite scoped to specific module categories |
-| `validate_governance.py` | Governance validator — checks license headers, author fields, docstrings |
+| `validate_governance.py` | Governance validator  -  checks license headers, author fields, docstrings |
 | `validate_arsenal_architecture.py` | Assert that arsenal layout matches actual module file tree |
 | `build_osi_tcpip_attack_matrix.py` | Generate OSI/TCP-IP attack surface matrix |
 | `deep_intel_backlog.py` | Report modules in the deep intelligence research backlog |
@@ -150,12 +150,12 @@ EmbedXPL-Forge Phase Gate v3.1.0
 
 [D]    flake8 Linting Gate
 ----------------------------
-  [OK]  flake8 passed — 0 violations
+  [OK]  flake8 passed  -  0 violations
 
 [E]    bandit Security Gate
 -----------------------------
-  [OK]  bandit passed — 0 high-severity findings
-  [INFO] 3 low-severity findings (eval, subprocess) — permitted by policy
+  [OK]  bandit passed  -  0 high-severity findings
+  [INFO] 3 low-severity findings (eval, subprocess)  -  permitted by policy
 
 [FINAL] index_modules() Full Indexing
 ---------------------------------------
@@ -172,10 +172,10 @@ Time: 12.4 s
 
 ```
 [A1/A2] Import and __info__ Validation
-  [FAIL] exploits/routers/acme/new_module — ImportError: cannot import name 'OptString'
-  [FAIL] exploits/cameras/brand/cve_test — __info__ missing required fields: ['cvss', 'references']
+  [FAIL] exploits/routers/acme/new_module  -  ImportError: cannot import name 'OptString'
+  [FAIL] exploits/cameras/brand/cve_test  -  __info__ missing required fields: ['cvss', 'references']
 
-GATE RESULT: FAIL (0/7 gates — stopped at A1/A2)
+GATE RESULT: FAIL (0/7 gates  -  stopped at A1/A2)
 Fix the 2 error(s) above and re-run.
 ```
 
@@ -190,7 +190,7 @@ python tools/env_doctor.py
 **Sample output:**
 
 ```
-EmbedXPL-Forge — Environment Doctor
+EmbedXPL-Forge  -  Environment Doctor
 =====================================
 Python          3.12.3          [OK]
 pip             24.0            [OK]
@@ -202,9 +202,9 @@ pysnmp          6.1.1           [OK]
 telnetlib3      2.0.1           [OK]   (required for Python 3.13+)
 impacket        0.11.0          [OK]
 pymodbus        3.7.0           [OK]
-torch           2.2.1+cu121     [OK]   (optional — GPU compute)
-tensorflow      MISSING         [WARN] (optional — install with pip install tensorflow)
-binwalk         MISSING         [WARN] (optional — firmware analysis; install with apt-get install binwalk)
+torch           2.2.1+cu121     [OK]   (optional  -  GPU compute)
+tensorflow      MISSING         [WARN] (optional  -  install with pip install tensorflow)
+binwalk         MISSING         [WARN] (optional  -  firmware analysis; install with apt-get install binwalk)
 nmap            7.95            [OK]   (required for NSE scripts)
 
 GPU / Compute
@@ -226,7 +226,7 @@ python tools/compat_smoke.py
 **Sample output:**
 
 ```
-EmbedXPL-Forge — Compatibility Smoke
+EmbedXPL-Forge  -  Compatibility Smoke
 =======================================
 [OK] embedxpl.interpreter imports cleanly
 [OK] embedxpl.core.exploit.exploit imports cleanly

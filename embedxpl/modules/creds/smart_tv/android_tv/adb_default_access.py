@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Android TV — Open ADB Access Credential Documentation.
+"""Android TV  -  Open ADB Access Credential Documentation.
 
 Documents and detects Android/Fire TV devices that expose ADB over TCP
 on port 5555 without authentication.  Attempts ``adb connect`` and checks
@@ -25,7 +25,7 @@ _ADB_VER     = 0x01000001
 _MAX_PAYLOAD = 256 * 1024
 
 _GUIDANCE = """
-Open ADB TCP Access — Remediation Guidance
+Open ADB TCP Access  -  Remediation Guidance
 ===========================================
 DEVICE ACCESS PATTERNS DETECTED:
   • Port 5555 accepts TCP connections with no TLS.
@@ -41,7 +41,7 @@ EXPLOITATION PATH (for documentation only):
 REMEDIATION:
   • Disable "Developer options > ADB over network" when not in use.
   • Restrict TCP port 5555 at the network/firewall layer.
-  • Update firmware — newer Android TV versions require RSA pairing.
+  • Update firmware  -  newer Android TV versions require RSA pairing.
 """
 
 
@@ -76,7 +76,7 @@ def _build_cnxn(banner: str = "host::") -> bytes:
 
 
 class Exploit(BaseExploit):
-    """Android TV — Open ADB Access Pattern Detector.
+    """Android TV  -  Open ADB Access Pattern Detector.
 
     Attempts three escalating checks to characterise the ADB exposure:
     1. Raw TCP connect to port 5555.
@@ -92,7 +92,7 @@ class Exploit(BaseExploit):
     """
 
     __info__ = {
-        "name": "Android TV — Open ADB Default Access Patterns",
+        "name": "Android TV  -  Open ADB Default Access Patterns",
         "description": (
             "Detects Android TV and Fire TV devices with ADB over TCP enabled "
             "on port 5555 and characterises the access level: unauthenticated "
@@ -100,7 +100,7 @@ class Exploit(BaseExploit):
         ),
         "authors": (
             "Android Open Source Project",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "references": (
             "https://developer.android.com/studio/command-line/adb",
@@ -195,7 +195,7 @@ class Exploit(BaseExploit):
         print_status("Checking ADB access patterns on {}:{}...".format(self.target, self.port))
 
         if not self._tcp_open():
-            print_error("Port {} is closed — ADB not reachable.".format(self.port))
+            print_error("Port {} is closed  -  ADB not reachable.".format(self.port))
             return
         print_success("Port {} is OPEN".format(self.port))
 
@@ -203,7 +203,7 @@ class Exploit(BaseExploit):
         if resp_hex:
             known = {"434e584e": "CNXN", "41555448": "AUTH", "4f50454e": "OPEN"}
             label = known.get(resp_hex.upper(), "UNKNOWN ({})".format(resp_hex))
-            print_success("ADB CNXN probe response: {} — ADB daemon is running".format(label))
+            print_success("ADB CNXN probe response: {}  -  ADB daemon is running".format(label))
         else:
             print_warning("Port open but no ADB response to CNXN probe.")
 
@@ -215,7 +215,7 @@ class Exploit(BaseExploit):
         elif cli_status == "connect_failed":
             print_error("adb CLI could not establish a usable connection.")
         elif cli_status == "adb_not_found":
-            print_warning("'adb' binary not found on PATH — CLI check skipped.")
+            print_warning("'adb' binary not found on PATH  -  CLI check skipped.")
 
         print_status(_GUIDANCE)
 

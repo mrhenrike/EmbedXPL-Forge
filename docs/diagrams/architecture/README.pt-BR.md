@@ -1,4 +1,4 @@
-# Diagramas de arquitetura — EmbedXPL-Forge
+# Diagramas de arquitetura  -  EmbedXPL-Forge
 
 **Idioma:** pt-BR. **English (en-US):** [README.md](README.md)
 
@@ -33,6 +33,6 @@ Caminhos em `docs/img/architecture/`. Galeria:
 |:---:|
 | ![GPON ONT](../../img/architecture/exf_arch_gpon_ont_attack.png) |
 
-**Diagrama GPON ONT:** ver [07-gpon-ont-attack.mmd](07-gpon-ont-attack.mmd) — validado contra Huawei EG8145X6-10 (OptiXstar, Loga Internet) e EG8145V5-V2 (EchoLife, Sumicity/Giga+). Mapeia todos os 11 módulos específicos com seus vetores de ataque.
+**Diagrama GPON ONT:** ver [07-gpon-ont-attack.mmd](07-gpon-ont-attack.mmd)  -  validado contra Huawei EG8145X6-10 (OptiXstar, Loga Internet) e EG8145V5-V2 (EchoLife, Sumicity/Giga+). Mapeia todos os 11 módulos específicos com seus vetores de ataque.
 
 Ver também [README.md](README.md) (en-US).

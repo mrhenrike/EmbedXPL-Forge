@@ -3,7 +3,7 @@
 Detecta o Nmap no sistema, copia nossos NSE customizados para
 /usr/share/nmap/scripts/ e executa 'nmap --script-updatedb'.
 
-Apenas NSE *customizados* do EmbedXPL são instalados — os scripts
+Apenas NSE *customizados* do EmbedXPL são instalados  -  os scripts
 absorvidos do Nmap original não são reinstalados (já estão lá).
 
 Uso:
@@ -105,7 +105,7 @@ def install(dry_run: bool = False, force: bool = False) -> dict:
 
 def status() -> None:
     """Lista todos os NSE do EmbedXPL e seu status de instalação."""
-    print("\n  NSE Scripts — EmbedXPL Arsenal\n  " + "─" * 60)
+    print("\n  NSE Scripts  -  EmbedXPL Arsenal\n  " + "─" * 60)
     print(f"  {'Script':<45} {'Category':<15} {'Installed'}")
     print("  " + "─" * 60)
 

@@ -30,7 +30,7 @@ class SegmentAutoPwn:
     def run(self):
         t0 = time.time(); mods = self._get_modules()
         report = AutoPwnReport(segment=self.segment, targets=self.targets)
-        if self.verbose: print(f"\n[*] AutoPwn {self.segment.upper()} — {len(mods)} modules")
+        if self.verbose: print(f"\n[*] AutoPwn {self.segment.upper()}  -  {len(mods)} modules")
         for target in self.targets:
             for rec in mods:
                 try:

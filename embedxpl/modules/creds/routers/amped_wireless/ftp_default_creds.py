@@ -7,7 +7,7 @@ class Exploit(FTPDefault):
     __info__ = {
         "name": "Amped Wireless Router Default FTP Creds",
         "description": "Dictionary attack with default credentials against Amped Wireless Router FTP service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Amped Wireless Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

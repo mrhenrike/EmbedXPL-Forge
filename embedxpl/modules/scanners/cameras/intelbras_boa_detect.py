@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Intelbras CCTV — Boa Web Server (EOL) Detection Scanner.
+"""Intelbras CCTV  -  Boa Web Server (EOL) Detection Scanner.
 
 Detects Boa HTTP server via banner fingerprinting on Intelbras CCTV devices.
 Boa has been end-of-life since 2005 (v0.94.14rc21) with known unpatched CVEs.

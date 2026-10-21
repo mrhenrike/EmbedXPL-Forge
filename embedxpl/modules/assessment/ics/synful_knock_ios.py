@@ -1,16 +1,16 @@
 """SYNful Knock Cisco IOS Implant Detection Assessment.
 
-# Original: SYNful Knock — Cisco IOS Implant (Mandiant/FireEye 2015)
+# Original: SYNful Knock  -  Cisco IOS Implant (Mandiant/FireEye 2015)
 # Reference: docs/malware-research/by-tool/FirewallXPL.md#2-win32turla
 # SYNful Knock: persistent implant in Cisco IOS router firmware
 # Activation: specific TCP packet with crafted SYN sequence number
 # MITRE: T1542.001 (System Firmware), T1205 (Traffic Signaling)
 """
 # ============================================================
-# AUTHORIZED USE ONLY — See docs/malware-research/DISCLAIMER.md
+# AUTHORIZED USE ONLY  -  See docs/malware-research/DISCLAIMER.md
 # Use only against systems you own or have WRITTEN authorization
 # to test. Operator assumes full legal responsibility for use.
-# simulate=True by default — set False only for authorized tests.
+# simulate=True by default  -  set False only for authorized tests.
 # ============================================================
 
 from __future__ import annotations
@@ -54,8 +54,8 @@ METADATA = {
 }
 
 # SYNful Knock known trigger sequence number pattern (public indicator)
-# (Actual trigger value is attacker-specific — this is a test for unexpected behavior)
-_SYNFUL_TRIGGER_HINT = "0xCAFEBABE"  # example — real value varies per implant
+# (Actual trigger value is attacker-specific  -  this is a test for unexpected behavior)
+_SYNFUL_TRIGGER_HINT = "0xCAFEBABE"  # example  -  real value varies per implant
 
 # Cisco IOS versions known to be targeted
 _CISCO_IOS_TARGETED = [
@@ -130,9 +130,9 @@ class Exploit(_Base):
                 resp, _ = sock.recvfrom(1024)
                 if resp:
                     findings.append("WARNING: SNMP responding (check write access with 'private' community)")
-                    print("    [!] SNMP port responding — verify write community is restricted")
+                    print("    [!] SNMP port responding  -  verify write community is restricted")
             except socket.timeout:
-                print("    SNMP: no response (filtered — good)")
+                print("    SNMP: no response (filtered  -  good)")
             sock.close()
         except Exception as e:
             print(f"    SNMP error: {e}")

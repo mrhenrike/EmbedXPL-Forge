@@ -1,4 +1,4 @@
-# IoT Default Credentials — Mirai Botnet (Original + Variants)
+# IoT Default Credentials  -  Mirai Botnet (Original + Variants)
 # Source: github.com/PCanyi/Mirai-IoT-Bot (mirai/bot/scanner.c)
 # Reference: docs/malware-research/by-tool/WordlistXPL.md
 # Format: username:password (empty password = empty string after colon)

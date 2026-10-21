@@ -1,5 +1,5 @@
-# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek — https://github.com/Uniao-Geek
-"""EmbedXPL-Forge — RTSP Protocol Client.
+# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
+"""EmbedXPL-Forge  -  RTSP Protocol Client.
 
 Low-level raw socket RTSP client ported and extended from cameradar.
 Implements full RTSP/1.0 per RFC 2326 with:
@@ -7,7 +7,7 @@ Implements full RTSP/1.0 per RFC 2326 with:
   - DESCRIBE request (stream info + SDP retrieval)
   - HTTP Basic and HTTP Digest authentication parsing
   - RTSPS (RTSP over TLS) support
-  - Status code–based attack decision logic matching cameradar
+  - Status code-based attack decision logic matching cameradar
 
 References:
   - cameradar: https://github.com/ullaakut/cameradar (MIT, Ullaakut)
@@ -136,7 +136,7 @@ def _detect_auth_type_from_header(www_auth: str) -> AuthType:
 
 
 class RTSPOverHTTPTunnel:
-    """RTSP-over-HTTP tunnel — pure Python implementation.
+    """RTSP-over-HTTP tunnel  -  pure Python implementation.
 
     Implements RFC 2326 Appendix C (RTSP-over-HTTP tunneling).
     Used when cameras sit behind HTTP proxies or NAT that only pass HTTP.
@@ -248,14 +248,14 @@ class RTSPClient:
 
     Ported from cameradar's internal/attack/rtsp.go with Python extensions.
     Supports plain RTSP, RTSPS (TLS), Basic auth, Digest auth,
-    and **RTSP-over-HTTP tunneling** (pure Python — replaces gortsplib TunnelHTTP).
+    and **RTSP-over-HTTP tunneling** (pure Python  -  replaces gortsplib TunnelHTTP).
 
     Transport modes
     ---------------
-    ``rtsp``    — Plain RTSP/1.0 over TCP (default, port 554)
-    ``rtsps``   — RTSP over TLS (port 443 or 8443)
-    ``http``    — RTSP-over-HTTP tunnel (port 80 or 8080)
-    ``https``   — RTSP-over-HTTPS tunnel (port 443 or 8443)
+    ``rtsp``     -  Plain RTSP/1.0 over TCP (default, port 554)
+    ``rtsps``    -  RTSP over TLS (port 443 or 8443)
+    ``http``     -  RTSP-over-HTTP tunnel (port 80 or 8080)
+    ``https``    -  RTSP-over-HTTPS tunnel (port 443 or 8443)
 
     Author: André Henrique (@mrhenrike) | União Geek
     Version: 1.1.0
@@ -421,7 +421,7 @@ class RTSPClient:
     def probe_auth_type(self, route: str = "") -> Tuple[AuthType, str, str]:
         """Probe a stream to detect authentication type.
 
-        Mirrors cameradar's probeDescribeHeaders — sends DESCRIBE without auth
+        Mirrors cameradar's probeDescribeHeaders  -  sends DESCRIBE without auth
         and parses the WWW-Authenticate header from 401 response.
 
         Args:

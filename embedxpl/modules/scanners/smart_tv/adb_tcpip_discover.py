@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""ADB TCP/IP Discovery Scanner — port 5555 TCP + ADB CNXN banner probe.
+"""ADB TCP/IP Discovery Scanner  -  port 5555 TCP + ADB CNXN banner probe.
 
 Attempts a raw TCP connection to port 5555 and sends the ADB CNXN magic
 packet to detect Android devices with ADB-over-TCP enabled.
@@ -67,7 +67,7 @@ def _build_cnxn(banner: str = "host::") -> bytes:
 
 
 class Exploit(BaseExploit):
-    """ADB TCP/IP Discovery Scanner — port 5555 CNXN banner probe.
+    """ADB TCP/IP Discovery Scanner  -  port 5555 CNXN banner probe.
 
     Performs a dual-stage check:
     1. Raw TCP connect to port 5555 to test reachability.
@@ -87,7 +87,7 @@ class Exploit(BaseExploit):
         ),
         "authors": (
             "Android Open Source Project",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "references": (
             "https://developer.android.com/studio/command-line/adb",
@@ -149,14 +149,14 @@ class Exploit(BaseExploit):
         print_status("Probing {}:{} for ADB TCP/IP...".format(self.target, self.port))
 
         if not self._tcp_connect():
-            print_error("TCP connect failed — port {} is closed or filtered.".format(self.port))
+            print_error("TCP connect failed  -  port {} is closed or filtered.".format(self.port))
             return
 
         print_success("TCP port {} is OPEN on {}".format(self.port, self.target))
 
         response_hex = self._adb_cnxn_probe()
         if response_hex is None:
-            print_warning("Port is open but no ADB response received — may be filtered.")
+            print_warning("Port is open but no ADB response received  -  may be filtered.")
             return
 
         # ADB command words (little-endian bytes):
@@ -164,7 +164,7 @@ class Exploit(BaseExploit):
         known = {"434e584e": "CNXN", "41555448": "AUTH", "4f50454e": "OPEN"}
         label = known.get(response_hex.upper(), "UNKNOWN ({})".format(response_hex))
         print_success(
-            "ADB response on {}:{} — command={} → Device likely has ADB over TCP ENABLED".format(
+            "ADB response on {}:{}  -  command={} → Device likely has ADB over TCP ENABLED".format(
                 self.target, self.port, label
             )
         )

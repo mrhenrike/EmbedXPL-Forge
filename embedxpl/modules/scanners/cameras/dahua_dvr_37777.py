@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Dahua DVR — TCP Port 37777 Scanner.
+"""Dahua DVR  -  TCP Port 37777 Scanner.
 
 Discovers Dahua DVR/NVR/XVR devices via TCP port 37777 and HTTP port 80.
 

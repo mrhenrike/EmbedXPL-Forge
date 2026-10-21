@@ -1,5 +1,5 @@
-# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek — https://github.com/Uniao-Geek
-"""EmbedXPL-Forge — RTSP Stream Data Models.
+# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
+"""EmbedXPL-Forge  -  RTSP Stream Data Models.
 
 Ported and extended from cameradar (https://github.com/ullaakut/cameradar, MIT).
 

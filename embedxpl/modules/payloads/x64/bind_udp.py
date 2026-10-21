@@ -6,7 +6,7 @@ from embedxpl.core.exploit.payloads import BasePayload
 class Payload(BasePayload):
     __info__ = {
         "name": "x64 Bind UDP",
-        "description": "UDP bind shell — useful when TCP egress is blocked.",
+        "description": "UDP bind shell  -  useful when TCP egress is blocked.",
         "authors": ("André Henrike (@mrhenrike)", "União Geek"),
     }
     options = {

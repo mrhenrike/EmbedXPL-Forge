@@ -1,4 +1,4 @@
-"""FortiGate Syslog Parser — EmbedXPL port of FirewallXPL-Forge.
+"""FortiGate Syslog Parser  -  EmbedXPL port of FirewallXPL-Forge.
 
 Original research / PoC credits
 --------------------------------

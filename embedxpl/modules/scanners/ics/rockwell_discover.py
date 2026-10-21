@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Rockwell CompactLogix / EtherNet-IP — List Identity Scanner.
+"""Rockwell CompactLogix / EtherNet-IP  -  List Identity Scanner.
 
 Discovers Rockwell PLC devices via EtherNet/IP ListIdentity broadcast on port 44818.
 
@@ -68,7 +68,7 @@ class Exploit(BaseExploit):
             sock.close()
 
             if len(data) < 24:
-                print_error("Response too short — not a valid EIP device")
+                print_error("Response too short  -  not a valid EIP device")
                 return
 
             cmd = struct.unpack_from("<H", data, 0)[0]

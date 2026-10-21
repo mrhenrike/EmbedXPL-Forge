@@ -3,7 +3,7 @@
 Parses common `'Name' =>`, `'Author' =>`, `'References' =>` patterns for
 documentation / cataloging. The file on disk is unchanged (ipsi litteris).
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations

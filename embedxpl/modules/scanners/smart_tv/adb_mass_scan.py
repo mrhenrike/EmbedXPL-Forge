@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""ADB Mass Scanner — Port 5555 LAN Sweep.
+"""ADB Mass Scanner  -  Port 5555 LAN Sweep.
 
 Scans a subnet for devices with open Android Debug Bridge (ADB)
 TCP port 5555 and no-auth configurations.
@@ -17,7 +17,7 @@ from embedxpl.core.exploit.exploit import BaseExploit
 
 
 class Exploit(BaseExploit):
-    """ADB Mass Scanner — LAN Sweep Port 5555.
+    """ADB Mass Scanner  -  LAN Sweep Port 5555.
 
     Sweeps a subnet for devices with open ADB TCP port 5555 and no
     authentication required. Identifies Android TV, Fire TV, and other
@@ -93,7 +93,7 @@ class Exploit(BaseExploit):
         )
         if found:
             for ip in found:
-                print_success("  {}:{} — try: adb connect {}:{}".format(
+                print_success("  {}:{}  -  try: adb connect {}:{}".format(
                     ip, self.port, ip, self.port
                 ))
 

@@ -1,4 +1,4 @@
-"""Device identification — matches scan results against FXF appliance catalog.
+"""Device identification  -  matches scan results against FXF appliance catalog.
 
 Author: André Henrique (@mrhenrike) | União Geek
 """

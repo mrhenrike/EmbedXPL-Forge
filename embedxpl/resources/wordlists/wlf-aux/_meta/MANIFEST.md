@@ -21,13 +21,13 @@ Local only. Entire `generated/` is gitignored from public GitHub.
 
 ## Taxonomy
 
-- `users.lst` — usernames only
-- `passwords.lst` — plaintext passwords only
-- `combo/user-pass.lst` — username:password
-- `combo/hash-pass.lst` — hash:password
-- `combo/hash-string.lst` — hash:string / bare hashes
-- `default-creds.lst` / `default-creds.json` — manufacturer defaults
-- `fuzzing.lst` — discovery paths
-- `secrets/*` — client creds and tokens (chmod 700/600)
+- `users.lst`  -  usernames only
+- `passwords.lst`  -  plaintext passwords only
+- `combo/user-pass.lst`  -  username:password
+- `combo/hash-pass.lst`  -  hash:password
+- `combo/hash-string.lst`  -  hash:string / bare hashes
+- `default-creds.lst` / `default-creds.json`  -  manufacturer defaults
+- `fuzzing.lst`  -  discovery paths
+- `secrets/*`  -  client creds and tokens (chmod 700/600)
 
 Provenance only in `SOURCES.tsv` (no source-named shard files).

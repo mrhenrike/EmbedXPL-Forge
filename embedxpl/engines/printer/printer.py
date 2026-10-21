@@ -66,7 +66,7 @@ def _detect_editor() -> str:
 
 class printer(cmd.Cmd, object):
     # cmd module config and customization
-    intro = "Welcome to the PrinterXPL-Forge shell. Type help or ? to list commands.\nType 'exit' to quit. Type 'discover' to scan for printers on your local network.\nNote: Not all commands will work on every printer — support depends on the device's manufacturer, model, and firmware language implementation."
+    intro = "Welcome to the PrinterXPL-Forge shell. Type help or ? to list commands.\nType 'exit' to quit. Type 'discover' to scan for printers on your local network.\nNote: Not all commands will work on every printer  -  support depends on the device's manufacturer, model, and firmware language implementation."
     doc_header = "Available commands (type help <topic>):"
     offline_str = "Not connected."
     undoc_header = None
@@ -91,7 +91,7 @@ class printer(cmd.Cmd, object):
     vendor = ""
     product = ""
     model = ""
-    # default editor – auto-detected per OS, can be overridden at runtime
+    # default editor - auto-detected per OS, can be overridden at runtime
     editor = _detect_editor()
     
     # Interruption control
@@ -422,7 +422,7 @@ class printer(cmd.Cmd, object):
         if self.conn:
             return True
         output().errmsg(
-            f"Not connected to RAW port 9100 — '{command}' requires an active PJL/RAW session."
+            f"Not connected to RAW port 9100  -  '{command}' requires an active PJL/RAW session."
         )
         return False
 
@@ -432,14 +432,14 @@ class printer(cmd.Cmd, object):
         parts = (arg or '').strip().split()
         if not parts:
             print()
-            print(f"  Vendor : {self.vendor or '(not set — generic INFO set)'}")
+            print(f"  Vendor : {self.vendor or '(not set  -  generic INFO set)'}")
             print(f"  Product: {self.product or '(unknown)'}")
             print(f"  Model  : {self.model or '(unknown)'}")
             print(f"  RAW    : {'connected' if self.conn else 'offline (passive mode)'}")
             print()
             print("  Usage:")
-            print("    vendor set <name>   — hp, brother, epson, ricoh, xerox, …")
-            print("    vendor detect       — re-run passive fingerprint")
+            print("    vendor set <name>    -  hp, brother, epson, ricoh, xerox, …")
+            print("    vendor detect        -  re-run passive fingerprint")
             print(f"    Known: {', '.join(VENDOR_NAMES)}")
             print()
             return
@@ -517,7 +517,7 @@ class printer(cmd.Cmd, object):
         else:
             self.set_defaults(False)
             output().warning(
-                f"RAW port unavailable on {base} — shell commands need port 9100 (PJL/PS/PCL)."
+                f"RAW port unavailable on {base}  -  shell commands need port 9100 (PJL/PS/PCL)."
             )
             if self._fingerprint:
                 from utils.banner_grabber import print_fingerprint, print_protocol_hints
@@ -666,10 +666,10 @@ class printer(cmd.Cmd, object):
     def do_id(self, *arg):
         "Show printer identification and system information"
         if not self.conn:
-            output().warning("Not connected to RAW — showing passive fingerprint:")
+            output().warning("Not connected to RAW  -  showing passive fingerprint:")
             self._show_passive_id()
             return
-        output().message("Unknown printer — specify mode: pjl, ps, or pcl")
+        output().message("Unknown printer  -  specify mode: pjl, ps, or pcl")
 
     def help_id(self):
         """Show printer identification and system information"""

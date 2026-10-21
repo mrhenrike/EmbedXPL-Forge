@@ -1,4 +1,4 @@
-"""WhisperPair — Google Fast Pair Unauthenticated Pairing Hijack (CVE-2025-36911).
+"""WhisperPair  -  Google Fast Pair Unauthenticated Pairing Hijack (CVE-2025-36911).
 
 Google Fast Pair (GFPS) implementation on certain Android 14/15 devices does
 not properly validate BLE advertisement authenticity before initiating a
@@ -59,7 +59,7 @@ class Exploit(Exploit):
 
     target_model = OptString("AirPods Pro 2", f"Spoofed device model: {', '.join(_POPULAR_MODEL_IDS)}")
     scan_time = OptInteger(15, "BLE scan duration to find targets (seconds)")
-    dry_run = OptBool(True, "Dry run — describe attack only")
+    dry_run = OptBool(True, "Dry run  -  describe attack only")
 
     @mute
     def check(self) -> bool:
@@ -70,7 +70,7 @@ class Exploit(Exploit):
         dry_run = bool(self.dry_run)
         model_id = _POPULAR_MODEL_IDS.get(model, b"\x20\x00\xf0")
 
-        print_status(f"WhisperPair Fast Pair attack — {_CVE}")
+        print_status(f"WhisperPair Fast Pair attack  -  {_CVE}")
         print_info(f"Spoofed model: {model} (model_id: {model_id.hex()})")
         print_info("Trigger: broadcast GFPS BLE advertisement → Android shows pairing dialog")
 

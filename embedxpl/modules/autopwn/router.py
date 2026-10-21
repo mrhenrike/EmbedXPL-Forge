@@ -1,4 +1,4 @@
-"""EmbedXPL AutoPwn — Router segment."""
+"""EmbedXPL AutoPwn  -  Router segment."""
 from .segment import SegmentAutoPwn
 
 class RouterAutoPwn(SegmentAutoPwn):

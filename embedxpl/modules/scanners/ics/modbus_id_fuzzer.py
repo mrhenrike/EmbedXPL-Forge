@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Modbus Unit ID Fuzzer — brute-force slave ID discovery on TCP/502.
+"""Modbus Unit ID Fuzzer  -  brute-force slave ID discovery on TCP/502.
 
 Scans all 256 possible Modbus Unit IDs (slave addresses) on a target
 Modbus gateway or multi-drop converter. Many Modbus-to-TCP gateways bridge
@@ -51,7 +51,7 @@ def _probe_unit_id(host: str, port: int, unit_id: int, timeout: float) -> bool:
 
 
 class Exploit(BaseExploit):
-    """Modbus Unit ID Fuzzer — discover all active Modbus slaves on a gateway.
+    """Modbus Unit ID Fuzzer  -  discover all active Modbus slaves on a gateway.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -67,7 +67,7 @@ class Exploit(BaseExploit):
         ),
         "authors": (
             "ModBusSploit contributors",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge port",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge port",
         ),
         "references": (
             "https://modbus.org/docs/Modbus_Application_Protocol_V1_1b3.pdf",
@@ -89,7 +89,7 @@ class Exploit(BaseExploit):
 
     def run(self) -> None:
         """Fuzz all Unit IDs and report responding devices."""
-        print_status(f"[Modbus ID Fuzzer] Scanning {self.target}:{self.port} Unit IDs {self.start_id}–{self.end_id}...")
+        print_status(f"[Modbus ID Fuzzer] Scanning {self.target}:{self.port} Unit IDs {self.start_id}-{self.end_id}...")
 
         found: List[int] = []
         total = self.end_id - self.start_id + 1

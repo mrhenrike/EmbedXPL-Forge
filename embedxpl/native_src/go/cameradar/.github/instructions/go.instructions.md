@@ -236,7 +236,7 @@ These instructions are based on:
     - Always close the writer; use `CloseWithError(err)` on failures
     - `io.Pipe` is for streaming, not rewinding or making readers reusable
 
-- **Warning:** When using `io.Pipe` (especially with multipart writers), all writes must be performed in strict, sequential order. Do not write concurrently or out of order—multipart boundaries and chunk order must be preserved. Out-of-order or parallel writes can corrupt the stream and result in errors.
+- **Warning:** When using `io.Pipe` (especially with multipart writers), all writes must be performed in strict, sequential order. Do not write concurrently or out of order - multipart boundaries and chunk order must be preserved. Out-of-order or parallel writes can corrupt the stream and result in errors.
 
 - Streaming multipart/form-data with `io.Pipe`:
     - `pr, pw := io.Pipe()`; `mw := multipart.NewWriter(pw)`; use `pr` as the HTTP request body

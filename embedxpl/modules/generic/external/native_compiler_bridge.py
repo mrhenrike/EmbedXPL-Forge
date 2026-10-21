@@ -2,7 +2,7 @@
 
 Provides compile_and_run() for C/Ruby/Bash source files embedded in
 embedxpl/resources/native_src/. Always compiles to workspace-local .tmp/
-directory — never uses OS /tmp per workspace operational guardrails.
+directory  -  never uses OS /tmp per workspace operational guardrails.
 
 Original code
 -------------

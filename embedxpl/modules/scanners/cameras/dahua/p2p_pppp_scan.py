@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Dahua CCTV — PPPP P2P Cloud Module Scanner.
+"""Dahua CCTV  -  PPPP P2P Cloud Module Scanner.
 
 Detects Dahua devices using the PPPP/iLnkP2P cloud relay protocol,
 which is vulnerable to UID enumeration (CVE-2019-11219) and session
@@ -28,14 +28,14 @@ class Exploit(HTTPClient):
     __info__ = {
         "name": "Dahua PPPP P2P Cloud Scanner (DAHUA-2026-004)",
         "description": (
-            "DAHUA-2026-004 — Detects PPPP/iLnkP2P cloud relay protocol on "
+            "DAHUA-2026-004  -  Detects PPPP/iLnkP2P cloud relay protocol on "
             "Dahua devices. The PPPP protocol is vulnerable to UID enumeration "
             "(CVE-2019-11219) and session key bypass (CVE-2019-11220), enabling "
             "remote access to video feeds without authentication."
         ),
         "authors": (
             "Paul Marrapese (CVE-2019-11219/11220)",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge port",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge port",
         ),
         "references": (
             "https://nvd.nist.gov/vuln/detail/CVE-2019-11219",

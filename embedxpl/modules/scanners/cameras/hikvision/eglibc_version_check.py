@@ -2,7 +2,7 @@
 """Hikvision EGLIBC/glibc Version & CVE Mapper (CWE-1104).
 
 Identifies glibc/EGLIBC version in extracted firmware and maps to known
-CVEs. Offline analysis — no network access required.
+CVEs. Offline analysis  -  no network access required.
 
 Version: 1.0.0
 """
@@ -102,7 +102,7 @@ class Exploit(Exploit):
             "Components."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "references": (
             "https://nvd.nist.gov/vuln/detail/CVE-2015-0235",
@@ -307,20 +307,20 @@ class Exploit(Exploit):
             age_years = 2026 - 2012
             risk = "CRITICAL"
             print_warning(
-                "{} {} is {} years old — end-of-life, no security patches. "
+                "{} {} is {} years old  -  end-of-life, no security patches. "
                 "Risk: {}".format(lib_name, ver_str, age_years, risk)
             )
         elif version[:2] <= (2, 22):
             risk = "HIGH"
             print_warning(
-                "{} {} is outdated — limited security support. Risk: {}".format(
+                "{} {} is outdated  -  limited security support. Risk: {}".format(
                     lib_name, ver_str, risk
                 )
             )
         else:
             risk = "MEDIUM"
             print_info(
-                "{} {} — check specific CVE patches. Risk: {}".format(
+                "{} {}  -  check specific CVE patches. Risk: {}".format(
                     lib_name, ver_str, risk
                 )
             )

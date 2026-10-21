@@ -4,7 +4,7 @@ from embedxpl.modules.creds.generic.http_basic_digest_default import Exploit as 
 
 
 class Exploit(HTTPBasicDigestDefault):
-    """D-Link ADSL/DSL Modem — Default Web Interface Credentials (HTTP Basic/Digest Auth).
+    """D-Link ADSL/DSL Modem  -  Default Web Interface Credentials (HTTP Basic/Digest Auth).
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -18,7 +18,7 @@ class Exploit(HTTPBasicDigestDefault):
             "If valid credentials are found, they are displayed to the user."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "devices": (
             "D-Link ADSL/DSL Modem",

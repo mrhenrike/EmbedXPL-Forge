@@ -1,4 +1,4 @@
-"""EmbedXPL Runtime — Python Executor.
+"""EmbedXPL Runtime  -  Python Executor.
 
 Passthrough executor for native Python modules (the default, 95%+ of modules).
 Runs the module's run() method directly in-process.

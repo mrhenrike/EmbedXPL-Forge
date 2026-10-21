@@ -57,7 +57,7 @@ class Exploit(Exploit):
             "dropbear, insecure mounts, hardcoded passwords). CWE-732."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "references": (
             "https://cwe.mitre.org/data/definitions/732.html",
@@ -271,5 +271,5 @@ class Exploit(Exploit):
             )
         if any("telnetd" in f[4] for f in all_findings):
             print_warning(
-                "CVSS 9.8: Debug telnet service enabled — full remote access risk"
+                "CVSS 9.8: Debug telnet service enabled  -  full remote access risk"
             )

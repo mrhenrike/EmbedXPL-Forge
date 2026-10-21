@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""TVIP S-Box IP Camera — HTTP Discovery Scanner.
+"""TVIP S-Box IP Camera  -  HTTP Discovery Scanner.
 
 Discovers TVIP S-Box and similar IP camera/IPTV box devices via HTTP probe.
 
@@ -42,7 +42,7 @@ class Exploit(HTTPClient):
             if resp and resp.status_code in (200, 302):
                 text = resp.text or ""
                 print_success(
-                    "HTTP {} on {} — {} bytes".format(resp.status_code, path, len(text))
+                    "HTTP {} on {}  -  {} bytes".format(resp.status_code, path, len(text))
                 )
                 if any(kw in text.lower() for kw in ["tvip", "s-box", "iptv", "multimedia"]):
                     print_success("TVIP device confirmed at {}:{}".format(

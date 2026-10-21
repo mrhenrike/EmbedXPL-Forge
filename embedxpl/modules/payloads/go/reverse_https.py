@@ -1,4 +1,4 @@
-"""Go Reverse HTTPS Implant — TLS encrypted C2."""
+"""Go Reverse HTTPS Implant  -  TLS encrypted C2."""
 
 from embedxpl.core.exploit.payloads import BasePayload
 
@@ -6,7 +6,7 @@ from embedxpl.core.exploit.payloads import BasePayload
 class Payload(BasePayload):
     __info__ = {
         "name": "Go Reverse HTTPS",
-        "description": "Go TLS reverse shell — encrypted C2, bypasses DPI.",
+        "description": "Go TLS reverse shell  -  encrypted C2, bypasses DPI.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
     }
 

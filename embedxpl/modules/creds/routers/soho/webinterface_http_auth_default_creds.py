@@ -7,7 +7,7 @@ class Exploit(HTTPBasicDigestDefault):
     __info__ = {
         "name": "Soho Router Default Web Interface Creds",
         "description": "Dictionary attack against Soho Router Web Interface (HTTP Basic/Digest Auth).",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Soho Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

@@ -1,7 +1,7 @@
 """Trickest CVE Repository Reference Module.
 
 Pointer to the trickest/cve submodule (github.com/trickest/cve).
-Does not embed exploit code — provides lookups and integration hooks.
+Does not embed exploit code  -  provides lookups and integration hooks.
 
 Original repository
 -------------------
@@ -74,7 +74,7 @@ class Exploit(Exploit):
             # Data source: trickest/cve (CC0 1.0)
         ),
         "references": ("https://github.com/trickest/cve",),
-        "devices": ("Intelligence gathering — any CVE",),
+        "devices": ("Intelligence gathering  -  any CVE",),
     }
 
     cve_id = OptString("CVE-2024-12345", "CVE ID to look up in trickest/cve")
@@ -87,7 +87,7 @@ class Exploit(Exploit):
         cve = str(self.cve_id).upper().strip()
         root = _find_trickest()
 
-        print_status(f"Trickest CVE lookup — {cve}")
+        print_status(f"Trickest CVE lookup  -  {cve}")
         if not root:
             print_error("trickest/cve not found locally")
             print_info("Clone: git clone https://github.com/trickest/cve.git")

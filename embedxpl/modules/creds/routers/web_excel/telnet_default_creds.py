@@ -7,7 +7,7 @@ class Exploit(TelnetDefault):
     __info__ = {
         "name": "Web Excel Router Default Telnet Creds",
         "description": "Dictionary attack with default credentials against Web Excel Router Telnet service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Web Excel Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

@@ -1,4 +1,4 @@
-"""Vulnerability mapper — matches identified devices to applicable FXF modules.
+"""Vulnerability mapper  -  matches identified devices to applicable FXF modules.
 
 Author: André Henrique (@mrhenrike) | União Geek
 """
@@ -69,7 +69,7 @@ class VulnMapper:
             applicable_exploits=exploits,
             applicable_creds=creds,
             risk_score=risk,
-            recommendation=f"{level} — {len(exploits)} exploits, {len(creds)} cred checks for {vendor}/{identification.product}",
+            recommendation=f"{level}  -  {len(exploits)} exploits, {len(creds)} cred checks for {vendor}/{identification.product}",
         )
 
     @staticmethod

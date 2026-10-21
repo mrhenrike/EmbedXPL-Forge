@@ -7,13 +7,13 @@ Uses the vulhub directory structure (github.com/vulhub/vulhub).
 Original tool references
 ------------------------
 vulhub : https://github.com/vulhub/vulhub
-         CC BY-NC 4.0 — educational/research use only
+         CC BY-NC 4.0  -  educational/research use only
 
 EmbedXPL port
 -------------
 Maintainer : Andre Henrique (@mrhenrike) | Uniao Geek
 
-# authorized use only — educational/lab use only
+# authorized use only  -  educational/lab use only
 """
 from __future__ import annotations
 
@@ -121,14 +121,14 @@ def tear_down_lab(lab: str, vulhub_path: Optional[Path] = None) -> dict[str, Any
 
 
 class Exploit(Exploit):
-    """Vulhub Docker Bridge — spin up/down vulnerable lab environments."""
+    """Vulhub Docker Bridge  -  spin up/down vulnerable lab environments."""
 
     __info__ = {
         "name": "Vulhub Docker Lab Bridge",
         "description": (
             "Spins up Vulhub Docker Compose labs for exploit testing. "
             "Supports: list labs, up, down. Requires docker + docker-compose. "
-            "Vulhub: github.com/vulhub/vulhub (CC BY-NC 4.0 — educational use only)."
+            "Vulhub: github.com/vulhub/vulhub (CC BY-NC 4.0  -  educational use only)."
         ),
         "authors": ("Andre Henrique (@mrhenrike) | Uniao Geek",),
         "references": ("https://github.com/vulhub/vulhub",),
@@ -165,7 +165,7 @@ class Exploit(Exploit):
                 if len(labs) > 50:
                     print_info(f"  … and {len(labs)-50} more")
             else:
-                print_info("No labs found — ensure vulhub is properly cloned")
+                print_info("No labs found  -  ensure vulhub is properly cloned")
 
         elif action == "up":
             if not lab:

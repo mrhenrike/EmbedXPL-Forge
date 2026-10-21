@@ -1,5 +1,5 @@
 # Author: Andre Henrique (LinkedIn/X: @mrhenrike)
-"""Page-cache LPE family hunter — DirtyPipe / DirtyFrag / DirtyClone / pedit COW.
+"""Page-cache LPE family hunter  -  DirtyPipe / DirtyFrag / DirtyClone / pedit COW.
 
 Heuristic local checks inspired by Tracee/eBPF detection principles: identify
 abnormal kernel prerequisites (user_ns, tc pedit, IPsec ESP, Squid FTP) rather
@@ -89,10 +89,10 @@ class Exploit(BaseExploit):
         for m in ("xt_TEE", "esp4", "esp6", "act_pedit", "sch_ingress"):
             if module_loaded(m):
                 mods.append(m)
-        rows.append(("kernel_modules", "—", ", ".join(mods) or "none", "—"))
+        rows.append(("kernel_modules", " - ", ", ".join(mods) or "none", " - "))
 
-        rows.append(("user_ns", "—", "ok" if userns_allowed() else "restricted", "—"))
-        rows.append(("kernel", "—", rel, "—"))
+        rows.append(("user_ns", " - ", "ok" if userns_allowed() else "restricted", " - "))
+        rows.append(("kernel", " - ", rel, " - "))
 
         print_table(["Family", "CVE", "Status", "IXF module"], rows, title="Page-Cache LPE Hunter")
 

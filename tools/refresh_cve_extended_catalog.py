@@ -3,9 +3,9 @@
 
 Merges, in order: (1) static rows from ``build_entries()``; (2) CVE strings found under
 ``embedxpl/modules/**/*.py`` that are not already covered by (1) or by
-``_EMBEDDED_CVES`` in ``cve_db.py`` (embedded wins — avoids replacing rich rows with stubs).
+``_EMBEDDED_CVES`` in ``cve_db.py`` (embedded wins  -  avoids replacing rich rows with stubs).
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations
@@ -48,14 +48,14 @@ def row(
 
 def build_entries() -> List[Dict[str, Any]]:
     e: List[Dict[str, Any]] = []
-    # Fortinet — pandemia e pós-pandemia (SSL-VPN / admin / SSO)
+    # Fortinet  -  pandemia e pós-pandemia (SSL-VPN / admin / SSO)
     e.extend(
         [
             row(
                 "CVE-2018-13379",
                 "fortinet",
                 "fortigate",
-                "FortiOS 5.6.3–6.0.4 SSL-VPN",
+                "FortiOS 5.6.3-6.0.4 SSL-VPN",
                 "Path traversal / credenciais expostas na interface SSL VPN",
                 9.1,
                 ref="https://www.fortiguard.com/psirt/FG-IR-18-384",
@@ -65,14 +65,14 @@ def build_entries() -> List[Dict[str, Any]]:
                 "CVE-2018-13382",
                 "fortinet",
                 "fortigate",
-                "FortiOS 5.6.x–6.0.x",
+                "FortiOS 5.6.x-6.0.x",
                 "Falha de autorização em SSL VPN",
                 9.8,
                 exploit_available=True,
             ),
             row("CVE-2018-13383", "fortinet", "fortigate", "FortiOS", "Heap overflow histórico SSL VPN", 8.8, exploit_available=True),
             row("CVE-2019-5598", "fortinet", "fortigate", "FortiOS", "Vulnerabilidade SSL VPN", 9.8, exploit_available=True),
-            row("CVE-2020-12812", "fortinet", "fortigate", "FortiOS 6.4–6.4.1, 6.2.5–6.2.7", "Bypass de 2FA em SSL VPN", 9.8, exploit_available=True),
+            row("CVE-2020-12812", "fortinet", "fortigate", "FortiOS 6.4-6.4.1, 6.2.5-6.2.7", "Bypass de 2FA em SSL VPN", 9.8, exploit_available=True),
             row("CVE-2020-29015", "fortinet", "fortigate", "FortiOS", "Impacto CSRF / interface web", 7.5),
             row("CVE-2021-1722", "fortinet", "fortigate", "FortiOS SSL-VPN", "Heap buffer overflow", 7.5, exploit_available=True),
             row("CVE-2021-22123", "fortinet", "fortigate", "FortiWeb/FortiOS", "Stack buffer overflow", 9.3, exploit_available=True),
@@ -82,7 +82,7 @@ def build_entries() -> List[Dict[str, Any]]:
                 "CVE-2022-40684",
                 "fortinet",
                 "fortigate",
-                "FortiOS 7.0.0–7.0.6, 7.2.0–7.2.1",
+                "FortiOS 7.0.0-7.0.6, 7.2.0-7.2.1",
                 "Bypass de autenticação via requisição HTTP(S) forjada",
                 9.8,
                 exploit_available=True,
@@ -98,10 +98,10 @@ def build_entries() -> List[Dict[str, Any]]:
                 exploit_available=True,
             ),
             row("CVE-2023-28001", "fortinet", "fortigate", "FortiOS", "Sessão REST API / expiração insuficiente", 9.8),
-            row("CVE-2023-33308", "fortinet", "fortigate", "FortiOS 7.0–7.2", "Stack overflow", 9.8),
+            row("CVE-2023-33308", "fortinet", "fortigate", "FortiOS 7.0-7.2", "Stack overflow", 9.8),
             row("CVE-2023-36633", "fortinet", "fortigate", "FortiOS", "Corrupção de memória / format string class", 9.8),
             row("CVE-2023-42789", "fortinet", "fortigate", "FortiOS", "Escrita fora dos limites via HTTP", 9.8),
-            row("CVE-2024-21762", "fortinet", "fortigate", "FortiOS 7.4–7.0 SSL-VPN", "Escrita fora dos limites SSL VPN RCE", 9.6, exploit_available=True),
+            row("CVE-2024-21762", "fortinet", "fortigate", "FortiOS 7.4-7.0 SSL-VPN", "Escrita fora dos limites SSL VPN RCE", 9.6, exploit_available=True),
             row("CVE-2024-23113", "fortinet", "fortigate", "FortiOS", "Format string", 9.8, exploit_available=True),
             row("CVE-2024-52965", "fortinet", "fortigate", "FortiOS", "Correção de memória ( advisories Fortinet)", 8.6),
             row("CVE-2024-55599", "fortinet", "fortigate", "FortiOS", "Advisory cumulativo FortiOS", 8.8),
@@ -274,7 +274,7 @@ def _entries_from_external_intel(repo_root: Path, seen: Set[str]) -> List[Dict[s
             vendor = _guess_vendor_from_intel_id(sid)
             desc = (
                 "Referenciado em external_tool_intel_sources (id={}); domínio catalogado: {}. "
-                "PoC/repo local listado — validar com NVD/PSIRT."
+                "PoC/repo local listado  -  validar com NVD/PSIRT."
             ).format(sid, dom or "n/d")
             ver = "Ver fonte: {} / NVD".format(name[:120])
             out.append(

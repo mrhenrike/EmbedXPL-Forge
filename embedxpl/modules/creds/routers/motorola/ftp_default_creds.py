@@ -4,7 +4,7 @@ from embedxpl.modules.creds.generic.ftp_default import Exploit as FTPDefault
 
 
 class Exploit(FTPDefault):
-    """Motorola Router/CPE — Default FTP Credentials.
+    """Motorola Router/CPE  -  Default FTP Credentials.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -18,7 +18,7 @@ class Exploit(FTPDefault):
             "If valid credentials are found, they are displayed to the user."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "devices": (
             "Motorola Router/CPE",

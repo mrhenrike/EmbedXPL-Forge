@@ -6,7 +6,7 @@
 
 ## Overview
 
-`sessions` manages scan session history. Every time `discover` or a module runs against a target, EmbedXPL-Forge records the result in a per-host session file (`~/.exf_sessions/`). Sessions persist between restarts and work like John the Ripper's `--restore` — resuming from where the last scan stopped.
+`sessions` manages scan session history. Every time `discover` or a module runs against a target, EmbedXPL-Forge records the result in a per-host session file (`~/.exf_sessions/`). Sessions persist between restarts and work like John the Ripper's `--restore`  -  resuming from where the last scan stopped.
 
 ---
 
@@ -23,7 +23,7 @@ sessions purge                  Delete ALL sessions (asks confirmation)
 
 ---
 
-## `sessions` / `sessions list` — list all sessions
+## `sessions` / `sessions list`  -  list all sessions
 
 ### Output (sessions exist)
 
@@ -70,7 +70,7 @@ exf> sessions
 
 ---
 
-## `sessions show <ip>` — session detail
+## `sessions show <ip>`  -  session detail
 
 ### Output
 
@@ -122,7 +122,7 @@ Execution History (last 20):
 └───────────────────────────────────────────────────┴───────────────┴─────────────┴─────────┘
 ```
 
-### Error — session not found
+### Error  -  session not found
 
 ```
 exf> sessions show 192.168.99.99
@@ -130,7 +130,7 @@ exf> sessions show 192.168.99.99
 [WARN] No session found for 192.168.99.99
 ```
 
-### Error — missing argument
+### Error  -  missing argument
 
 ```
 exf> sessions show
@@ -140,7 +140,7 @@ exf> sessions show
 
 ---
 
-## `sessions delete <ip>` — delete one session
+## `sessions delete <ip>`  -  delete one session
 
 ```
 exf> sessions delete 192.168.1.100
@@ -166,7 +166,7 @@ exf> sessions delete
 
 ---
 
-## `sessions export <ip>` — export session as JSON
+## `sessions export <ip>`  -  export session as JSON
 
 Exports the full session record as a JSON object printed to stdout.
 
@@ -251,7 +251,7 @@ exf> sessions export 192.168.99.99
 
 ---
 
-## `sessions purge` — delete ALL sessions
+## `sessions purge`  -  delete ALL sessions
 
 Requires explicit confirmation.
 

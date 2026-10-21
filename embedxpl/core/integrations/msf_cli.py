@@ -1,6 +1,6 @@
 """Helpers to invoke Metasploit ``msfconsole`` without vendoring Rapid7 code.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations

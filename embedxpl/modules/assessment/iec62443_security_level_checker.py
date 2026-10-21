@@ -69,7 +69,7 @@ class Exploit(Exploit):
         "name": "IEC 62443 Security Level Assessment",
         "description": (
             "Assessment stub that checks an OT/ICS site against IEC 62443 "
-            "security level requirements (SL1–SL4) across 7 foundational requirements. "
+            "security level requirements (SL1-SL4) across 7 foundational requirements. "
             "Produces a gap analysis report. Interactive checklist mode."
         ),
         "authors": ("Andre Henrique (@mrhenrike) | Uniao Geek",),
@@ -92,7 +92,7 @@ class Exploit(Exploit):
         interactive = bool(self.interactive)
 
         print_status(f"IEC 62443 Security Level {target_sl} Assessment")
-        print_info(f"Target SL: {target_sl} — {_SECURITY_LEVELS[target_sl]}")
+        print_info(f"Target SL: {target_sl}  -  {_SECURITY_LEVELS[target_sl]}")
         print_info("=" * 60)
 
         requirements = _SL_REQUIREMENTS.get(target_sl, _SL_REQUIREMENTS[2])

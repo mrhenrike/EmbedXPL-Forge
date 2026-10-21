@@ -65,14 +65,14 @@ python --version    # deve ser >= 3.8
 **Opções de correção:**
 
 ```bash
-# Opção 1 — modo não interativo (sem TTY necessário)
+# Opção 1  -  modo não interativo (sem TTY necessário)
 python -m embedxpl -m exploits/routers/tplink/wr841n_credential_disclosure_cve_2023_50224 \
     -s "target 192.168.1.1" -s "port 80"
 
-# Opção 2 — Docker: alocar um pseudo-TTY
+# Opção 2  -  Docker: alocar um pseudo-TTY
 docker run -it --rm embedxpl-forge embedxpl
 
-# Opção 3 — SSH: solicitar um TTY
+# Opção 3  -  SSH: solicitar um TTY
 ssh -t user@host 'embedxpl'
 ```
 
@@ -111,7 +111,7 @@ Este é o comportamento esperado. `Ctrl+C` cancela a operação atual. Para sair
 
 ## Problemas de versão do Python
 
-### Python 3.13+ — `telnetlib` removido
+### Python 3.13+  -  `telnetlib` removido
 
 ```
 ModuleNotFoundError: No module named 'telnetlib'
@@ -145,7 +145,7 @@ python --version
 ### `readline` não disponível (Windows)
 
 ```
-[WARN] readline not available — tab completion disabled
+[WARN] readline not available  -  tab completion disabled
 ```
 
 Este é um aviso não crítico no Windows. O interpretador usa um shim que desabilita o completamento por Tab, mas todos os comandos funcionam normalmente. Para habilitar o completamento por Tab no Windows, instale `pyreadline3`:
@@ -158,7 +158,7 @@ pip install pyreadline3
 
 ## Problemas específicos de protocolo
 
-### SSH — `Authentication failed`
+### SSH  -  `Authentication failed`
 
 ```
 [-] Authentication failed for 192.168.1.1:22
@@ -176,7 +176,7 @@ pip install pyreadline3
 
 ---
 
-### Telnet — conexão recusada
+### Telnet  -  conexão recusada
 
 ```
 [-] Connection refused: 192.168.1.1:23
@@ -196,7 +196,7 @@ pip install telnetlib3
 
 ---
 
-### HTTP/HTTPS — erros de certificado SSL
+### HTTP/HTTPS  -  erros de certificado SSL
 
 ```
 ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED]
@@ -216,7 +216,7 @@ exf> setg ssl_verify false
 
 ---
 
-### SNMP — sem resposta
+### SNMP  -  sem resposta
 
 ```
 [-] SNMP: no response from 192.168.1.1 (timeout after 5s)
@@ -233,7 +233,7 @@ exf> setg ssl_verify false
 
 ---
 
-### Modbus TCP — erros de conexão
+### Modbus TCP  -  erros de conexão
 
 ```
 [-] Modbus: connection refused on 192.168.1.100:502
@@ -249,7 +249,7 @@ Se a porta estiver filtrada, o alvo pode exigir acesso serial direto RS-485 (Mod
 
 ---
 
-### FTP — `530 Login incorrect`
+### FTP  -  `530 Login incorrect`
 
 ```
 [-] FTP authentication failed: 530 Login incorrect
@@ -349,7 +349,7 @@ sudo embedxpl-nse install --force
 
 ## Problemas específicos de CVE
 
-### CVE-2022-40684 (FortiOS auth bypass) — HTTP 404
+### CVE-2022-40684 (FortiOS auth bypass)  -  HTTP 404
 
 ```
 [-] HTTP 404 on /api/v2/cmdb/system/admin/admin
@@ -363,11 +363,11 @@ exf (fortios_version_check) > set target 192.168.1.1
 exf (fortios_version_check) > run
 ```
 
-Versões afetadas: FortiOS 5.x, 6.x, 7.0.0–7.0.6, 7.2.0–7.2.1.
+Versões afetadas: FortiOS 5.x, 6.x, 7.0.0-7.0.6, 7.2.0-7.2.1.
 
 ---
 
-### CVE-2021-36260 (Hikvision RCE) — comando não executado
+### CVE-2021-36260 (Hikvision RCE)  -  comando não executado
 
 ```
 [*] Sent payload but no connection received on 0.0.0.0:4444
@@ -384,7 +384,7 @@ Versões afetadas: FortiOS 5.x, 6.x, 7.0.0–7.0.6, 7.2.0–7.2.1.
 
 ---
 
-### CVE-2018-14847 (MikroTik Winbox) — conexão recusada
+### CVE-2018-14847 (MikroTik Winbox)  -  conexão recusada
 
 ```
 [-] Connection refused on port 8291

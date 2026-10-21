@@ -5,11 +5,11 @@ Profinet DCP uses Ethernet Layer 2 multicast frames (EtherType 0x8892)
 for device discovery. Since raw Layer 2 sockets (AF_PACKET) are only
 available on Linux, this module implements two strategies:
 
-  1. Linux — raw AF_PACKET socket to send a Profinet DCP Identify All Request
+  1. Linux  -  raw AF_PACKET socket to send a Profinet DCP Identify All Request
      to the PROFINET multicast address (01:0e:cf:00:00:00, EtherType 0x8892)
      and listens for DCP Identify responses.
 
-  2. Fallback — tries to reach the device via TCP/102 (ISO-on-TCP/TPKT),
+  2. Fallback  -  tries to reach the device via TCP/102 (ISO-on-TCP/TPKT),
      which some Profinet devices also expose alongside DCP, and reports
      basic TCP reachability as a Profinet indicator.
 
@@ -19,7 +19,7 @@ The DCP Identify Request causes any Profinet device to respond with:
   - IP address, netmask, gateway
 
 Note: Full DCP discovery requires L2 access (same broadcast domain).
-      No authentication is required — DCP is an open discovery protocol.
+      No authentication is required  -  DCP is an open discovery protocol.
 
 Protocol: Profinet DCP (PNIO)
 EtherType: 0x8892, Multicast: 01:0e:cf:00:00:00
@@ -109,7 +109,7 @@ def _parse_dcp_response(data: bytes, src_mac: str) -> Optional[dict]:
             if block_len % 2 != 0:
                 block_offset += 1  # padding
 
-            if option == 0x02 and suboption == 0x01:  # IP — IPAddress
+            if option == 0x02 and suboption == 0x01:  # IP  -  IPAddress
                 if len(block_data) >= 12:
                     ip = socket.inet_ntoa(block_data[0:4])
                     mask = socket.inet_ntoa(block_data[4:8])
@@ -117,13 +117,13 @@ def _parse_dcp_response(data: bytes, src_mac: str) -> Optional[dict]:
                     result["ip_address"] = ip
                     result["netmask"] = mask
                     result["gateway"] = gw
-            elif option == 0x02 and suboption == 0x02:  # IP — MAC
+            elif option == 0x02 and suboption == 0x02:  # IP  -  MAC
                 pass
             elif option == 0x01 and suboption == 0x01:  # Manufacturer specific - DeviceVendor
                 result["device_vendor"] = block_data.rstrip(b"\x00").decode("ascii", errors="replace")
             elif option == 0x01 and suboption == 0x02:  # Manufacturer specific - NameOfStation
                 result["name_of_station"] = block_data.rstrip(b"\x00").decode("ascii", errors="replace")
-            elif option == 0x02 and suboption == 0x05:  # IP — NameOfStation
+            elif option == 0x02 and suboption == 0x05:  # IP  -  NameOfStation
                 result["name_of_station"] = block_data.rstrip(b"\x00").decode("ascii", errors="replace")
 
         return result if len(result) > 1 else None
@@ -179,7 +179,7 @@ def _check_tcp_port(host: str, port: int, timeout: int) -> bool:
 
 
 class Exploit(BaseExploit):
-    """Profinet DCP Scanner — Layer 2 device discovery.
+    """Profinet DCP Scanner  -  Layer 2 device discovery.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -196,7 +196,7 @@ class Exploit(BaseExploit):
         ),
         "authors": (
             "wenzhe zhu <jtrkid[at]gmail.com> (ISF icssploit)",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge port",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge port",
         ),
         "references": (
             "https://www.profibus.com/technology/profinet/",
@@ -230,9 +230,9 @@ class Exploit(BaseExploit):
                 print_error(f"[Profinet DCP] No Profinet devices found on {self.iface}")
                 print_info("[Profinet DCP] Ensure you are in the same L2 broadcast domain as the devices")
         else:
-            print_status(f"[Profinet DCP] Non-Linux platform — falling back to TCP/{self.port} reachability on {self.target}")
+            print_status(f"[Profinet DCP] Non-Linux platform  -  falling back to TCP/{self.port} reachability on {self.target}")
             if _check_tcp_port(self.target, self.port, self.timeout):
-                print_success(f"[Profinet DCP] TCP/{self.port} open on {self.target} — potential Profinet/S7 device")
+                print_success(f"[Profinet DCP] TCP/{self.port} open on {self.target}  -  potential Profinet/S7 device")
                 print_info("[Profinet DCP] Use Linux with AF_PACKET for full DCP discovery")
             else:
                 print_error(f"[Profinet DCP] No response from {self.target}:{self.port}")

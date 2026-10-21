@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Hisense VIDAA OS Discovery Scanner — HTTP banner probe.
+"""Hisense VIDAA OS Discovery Scanner  -  HTTP banner probe.
 
 Probes HTTP ports 80, 4444, and 8081 for Hisense/VIDAA OS banners in
 response headers or body content to identify Hisense Smart TV devices.
@@ -23,7 +23,7 @@ _VIDAA_MARKERS = (
 
 
 class Exploit(HTTPClient):
-    """Hisense VIDAA OS Discovery Scanner — HTTP banner probe.
+    """Hisense VIDAA OS Discovery Scanner  -  HTTP banner probe.
 
     Attempts HTTP GET / on the configured port (default 80) and also
     performs quick TCP banner grabs on ports 4444 and 8081 to detect
@@ -41,7 +41,7 @@ class Exploit(HTTPClient):
             "running VIDAA OS."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "references": (
             "https://www.hisense.com/",
@@ -132,7 +132,7 @@ class Exploit(HTTPClient):
             print_status("Probing port {}...".format(probe_port))
             text = self._http_probe(probe_port) or self._tcp_banner(probe_port)
             if text is None:
-                print_status("Port {} — no response.".format(probe_port))
+                print_status("Port {}  -  no response.".format(probe_port))
                 continue
             if self._has_vidaa_marker(text):
                 print_success(
@@ -140,7 +140,7 @@ class Exploit(HTTPClient):
                 )
                 print_status("Banner excerpt: {}".format(text[:300]))
             else:
-                print_status("Port {} responded — no VIDAA marker detected.".format(probe_port))
+                print_status("Port {} responded  -  no VIDAA marker detected.".format(probe_port))
 
     @mute
     def check(self) -> bool:

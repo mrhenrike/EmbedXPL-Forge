@@ -6,7 +6,7 @@ from embedxpl.core.exploit.payloads import BasePayload
 class Payload(BasePayload):
     __info__ = {
         "name": "Go Bind TCP",
-        "description": "Go native bind TCP shell — listens on target.",
+        "description": "Go native bind TCP shell  -  listens on target.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
     }
 

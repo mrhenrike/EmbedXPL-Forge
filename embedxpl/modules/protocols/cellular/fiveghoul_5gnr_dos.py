@@ -1,14 +1,14 @@
-"""5Ghoul 5G NR DoS Attacks — Qualcomm + MediaTek Basebands.
+"""5Ghoul 5G NR DoS Attacks  -  Qualcomm + MediaTek Basebands.
 
 5Ghoul is a family of 5G NR implementation-level DoS vulnerabilities in
 Qualcomm and MediaTek mobile platforms. All attacks are pre-authentication
 and do not require SIM information.
 
 Covered CVEs (selected):
-  CVE-2023-33042 — Qualcomm: RRC Setup malformation
-  CVE-2023-33043 — Qualcomm: RRC Reconfiguration crash
-  CVE-2023-20702 — MediaTek: 5G NR DoS
-  CVE-2024-20003 — MediaTek: MTK RRC CellGroup ID crash
+  CVE-2023-33042  -  Qualcomm: RRC Setup malformation
+  CVE-2023-33043  -  Qualcomm: RRC Reconfiguration crash
+  CVE-2023-20702  -  MediaTek: 5G NR DoS
+  CVE-2024-20003  -  MediaTek: MTK RRC CellGroup ID crash
 
 HARDWARE: USRP B210 + srsRAN gNB rogue base station required.
 
@@ -40,7 +40,7 @@ class Exploit(Exploit):
     """5Ghoul 5G NR DoS via rogue gNB (Qualcomm + MediaTek)."""
 
     __info__ = {
-        "name": "5Ghoul 5G NR DoS — Qualcomm + MediaTek Basebands",
+        "name": "5Ghoul 5G NR DoS  -  Qualcomm + MediaTek Basebands",
         "description": (
             "Orchestrator for the 5Ghoul family of 5G NR pre-auth DoS attacks "
             "against Qualcomm (CVE-2023-33042/43/44) and MediaTek (CVE-2023-32841..46, "
@@ -61,7 +61,7 @@ class Exploit(Exploit):
 
     attack_id = OptString("cve_2023_33042", "5Ghoul attack ID (e.g. cve_2023_33042)")
     ghoul_repo = OptString("", "Path to cloned 5ghoul-5g-nr-attacks repo")
-    dry_run = OptBool(True, "Dry run — describe only")
+    dry_run = OptBool(True, "Dry run  -  describe only")
 
     @mute
     def check(self) -> bool:
@@ -80,7 +80,7 @@ class Exploit(Exploit):
         repo = str(self.ghoul_repo)
         dry_run = bool(self.dry_run)
 
-        print_status(f"5Ghoul 5G NR DoS orchestrator — attack: {attack_id}")
+        print_status(f"5Ghoul 5G NR DoS orchestrator  -  attack: {attack_id}")
         print_info(f"Covered CVEs: {', '.join(_CVE_LIST)}")
         print_info("HW required: USRP B210 + 5G NR SIM + srsRAN gNB + 5Ghoul PoC scripts")
 

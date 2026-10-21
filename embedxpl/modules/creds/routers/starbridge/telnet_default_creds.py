@@ -7,7 +7,7 @@ class Exploit(TelnetDefault):
     __info__ = {
         "name": "Starbridge Router Default Telnet Creds",
         "description": "Dictionary attack with default credentials against Starbridge Router Telnet service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Starbridge Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

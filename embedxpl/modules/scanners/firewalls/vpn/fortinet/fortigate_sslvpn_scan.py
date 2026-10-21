@@ -10,7 +10,7 @@ from firewallxpl.core.exploit.option import OptBool, OptIP, OptPort
 from firewallxpl.core.exploit.printer import print_error, print_status, print_success
 from firewallxpl.core.http.http_client import HTTPClient
 
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 
 
 class Exploit(HTTPClient):
@@ -23,14 +23,14 @@ class Exploit(HTTPClient):
             "version hints when present, and lists matching CVEs from the embedded + "
             "extended FirewallXPL-Forge catalog (CVE-2018-13379, CVE-2022-40684, "
             "CVE-2023-27997, CVE-2024-21762, CVE-2025-59718, ...). "
-            "Does not exploit — recon only."
+            "Does not exploit  -  recon only."
         ),
         "authors": (
             "André Henrique (@mrhenrike) | União Geek",
         ),
         "references": (
             "https://www.fortiguard.com/psirt",
-            "https://nvd.nist.gov/ — Fortinet vendor search",
+            "https://nvd.nist.gov/  -  Fortinet vendor search",
         ),
         "devices": (
             "Fortinet FortiGate / FortiOS SSL-VPN",
@@ -78,7 +78,7 @@ class Exploit(HTTPClient):
 
         print_success("CVE matches (Fortinet-focused, sorted by CVSS): {}".format(len(cves)))
         for entry in cves[:40]:
-            mod = entry.rxf_module or "—"
+            mod = entry.rxf_module or " - "
             print_status(
                 "{} | {} | {} | {} | rxf: {}".format(
                     entry.cve_id,

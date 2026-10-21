@@ -1,13 +1,13 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Modbus/TCP Scanner — Fingerprint PLCs, RTUs and HMIs via Modbus Function Codes.
+"""Modbus/TCP Scanner  -  Fingerprint PLCs, RTUs and HMIs via Modbus Function Codes.
 
 Scans for Modbus/TCP capable devices on port 502 using standard Modbus function
 codes to identify and fingerprint industrial control system components:
 
   - Function Code 43 / MEI Type 14 (Read Device Identification)
     Reports device vendor, product name, firmware version, and serial number.
-  - Function Code 1  (Read Coils) — probes coil status registers.
-  - Function Code 3  (Read Holding Registers) — reads holding register values.
+  - Function Code 1  (Read Coils)  -  probes coil status registers.
+  - Function Code 3  (Read Holding Registers)  -  reads holding register values.
 
 Modbus/TCP has no built-in authentication; any device reachable on TCP/502 is
 accessible.
@@ -35,13 +35,13 @@ _TRANSACTION = 0x0001
 _PROTOCOL_ID = 0x0000
 _UNIT_ID = 0x01
 
-# Function Code 43 sub-function 14 (MEI — Read Device Identification)
+# Function Code 43 sub-function 14 (MEI  -  Read Device Identification)
 _MEI_REQ = struct.pack(">HHHBBBB", _TRANSACTION, _PROTOCOL_ID, 4, _UNIT_ID, 0x2B, 0x0E, 0x01, 0x00)
 
-# FC1 — Read Coils (address 0, quantity 8)
+# FC1  -  Read Coils (address 0, quantity 8)
 _FC1_REQ = struct.pack(">HHHBBBBB", _TRANSACTION, _PROTOCOL_ID, 6, _UNIT_ID, 0x01, 0x00, 0x00, 0x00, 0x08)
 
-# FC3 — Read Holding Registers (address 0, quantity 10)
+# FC3  -  Read Holding Registers (address 0, quantity 10)
 _FC3_REQ = struct.pack(">HHHBBBBB", _TRANSACTION, _PROTOCOL_ID, 6, _UNIT_ID, 0x03, 0x00, 0x00, 0x00, 0x0A)
 
 
@@ -86,7 +86,7 @@ def _parse_mei_response(data: bytes) -> dict:
 
 
 class Exploit(BaseExploit):
-    """Modbus/TCP ICS Scanner — Device identification and register enumeration.
+    """Modbus/TCP ICS Scanner  -  Device identification and register enumeration.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -98,12 +98,12 @@ class Exploit(BaseExploit):
             "Scans for Modbus/TCP devices on port 502. Uses FC43/MEI Type 14 for "
             "device identification (vendor, product, firmware version), FC1 for coil "
             "status, and FC3 for holding register values. Modbus/TCP has no "
-            "authentication — any reachable device is accessible."
+            "authentication  -  any reachable device is accessible."
         ),
         "authors": (
             "Marcin Bury <marcin[at]threat9.com>",
             "Shodan ICS Research",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "references": (
             "https://modbus.org/docs/Modbus_Application_Protocol_V1_1b3.pdf",
@@ -117,13 +117,13 @@ class Exploit(BaseExploit):
 
     target = OptIP("", "Target IPv4 or IPv6 address")
     port = OptPort(_MODBUS_PORT, "Modbus/TCP port (default 502)")
-    unit_id = OptInteger(1, "Modbus Unit ID / Slave ID (1–247)")
+    unit_id = OptInteger(1, "Modbus Unit ID / Slave ID (1-247)")
     timeout = OptInteger(5, "Socket timeout in seconds")
 
     def run(self) -> None:
         print_status("Probing Modbus/TCP on {}:{}...".format(self.target, self.port))
 
-        # FC43 — Device Identification
+        # FC43  -  Device Identification
         resp = _modbus_query(self.target, self.port, _MEI_REQ, self.timeout)
         if resp and len(resp) > 8 and resp[7] == 0x2B:
             device_info = _parse_mei_response(resp)
@@ -135,19 +135,19 @@ class Exploit(BaseExploit):
             print_status("FC43 exception code {} (device may not support MEI)".format(exc_code))
             print_success("Modbus/TCP device present (FC43 not supported)")
         elif resp:
-            print_success("Modbus/TCP response received — device confirmed")
+            print_success("Modbus/TCP response received  -  device confirmed")
         else:
             print_error("No Modbus/TCP response on {}:{}".format(self.target, self.port))
             return
 
-        # FC1 — Read Coils
+        # FC1  -  Read Coils
         coil_resp = _modbus_query(self.target, self.port, _FC1_REQ, self.timeout)
         if coil_resp and len(coil_resp) > 8 and coil_resp[7] == 0x01:
             coil_byte = coil_resp[9] if len(coil_resp) > 9 else 0
             coils = "{:08b}".format(coil_byte)
             print_status("FC1 Coils (addr 0-7): {}".format(coils))
 
-        # FC3 — Read Holding Registers
+        # FC3  -  Read Holding Registers
         reg_resp = _modbus_query(self.target, self.port, _FC3_REQ, self.timeout)
         if reg_resp and len(reg_resp) > 9 and reg_resp[7] == 0x03:
             byte_count = reg_resp[8]

@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""LG WebOS SSAP Discovery Scanner — TCP probe on ports 3000/3001.
+"""LG WebOS SSAP Discovery Scanner  -  TCP probe on ports 3000/3001.
 
 Probes LG Smart TVs running WebOS by attempting a minimal WebSocket
 upgrade handshake over plain TCP to identify SSAP-enabled devices and

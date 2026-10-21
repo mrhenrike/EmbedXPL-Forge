@@ -77,7 +77,7 @@ _BUILTIN_RULES = {
 
 
 class Exploit(Exploit):
-    """Sigma Perimeter Log Validator — applies built-in detection rules."""
+    """Sigma Perimeter Log Validator  -  applies built-in detection rules."""
 
     __info__ = {
         "name": "Sigma Perimeter Rule Validator",
@@ -141,6 +141,6 @@ class Exploit(Exploit):
             hits = len(lines)
             sample = f"lines {', '.join(str(l) for l in lines[:5])}"
             if sev == "HIGH":
-                print_success(f"[{sev}] {rule_name}: {hits} hits — {desc} ({sample})")
+                print_success(f"[{sev}] {rule_name}: {hits} hits  -  {desc} ({sample})")
             else:
-                print_info(f"[{sev}] {rule_name}: {hits} hits — {desc} ({sample})")
+                print_info(f"[{sev}] {rule_name}: {hits} hits  -  {desc} ({sample})")

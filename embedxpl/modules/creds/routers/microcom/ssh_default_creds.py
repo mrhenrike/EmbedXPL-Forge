@@ -7,7 +7,7 @@ class Exploit(SSHDefault):
     __info__ = {
         "name": "Microcom Router Default SSH Creds",
         "description": "Dictionary attack with default credentials against Microcom Router SSH service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Microcom Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

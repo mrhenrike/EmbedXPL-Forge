@@ -68,7 +68,7 @@ class Exploit(BaseExploit):
         ),
         "authors": (
             "DIAL Specification Group",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "references": (
             "http://www.dial-multiscreen.org/dial-protocol-specification",
@@ -115,7 +115,7 @@ class Exploit(BaseExploit):
                     if key not in seen:
                         seen.add(key)
                         found.append(key)
-                        print_success("DIAL device at {} — LOCATION: {}".format(ip, loc or "N/A"))
+                        print_success("DIAL device at {}  -  LOCATION: {}".format(ip, loc or "N/A"))
                 except socket.timeout:
                     break
         except OSError as exc:
@@ -146,7 +146,7 @@ class Exploit(BaseExploit):
                             device_type = label
                             break
                     print_success(
-                        "DIAL app list at {} — Device: {} — Preview: {}".format(
+                        "DIAL app list at {}  -  Device: {}  -  Preview: {}".format(
                             url, device_type, body[:200]
                         )
                     )

@@ -32,7 +32,7 @@ discover -T <targets.txt> --fresh
 
 ---
 
-## Standard discovery — single CIDR
+## Standard discovery  -  single CIDR
 
 ```
 exf> discover 192.168.1.0/24
@@ -145,14 +145,14 @@ exf> discover 192.168.1.0/24
 [*] Starting network discovery on 192.168.1.0/24
 ...
 
-SESSION FOUND for 192.168.1.100 (AC:CC:8E:5A:10:F2) — last scan: 2026-05-29 14:32, tested: 9, vulns: 2
-  9 module(s) already tested, 5 pending — resuming from where it stopped
+SESSION FOUND for 192.168.1.100 (AC:CC:8E:5A:10:F2)  -  last scan: 2026-05-29 14:32, tested: 9, vulns: 2
+  9 module(s) already tested, 5 pending  -  resuming from where it stopped
   Previous vulns:
     • exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
     • exploits/cameras/hikvision/info_disclosure_cve_2017_7921
 
-SESSION FOUND for 192.168.1.200 (00:09:0F:AA:00:01) — last scan: 2026-05-30 09:15, tested: 4, vulns: 0
-  4 module(s) already tested, 8 pending — resuming from where it stopped
+SESSION FOUND for 192.168.1.200 (00:09:0F:AA:00:01)  -  last scan: 2026-05-30 09:15, tested: 4, vulns: 0
+  4 module(s) already tested, 8 pending  -  resuming from where it stopped
 
 [+]
 [+] 2 host(s) resumed from session history, 3 new
@@ -224,23 +224,23 @@ exf> discover -T /path/to/targets.txt
 [*] [192.168.1.0/24] [arp_ping] Sending ARP broadcast...
 [*] [10.0.0.1] [port_scan] Scanning ports...
 [*] [172.16.0.0/23] [arp_ping] Sending ARP broadcast...
-[+] [192.168.1.0/24] done — 5 host(s) found
-[+] [10.0.0.1] done — 1 host(s) found
-[+] [172.16.0.0/23] done — 12 host(s) found
+[+] [192.168.1.0/24] done  -  5 host(s) found
+[+] [10.0.0.1] done  -  1 host(s) found
+[+] [172.16.0.0/23] done  -  12 host(s) found
 
-Scan complete — 3 target(s), 18 total host(s) found
+Scan complete  -  3 target(s), 18 total host(s) found
 
-  192.168.1.0/24 — 5 host(s):
+  192.168.1.0/24  -  5 host(s):
     192.168.1.1    TP-Link TL-WR841N  ports=[80,443,22]  conf=92%  modules=6
     192.168.1.100  Hikvision DS-7608NI-K2  ports=[80,554,37777]  conf=88%  modules=14
     192.168.1.101  Dahua IPC-HDW2831T  ports=[80,37777]  conf=81%  modules=8
     192.168.1.200  Fortinet FortiGate  ports=[80,443,8443]  conf=95%  modules=12
     192.168.1.254  Cisco RV325  ports=[80,22,23]  conf=90%  modules=5
 
-  10.0.0.1 — 1 host(s):
+  10.0.0.1  -  1 host(s):
     10.0.0.1  Cisco IOS XE  ports=[443,22]  conf=87%  modules=3
 
-  172.16.0.0/23 — 12 host(s):
+  172.16.0.0/23  -  12 host(s):
     172.16.0.1   ... (12 entries) ...
 ```
 
@@ -303,7 +303,7 @@ For each discovered host, `discover` stores in the session:
 | `model` | Model guess from banner/HTTP headers |
 | `open_ports` | List of open TCP ports |
 | `banners` | HTTP/Telnet/RTSP banner strings per port |
-| `fingerprint_confidence` | 0.0–1.0 float, % certainty of vendor/model match |
+| `fingerprint_confidence` | 0.0-1.0 float, % certainty of vendor/model match |
 | `matched_modules` | List of EmbedXPL module paths that match this host |
 | `has_wireless` | True if wireless interfaces/SSIDs were detected |
 | `wireless_ssids` | List of SSID names if detected |
@@ -338,10 +338,10 @@ The panel is `RECOMMENDED` (magenta border) when no wired exploit modules matche
 
 | Network size | Typical scan time |
 |---|---|
-| Single host | 3–8 seconds |
-| /30 (4 hosts) | 5–12 seconds |
-| /24 (256 hosts) | 30–90 seconds |
-| /22 (1024 hosts) | 2–5 minutes |
-| /16 (65536 hosts) | 20–60 minutes |
+| Single host | 3-8 seconds |
+| /30 (4 hosts) | 5-12 seconds |
+| /24 (256 hosts) | 30-90 seconds |
+| /22 (1024 hosts) | 2-5 minutes |
+| /16 (65536 hosts) | 20-60 minutes |
 
 Timing depends on ARP response latency, open port count, and banner grab timeouts.

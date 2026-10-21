@@ -1,12 +1,12 @@
-# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek — https://github.com/Uniao-Geek
-"""EmbedXPL-Forge — RTSP Stream Attacker.
+# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
+"""EmbedXPL-Forge  -  RTSP Stream Attacker.
 
 Complete port of cameradar's attack pipeline to Python:
-  Phase 1: Route discovery    — dictionary brute-force of RTSP paths
-  Phase 2: Auth detection     — Basic vs Digest, realm/nonce extraction
-  Phase 3: Credential attack  — user:pass dictionary brute-force
-  Phase 4: Stream validation  — full DESCRIBE + SETUP cycle
-  Phase 5: Re-attack          — handles inaccurate 401-over-404 cameras
+  Phase 1: Route discovery     -  dictionary brute-force of RTSP paths
+  Phase 2: Auth detection      -  Basic vs Digest, realm/nonce extraction
+  Phase 3: Credential attack   -  user:pass dictionary brute-force
+  Phase 4: Stream validation   -  full DESCRIBE + SETUP cycle
+  Phase 5: Re-attack           -  handles inaccurate 401-over-404 cameras
 
 References:
   - cameradar: https://github.com/ullaakut/cameradar (MIT, Ullaakut)
@@ -182,7 +182,7 @@ class RTSPAttacker:
         if client.test_route(""):
             stream.route_found = True
             stream.routes.append("")
-            self._log(f"  {stream.address}:{stream.port} — default route accepted")
+            self._log(f"  {stream.address}:{stream.port}  -  default route accepted")
             return stream
 
         # Dictionary brute-force
@@ -203,7 +203,7 @@ class RTSPAttacker:
         auth_type, realm, nonce = client.probe_auth_type(route)
         stream.auth_type = auth_type
         self._log(
-            f"  {stream.address}:{stream.port} — auth: {auth_type.name} "
+            f"  {stream.address}:{stream.port}  -  auth: {auth_type.name} "
             f"realm={realm!r}"
         )
         return stream
@@ -242,7 +242,7 @@ class RTSPAttacker:
                     stream.username = username
                     stream.password = password
                     self._log(
-                        f"  {stream.address}:{stream.port} — CREDS: {username!r}:{password!r}"
+                        f"  {stream.address}:{stream.port}  -  CREDS: {username!r}:{password!r}"
                     )
                     return stream
 
@@ -281,7 +281,7 @@ class RTSPAttacker:
                 stream.device = banner
 
         if stream.available:
-            self._log(f"  {stream.address}:{stream.port} — ACCESSIBLE! {stream.url()}")
+            self._log(f"  {stream.address}:{stream.port}  -  ACCESSIBLE! {stream.url()}")
 
         return stream
 

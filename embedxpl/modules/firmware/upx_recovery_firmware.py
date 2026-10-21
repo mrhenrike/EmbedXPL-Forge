@@ -1,6 +1,6 @@
-# AUTHORIZED USE ONLY — See docs/malware-research/DISCLAIMER.md
-# simulate=True by default — set False only for authorized tests.
-"""UPX Recovery Tool — Firmware Malware Analysis (NozomiNetworks).
+# AUTHORIZED USE ONLY  -  See docs/malware-research/DISCLAIMER.md
+# simulate=True by default  -  set False only for authorized tests.
+"""UPX Recovery Tool  -  Firmware Malware Analysis (NozomiNetworks).
 
 Repairs anti-unpack modifications done to ELF UPX-compressed firmware binaries
 by malware creators. Common in IoT/embedded malware that modifies UPX headers
@@ -8,7 +8,7 @@ to prevent automatic unpacking.
 
 Source: github.com/NozomiNetworks/upx-recovery-tool
 YARA rules: embedxpl/resources/yara/upx/ (ARM, MIPS, x86-64, PPC, i386)
-Author: NozomiNetworks Research | Andre Henrique (@mrhenrike) — EmbedXPL port
+Author: NozomiNetworks Research | Andre Henrique (@mrhenrike)  -  EmbedXPL port
 """
 from __future__ import annotations
 
@@ -35,14 +35,14 @@ _ARCH_RULES = {
 
 # Common anti-unpack modifications repaired by upxrecoverytool
 _FIXES = [
-    "`l_magic` field of `l_info` struct — UPX! magic value corrupted",
+    "`l_magic` field of `l_info` struct  -  UPX! magic value corrupted",
     "`p_filesize` and `p_blocksize` fields of `p_info` struct",
     "Overlay bytes modification",
 ]
 
 
 class Exploit(HTTPClient):
-    """UPX Recovery Tool — Firmware ELF Malware Unpacking (NozomiNetworks)."""
+    """UPX Recovery Tool  -  Firmware ELF Malware Unpacking (NozomiNetworks)."""
 
     __info__ = {
         "name": "UPX Recovery Tool for Firmware ELF Analysis (NozomiNetworks)",
@@ -53,7 +53,7 @@ class Exploit(HTTPClient):
             "Supports ARM, MIPS, x86-64, PowerPC, i386 architectures (IoT/embedded). "
             "Includes YARA rules for each architecture."
         ),
-        "authors": ("NozomiNetworks Research (upx-recovery-tool)", "Andre Henrique (@mrhenrike) — EmbedXPL port"),
+        "authors": ("NozomiNetworks Research (upx-recovery-tool)", "Andre Henrique (@mrhenrike)  -  EmbedXPL port"),
         "references": (
             "https://github.com/NozomiNetworks/upx-recovery-tool",
             "embedxpl/resources/yara/upx/",
@@ -105,7 +105,7 @@ class Exploit(HTTPClient):
 
     def run(self) -> None:
         if self.simulate:
-            print_status("[SIMULATE] UPX Recovery Tool — NozomiNetworks")
+            print_status("[SIMULATE] UPX Recovery Tool  -  NozomiNetworks")
             print_status()
             print_status("  Anti-unpack modifications repaired:")
             for fix in _FIXES:
@@ -127,7 +127,7 @@ class Exploit(HTTPClient):
             return
 
         if not self.firmware_path:
-            print_error("No firmware_path set — specify ELF binary path")
+            print_error("No firmware_path set  -  specify ELF binary path")
             return
 
         fw = Path(self.firmware_path)

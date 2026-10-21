@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Intelbras CCTV — Multi-Model Discovery Scanner.
+"""Intelbras CCTV  -  Multi-Model Discovery Scanner.
 
 Discovers Intelbras CCTV devices (IP cameras, DVRs, NVRs) via HTTP banner
 fingerprinting. Identifies Dahua OEM heritage through protocol probing.
@@ -76,7 +76,7 @@ class Exploit(HTTPClient):
                 if marker in combined:
                     detected = True
                     print_success(
-                        "Intelbras/Dahua OEM detected — marker '{}' in response".format(marker)
+                        "Intelbras/Dahua OEM detected  -  marker '{}' in response".format(marker)
                     )
                     break
 

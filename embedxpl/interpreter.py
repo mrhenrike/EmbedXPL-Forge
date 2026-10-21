@@ -8,7 +8,7 @@ import traceback
 from collections import Counter
 from pathlib import Path
 
-# Adaptation credits: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Adaptation credits: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 from embedxpl.core.exploit.exceptions import EmbedXPLException
 from embedxpl.core.exploit.exploit import GLOBAL_OPTS
 from embedxpl.core.exploit.payloads import BasePayload
@@ -322,7 +322,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         self._validate_compute_mode(silent=True)
 
         self.banner = ""
-        self._rich_banner = ""   # banner novo via banner.py — exibido em start()
+        self._rich_banner = ""   # banner novo via banner.py  -  exibido em start()
 
     def __parse_prompt(self):
         raw_prompt_default_template = "\001\033[4m\002{host}\001\033[0m\002 > "
@@ -473,7 +473,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         """Resolve and display modules for the given infra/context pair.
 
         When a target is provided, prints the ordered module list that
-        would be executed by a full scan. Does not auto-run exploits —
+        would be executed by a full scan. Does not auto-run exploits  - 
         the user selects modules interactively after reviewing the plan.
 
         Args:
@@ -560,7 +560,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
         def progress_cb(target: str, stage: str, detail: str) -> None:
             if stage == "done":
-                print_success("[{}] done — {}".format(target, detail))
+                print_success("[{}] done  -  {}".format(target, detail))
             else:
                 print_status("[{}] [{}] {}".format(target, stage, detail))
 
@@ -580,16 +580,16 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
         total_hosts = sum(len(v) for v in results.values())
         print_success(
-            "\nScan complete — {} target(s), {} total host(s) found".format(
+            "\nScan complete  -  {} target(s), {} total host(s) found".format(
                 len(results), total_hosts
             )
         )
 
         for target, hosts in sorted(results.items()):
             if not hosts:
-                print_info("  {} — no live hosts".format(target))
+                print_info("  {}  -  no live hosts".format(target))
                 continue
-            print_info("  {} — {} host(s):".format(target, len(hosts)))
+            print_info("  {}  -  {} host(s):".format(target, len(hosts)))
             for h in hosts:
                 print_info("    {}".format(h.summary()))
 
@@ -852,7 +852,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 evidence = info.get("evidence", "")
                 cves = info.get("cves", [])
                 if tested is True:
-                    badge = "\033[92m[TESTED — {}]\033[0m".format(evidence) if evidence else "\033[92m[TESTED]\033[0m"
+                    badge = "\033[92m[TESTED  -  {}]\033[0m".format(evidence) if evidence else "\033[92m[TESTED]\033[0m"
                     cve_str = "  CVEs: {}".format(", ".join(cves[:4])) if cves else ""
                     print_info("Test status: {}{}".format(badge, cve_str))
                 elif tested is False:
@@ -1037,7 +1037,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         os.system(args[0])
 
     def command_search(self, *args, **kwargs):
-        """Rich search: keyword, CVE, vendor, type, tested flag — integrates tools/search.py engine."""
+        """Rich search: keyword, CVE, vendor, type, tested flag  -  integrates tools/search.py engine."""
         try:
             query = " ".join(args).strip("'\"") if args else ""
         except Exception:
@@ -1322,7 +1322,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
                 _con.print(
                     "\n[bold yellow]SESSION FOUND[/bold yellow] for "
-                    "[bold]{ip}[/bold] ({mac}) — "
+                    "[bold]{ip}[/bold] ({mac})  -  "
                     "last scan: {dt}, tested: {t}, vulns: {v}".format(
                         ip=h.ip,
                         mac=h.mac or "no-mac",
@@ -1336,7 +1336,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 if pending:
                     _con.print(
                         "  [dim]{} module(s) already tested, "
-                        "{} pending — resuming from where it stopped[/dim]".format(
+                        "{} pending  -  resuming from where it stopped[/dim]".format(
                             prev_tested, len(pending),
                         )
                     )
@@ -1828,7 +1828,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 return
 
             for g in results:
-                print_success("{} ({}) — {} attacks".format(g.name, g.country, len(g.attacks)))
+                print_success("{} ({})  -  {} attacks".format(g.name, g.country, len(g.attacks)))
                 for atk in g.attacks:
                     if keyword.lower() in " ".join(atk.target_devices).lower() or keyword.upper() in atk.cves:
                         print_info("  -> {} [{}]".format(atk.name, ", ".join(atk.cves) if atk.cves else atk.phase))
@@ -1855,11 +1855,11 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
             for atk in attacks_to_run:
                 if not atk.modules:
-                    print_status("Skipping '{}' — no executable module".format(atk.name))
+                    print_status("Skipping '{}'  -  no executable module".format(atk.name))
                     continue
 
                 module_path = atk.modules[0]
-                print_status("[{}] {} — loading {}".format(atk.phase, atk.name, module_path))
+                print_status("[{}] {}  -  loading {}".format(atk.phase, atk.name, module_path))
 
                 try:
                     self.command_use(module_path)
@@ -1877,7 +1877,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
     # ------------------------------------------------------------------
 
     def command_autopwn(self, *args, **kwargs):
-        """autopwn <segment> <target> — run all modules for a segment against a target.
+        """autopwn <segment> <target>  -  run all modules for a segment against a target.
 
         Examples:
           autopwn router 192.168.1.1
@@ -1926,7 +1926,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         return self._exf_db
 
     def command_workspace(self, *args, **kwargs):
-        """workspace [list | <name>] — create/select workspaces."""
+        """workspace [list | <name>]  -  create/select workspaces."""
         db = self._get_db()
         if db is None:
             print_error("EXFDatabase not available")
@@ -1944,7 +1944,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         print_success(f"Workspace: {name}")
 
     def command_hosts(self, *args, **kwargs):
-        """hosts — list discovered hosts in current workspace."""
+        """hosts  -  list discovered hosts in current workspace."""
         db = self._get_db()
         if db is None:
             print_error("EXFDatabase not available")
@@ -1957,7 +1957,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         print_table(["Address", "OS", "Status", "Services", "Vulns", "Creds"], *rows)
 
     def command_vulns(self, *args, **kwargs):
-        """vulns — list all found vulnerabilities in current workspace."""
+        """vulns  -  list all found vulnerabilities in current workspace."""
         db = self._get_db()
         if db is None:
             print_error("EXFDatabase not available")
@@ -1970,7 +1970,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         print_table(["Host", "Severity", "CVEs", "Module", "Found At"], *rows)
 
     def command_creds(self, *args, **kwargs):
-        """creds — list all captured credentials in current workspace."""
+        """creds  -  list all captured credentials in current workspace."""
         db = self._get_db()
         if db is None:
             print_error("EXFDatabase not available")
@@ -1983,7 +1983,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         print_table(["Host", "Username", "Password", "Type", "Found At"], *rows)
 
     def command_nse(self, *args, **kwargs):
-        """nse install | list | run <script> <target> — Manage EmbedXPL NSE scripts."""
+        """nse install | list | run <script> <target>  -  Manage EmbedXPL NSE scripts."""
         from embedxpl.tools.nse_installer import install, run_nse, status
         if not args:
             print_info("Usage: nse install | list | run <script> <target>")

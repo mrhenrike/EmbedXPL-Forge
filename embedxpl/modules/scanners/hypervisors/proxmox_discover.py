@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Proxmox VE — Web Interface Discovery Scanner.
+"""Proxmox VE  -  Web Interface Discovery Scanner.
 
 Probes TCP/8006 HTTPS for the Proxmox VE management interface
 and extracts version information from the API.
@@ -49,7 +49,7 @@ class Exploit(HTTPClient):
                 release = data.get("release", "?")
                 repoid = data.get("repoid", "?")
                 print_success(
-                    "Proxmox VE detected on {}:{} — version={} release={} repoid={}".format(
+                    "Proxmox VE detected on {}:{}  -  version={} release={} repoid={}".format(
                         self.target, self.port, version, release, repoid
                     )
                 )
@@ -57,7 +57,7 @@ class Exploit(HTTPClient):
                 print_success("Proxmox VE API responded on {}:{}".format(self.target, self.port))
         elif resp:
             print_status(
-                "HTTP {} on /api2/json/version — may require auth".format(resp.status_code)
+                "HTTP {} on /api2/json/version  -  may require auth".format(resp.status_code)
             )
 
         # Check login page

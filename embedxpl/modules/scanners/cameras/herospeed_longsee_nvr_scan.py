@@ -1,6 +1,6 @@
-# Discovery: c3l3r1on (github.com/c3l3r1on) — Herospeed/Longsee NVR OEM platform research
+# Discovery: c3l3r1on (github.com/c3l3r1on)  -  Herospeed/Longsee NVR OEM platform research
 # EmbedXPL-Forge module: André Henrique (@mrhenrike)
-"""Herospeed/Longsee OEM NVR Scanner — fingerprint and vulnerability pre-check.
+"""Herospeed/Longsee OEM NVR Scanner  -  fingerprint and vulnerability pre-check.
 
 Scans for NVR devices running the Longsee/Herospeed OEM firmware platform
 (API v4.0.0).  Detected via:
@@ -417,8 +417,8 @@ class Exploit(BaseExploit):
             "Discovery: c3l3r1on (github.com/c3l3r1on). ~100k FOFA targets EU."
         ),
         "authors": (
-            "c3l3r1on (discovery — github.com/c3l3r1on)",
-            "Andre Henrique (@mrhenrike) — EmbedXPL-Forge integration",
+            "c3l3r1on (discovery  -  github.com/c3l3r1on)",
+            "Andre Henrique (@mrhenrike)  -  EmbedXPL-Forge integration",
         ),
         "references": (
             "https://github.com/c3l3r1on/nvr",
@@ -449,7 +449,7 @@ class Exploit(BaseExploit):
             try:
                 hosts = [str(h) for h in ip_network(target_str, strict=False).hosts()]
             except ValueError:
-                print_error("Invalid target — provide an IP address or CIDR (e.g. 192.168.1.0/24)")
+                print_error("Invalid target  -  provide an IP address or CIDR (e.g. 192.168.1.0/24)")
                 return
 
         print_info("Discovery credit: c3l3r1on (github.com/c3l3r1on)")
@@ -503,7 +503,7 @@ class Exploit(BaseExploit):
             print_status("No Herospeed/Longsee NVR devices found in the target range")
         else:
             print_success(
-                "Scan complete — {} Herospeed/Longsee NVR device(s) detected".format(found)
+                "Scan complete  -  {} Herospeed/Longsee NVR device(s) detected".format(found)
             )
 
     @mute

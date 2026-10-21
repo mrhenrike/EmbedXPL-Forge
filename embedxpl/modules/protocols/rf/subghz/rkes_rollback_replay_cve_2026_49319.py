@@ -1,4 +1,4 @@
-"""RKES Rollback-Replay Attack — Alps Alpine R53R0 / Suzuki Swift 2024 (CVE-2026-49319).
+"""RKES Rollback-Replay Attack  -  Alps Alpine R53R0 / Suzuki Swift 2024 (CVE-2026-49319).
 
 The Alps Alpine R53R0 Remote Keyless Entry System fails to invalidate captured
 rolling codes after use.  An attacker within 433 MHz RF range who records two
@@ -35,7 +35,7 @@ class Exploit(Exploit):
     """RKES Rollback-Replay Attack (CVE-2026-49319)."""
 
     __info__ = {
-        "name": "RKES Rollback-Replay (CVE-2026-49319) — Alps Alpine R53R0",
+        "name": "RKES Rollback-Replay (CVE-2026-49319)  -  Alps Alpine R53R0",
         "description": (
             "Alps Alpine R53R0 RKES (2024 Suzuki Swift) fails to invalidate used "
             "rolling codes. RollJam attack: jam+capture Code A, capture Code B, "
@@ -57,7 +57,7 @@ class Exploit(Exploit):
 
     hw_tool = OptString("flipper_zero", "RF hardware: flipper_zero | hackrf | cc1101")
     freq_mhz = OptString("433.92", "Target frequency in MHz")
-    dry_run = OptBool(True, "Dry run — describe attack only")
+    dry_run = OptBool(True, "Dry run  -  describe attack only")
 
     @mute
     def check(self) -> bool:
@@ -68,7 +68,7 @@ class Exploit(Exploit):
         freq = str(self.freq_mhz)
         dry_run = bool(self.dry_run)
 
-        print_status(f"RKES Rollback-Replay probe — {_CVE}")
+        print_status(f"RKES Rollback-Replay probe  -  {_CVE}")
         print_info(f"Target frequency: {freq} MHz | Hardware: {hw}")
 
         if dry_run:

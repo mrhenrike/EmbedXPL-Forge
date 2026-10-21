@@ -1,10 +1,10 @@
-# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek — https://github.com/Uniao-Geek
-"""EmbedXPL-Forge — RTSP Network Scanner.
+# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
+"""EmbedXPL-Forge  -  RTSP Network Scanner.
 
 Port of cameradar's network discovery to Python. Supports:
   - nmap-based RTSP port discovery (with service identification)
   - masscan-based fast scanning (large networks)
-  - Direct socket probe (skip-scan mode — no external tool required)
+  - Direct socket probe (skip-scan mode  -  no external tool required)
   - CIDR, range, and host expansion
 
 References:
@@ -114,7 +114,7 @@ def _expand_target(target: str) -> List[str]:
     """
     target = target.strip()
 
-    # CIDR — try first
+    # CIDR  -  try first
     try:
         net = ipaddress.ip_network(target, strict=False)
         return [str(ip) for ip in net.hosts()]
@@ -147,7 +147,7 @@ def _expand_target(target: str) -> List[str]:
     except ValueError:
         pass
 
-    # Hostname — DNS resolution
+    # Hostname  -  DNS resolution
     try:
         infos = socket.getaddrinfo(target, None, socket.AF_INET)
         return list({info[4][0] for info in infos})
@@ -280,7 +280,7 @@ class RTSPScanner:
         return self._scan_direct(targets)
 
     def skip_scan(self, targets: List[str]) -> List[RTSPStream]:
-        """Skip discovery — treat every target:port as an RTSP stream candidate.
+        """Skip discovery  -  treat every target:port as an RTSP stream candidate.
 
         Mirrors cameradar's --skip-scan mode (internal/scan/skip/skip.go).
         Resolves hostnames via DNS, expands CIDRs and multi-octet ranges,

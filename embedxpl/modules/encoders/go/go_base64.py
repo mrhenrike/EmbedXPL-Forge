@@ -1,4 +1,4 @@
-"""Go base64 encoder — gera source Go com payload embutido."""
+"""Go base64 encoder  -  gera source Go com payload embutido."""
 
 import base64
 from embedxpl.core.exploit.encoders import BaseEncoder

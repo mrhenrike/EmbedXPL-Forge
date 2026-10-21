@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """Sync router/switch/tap scoped credential wordlists from local sources.
 
 This script updates EmbedXPL-Forge scoped wordlists by merging:

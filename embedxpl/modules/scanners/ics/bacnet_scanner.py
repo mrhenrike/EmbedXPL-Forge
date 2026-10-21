@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""BACnet/IP Scanner — Enumerate Building Automation Devices (Port 47808/UDP).
+"""BACnet/IP Scanner  -  Enumerate Building Automation Devices (Port 47808/UDP).
 
 Scans for BACnet/IP devices on UDP port 47808 (0xBAC0).  BACnet (Building
 Automation and Control Networks) is the ISO 16484-5 standard protocol used in
@@ -111,7 +111,7 @@ def _parse_i_am(data: bytes) -> Optional[dict]:
 
 
 class Exploit(BaseExploit):
-    """BACnet/IP Building Automation Scanner — Who-Is / I-Am enumeration.
+    """BACnet/IP Building Automation Scanner  -  Who-Is / I-Am enumeration.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -123,11 +123,11 @@ class Exploit(BaseExploit):
             "Scans for BACnet/IP building automation devices on UDP/47808. Sends a "
             "Who-Is broadcast and parses I-Am responses to identify device instance "
             "numbers, vendor IDs, and APDU capabilities. BACnet/IP has no authentication "
-            "— all responding devices are directly accessible."
+            " -  all responding devices are directly accessible."
         ),
         "authors": (
             "Project Redpoint",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "references": (
             "https://attack.mitre.org/techniques/T0846/",
@@ -158,7 +158,7 @@ class Exploit(BaseExploit):
                     responses += 1
                     if info:
                         print_success(
-                            "I-Am from {} — Device Instance: {}, Vendor: {}".format(
+                            "I-Am from {}  -  Device Instance: {}, Vendor: {}".format(
                                 addr[0],
                                 info.get("DeviceInstance", "?"),
                                 info.get("VendorName", "?"),
@@ -169,7 +169,7 @@ class Exploit(BaseExploit):
                 except socket.timeout:
                     break
             if responses == 0:
-                print_error("No BACnet devices responded — port may be filtered or no device present")
+                print_error("No BACnet devices responded  -  port may be filtered or no device present")
         finally:
             sock.close()
 

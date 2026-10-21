@@ -1,4 +1,4 @@
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 
 name: compatibility-matrix
 
@@ -111,7 +111,7 @@ jobs:
           python tools/generate_coverage_matrix.py
           python tools/build_arsenal_index.py
           git diff --stat -- docs/COVERAGE_MATRIX.md docs/COVERAGE_MATRIX.txt embedxpl/resources/catalogs/arsenal_index.json || true
-          echo "Coverage matrix regenerated (diff shown above — non-gating)."
+          echo "Coverage matrix regenerated (diff shown above  -  non-gating)."
 
       - name: Dependency vulnerability audit
         run: |

@@ -7,7 +7,7 @@ class Exploit(FTPDefault):
     __info__ = {
         "name": "Net Lynx Router Default FTP Creds",
         "description": "Dictionary attack with default credentials against Net Lynx Router FTP service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Net Lynx Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

@@ -1,4 +1,4 @@
-"""EmbedXPL Search Engine — MSF-style module discovery.
+"""EmbedXPL Search Engine  -  MSF-style module discovery.
 
 Usage:
     from embedxpl.tools.search import search, search_cve, search_vendor
@@ -254,7 +254,7 @@ def _get_cache(rebuild: bool = False, use_db_cache: bool = True) -> list[ModuleR
                 db.close()
             except Exception:
                 pass
-        print("[*] Indexando módulos EmbedXPL (primeira execução — aguarde)...")
+        print("[*] Indexando módulos EmbedXPL (primeira execução  -  aguarde)...")
         records = []
         for path in _iter_modules():
             rec = _extract_info(path)

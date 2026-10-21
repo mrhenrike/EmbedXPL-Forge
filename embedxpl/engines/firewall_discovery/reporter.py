@@ -54,9 +54,9 @@ def print_discovery_report(hosts: List[DiscoveredHost], engine: str = "") -> Non
         for i, host in enumerate(hosts, 1):
             if host.identification:
                 ident = host.identification
-                print(f"  {i}. {host.ip} — {ident.vendor}/{ident.product} [{ident.device_class}] risk={host.risk_score:.1f} modules={len(host.applicable_modules)}")
+                print(f"  {i}. {host.ip}  -  {ident.vendor}/{ident.product} [{ident.device_class}] risk={host.risk_score:.1f} modules={len(host.applicable_modules)}")
             else:
-                print(f"  {i}. {host.ip} — unidentified")
+                print(f"  {i}. {host.ip}  -  unidentified")
 
 
 def export_json(hosts: List[DiscoveredHost], path: str) -> None:

@@ -1,4 +1,4 @@
-"""Double URL encoder — %25XX."""
+"""Double URL encoder  -  %25XX."""
 
 from urllib.parse import unquote
 from embedxpl.core.exploit.encoders import BaseEncoder
@@ -8,7 +8,7 @@ from embedxpl.core.exploit.payloads import Architectures
 class Encoder(BaseEncoder):
     __info__ = {
         "name": "Double URL Encoder",
-        "description": "Double URL encoding %25XX — bypasses single-decode WAFs.",
+        "description": "Double URL encoding %25XX  -  bypasses single-decode WAFs.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
         "evasion_score": 5,
     }

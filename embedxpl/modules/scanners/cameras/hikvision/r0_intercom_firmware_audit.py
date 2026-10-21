@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Hikvision R0 Indoor Station — Comprehensive Firmware Security Audit.
+"""Hikvision R0 Indoor Station  -  Comprehensive Firmware Security Audit.
 
 Performs a complete offline security audit of extracted R0 firmware rootfs.
 Covers 12 vulnerability categories: 3DES keys, RSA keys, binary hardening,
@@ -7,7 +7,7 @@ boot script permissions, password hashes, SSH host keys, kernel version,
 C library CVEs, debug utilities, JTAG references, developer artifacts,
 and system hardening (IP forwarding, watchdog).
 
-No network access needed — purely offline analysis.
+No network access needed  -  purely offline analysis.
 
 Version: 1.0.0
 """
@@ -83,7 +83,7 @@ class Exploit(Exploit):
             "system hardening. Generates risk score and vulnerability table."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "references": (
             "https://cwe.mitre.org/data/definitions/321.html",
@@ -93,10 +93,10 @@ class Exploit(Exploit):
             "https://cwe.mitre.org/data/definitions/732.html",
         ),
         "devices": (
-            "Hikvision DS-KH6320-LE1(B) — R0 Indoor Station",
-            "Hikvision DS-KH6350 — R0 Indoor Station",
-            "Hikvision DS-KH6360 — R0 Indoor Station",
-            "Hikvision DS-KH6320Y-WTE2 — R0 Indoor Station",
+            "Hikvision DS-KH6320-LE1(B)  -  R0 Indoor Station",
+            "Hikvision DS-KH6350  -  R0 Indoor Station",
+            "Hikvision DS-KH6360  -  R0 Indoor Station",
+            "Hikvision DS-KH6320Y-WTE2  -  R0 Indoor Station",
         ),
     }
 
@@ -209,7 +209,7 @@ class Exploit(Exploit):
                     self._add_finding(
                         findings, "RSA Keys", "CRITICAL",
                         "Known Hikvision RSA-1024 master key in {}".format(rel),
-                        "{} — EXACT MATCH to known master key".format(size_label),
+                        "{}  -  EXACT MATCH to known master key".format(size_label),
                     )
 
             if not master_key_found and matches:
@@ -346,7 +346,7 @@ class Exploit(Exploit):
         dangerous_patterns = [
             (re.compile(r"chmod\s+(?:a\+s|[0-7]*[67][0-7]{2})\b"), "CRITICAL",
              "Dangerous chmod (SUID or world-writable)"),
-            (re.compile(r"chmod\s+777\b"), "CRITICAL", "chmod 777 — world-writable"),
+            (re.compile(r"chmod\s+777\b"), "CRITICAL", "chmod 777  -  world-writable"),
         ]
 
         script_dirs = ["etc/init.d", "etc/rcS.d", "etc/rc.d", "etc", "init", "sbin"]
@@ -536,7 +536,7 @@ class Exploit(Exploit):
                 if major < 4 or (major == 4 and minor < 4):
                     self._add_finding(
                         findings, "Kernel Version", "HIGH",
-                        "Kernel {}.{}.{} is EOL — no security patches".format(
+                        "Kernel {}.{}.{} is EOL  -  no security patches".format(
                             major, minor, patch
                         ),
                         "Upgrade to supported LTS kernel",
@@ -791,7 +791,7 @@ class Exploit(Exploit):
                     self._add_finding(
                         findings, "System Hardening", "MEDIUM",
                         "IP forwarding enabled in {}".format(rel),
-                        "Device acts as a router — lateral movement risk",
+                        "Device acts as a router  -  lateral movement risk",
                     )
 
                 if wdt_pattern.search(content):
@@ -802,7 +802,7 @@ class Exploit(Exploit):
                     )
 
     # ------------------------------------------------------------------ #
-    # Run — orchestrate all checks
+    # Run  -  orchestrate all checks
     # ------------------------------------------------------------------ #
     def run(self):
         if not self.firmware_dir or not os.path.isdir(self.firmware_dir):
@@ -813,7 +813,7 @@ class Exploit(Exploit):
             self.firmware_dir
         ))
         if self.deep_scan:
-            print_info("Deep scan enabled — this may take longer")
+            print_info("Deep scan enabled  -  this may take longer")
 
         findings = []
 
@@ -898,17 +898,17 @@ class Exploit(Exploit):
         ))
 
         if risk_label == "CRITICAL":
-            print_error("  Overall Risk: {} — Immediate remediation required".format(
+            print_error("  Overall Risk: {}  -  Immediate remediation required".format(
                 risk_label
             ))
         elif risk_label == "HIGH":
-            print_warning("  Overall Risk: {} — Significant exposure".format(risk_label))
+            print_warning("  Overall Risk: {}  -  Significant exposure".format(risk_label))
         elif risk_label == "MEDIUM":
-            print_warning("  Overall Risk: {} — Moderate exposure".format(risk_label))
+            print_warning("  Overall Risk: {}  -  Moderate exposure".format(risk_label))
         else:
             print_info("  Overall Risk: {}".format(risk_label))
 
     @mute
     def check(self):
-        """Offline tool — always returns True if firmware_dir exists."""
+        """Offline tool  -  always returns True if firmware_dir exists."""
         return bool(self.firmware_dir) and os.path.isdir(self.firmware_dir)

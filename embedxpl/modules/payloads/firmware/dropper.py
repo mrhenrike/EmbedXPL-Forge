@@ -4,10 +4,10 @@ Payload de persistência para dispositivos Linux embedded (OpenWRT, LEDE, DD-WRT
 Injeta stage 2 em NVRAM ou partição jffs2/overlay para sobreviver a reboot.
 
 Métodos de persistência:
-  1. NVRAM (nvram set/commit) — roteadores Broadcom/Netgear/Linksys
-  2. /etc/init.d/S99embedxpl — SysV init em OpenWRT
-  3. /etc/rc.local — sistemas mais simples
-  4. cron (root crontab) — fallback universal
+  1. NVRAM (nvram set/commit)  -  roteadores Broadcom/Netgear/Linksys
+  2. /etc/init.d/S99embedxpl  -  SysV init em OpenWRT
+  3. /etc/rc.local  -  sistemas mais simples
+  4. cron (root crontab)  -  fallback universal
 """
 
 from embedxpl.core.exploit.payloads import BasePayload
@@ -16,7 +16,7 @@ from embedxpl.core.exploit.payloads import BasePayload
 class Payload(BasePayload):
     __info__ = {
         "name": "Firmware Dropper",
-        "description": "Embedded Linux persistence dropper — survives reboot via NVRAM/init.d/cron.",
+        "description": "Embedded Linux persistence dropper  -  survives reboot via NVRAM/init.d/cron.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
     }
 

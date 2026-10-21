@@ -1,4 +1,4 @@
-"""EmbedXPL Runtime — C++ Executor.
+"""EmbedXPL Runtime  -  C++ Executor.
 
 Compiles and executes C++ source files with cross-compile support.
 Follows the same cache + cross-compile pattern as c_exec.py.

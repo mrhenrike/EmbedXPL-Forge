@@ -9,7 +9,7 @@ from embedxpl.core.exploit.payloads import Architectures
 class Encoder(BaseEncoder):
     __info__ = {
         "name": "zlib+Base64 Encoder",
-        "description": "zlib compress then base64 — smaller payload, hides raw bytes.",
+        "description": "zlib compress then base64  -  smaller payload, hides raw bytes.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
         "evasion_score": 4,
     }

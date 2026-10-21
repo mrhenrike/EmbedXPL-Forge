@@ -6,7 +6,7 @@
 
 ## Visão geral
 
-`sessions` gerencia o histórico de sessões de varredura. Toda vez que `discover` ou um módulo executa contra um alvo, o EmbedXPL-Forge registra o resultado em um arquivo de sessão por host (`~/.exf_sessions/`). As sessões persistem entre reinicializações e funcionam como o `--restore` do John the Ripper — retomando de onde a última varredura parou.
+`sessions` gerencia o histórico de sessões de varredura. Toda vez que `discover` ou um módulo executa contra um alvo, o EmbedXPL-Forge registra o resultado em um arquivo de sessão por host (`~/.exf_sessions/`). As sessões persistem entre reinicializações e funcionam como o `--restore` do John the Ripper  -  retomando de onde a última varredura parou.
 
 ---
 
@@ -23,7 +23,7 @@ sessions purge                  Excluir TODAS as sessões (solicita confirmaçã
 
 ---
 
-## `sessions` / `sessions list` — listar todas as sessões
+## `sessions` / `sessions list`  -  listar todas as sessões
 
 ### Saída (sessões existem)
 
@@ -70,7 +70,7 @@ exf> sessions
 
 ---
 
-## `sessions show <ip>` — detalhe da sessão
+## `sessions show <ip>`  -  detalhe da sessão
 
 ### Saída
 
@@ -122,7 +122,7 @@ Execution History (last 20):
 └───────────────────────────────────────────────────┴───────────────┴─────────────┴─────────┘
 ```
 
-### Erro — sessão não encontrada
+### Erro  -  sessão não encontrada
 
 ```
 exf> sessions show 192.168.99.99
@@ -130,7 +130,7 @@ exf> sessions show 192.168.99.99
 [WARN] No session found for 192.168.99.99
 ```
 
-### Erro — argumento ausente
+### Erro  -  argumento ausente
 
 ```
 exf> sessions show
@@ -140,7 +140,7 @@ exf> sessions show
 
 ---
 
-## `sessions delete <ip>` — excluir uma sessão
+## `sessions delete <ip>`  -  excluir uma sessão
 
 ```
 exf> sessions delete 192.168.1.100
@@ -166,7 +166,7 @@ exf> sessions delete
 
 ---
 
-## `sessions export <ip>` — exportar sessão como JSON
+## `sessions export <ip>`  -  exportar sessão como JSON
 
 Exporta o registro completo da sessão como um objeto JSON impresso no stdout.
 
@@ -232,7 +232,7 @@ exf> sessions export 192.168.99.99
 
 ---
 
-## `sessions purge` — excluir TODAS as sessões
+## `sessions purge`  -  excluir TODAS as sessões
 
 Requer confirmação explícita.
 

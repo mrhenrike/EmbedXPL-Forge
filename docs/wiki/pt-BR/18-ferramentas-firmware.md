@@ -17,7 +17,7 @@ Ambas as ferramentas estão localizadas em `embedxpl/tools/` e são utilizáveis
 
 ---
 
-## `firmware-dl` — Downloader de Firmware
+## `firmware-dl`  -  Downloader de Firmware
 
 ### Ponto de entrada
 
@@ -32,7 +32,7 @@ firmware-dl [flags]
 | Flag | Tipo | Obrigatório | Descrição |
 |------|------|-------------|-----------|
 | `--list` | flag | não | Listar todas as entradas de vendor de `firmware_sources.yaml` |
-| `--vendor <chave>` | string | não | Chave de vendor (ex.: `hikvision`, `tplink`, `cisco`) — veja `--list` |
+| `--vendor <chave>` | string | não | Chave de vendor (ex.: `hikvision`, `tplink`, `cisco`)  -  veja `--list` |
 | `--model <nome>` | string | não | Nome do modelo do dispositivo (informativo; usado para orientação de navegação no portal) |
 | `--url <url>` | string | não | URL de download direto do firmware (ignora o lookup de vendor) |
 | `--output <dir>` | string | não | Diretório de saída (padrão: `./firmware_downloads`) |
@@ -42,7 +42,7 @@ firmware-dl [flags]
 
 ---
 
-### `--list` — listar fontes de vendor disponíveis
+### `--list`  -  listar fontes de vendor disponíveis
 
 ```
 $ python -m embedxpl.tools.firmware_downloader --list
@@ -84,7 +84,7 @@ $ python -m embedxpl.tools.firmware_downloader --vendor hikvision --model DS-2CD
 
 ---
 
-### `--vendor --url` — download via URL direta
+### `--vendor --url`  -  download via URL direta
 
 ```
 $ python -m embedxpl.tools.firmware_downloader \
@@ -152,7 +152,7 @@ $ python -m embedxpl.tools.firmware_downloader
 usage: firmware_downloader [-h] [--list] [--vendor VENDOR] [--model MODEL]
                            [--url URL] [--output OUTPUT] [--filename FILENAME]
 
-EmbedXPL-Forge — Firmware Downloader CLI
+EmbedXPL-Forge  -  Firmware Downloader CLI
 
 optional arguments:
   --list              List all known firmware sources
@@ -178,7 +178,7 @@ urllib.error.HTTPError: HTTP Error 404: Not Found
 
 ---
 
-## `firmware-analyze` — Analisador de Firmware
+## `firmware-analyze`  -  Analisador de Firmware
 
 ### Ponto de entrada
 
@@ -198,7 +198,7 @@ firmware-analyze [flags]
 
 ---
 
-### `--tool all` (padrão) — pipeline completo
+### `--tool all` (padrão)  -  pipeline completo
 
 ```
 $ python -m embedxpl.tools.firmware_analyzer \
@@ -302,10 +302,10 @@ $ python -m embedxpl.tools.firmware_analyzer \
 Execute `--tool all` ou execute binwalk/unblob primeiro, depois firmwalker:
 
 ```bash
-# Passo 1 — extrair
+# Passo 1  -  extrair
 python -m embedxpl.tools.firmware_analyzer --file router_fw_v2.1.bin --tool binwalk
 
-# Passo 2 — analisar sistema de arquivos extraído
+# Passo 2  -  analisar sistema de arquivos extraído
 python -m embedxpl.tools.firmware_analyzer --file router_fw_v2.1.bin --tool firmwalker
 ```
 
@@ -327,7 +327,7 @@ $ python -m embedxpl.tools.firmware_analyzer \
   [*] S25_kernel_check: Linux 3.10.108, no KASLR, no stack canary
   [*] F20_file_details: 463 files, 23 ELF binaries, 5 SUID binaries
   [*] CVE check: 4 potential vulnerabilities found
-  [*] EMBA complete — report at ./emba_results/emba_output/index.html
+  [*] EMBA complete  -  report at ./emba_results/emba_output/index.html
 
 ============================================================
   Firmware Analysis Summary
@@ -396,7 +396,7 @@ firmware_analysis_DS-2CD2143G2-I_V5.7.16_230415/
 | Ferramenta | Comando de instalação | Notas |
 |------------|----------------------|-------|
 | binwalk | `sudo apt-get install binwalk` ou `pip install binwalk` | Wrapper Python tem extração limitada |
-| unblob | `pip install unblob` | Recomendado — extração mais confiável |
+| unblob | `pip install unblob` | Recomendado  -  extração mais confiável |
 | Firmwalker | `git clone https://github.com/craigz28/firmwalker` | Script shell, requer bash |
 | EMBA | `git clone https://github.com/e-m-b-a/emba && sudo ./installer.sh` | Requer Docker e root/sudo |
 

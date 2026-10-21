@@ -4,7 +4,7 @@ from embedxpl.core.http.http_client import HTTPClient
 
 
 class Exploit(HTTPClient):
-    """AT&T Uverse Pace 5268AC — Web Interface Default Credentials Tester.
+    """AT&T Uverse Pace 5268AC  -  Web Interface Default Credentials Tester.
 
     Performs a dictionary-style authentication check against the Pace 5268AC
     web management interface using all known default credential pairs.
@@ -106,7 +106,7 @@ class Exploit(HTTPClient):
                 *self.credentials,
             )
         else:
-            print_error("No default credentials matched — device may use a custom PIN or patched firmware")
+            print_error("No default credentials matched  -  device may use a custom PIN or patched firmware")
 
     @mute
     def check(self) -> bool:

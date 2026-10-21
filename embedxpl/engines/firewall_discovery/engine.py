@@ -1,4 +1,4 @@
-"""Discovery engine orchestrator — coordinates scan engines and FXF intelligence.
+"""Discovery engine orchestrator  -  coordinates scan engines and FXF intelligence.
 
 Author: André Henrique (@mrhenrike) | União Geek
 """

@@ -1,10 +1,10 @@
-# Herospeed / Longsee NVR — Comprehensive Security Research Report
+# Herospeed / Longsee NVR  -  Comprehensive Security Research Report
 
 **Research scope:** All publicly available Herospeed/Longsee N-series NVR firmware (2023-2026) + full NAND flash dump
 **Method:** Firmware download, static analysis, binwalk extraction, reverse engineering, QEMU emulation, live API testing, NAND flash analysis
 **Date:** May 2026
-**Researcher:** André Henrique (@mrhenrike) — EmbedXPL-Forge
-**Community discovery credit:** c3l3r1on (github.com/c3l3r1on) — original lab research, Cases A/B/C/D, nvr_h4rv3st3r.py v8
+**Researcher:** André Henrique (@mrhenrike)  -  EmbedXPL-Forge
+**Community discovery credit:** c3l3r1on (github.com/c3l3r1on)  -  original lab research, Cases A/B/C/D, nvr_h4rv3st3r.py v8
 
 ---
 
@@ -19,7 +19,7 @@
 | Shodan | `"Boa/0.94.13" http.title:"NVR"` | Boa HTTP server |
 | FOFA (c3l3r1on, May 2026) | `body="longseSha256"` | ~100k+ EU, ~50k+ global |
 
-**`variable.js` contains `DEFAULT_ADMIN_PASSWORD="12345"` hardcoded** — confirms the Shodan fingerprint also reveals the default credential.
+**`variable.js` contains `DEFAULT_ADMIN_PASSWORD="12345"` hardcoded**  -  confirms the Shodan fingerprint also reveals the default credential.
 
 ## Known OEM Re-brands (c3l3r1on, not independently verified)
 
@@ -54,11 +54,11 @@
 **Total firmwares analyzed: 9** (8 standard + 1 full NAND flash dump from c3l3r1on's lab device)
 
 ### Flash Dump Key Findings (nvr_full_flash.bin)
-- **PERF magic**: Full NAND flash (32MB) — kernel at 0x60000, SquashFS at 0x400000, JFFS2 config at 0x1900000
+- **PERF magic**: Full NAND flash (32MB)  -  kernel at 0x60000, SquashFS at 0x400000, JFFS2 config at 0x1900000
 - **Plugin**: `LsNXVRPlugin_V24.2.3.240201_R1.exe` (2024-02-01 build)
-- **Root hash**: `12ZpTwfyH6/Bs` — same hardcoded hash confirmed in real device
-- **libweb.so**: 814,008B — unique version between v2.0.4 (686KB) and v2.0.6 (868KB)
-- **nvr_main**: 5,357KB (larger than N3009 v2.0.4 4,820KB — more features)
+- **Root hash**: `12ZpTwfyH6/Bs`  -  same hardcoded hash confirmed in real device
+- **libweb.so**: 814,008B  -  unique version between v2.0.4 (686KB) and v2.0.6 (868KB)
+- **nvr_main**: 5,357KB (larger than N3009 v2.0.4 4,820KB  -  more features)
 - **AES key in libdatamanager.so**: `0123456789ABCDEF0123456789abcdef` (hardcoded encryption key)
 - **Case B confirmed**: `FTP_UploadJpgBuffer(server:%s)` + `popen()` in nvr_main
 
@@ -139,7 +139,7 @@ Related pattern: CVE-2017-7921 (Hikvision XVR/DVR interface, similar design).
 
 **All versions affected, with different exploitation mechanisms:**
 
-#### v2.0.4 variant — Shell Source Injection
+#### v2.0.4 variant  -  Shell Source Injection
 `update.sh` sources the `version` file from the upgrade package:
 ```sh
 version_remote_file="${UPDATA_PATH}/version"
@@ -147,7 +147,7 @@ version_remote_file="${UPDATA_PATH}/version"
 ```
 Craft a `version` file with shell commands alongside variable definitions. Commands execute as root.
 
-#### v2.0.6 "patch" — Retreat.sh Explicit Execution (NEW)
+#### v2.0.6 "patch"  -  Retreat.sh Explicit Execution (NEW)
 The v2.0.6 "security patch" introduced a NEW, MORE EXPLICIT execution path:
 ```sh
 detect_shell=/tmp/update/version
@@ -176,7 +176,7 @@ id > /tmp/pwned.txt
 5. Commands execute as root; default payload spawns telnetd on port 23
 
 **Module:** `exploits/cameras/herospeed/herospeed_nvr_upgrade_source_injection_rce`
-**Status:** Confirmed — file creation (`touch /tmp/pwn_upgrade_rce.txt`) observed after source injection via QEMU ARM chroot emulation
+**Status:** Confirmed  -  file creation (`touch /tmp/pwn_upgrade_rce.txt`) observed after source injection via QEMU ARM chroot emulation
 
 ---
 
@@ -225,24 +225,24 @@ Further testing on live hardware is required to confirm exploitability.
 
 ### libweb.so Sizes (HTTP API Server)
 ```
-v2.0.4 (N3009, N3016):      702,752 bytes — IDENTICAL MD5
-v2.0.4 (N3332, 32CH):       760,824 bytes — different (extra channels)
-v2.0.6 (N3009, N3016):      867,672 bytes — IDENTICAL MD5 (patched)
-v2.0.6 (N3109):              834,924 bytes — different hardware variant
-v2.0.8 (F30, 2025):         941,964 bytes — newest, most features
+v2.0.4 (N3009, N3016):      702,752 bytes  -  IDENTICAL MD5
+v2.0.4 (N3332, 32CH):       760,824 bytes  -  different (extra channels)
+v2.0.6 (N3009, N3016):      867,672 bytes  -  IDENTICAL MD5 (patched)
+v2.0.6 (N3109):              834,924 bytes  -  different hardware variant
+v2.0.8 (F30, 2025):         941,964 bytes  -  newest, most features
 ```
 
-N3009 and N3016 share **identical libweb.so** within each version — same firmware, different channel count only.
+N3009 and N3016 share **identical libweb.so** within each version  -  same firmware, different channel count only.
 
 ### Key Changes in v2.0.6 libweb.so
 New strings added:
-- `auth failed !` — login failure tracking
-- `session timeout!` — session management
-- `error ! invalid user id` — user validation
-- `user_sha256.license_key` — new license key mechanism
-- `getonlineupgradeurl` / `setonlineupgradeurl` — OTA update support
-- `login_time` — login timestamp tracking
-- `set_block_fd(req->fd) == -1` — connection limiting
+- `auth failed !`  -  login failure tracking
+- `session timeout!`  -  session management
+- `error ! invalid user id`  -  user validation
+- `user_sha256.license_key`  -  new license key mechanism
+- `getonlineupgradeurl` / `setonlineupgradeurl`  -  OTA update support
+- `login_time`  -  login timestamp tracking
+- `set_block_fd(req->fd) == -1`  -  connection limiting
 
 No API endpoints were added or removed between v2.0.4 and v2.0.6 (same set of `/api/` paths).
 
@@ -316,13 +316,13 @@ This affects ALL firmware versions 2023-2025 sharing the same hardcoded hash.
 - VULN-4 (hardcoded root): Discovered via systematic firmware analysis
 - VULN-2 (XVR /vb.htm): Discovered via firmware RE
 
-**Vendor contact:** Herospeed Technology Limited — contact attempted via herospeed.net. ZDI declined (not enterprise scope). CERT Polska notified for VULN-1.
+**Vendor contact:** Herospeed Technology Limited  -  contact attempted via herospeed.net. ZDI declined (not enterprise scope). CERT Polska notified for VULN-1.
 
 ---
 
 ## Remediation
 
-1. Remove hardcoded root password hash — generate device-unique credentials at factory
+1. Remove hardcoded root password hash  -  generate device-unique credentials at factory
 2. Restrict `/api/session/login-capabilities` to require prior authentication or rate-limit heavily
 3. Disable or remove `/vb.htm` legacy XVR interface from NVR firmware
 4. Rewrite `update.sh` to validate upgrade package integrity before sourcing `version` file (use explicit allowlist of variable names, not shell source)

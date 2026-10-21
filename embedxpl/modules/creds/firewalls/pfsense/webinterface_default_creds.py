@@ -17,7 +17,7 @@ class Exploit(HTTPDefault):
             "web management interface. Default admin:pfsense is well-known. "
             "Cherry-picked from FirewallXPL-Forge."
         ),
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (
             "pfSense CE / pfSense Plus (all versions)",
             "Netgate appliances SG-1100 through SG-8200",

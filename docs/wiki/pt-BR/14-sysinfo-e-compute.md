@@ -4,7 +4,7 @@
 
 ---
 
-## `sysinfo` — exibir perfil de hardware
+## `sysinfo`  -  exibir perfil de hardware
 
 ### Sintaxe
 
@@ -14,7 +14,7 @@ sysinfo
 
 Sem parâmetros. Sempre realiza uma detecção de hardware atualizada (`force=True`). O `compute_mode` salvo anteriormente é reaplicado após a detecção.
 
-### Saída completa — apenas CPU + RAM (sem GPU)
+### Saída completa  -  apenas CPU + RAM (sem GPU)
 
 ```
 exf> sysinfo
@@ -47,7 +47,7 @@ exf> sysinfo
 
 ---
 
-### Saída completa — com GPU NVIDIA
+### Saída completa  -  com GPU NVIDIA
 
 ```
 exf> sysinfo
@@ -86,7 +86,7 @@ exf> sysinfo
 
 ---
 
-### Saída completa — com GPU AMD (ROCm)
+### Saída completa  -  com GPU AMD (ROCm)
 
 ```
 exf> sysinfo
@@ -106,7 +106,7 @@ exf> sysinfo
 
 ---
 
-### Saída completa — sistema multi-GPU
+### Saída completa  -  sistema multi-GPU
 
 ```
 exf> sysinfo
@@ -157,7 +157,7 @@ A linha de hardware de uma linha exibida no banner de inicialização é gerada 
 
 ---
 
-## `compute` — definir modo de computação
+## `compute`  -  definir modo de computação
 
 ### Sintaxe
 
@@ -203,7 +203,7 @@ exf> compute gpu
 
 ---
 
-### `compute gpu` (sem GPU — fallback automático)
+### `compute gpu` (sem GPU  -  fallback automático)
 
 ```
 exf> compute gpu
@@ -223,7 +223,7 @@ exf> compute hybrid
 
 ---
 
-### `compute hybrid` (sem GPU — fallback automático)
+### `compute hybrid` (sem GPU  -  fallback automático)
 
 ```
 exf> compute hybrid
@@ -279,12 +279,12 @@ exf> sysinfo
 | Exploits padrão | Nunca (apenas CPU) |
 | Scanners padrão | Nunca (apenas CPU) |
 | Creds padrão | Nunca (apenas CPU) |
-| `core/ml/banner_fingerprint.py` | Sim — fingerprinting de dispositivo via modelo transformer |
-| `core/ml/advisor.py` | Sim — classificação de prioridade de módulo usando pontuação ML |
-| `core/gpu/backend.py` | Sim — dispatcher de backend GPU para módulos ML |
+| `core/ml/banner_fingerprint.py` | Sim  -  fingerprinting de dispositivo via modelo transformer |
+| `core/ml/advisor.py` | Sim  -  classificação de prioridade de módulo usando pontuação ML |
+| `core/gpu/backend.py` | Sim  -  dispatcher de backend GPU para módulos ML |
 | Estimador de entropia de fuzzing | Sim (hybrid: GPU para pontuação, CPU para entrega) |
 
-Se nenhuma GPU estiver presente, todos os módulos ML voltam automaticamente para caminhos de CPU — são mais lentos, mas funcionalmente equivalentes.
+Se nenhuma GPU estiver presente, todos os módulos ML voltam automaticamente para caminhos de CPU  -  são mais lentos, mas funcionalmente equivalentes.
 
 ---
 

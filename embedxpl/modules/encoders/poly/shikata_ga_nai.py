@@ -1,6 +1,6 @@
 """Shikata-Ga-Nai style polymorphic encoder.
 
-Additive feedback XOR — cada geração usa chave aleatória de 4 bytes.
+Additive feedback XOR  -  cada geração usa chave aleatória de 4 bytes.
 Formato: [4-byte seed][4-byte orig_len][encoded_payload]
 """
 

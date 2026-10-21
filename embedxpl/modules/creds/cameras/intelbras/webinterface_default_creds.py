@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Intelbras PVIP 1000 — Default Web Interface Credentials.
+"""Intelbras PVIP 1000  -  Default Web Interface Credentials.
 
 Brute-forces the web interface with known default credentials.
 
@@ -69,7 +69,7 @@ class Exploit(HTTPClient):
             else:
                 code = resp.status_code if resp else "no response"
                 print_status(
-                    "  {}:{} — {}".format(username, password, code)
+                    "  {}:{}  -  {}".format(username, password, code)
                 )
 
         if not found:

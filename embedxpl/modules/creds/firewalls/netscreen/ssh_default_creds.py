@@ -18,7 +18,7 @@ class Exploit(SSHDefault):
             "firewalls with well-known default credentials. "
             "Cherry-picked from FirewallXPL-Forge."
         ),
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (
             "Juniper NetScreen 5GT / 5XT / 25 / 50",
             "Juniper NetScreen (all ScreenOS models)",

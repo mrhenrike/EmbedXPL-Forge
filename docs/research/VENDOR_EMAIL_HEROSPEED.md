@@ -1,8 +1,8 @@
-# Vendor Disclosure Email — Herospeed Technology Limited
+# Vendor Disclosure Email  -  Herospeed Technology Limited
 
 **To:** support@herospeed.net
 **CC:** security.research@uniaogeek.com.br (researcher)
-**Subject:** Security Vulnerability Report — Herospeed NVR N-series (4 Critical/High Findings)
+**Subject:** Security Vulnerability Report  -  Herospeed NVR N-series (4 Critical/High Findings)
 **Date:** 2026-05-15
 **Embargo Expires:** 2026-08-13 (90 days)
 
@@ -10,7 +10,7 @@
 
 ```
 To: support@herospeed.net
-Subject: Security Vulnerability Report — Herospeed NVR N-series (4 Critical/High Findings)
+Subject: Security Vulnerability Report  -  Herospeed NVR N-series (4 Critical/High Findings)
 Importance: High
 
 Dear Herospeed Technology Security Team,
@@ -48,7 +48,7 @@ Platform: SiGmaStar MC6830 ARM Cortex-A7, Boa/0.94.13 HTTP server
 VULNERABILITY SUMMARY
 ═══════════════════════════════════════════════════════════
 
-FINDING 1 — CRITICAL (CVSS 9.8): Hardcoded Root Password Hash
+FINDING 1  -  CRITICAL (CVSS 9.8): Hardcoded Root Password Hash
 The DES crypt hash "12ZpTwfyH6/Bs" for the root account is present
 identically in ALL 7 analyzed firmware images from 2023 to 2025.
 This hash appears in /etc/passwd as:
@@ -56,7 +56,7 @@ This hash appears in /etc/passwd as:
 Busybox telnetd is available in all firmware versions. Combined with
 any code execution vulnerability, this provides immediate root access.
 
-FINDING 2 — CRITICAL (CVSS 9.1): Unauthenticated Credential Metadata
+FINDING 2  -  CRITICAL (CVSS 9.1): Unauthenticated Credential Metadata
 The /api/session/login-capabilities endpoint returns per-user salt,
 challenge nonce, and sessionID without any prior authentication.
 This enables offline SHA-256 KDF credential reconstruction without
@@ -67,16 +67,16 @@ Proof (curl command, no credentials required):
     -H "Content-Type: application/json" \
     -H "Api-Version: v4.0.0" \
     -d '{"action":"get","data":{"username":"admin"}}'
-  Response includes: salt, challenge, sessionID — all without auth.
+  Response includes: salt, challenge, sessionID  -  all without auth.
 
-FINDING 3 — HIGH (CVSS 8.8): Upgrade Package Shell Execution RCE
+FINDING 3  -  HIGH (CVSS 8.8): Upgrade Package Shell Execution RCE
 
 Vector A (v2.0.4): update.sh sources the "version" file from the
 upgrade package using the shell "." operator without sanitisation:
   . $version_remote_file
 Any shell command in the version file executes as root.
 
-Vector B (v2.0.6 — NOTE: This is in your PATCHED version):
+Vector B (v2.0.6  -  NOTE: This is in your PATCHED version):
 Your v2.0.6 patch introduced a NEW, MORE EXPLICIT execution path.
 update.sh now contains:
   detect_shell=/tmp/update/version
@@ -86,13 +86,13 @@ update.sh now contains:
       /tmp/retreat.sh          ← DIRECT EXECUTION OF UPLOADED SCRIPT
   fi
 A "version" file starting with "#!/bin/sh" is explicitly executed.
-This is not a partial fix — it introduces a cleaner attack vector.
+This is not a partial fix  -  it introduces a cleaner attack vector.
 
 An authenticated attacker uploads a crafted firmware to:
   POST /api/upgrade/upgrade-file
 The upgrade pipeline then executes the injected commands as root.
 
-FINDING 4 — MEDIUM (CVSS 6.5): XVR Legacy Interface Credential Disclosure
+FINDING 4  -  MEDIUM (CVSS 6.5): XVR Legacy Interface Credential Disclosure
 The /vb.htm?selectalluserlist endpoint (accessible with Basic HTTP auth
 using any valid account) returns all user credentials with passwords
 encoded in Base64. This is simpler to exploit than the SHA-256 KDF API
@@ -128,19 +128,19 @@ Shodan queries for verification:
 REMEDIATION RECOMMENDATIONS
 ═══════════════════════════════════════════════════════════
 
-1. CRITICAL — Remove the hardcoded root hash from all firmware.
+1. CRITICAL  -  Remove the hardcoded root hash from all firmware.
    Generate device-unique root credentials at factory.
 
-2. CRITICAL — Require authentication before returning any data from
+2. CRITICAL  -  Require authentication before returning any data from
    /api/session/login-capabilities (return an error for unauthenticated
    requests, or remove the salt/challenge from the unauthenticated response).
 
-3. HIGH — Rewrite update.sh to validate upgrade package integrity before
+3. HIGH  -  Rewrite update.sh to validate upgrade package integrity before
    sourcing or executing the version file. Use an allowlist of permitted
    variable names; do NOT use "." (source) or execute the file directly.
    Remove the retreat.sh execution mechanism entirely.
 
-4. MEDIUM — Disable or remove the /vb.htm legacy XVR interface from NVR
+4. MEDIUM  -  Disable or remove the /vb.htm legacy XVR interface from NVR
    firmware. If retained for compatibility, require session-based auth and
    never return passwords in any encoding.
 
@@ -193,7 +193,7 @@ CERT/CC VINCE: Submitted concurrently
 
 ## Follow-up communication template (14 days after no response)
 
-**Subject:** RE: Security Vulnerability Report — Herospeed NVR N-series (FINAL NOTICE before CERT/CC)
+**Subject:** RE: Security Vulnerability Report  -  Herospeed NVR N-series (FINAL NOTICE before CERT/CC)
 
 ```
 Dear Herospeed Security Team,
@@ -214,5 +214,5 @@ I strongly encourage you to acknowledge this report immediately.
 
 André Henrique
 security.research@uniaogeek.com.br
-CERT/CC VINCE Case: [VU#XXXXXX — to be updated after assignment]
+CERT/CC VINCE Case: [VU#XXXXXX  -  to be updated after assignment]
 ```

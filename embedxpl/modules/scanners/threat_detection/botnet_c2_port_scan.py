@@ -1,4 +1,4 @@
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """Botnet C2 port scanner and banner fingerprinter.
 
 Scans a set of TCP/UDP ports commonly used by Mirai, Condi, Gafgyt, Mozi,
@@ -7,24 +7,24 @@ For each open port, fetches the initial banner and computes an MD5 hash for
 offline correlation with known C2 infrastructure.
 
 C2 port list (rationale):
-  23    — Telnet (Mirai propagation + C2 fallback)
-  2323  — Alt-Telnet (Mirai/Gafgyt)
-  3778  — Mirai/Condi CnC bot listener (decoded: table.c bytes[0x2C,0xE0] XOR 0xdeadbeef)
-  9555  — Mirai scan-callback / loader report port (decoded: [0x07,0x71] XOR 0xdeadbeef)
-  7547  — TR-069 CWMP (Mirai Eir variant, CVE-2016-10372)
-  37215 — Huawei HG532 TR-069 (CVE-2017-17215, Satori/Mirai)
-  52869 — MiniUPnP (CVE-2013-0230, Mirai)
-  8080  — HTTP alt (Condi / generic C2)
-  9001  — Tor OR port / generic C2 (Mozi / Hajime)
-  6667  — IRC (classic botnet C2 / Mirai variants)
-  8443  — HTTPS alt C2 (Condi 2025)
-  48101 — Mirai-specific C2 beacon port
-  46266 — Mozi DHT peer port
+  23     -  Telnet (Mirai propagation + C2 fallback)
+  2323   -  Alt-Telnet (Mirai/Gafgyt)
+  3778   -  Mirai/Condi CnC bot listener (decoded: table.c bytes[0x2C,0xE0] XOR 0xdeadbeef)
+  9555   -  Mirai scan-callback / loader report port (decoded: [0x07,0x71] XOR 0xdeadbeef)
+  7547   -  TR-069 CWMP (Mirai Eir variant, CVE-2016-10372)
+  37215  -  Huawei HG532 TR-069 (CVE-2017-17215, Satori/Mirai)
+  52869  -  MiniUPnP (CVE-2013-0230, Mirai)
+  8080   -  HTTP alt (Condi / generic C2)
+  9001   -  Tor OR port / generic C2 (Mozi / Hajime)
+  6667   -  IRC (classic botnet C2 / Mirai variants)
+  8443   -  HTTPS alt C2 (Condi 2025)
+  48101  -  Mirai-specific C2 beacon port
+  46266  -  Mozi DHT peer port
 
 MITRE ATT&CK:
-  T1571   — Non-Standard Port
-  T1095   — Non-Application Layer Protocol
-  T1219   — Remote Access Software (C2 beaconing)
+  T1571    -  Non-Standard Port
+  T1095    -  Non-Application Layer Protocol
+  T1219    -  Remote Access Software (C2 beaconing)
 
 References:
   https://www.cisecurity.org/insights/blog/mirai-botnet
@@ -55,23 +55,23 @@ from embedxpl.core.exploit import (
     print_warning,
 )
 
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 
 logger = logging.getLogger("embedxpl.scanners.threat_detection.botnet_c2_port_scan")
 
 # Known C2 ports with associated botnet family labels
 _C2_PORTS: Dict[int, str] = {
-    23:    "Telnet — Mirai/Gafgyt propagation",
-    2323:  "Alt-Telnet — Mirai/Gafgyt/Condi",
+    23:    "Telnet  -  Mirai/Gafgyt propagation",
+    2323:  "Alt-Telnet  -  Mirai/Gafgyt/Condi",
     3778:  "Mirai/Condi CnC bot listener (table.c decoded)",
     9555:  "Mirai scan-callback / loader report (table.c decoded)",
-    7547:  "TR-069 CWMP — Mirai Eir (CVE-2016-10372)",
-    37215: "Huawei TR-069 — Satori/Mirai (CVE-2017-17215)",
-    52869: "MiniUPnP — Mirai (CVE-2013-0230)",
-    8080:  "HTTP-alt C2 — Condi/generic",
-    9001:  "Tor/generic C2 — Mozi/Hajime",
-    6667:  "IRC C2 — Mirai variants",
-    8443:  "HTTPS-alt C2 — Condi 2025",
+    7547:  "TR-069 CWMP  -  Mirai Eir (CVE-2016-10372)",
+    37215: "Huawei TR-069  -  Satori/Mirai (CVE-2017-17215)",
+    52869: "MiniUPnP  -  Mirai (CVE-2013-0230)",
+    8080:  "HTTP-alt C2  -  Condi/generic",
+    9001:  "Tor/generic C2  -  Mozi/Hajime",
+    6667:  "IRC C2  -  Mirai variants",
+    8443:  "HTTPS-alt C2  -  Condi 2025",
     48101: "Mirai C2 beacon",
     46266: "Mozi DHT peer",
 }

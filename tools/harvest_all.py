@@ -358,7 +358,7 @@ def harvest_routersploit(dry_run: bool = False) -> dict:
             device_type = parts[1]  # routers, cameras, misc
             if len(parts) == 3:
                 # Flat module: exploits/generic/shellshock.py
-                # parts[2] is the filename itself — no vendor subdir
+                # parts[2] is the filename itself  -  no vendor subdir
                 dest_dir = (
                     BASE / "embedxpl" / "modules" / "exploits" /
                     f"{device_type}" / "rsf"

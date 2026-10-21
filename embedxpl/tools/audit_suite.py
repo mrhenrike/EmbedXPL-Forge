@@ -1,12 +1,12 @@
 """EmbedXPL Suite Auditor.
 
 Executa code review automático de toda a suite:
-  1. Import health — detecta ImportError em todos os módulos
-  2. Unused imports — detecta F401 (pyflakes) se disponível
-  3. Missing __info__ — módulos sem metadados
-  4. Missing deps — dependências externas não instaladas
-  5. Bad patterns — print() direto, hardcoded creds, missing check/run
-  6. Stats check — valida contadores do banner
+  1. Import health  -  detecta ImportError em todos os módulos
+  2. Unused imports  -  detecta F401 (pyflakes) se disponível
+  3. Missing __info__  -  módulos sem metadados
+  4. Missing deps  -  dependências externas não instaladas
+  5. Bad patterns  -  print() direto, hardcoded creds, missing check/run
+  6. Stats check  -  valida contadores do banner
 
 Uso:
     python3 -m embedxpl.tools.audit_suite [--fix] [--path embedxpl/modules]
@@ -115,7 +115,7 @@ def audit_unused_imports(root: Path) -> List[dict]:
         issues.append({
             "step": 2, "level": "INFO",
             "file": "N/A",
-            "message": "pyflakes not installed — skipping unused import check. Run: pip install pyflakes",
+            "message": "pyflakes not installed  -  skipping unused import check. Run: pip install pyflakes",
         })
     return issues
 
@@ -203,7 +203,7 @@ def audit_patterns(root: Path) -> List[dict]:
     issues = []
     BAD_PATTERNS = [
         # (pattern, description, level)
-        (r'\bprint\s*\(', "Direct print() call — use print_info/print_success/print_error", "WARN"),
+        (r'\bprint\s*\(', "Direct print() call  -  use print_info/print_success/print_error", "WARN"),
         (r'password\s*=\s*["\'][^"\']+["\']', "Hardcoded password string", "WARN"),
         (r'secret\s*=\s*["\']', "Hardcoded secret", "WARN"),
         (r'TODO.*implement', "Unimplemented TODO", "INFO"),
@@ -371,11 +371,11 @@ def run_audit(root: Path = _MODULES, steps: list[int] | None = None,
 
     print(_color(f"\n  Summary: {errors} errors | {warns} warnings | {oks} OK", _BOLD))
     if errors:
-        print(_color("  ✗ AUDIT FAILED — fix errors before closing phase", _RED))
+        print(_color("  ✗ AUDIT FAILED  -  fix errors before closing phase", _RED))
     elif warns:
-        print(_color("  ⚠ AUDIT PASSED WITH WARNINGS — review warnings", _YELLOW))
+        print(_color("  ⚠ AUDIT PASSED WITH WARNINGS  -  review warnings", _YELLOW))
     else:
-        print(_color("  ✓ AUDIT PASSED — phase is clean", _GREEN))
+        print(_color("  ✓ AUDIT PASSED  -  phase is clean", _GREEN))
     print()
 
     if json_output:
