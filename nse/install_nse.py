@@ -20,7 +20,6 @@ Author: André Henrique (@mrhenrike) | União Geek
 from __future__ import annotations
 
 import argparse
-import os
 import platform
 import shutil
 import subprocess
@@ -154,7 +153,7 @@ def cmd_install(args: argparse.Namespace) -> int:
             installed.append(src.name)
         except PermissionError:
             print(f"[!] Permission denied: {dst}")
-            print(f"    Retry with sudo / Administrator privileges")
+            print("    Retry with sudo / Administrator privileges")
             errors.append(src.name)
         except Exception as exc:
             print(f"[!] Failed to copy {src.name}: {exc}")

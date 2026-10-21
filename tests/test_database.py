@@ -1,8 +1,6 @@
 """Tests for embedxpl.core.database (SQLite module database)."""
 from __future__ import annotations
 
-import pytest
-
 import embedxpl.core.database as db_mod
 
 

@@ -204,7 +204,7 @@ def analyze_firmware(zip_path: Path, model: str) -> dict:
             zf.extractall(extract_dir)
             print(f"  Extracted {len(zf.infolist())} files to {extract_dir.name}")
     except zipfile.BadZipFile:
-        print(f"  [WARN] Not a valid ZIP — treating as raw firmware binary")
+        print("  [WARN] Not a valid ZIP — treating as raw firmware binary")
         report["zip_contents"].append({
             "name": zip_path.name,
             "size": zip_path.stat().st_size,
@@ -270,7 +270,7 @@ def analyze_firmware(zip_path: Path, model: str) -> dict:
             else:
                 report["strings_findings"].append(f_item)
 
-    print(f"\n  Summary:")
+    print("\n  Summary:")
     print(f"    CGI handlers: {len(report['cgi_handlers'])}")
     print(f"    Credentials:  {len(report['credentials'])}")
     print(f"    Libraries:    {len(report['libraries'])}")
@@ -289,12 +289,12 @@ def generate_forensic_report_md(report: dict, output_path: Path):
     lines = [
         f"# Forensic Analysis Report — Intelbras {model}",
         f"<!-- Generated: {report['analysis_date']} -->",
-        f"<!-- Author: André Henrique (@mrhenrike) | União Geek -->",
+        "<!-- Author: André Henrique (@mrhenrike) | União Geek -->",
         "",
         "## Target Profile",
         "",
-        f"| Field | Value |",
-        f"|---|---|",
+        "| Field | Value |",
+        "|---|---|",
         f"| Model | {model} |",
         f"| Filename | `{report['filename']}` |",
         f"| File Size | {report['file_size']:,} bytes ({report['file_size']/1024/1024:.1f} MB) |",
@@ -468,7 +468,7 @@ def main():
             json.dump(serializable, f, indent=2, default=str)
 
     print(f"\n{'='*70}")
-    print(f"FORENSIC ANALYSIS COMPLETE")
+    print("FORENSIC ANALYSIS COMPLETE")
     print(f"{'='*70}")
     print(f"  Models analyzed: {len(all_reports)}")
     for r in all_reports:

@@ -285,7 +285,7 @@ def step3_extract_kernel_and_rootfs() -> tuple[list[dict], list[dict]]:
         kernel_out.write_bytes(payload)
         print(f"    Saved kernel payload: {kernel_out.name} ({len(payload):,} bytes)")
 
-        print(f"    Decompressing LZMA...")
+        print("    Decompressing LZMA...")
         decompressed = _decompress_lzma_kernel(payload)
         if decompressed:
             dec_path = EXTRACTED_DIR / f"kernel_{i}_decompressed.bin"
@@ -649,7 +649,7 @@ def step5_binary_hardening() -> list[dict]:
     no_canary_count = sum(1 for r in results if not r["canary"])
     danger_count = sum(1 for r in results if r["dangerous"])
 
-    print(f"\n  HARDENING SUMMARY:")
+    print("\n  HARDENING SUMMARY:")
     print(f"    Total ELF: {len(results)}")
     print(f"    No PIE:    {no_pie_count}/{len(results)}")
     print(f"    No NX:     {no_nx_count}/{len(results)}")
@@ -742,7 +742,7 @@ def step6_boot_script_audit() -> list[dict]:
                 add_finding(
                     f"F-V484-BOOT-{os.path.basename(rel_name)[:12].upper()}-{len(findings):03d}",
                     sev, f"Boot script {rel_name}: {issue}",
-                    f"Insecure pattern in init script.", issue)
+                    "Insecure pattern in init script.", issue)
 
     print("\n  --- /etc/passwd & /etc/shadow ---")
     for name in ["etc/passwd", "etc/shadow", "etc/group"]:
@@ -915,9 +915,9 @@ def step8_generate_report(
         "",
         "### 1.1 DAV Container",
         "",
-        f"```",
+        "```",
         report_sections.get("dav_header", "N/A"),
-        f"```",
+        "```",
         "",
         "### 1.2 Kernel Extraction",
         "",
@@ -938,8 +938,8 @@ def step8_generate_report(
     lines.extend([
         "### 1.3 Initramfs Extraction",
         "",
-        f"| Category | Count |",
-        f"|----------|-------|",
+        "| Category | Count |",
+        "|----------|-------|",
     ])
     for t, c in type_counts.most_common():
         lines.append(f"| {t} | {c} |")

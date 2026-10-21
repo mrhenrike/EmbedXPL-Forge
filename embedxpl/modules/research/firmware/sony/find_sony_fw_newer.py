@@ -4,7 +4,14 @@ Search for Sony Bravia firmware download URLs for 2023-2026 Google TV models.
 Uses Sony's update CDN, support pages, and known URL patterns.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
-import os, sys, tempfile, json, re, time, hashlib, datetime
+import os
+import sys
+import tempfile
+import json
+import re
+import time
+import hashlib
+import datetime
 import requests
 
 _tmp = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -82,9 +89,9 @@ def check_sony_support(model: str) -> list:
     """Scrape Sony support pages for firmware links."""
     found = []
     search_urls = [
-        f"https://www.sony.com.br/pt/articles/downloads-de-atualizacao-de-software-para-televisores-bravia",
+        "https://www.sony.com.br/pt/articles/downloads-de-atualizacao-de-software-para-televisores-bravia",
         f"https://www.sony.com/en/articles/firmware-update-for-{model.lower().replace('-', '-')}",
-        f"https://www.sony.com.br/electronics/suporte/televisores-lcd-led-bravia/bravia-xr-series/downloads",
+        "https://www.sony.com.br/electronics/suporte/televisores-lcd-led-bravia/bravia-xr-series/downloads",
     ]
     for url in search_urls:
         try:
@@ -116,15 +123,15 @@ def try_direct_cdns(model: str) -> list:
     # For Google TV models the format may be different
     candidate_urls = [
         # XR-55A95L known firmware versions
-        f"https://tv.update.sony.net/OND/2023/us/main/XRA95L/sony_tvupdate_2023_A95L.zip",
-        f"https://tv.update.sony.net/OND/2023/br/main/XRA95L/sony_tvupdate_2023_A95L.zip",
+        "https://tv.update.sony.net/OND/2023/us/main/XRA95L/sony_tvupdate_2023_A95L.zip",
+        "https://tv.update.sony.net/OND/2023/br/main/XRA95L/sony_tvupdate_2023_A95L.zip",
         # X90L variants
-        f"https://tv.update.sony.net/OND/2023/us/main/XRX90L/sony_tvupdate_2023_X90L.zip",
+        "https://tv.update.sony.net/OND/2023/us/main/XRX90L/sony_tvupdate_2023_X90L.zip",
         # Check if sdm.downloads.sony.net has newer
-        f"https://sdm.downloads.sony.net/bravia/XR-55A95L/firmware.zip",
-        f"https://sdm.downloads.sony.net/bravia/XR-65X90L/firmware.zip",
+        "https://sdm.downloads.sony.net/bravia/XR-55A95L/firmware.zip",
+        "https://sdm.downloads.sony.net/bravia/XR-65X90L/firmware.zip",
         # Sony global software download
-        f"https://www.sony.com/en/articles/software-downloads-for-bravia-tvs",
+        "https://www.sony.com/en/articles/software-downloads-for-bravia-tvs",
     ]
     for url in candidate_urls:
         try:
@@ -147,7 +154,7 @@ def search_archive_org(model: str) -> list:
     """Search archive.org Wayback Machine for cached firmware pages."""
     found = []
     try:
-        api_url = f"https://archive.org/wayback/available?url=tv.update.sony.net"
+        api_url = "https://archive.org/wayback/available?url=tv.update.sony.net"
         r = SESS.get(api_url, timeout=8)
         if r.status_code == 200:
             data = r.json()

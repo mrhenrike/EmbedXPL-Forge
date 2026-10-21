@@ -181,7 +181,7 @@ def download(meta: dict[str, str], dest: Path) -> dict[str, Any]:
             "sha256_match": digest.lower() == meta["expected_sha256"].lower(),
             "url": meta["url"],
         }
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         if tmp.exists():
             tmp.unlink(missing_ok=True)
         return {"status": "error", "error": str(exc), "url": meta["url"]}
@@ -388,7 +388,7 @@ def analyze_one(meta: dict[str, str], dl: dict[str, Any], path: Path) -> dict[st
     try:
         saved = extract_interesting(path, ext_dir)
         report["extracted_files"] = saved[:200]
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         report["errors"].append(f"extract: {exc}")
         saved = []
 
@@ -408,7 +408,7 @@ def analyze_one(meta: dict[str, str], dl: dict[str, Any], path: Path) -> dict[st
             continue
         try:
             data = p.read_bytes()
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             report["errors"].append(f"read {p}: {exc}")
             continue
 
@@ -471,7 +471,7 @@ def analyze_one(meta: dict[str, str], dl: dict[str, Any], path: Path) -> dict[st
                         hit["member"] = "(outer_archive_scan)"
                         report["markers"][k] = hit
                 offset += len(chunk)
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         report["errors"].append(f"outer_scan: {exc}")
 
     mk = report["markers"]

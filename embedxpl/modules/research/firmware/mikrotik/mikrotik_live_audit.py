@@ -279,7 +279,7 @@ class MikroTikAuditor:
                     str(resp)[:500],
                 )
                 # Clean up
-                self._rest_post(f"/system/scheduler/remove", {".id": f"test_inject_{hash(payload) % 10000}"})
+                self._rest_post("/system/scheduler/remove", {".id": f"test_inject_{hash(payload) % 10000}"})
 
         # Test 2: Path traversal in REST API
         traversal_paths = [
@@ -533,7 +533,7 @@ class MikroTikAuditor:
 
     def run_full_audit(self) -> dict[str, Any]:
         print(f"\n{'='*70}")
-        print(f"  MIKROTIK LIVE SECURITY AUDIT")
+        print("  MIKROTIK LIVE SECURITY AUDIT")
         print(f"  Target: {self.host} | User: {self.user}")
         print(f"  Time: {datetime.now(timezone.utc).isoformat()}")
         print(f"{'='*70}")
@@ -560,11 +560,11 @@ class MikroTikAuditor:
         ts = results.get("timestamp", "")[:19].replace("T", " ") + " UTC"
 
         lines = [
-            f"# MikroTik RouterOS 7.22.1 — Live Security Audit Report",
+            "# MikroTik RouterOS 7.22.1 — Live Security Audit Report",
             f"> Generated: {ts}",
-            f"> Analyst: Andre Henrique (@mrhenrike) | Uniao Geek",
+            "> Analyst: Andre Henrique (@mrhenrike) | Uniao Geek",
             f"> Target: {self.host}",
-            f"> Method: REST API + Winbox + SNMP active probing",
+            "> Method: REST API + Winbox + SNMP active probing",
             "",
             "---",
             "",
@@ -576,8 +576,8 @@ class MikroTikAuditor:
             lines += [
                 "## 1. System Information",
                 "",
-                f"| Field | Value |",
-                f"|-------|-------|",
+                "| Field | Value |",
+                "|-------|-------|",
                 f"| Version | `{res.get('version', '?')}` |",
                 f"| Architecture | `{res.get('architecture-name', '?')}` |",
                 f"| Board | `{res.get('board-name', '?')}` |",
@@ -597,8 +597,8 @@ class MikroTikAuditor:
         lines += [
             "## 2. Findings Summary",
             "",
-            f"| Severity | Count |",
-            f"|----------|-------|",
+            "| Severity | Count |",
+            "|----------|-------|",
             f"| CRITICAL | {len(crit)} |",
             f"| HIGH | {len(high)} |",
             f"| MEDIUM | {len(med)} |",
@@ -623,9 +623,9 @@ class MikroTikAuditor:
                     "<details>",
                     "<summary>Evidence</summary>",
                     "",
-                    f"```",
+                    "```",
                     f"{f['evidence'][:1000]}",
-                    f"```",
+                    "```",
                     "",
                     "</details>",
                     "",

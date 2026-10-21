@@ -62,7 +62,7 @@ def analyze_psh_binary():
                for s in re.findall(rb"[\x20-\x7e]{4,}", data)]
 
     # 1. COMMAND WHITELIST ANALYSIS
-    print(f"\n  --- COMMAND WHITELIST ---")
+    print("\n  --- COMMAND WHITELIST ---")
     commands = []
     in_commands = False
     for s in strings:
@@ -103,7 +103,7 @@ def analyze_psh_binary():
         "miscCmd": "Generic command passthrough",
     }
 
-    print(f"\n  === SECURITY-SENSITIVE COMMANDS ===")
+    print("\n  === SECURITY-SENSITIVE COMMANDS ===")
     for cmd in sorted(unique_cmds):
         if cmd in dangerous:
             print(f"    !!! {cmd}: {dangerous[cmd]}")
@@ -118,7 +118,7 @@ def analyze_psh_binary():
     )
 
     # 2. AUTHENTICATION ANALYSIS
-    print(f"\n  --- AUTHENTICATION MECHANISM ---")
+    print("\n  --- AUTHENTICATION MECHANISM ---")
 
     # Extract RSA modulus
     mod_pattern = re.compile(r"[0-9A-F]{200,}", re.I)
@@ -170,7 +170,7 @@ def analyze_psh_binary():
     )
 
     # 3. COMMAND INJECTION ANALYSIS
-    print(f"\n  --- COMMAND INJECTION VECTORS ---")
+    print("\n  --- COMMAND INJECTION VECTORS ---")
 
     # Check for input validation
     blacklist = []
@@ -180,7 +180,7 @@ def analyze_psh_binary():
 
     filter_chars = "~`!$^&*()=|\\{}[];\"'<>?"
     print(f"  Blacklisted characters: {filter_chars}")
-    print(f"  Block messages:")
+    print("  Block messages:")
     for s in strings:
         if "Not Support" in s or "Redirect" in s or "Replace" in s:
             print(f"    {s}")
@@ -197,7 +197,7 @@ def analyze_psh_binary():
         missing.append("tab (IFS manipulation)")
 
     if missing:
-        print(f"\n  Potentially missing from blacklist:")
+        print("\n  Potentially missing from blacklist:")
         for m in missing:
             print(f"    - {m}")
         add_finding(
@@ -210,7 +210,7 @@ def analyze_psh_binary():
         )
 
     # 4. cmd_exec ANALYSIS
-    print(f"\n  --- cmd_exec FUNCTION ---")
+    print("\n  --- cmd_exec FUNCTION ---")
     print("  PSH uses execvp/vfork with /bin/sh for command execution")
     print("  vfork is unsafe: child shares parent address space")
     print("  If input validation can be bypassed, arbitrary code execution follows")
@@ -226,16 +226,16 @@ def analyze_psh_binary():
     )
 
     # 5. PASSWORD MANAGEMENT
-    print(f"\n  --- PASSWORD MANAGEMENT ---")
+    print("\n  --- PASSWORD MANAGEMENT ---")
     pwd_strings = [s for s in strings if "assword" in s or "asswd" in s]
     for s in pwd_strings:
         print(f"    {s}")
 
-    print(f"\n  Password-related commands:")
-    print(f"    resetPasswd — Reset device passwords")
-    print(f"    setCloudPassword — Set cloud account password")
-    print(f"    ttyAuth — TTY authentication")
-    print(f"    debug — Debug mode with password challenge")
+    print("\n  Password-related commands:")
+    print("    resetPasswd — Reset device passwords")
+    print("    setCloudPassword — Set cloud account password")
+    print("    ttyAuth — TTY authentication")
+    print("    debug — Debug mode with password challenge")
 
     add_finding(
         "F-HK4-PSH-RESET-PASSWD", "HIGH",
@@ -267,17 +267,17 @@ def analyze_ded_binary():
     strings = [s.decode("ascii", errors="replace")
                for s in re.findall(rb"[\x20-\x7e]{4,}", data)]
 
-    print(f"\n  Key strings:")
+    print("\n  Key strings:")
     for s in strings:
         if any(k in s.lower() for k in ["ded", "decrypt", "encrypt", "ioctl",
                                          "usage", "dev", "open", "fail"]):
             print(f"    {s}")
 
-    print(f"\n  Architecture:")
-    print(f"    1. bin/ded opens /dev/hikded (kernel device)")
-    print(f"    2. Passes input/output filenames via ioctl()")
-    print(f"    3. Kernel driver performs actual AES decryption")
-    print(f"    4. Key is stored in kernel driver, not in userspace")
+    print("\n  Architecture:")
+    print("    1. bin/ded opens /dev/hikded (kernel device)")
+    print("    2. Passes input/output filenames via ioctl()")
+    print("    3. Kernel driver performs actual AES decryption")
+    print("    4. Key is stored in kernel driver, not in userspace")
 
     add_finding(
         "F-HK4-DED-KERNEL-KEY", "HIGH",
@@ -361,8 +361,8 @@ def analyze_glibc():
          "Code execution via crafted character set"),
     ]
 
-    print(f"  glibc version: 2.16 (released June 2012)")
-    print(f"  Age: ~14 years")
+    print("  glibc version: 2.16 (released June 2012)")
+    print("  Age: ~14 years")
     print(f"  Known applicable CVEs: {len(known_cves)}")
     print()
 

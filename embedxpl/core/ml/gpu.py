@@ -21,6 +21,12 @@ def torch_cuda_available() -> bool:
         return False
 
 
+def detect_all_backends() -> List[str]:
+    """Return names of all available compute backends (CUDA, ROCm, MPS, CPU)."""
+    discovery = HardwareDiscovery()
+    return discovery.available_backends()
+
+
 def gpu_capability_summary() -> Tuple[bool, bool, List[str]]:
     """Summarize GPU-related capabilities for user messaging.
 

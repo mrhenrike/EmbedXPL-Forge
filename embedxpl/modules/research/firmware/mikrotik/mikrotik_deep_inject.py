@@ -114,7 +114,7 @@ def test_scheduler_injection():
                     stored = match[0].get("on-event", "")
                     print(f"    Stored: {stored[:80]!r}")
                     if stored != payload:
-                        print(f"    MODIFIED by server (sanitization?)")
+                        print("    MODIFIED by server (sanitization?)")
                         add_finding(
                             f"F-MT-SCHED-SANITIZE-{name.upper()}", "INFO",
                             f"Scheduler on-event modified by server for '{name}'",
@@ -315,7 +315,7 @@ def test_api_path_traversal():
                 add_finding(
                     "F-MT-TRAVERSAL-REST", "CRITICAL",
                     f"Path traversal via REST: {path[:50]}",
-                    f"Unexpected response content from traversal path.",
+                    "Unexpected response content from traversal path.",
                     r.text[:500],
                 )
         except Exception as e:
@@ -366,7 +366,7 @@ def generate_deep_report():
     print("  NEW / POTENTIALLY CVE-WORTHY:")
     for f in new_vulns:
         print(f"    [{f['severity']:8s}] {f['id']}: {f['title'][:60]}")
-    print(f"\n  KNOWN / BY-DESIGN:")
+    print("\n  KNOWN / BY-DESIGN:")
     for f in known:
         print(f"    [{f['severity']:8s}] {f['id']}: {f['title'][:60]}")
 
@@ -384,8 +384,8 @@ def generate_deep_report():
         "",
         "## Findings Summary",
         "",
-        f"| Category | Count |",
-        f"|----------|-------|",
+        "| Category | Count |",
+        "|----------|-------|",
         f"| New / CVE-worthy | {len(new_vulns)} |",
         f"| Known / By-design | {len(known)} |",
         f"| **Total** | **{len(findings)}** |",
@@ -422,7 +422,7 @@ def generate_deep_report():
 
 if __name__ == "__main__":
     print(f"\n{'='*70}")
-    print(f"  MIKROTIK DEEP INJECTION & SSRF ANALYSIS")
+    print("  MIKROTIK DEEP INJECTION & SSRF ANALYSIS")
     print(f"  Target: {HOST}")
     print(f"  Time: {datetime.now(timezone.utc).isoformat()}")
     print(f"{'='*70}")

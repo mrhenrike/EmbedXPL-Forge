@@ -1,10 +1,8 @@
 """Tests for embedxpl.core.banner."""
 from __future__ import annotations
 
-import pytest
-
-from embedxpl.core.banner import *
 import embedxpl.core.banner as banner_mod
+from embedxpl.core.banner import *
 
 
 class TestBannerModule:

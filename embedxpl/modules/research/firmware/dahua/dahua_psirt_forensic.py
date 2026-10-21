@@ -225,7 +225,7 @@ def download_one(meta: dict[str, str], dest: Path) -> dict[str, Any]:
                 total += len(block)
         tmp.replace(dest)
         return {"status": "downloaded", "url": url, "bytes": total}
-    except Exception as exc:  # noqa: BLE001 — surface CDN errors in report
+    except Exception as exc:
         if tmp.exists():
             tmp.unlink(missing_ok=True)
         return {"status": "error", "url": url, "error": str(exc)}
@@ -405,7 +405,7 @@ def analyze_firmware(path: Path, meta: dict[str, str]) -> dict[str, Any]:
                     continue
                 try:
                     data = zf.read(n)
-                except Exception as exc:  # noqa: BLE001
+                except Exception as exc:
                     result["errors"].append(f"read {n}: {exc}")
                     continue
 

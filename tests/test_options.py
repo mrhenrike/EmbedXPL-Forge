@@ -10,13 +10,13 @@ from embedxpl.core.exploit.exceptions import OptionValidationError
 from embedxpl.core.exploit.option import (
     OptBool,
     OptFloat,
-    OptIP,
     OptInteger,
+    Option,
+    OptIP,
     OptMAC,
     OptPort,
     OptString,
     OptWordlist,
-    Option,
 )
 
 

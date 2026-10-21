@@ -1,16 +1,14 @@
 """Tests for embedxpl.core.apt_catalog."""
 from __future__ import annotations
 
-import pytest
-
 from embedxpl.core.apt_catalog import (
     APTAttack,
     APTGroup,
+    find_groups_by_cve,
+    find_groups_by_device,
     get_catalog,
     get_group,
     list_groups,
-    find_groups_by_device,
-    find_groups_by_cve,
 )
 
 

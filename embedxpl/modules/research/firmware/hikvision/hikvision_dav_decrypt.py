@@ -97,7 +97,7 @@ def analyze_header_structure(data: bytes):
             p = f / total
             entropy -= p * (p and __import__("math").log2(p))
     print(f"  Header entropy (first 64KB): {entropy:.4f} bits/byte")
-    print(f"    (7.0+ = encrypted/compressed, 4-6 = code/data, <4 = text)")
+    print("    (7.0+ = encrypted/compressed, 4-6 = code/data, <4 = text)")
 
     # Most common bytes
     top = sorted(range(256), key=lambda x: freq[x], reverse=True)[:10]
@@ -615,7 +615,7 @@ def try_jffs2_analysis(data: bytes):
             break
 
     if positions_le:
-        print(f"\n  === JFFS2 ANALYSIS ===")
+        print("\n  === JFFS2 ANALYSIS ===")
         print(f"  Valid JFFS2 nodes found: {len(positions_le)}")
         first = positions_le[0]
         print(f"  First JFFS2 node @ 0x{first:08X}")

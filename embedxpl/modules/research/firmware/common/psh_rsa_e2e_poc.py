@@ -134,7 +134,7 @@ def extract_rsa_keys():
                 "bits": bits,
             })
         else:
-            print(f"    [!] Could not parse modulus")
+            print("    [!] Could not parse modulus")
 
     return keys_analyzed
 
@@ -177,7 +177,7 @@ def analyze_key_strength(keys):
             print(f"    [OK] RSA-{bits} — adequate strength")
 
         # Check 2: Small factors (trial division)
-        print(f"\n    Trial division (up to 2^24 = 16M)...")
+        print("\n    Trial division (up to 2^24 = 16M)...")
         small_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
         for p in small_primes:
             if n % p == 0:
@@ -210,7 +210,7 @@ def analyze_key_strength(keys):
                 break
         if not found:
             print(f"    No small factors found (< {limit:,})")
-            print(f"    Full factoring requires CADO-NFS or GNFS (~days on GPU cluster)")
+            print("    Full factoring requires CADO-NFS or GNFS (~days on GPU cluster)")
 
         # Check 3: GCD with other keys
         for other in keys:
@@ -231,9 +231,9 @@ def analyze_key_strength(keys):
         # Check 4: Known weak key databases
         print(f"    Exponent: {key_info['exponent']}")
         if key_info['exponent'] == 1:
-            print(f"    [!!!] Exponent is 1 — no encryption!")
+            print("    [!!!] Exponent is 1 — no encryption!")
         elif key_info['exponent'] < 5:
-            print(f"    [WARN] Very small exponent — Coppersmith attack possible")
+            print("    [WARN] Very small exponent — Coppersmith attack possible")
 
     return False
 
@@ -255,13 +255,13 @@ def analyze_challenge_format():
         raw = base64.b64decode(example)
         print(f"\n  Example challenge: {example}")
         print(f"  Decoded ({len(raw)} bytes): {raw.hex()}")
-        print(f"  Breakdown:")
+        print("  Breakdown:")
         print(f"    Byte 0: 0x{raw[0]:02X} (type/version = {raw[0]})")
         for i in range(1, len(raw)):
             print(f"    Byte {i}: 0x{raw[i]:02X} ({raw[i]})")
 
         if raw[0] == 0x06:
-            print(f"\n  Type 0x06 = debug mode challenge")
+            print("\n  Type 0x06 = debug mode challenge")
 
         # MAC is embedded bytes 4-9 (6 bytes)
         if len(raw) >= 10:
@@ -284,8 +284,8 @@ def analyze_challenge_format():
         print(f"  Challenge decode error: {e}")
 
     # Check retry policy
-    print(f"\n  Retry policy: 5 attempts, NO lockout, NO delay")
-    print(f"  After 5 failures: unknown (may reset or require reboot)")
+    print("\n  Retry policy: 5 attempts, NO lockout, NO delay")
+    print("  After 5 failures: unknown (may reset or require reboot)")
     add_finding(
         "F-PSH-NO-RATELIMIT", "MEDIUM",
         "No rate limiting on debug authentication (5 attempts, no lockout)",
@@ -347,10 +347,10 @@ def check_existing_cves():
         print(f"    Overlaps our finding: {covered}")
         print(f"    Reason: {cve['reason']}")
 
-    print(f"\n  CONCLUSION: Our RSA-1024 finding in V4.62+/V4.84+ firmware")
-    print(f"  is NOT covered by any existing CVE.")
-    print(f"  CVE-2025-66173/66174 are closest but affect OLDER firmware only.")
-    print(f"  This is a NEW vulnerability in CURRENT firmware.")
+    print("\n  CONCLUSION: Our RSA-1024 finding in V4.62+/V4.84+ firmware")
+    print("  is NOT covered by any existing CVE.")
+    print("  CVE-2025-66173/66174 are closest but affect OLDER firmware only.")
+    print("  This is a NEW vulnerability in CURRENT firmware.")
 
     add_finding(
         "F-PSH-NOVEL-CVE", "CRITICAL",
@@ -456,11 +456,11 @@ def main():
     print(f"    MEDIUM: {medium}")
     print(f"  Report: {report}")
     if factored:
-        print(f"\n  *** RSA KEY FACTORED — FULL COMPROMISE POSSIBLE ***")
+        print("\n  *** RSA KEY FACTORED — FULL COMPROMISE POSSIBLE ***")
     else:
-        print(f"\n  RSA key not trivially factorable (needs CADO-NFS)")
-        print(f"  Estimated factoring cost: $50K-100K cloud compute, days-weeks")
-        print(f"  Key weakness: 1024-bit, NIST-deprecated since 2013")
+        print("\n  RSA key not trivially factorable (needs CADO-NFS)")
+        print("  Estimated factoring cost: $50K-100K cloud compute, days-weeks")
+        print("  Key weakness: 1024-bit, NIST-deprecated since 2013")
 
 
 if __name__ == "__main__":

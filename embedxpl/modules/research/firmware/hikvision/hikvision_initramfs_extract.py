@@ -174,7 +174,7 @@ def analyze_extracted(entries):
                     if len(parts) >= 2 and parts[1] and parts[1] != "*" and parts[1] != "!":
                         add_finding(f"F-HK4-SHADOW-{parts[0]}", "CRITICAL",
                                     f"Password hash for {parts[0]}: {parts[1][:30]}...",
-                                    f"Default password hash in firmware.",
+                                    "Default password hash in firmware.",
                                     line[:200])
 
             if "passwd" in name:
@@ -185,7 +185,7 @@ def analyze_extracted(entries):
                         if uid_s == "0":
                             add_finding(f"F-HK4-ROOT-{user}", "HIGH",
                                         f"Root-level user: {user} (uid=0)",
-                                        f"User with UID 0 in /etc/passwd.",
+                                        "User with UID 0 in /etc/passwd.",
                                         line[:200])
         else:
             # Check with offset-suffixed names
@@ -195,7 +195,7 @@ def analyze_extracted(entries):
                 print(f"  {content.strip()[:500]}")
 
     # 2. ELF binary analysis
-    print(f"\n  --- ELF BINARY ANALYSIS ---")
+    print("\n  --- ELF BINARY ANALYSIS ---")
     elf_entries = [e for e in entries if e.get("type") == "elf"]
     print(f"  ELF binaries found: {len(elf_entries)}")
 
@@ -254,7 +254,7 @@ def analyze_extracted(entries):
                             f"F-HK4-ELF-{os.path.basename(name)[:12].upper()}",
                             "MEDIUM",
                             f"Dangerous imports in {name}: {dlist}",
-                            f"Binary imports exploitable functions.", dlist)
+                            "Binary imports exploitable functions.", dlist)
                     if not nx:
                         add_finding(
                             f"F-HK4-NO-NX-{os.path.basename(name)[:12].upper()}",
@@ -278,7 +278,7 @@ def analyze_extracted(entries):
                     break
 
     # 3. Shell scripts
-    print(f"\n  --- SHELL SCRIPTS ---")
+    print("\n  --- SHELL SCRIPTS ---")
     script_entries = [e for e in entries if e.get("type") == "script"]
     print(f"  Scripts found: {len(script_entries)}")
 
@@ -305,10 +305,10 @@ def analyze_extracted(entries):
                 add_finding(
                     f"F-HK4-SCRIPT-{os.path.basename(name)[:10].upper()}",
                     "MEDIUM", f"Script {name}: {issue}",
-                    f"Security issue in init script.", issue)
+                    "Security issue in init script.", issue)
 
     # 4. Config files
-    print(f"\n  --- CONFIG FILES ---")
+    print("\n  --- CONFIG FILES ---")
     for e in entries:
         name = e.get("name", "")
         if name.endswith((".conf", ".cfg", ".ini", ".json")):
@@ -318,7 +318,7 @@ def analyze_extracted(entries):
                 print(f"    {name}: {len(content)} bytes")
                 if any(k in content.lower() for k in ["password", "secret",
                                                         "key", "token"]):
-                    print(f"      !!! Contains sensitive data")
+                    print("      !!! Contains sensitive data")
                     add_finding(f"F-HK4-CONF-{os.path.basename(name)[:12]}",
                                 "HIGH", f"Sensitive config: {name}",
                                 "Configuration file with credentials.", "")

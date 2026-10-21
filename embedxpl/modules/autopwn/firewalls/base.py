@@ -2,7 +2,9 @@
 # authorized use only
 """
 from __future__ import annotations
-import importlib, inspect, time
+import importlib
+import inspect
+import time
 from dataclasses import dataclass, field
 
 @dataclass
