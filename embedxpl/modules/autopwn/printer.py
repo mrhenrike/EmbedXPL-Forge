@@ -1,4 +1,4 @@
-"""EmbedXPL AutoPwn — Printer segment."""
+"""EmbedXPL AutoPwn  -  Printer segment."""
 from .segment import SegmentAutoPwn
 
 class PrinterAutoPwn(SegmentAutoPwn):

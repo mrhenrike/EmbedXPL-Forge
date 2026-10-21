@@ -1,4 +1,4 @@
-# HANDOFF — EmbedXPL v5.0.0 Ubuntu Continuation
+# HANDOFF  -  EmbedXPL v5.0.0 Ubuntu Continuation
 ## Session: Sep 26, 2026 | Source: Windows 11 → Target: Ubuntu Linux
 
 ---
@@ -44,7 +44,7 @@ All repos are on GitHub under `UniaoGeek` org. Clone them fresh on Ubuntu.
 
 ---
 
-## Step 1 — Ubuntu Prerequisites
+## Step 1  -  Ubuntu Prerequisites
 
 Run as the Ubuntu user (assumes `sudo` access):
 
@@ -120,7 +120,7 @@ echo "=== ALL PREREQS INSTALLED ==="
 
 ---
 
-## Step 2 — Clone All Repos
+## Step 2  -  Clone All Repos
 
 ```bash
 #!/bin/bash
@@ -231,13 +231,13 @@ echo "Run verify_repos.sh to check counts"
 
 ---
 
-## Step 3 — Phase Execution Script
+## Step 3  -  Phase Execution Script
 
 Save this as `run_phase.sh` and use it to execute each phase:
 
 ```bash
 #!/bin/bash
-# run_phase.sh — execute one phase of EmbedXPL v5.0.0 plan
+# run_phase.sh  -  execute one phase of EmbedXPL v5.0.0 plan
 # Usage: ./run_phase.sh <phase_number>
 # Example: ./run_phase.sh 0
 
@@ -284,7 +284,7 @@ echo ">>> REVIEW LOG AND REPORT TO USER BEFORE PROCEEDING TO NEXT PHASE <<<"
 
 ## Phase Details for Linux Execution
 
-### PHASE 0 — Multi-Language Runtime
+### PHASE 0  -  Multi-Language Runtime
 **What it does:** Creates `embedxpl/runtime/` with all language executors.
 **Key files to create:**
 ```
@@ -309,22 +309,22 @@ mips-linux-gnu-gcc --version
 aarch64-linux-gnu-gcc --version
 ```
 
-### PHASE 1 — Deep Research Audit
+### PHASE 1  -  Deep Research Audit
 **What it does:** Reads and catalogs all unanalyzed repos, generates mapping report.
 
 **Key repos to audit:**
-- `~/projects/Submodulos/OT/` — 62K files (BusPwn, ics-tools, modbus-tcp-auditor, s7comm-auditor)
-- `~/projects/Submodulos/IoT/` — 56K files (third-party-router-poc, aic8800-src, _loose-root)
-- `~/projects/Submodulos/Hacking/` — 23K files (26 security tools)
-- `~/projects/Labs/malware-samples/TRISIS-TRITON-HATMAN/` — 228 files (ICS attack malware)
-- `~/projects/Labs/malware-samples/IoT_ARM/` — 6K files (Mirai source C+Go)
-- `~/projects/Labs/malware-samples/cube-maliot-2021/` — 48K files (IoT malware dataset)
-- `~/projects/Labs/malware-samples/thezoo/` — 1.5K files (malware zoo)
-- `~/projects/Labs/rapid7/metasploit-framework/` — post-clone
+- `~/projects/Submodulos/OT/`  -  62K files (BusPwn, ics-tools, modbus-tcp-auditor, s7comm-auditor)
+- `~/projects/Submodulos/IoT/`  -  56K files (third-party-router-poc, aic8800-src, _loose-root)
+- `~/projects/Submodulos/Hacking/`  -  23K files (26 security tools)
+- `~/projects/Labs/malware-samples/TRISIS-TRITON-HATMAN/`  -  228 files (ICS attack malware)
+- `~/projects/Labs/malware-samples/IoT_ARM/`  -  6K files (Mirai source C+Go)
+- `~/projects/Labs/malware-samples/cube-maliot-2021/`  -  48K files (IoT malware dataset)
+- `~/projects/Labs/malware-samples/thezoo/`  -  1.5K files (malware zoo)
+- `~/projects/Labs/rapid7/metasploit-framework/`  -  post-clone
 
 **Output:** `docs/PHASE1-AUDIT-REPORT-$(date).md`
 
-### PHASE 2 — Sync Model
+### PHASE 2  -  Sync Model
 **Creates:** `EmbedXPL-Forge/tools/sync_from_suite.py`
 ```python
 SYNC_MAP = {
@@ -336,7 +336,7 @@ SYNC_MAP = {
 }
 ```
 
-### PHASES 3–7 — Specialized Tool Copy
+### PHASES 3-7  -  Specialized Tool Copy
 Each phase syncs one specialized tool into EmbedXPL:
 ```bash
 # Example for Phase 3 (WirelessXPL):
@@ -345,7 +345,7 @@ rsync -av \
   ~/projects/XPL-Suite/EmbedXPL-Forge/embedxpl/modules/exploits/wireless/
 ```
 
-### PHASE 8 — MikrotikAPI-BF Absorção
+### PHASE 8  -  MikrotikAPI-BF Absorção
 ```bash
 # Copy all Python modules
 rsync -av \
@@ -361,7 +361,7 @@ rsync -av \
 gh repo archive UniaoGeek/MikrotikAPI-BF --yes
 ```
 
-### PHASE 9 — Cameras + Cameradar Go
+### PHASE 9  -  Cameras + Cameradar Go
 ```bash
 # Build Cameradar (Go required)
 mkdir -p ~/projects/XPL-Suite/EmbedXPL-Forge/embedxpl/native_src/go/cameradar
@@ -373,7 +373,7 @@ cd ~/projects/XPL-Suite/EmbedXPL-Forge/embedxpl/native_src/go/cameradar
 go build ./cmd/cameradar/  # verify it compiles on Linux
 ```
 
-### PHASE 10 — Malware Research
+### PHASE 10  -  Malware Research
 ```bash
 # Copy IoT_ARM source
 mkdir -p ~/projects/XPL-Suite/EmbedXPL-Forge/embedxpl/native_src/c/mirai_iot
@@ -397,7 +397,7 @@ cp -r ~/projects/Labs/malware-samples/TRISIS-TRITON-HATMAN \
   ~/projects/XPL-Suite/EmbedXPL-Forge/embedxpl/malware_research/ics_apt/trisis/
 ```
 
-### PHASE 11 — Rapid7 + Tenable
+### PHASE 11  -  Rapid7 + Tenable
 ```bash
 # MSF modules selection (linux/ + hardware/ + multi/ + auxiliary/scanner/)
 mkdir -p ~/projects/XPL-Suite/EmbedXPL-Forge/embedxpl/native_src/ruby/msf
@@ -419,7 +419,7 @@ cp -r ~/projects/Labs/rapid7/recog/xml/ \
   ~/projects/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/fingerprint/recog/
 ```
 
-### PHASE 12 — Native Source Trees
+### PHASE 12  -  Native Source Trees
 ```bash
 # meltdown (C)
 mkdir -p ~/projects/XPL-Suite/EmbedXPL-Forge/embedxpl/native_src/c/meltdown
@@ -440,20 +440,20 @@ arm-linux-gnueabi-gcc meltdown.c -o /tmp/meltdown_arm -lm && echo "ARM compile O
 mips-linux-gnu-gcc meltdown.c -o /tmp/meltdown_mips -lm && echo "MIPS compile OK" && rm /tmp/meltdown_mips
 ```
 
-### PHASE 13 — Arsenal CVEs Pending
+### PHASE 13  -  Arsenal CVEs Pending
 ```bash
-# murrez CVE batch — implement Python exploits
+# murrez CVE batch  -  implement Python exploits
 # CVE-2026-13355, 19658, 12227, 92229, 6433, 8181, 14281, 89055, 41940
 # Each is a separate exploit module in routers/ or misc/
 
 # CheckPoint CVE-2026-50751
 # Add to both EmbedXPL firewalls/checkpoint/ AND FirewallXPL
 
-# Pruva.dev REPROs — run and verify
+# Pruva.dev REPROs  -  run and verify
 ls ~/projects/Labs/pruva-repros/
 ```
 
-### PHASE 14 — Intel/OSINT
+### PHASE 14  -  Intel/OSINT
 ```bash
 # nuclei-templates
 mkdir -p ~/projects/XPL-Suite/EmbedXPL-Forge/embedxpl/engines/nuclei
@@ -471,7 +471,7 @@ for tool in maigret theHarvester spiderfoot; do
 done
 ```
 
-### PHASE 15 — Releases
+### PHASE 15  -  Releases
 ```bash
 # Authenticate GitHub CLI first
 gh auth login
@@ -490,7 +490,7 @@ sed -i 's/__version__ = ".*"/__version__ = "5.0.0"/' embedxpl/version.py 2>/dev/
 
 # Commit and push
 git add -A
-git commit -m "feat: EmbedXPL v5.0.0 — Unified XPL Suite Framework
+git commit -m "feat: EmbedXPL v5.0.0  -  Unified XPL Suite Framework
 
 Absorbed tools: MikrotikAPI-BF (fully), WirelessXPL (copy), PrinterXPL (copy),
 FirewallXPL (copy), IndustrialXPL (copy), WordlistXPL (copy).
@@ -506,7 +506,7 @@ git push origin main
 
 # Create release
 gh release create v5.0.0 \
-  --title "EmbedXPL v5.0.0 — Unified XPL Suite Framework" \
+  --title "EmbedXPL v5.0.0  -  Unified XPL Suite Framework" \
   --notes-file docs/RELEASE-V5.0.0-NOTES.md
 ```
 
@@ -546,7 +546,7 @@ gh auth status
 ## Phase Gate Protocol (copy this to AI assistant)
 
 ```
-IMPORTANT — PHASE GATES:
+IMPORTANT  -  PHASE GATES:
 Each phase must end with a COMPLETION REPORT showing:
 - Files created/modified (full list)
 - Modules integrated (count + names)
@@ -570,7 +570,7 @@ Phase sequence: P0 → P1 → P2 → P3 → P4 → P5 → P6 → P7 → P8 →
 | Architecture designed | ✅ Multi-language runtime, sync model, domain mapping |
 | Phase 0 runtime | ❌ Not yet implemented (blocked by Windows toolchain) |
 | All other phases | ❌ Not yet started |
-| Existing `multi_lang_module.py` | ✅ Basic C/Ruby/Bash runner (161 lines) — Phase 0 extends this |
+| Existing `multi_lang_module.py` | ✅ Basic C/Ruby/Bash runner (161 lines)  -  Phase 0 extends this |
 | EmbedXPL current version | v3.9.0 (latest) |
 | EmbedXPL current modules | ~4,959 Python files |
 
@@ -586,10 +586,10 @@ Phase 0 extends this into the full `runtime/` package.
 
 ## Priority Order on Ubuntu
 
-1. **Install prereqs** (setup_ubuntu_prereqs.sh) — 10 min
-2. **Clone repos** (clone_repos.sh) — 20-60 min (MSF is 4GB)
-3. **Phase 0** — build `runtime/` package — 45 min
-4. **Verify** all cross-compilers, Go, Ruby work — 15 min
+1. **Install prereqs** (setup_ubuntu_prereqs.sh)  -  10 min
+2. **Clone repos** (clone_repos.sh)  -  20-60 min (MSF is 4GB)
+3. **Phase 0**  -  build `runtime/` package  -  45 min
+4. **Verify** all cross-compilers, Go, Ruby work  -  15 min
 5. **Present report** → wait for `APROVADO: P1`
 6. Continue sequentially through phases with gates
 

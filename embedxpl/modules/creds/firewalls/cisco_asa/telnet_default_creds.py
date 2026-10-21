@@ -4,7 +4,7 @@ from embedxpl.modules.creds.generic.telnet_default import Exploit as TelnetDefau
 
 
 class Exploit(TelnetDefault):
-    """Cisco ASA Firewall — Default Telnet Credentials.
+    """Cisco ASA Firewall  -  Default Telnet Credentials.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -18,7 +18,7 @@ class Exploit(TelnetDefault):
             "If valid credentials are found, they are displayed to the user."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "devices": (
             "Cisco ASA Firewall",

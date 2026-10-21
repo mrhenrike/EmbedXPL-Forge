@@ -62,10 +62,10 @@ Taxonomia de contexto de infraestrutura para o modo orquestrador `--infra` / `--
 
 | Arquivo | Finalidade |
 |---------|-----------|
-| `market_priority_devices_2010_2026.json` | Matriz de cobertura de dispositivos prioritários no mercado — modelos classificados por volume de implantação e densidade de CVE |
-| `module_target_scope.json` | Mapeamento de módulo para escopo de alvo — especifica quais classes de dispositivos alvo cada módulo endereça |
-| `cve_extended_catalog.json` | Dados de referência CVE estendidos — pontuações CVSS, CWE, versões de firmware afetadas, técnicas MITRE ATT&CK e caminhos de módulo EmbedXPL associados |
-| `arsenal_layout.json` | Descritor de layout do arsenal — descreve o agrupamento visual de módulos por fase de ataque para a ferramenta de índice do arsenal |
+| `market_priority_devices_2010_2026.json` | Matriz de cobertura de dispositivos prioritários no mercado  -  modelos classificados por volume de implantação e densidade de CVE |
+| `module_target_scope.json` | Mapeamento de módulo para escopo de alvo  -  especifica quais classes de dispositivos alvo cada módulo endereça |
+| `cve_extended_catalog.json` | Dados de referência CVE estendidos  -  pontuações CVSS, CWE, versões de firmware afetadas, técnicas MITRE ATT&CK e caminhos de módulo EmbedXPL associados |
+| `arsenal_layout.json` | Descritor de layout do arsenal  -  descreve o agrupamento visual de módulos por fase de ataque para a ferramenta de índice do arsenal |
 
 ---
 
@@ -73,9 +73,9 @@ Taxonomia de contexto de infraestrutura para o modo orquestrador `--infra` / `--
 
 | Script | Função |
 |--------|--------|
-| `phase_gate.py` | Gate de qualidade automatizado — valida módulos antes do release em 7 fases sequenciais de gate |
-| `env_doctor.py` | Diagnóstico de ambiente — reporta versão Python, status de dependências, opcionais ausentes |
-| `compat_smoke.py` | Verificações de compatibilidade — importação rápida e teste de interface para todos os módulos |
+| `phase_gate.py` | Gate de qualidade automatizado  -  valida módulos antes do release em 7 fases sequenciais de gate |
+| `env_doctor.py` | Diagnóstico de ambiente  -  reporta versão Python, status de dependências, opcionais ausentes |
+| `compat_smoke.py` | Verificações de compatibilidade  -  importação rápida e teste de interface para todos os módulos |
 | `gen_wiki_module_index.py` | Regenerar índice de módulos da wiki a partir de metadados ao vivo do módulo |
 | `generate_coverage_matrix.py` | Construir artefatos de matriz de cobertura HTML/JSON a partir do catálogo de dispositivos |
 | `generate_full_catalog.py` | Gerar saídas completas de catálogo (JSON + Markdown) para todos os módulos |
@@ -83,9 +83,9 @@ Taxonomia de contexto de infraestrutura para o modo orquestrador `--infra` / `--
 | `validate_market_priority_minimums.py` | Assegurar que modelos de dispositivos de alta prioridade tenham pelo menos um módulo |
 | `build_arsenal_index.py` | Construir JSON de índice do arsenal a partir de metadados de módulo |
 | `sync_scope_wordlists.py` | Sincronizar wordlists relacionadas ao escopo com o catálogo de dispositivos |
-| `audit_modules.py` | Auditar completude de metadados dos módulos — reporta campos `__info__` ausentes |
+| `audit_modules.py` | Auditar completude de metadados dos módulos  -  reporta campos `__info__` ausentes |
 | `run_scoped_tests.py` | Executar suite de testes com escopo para categorias específicas de módulos |
-| `validate_governance.py` | Validador de governança — verifica cabeçalhos de licença, campos de autor, docstrings |
+| `validate_governance.py` | Validador de governança  -  verifica cabeçalhos de licença, campos de autor, docstrings |
 | `validate_arsenal_architecture.py` | Assegurar que o layout do arsenal corresponda à árvore de arquivos real dos módulos |
 | `build_osi_tcpip_attack_matrix.py` | Gerar matriz de superfície de ataque OSI/TCP-IP |
 | `deep_intel_backlog.py` | Reportar módulos no backlog de pesquisa de inteligência aprofundada |
@@ -150,12 +150,12 @@ EmbedXPL-Forge Phase Gate v3.1.0
 
 [D]    flake8 Linting Gate
 ----------------------------
-  [OK]  flake8 passed — 0 violations
+  [OK]  flake8 passed  -  0 violations
 
 [E]    bandit Security Gate
 -----------------------------
-  [OK]  bandit passed — 0 high-severity findings
-  [INFO] 3 low-severity findings (eval, subprocess) — permitted by policy
+  [OK]  bandit passed  -  0 high-severity findings
+  [INFO] 3 low-severity findings (eval, subprocess)  -  permitted by policy
 
 [FINAL] index_modules() Full Indexing
 ---------------------------------------
@@ -172,10 +172,10 @@ Time: 12.4 s
 
 ```
 [A1/A2] Import and __info__ Validation
-  [FAIL] exploits/routers/acme/new_module — ImportError: cannot import name 'OptString'
-  [FAIL] exploits/cameras/brand/cve_test — __info__ missing required fields: ['cvss', 'references']
+  [FAIL] exploits/routers/acme/new_module  -  ImportError: cannot import name 'OptString'
+  [FAIL] exploits/cameras/brand/cve_test  -  __info__ missing required fields: ['cvss', 'references']
 
-GATE RESULT: FAIL (0/7 gates — stopped at A1/A2)
+GATE RESULT: FAIL (0/7 gates  -  stopped at A1/A2)
 Fix the 2 error(s) above and re-run.
 ```
 
@@ -190,7 +190,7 @@ python tools/env_doctor.py
 **Saída de exemplo:**
 
 ```
-EmbedXPL-Forge — Environment Doctor
+EmbedXPL-Forge  -  Environment Doctor
 =====================================
 Python          3.12.3          [OK]
 pip             24.0            [OK]
@@ -202,9 +202,9 @@ pysnmp          6.1.1           [OK]
 telnetlib3      2.0.1           [OK]   (required for Python 3.13+)
 impacket        0.11.0          [OK]
 pymodbus        3.7.0           [OK]
-torch           2.2.1+cu121     [OK]   (optional — GPU compute)
-tensorflow      MISSING         [WARN] (optional — install with pip install tensorflow)
-binwalk         MISSING         [WARN] (optional — firmware analysis; install with apt-get install binwalk)
+torch           2.2.1+cu121     [OK]   (optional  -  GPU compute)
+tensorflow      MISSING         [WARN] (optional  -  install with pip install tensorflow)
+binwalk         MISSING         [WARN] (optional  -  firmware analysis; install with apt-get install binwalk)
 nmap            7.95            [OK]   (required for NSE scripts)
 
 GPU / Compute
@@ -226,7 +226,7 @@ python tools/compat_smoke.py
 **Saída de exemplo:**
 
 ```
-EmbedXPL-Forge — Compatibility Smoke
+EmbedXPL-Forge  -  Compatibility Smoke
 =======================================
 [OK] embedxpl.interpreter imports cleanly
 [OK] embedxpl.core.exploit.exploit imports cleanly

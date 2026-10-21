@@ -80,7 +80,7 @@ class Exploit(BaseExploit):
         for username, password in _DEFAULT_CREDENTIALS:
             if self._try_credentials(username, password):
                 print_success(
-                    "Valid credentials — {}:{} @ rtsp://{}:{}/{}".format(
+                    "Valid credentials  -  {}:{} @ rtsp://{}:{}/{}".format(
                         username, password, self.target, self.port, self.stream
                     )
                 )

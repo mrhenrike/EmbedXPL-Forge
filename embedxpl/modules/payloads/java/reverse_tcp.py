@@ -1,6 +1,6 @@
 """Java Reverse TCP Shell.
 
-Gera source Java compilável — target: Android (via d8/dex), servidores Java,
+Gera source Java compilável  -  target: Android (via d8/dex), servidores Java,
 dispositivos embarcados com JVM (routers enterprise).
 """
 
@@ -10,7 +10,7 @@ from embedxpl.core.exploit.payloads import BasePayload
 class Payload(BasePayload):
     __info__ = {
         "name": "Java Reverse TCP",
-        "description": "Java reverse TCP shell — compilable to JAR or Android DEX.",
+        "description": "Java reverse TCP shell  -  compilable to JAR or Android DEX.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
     }
 

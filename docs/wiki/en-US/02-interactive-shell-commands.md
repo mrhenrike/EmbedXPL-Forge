@@ -8,8 +8,8 @@
 
 ```bash
 embedxpl           # recommended (after pip install embedxpl)
-exf                # alias — identical behavior
-fxf                # alias — identical behavior
+exf                # alias  -  identical behavior
+fxf                # alias  -  identical behavior
 python -m embedxpl # module invocation
 python exf.py      # legacy bootstrap (from git clone root)
 ```
@@ -49,8 +49,8 @@ exf (AutoPwn) >                    # scanner module loaded
 ```
 
 The prompt templates can be customized via environment variables:
-- `EXF_RAW_PROMPT` — prompt when no module is active (must contain `{host}`)
-- `EXF_MODULE_PROMPT` — prompt when a module is active (must contain `{host}` and `{module}`)
+- `EXF_RAW_PROMPT`  -  prompt when no module is active (must contain `{host}`)
+- `EXF_MODULE_PROMPT`  -  prompt when a module is active (must contain `{host}` and `{module}`)
 
 ---
 
@@ -80,7 +80,7 @@ firmware_crypto_key_extract
 | `help` | `help` | Print the global and module help menus |
 | `use` | `use <module_path>` | Load a module from the module arsenal |
 | `search` | `search [term] [filters]` | Search for modules by keyword, CVE, or filter |
-| `show` | `show <subcommand>` | Display listings — see subcommands below |
+| `show` | `show <subcommand>` | Display listings  -  see subcommands below |
 | `exec` | `exec <shell_command>` | Execute an OS shell command via `os.system()` |
 | `sysinfo` | `sysinfo` | Display detailed CPU, RAM, GPU, compute mode |
 | `compute` | `compute <mode>` | Set compute backend (`cpu`, `gpu`, `hybrid`, `auto`) |
@@ -109,7 +109,7 @@ firmware_crypto_key_extract
 
 ---
 
-## `help` — print help
+## `help`  -  print help
 
 ```
 help
@@ -158,7 +158,7 @@ exf >
 
 ---
 
-## `use` — load a module
+## `use`  -  load a module
 
 ```
 use <module_path>
@@ -168,37 +168,37 @@ use <module_path>
 
 | Parameter | Type | Required | Default | Accepted values | Description |
 |-----------|------|----------|---------|-----------------|-------------|
-| `module_path` | string | Yes | — | Any valid module path | Slash-separated path relative to `embedxpl/modules/`. Dots or slashes both work. |
+| `module_path` | string | Yes |  -  | Any valid module path | Slash-separated path relative to `embedxpl/modules/`. Dots or slashes both work. |
 
-**Terminal session — loading an exploit:**
+**Terminal session  -  loading an exploit:**
 
 ```text
 exf > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
 exf (Hikvision Unauthenticated RCE) >
 ```
 
-**Terminal session — loading a credential module:**
+**Terminal session  -  loading a credential module:**
 
 ```text
 exf > use creds/routers/dlink/telnet_default_creds
 exf (telnet_default_creds) >
 ```
 
-**Terminal session — loading a scanner:**
+**Terminal session  -  loading a scanner:**
 
 ```text
 exf > use scanners/autopwn
 exf (AutoPwn) >
 ```
 
-**Terminal session — loading a payload:**
+**Terminal session  -  loading a payload:**
 
 ```text
 exf > use payloads/python/reverse_tcp
 exf (python/reverse_tcp) >
 ```
 
-**Terminal session — module not found:**
+**Terminal session  -  module not found:**
 
 ```text
 exf > use exploits/cameras/hikvision/does_not_exist
@@ -213,7 +213,7 @@ exf >
 
 ---
 
-## `set` — set a module option
+## `set`  -  set a module option
 
 ```
 set <option_name> <value>
@@ -223,15 +223,15 @@ set <option_name> <value>
 
 | Parameter | Type | Required | Default | Accepted values | Description |
 |-----------|------|----------|---------|-----------------|-------------|
-| `option_name` | string | Yes | — | Any option defined by the module | Option to configure |
-| `value` | string | Yes | — | Depends on option type | New value for the option |
+| `option_name` | string | Yes |  -  | Any option defined by the module | Option to configure |
+| `value` | string | Yes |  -  | Depends on option type | New value for the option |
 
 **Option data types:**
 
 | Type | Shell input format | Example |
 |------|--------------------|---------|
 | `OptIP` | IPv4, IPv6, hostname, or `file://path` | `192.168.1.1`, `file:///tmp/hosts.txt` |
-| `OptPort` | Integer 1–65535 | `443`, `9100` |
+| `OptPort` | Integer 1-65535 | `443`, `9100` |
 | `OptBool` | `true` or `false` (case-insensitive) | `true`, `false` |
 | `OptString` | Any string value | `admin`, `id`, `whoami` |
 | `OptInteger` | Decimal or hex integer | `10`, `0x1F` |
@@ -253,7 +253,7 @@ exf (Hikvision Unauthenticated RCE) > set command "id; uname -a"
 [+] command => id; uname -a
 ```
 
-**Error case — invalid option name:**
+**Error case  -  invalid option name:**
 
 ```text
 exf (Hikvision Unauthenticated RCE) > set nonexistent_option foo
@@ -263,7 +263,7 @@ exf (Hikvision Unauthenticated RCE) > set nonexistent_option foo
 
 ---
 
-## `setg` — set a global option
+## `setg`  -  set a global option
 
 ```
 setg <option_name> <value>
@@ -292,7 +292,7 @@ exf (Dahua RCE CVE-2021-36260 (DAHUA-2026-006)) >
 
 ---
 
-## `unsetg` — clear a global option
+## `unsetg`  -  clear a global option
 
 ```
 unsetg <option_name>
@@ -302,7 +302,7 @@ unsetg <option_name>
 
 | Parameter | Type | Required | Default | Accepted values | Description |
 |-----------|------|----------|---------|-----------------|-------------|
-| `option_name` | string | Yes | — | Any key in `GLOBAL_OPTS` | Name of the global option to remove |
+| `option_name` | string | Yes |  -  | Any key in `GLOBAL_OPTS` | Name of the global option to remove |
 
 **Terminal session (success):**
 
@@ -321,7 +321,7 @@ exf (Hikvision Unauthenticated RCE) > unsetg port
 
 ---
 
-## `back` — unload current module
+## `back`  -  unload current module
 
 ```
 back
@@ -342,7 +342,7 @@ exf >
 
 ---
 
-## `run` / `exploit` — execute a module
+## `run` / `exploit`  -  execute a module
 
 ```
 run
@@ -351,7 +351,7 @@ exploit
 
 **Parameters:** none (options are set beforehand with `set`).
 
-**Terminal session — exploit module execution:**
+**Terminal session  -  exploit module execution:**
 
 ```text
 exf > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
@@ -369,7 +369,7 @@ exf (Hikvision Unauthenticated RCE) > run
 exf (Hikvision Unauthenticated RCE) >
 ```
 
-**Terminal session — cancelled with Ctrl+C:**
+**Terminal session  -  cancelled with Ctrl+C:**
 
 ```text
 exf (AutoPwn) > run
@@ -381,7 +381,7 @@ exf (AutoPwn) > run
 exf (AutoPwn) >
 ```
 
-**Terminal session — module raises exception:**
+**Terminal session  -  module raises exception:**
 
 ```text
 exf (Hikvision Unauthenticated RCE) > run
@@ -402,7 +402,7 @@ exf (Hikvision Unauthenticated RCE) >
 
 ---
 
-## `check` — verify vulnerability only
+## `check`  -  verify vulnerability only
 
 ```
 check
@@ -450,7 +450,7 @@ exf (Dahua RCE CVE-2021-36260 (DAHUA-2026-006)) > check
 
 ---
 
-## `show` — display module/system information
+## `show`  -  display module/system information
 
 ```
 show <subcommand>
@@ -460,7 +460,7 @@ show <subcommand>
 
 | Parameter | Type | Required | Default | Accepted values | Description |
 |-----------|------|----------|---------|-----------------|-------------|
-| `subcommand` | string | Yes | — | See table below | What to display |
+| `subcommand` | string | Yes |  -  | See table below | What to display |
 
 **Available subcommands:**
 
@@ -477,14 +477,14 @@ show <subcommand>
 | `scanners` | No | All scanner module paths |
 | `creds` | No | All credential module paths |
 
-**Terminal session — `show info`:**
+**Terminal session  -  `show info`:**
 
 ```text
 exf > use exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
 exf (Hikvision Unauthenticated RCE) > show info
 
 [*] Name:        Hikvision Unauthenticated RCE
-[*] Description: CVE-2021-36260 — Hikvision IP cameras allow remote code execution
+[*] Description: CVE-2021-36260  -  Hikvision IP cameras allow remote code execution
                  without authentication via crafted HTTP PUT to /SDK/webLanguage.
                  The command is injected via the lang parameter, executing as root.
 [*] Devices:     Hikvision IP Cameras (DS-2CD series, DS-2DE series, etc.)
@@ -497,7 +497,7 @@ exf (Hikvision Unauthenticated RCE) > show info
 exf (Hikvision Unauthenticated RCE) >
 ```
 
-**Terminal session — `show options`:**
+**Terminal session  -  `show options`:**
 
 ```text
 exf (Hikvision Unauthenticated RCE) > show options
@@ -521,7 +521,7 @@ Module options:
 exf (Hikvision Unauthenticated RCE) >
 ```
 
-**Terminal session — `show devices`:**
+**Terminal session  -  `show devices`:**
 
 ```text
 exf (Hikvision Unauthenticated RCE) > show devices
@@ -533,7 +533,7 @@ Target devices:
 exf (Hikvision Unauthenticated RCE) >
 ```
 
-**Terminal session — `show wordlists` (on a creds module):**
+**Terminal session  -  `show wordlists` (on a creds module):**
 
 ```text
 exf > use creds/routers/dlink/telnet_default_creds
@@ -546,7 +546,7 @@ exf (telnet_default_creds) > show wordlists
 └────────────────────┴──────────────────────────────────────────────────────────────┘
 ```
 
-**Terminal session — `show encoders` (on a payload module):**
+**Terminal session  -  `show encoders` (on a payload module):**
 
 ```text
 exf > use payloads/python/reverse_tcp
@@ -560,7 +560,7 @@ exf (python/reverse_tcp) > show encoders
 └───────────────┴──────────────────────────────┴──────────────────────────────────────┘
 ```
 
-**Terminal session — `show all` (truncated):**
+**Terminal session  -  `show all` (truncated):**
 
 ```text
 exf > show all
@@ -577,7 +577,7 @@ scanners/cameras/herospeed_longsee_nvr_scan
 ...
 ```
 
-**Error case — unknown subcommand:**
+**Error case  -  unknown subcommand:**
 
 ```text
 exf > show unknown_sub
@@ -588,7 +588,7 @@ exf > show unknown_sub
 
 ---
 
-## `sysinfo` — hardware profile
+## `sysinfo`  -  hardware profile
 
 See [01-introduction-and-installation.md](01-introduction-and-installation.md#sysinfo--hardware-profile) for full output examples.
 
@@ -600,7 +600,7 @@ Displays CPU model/arch/cores/threads/frequency, RAM total/available, GPU table 
 
 ---
 
-## `compute` — set compute mode
+## `compute`  -  set compute mode
 
 ```
 compute <mode>
@@ -626,14 +626,14 @@ exf > compute gpu
 [+] compute_mode => gpu
 ```
 
-**Error case — invalid mode:**
+**Error case  -  invalid mode:**
 
 ```text
 exf > compute turbo
 [-] Invalid compute mode 'turbo'. Choose from: cpu, gpu, hybrid, auto
 ```
 
-**Error case — GPU requested but not present:**
+**Error case  -  GPU requested but not present:**
 
 ```text
 exf > compute gpu
@@ -642,7 +642,7 @@ exf > compute gpu
 
 ---
 
-## `exec` — run OS shell commands
+## `exec`  -  run OS shell commands
 
 ```
 exec <shell_command>
@@ -652,7 +652,7 @@ exec <shell_command>
 
 | Parameter | Type | Required | Default | Accepted values | Description |
 |-----------|------|----------|---------|-----------------|-------------|
-| `shell_command` | string | Yes | — | Any valid OS command | Command passed to `os.system()` |
+| `shell_command` | string | Yes |  -  | Any valid OS command | Command passed to `os.system()` |
 
 **Terminal session:**
 
@@ -678,7 +678,7 @@ exf > exec cat /etc/hosts
 
 ---
 
-## `discover` — network discovery
+## `discover`  -  network discovery
 
 ```
 discover <subnet/CIDR>
@@ -691,13 +691,13 @@ discover -T <targets_file> --fresh
 
 | Parameter | Type | Required | Default | Accepted values | Description |
 |-----------|------|----------|---------|-----------------|-------------|
-| `subnet/CIDR` | string | Yes* | — | IP address or CIDR notation | Target to scan |
-| `--fresh` | flag | No | — | — | Ignore session cache, force full rescan |
-| `-T` | flag + path | No* | — | File path | Scan IPs/CIDRs listed in file (one per line) |
+| `subnet/CIDR` | string | Yes* |  -  | IP address or CIDR notation | Target to scan |
+| `--fresh` | flag | No |  -  |  -  | Ignore session cache, force full rescan |
+| `-T` | flag + path | No* |  -  | File path | Scan IPs/CIDRs listed in file (one per line) |
 
 \* Either `subnet/CIDR` or `-T file` is required.
 
-**Terminal session — CIDR scan:**
+**Terminal session  -  CIDR scan:**
 
 ```text
 exf > discover 192.168.1.0/24
@@ -731,13 +731,13 @@ exf > discover 192.168.1.0/24
     ...
 ```
 
-**Terminal session — session resume (host previously scanned):**
+**Terminal session  -  session resume (host previously scanned):**
 
 ```text
 exf > discover 192.168.1.0/24
 
-SESSION FOUND for 192.168.1.50 (44:19:b6:xx:yy:zz) — last scan: 2026-05-30 14:22, tested: 3, vulns: 1
-  3 module(s) already tested, 3 pending — resuming from where it stopped
+SESSION FOUND for 192.168.1.50 (44:19:b6:xx:yy:zz)  -  last scan: 2026-05-30 14:22, tested: 3, vulns: 1
+  3 module(s) already tested, 3 pending  -  resuming from where it stopped
   Previous vulns:
     • exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
 
@@ -745,7 +745,7 @@ SESSION FOUND for 192.168.1.50 (44:19:b6:xx:yy:zz) — last scan: 2026-05-30 14:
 Use 'discover 192.168.1.0/24 --fresh' to ignore history and rescan from zero
 ```
 
-**Terminal session — no live hosts found:**
+**Terminal session  -  no live hosts found:**
 
 ```text
 exf > discover 10.200.0.0/24
@@ -765,7 +765,7 @@ exf > discover -T
 
 ---
 
-## `sessions` — manage scan history
+## `sessions`  -  manage scan history
 
 ```
 sessions
@@ -780,13 +780,13 @@ sessions purge
 
 | Subcommand | Parameter | Description |
 |------------|-----------|-------------|
-| `list` | — | Show all saved sessions in a table |
+| `list` |  -  | Show all saved sessions in a table |
 | `show` | `<ip>` | Detailed view for a specific host |
 | `delete` | `<ip>` | Delete session for a host |
 | `export` | `<ip>` | Print session as JSON |
-| `purge` | — | Delete ALL sessions (prompts for confirmation) |
+| `purge` |  -  | Delete ALL sessions (prompts for confirmation) |
 
-**Terminal session — list:**
+**Terminal session  -  list:**
 
 ```text
 exf > sessions list
@@ -803,7 +803,7 @@ exf > sessions list
 Use 'sessions show <ip>' for details
 ```
 
-**Terminal session — show:**
+**Terminal session  -  show:**
 
 ```text
 exf > sessions show 192.168.1.50
@@ -842,7 +842,7 @@ Execution History (last 20):
 └───────────────────────────────────┴────────────┴───────────┴─────────┘
 ```
 
-**Terminal session — purge (with confirmation):**
+**Terminal session  -  purge (with confirmation):**
 
 ```text
 exf > sessions purge
@@ -858,7 +858,7 @@ Type 'yes' to confirm: no
 
 ---
 
-## `apt` — APT attack chain catalog
+## `apt`  -  APT attack chain catalog
 
 ```
 apt
@@ -869,7 +869,7 @@ apt run <group_id>
 apt run <group_id> <attack_index>
 ```
 
-**Terminal session — list:**
+**Terminal session  -  list:**
 
 ```text
 exf > apt list
@@ -886,7 +886,7 @@ exf > apt list
 Use 'apt show <group_id>' for details or 'apt run <group_id>' to execute
 ```
 
-**Terminal session — show:**
+**Terminal session  -  show:**
 
 ```text
 exf > apt show teamcnc-4
@@ -908,7 +908,7 @@ Use 'apt run teamcnc-4 [attack#]' to execute
 
 ---
 
-## `exit` — quit the shell
+## `exit`  -  quit the shell
 
 ```
 exit
@@ -951,12 +951,12 @@ Exploit modules that support post-exploitation shell delivery expose these addit
 | Option | Type | Default | Accepted values | Description |
 |--------|------|---------|-----------------|-------------|
 | `lhost` | `OptString` | `""` | Any IP | Attacker IP for reverse shell callback |
-| `lport` | `OptPort` | `4444` | 1–65535 | Listener port for reverse shell |
+| `lport` | `OptPort` | `4444` | 1-65535 | Listener port for reverse shell |
 | `shell_type` | `OptString` | `auto` | See list below | Shell/payload type |
 | `force_exploit` | `OptBool` | `false` | `true`, `false` | Skip `check()` and run exploitation directly |
 | `ask_on_fail` | `OptBool` | `true` | `true`, `false` | Prompt user if `check()` returns False |
 | `pty_upgrade` | `OptBool` | `true` | `true`, `false` | Auto-send `python3 pty.spawn()` on shell connect |
-| `listener_timeout` | `OptPort` | `60` | 1–65535 | Seconds to wait for reverse connection |
+| `listener_timeout` | `OptPort` | `60` | 1-65535 | Seconds to wait for reverse connection |
 
 **Accepted `shell_type` values:**
 `bash`, `nc`, `python`, `perl`, `ruby`, `php`, `awk`, `socat`, `powershell`, `powershell_b64`, `nc_bind`, `python_bind`, `meterpreter_linux`, `meterpreter_windows`, `meterpreter_php`, `php_webshell`, `aspx_webshell`, `auto`

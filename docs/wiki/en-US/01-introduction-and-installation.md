@@ -13,9 +13,9 @@
 | Metric | Value |
 |--------|-------|
 | Active modules | 2800+ |
-| CVEs mapped | 700+ (2001–2026) |
+| CVEs mapped | 700+ (2001-2026) |
 | Vendor families | 114+ |
-| Python versions | 3.8 – 3.13 |
+| Python versions | 3.8 - 3.13 |
 | Platforms | Linux, macOS, Windows |
 | License | BSD-3-Clause |
 | History file | `~/.exf_history` (100 entries) |
@@ -27,12 +27,12 @@
 
 | Class | Coverage |
 |-------|----------|
-| **Routers / GPON ONT / CPE** | Primary focus — 580+ modules, 85+ vendor folders (D-Link, TP-Link, NETGEAR, Huawei, ZTE, MikroTik, Ubiquiti, ASUS, Linksys, Totolink, and more) |
+| **Routers / GPON ONT / CPE** | Primary focus  -  580+ modules, 85+ vendor folders (D-Link, TP-Link, NETGEAR, Huawei, ZTE, MikroTik, Ubiquiti, ASUS, Linksys, Totolink, and more) |
 | **IP Cameras / NVR / DVR** | Hikvision, Dahua, Herospeed/Longsee (all OEM brands), Axis, Reolink, Amcrest, Annke, Intelbras, Uniview, Bosch, ACTi, Avigilon, and more |
-| **Firewalls / VPN / Perimeter appliances** | 80+ modules — Fortinet, Palo Alto, Cisco, SonicWall, Check Point, Sophos, WatchGuard, Juniper |
-| **Printers / MFP** | 185+ modules — HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung, CUPS |
+| **Firewalls / VPN / Perimeter appliances** | 80+ modules  -  Fortinet, Palo Alto, Cisco, SonicWall, Check Point, Sophos, WatchGuard, Juniper |
+| **Printers / MFP** | 185+ modules  -  HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung, CUPS |
 | **Managed Switches L2/L3** | Cisco, D-Link, NETGEAR |
-| **ICS / OT / Industrial** | 35+ modules — PLCs, SCADA HMIs, Modbus, S7comm, EtherNet/IP, Universal Robots |
+| **ICS / OT / Industrial** | 35+ modules  -  PLCs, SCADA HMIs, Modbus, S7comm, EtherNet/IP, Universal Robots |
 | **BMC / IPMI** | ASUS ASMB8 (IPMI), Dell iDRAC9, Supermicro IPMI |
 | **BMS (Building Management)** | ABB Cylon Aspect |
 | **NAS** | QNAP, Synology, D-Link NAS |
@@ -49,7 +49,7 @@
 
 | Requirement | Value | Notes |
 |-------------|-------|-------|
-| Python | **3.8 – 3.13** | Tested on CPython |
+| Python | **3.8 - 3.13** | Tested on CPython |
 | pip | 21.0 or newer | Recommended |
 | nmap | Optional | Enables `discover` enhanced scanning |
 | Npcap | Optional (Windows) | Required for Scapy raw-socket operations |
@@ -78,7 +78,7 @@ python-nmap >= 0.7.1  - nmap Python binding
 
 ## Installation
 
-### Option 1 — PyPI (recommended for most users)
+### Option 1  -  PyPI (recommended for most users)
 
 ```bash
 pip install embedxpl
@@ -129,7 +129,7 @@ Successfully installed embedxpl-1.0.0 python-nmap-0.7.1
 
 ---
 
-### Option 2 — Git clone + editable install (development / contribution)
+### Option 2  -  Git clone + editable install (development / contribution)
 
 ```bash
 git clone https://github.com/mrhenrike/EmbedXPL-Forge.git
@@ -154,7 +154,7 @@ python -m embedxpl         # module invocation
 
 ---
 
-### Option 3 — One-shot non-interactive (no shell needed)
+### Option 3  -  One-shot non-interactive (no shell needed)
 
 ```bash
 pip install embedxpl
@@ -165,7 +165,7 @@ See [04-non-interactive-mode.md](04-non-interactive-mode.md) for the full CLI re
 
 ---
 
-## First run — interactive shell
+## First run  -  interactive shell
 
 ```text
 $ embedxpl
@@ -220,7 +220,7 @@ Sample output (nmap missing):
 [OK]  Python 3.11.9
 [OK]  requests 2.34.2
 ...
-[WARN] nmap not found in PATH — discover fingerprinting will use Scapy only (reduced accuracy)
+[WARN] nmap not found in PATH  -  discover fingerprinting will use Scapy only (reduced accuracy)
 [OK]  Module index: 2807 modules loaded
 ```
 
@@ -228,7 +228,7 @@ Sample output (dependency problem):
 
 ```text
 [OK]  Python 3.9.18
-[-]   rich not installed — install with: pip install "rich>=13.0"
+[-]   rich not installed  -  install with: pip install "rich>=13.0"
 [OK]  Module index: 2807 modules loaded
 ```
 
@@ -278,7 +278,7 @@ Valid modes: `cpu`, `gpu`, `hybrid`, `auto`. The selected mode is persisted in t
 
 ---
 
-## `sysinfo` — hardware profile
+## `sysinfo`  -  hardware profile
 
 ```text
 exf > sysinfo
@@ -357,12 +357,12 @@ CLI (exf / embedxpl / fxf)
     │       └── SessionManager (persistent per-host scan state)
     │
     └── Module Arsenal  (embedxpl/modules/)
-            ├── exploits/     (1842 modules — routers, cameras, firewalls, printers, ICS, BMC...)
-            ├── creds/        (687 modules — SSH, Telnet, FTP, HTTP, SNMP per-vendor)
-            ├── scanners/     (134 modules — network discovery, protocol scanners, autopwn)
-            ├── payloads/     (32 modules — x86, x64, ARM, MIPS, cmd, perl, php, python)
-            ├── encoders/     (13 modules — base64, hex, Python/PHP/Perl)
-            └── generic/      (22 modules — CVE lookup, UPnP, SNMP, wordlist, DNS, PCAP)
+            ├── exploits/     (1842 modules  -  routers, cameras, firewalls, printers, ICS, BMC...)
+            ├── creds/        (687 modules  -  SSH, Telnet, FTP, HTTP, SNMP per-vendor)
+            ├── scanners/     (134 modules  -  network discovery, protocol scanners, autopwn)
+            ├── payloads/     (32 modules  -  x86, x64, ARM, MIPS, cmd, perl, php, python)
+            ├── encoders/     (13 modules  -  base64, hex, Python/PHP/Perl)
+            └── generic/      (22 modules  -  CVE lookup, UPnP, SNMP, wordlist, DNS, PCAP)
 ```
 
 ---
@@ -374,7 +374,7 @@ CLI (exf / embedxpl / fxf)
 | EmbedXPL-Forge | `pip install embedxpl` | `embedxpl` / `exf` | IoT / network devices (broad) |
 | FirewallXPL-Forge | `pip install firewallxpl` | `fxf` | Firewall / VPN specialist |
 | PrinterXPL-Forge | `pip install printerxpl-forge` | `printerxpl-forge` | Printer / MFP specialist |
-| WirelessXPL-Forge | `pip install wirelessxpl` | `wxf` | Wireless — Wi-Fi, BLE, Zigbee, Z-Wave |
+| WirelessXPL-Forge | `pip install wirelessxpl` | `wxf` | Wireless  -  Wi-Fi, BLE, Zigbee, Z-Wave |
 | MikrotikAPI-BF | `pip install mikrotikapi-bf` | `mikrotik-bf` | MikroTik RouterOS API brute-force |
 
 ---

@@ -1,4 +1,4 @@
-"""Local LLM Bridge for EmbedXPL — Ollama / llama.cpp Integration.
+"""Local LLM Bridge for EmbedXPL  -  Ollama / llama.cpp Integration.
 
 Provides a subprocess/API bridge to locally-running unrestricted LLMs via
 Ollama (default) or llama.cpp HTTP server.  Designed for offline security
@@ -23,7 +23,7 @@ Original code
 -------------
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 
-# authorized use only — offline/air-gap context intended
+# authorized use only  -  offline/air-gap context intended
 """
 from __future__ import annotations
 
@@ -128,10 +128,10 @@ def generate(
 
 
 class Exploit(Exploit):
-    """Local LLM Bridge — Ollama/llama.cpp security research assistant."""
+    """Local LLM Bridge  -  Ollama/llama.cpp security research assistant."""
 
     __info__ = {
-        "name": "Local LLM Bridge (Ollama — unrestricted offline security AI)",
+        "name": "Local LLM Bridge (Ollama  -  unrestricted offline security AI)",
         "description": (
             "Bridges EmbedXPL to a locally-running unrestricted LLM via Ollama API. "
             "For offline security research: payload generation, forensics, RE, malware analysis. "
@@ -156,7 +156,7 @@ class Exploit(Exploit):
         "Assist with authorized penetration testing and security research.",
         "System prompt for generate action",
     )
-    temperature = OptString("0.7", "Temperature (0.0–1.0)")
+    temperature = OptString("0.7", "Temperature (0.0-1.0)")
     timeout = OptInteger(120, "Timeout for generate in seconds")
 
     @mute
@@ -172,7 +172,7 @@ class Exploit(Exploit):
         temp = float(str(self.temperature))
         timeout = int(self.timeout)
 
-        print_status(f"Local LLM bridge — action: {action}")
+        print_status(f"Local LLM bridge  -  action: {action}")
 
         if action == "check":
             if check_ollama(host):

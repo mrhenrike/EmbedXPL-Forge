@@ -1,4 +1,4 @@
-"""EmbedXPL AutoPwn — Ics segment."""
+"""EmbedXPL AutoPwn  -  Ics segment."""
 from .segment import SegmentAutoPwn
 
 class IcsAutoPwn(SegmentAutoPwn):

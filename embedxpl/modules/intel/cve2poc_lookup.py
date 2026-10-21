@@ -1,4 +1,4 @@
-"""CVE2PoC — GitHub PoC Lookup for CVEs.
+"""CVE2PoC  -  GitHub PoC Lookup for CVEs.
 
 Queries multiple public CVE-to-PoC index APIs (nomi-sec, trickest/cve,
 CVE2PoC, BugBountyHunt, Vulhub) to find public exploit/PoC GitHub repositories
@@ -96,10 +96,10 @@ def lookup_bugbountyhunt(cve_id: str) -> list[str]:
 
 
 class Exploit(Exploit):
-    """CVE2PoC — multi-source PoC/exploit repository lookup for a CVE ID."""
+    """CVE2PoC  -  multi-source PoC/exploit repository lookup for a CVE ID."""
 
     __info__ = {
-        "name": "CVE2PoC — GitHub PoC Lookup (nomi-sec + trickest + BugBountyHunt)",
+        "name": "CVE2PoC  -  GitHub PoC Lookup (nomi-sec + trickest + BugBountyHunt)",
         "description": (
             "Queries nomi-sec/PoC-in-GitHub, trickest/cve, and BugBountyHunt API "
             "to find public exploit/PoC GitHub repos for a CVE. "
@@ -114,7 +114,7 @@ class Exploit(Exploit):
             "https://github.com/trickest/cve",
             "https://www.bugbountyhunt.com/cve",
         ),
-        "devices": ("Intelligence gathering — any CVE",),
+        "devices": ("Intelligence gathering  -  any CVE",),
     }
 
     cve_id = OptString("CVE-2024-12345", "CVE ID to look up")
@@ -128,7 +128,7 @@ class Exploit(Exploit):
         cve = str(self.cve_id).upper().strip()
         timeout = float(self.timeout)
 
-        print_status(f"CVE2PoC lookup — {cve}")
+        print_status(f"CVE2PoC lookup  -  {cve}")
 
         # nomi-sec
         print_status("Querying nomi-sec/PoC-in-GitHub…")

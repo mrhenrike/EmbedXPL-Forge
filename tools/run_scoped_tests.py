@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Scoped test gate — validates module structure and import sanity.
+"""Scoped test gate  -  validates module structure and import sanity.
 
 Runs lightweight checks that do not require network access or credentials:
   - All module files compile without syntax errors
@@ -7,7 +7,7 @@ Runs lightweight checks that do not require network access or credentials:
   - OptIP / OptPort / OptString types are correctly used
   - No circular imports in core packages
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations
@@ -50,7 +50,7 @@ def main() -> int:
         if p.name != "__init__.py" and "__pycache__" not in str(p)
     ]
 
-    print(f"Scoped test gate — checking {len(py_files)} module files...")
+    print(f"Scoped test gate  -  checking {len(py_files)} module files...")
     for f in py_files:
         _check_file(f)
 

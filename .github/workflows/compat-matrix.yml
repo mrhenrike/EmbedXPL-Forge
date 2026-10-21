@@ -1,4 +1,4 @@
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 
 name: compatibility-matrix
 
@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.12", "3.13", "3.14"]
 
     steps:
       - name: Checkout
@@ -40,12 +40,12 @@ jobs:
           python tools/compat_smoke.py
 
       - name: Validate market priority yearly minimums
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
         run: |
           python tools/validate_market_priority_minimums.py
 
   quality-security:
-    name: "quality-security / ubuntu / py3.11"
+    name: "quality-security / ubuntu / py3.12"
     runs-on: ubuntu-latest
 
     steps:
@@ -55,7 +55,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
       - name: Install runtime requirements
         run: |
@@ -111,7 +111,7 @@ jobs:
           python tools/generate_coverage_matrix.py
           python tools/build_arsenal_index.py
           git diff --stat -- docs/COVERAGE_MATRIX.md docs/COVERAGE_MATRIX.txt embedxpl/resources/catalogs/arsenal_index.json || true
-          echo "Coverage matrix regenerated (diff shown above — non-gating)."
+          echo "Coverage matrix regenerated (diff shown above  -  non-gating)."
 
       - name: Dependency vulnerability audit
         run: |

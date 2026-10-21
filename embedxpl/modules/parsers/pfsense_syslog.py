@@ -1,4 +1,4 @@
-"""pfSense / OPNsense Syslog Parser — EmbedXPL port of FirewallXPL-Forge.
+"""pfSense / OPNsense Syslog Parser  -  EmbedXPL port of FirewallXPL-Forge.
 
 Original research / PoC credits
 --------------------------------

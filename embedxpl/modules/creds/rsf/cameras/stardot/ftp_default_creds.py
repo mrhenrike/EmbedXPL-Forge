@@ -1,4 +1,4 @@
-# Absorbed from RouterSploit — rewritten for EmbedXPL v5.0.0
+# Absorbed from RouterSploit  -  rewritten for EmbedXPL v5.0.0
 # Original authors preserved in __info__["authors"]
 # EmbedXPL adaptation: André Henrique (@mrhenrike) | União Geek
 

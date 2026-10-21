@@ -1,4 +1,4 @@
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """Mozi DHT botnet presence detector.
 
 Mozi is an IoT P2P botnet that operates on a modified BitTorrent DHT
@@ -16,9 +16,9 @@ Combined with checking for other infection indicators (Telnet exposure,
 default creds) this module provides a multi-signal detection capability.
 
 MITRE ATT&CK:
-  T1095   — Non-Application Layer Protocol (P2P DHT)
-  T1571   — Non-Standard Port (14836/UDP)
-  T1590.001 — Gather Victim Network Information: IP Addresses
+  T1095    -  Non-Application Layer Protocol (P2P DHT)
+  T1571    -  Non-Standard Port (14836/UDP)
+  T1590.001  -  Gather Victim Network Information: IP Addresses
 
 References:
   https://blog.netlab.360.com/mozi-another-botnet-using-dht/
@@ -50,7 +50,7 @@ from embedxpl.core.exploit import (
     print_warning,
 )
 
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 
 logger = logging.getLogger("embedxpl.scanners.threat_detection.mozi_dht_presence_scan")
 

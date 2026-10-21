@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 import csv
 import json
 from pathlib import Path

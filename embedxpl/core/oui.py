@@ -2,10 +2,10 @@
 
 Resolves MAC addresses to vendor names using a multi-tier strategy:
 
-  1. **In-memory session cache** — instant, avoids repeated lookups.
-  2. **Online API (preferred)** — queries free public services
+  1. **In-memory session cache**  -  instant, avoids repeated lookups.
+  2. **Online API (preferred)**  -  queries free public services
      (macvendors.com → maclookup.app) for the most current data.
-  3. **Local IEEE database** — parses ``data/oui.txt`` (official IEEE
+  3. **Local IEEE database**  -  parses ``data/oui.txt`` (official IEEE
      export, ~39 000 entries) as offline fallback.
 
 The online tier is tried first because it reflects OUI assignments
@@ -386,7 +386,7 @@ def _lookup_online(prefix: str) -> str:
     if _online_failures >= _MAX_CONSECUTIVE_FAILURES:
         _online_enabled = False
         logger.warning(
-            "OUI online disabled after %d consecutive failures — "
+            "OUI online disabled after %d consecutive failures  -  "
             "using local fallback only. Call clear_session_cache() to re-enable.",
             _online_failures,
         )

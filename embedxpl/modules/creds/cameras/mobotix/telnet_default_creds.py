@@ -4,7 +4,7 @@ from embedxpl.modules.creds.generic.telnet_default import Exploit as TelnetDefau
 
 
 class Exploit(TelnetDefault):
-    """Mobotix Camera — Default Telnet Credentials.
+    """Mobotix Camera  -  Default Telnet Credentials.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -18,7 +18,7 @@ class Exploit(TelnetDefault):
         ),
         "authors": (
             "Marcin Bury <marcin[at]threat9.com>",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge port",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge port",
         ),
         "devices": (
             "Mobotix Camera",

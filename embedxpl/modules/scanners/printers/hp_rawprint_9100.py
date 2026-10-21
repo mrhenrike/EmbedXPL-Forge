@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""HP Printer — Raw Print Port 9100 Scanner.
+"""HP Printer  -  Raw Print Port 9100 Scanner.
 
 Discovers HP and other printers with the raw print (JetDirect) port 9100 open.
 
@@ -68,11 +68,11 @@ class Exploit(BaseExploit):
                 for line in lines[:10]:
                     print_status("  {}".format(line))
                 print_status(
-                    "Port 9100 is open — raw printing and PJL attacks are possible"
+                    "Port 9100 is open  -  raw printing and PJL attacks are possible"
                 )
             else:
                 print_status(
-                    "Port {} open but no PJL response — may be non-HP or filtered".format(
+                    "Port {} open but no PJL response  -  may be non-HP or filtered".format(
                         self.port
                     )
                 )

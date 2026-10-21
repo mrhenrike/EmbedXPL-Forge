@@ -159,7 +159,7 @@ def ensure_runtime(entry_script: str | Path) -> None:
             os.execv(str(py), [str(py), str(entry), *sys.argv[1:]])
         _create_venv(root)
         if not _venv_usable(root):
-            raise SystemExit("[embedxpl] Failed to create .venv — run ./setup_venv.sh")
+            raise SystemExit("[embedxpl] Failed to create .venv  -  run ./setup_venv.sh")
         _install_deps(root, py)
         os.execv(str(py), [str(py), str(entry), *sys.argv[1:]])
 

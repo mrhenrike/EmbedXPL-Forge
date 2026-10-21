@@ -1,4 +1,4 @@
-"""Built-in TCP connect scan engine — zero external dependencies.
+"""Built-in TCP connect scan engine  -  zero external dependencies.
 
 Fallback when Nmap/Masscan are not available. Limited capability
 (no OS fingerprint, no version intensity).

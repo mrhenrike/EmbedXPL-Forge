@@ -174,7 +174,7 @@ async def get_ai_analysis(
         raise
 
     if first_token:
-        # No tokens received — stop spinner anyway
+        # No tokens received  -  stop spinner anyway
         spinner.stop()
 
     print()

@@ -1,6 +1,6 @@
 """Entry point for `python -m embedxpl` and `exf` / `embedxpl` console scripts.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 import logging.handlers
@@ -42,7 +42,7 @@ def main() -> None:
     try:
         from embedxpl.interpreter import EmbedXPLInterpreter
     except ModuleNotFoundError as err:
-        print("EmbedXPL bootstrap error — missing dependency: {}".format(err))
+        print("EmbedXPL bootstrap error  -  missing dependency: {}".format(err))
         print("Run: ./setup_venv.sh   or   .\\setup_venv.ps1")
         print("Or:  ./run.sh")
         print("Optional diagnostics: python tools/env_doctor.py")

@@ -1,4 +1,4 @@
-"""EmbedXPL Runtime — Toolchain Detection.
+"""EmbedXPL Runtime  -  Toolchain Detection.
 
 Auto-detects all available compilers and language runtimes at import time.
 Results are cached as module-level constants so detection runs only once.

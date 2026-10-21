@@ -8,7 +8,7 @@ from embedxpl.core.exploit.exploit import Exploit as BaseExploit
 
 
 class Exploit(BaseExploit):
-    """DNS Hijack Detector — APT28 Campaign Detection (Defensive).
+    """DNS Hijack Detector  -  APT28 Campaign Detection (Defensive).
 
     Queries APT28-targeted Outlook/O365 domains through the target router
     and compares results with a trusted resolver. Mismatches indicate
@@ -104,16 +104,16 @@ class Exploit(BaseExploit):
             tgt = self._query(domain, str(self.target), int(self.port))
             ref = self._query(domain, str(self.trusted_dns))
             if not tgt:
-                print_status("  {} — no response".format(domain))
+                print_status("  {}  -  no response".format(domain))
                 continue
             if set(tgt) == set(ref) or set(tgt) & set(ref):
-                print_status("  {} — OK ({})".format(domain, ", ".join(tgt)))
+                print_status("  {}  -  OK ({})".format(domain, ", ".join(tgt)))
             else:
                 compromised.append((domain, tgt, ref))
-                print_error("  {} — HIJACKED! {} (expected {})".format(domain, tgt, ref))
+                print_error("  {}  -  HIJACKED! {} (expected {})".format(domain, tgt, ref))
 
         if compromised:
-            print_error("ALERT: {} domain(s) hijacked — matches APT28 TTP".format(len(compromised)))
+            print_error("ALERT: {} domain(s) hijacked  -  matches APT28 TTP".format(len(compromised)))
         else:
             print_success("No DNS hijack detected on {} domains".format(len(self._DOMAINS)))
 

@@ -1,4 +1,4 @@
-"""PowerShell Reverse HTTPS Shell — HTTPS polling C2."""
+"""PowerShell Reverse HTTPS Shell  -  HTTPS polling C2."""
 
 from embedxpl.core.exploit.payloads import BasePayload
 
@@ -6,7 +6,7 @@ from embedxpl.core.exploit.payloads import BasePayload
 class Payload(BasePayload):
     __info__ = {
         "name": "PowerShell Reverse HTTPS",
-        "description": "PowerShell HTTPS polling shell — mimics web traffic.",
+        "description": "PowerShell HTTPS polling shell  -  mimics web traffic.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
     }
 

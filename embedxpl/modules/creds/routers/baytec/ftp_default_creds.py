@@ -7,7 +7,7 @@ class Exploit(FTPDefault):
     __info__ = {
         "name": "Baytec Router Default FTP Creds",
         "description": "Dictionary attack with default credentials against Baytec Router FTP service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Baytec Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

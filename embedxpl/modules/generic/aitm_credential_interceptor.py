@@ -113,7 +113,7 @@ class _DNS(threading.Thread):
 
 
 class Exploit(BaseExploit):
-    """AITM Credential Interceptor — APT28 Lab Validation Tool.
+    """AITM Credential Interceptor  -  APT28 Lab Validation Tool.
 
     Runs malicious DNS + HTTP capture to intercept Outlook credentials.
     For controlled lab environments only.
@@ -161,7 +161,7 @@ class Exploit(BaseExploit):
 
         t = threading.Thread(target=httpd.serve_forever, daemon=True)
         t.start()
-        print_success("AITM running — {} seconds".format(self.duration))
+        print_success("AITM running  -  {} seconds".format(self.duration))
 
         try:
             time.sleep(int(self.duration))

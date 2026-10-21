@@ -3,7 +3,7 @@
 Tests a list of community strings against an SNMP-enabled device.
 Supports SNMPv1 and SNMPv2c. Uses pysnmp for protocol handling.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations
@@ -51,7 +51,7 @@ class Exploit(HTTPClient):
                     if line.strip() and not line.startswith("#")
                 ]
             except Exception as e:
-                print_error(f"Could not load wordlist: {e} — using defaults")
+                print_error(f"Could not load wordlist: {e}  -  using defaults")
         return _DEFAULT_COMMUNITIES
 
     def run(self) -> None:
@@ -62,7 +62,7 @@ class Exploit(HTTPClient):
                 SnmpEngine, UdpTransportTarget, getCmd,
             )
         except ImportError:
-            print_error("pysnmp not installed — run: pip install pysnmp")
+            print_error("pysnmp not installed  -  run: pip install pysnmp")
             return
 
         communities = self._load_communities()

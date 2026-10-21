@@ -1,4 +1,4 @@
-# MikrotikAPI-BF — Nmap NSE Scripts
+# MikrotikAPI-BF  -  Nmap NSE Scripts
 
 Nmap Scripting Engine (NSE) scripts for MikroTik RouterOS security assessment.  
 Complement the main Python tool with Nmap-native scanning capabilities.
@@ -7,7 +7,7 @@ Complement the main Python tool with Nmap-native scanning capabilities.
 
 ## Installation
 
-### Method 1 — pip (recommended)
+### Method 1  -  pip (recommended)
 
 ```bash
 pip install mikrotikapi-bf
@@ -15,7 +15,7 @@ pip install mikrotikapi-bf
 mikrotikapi-bf --nse-path   # prints the NSE scripts directory
 ```
 
-### Method 2 — Manual copy
+### Method 2  -  Manual copy
 
 ```bash
 # Linux/macOS
@@ -27,7 +27,7 @@ copy nse\*.nse "C:\Program Files (x86)\Nmap\scripts\"
 nmap --script-updatedb
 ```
 
-### Method 3 — Direct path
+### Method 3  -  Direct path
 
 ```bash
 nmap --script ./nse/mikrotik-routeros-version.nse <target>

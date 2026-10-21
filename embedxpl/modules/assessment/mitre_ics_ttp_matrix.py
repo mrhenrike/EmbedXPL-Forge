@@ -21,28 +21,28 @@ from embedxpl.core.exploit import *
 
 
 _ICS_TACTICS = {
-    "TA0108": "Initial Access — Gain first foothold in ICS network",
-    "TA0104": "Execution — Run attacker code on ICS systems",
-    "TA0110": "Persistence — Maintain access to ICS systems",
-    "TA0111": "Privilege Escalation — Gain higher-level permissions",
-    "TA0103": "Evasion — Avoid detection by ICS security controls",
-    "TA0102": "Discovery — Map ICS network and assets",
-    "TA0109": "Lateral Movement — Move between ICS systems",
-    "TA0100": "Collection — Gather ICS data for exfiltration/analysis",
-    "TA0101": "Command and Control — Communicate with compromised ICS systems",
-    "TA0107": "Inhibit Response Function — Prevent ICS safety/protective responses",
-    "TA0106": "Impair Process Control — Interfere with industrial process",
-    "TA0105": "Impact — Disrupt/damage physical industrial process",
+    "TA0108": "Initial Access  -  Gain first foothold in ICS network",
+    "TA0104": "Execution  -  Run attacker code on ICS systems",
+    "TA0110": "Persistence  -  Maintain access to ICS systems",
+    "TA0111": "Privilege Escalation  -  Gain higher-level permissions",
+    "TA0103": "Evasion  -  Avoid detection by ICS security controls",
+    "TA0102": "Discovery  -  Map ICS network and assets",
+    "TA0109": "Lateral Movement  -  Move between ICS systems",
+    "TA0100": "Collection  -  Gather ICS data for exfiltration/analysis",
+    "TA0101": "Command and Control  -  Communicate with compromised ICS systems",
+    "TA0107": "Inhibit Response Function  -  Prevent ICS safety/protective responses",
+    "TA0106": "Impair Process Control  -  Interfere with industrial process",
+    "TA0105": "Impact  -  Disrupt/damage physical industrial process",
 }
 
 _HIGH_IMPACT_TECHNIQUES = {
-    "T0831": "Manipulation of Control — Modify PLC/RTU control programs",
-    "T0836": "Modify Parameter — Change process setpoints",
-    "T0843": "Program Download — Push malicious logic to PLC",
-    "T0855": "Unauthorized Command Message — Send rogue Modbus/S7/DNP3 commands",
-    "T0878": "Alarm Suppression — Disable/manipulate safety alarms",
-    "T0883": "Internet Accessible Device — Exploit internet-exposed ICS",
-    "T0814": "Denial of Control — Prevent operator commands from reaching PLC",
+    "T0831": "Manipulation of Control  -  Modify PLC/RTU control programs",
+    "T0836": "Modify Parameter  -  Change process setpoints",
+    "T0843": "Program Download  -  Push malicious logic to PLC",
+    "T0855": "Unauthorized Command Message  -  Send rogue Modbus/S7/DNP3 commands",
+    "T0878": "Alarm Suppression  -  Disable/manipulate safety alarms",
+    "T0883": "Internet Accessible Device  -  Exploit internet-exposed ICS",
+    "T0814": "Denial of Control  -  Prevent operator commands from reaching PLC",
 }
 
 
@@ -81,11 +81,11 @@ class Exploit(Exploit):
             if found:
                 print_success(f"{tid}: {found}")
             else:
-                print_info(f"{tid}: not in local high-impact index — check attack.mitre.org/matrices/ics/")
+                print_info(f"{tid}: not in local high-impact index  -  check attack.mitre.org/matrices/ics/")
             return
 
         if show_tactics:
-            print_status("MITRE ATT&CK for ICS — v19 Tactics (12)")
+            print_status("MITRE ATT&CK for ICS  -  v19 Tactics (12)")
             for tactic_id, desc in _ICS_TACTICS.items():
                 print_info(f"  {tactic_id}: {desc}")
 

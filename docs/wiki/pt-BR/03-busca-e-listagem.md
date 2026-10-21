@@ -4,7 +4,7 @@
 
 ---
 
-## `search` — encontrar módulos
+## `search`  -  encontrar módulos
 
 O comando `search` realiza correspondência de substring sem distinção de maiúsculas/minúsculas em todos os caminhos de módulos. Suporta busca por palavra-chave e filtros estruturados. Os resultados são exibidos com palavras correspondentes destacadas em vermelho/negrito.
 
@@ -19,11 +19,11 @@ search [palavra-chave] [filtro=valor ...]
 | Parâmetro | Tipo | Obrigatório | Padrão | Valores aceitos | Descrição |
 |-----------|------|-------------|--------|-----------------|-----------|
 | `palavra-chave` | string | Não* | `""` | Qualquer texto | Substring correspondida ao caminho completo do módulo |
-| `type=` | filtro | Não | — | `exploits`, `creds`, `scanners`, `payloads`, `encoders`, `generic` | Restringir a uma categoria de módulo |
-| `device=` | filtro | Não | — | Subdiretório de `exploits/` (ex.: `cameras`, `routers`, `firewalls`) | Restringir a uma classe de dispositivo em módulos de exploit |
-| `vendor=` | filtro | Não | — | Qualquer segmento de caminho (ex.: `hikvision`, `dlink`, `cisco`) | Restringir a um subdiretório de vendor |
-| `language=` | filtro | Não | — | Subdiretório de `encoders/` (ex.: `python`, `php`, `perl`) | Restringir à linguagem do encoder |
-| `payload=` | filtro | Não | — | Subdiretório de `payloads/` (ex.: `python`, `x86`, `armle`) | Restringir a uma arquitetura de payload |
+| `type=` | filtro | Não |  -  | `exploits`, `creds`, `scanners`, `payloads`, `encoders`, `generic` | Restringir a uma categoria de módulo |
+| `device=` | filtro | Não |  -  | Subdiretório de `exploits/` (ex.: `cameras`, `routers`, `firewalls`) | Restringir a uma classe de dispositivo em módulos de exploit |
+| `vendor=` | filtro | Não |  -  | Qualquer segmento de caminho (ex.: `hikvision`, `dlink`, `cisco`) | Restringir a um subdiretório de vendor |
+| `language=` | filtro | Não |  -  | Subdiretório de `encoders/` (ex.: `python`, `php`, `perl`) | Restringir à linguagem do encoder |
+| `payload=` | filtro | Não |  -  | Subdiretório de `payloads/` (ex.: `python`, `x86`, `armle`) | Restringir a uma arquitetura de payload |
 
 \* Pelo menos uma palavra-chave ou filtro deve ser fornecido.
 
@@ -41,7 +41,7 @@ exf > search
 
 Busque por nome de vendor, identificador CVE, família de dispositivo, protocolo ou qualquer substring de um caminho de módulo:
 
-**Sessão de terminal — busca por vendor:**
+**Sessão de terminal  -  busca por vendor:**
 
 ```text
 exf > search dlink
@@ -54,7 +54,7 @@ creds/routers/dlink/telnet_default_creds
 ...
 ```
 
-**Sessão de terminal — busca por CVE:**
+**Sessão de terminal  -  busca por CVE:**
 
 ```text
 exf > search CVE-2021-36260
@@ -62,7 +62,7 @@ exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
 exploits/cameras/dahua/cctv_rce_cve_2021_36260
 ```
 
-**Sessão de terminal — busca por família de dispositivo:**
+**Sessão de terminal  -  busca por família de dispositivo:**
 
 ```text
 exf > search herospeed
@@ -81,7 +81,7 @@ exploits/cameras/herospeed/herospeed_nvr_vbhtm_cred_disclosure
 scanners/cameras/herospeed_longsee_nvr_scan
 ```
 
-**Sessão de terminal — busca por palavra-chave múltipla (lógica AND):**
+**Sessão de terminal  -  busca por palavra-chave múltipla (lógica AND):**
 
 ```text
 exf > search hikvision rce
@@ -96,7 +96,7 @@ Todas as palavras-chave separadas por espaço devem aparecer no caminho do módu
 
 Combine palavra-chave com um ou mais filtros `chave=valor`:
 
-**Sessão de terminal — filtro `type=`:**
+**Sessão de terminal  -  filtro `type=`:**
 
 ```text
 exf > search type=exploits cisco
@@ -104,7 +104,7 @@ exploits/cameras/cisco/video_surv_path_traversal
 exploits/cisco/cisco_ios_smart_install_rce_cve_2018_0171
 ```
 
-**Sessão de terminal — filtro `device=`:**
+**Sessão de terminal  -  filtro `device=`:**
 
 ```text
 exf > search type=exploits device=cameras auth_bypass
@@ -116,7 +116,7 @@ exploits/cameras/hikvision/nas_auth_bypass_cve_2023_28808
 exploits/cameras/reolink/reolink_baicells_auth_bypass_rce_cve_2021_40655
 ```
 
-**Sessão de terminal — filtro `vendor=`:**
+**Sessão de terminal  -  filtro `vendor=`:**
 
 ```text
 exf > search vendor=hikvision
@@ -141,7 +141,7 @@ creds/cameras/hikvision/ssh_default_creds
 creds/cameras/hikvision/telnet_default_creds
 ```
 
-**Sessão de terminal — filtro `language=` (encoders):**
+**Sessão de terminal  -  filtro `language=` (encoders):**
 
 ```text
 exf > search type=encoders language=python
@@ -149,7 +149,7 @@ encoders/python/base64
 encoders/python/hex
 ```
 
-**Sessão de terminal — filtro `payload=`:**
+**Sessão de terminal  -  filtro `payload=`:**
 
 ```text
 exf > search type=payloads payload=python
@@ -161,7 +161,7 @@ payloads/python/reverse_udp
 
 ---
 
-## Subcomandos `show` — listagem
+## Subcomandos `show`  -  listagem
 
 O comando `show` lista módulos ou exibe dados específicos do módulo.
 
@@ -278,14 +278,14 @@ exf > use exploits/cameras/herospeed/herospeed_nvr_unauth_account_enum
 exf (Herospeed/Longsee NVR Unauthenticated Account Enumeration) > show info
 
 [*] Name:         Herospeed/Longsee NVR Unauthenticated Account Enumeration
-[*] Description:  HSLS-2026-001 — Returns salt, challenge, and sessionID without authentication.
+[*] Description:  HSLS-2026-001  -  Returns salt, challenge, and sessionID without authentication.
                   Reveals all user accounts on the target NVR.
 [*] Devices:      Herospeed NVR N-series (all MC6830/FH6830 platform, 2023-2026)
-                  TVT Digital TD-3000H1/TD-3300 — V21.1.x / V22.1.x
-                  GISE V5 series (XVR/NVR) — V21.1.20.x - V21.1.27.x
-                  Longse LSN-9836/LSN-9436 — Web v6.0 series (2021-2023)
+                  TVT Digital TD-3000H1/TD-3300  -  V21.1.x / V22.1.x
+                  GISE V5 series (XVR/NVR)  -  V21.1.20.x - V21.1.27.x
+                  Longse LSN-9836/LSN-9436  -  Web v6.0 series (2021-2023)
 [*] Authors:      c3l3r1on (discovery)
-                  André Henrique (@mrhenrike) — EmbedXPL-Forge port
+                  André Henrique (@mrhenrike)  -  EmbedXPL-Forge port
 [*] References:   https://github.com/c3l3r1on/nvr
 ```
 
@@ -345,7 +345,7 @@ Module options:
 │ telnet_use              │ True             │ Check Telnet service                      │
 │ snmp_use                │ True             │ Check SNMP service                        │
 │ snmp_community          │ public           │ SNMP community string                     │
-│ threads                 │ 8                │ Thread count (1–300)                      │
+│ threads                 │ 8                │ Thread count (1-300)                      │
 │ ml_advisor              │ False            │ Enable ML/heuristic attack advisor        │
 │ ml_auto_timing          │ False            │ Auto-set timing from ML suggestion        │
 │ ml_use_gpu              │ False            │ Use GPU for ML scoring                    │
@@ -364,14 +364,14 @@ exf (Herospeed/Longsee NVR Scanner) > show devices
 
 Target devices:
    0 - Herospeed NVR N-series (9CH-64CH, firmware v2.0.4-v2.1.x, SoC MC6830)
-   1 - TVT Digital TD-3000H1/TD-3300 — V21.1.x / V22.1.x
-   2 - GISE V5 series (XVR/NVR) — V21.1.20.x - V21.1.27.x
-   3 - Longse LSN-9836/LSN-9436 — Web v6.0 series (2021-2023)
-   4 - Zintronic P5/NVR — N9000 platform (BitVision)
-   5 - Turing AI SMART series — N9000 platform
-   6 - Speco ZIP series — OEM TVT
-   7 - Alibi Security Vigilant series — OEM TVT
-   8 - IRBIS MBD6804T-EL — V4.02.R11 (legacy)
+   1 - TVT Digital TD-3000H1/TD-3300  -  V21.1.x / V22.1.x
+   2 - GISE V5 series (XVR/NVR)  -  V21.1.20.x - V21.1.27.x
+   3 - Longse LSN-9836/LSN-9436  -  Web v6.0 series (2021-2023)
+   4 - Zintronic P5/NVR  -  N9000 platform (BitVision)
+   5 - Turing AI SMART series  -  N9000 platform
+   6 - Speco ZIP series  -  OEM TVT
+   7 - Alibi Security Vigilant series  -  OEM TVT
+   8 - IRBIS MBD6804T-EL  -  V4.02.R11 (legacy)
 ```
 
 ---

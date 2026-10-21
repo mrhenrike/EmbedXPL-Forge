@@ -6,7 +6,7 @@
 
 ## AutoPwn
 
-O **AutoPwn** orquestra fluxos de trabalho de fingerprinting e seleção de módulos. Carregue o módulo AutoPwn com `use`, defina `target` (e opções de interface se necessário), depois execute `run` — o comportamento é definido dentro da implementação `run()` do módulo.
+O **AutoPwn** orquestra fluxos de trabalho de fingerprinting e seleção de módulos. Carregue o módulo AutoPwn com `use`, defina `target` (e opções de interface se necessário), depois execute `run`  -  o comportamento é definido dentro da implementação `run()` do módulo.
 
 ```text
 exf > use scanners/autopwn

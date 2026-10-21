@@ -5,13 +5,13 @@ and matches them against the EmbedXPL module catalog to identify
 potential exploit targets.
 
 Scanning strategy (multi-phase, with automatic fallback):
-  Phase 0 — ARP sweep (L2, same-subnet, fastest, requires admin/root)
-  Phase 1 — Nmap smart host discovery (multi-method: TCP SYN/ACK + ICMP + UDP)
+  Phase 0  -  ARP sweep (L2, same-subnet, fastest, requires admin/root)
+  Phase 1  -  Nmap smart host discovery (multi-method: TCP SYN/ACK + ICMP + UDP)
             For single hosts (/32): uses -Pn (skip discovery, scan the specific target)
             For subnets: uses -PS/-PA/-PE/-PP/-PU to discover live hosts first
-  Phase 1b — Masscan (fast SYN scanner, ideal for large subnets when nmap unavailable)
-  Phase 2 — Scapy ARP scan (if nmap and masscan unavailable)
-  Phase 3 — Socket-based TCP probe (universal fallback, no special privileges)
+  Phase 1b  -  Masscan (fast SYN scanner, ideal for large subnets when nmap unavailable)
+  Phase 2  -  Scapy ARP scan (if nmap and masscan unavailable)
+  Phase 3  -  Socket-based TCP probe (universal fallback, no special privileges)
 
 IMPORTANT: -Pn is ONLY used for single-host targets.  Using -Pn on
 subnets causes Nmap to scan every IP in the range even if the host
@@ -70,7 +70,7 @@ _HOST_DISCOVERY_ARGS = (
 Uses five probe types in parallel so hosts that block ICMP are still
 found via TCP SYN/ACK, and vice versa.  This replaces the old
 blanket ``-Pn`` which assumed ALL hosts are up and caused Nmap to
-scan every IP in a /24 — extremely slow and full of false positives.
+scan every IP in a /24  -  extremely slow and full of false positives.
 """
 
 
@@ -201,7 +201,7 @@ def _detect_oem_encoding() -> str:
     """Detect the Windows OEM codepage for subprocess output decoding.
 
     Windows system commands (ipconfig, arp, ping, etc.) output text in
-    the console's OEM codepage — typically cp850 (Western European) or
+    the console's OEM codepage  -  typically cp850 (Western European) or
     cp437 (US).  Using utf-8 corrupts accented characters.
     On non-Windows systems, returns utf-8.
     """
@@ -294,7 +294,7 @@ class NetworkDiscovery:
         self._known_vendors: Set[str] = set()
         self._module_index: Dict[str, List[str]] = {}
         logger.info(
-            "Discovery initialized — timing=%s, workers=%d, timeout=%.1fs, ports=%d",
+            "Discovery initialized  -  timing=%s, workers=%d, timeout=%.1fs, ports=%d",
             self.timing_profile.name, self.max_workers, self.timeout,
             len(self.ports),
         )
@@ -553,7 +553,7 @@ class NetworkDiscovery:
         For subnets: uses multi-method discovery (TCP SYN/ACK + ICMP
         echo/timestamp + UDP) so only *confirmed live* hosts are
         port-scanned.  This prevents the old problem where ``-Pn`` on
-        a /24 would scan all 254 IPs — extremely slow and full of
+        a /24 would scan all 254 IPs  -  extremely slow and full of
         false-positive "filtered" ports on non-existent hosts.
 
         If the ARP sweep already found hosts, they are passed as an
@@ -1341,7 +1341,7 @@ class NetworkDiscovery:
         "focuses on wired/web-based exploit testing. For wireless-specific "
         "attacks (WPA/WPA2/WPA3 cracking, deauth, evil twin, PMKID capture, "
         "handshake sniffing, rogue AP, and other active/passive wireless "
-        "attacks), use WirelessXPL-Forge — a dedicated tool for online/offline "
+        "attacks), use WirelessXPL-Forge  -  a dedicated tool for online/offline "
         "wireless security testing. See: submodules/IoT/WirelessXPL-Forge"
     )
 
@@ -1420,7 +1420,7 @@ def scan_from_file(
 
     Args:
         targets_file: Path to a plain-text file with one IP or CIDR per line.
-        timing: Nmap-style timing level (0–5) passed to each :class:`NetworkDiscovery`.
+        timing: Nmap-style timing level (0-5) passed to each :class:`NetworkDiscovery`.
         callback: Optional ``(target, stage, detail)`` progress callback.
         max_file_workers: Maximum number of targets scanned concurrently.
 

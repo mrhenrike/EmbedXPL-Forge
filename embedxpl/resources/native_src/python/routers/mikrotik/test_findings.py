@@ -200,7 +200,7 @@ def test_rest_api_ratelimit():
 
 def main():
     print("=" * 72)
-    print("  MIKROTIK-CONFIG-001 & -002 — Privilege Test")
+    print("  MIKROTIK-CONFIG-001 & -002  -  Privilege Test")
     print(f"  Target: {TARGET}:{PORT}  |  {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 72)
 
@@ -273,7 +273,7 @@ def main():
 
     # ── REST API rate-limit test ──────────────────────────────────────────────
     print(f"\n{'─'*60}")
-    print("  REST API (HTTP :80) — Rate-Limiting Test (20 rapid attempts)")
+    print("  REST API (HTTP :80)  -  Rate-Limiting Test (20 rapid attempts)")
     print(f"{'─'*60}")
     statuses, rate_limited = test_rest_api_ratelimit()
     codes = {}
@@ -293,8 +293,8 @@ def main():
     vuln_sn = [f["user"] for f in findings if f["sniffer_start"]]
     partial_sn = [f["user"] for f in findings if f["sniffer_read"] and not f["sniffer_start"]]
 
-    print(f"  CONFIG-001 (WireGuard key visible)  : {vuln_wg if vuln_wg else 'NONE — not vulnerable'}")
-    print(f"  CONFIG-002 (Sniffer can start)      : {vuln_sn if vuln_sn else 'NONE — not vulnerable'}")
+    print(f"  CONFIG-001 (WireGuard key visible)  : {vuln_wg if vuln_wg else 'NONE  -  not vulnerable'}")
+    print(f"  CONFIG-002 (Sniffer can start)      : {vuln_sn if vuln_sn else 'NONE  -  not vulnerable'}")
     print(f"  CONFIG-002 (Sniffer settings read)  : {partial_sn if partial_sn else 'NONE'}")
     print(f"  REST rate-limiting                   : {'ABSENT (VULNERABLE)' if not rate_limited else 'PRESENT (OK)'}")
 

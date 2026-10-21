@@ -18,7 +18,7 @@ class Exploit(SSHDefault):
             "in branch/SMB environments. F5 BIG-IP ships with known default credentials "
             "on the management interface. Cherry-picked from FirewallXPL-Forge."
         ),
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": (
             "F5 BIG-IP LTM 2000s / 2200s / 4000s / 4200v",
             "F5 BIG-IP (all models, default config)",

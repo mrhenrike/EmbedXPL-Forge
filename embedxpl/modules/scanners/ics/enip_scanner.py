@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""EtherNet/IP (ENIP) Scanner — ListIdentity UDP/TCP broadcast discovery.
+"""EtherNet/IP (ENIP) Scanner  -  ListIdentity UDP/TCP broadcast discovery.
 
 Sends the EtherNet/IP ListIdentity encapsulation command (0x0063) to
 UDP/44818 and optionally TCP/44818. This command causes any ENIP-capable
@@ -8,10 +8,10 @@ respond with their identity object including:
   - Product name, device type, vendor ID, revision
   - Serial number, IP address, product code
 
-No authentication required — EtherNet/IP ListIdentity is an open broadcast
+No authentication required  -  EtherNet/IP ListIdentity is an open broadcast
 used for device discovery in factory automation environments.
 
-Protocol: ENIP (EtherNet/IP) — ODVA standard
+Protocol: ENIP (EtherNet/IP)  -  ODVA standard
 Default ports: TCP/UDP 44818
 
 References:
@@ -145,7 +145,7 @@ def _parse_list_identity(data: bytes) -> dict:
 
 
 class Exploit(BaseExploit):
-    """EtherNet/IP ListIdentity Scanner — ENIP device discovery via UDP/TCP.
+    """EtherNet/IP ListIdentity Scanner  -  ENIP device discovery via UDP/TCP.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -156,12 +156,12 @@ class Exploit(BaseExploit):
         "description": (
             "Sends the ENIP ListIdentity encapsulation command (0x0063) via UDP and TCP "
             "to port 44818. Identifies ENIP-capable devices: Allen-Bradley PLCs, HMIs, "
-            "drives, I/O modules. No authentication required — ENIP discovery is open. "
+            "drives, I/O modules. No authentication required  -  ENIP discovery is open. "
             "Ported from ISF icssploit enip_scan.py using raw sockets (no Scapy)."
         ),
         "authors": (
             "wenzhe zhu <jtrkid[at]gmail.com> (ISF icssploit)",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge port",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge port",
         ),
         "references": (
             "https://github.com/nmap/nmap/blob/master/scripts/enip-info.nse",
@@ -198,7 +198,7 @@ class Exploit(BaseExploit):
                         print_success(f"  {key}: {val}")
                     found = True
                 else:
-                    print_status(f"[ENIP] UDP response ({len(data)} bytes) — could not parse identity")
+                    print_status(f"[ENIP] UDP response ({len(data)} bytes)  -  could not parse identity")
                     found = True
 
         if self.use_tcp:
@@ -212,7 +212,7 @@ class Exploit(BaseExploit):
                             print_success(f"  {key}: {val}")
                     found = True
                 elif not found:
-                    print_status(f"[ENIP] TCP response ({len(data)} bytes) — ENIP service present")
+                    print_status(f"[ENIP] TCP response ({len(data)} bytes)  -  ENIP service present")
                     found = True
 
         if not found:

@@ -1,4 +1,4 @@
-"""x64 Reverse DNS Shell — DNS TXT record C2.
+"""x64 Reverse DNS Shell  -  DNS TXT record C2.
 
 Usa consultas DNS TXT como canal de C2.
 Bypassa firewalls que bloqueiam TCP mas permitem DNS.
@@ -10,7 +10,7 @@ from embedxpl.core.exploit.payloads import BasePayload
 class Payload(BasePayload):
     __info__ = {
         "name": "x64 Reverse DNS",
-        "description": "DNS TXT record covert C2 channel — bypasses TCP firewalls.",
+        "description": "DNS TXT record covert C2 channel  -  bypasses TCP firewalls.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
     }
     options = {

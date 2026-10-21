@@ -28,7 +28,7 @@ import warnings as _pysnmp_warn
 _pysnmp_warn.filterwarnings("ignore", category=RuntimeWarning)
 
 try:
-    # pysnmp-lextudio ≥5 (hlapi synchronous, Python 3.8+) — primary backend
+    # pysnmp-lextudio ≥5 (hlapi synchronous, Python 3.8+)  -  primary backend
     from pysnmp.hlapi import (  # type: ignore
         getCmd, nextCmd, CommunityData, UdpTransportTarget,
         ContextData, ObjectType, ObjectIdentity, SnmpEngine,
@@ -257,7 +257,7 @@ class capabilities():
                             bucket.append(str(var_bind[1]))
 
             elif _SNMP_BACKEND == 'oneliner':
-                # Legacy oneliner API (pysnmp ≤ 4.x, Python 3.8–3.11)
+                # Legacy oneliner API (pysnmp ≤ 4.x, Python 3.8-3.11)
                 error, error_status, _idx, binds = cmdgen.CommandGenerator().nextCmd(  # type: ignore
                     cmdgen.CommunityData('public', mpModel=0),
                     cmdgen.UdpTransportTarget((host, 161), timeout=self.timeout, retries=0),

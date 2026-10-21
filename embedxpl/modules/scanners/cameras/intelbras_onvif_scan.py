@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Intelbras CCTV — ONVIF Endpoint Discovery Scanner.
+"""Intelbras CCTV  -  ONVIF Endpoint Discovery Scanner.
 
 Discovers and probes ONVIF endpoints on Intelbras NVR/DVR/IP Camera devices.
 Checks for unauthenticated access to device management functions.

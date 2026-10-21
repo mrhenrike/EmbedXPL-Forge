@@ -155,7 +155,7 @@ class SMBProtocol:
         Returns a list of dicts with keys: name, type, comments.
         """
         if not self._connected:
-            raise RuntimeError("Not connected — call connect() first")
+            raise RuntimeError("Not connected  -  call connect() first")
 
         if self._conn:
             try:
@@ -171,7 +171,7 @@ class SMBProtocol:
             except Exception as exc:
                 raise RuntimeError(f"listShares failed: {exc}") from exc
 
-        # No pysmb — try smbclient binary
+        # No pysmb  -  try smbclient binary
         return self._smbclient_list_shares()
 
     def list_printers(self) -> List[Dict[str, str]]:

@@ -71,7 +71,7 @@ class ParsingActivator:
     @staticmethod
     async def onlyfans(site, logger, url=None, **kwargs):
         # Signing rules (static_param / checksum_indexes / checksum_constant / format / app_token)
-        # live in data.json under OnlyFans.activation and rotate upstream every ~1–3 weeks.
+        # live in data.json under OnlyFans.activation and rotate upstream every ~1-3 weeks.
         # If "Please refresh the page" keeps firing after activation, refresh them from:
         #   https://raw.githubusercontent.com/DATAHOARDERS/dynamic-rules/main/onlyfans.json
         import hashlib
@@ -221,7 +221,7 @@ def load_activation_cache(db, logger) -> Dict[str, Dict[str, str]]:
 
     Tokens minted at runtime (guest tokens, JWTs, session cookies) are user
     state, not package data, so they are kept in the user's home instead of
-    being written back into the shipped database — which is read-only on any
+    being written back into the shipped database  -  which is read-only on any
     system-wide install.
 
     Returns the pre-overlay headers, needed by :func:`save_activation_cache`

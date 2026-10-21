@@ -7,7 +7,7 @@ class Exploit(HTTPBasicDigestDefault):
     __info__ = {
         "name": "Web Excel Router Default Web Interface Creds",
         "description": "Dictionary attack against Web Excel Router Web Interface (HTTP Basic/Digest Auth).",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Web Excel Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

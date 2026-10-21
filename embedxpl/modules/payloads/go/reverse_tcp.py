@@ -1,7 +1,7 @@
 """Go Reverse TCP Implant.
 
 Gera source Go de implant reverso TCP compilável via GoExecutor.
-Zero dependências externas — apenas stdlib Go.
+Zero dependências externas  -  apenas stdlib Go.
 Cross-compila para qualquer arch via GOOS/GOARCH env vars.
 """
 
@@ -11,7 +11,7 @@ from embedxpl.core.exploit.payloads import BasePayload
 class Payload(BasePayload):
     __info__ = {
         "name": "Go Reverse TCP",
-        "description": "Go native reverse TCP shell — cross-compiles for any arch/OS.",
+        "description": "Go native reverse TCP shell  -  cross-compiles for any arch/OS.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
     }
 

@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""RTSP Camera Discovery — Banner Probe on Port 554/8554.
+"""RTSP Camera Discovery  -  Banner Probe on Port 554/8554.
 
 Discovers IP cameras and streaming devices via RTSP protocol fingerprinting.
 
@@ -96,7 +96,7 @@ class Exploit(BaseExploit):
                         server = line.split(":", 1)[1].strip()
                         break
                 print_success(
-                    "RTSP on {}:{} — Server: {}".format(host, port, server or "(unknown)")
+                    "RTSP on {}:{}  -  Server: {}".format(host, port, server or "(unknown)")
                 )
                 return True
         except Exception:

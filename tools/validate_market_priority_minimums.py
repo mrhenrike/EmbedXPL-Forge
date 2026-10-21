@@ -4,7 +4,7 @@
 Ensures the framework maintains a baseline of vendor and CVE coverage
 that meets the documented yearly minimums.
 
-Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
 from __future__ import annotations

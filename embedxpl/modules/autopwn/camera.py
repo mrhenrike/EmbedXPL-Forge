@@ -1,4 +1,4 @@
-"""EmbedXPL AutoPwn — Camera segment."""
+"""EmbedXPL AutoPwn  -  Camera segment."""
 from .segment import SegmentAutoPwn
 
 class CameraAutoPwn(SegmentAutoPwn):

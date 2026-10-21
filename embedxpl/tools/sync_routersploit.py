@@ -35,7 +35,7 @@ _IMPORT_MAP = {
     "from routersploit.core.exploit import *":                    "from embedxpl.core.exploit import *",
     "from routersploit.core.exploit import shell":                "# from routersploit.core.exploit import shell  # absorbed",
     "from routersploit.core.exploit.option import OptIP, OptPort":"from embedxpl.core.exploit.exploit import OptIP, OptPort",
-    # Protocol clients — correct paths in EmbedXPL
+    # Protocol clients  -  correct paths in EmbedXPL
     "from routersploit.core.http.http_client import HTTPClient":  "from embedxpl.core.http.http_client import HTTPClient",
     "from routersploit.core.udp.udp_client import UDPClient":     "from embedxpl.core.udp.udp_client import UDPClient",
     "from routersploit.core.tcp.tcp_client import TCPClient":     "from embedxpl.core.tcp.tcp_client import TCPClient",
@@ -45,7 +45,7 @@ _IMPORT_MAP = {
 }
 
 _HEADER = """\
-# Absorbed from RouterSploit — rewritten for EmbedXPL v5.0.0
+# Absorbed from RouterSploit  -  rewritten for EmbedXPL v5.0.0
 # Original authors preserved in __info__["authors"]
 # EmbedXPL adaptation: André Henrique (@mrhenrike) | União Geek
 """
@@ -130,7 +130,7 @@ def absorb_cameras(dry_run: bool = False) -> int:
                 dst_file.write_text(transformed)
                 print(f"  [+] camera/{vendor}/{py_file.name}")
             else:
-                print(f"  [DRY] camera/{vendor}/{py_file.name} — {info.get('name', '?')}")
+                print(f"  [DRY] camera/{vendor}/{py_file.name}  -  {info.get('name', '?')}")
             absorbed += 1
 
     return absorbed

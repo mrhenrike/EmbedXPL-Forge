@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Amazon Fire TV Discovery Scanner — ADB port 5555 + DIAL port 8008.
+"""Amazon Fire TV Discovery Scanner  -  ADB port 5555 + DIAL port 8008.
 
 Discovers Amazon Fire TV devices by probing port 5555 (ADB) and port 8008
 (DIAL app-list endpoint).  A DIAL response listing Fire TV apps confirms
@@ -22,7 +22,7 @@ _FIRETV_APP_IDS = ("AmazonVideoApp", "AmazonMusic", "com.amazon", "amazon")
 
 
 class Exploit(HTTPClient):
-    """Amazon Fire TV Discovery — ADB port 5555 + DIAL port 8008 probe.
+    """Amazon Fire TV Discovery  -  ADB port 5555 + DIAL port 8008 probe.
 
     Performs two independent discovery checks:
     1. TCP connect to port 5555 to detect open ADB.
@@ -41,7 +41,7 @@ class Exploit(HTTPClient):
             "device via DIAL app identifiers."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "references": (
             "https://developer.amazon.com/docs/fire-tv/dial-integration.html",
@@ -114,7 +114,7 @@ class Exploit(HTTPClient):
 
         adb_open = self._probe_adb()
         if adb_open:
-            print_success("ADB port {}  OPEN — device may have debugging enabled.".format(
+            print_success("ADB port {}  OPEN  -  device may have debugging enabled.".format(
                 self.adb_port
             ))
         else:

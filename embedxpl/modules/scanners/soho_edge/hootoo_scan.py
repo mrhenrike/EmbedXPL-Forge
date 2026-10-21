@@ -1,7 +1,7 @@
 from embedxpl.modules.scanners.autopwn import Exploit as BaseScanner
 from embedxpl.core.exploit import OptString
 
-# Author: André Henrique (@mrhenrike) | União Geek — https://github.com/Uniao-Geek
+# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 
 
 class Exploit(BaseScanner):

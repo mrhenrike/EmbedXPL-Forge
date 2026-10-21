@@ -5,7 +5,7 @@ Reference tree: `/home/mrhenrike/llm-local/knowledge/PayloadsAllTheThings`
 
 GitHub `has_issues: false` → real contribution path is **PR**, not issue.
 
-## Wave 1 — assessment
+## Wave 1  -  assessment
 
 Compared local fuzzing / traversal material against existing PAT sections:
 

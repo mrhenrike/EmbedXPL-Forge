@@ -121,7 +121,7 @@ SYNC_MAP: dict[str, dict] = {
     "wordlist_data": {
         "src":  _SUITE_ROOT / "WordlistXPL-Forge" / "passwords",
         "dst":  _EMBEDXPL  / "embedxpl" / "data" / "wordlists" / "passwords",
-        "pkg_rewrite": {},   # data files — no rewrite
+        "pkg_rewrite": {},   # data files  -  no rewrite
         "include_subdirs": None,
         "skip_subdirs": [],
         "description": "WordlistXPL passwords → data/wordlists/passwords/",
@@ -236,7 +236,7 @@ def sync_target(
         init = dst / "__init__.py"
         if not init.exists():
             init.write_text(
-                f'"""EmbedXPL — {target_name} modules (synced from specialized tool).\n'
+                f'"""EmbedXPL  -  {target_name} modules (synced from specialized tool).\n'
                 f'# authorized use only\n"""\n'
             )
 
@@ -282,7 +282,7 @@ def sync_target(
             prev_dst_hash = synced.get(manifest_key, {}).get("dst_hash")
             if prev_dst_hash and dst_hash != prev_dst_hash:
                 if verbose:
-                    print(f"  [CONFLICT]  {rel} — dest modified locally, keeping")
+                    print(f"  [CONFLICT]  {rel}  -  dest modified locally, keeping")
                 stats["conflicts"] += 1
                 continue
 
@@ -356,11 +356,11 @@ def main() -> None:
     targets = SYNC_MAP if args.target == "all" else {args.target: SYNC_MAP[args.target]}
 
     print(f"{'='*65}")
-    print(f"  EmbedXPL Suite Sync — {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    print(f"  EmbedXPL Suite Sync  -  {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     print(f"  Suite root: {_SUITE_ROOT}")
     print(f"  EmbedXPL:   {_EMBEDXPL}")
     if args.dry_run:
-        print("  *** DRY RUN — no files will be written ***")
+        print("  *** DRY RUN  -  no files will be written ***")
     print(f"{'='*65}\n")
 
     total = {"copied": 0, "skipped": 0, "conflicts": 0, "errors": 0, "rewrites": 0}

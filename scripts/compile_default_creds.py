@@ -553,7 +553,7 @@ def parse_router_files(routers_dir: Path) -> dict[str, list[dict[str, Any]]]:
                         "pass": p,
                         "protocol": "multi",
                         "device_type": dtype,
-                        "notes": f"Router default — {stem}",
+                        "notes": f"Router default  -  {stem}",
                     }
                     db[vendor].append(entry)
 
@@ -584,7 +584,7 @@ EXTRA_CREDS: dict[str, list[dict[str, Any]]] = {
         {"user": "root", "pass": "", "protocol": "http", "device_type": "camera", "notes": "Blank password variant"},
     ],
     "foscam": [
-        {"user": "admin", "pass": "", "protocol": "http", "device_type": "camera", "notes": "Factory default — blank password"},
+        {"user": "admin", "pass": "", "protocol": "http", "device_type": "camera", "notes": "Factory default  -  blank password"},
         {"user": "admin", "pass": "admin", "protocol": "http", "device_type": "camera", "notes": "Alternative"},
         {"user": "user", "pass": "user", "protocol": "http", "device_type": "camera", "notes": "User-level account"},
     ],
@@ -709,7 +709,7 @@ EXTRA_CREDS: dict[str, list[dict[str, Any]]] = {
         {"user": "admin", "pass": "12345678", "protocol": "http", "device_type": "printer", "notes": "Some bizhub models"},
     ],
     "lexmark": [
-        {"user": "admin", "pass": "", "protocol": "http", "device_type": "printer", "notes": "Lexmark EWS — no password"},
+        {"user": "admin", "pass": "", "protocol": "http", "device_type": "printer", "notes": "Lexmark EWS  -  no password"},
         {"user": "admin", "pass": "admin", "protocol": "http", "device_type": "printer", "notes": "Some firmware"},
     ],
     "oki": [
@@ -727,17 +727,17 @@ EXTRA_CREDS: dict[str, list[dict[str, Any]]] = {
     ],
     # --- NAS / Storage ---
     "qnap": [
-        {"user": "admin", "pass": "admin", "protocol": "http", "device_type": "nas", "notes": "Factory default — QLocker/DeadBolt targeted"},
+        {"user": "admin", "pass": "admin", "protocol": "http", "device_type": "nas", "notes": "Factory default  -  QLocker/DeadBolt targeted"},
         {"user": "admin", "pass": "admin", "protocol": "ssh", "device_type": "nas", "notes": "SSH access"},
         {"user": "admin", "pass": "", "protocol": "http", "device_type": "nas", "notes": "Some firmware"},
     ],
     "synology": [
-        {"user": "admin", "pass": "", "protocol": "http", "device_type": "nas", "notes": "DSM default — forces setup"},
+        {"user": "admin", "pass": "", "protocol": "http", "device_type": "nas", "notes": "DSM default  -  forces setup"},
         {"user": "admin", "pass": "admin", "protocol": "ssh", "device_type": "nas", "notes": "Older firmware"},
         {"user": "root", "pass": "", "protocol": "ssh", "device_type": "nas", "notes": "Root SSH (disabled by default in newer DSM)"},
     ],
     "wd": [
-        {"user": "admin", "pass": "", "protocol": "http", "device_type": "nas", "notes": "WD MyCloud — no password"},
+        {"user": "admin", "pass": "", "protocol": "http", "device_type": "nas", "notes": "WD MyCloud  -  no password"},
         {"user": "mydlinkBRionyg", "pass": "abc12345cba", "protocol": "http", "device_type": "nas", "notes": "CVE-2018-18472 hardcoded backdoor"},
     ],
     "seagate": [
@@ -783,7 +783,7 @@ EXTRA_CREDS: dict[str, list[dict[str, Any]]] = {
     ],
     # --- Switches / Network ---
     "extreme_networks": [
-        {"user": "admin", "pass": "", "protocol": "http", "device_type": "switch", "notes": "ExtremeOS default — no password"},
+        {"user": "admin", "pass": "", "protocol": "http", "device_type": "switch", "notes": "ExtremeOS default  -  no password"},
         {"user": "user", "pass": "", "protocol": "telnet", "device_type": "switch", "notes": "User-level access"},
         {"user": "admin", "pass": "admin", "protocol": "http", "device_type": "switch", "notes": "Some appliances"},
     ],
@@ -793,9 +793,9 @@ EXTRA_CREDS: dict[str, list[dict[str, Any]]] = {
         {"user": "admin", "pass": "admin", "protocol": "http", "device_type": "switch", "notes": "Web interface"},
     ],
     "nortel": [
-        {"user": "ro", "pass": "ro", "protocol": "multi", "device_type": "switch", "notes": "Accelar/Passport — read-only"},
-        {"user": "rw", "pass": "rw", "protocol": "multi", "device_type": "switch", "notes": "Accelar/Passport — read-write"},
-        {"user": "rwa", "pass": "rwa", "protocol": "multi", "device_type": "switch", "notes": "Accelar/Passport — full"},
+        {"user": "ro", "pass": "ro", "protocol": "multi", "device_type": "switch", "notes": "Accelar/Passport  -  read-only"},
+        {"user": "rw", "pass": "rw", "protocol": "multi", "device_type": "switch", "notes": "Accelar/Passport  -  read-write"},
+        {"user": "rwa", "pass": "rwa", "protocol": "multi", "device_type": "switch", "notes": "Accelar/Passport  -  full"},
         {"user": "admin", "pass": "setup", "protocol": "http", "device_type": "switch", "notes": "Contivity/Extranet"},
         {"user": "supervisor", "pass": "visor", "protocol": "multi", "device_type": "switch", "notes": "BCM 3.5-3.7"},
         {"user": "administrator", "pass": "PlsChgMe!", "protocol": "multi", "device_type": "switch", "notes": "BCM"},
@@ -862,11 +862,11 @@ EXTRA_CREDS: dict[str, list[dict[str, Any]]] = {
         {"user": "admin", "pass": "admin", "protocol": "http", "device_type": "ics", "notes": "SREA-01 Ethernet adapter"},
     ],
     "rockwell": [
-        {"user": "", "pass": "", "protocol": "ethernet/ip", "device_type": "ics", "notes": "ControlLogix/MicroLogix — no auth by default"},
+        {"user": "", "pass": "", "protocol": "ethernet/ip", "device_type": "ics", "notes": "ControlLogix/MicroLogix  -  no auth by default"},
         {"user": "Administrator", "pass": "", "protocol": "windows", "device_type": "ics", "notes": "FactoryTalk View"},
     ],
     "apc": [
-        {"user": "apc", "pass": "apc", "protocol": "http", "device_type": "ics", "notes": "APC Smart-UPS — universal default"},
+        {"user": "apc", "pass": "apc", "protocol": "http", "device_type": "ics", "notes": "APC Smart-UPS  -  universal default"},
         {"user": "device", "pass": "apc", "protocol": "http", "device_type": "ics", "notes": "Device-level account"},
         {"user": "apc", "pass": "apc", "protocol": "ssh", "device_type": "ics", "notes": "SSH management"},
     ],
@@ -881,7 +881,7 @@ EXTRA_CREDS: dict[str, list[dict[str, Any]]] = {
         {"user": "admin", "pass": "root", "protocol": "ssh", "device_type": "ics", "notes": "AWK wireless APs"},
     ],
     "omron": [
-        {"user": "admin", "pass": "", "protocol": "http", "device_type": "ics", "notes": "NJ/NX PLCs — no password"},
+        {"user": "admin", "pass": "", "protocol": "http", "device_type": "ics", "notes": "NJ/NX PLCs  -  no password"},
         {"user": "admin", "pass": "admin", "protocol": "http", "device_type": "ics", "notes": "CX-One variant"},
     ],
     # --- Additional routers not in SecLists ---
@@ -912,18 +912,18 @@ EXTRA_CREDS: dict[str, list[dict[str, Any]]] = {
         {"user": "ubnt", "pass": "ubnt", "protocol": "ssh", "device_type": "wireless", "notes": "SSH access"},
     ],
     "fortinet": [
-        {"user": "admin", "pass": "", "protocol": "http", "device_type": "firewall", "notes": "FortiGate factory default — no password"},
+        {"user": "admin", "pass": "", "protocol": "http", "device_type": "firewall", "notes": "FortiGate factory default  -  no password"},
         {"user": "admin", "pass": "", "protocol": "ssh", "device_type": "firewall", "notes": "FortiGate SSH"},
         {"user": "maintainer", "pass": "bcpb+SERIAL", "protocol": "console", "device_type": "firewall", "notes": "Console recovery (physical access only)"},
     ],
     "zyxel": [
         {"user": "admin", "pass": "1234", "protocol": "http", "device_type": "router", "notes": "Prestige series default"},
-        {"user": "", "pass": "1234", "protocol": "telnet", "device_type": "router", "notes": "Telnet — no username"},
+        {"user": "", "pass": "1234", "protocol": "telnet", "device_type": "router", "notes": "Telnet  -  no username"},
         {"user": "zyfwp", "pass": "PrOw!aN_fXp", "protocol": "ftp", "device_type": "router", "notes": "CVE-2020-29583 hardcoded backdoor"},
     ],
     # SNMP universal community strings
     "snmp_universal": [
-        {"user": "public", "pass": "public", "protocol": "snmp", "device_type": "embedded", "notes": "SNMP read community string — universal"},
+        {"user": "public", "pass": "public", "protocol": "snmp", "device_type": "embedded", "notes": "SNMP read community string  -  universal"},
         {"user": "private", "pass": "private", "protocol": "snmp", "device_type": "embedded", "notes": "SNMP read-write community string"},
         {"user": "community", "pass": "community", "protocol": "snmp", "device_type": "embedded", "notes": "SNMP read string"},
         {"user": "manager", "pass": "manager", "protocol": "snmp", "device_type": "embedded", "notes": "SNMP r/w (HP/Compaq)"},

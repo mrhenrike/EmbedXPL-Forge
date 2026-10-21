@@ -6,10 +6,10 @@
 # MITRE: T1542.001 (System Firmware), T1205 (Traffic Signaling)
 """
 # ============================================================
-# AUTHORIZED USE ONLY — See docs/malware-research/DISCLAIMER.md
+# AUTHORIZED USE ONLY  -  See docs/malware-research/DISCLAIMER.md
 # Use only against systems you own or have WRITTEN authorization
 # to test. Operator assumes full legal responsibility for use.
-# simulate=True by default — set False only for authorized tests.
+# simulate=True by default  -  set False only for authorized tests.
 # ============================================================
 
 from __future__ import annotations
@@ -38,7 +38,7 @@ METADATA = {
         "(2) unexpected TCP ports that implants use as trigger channels, "
         "(3) SNMP community strings associated with implant access, "
         "(4) unexpected SSH host key changes (re-implant indicator). "
-        "Non-destructive — read only."
+        "Non-destructive  -  read only."
     ),
     "references":     [
         "docs/malware-research/by-tool/EmbedXPL.md#2-equationgroup",
@@ -60,8 +60,8 @@ EQ_TRIGGER_PORTS = [
     (8443, "HTTPS C2 channel"),
 ]
 
-# Juniper NetScreen CVE-2015-7755 — master password constant
-_JUNIPER_BACKDOOR_HASH = "3u$3c"  # placeholder indicator — real hash in CVE advisory
+# Juniper NetScreen CVE-2015-7755  -  master password constant
+_JUNIPER_BACKDOOR_HASH = "3u$3c"  # placeholder indicator  -  real hash in CVE advisory
 
 
 class Exploit(_Base):
@@ -105,7 +105,7 @@ class Exploit(_Base):
                 s = socket.create_connection((self.target, port), timeout=1.5)
                 s.close()
                 findings.append(f"SUSPICIOUS: Port {port}/tcp open ({desc})")
-                print(f"  [!] Port {port} OPEN — {desc}")
+                print(f"  [!] Port {port} OPEN  -  {desc}")
             except Exception:
                 pass
 
@@ -120,7 +120,7 @@ class Exploit(_Base):
             if result.stdout:
                 key_hash = hashlib.sha256(result.stdout.encode()).hexdigest()[:16]
                 print(f"  SSH key fingerprint (first 16 chars SHA256): {key_hash}")
-                print("  [NOTE] Store this and compare on future scans — changes may indicate re-implant")
+                print("  [NOTE] Store this and compare on future scans  -  changes may indicate re-implant")
         except Exception:
             print("  ssh-keyscan not available")
 
@@ -144,10 +144,10 @@ class Exploit(_Base):
                 desc_start = resp.find(b"Cisco") or resp.find(b"NetScreen") or resp.find(b"Juniper")
                 if b"Cisco" in resp:
                     print("  SNMP open: Cisco device detected (EXTRABACON CVE-2016-6366 vector)")
-                    findings.append("CISCO detected with SNMP open — check CVE-2016-6366")
+                    findings.append("CISCO detected with SNMP open  -  check CVE-2016-6366")
                 elif b"NetScreen" in resp or b"Juniper" in resp:
                     print("  SNMP open: Juniper/NetScreen detected (CVE-2015-7755 vector)")
-                    findings.append("JUNIPER NetScreen with SNMP open — check CVE-2015-7755 backdoor")
+                    findings.append("JUNIPER NetScreen with SNMP open  -  check CVE-2015-7755 backdoor")
                 else:
                     print(f"  SNMP open: {resp[20:60]!r}")
             except socket.timeout:
@@ -164,7 +164,7 @@ class Exploit(_Base):
             print("\n    Recommendation:")
             print("    - Disable SNMP write access (community 'private')")
             print("    - Upgrade Cisco ASA firmware (CVE-2016-6366 patched in 8.4(7.30)+)")
-            print("    - Upgrade Juniper NetScreen (CVE-2015-7755 — no longer supported; replace)")
+            print("    - Upgrade Juniper NetScreen (CVE-2015-7755  -  no longer supported; replace)")
         else:
             print("    No obvious EquationGroup implant indicators found")
         print()

@@ -7,7 +7,7 @@ class Exploit(HTTPBasicDigestDefault):
     __info__ = {
         "name": "Baudtec Router Default Web Interface Creds",
         "description": "Dictionary attack against Baudtec Router Web Interface (HTTP Basic/Digest Auth).",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Baudtec Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

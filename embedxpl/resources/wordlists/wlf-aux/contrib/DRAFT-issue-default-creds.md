@@ -1,4 +1,4 @@
-# DRAFT — SecLists issue: manufacturer default-creds delta
+# DRAFT  -  SecLists issue: manufacturer default-creds delta
 
 > Local draft only. Copy/edit by hand before opening on GitHub.
 > Do not paste AI-authored prose if submitting to SecLists.
@@ -7,7 +7,7 @@
 
 Add / review manufacturer default credential delta (ICS, printers, network gear)
 
-## Body (skeleton — rewrite in your own words)
+## Body (skeleton  -  rewrite in your own words)
 
 ### Summary
 

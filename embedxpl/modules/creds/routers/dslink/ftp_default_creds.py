@@ -7,7 +7,7 @@ class Exploit(FTPDefault):
     __info__ = {
         "name": "Dslink Router Default FTP Creds",
         "description": "Dictionary attack with default credentials against Dslink Router FTP service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Dslink Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

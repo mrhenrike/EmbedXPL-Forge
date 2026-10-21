@@ -7,7 +7,7 @@ class Exploit(SSHDefault):
     __info__ = {
         "name": "Spectrum Router Default SSH Creds",
         "description": "Dictionary attack with default credentials against Spectrum Router SSH service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Spectrum Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

@@ -68,7 +68,7 @@ class Exploit(Exploit):
             "access point management daemon. Triggered via crafted 802.11 management "
             "frame or association request. No credentials required. "
             "Affects routers/APs using MT7622 chipset (Asus, Netgear, and others). "
-            "CVE pending — 2026 research."
+            "CVE pending  -  2026 research."
         ),
         "authors": ("Andre Henrique (@mrhenrike) | Uniao Geek",),
         "references": (
@@ -105,9 +105,9 @@ class Exploit(Exploit):
         if body:
             print_success(f"AP web UI reachable ({len(body)} bytes)")
             if "mt7622" in body.lower() or "mediatek" in body.lower():
-                print_success("MediaTek MT7622 banner detected — potentially vulnerable")
+                print_success("MediaTek MT7622 banner detected  -  potentially vulnerable")
             else:
-                print_info("Chipset not confirmed via web banner — check via 802.11 probe frames")
+                print_info("Chipset not confirmed via web banner  -  check via 802.11 probe frames")
         print_info(
             "Full pre-auth overflow exploitation requires: monitor-mode NIC + scapy "
             "to craft 802.11 association request frames. "

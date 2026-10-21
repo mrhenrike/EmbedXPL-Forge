@@ -71,7 +71,7 @@ class Exploit(BaseExploit):
                         sock.sendto(b"\x00", (self.target, port))
                     data, _ = sock.recvfrom(256)
                     if data:
-                        print_success("UDP/{} open — {} (BACnet response: {} bytes)".format(
+                        print_success("UDP/{} open  -  {} (BACnet response: {} bytes)".format(
                             port, desc, len(data)
                         ))
                 except Exception:
@@ -81,7 +81,7 @@ class Exploit(BaseExploit):
                     with socket.create_connection(
                         (self.target, port), timeout=float(self.timeout)
                     ):
-                        print_success("TCP/{} open — {}".format(port, desc))
+                        print_success("TCP/{} open  -  {}".format(port, desc))
                 except Exception:
                     pass
 

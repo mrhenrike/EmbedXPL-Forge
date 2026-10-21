@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Dahua CCTV — Multi-Model Discovery Scanner.
+"""Dahua CCTV  -  Multi-Model Discovery Scanner.
 
 Discovers Dahua IP cameras, NVRs, DVRs, and PTZ devices via HTTP
 fingerprinting, RTSP probing, and the proprietary TCP/37777 binary protocol.
@@ -79,7 +79,7 @@ class Exploit(HTTPClient):
                 if marker in combined:
                     detected = True
                     print_success(
-                        "Dahua device detected — marker '{}' in HTTP response".format(marker)
+                        "Dahua device detected  -  marker '{}' in HTTP response".format(marker)
                     )
                     break
 

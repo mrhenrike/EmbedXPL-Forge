@@ -1,4 +1,4 @@
-"""EmbedXPL DB Init — seed script.
+"""EmbedXPL DB Init  -  seed script.
 
 Creates ~/.embedxpl/exf.db from scratch and optionally populates the
 module_cache table by scanning the local EmbedXPL module tree.

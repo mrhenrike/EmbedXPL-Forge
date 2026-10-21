@@ -1,4 +1,4 @@
-"""EmbedXPL Runtime — Rust Executor.
+"""EmbedXPL Runtime  -  Rust Executor.
 
 Compiles Rust source files or Cargo projects. Supports cross-compilation
 via rustup target add and cargo build --target.

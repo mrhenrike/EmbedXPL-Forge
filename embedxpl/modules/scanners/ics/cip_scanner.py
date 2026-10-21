@@ -98,7 +98,7 @@ def _scan_target(host: str, port: int, timeout: int) -> Optional[dict]:
         if len(resp2) < 46:
             return {"session_handle": hex(session_handle), "note": "RegisterSession OK, GetAttributeAll no data"}
 
-        # Parse CPF response — skip ENIP header (24) + interface/timeout (6) + item_count (2)
+        # Parse CPF response  -  skip ENIP header (24) + interface/timeout (6) + item_count (2)
         # + NullAddress item (4) + UnconnData item header (4) = 40 bytes from start of body
         body_offset = 24 + 6 + 2
         # NullAddress: 4 bytes, UnconnData hdr: 4 bytes, CIP reply starts at offset 40
@@ -139,7 +139,7 @@ def _scan_target(host: str, port: int, timeout: int) -> Optional[dict]:
 
 
 class Exploit(BaseExploit):
-    """CIP/EtherNet/IP Device Scanner — Identity Object enumeration.
+    """CIP/EtherNet/IP Device Scanner  -  Identity Object enumeration.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -155,7 +155,7 @@ class Exploit(BaseExploit):
         ),
         "authors": (
             "wenzhe zhu <jtrkid[at]gmail.com> (ISF icssploit)",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge port",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge port",
         ),
         "references": (
             "https://www.odva.org/technology-standards/key-technologies/ethernet-ip/",

@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Hikvision R0 Indoor Station — Network Detection and Fingerprinting.
+"""Hikvision R0 Indoor Station  -  Network Detection and Fingerprinting.
 
 Network-based scanner to discover and fingerprint Hikvision R0 Video
 Intercom Indoor Station devices. Probes HTTP (ISAPI), SSH (Dropbear
@@ -149,16 +149,16 @@ class Exploit(Exploit):
             "serial numbers, and activation status. Flags vulnerable versions."
         ),
         "authors": (
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "references": (
             "https://www.hikvision.com/en/products/Video-Intercom/",
         ),
         "devices": (
-            "Hikvision DS-KH6320-LE1(B) — R0 Indoor Station",
-            "Hikvision DS-KH6350 — R0 Indoor Station",
-            "Hikvision DS-KH6360 — R0 Indoor Station",
-            "Hikvision DS-KH6320Y-WTE2 — R0 Indoor Station",
+            "Hikvision DS-KH6320-LE1(B)  -  R0 Indoor Station",
+            "Hikvision DS-KH6350  -  R0 Indoor Station",
+            "Hikvision DS-KH6360  -  R0 Indoor Station",
+            "Hikvision DS-KH6320Y-WTE2  -  R0 Indoor Station",
         ),
     }
 
@@ -169,7 +169,7 @@ class Exploit(Exploit):
     scan_rtsp = OptBool(False, "Also check RTSP port 554")
 
     def _probe_isapi_device_info(self, host, http_port):
-        """GET /ISAPI/System/deviceInfo — parse model, firmware, serial."""
+        """GET /ISAPI/System/deviceInfo  -  parse model, firmware, serial."""
         result = {
             "model": None,
             "firmware": None,
@@ -203,7 +203,7 @@ class Exploit(Exploit):
         return result
 
     def _probe_activate_status(self, host, http_port):
-        """GET /SDK/activateStatus — check if device is activated."""
+        """GET /SDK/activateStatus  -  check if device is activated."""
         status, _headers, body = _http_get(host, http_port, "/SDK/activateStatus")
 
         if status == 200 and body:
@@ -440,7 +440,7 @@ class Exploit(Exploit):
                 if ssh["is_dropbear"]:
                     result["services"][-1] = "SSH/Dropbear (port 22)"
                     result["vulnerabilities"].append(
-                        "Dropbear detected — likely static host keys (CWE-321)"
+                        "Dropbear detected  -  likely static host keys (CWE-321)"
                     )
                     if not result["is_r0"] and not result["model"]:
                         result["is_r0"] = True
@@ -451,7 +451,7 @@ class Exploit(Exploit):
                 if sip["sip_available"]:
                     svc = "SIP (port {})".format(sip_port)
                     if sip["server"]:
-                        svc += " — {}".format(sip["server"])
+                        svc += "  -  {}".format(sip["server"])
                     result["services"].append(svc)
 
         if self.scan_rtsp:
@@ -459,7 +459,7 @@ class Exploit(Exploit):
             if rtsp["rtsp_available"]:
                 svc = "RTSP (port 554)"
                 if rtsp["server"]:
-                    svc += " — {}".format(rtsp["server"])
+                    svc += "  -  {}".format(rtsp["server"])
                 result["services"].append(svc)
                 if rtsp["server"] and "hikvision" in rtsp["server"].lower():
                     if not result["model"]:
@@ -508,7 +508,7 @@ class Exploit(Exploit):
             for dev in sadp_results:
                 ip = dev.get("reported_ip", dev.get("ip", "?"))
                 model = dev.get("model", "Unknown")
-                print_info("  SADP: {} — {}".format(ip, model))
+                print_info("  SADP: {}  -  {}".format(ip, model))
 
                 existing = None
                 for r in all_results:

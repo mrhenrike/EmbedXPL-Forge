@@ -1,4 +1,4 @@
-"""RTSP Camera Scanner — Full brute-force engine (cameradar Python port).
+"""RTSP Camera Scanner  -  Full brute-force engine (cameradar Python port).
 
 Native Python RTSP scanner ported from cameradar (Go→Python).
 Implements CIDR/IP/range/hostname target expansion, port discovery via raw
@@ -602,7 +602,7 @@ class RtspScanner:
         # Route discovery
         route = self.brute_route(host, port)
         if not route:
-            logger.debug("[RtspScanner] %s:%d — no valid route found", host, port)
+            logger.debug("[RtspScanner] %s:%d  -  no valid route found", host, port)
             return None
 
         # Detect auth + brute credentials
@@ -643,7 +643,7 @@ class RtspScanner:
 # ── EmbedXPL Module Exploit class ─────────────────────────────────────────────
 
 class Exploit(BaseExploit):
-    """RTSP Camera Scanner — Full brute-force (cameradar Python port).
+    """RTSP Camera Scanner  -  Full brute-force (cameradar Python port).
 
     Ported from cameradar (https://github.com/Ullaakut/cameradar, MIT).
     Uses raw sockets + asyncio; no nmap dependency required.
@@ -662,7 +662,7 @@ class Exploit(BaseExploit):
         ),
         "authors": (
             "Ullaakut (cameradar, Go original)",
-            "André Henrique (@mrhenrike) — EmbedXPL Python port",
+            "André Henrique (@mrhenrike)  -  EmbedXPL Python port",
         ),
         "references": (
             "https://github.com/Ullaakut/cameradar",

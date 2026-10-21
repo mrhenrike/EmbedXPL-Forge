@@ -1,5 +1,5 @@
-# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek — https://github.com/Uniao-Geek
-"""EmbedXPL-Forge — Multi-Language PoC Runner.
+# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
+"""EmbedXPL-Forge  -  Multi-Language PoC Runner.
 
 Executes PoC scripts written in Ruby, Node.js, PHP, Bash, and Python
 as sub-processes. Designed to be mixed into exploit modules alongside
@@ -7,11 +7,11 @@ as sub-processes. Designed to be mixed into exploit modules alongside
 multi-language orchestration.
 
 Supported runtimes:
-  - Ruby   (ruby)   — Metasploit-derived scripts, standalone PoCs
-  - Node   (node)   — JavaScript exploit PoCs, headless-browser attacks
-  - PHP    (php)    — Web-based PoC scripts
-  - Bash   (bash)   — Shell one-liners and staged payloads
-  - Python (python3) — Cross-invoked Python sub-scripts
+  - Ruby   (ruby)    -  Metasploit-derived scripts, standalone PoCs
+  - Node   (node)    -  JavaScript exploit PoCs, headless-browser attacks
+  - PHP    (php)     -  Web-based PoC scripts
+  - Bash   (bash)    -  Shell one-liners and staged payloads
+  - Python (python3)  -  Cross-invoked Python sub-scripts
 
 Author: André Henrique (@mrhenrike) | União Geek
 Version: 1.0.0

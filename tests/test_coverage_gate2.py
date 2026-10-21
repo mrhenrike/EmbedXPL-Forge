@@ -90,7 +90,7 @@ def test_config_reset_cache() -> None:
 
 
 # ---------------------------------------------------------------------------
-# embedxpl.core.session — host_id, ModuleResult, HostSession
+# embedxpl.core.session  -  host_id, ModuleResult, HostSession
 # ---------------------------------------------------------------------------
 
 def test_host_id_deterministic() -> None:
@@ -151,7 +151,7 @@ def test_host_session_defaults() -> None:
 
 
 # ---------------------------------------------------------------------------
-# embedxpl.core.pool — PoolStrategy, SmartPool, cpu_count
+# embedxpl.core.pool  -  PoolStrategy, SmartPool, cpu_count
 # ---------------------------------------------------------------------------
 
 def test_cpu_count_positive() -> None:
@@ -187,7 +187,7 @@ def test_smart_pool_processes_strategy() -> None:
 
 
 # ---------------------------------------------------------------------------
-# embedxpl.core.oui — normalize_vendor
+# embedxpl.core.oui  -  normalize_vendor
 # ---------------------------------------------------------------------------
 
 def test_normalize_vendor_known() -> None:
@@ -222,7 +222,7 @@ def test_get_stats() -> None:
 
 
 # ---------------------------------------------------------------------------
-# embedxpl.core.banner — TOOL_BANNERS dict
+# embedxpl.core.banner  -  TOOL_BANNERS dict
 # ---------------------------------------------------------------------------
 
 def test_tool_banners_dict() -> None:
@@ -252,7 +252,7 @@ def test_toolchain_available() -> None:
 def test_toolchain_get_c_compiler() -> None:
     from embedxpl.runtime.toolchain import get_c_compiler
     cc = get_c_compiler("x64")
-    # may be None if no gcc/clang — that's ok
+    # may be None if no gcc/clang  -  that's ok
     assert cc is None or isinstance(cc, str)
 
 
@@ -332,7 +332,7 @@ def test_cache_clear(tmp_path) -> None:
 
 
 # ---------------------------------------------------------------------------
-# embedxpl.runtime.executor — XplRuntime, get_runtime
+# embedxpl.runtime.executor  -  XplRuntime, get_runtime
 # ---------------------------------------------------------------------------
 
 def test_get_runtime_returns_instance() -> None:
@@ -348,7 +348,7 @@ def test_xpl_runtime_class() -> None:
 
 
 # ---------------------------------------------------------------------------
-# embedxpl.core.engine — ScanResult, AsyncScanEngine
+# embedxpl.core.engine  -  ScanResult, AsyncScanEngine
 # ---------------------------------------------------------------------------
 
 def test_scan_result_dataclass() -> None:
@@ -365,7 +365,7 @@ def test_async_scan_engine_init() -> None:
 
 
 # ---------------------------------------------------------------------------
-# embedxpl.core.discovery — DiscoveredHost, TimingProfile, PROBE_PORTS
+# embedxpl.core.discovery  -  DiscoveredHost, TimingProfile, PROBE_PORTS
 # ---------------------------------------------------------------------------
 
 def test_discovered_host_dataclass() -> None:

@@ -270,7 +270,7 @@ def _network_around(ip_str: str, prefix: int) -> ipaddress.IPv4Network:
 def _scan_target_printer_ports(host: str, verbose: bool = False) -> None:
     """Quick TCP probe for common printer ports on a single host."""
     open_ports = [p for p in _PRINTER_PROBE_PORTS if _tcp_open(host, p)]
-    print(f"\n  Target {host} — open printer-related ports: {open_ports or 'none'}")
+    print(f"\n  Target {host}  -  open printer-related ports: {open_ports or 'none'}")
     descr = _snmp_get(host, OID_HRDEV_DESCR)
     if descr:
         print(f"  SNMP     : {descr}")
@@ -305,14 +305,14 @@ class discovery:
             self._discover_public_context(ctx)
             return
 
-        # macOS and Android are supported – just ensure the user knows the requirements
+        # macOS and Android are supported - just ensure the user knows the requirements
         if os_type == 'darwin':
             output().chitchat("macOS detected. Discovery requires: brew install net-snmp")
         if os_type == 'android':
             output().chitchat("Android/Termux detected. Discovery requires: pkg install net-snmp")
 
         if usage:
-            print("No target given — discovering printers on local network.")
+            print("No target given  -  discovering printers on local network.")
             print("Press CTRL+C at any time to cancel.\n")
 
         if not shutil.which('snmpget'):
@@ -437,13 +437,13 @@ class discovery:
         """Discovery scoped to a public/WAN target instead of local LAN."""
         print()
         output().chitchat(
-            f"Target {ip} is a public address — local LAN scan skipped."
+            f"Target {ip} is a public address  -  local LAN scan skipped."
         )
         print(f"  Default printer ports: {', '.join(map(str, _PRINTER_PROBE_PORTS))}")
         print()
         print("  [1]  Probe this host only (TCP + SNMP if available)")
         print("  [2]  TCP scan /24 around target (~254 hosts)")
-        print("  [3]  TCP scan /16 around target (large — confirmation required)")
+        print("  [3]  TCP scan /16 around target (large  -  confirmation required)")
         print("  [4]  Custom CIDR (e.g. 191.37.240.0/24 or ASN allocation)")
         print("  [0]  Cancel")
         print()
@@ -466,7 +466,7 @@ class discovery:
         if sel == '3':
             cidr = str(_network_around(ip, 16))
             hosts = _network_around(ip, 16).num_addresses
-            print(f"\n  [!] /16 scan covers ~{hosts} addresses — may take a long time.")
+            print(f"\n  [!] /16 scan covers ~{hosts} addresses  -  may take a long time.")
             confirm = input("  Continue? [y/N]: ").strip().lower()
             if confirm not in ('y', 'yes'):
                 print("  Cancelled.")
@@ -548,7 +548,7 @@ def groinc_passive_sniff(interface: str = None, timeout: int = 30,
     try:
         from scapy.all import sniff, TCP, UDP, IP
     except ImportError:
-        print("[!] scapy not installed — passive sniffer unavailable.")
+        print("[!] scapy not installed  -  passive sniffer unavailable.")
         print("    Install with: pip install scapy")
         return []
 

@@ -1,6 +1,6 @@
-# Security Policy — EmbedXPL-Forge
+# Security Policy  -  EmbedXPL-Forge
 
-**Language:** **English (en-US)** — default. **Português (pt-BR):** [SECURITY.pt-BR.md](SECURITY.pt-BR.md)
+**Language:** **English (en-US)**  -  default. **Português (pt-BR):** [SECURITY.pt-BR.md](SECURITY.pt-BR.md)
 
 ## Supported scope
 
@@ -38,7 +38,7 @@ We prefer **coordinated disclosure**: keep details private until a fix or agreed
 - Use only on assets you **own** or with **written authorization**.
 - Third-party production requires contract and clear rules of engagement.
 - Do not submit customer data, credentials, or dumps to this repository.
-- Modules may be destructive in lab environments — isolate test networks.
+- Modules may be destructive in lab environments  -  isolate test networks.
 
 ## Conduct
 

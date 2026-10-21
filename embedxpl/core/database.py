@@ -1,4 +1,4 @@
-"""EmbedXPL Operational Database — EXFDatabase.
+"""EmbedXPL Operational Database  -  EXFDatabase.
 
 SQLite-based persistence layer for engagement/assessment sessions.
 Stores workspaces, discovered hosts/services, vulnerabilities, captured

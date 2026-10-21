@@ -1,4 +1,4 @@
-"""EmbedXPL Runtime — C Executor.
+"""EmbedXPL Runtime  -  C Executor.
 
 Compiles and executes C source files. Supports native x64 and cross-compilation
 to ARM32, ARM64, MIPS, MIPSLE targets via the cross-compilers detected by

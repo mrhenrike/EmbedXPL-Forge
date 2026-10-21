@@ -123,7 +123,7 @@ def _resolve_vendor_uri(module_name: str) -> Optional[str]:
 
 
 def _resolve_router_vendor_uri(module_name: str) -> Optional[str]:
-    """Legacy router-only resolver — kept for backwards compatibility."""
+    """Legacy router-only resolver  -  kept for backwards compatibility."""
     return _resolve_vendor_uri(module_name)
 
 

@@ -1,12 +1,12 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-"""Siemens S7 Communication Plus Scanner — Fingerprint S7 PLCs (Port 102/TCP).
+"""Siemens S7 Communication Plus Scanner  -  Fingerprint S7 PLCs (Port 102/TCP).
 
 Siemens S7 PLCs use the S7 Communication protocol (S7comm and S7comm-plus) over
 ISO-TSAP/COTP on TCP port 102.  The scanner performs:
 
-  1. COTP Connection Request (CR) — establishes transport connection.
-  2. S7comm Setup Communication request — negotiates PDU size.
-  3. Reads CPU identification (SZL ID 0x001C) — returns PLC order number,
+  1. COTP Connection Request (CR)  -  establishes transport connection.
+  2. S7comm Setup Communication request  -  negotiates PDU size.
+  3. Reads CPU identification (SZL ID 0x001C)  -  returns PLC order number,
      module name, plant identification, hardware/firmware version.
 
 S7comm has no authentication; the PLC processes any valid S7 connection.
@@ -60,7 +60,7 @@ _S7_SETUP_COMM = bytes([
     0x03, 0xC0,              # PDU length (960)
 ])
 
-# S7comm Read SZL (System Status List) ID 0x001C — CPU identification
+# S7comm Read SZL (System Status List) ID 0x001C  -  CPU identification
 _S7_READ_SZL = bytes([
     0x03, 0x00, 0x00, 0x21,  # TPKT
     0x02, 0xF0, 0x80,        # COTP DT
@@ -100,7 +100,7 @@ def _recv_tpkt(sock: socket.socket) -> Optional[bytes]:
 
 
 class Exploit(BaseExploit):
-    """Siemens S7 PLC Communication Scanner — CPU identification via S7comm.
+    """Siemens S7 PLC Communication Scanner  -  CPU identification via S7comm.
 
     Author: André Henrique (LinkedIn/X: @mrhenrike)
     Version: 1.0.0
@@ -112,12 +112,12 @@ class Exploit(BaseExploit):
             "Scans for Siemens S7 PLCs on TCP/102 using the S7 Communication protocol. "
             "Performs COTP connection request + S7comm Setup Communication + SZL read "
             "to extract CPU order number, module name, hardware/firmware versions. "
-            "S7comm has no authentication — targets S7-300/400/1200/1500 series."
+            "S7comm has no authentication  -  targets S7-300/400/1200/1500 series."
         ),
         "authors": (
             "Digitalbond / Project Redpoint",
             "Smod (scadastrangelove)",
-            "André Henrique (@mrhenrike) — EmbedXPL-Forge",
+            "André Henrique (@mrhenrike)  -  EmbedXPL-Forge",
         ),
         "references": (
             "https://github.com/digitalbond/Redpoint",
@@ -146,7 +146,7 @@ class Exploit(BaseExploit):
             sock.sendall(_COTP_CR)
             cotp_resp = _recv_tpkt(sock)
             if not cotp_resp or len(cotp_resp) < 5 or cotp_resp[4] != 0x0B:
-                print_error("COTP connection rejected — target may not be an S7 PLC")
+                print_error("COTP connection rejected  -  target may not be an S7 PLC")
                 return
             print_success("COTP connected to {}:{}".format(self.target, self.port))
 
@@ -182,7 +182,7 @@ class Exploit(BaseExploit):
                     if plant_id:
                         print_status("Plant ID: {}".format(plant_id))
                 except Exception:
-                    print_status("SZL data ({} bytes) — could not parse fields".format(len(szl_data)))
+                    print_status("SZL data ({} bytes)  -  could not parse fields".format(len(szl_data)))
             else:
                 print_status("No SZL response or insufficient data")
         finally:

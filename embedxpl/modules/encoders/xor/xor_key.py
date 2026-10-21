@@ -1,4 +1,4 @@
-"""XOR encoder — chave estática configurável.
+"""XOR encoder  -  chave estática configurável.
 
 Bypassa filtros simples de AV baseados em assinatura.
 Uso: encoder.key = 0x41; encoded = encoder.encode(payload_bytes)
@@ -30,7 +30,7 @@ class Encoder(BaseEncoder):
 
     def decode_stub_c(self) -> str:
         return (
-            f"// XOR decode stub — key=0x{self.key:02x}\n"
+            f"// XOR decode stub  -  key=0x{self.key:02x}\n"
             f"void decode(unsigned char *buf, int len) {{\n"
             f"    for (int i = 0; i < len; i++) buf[i] ^= 0x{self.key:02x};\n"
             f"}}\n"

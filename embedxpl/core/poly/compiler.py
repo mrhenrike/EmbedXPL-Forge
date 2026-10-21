@@ -1,5 +1,5 @@
-# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek — https://github.com/Uniao-Geek
-"""EmbedXPL-Forge — C/C++ PoC Compiler.
+# Author: André Henrique (LinkedIn/X: @mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
+"""EmbedXPL-Forge  -  C/C++ PoC Compiler.
 
 Provides runtime compilation of embedded C/C++ exploit source code using
 any available system compiler (gcc, cc, clang, musl-gcc, mingw-w64).

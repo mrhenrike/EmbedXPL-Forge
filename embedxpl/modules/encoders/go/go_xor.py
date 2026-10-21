@@ -1,4 +1,4 @@
-"""Go XOR encoder — gera source Go com payload XOR-encoded."""
+"""Go XOR encoder  -  gera source Go com payload XOR-encoded."""
 
 import os as _os
 from embedxpl.core.exploit.encoders import BaseEncoder

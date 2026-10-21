@@ -1,4 +1,4 @@
-# CERT/CC VINCE Submission — Herospeed / Longsee NVR
+# CERT/CC VINCE Submission  -  Herospeed / Longsee NVR
 <!-- Template v2, adapted to NIST NVD risk-based enrichment model (eff. 2026-04-15) -->
 <!-- Research IDs: HSLS-2026-001 through HSLS-2026-004 -->
 <!-- Date of first vendor contact attempt: 2026-05-15 -->
@@ -6,11 +6,11 @@
 
 ---
 
-## VINCE — Field: Title / Short Description
+## VINCE  -  Field: Title / Short Description
 
 **PASTE:**
 ```
-Herospeed / Longsee NVR (N-series, MC6830 Platform, 9 OEM re-brands) — 6 Critical/High
+Herospeed / Longsee NVR (N-series, MC6830 Platform, 9 OEM re-brands)  -  6 Critical/High
 Vulnerabilities: Unauthenticated Credential Metadata, XVR Interface Disclosure, Upgrade
 Shell RCE + Retreat.sh 0day (v2.0.6), Hardcoded Root Hash, Config Export with Hardcoded
 AES Key, FTP Diagnostic Command Injection RCE (CVSS 9.8 CRITICAL + 5 additional)
@@ -18,7 +18,7 @@ AES Key, FTP Diagnostic Command Injection RCE (CVSS 9.8 CRITICAL + 5 additional)
 
 ---
 
-## VINCE — Field: Vulnerability Description / Summary
+## VINCE  -  Field: Vulnerability Description / Summary
 
 **PASTE:**
 ```
@@ -31,7 +31,7 @@ vulnerabilities affect all OEM re-brands sharing this Longsee platform.
 
 Researcher estimates 50,000-100,000+ devices exposed on the public internet globally.
 Confirmed Shodan fingerprint (c3l3r1on, May 2026):
-  http.html:"statics/js/variable.js"  ← PRIMARY — finds all NVR families on this platform
+  http.html:"statics/js/variable.js"  ← PRIMARY  -  finds all NVR families on this platform
   http.html:"longseSha256"             ← Secondary (Longsee platform specific)
   http.html:"LsNXVRPlugin"             ← Secondary (NVR plugin)
 FOFA (c3l3r1on, May 2026): body="longseSha256" → 100k+ in Europe alone.
@@ -45,15 +45,15 @@ V5 series), Longse (LSN-9836, LSN-9436), Zintronic (P5, N9000), Turing AI USA
 series, OEM TVT), IRBIS (MBD6804T-EL, V4.02.R11).
 
 PRIOR RELATED CVEs FOR DIFFERENT PRODUCTS (NOT this finding):
-- CVE-2024-5631: Longse NVR3608PGE2W — credential transmission (different model)
-- CVE-2024-5634: Longse cameras — predictable telnet passwords (cameras, not NVR)
+- CVE-2024-5631: Longse NVR3608PGE2W  -  credential transmission (different model)
+- CVE-2024-5634: Longse cameras  -  predictable telnet passwords (cameras, not NVR)
 Our findings are DISTINCT: different models, different vulnerability classes.
 
 ═══════════════════════════════════════════════════════════════
 PRIMARY FINDINGS (require immediate remediation):
 ═══════════════════════════════════════════════════════════════
 
-HSLS-2026-004: Hardcoded Root Password Hash — ALL Versions 2023-2025
+HSLS-2026-004: Hardcoded Root Password Hash  -  ALL Versions 2023-2025
   CVSSv3.1: AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H = 9.8 CRITICAL
   CWE-798: Use of Hard-coded Credentials
   Impact: The DES crypt hash "12ZpTwfyH6/Bs" (salt="12") for the root account
@@ -67,12 +67,12 @@ HSLS-2026-003: Upgrade Package Shell Execution RCE (Two Vectors)
   CVSSv3.1: AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H = 8.8 HIGH
   CWE-78: OS Command Injection / CWE-494: Download of Code Without Integrity Check
   
-  Vector A — v2.0.4 (Source Injection):
+  Vector A  -  v2.0.4 (Source Injection):
   update.sh sources (shell "." operator) the "version" file from the upgrade
   package without any sanitisation: ". $version_remote_file". Any non-assignment
   line in the version file executes as root during the upgrade pipeline.
   
-  Vector B — v2.0.6 "patch" INTRODUCES NEW RCE (Retreat.sh Execution):
+  Vector B  -  v2.0.6 "patch" INTRODUCES NEW RCE (Retreat.sh Execution):
   The vendor's security patch for v2.0.4 introduced a MORE EXPLOITABLE vector.
   update.sh v2.0.6 added:
     detect_shell=/tmp/update/version
@@ -94,7 +94,7 @@ HSLS-2026-001: Unauthenticated Credential Metadata Disclosure
   reconstruction of credentials without triggering lockout or rate-limiting.
   Confirmed on all analyzed firmware versions.
 
-HSLS-2026-005: Config Export with Hardcoded AES Key (Case A — c3l3r1on)
+HSLS-2026-005: Config Export with Hardcoded AES Key (Case A  -  c3l3r1on)
   CVSSv3.1: AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N = 8.8 HIGH
   CWE-798: Use of Hard-coded Credentials / CWE-312: Cleartext Storage
   Impact: libdatamanager.so contains hardcoded AES key "0123456789ABCDEF0123456789abcdef".
@@ -105,7 +105,7 @@ HSLS-2026-005: Config Export with Hardcoded AES Key (Case A — c3l3r1on)
   Source: static analysis of libdatamanager.so from NAND flash dump (c3l3r1on lab).
   variable.js confirms: DEFAULT_ADMIN_PASSWORD="12345" (default credential in all versions).
 
-HSLS-2026-006: FTP Diagnostic Server Parameter Command Injection RCE (Case B — c3l3r1on)
+HSLS-2026-006: FTP Diagnostic Server Parameter Command Injection RCE (Case B  -  c3l3r1on)
   CVSSv3.1: AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H = 8.8 HIGH
   CWE-78: OS Command Injection
   Impact: nvr_main contains FTP_UploadJpgBuffer(server:%s) and TestFTPEv functions
@@ -140,13 +140,13 @@ consider HSLS-2026-004 and HSLS-2026-001 for CISA KEV review.
 
 ---
 
-## VINCE — Field: Affected Products / Vendor
+## VINCE  -  Field: Affected Products / Vendor
 
 **PASTE:**
 ```
 Vendor: Herospeed Technology Limited
 Vendor Website: https://www.herospeed.net/
-Vendor Contact: support@herospeed.net (general contact — no dedicated PSIRT found)
+Vendor Contact: support@herospeed.net (general contact  -  no dedicated PSIRT found)
 Vendor CNA Status: Not known to be a CNA
 
 OEM Platform Vendor (shared firmware): Longse (Longsee Technology Co., Ltd.)
@@ -176,7 +176,7 @@ Firmware source: https://www.herospeed.net/en/index.php?a=lists&c=index&catid=14
 
 ---
 
-## VINCE — Field: CVSSv3.1 Score
+## VINCE  -  Field: CVSSv3.1 Score
 
 **PASTE:**
 ```
@@ -196,7 +196,7 @@ Calculator: https://www.first.org/cvss/calculator/3.1
 
 ---
 
-## VINCE — Field: CWE
+## VINCE  -  Field: CWE
 
 **PASTE:**
 ```
@@ -212,7 +212,7 @@ CWE-312: Cleartext Storage of Sensitive Information (HSLS-2026-002)
 
 ---
 
-## VINCE — Field: Reproduction Steps / Proof of Concept
+## VINCE  -  Field: Reproduction Steps / Proof of Concept
 
 **PASTE:**
 ```
@@ -236,7 +236,7 @@ Phase 1 only (HSLS-2026-001):
 Phase 2 only (HSLS-2026-002):
   python3 HEROSPEED_E2E_POC.py --target TARGET_IP --phase 2
 
-Phase 3 (HSLS-2026-003, upgrade RCE — requires valid credentials):
+Phase 3 (HSLS-2026-003, upgrade RCE  -  requires valid credentials):
   python3 HEROSPEED_E2E_POC.py --target TARGET_IP --phase 3 \
     --username admin --password 12345 \
     --cmd "touch /tmp/HSLS_2026_003_pwned.txt"
@@ -257,15 +257,15 @@ FOFA (cited by independent researcher c3l3r1on, May 2026):
   Conservative global estimate: 50,000+ internet-exposed NVR devices
 
 ZIP contents:
-- HEROSPEED_E2E_POC.py         — Full end-to-end attack chain PoC
-- HEROSPEED_LONGSEE_RESEARCH_REPORT.md — Technical research report
-- VINCE_REPORT_HEROSPEED_LONGSEE_NVR.md — This document
-- VENDOR_EMAIL_HEROSPEED.md    — Vendor notification email
+- HEROSPEED_E2E_POC.py          -  Full end-to-end attack chain PoC
+- HEROSPEED_LONGSEE_RESEARCH_REPORT.md  -  Technical research report
+- VINCE_REPORT_HEROSPEED_LONGSEE_NVR.md  -  This document
+- VENDOR_EMAIL_HEROSPEED.md     -  Vendor notification email
 ```
 
 ---
 
-## VINCE — Field: Impact / Attack Scenario
+## VINCE  -  Field: Impact / Attack Scenario
 
 **PASTE:**
 ```
@@ -320,7 +320,7 @@ HSLS-2026-004 for CISA KEV catalog if in-the-wild exploitation is confirmed.
 
 ---
 
-## VINCE — Field: Has the vendor been contacted?
+## VINCE  -  Field: Has the vendor been contacted?
 
 **PASTE:**
 ```
@@ -344,7 +344,7 @@ assistance in reaching the OEM platform vendor would be appreciated.
 
 ---
 
-## VINCE — Field: Date of First Contact Attempt
+## VINCE  -  Field: Date of First Contact Attempt
 
 **PASTE:**
 ```
@@ -353,7 +353,7 @@ assistance in reaching the OEM platform vendor would be appreciated.
 
 ---
 
-## VINCE — Field: What are your public disclosure plans?
+## VINCE  -  Field: What are your public disclosure plans?
 
 **PASTE:**
 ```
@@ -380,7 +380,7 @@ after CVE assignment to assist defenders in identifying vulnerable devices.
 
 ---
 
-## VINCE — Field: Tracking IDs
+## VINCE  -  Field: Tracking IDs
 
 **PASTE:**
 ```
@@ -396,12 +396,12 @@ Vendor Tracking ID: Pending vendor acknowledgment
 
 ---
 
-## VINCE — Field: Summary of Previous Vendor Communications
+## VINCE  -  Field: Summary of Previous Vendor Communications
 
 **PASTE:**
 ```
 2026-05-15: Initial responsible disclosure email sent to support@herospeed.net
-  - Subject: Security Vulnerability Report — Herospeed NVR N-series (CRITICAL)
+  - Subject: Security Vulnerability Report  -  Herospeed NVR N-series (CRITICAL)
   - Attached: Technical summary (see VENDOR_EMAIL_HEROSPEED.md for exact text)
   - Vendor notified of concurrent CERT/CC VINCE submission (this report)
   - Embargo period: 2026-05-15 to 2026-08-13 (90 days)
@@ -419,7 +419,7 @@ email notification.
 
 ---
 
-## VINCE — Field: Name (Researcher)
+## VINCE  -  Field: Name (Researcher)
 
 **PASTE:**
 ```
@@ -428,7 +428,7 @@ Andre Henrique
 
 ---
 
-## VINCE — Field: Email Address
+## VINCE  -  Field: Email Address
 
 **PASTE:**
 ```
@@ -437,16 +437,16 @@ security.research@uniaogeek.com.br
 
 ---
 
-## VINCE — Field: Organization
+## VINCE  -  Field: Organization
 
 **PASTE:**
 ```
-Uniao Geek — https://github.com/Uniao-Geek
+Uniao Geek  -  https://github.com/Uniao-Geek
 ```
 
 ---
 
-## VINCE — Field: ORCID (Optional)
+## VINCE  -  Field: ORCID (Optional)
 
 **PASTE:**
 ```
@@ -455,7 +455,7 @@ https://orcid.org/0009-0006-0688-4973
 
 ---
 
-## VINCE — Field: Private Comments
+## VINCE  -  Field: Private Comments
 
 **PASTE:**
 ```
@@ -475,7 +475,7 @@ with c3l3r1on and both researchers consent to joint attribution.
 FORMAL REQUESTS:
 1. Assign CVE IDs for HSLS-2026-001 (CVSS 9.1), HSLS-2026-003 (CVSS 8.8),
    HSLS-2026-004 (CVSS 9.8)
-2. Consider HSLS-2026-004 for CISA KEV catalog nomination — hardcoded root
+2. Consider HSLS-2026-004 for CISA KEV catalog nomination  -  hardcoded root
    hash in 50,000+ internet-exposed devices, trivially exploitable chain
 3. Request NVD manual enrichment for all assigned CVEs via nvd@nist.gov
 4. CERT/CC assistance contacting OEM platform vendor (Longse/Longsee) is
@@ -489,7 +489,7 @@ All findings are based on:
 - Source code analysis of update.sh, libweb.so, nvr_main, api.js
 - Full firmware extraction via binwalk + unsquashfs (SquashFS at offset 0x110)
 - Live /api/session/login-capabilities testing against emulated firmware
-  (code=0 returned with salt/challenge without authentication — confirmed)
+  (code=0 returned with salt/challenge without authentication  -  confirmed)
 
 PRIOR ART DISTINCTION:
 CVE-2024-5631 (Longse NVR3608PGE2W, cleartext credential transmission)
@@ -501,15 +501,15 @@ via upgrade pipeline, hardcoded root hash). No overlap with existing CVEs.
 
 ---
 
-## VINCE — File Upload Checklist
+## VINCE  -  File Upload Checklist
 
 ```
 [ ] HEROSPEED_Vulns_HSLS2026_UniaoGeek.zip containing:
-    [x] HEROSPEED_E2E_POC.py          — Full E2E attack chain PoC script
-    [x] HEROSPEED_LONGSEE_RESEARCH_REPORT.md — Technical research report
-    [x] VINCE_REPORT_HEROSPEED_LONGSEE_NVR.md — This submission document
-    [x] VENDOR_EMAIL_HEROSPEED.md     — Vendor notification email
-    [ ] HEROSPEED_VULNS_SUMMARY.pdf   — Optional PDF version of report
+    [x] HEROSPEED_E2E_POC.py           -  Full E2E attack chain PoC script
+    [x] HEROSPEED_LONGSEE_RESEARCH_REPORT.md  -  Technical research report
+    [x] VINCE_REPORT_HEROSPEED_LONGSEE_NVR.md  -  This submission document
+    [x] VENDOR_EMAIL_HEROSPEED.md      -  Vendor notification email
+    [ ] HEROSPEED_VULNS_SUMMARY.pdf    -  Optional PDF version of report
 ```
 
 ---
@@ -533,6 +533,6 @@ via upgrade pipeline, hardcoded root hash). No overlap with existing CVEs.
 
 ---
 
-*VINCE Submission — HSLS-2026-001 through HSLS-2026-004*
+*VINCE Submission  -  HSLS-2026-001 through HSLS-2026-004*
 *Researcher: André Henrique (@mrhenrike) | Uniao Geek*
 *Date: 2026-05-15 | Embargo: 2026-08-13*

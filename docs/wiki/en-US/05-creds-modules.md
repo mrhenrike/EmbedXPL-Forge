@@ -18,7 +18,7 @@ Each credential module inherits from a generic protocol base class and adds vend
 
 ```
 embedxpl/modules/creds/
-├── cameras/        IP cameras, NVRs, DVRs — 40+ camera vendor folders
+├── cameras/        IP cameras, NVRs, DVRs  -  40+ camera vendor folders
 │   ├── acti/           ftp_default_creds, ssh_default_creds, telnet_default_creds, webinterface_http_form_default_creds
 │   ├── american_dynamics/
 │   ├── arecont/
@@ -50,7 +50,7 @@ embedxpl/modules/creds/
 │   ├── dell_idrac/
 │   └── supermicro/
 │
-└── (routers, firewalls, switches, nas, printers — many vendor subfolders)
+└── (routers, firewalls, switches, nas, printers  -  many vendor subfolders)
 ```
 
 ---
@@ -60,12 +60,12 @@ embedxpl/modules/creds/
 | Option | Type | Required | Default | Accepted values | Description |
 |--------|------|----------|---------|-----------------|-------------|
 | `target` | `OptIP` | Yes | `""` | IPv4, IPv6, hostname, `file://path` | Target host or file with IPs (one per line for multi-target) |
-| `port` | `OptPort` | No | Protocol default | 1–65535 | Service port to test |
-| `threads` | `OptInteger` | No | `8` | 1–300 | Number of parallel connection threads |
+| `port` | `OptPort` | No | Protocol default | 1-65535 | Service port to test |
+| `threads` | `OptInteger` | No | `8` | 1-300 | Number of parallel connection threads |
 | `defaults` | `OptWordlist` | No | Vendor-specific | `user:pass`, comma-separated pairs, or `file://path` | Credential list to try |
 | `stop_on_success` | `OptBool` | No | `True` | `true`, `false` | Stop testing after first successful credential |
 | `verbosity` | `OptBool` | No | `True` | `true`, `false` | Show each credential attempt in the output |
-| `timeout` | `OptInteger` | No | `10` | 1–120 | Per-connection timeout in seconds |
+| `timeout` | `OptInteger` | No | `10` | 1-120 | Per-connection timeout in seconds |
 
 **Protocol default ports:**
 
@@ -82,7 +82,7 @@ embedxpl/modules/creds/
 
 ## Module types by protocol
 
-### `telnet_default_creds` — Telnet
+### `telnet_default_creds`  -  Telnet
 
 Tests Telnet login with vendor default credentials. Uses `telnetlib3` on Python 3.13+ and `telnetlib` on earlier versions.
 
@@ -115,7 +115,7 @@ exf (Hikvision Camera Default Telnet Creds) > set target 192.168.1.100
 exf (Hikvision Camera Default Telnet Creds) > run
 [*] Running module ...
 [*] Trying admin:12345 on 192.168.1.100:23
-[+] SUCCESS: admin:12345 — telnet session obtained
+[+] SUCCESS: admin:12345  -  telnet session obtained
 ```
 
 **Terminal session (all credentials fail):**
@@ -128,7 +128,7 @@ exf (Hikvision Camera Default Telnet Creds) > run
 [-] No valid credentials found
 ```
 
-**Terminal session (Dahua camera — multiple defaults):**
+**Terminal session (Dahua camera  -  multiple defaults):**
 
 ```text
 exf > use creds/cameras/dahua/telnet_default_creds
@@ -139,12 +139,12 @@ exf (Dahua Camera/DVR/NVR Default Telnet Creds) > run
 [*] Trying admin:admin on 192.168.1.50:23
 [-] FAIL: admin:admin
 [*] Trying 888888:888888 on 192.168.1.50:23
-[+] SUCCESS: 888888:888888 — telnet session obtained
+[+] SUCCESS: 888888:888888  -  telnet session obtained
 ```
 
 ---
 
-### `ssh_default_creds` — SSH
+### `ssh_default_creds`  -  SSH
 
 Tests SSH login with vendor default credentials using Paramiko.
 
@@ -168,7 +168,7 @@ exf (Hikvision Camera Default SSH Creds) > run
 [*] Trying admin:12345 on 192.168.1.100:22
 [-] FAIL: admin:12345
 [*] Trying root:hikadmin on 192.168.1.100:22
-[+] SUCCESS: root:hikadmin — SSH session opened
+[+] SUCCESS: root:hikadmin  -  SSH session opened
 ```
 
 **Terminal session (Axis camera SSH):**
@@ -180,12 +180,12 @@ exf (Axis Camera Default SSH Creds) > set target 192.168.1.110
 exf (Axis Camera Default SSH Creds) > run
 [*] Running module ...
 [*] Trying root: on 192.168.1.110:22
-[+] SUCCESS: root: (empty password) — SSH session opened
+[+] SUCCESS: root: (empty password)  -  SSH session opened
 ```
 
 ---
 
-### `ftp_default_creds` — FTP
+### `ftp_default_creds`  -  FTP
 
 Tests FTP login using vendor default credentials.
 
@@ -207,13 +207,13 @@ exf (Hikvision Camera Default FTP Creds) > set target 192.168.1.100
 exf (Hikvision Camera Default FTP Creds) > run
 [*] Running module ...
 [*] Trying admin:12345 on 192.168.1.100:21
-[+] SUCCESS: admin:12345 — FTP session opened
+[+] SUCCESS: admin:12345  -  FTP session opened
 230 Login successful.
 ```
 
 ---
 
-### `webinterface_http_auth_default_creds` — HTTP Basic/Digest Auth
+### `webinterface_http_auth_default_creds`  -  HTTP Basic/Digest Auth
 
 Tests HTTP Basic authentication or Digest authentication endpoints with vendor default credentials.
 
@@ -251,12 +251,12 @@ exf (Axis Camera Default HTTP Auth Creds) > set target 192.168.1.110
 exf (Axis Camera Default HTTP Auth Creds) > run
 [*] Running module ...
 [*] Trying root: on http://192.168.1.110:80
-[+] SUCCESS: root: (empty password) — HTTP 200
+[+] SUCCESS: root: (empty password)  -  HTTP 200
 ```
 
 ---
 
-### `webinterface_http_form_default_creds` — HTTP Form Login
+### `webinterface_http_form_default_creds`  -  HTTP Form Login
 
 Tests vendor-specific HTTP login form endpoints (POST-based authentication).
 
@@ -269,12 +269,12 @@ exf (ACTi Camera Default HTTP Form Creds) > set target 192.168.1.120
 exf (ACTi Camera Default HTTP Form Creds) > run
 [*] Running module ...
 [*] Trying admin:123456 on http://192.168.1.120:80/cgi-bin/encoder?USER=admin&PWD=123456
-[+] SUCCESS: admin:123456 — HTTP form login successful
+[+] SUCCESS: admin:123456  -  HTTP form login successful
 ```
 
 ---
 
-### `webinterface_default_creds` — Intelbras cameras
+### `webinterface_default_creds`  -  Intelbras cameras
 
 Intelbras cameras use a combined web interface module:
 
@@ -285,7 +285,7 @@ exf (Intelbras Camera Default Creds) > set target 192.168.1.130
 exf (Intelbras Camera Default Creds) > run
 [*] Running module ...
 [*] Trying admin:admin on 192.168.1.130:80
-[+] SUCCESS: admin:admin — web session obtained
+[+] SUCCESS: admin:admin  -  web session obtained
 ```
 
 ---
@@ -297,29 +297,29 @@ The following camera vendors have at least one credential module (`ftp_default_c
 | Vendor | ftp | ssh | telnet | webinterface |
 |--------|-----|-----|--------|--------------|
 | ACTi | Yes | Yes | Yes | form |
-| American Dynamics | Yes | Yes | Yes | — |
+| American Dynamics | Yes | Yes | Yes |  -  |
 | Arecont | Yes | Yes | Yes | auth |
-| Avigilon | Yes | Yes | Yes | — |
-| AVTech | Yes | Yes | Yes | — |
+| Avigilon | Yes | Yes | Yes |  -  |
+| AVTech | Yes | Yes | Yes |  -  |
 | Axis | Yes | Yes | Yes | auth |
 | Basler | Yes | Yes | Yes | form |
 | Bosch | Yes | Yes | Yes | auth |
 | Brickcom | Yes | Yes | Yes | auth |
 | Canon | Yes | Yes | Yes | auth |
 | CBC/GANZ | Yes | Yes | Yes | auth |
-| Cisco (cameras) | Yes | Yes | Yes | — |
+| Cisco (cameras) | Yes | Yes | Yes |  -  |
 | Dahua | Yes | Yes | Yes | auth |
-| D-Link (cameras) | Yes | Yes | Yes | — |
+| D-Link (cameras) | Yes | Yes | Yes |  -  |
 | DVTel | Yes | Yes | Yes | auth |
 | Dynacolor | Yes | Yes | Yes | auth |
 | EverFocus | Yes | Yes | Yes | auth |
 | FLIR | Yes | Yes | Yes | auth |
 | Foscam | Yes | Yes | Yes | auth |
-| GeoVision | Yes | Yes | Yes | — |
-| Grandstream | Yes | Yes | Yes | — |
-| Hikvision | Yes | Yes | Yes | — |
-| Honeywell | Yes | Yes | Yes | — |
-| Intelbras | — | — | — | combined |
+| GeoVision | Yes | Yes | Yes |  -  |
+| Grandstream | Yes | Yes | Yes |  -  |
+| Hikvision | Yes | Yes | Yes |  -  |
+| Honeywell | Yes | Yes | Yes |  -  |
+| Intelbras |  -  |  -  |  -  | combined |
 
 ---
 
@@ -360,7 +360,7 @@ exf (Hikvision Camera Default Telnet Creds) > set defaults file:///tmp/custom_cr
 [+] defaults => file:///tmp/custom_creds.txt
 ```
 
-Wordlist format — one credential pair per line, colon-separated:
+Wordlist format  -  one credential pair per line, colon-separated:
 
 ```text
 admin:admin
@@ -388,7 +388,7 @@ embedxpl -m creds/routers/dlink/telnet_default_creds -s "target 192.168.1.1"
 [*] Trying admin:admin on 192.168.1.1:23
 [-] FAIL: admin:admin
 [*] Trying admin:1234 on 192.168.1.1:23
-[+] SUCCESS: admin:1234 — telnet session obtained
+[+] SUCCESS: admin:1234  -  telnet session obtained
 ```
 
 ### SSH scan (TP-Link router)
@@ -402,7 +402,7 @@ embedxpl -m creds/routers/tplink/ssh_default_creds -s "target 192.168.0.1"
 [*] Trying admin:admin on 192.168.0.1:22
 [-] FAIL: admin:admin
 [*] Trying admin:tplink on 192.168.0.1:22
-[+] SUCCESS: admin:tplink — SSH session opened
+[+] SUCCESS: admin:tplink  -  SSH session opened
 ```
 
 ### HTTPS web interface (Dahua camera)
@@ -438,7 +438,7 @@ embedxpl \
 [*] Trying admin:12345 on 192.168.1.100:23
 [*] Trying admin:12345 on 192.168.1.101:23
 [+] SUCCESS: admin:12345 on 192.168.1.100:23
-[-] FAIL on 192.168.1.101 — no valid credentials
+[-] FAIL on 192.168.1.101  -  no valid credentials
 ```
 
 ---
@@ -498,7 +498,7 @@ exf (Hikvision Camera Default Telnet Creds) > run
 ## SNMP community bruteforce (generic)
 
 SNMP community string testing is available via:
-- `generic/snmp/snmp_bruteforce` — standalone generic SNMP bruteforcer
+- `generic/snmp/snmp_bruteforce`  -  standalone generic SNMP bruteforcer
 - `creds/generic/snmp_community_bruteforce` (if present)
 
 See [08-generic-modules.md](08-generic-modules.md#snmp-modules) for the SNMP module reference.
@@ -511,7 +511,7 @@ See [08-generic-modules.md](08-generic-modules.md#snmp-modules) for the SNMP mod
 2. Set `threads 16` for faster scanning on LAN targets (default 8).
 3. Use `stop_on_success false` to collect all valid credentials (e.g., when multiple accounts have default passwords).
 4. Combine with `discover` to find hosts and then target them: discover → get IPs → feed to creds module via `file://`.
-5. For routers with SNMP: always try `public` and `private` community strings — they are embedded defaults across most vendors.
+5. For routers with SNMP: always try `public` and `private` community strings  -  they are embedded defaults across most vendors.
 
 
 [Wiki hub](../README.md)

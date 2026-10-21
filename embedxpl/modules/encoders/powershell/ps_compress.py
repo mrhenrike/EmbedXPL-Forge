@@ -9,7 +9,7 @@ from embedxpl.core.exploit.payloads import Architectures
 class Encoder(BaseEncoder):
     __info__ = {
         "name": "PowerShell GZip+Base64 Encoder",
-        "description": "GZip compress + base64 — evades string-based Defender/AMSI detection.",
+        "description": "GZip compress + base64  -  evades string-based Defender/AMSI detection.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
         "evasion_score": 6,
     }

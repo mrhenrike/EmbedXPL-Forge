@@ -6,10 +6,10 @@
 # MITRE: T1095 (Non-Application Layer Protocol), T1205 (Traffic Signaling)
 """
 # ============================================================
-# AUTHORIZED USE ONLY — See docs/malware-research/DISCLAIMER.md
+# AUTHORIZED USE ONLY  -  See docs/malware-research/DISCLAIMER.md
 # Use only against systems you own or have WRITTEN authorization
 # to test. Operator assumes full legal responsibility for use.
-# simulate=True by default — set False only for authorized tests.
+# simulate=True by default  -  set False only for authorized tests.
 # ============================================================
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ METADATA = {
     "platform":       "linux,windows,macos",
     "author":         "Andre Henrique (@mrhenrike) | Uniao Geek",
     "description":    (
-        "Assesses whether ICMP can be used as a covert C2 channel — "
+        "Assesses whether ICMP can be used as a covert C2 channel  -  "
         "the technique used by the Dino implant (Animal Farm APT, "
         "attributed to DGSE France). "
         "Dino encoded C2 commands in ICMP Echo payload, using the "
@@ -116,7 +116,7 @@ class Exploit(_Base):
 
         print(f"[*] Dino ICMP covert channel assessment: {self.target}")
 
-        # Need raw socket for ICMP — check privileges
+        # Need raw socket for ICMP  -  check privileges
         try:
             if os.name == "nt":
                 # Windows: use ICMP.dll style
@@ -128,7 +128,7 @@ class Exploit(_Base):
                 )
                 if "Reply from" in result.stdout:
                     print(f"  [+] ICMP Echo reply received ({self.payload_size}B payload)")
-                    print("  [!] ICMP reachable — covert channel via payload possible")
+                    print("  [!] ICMP reachable  -  covert channel via payload possible")
                 else:
                     print("  [-] No ICMP reply")
             else:
@@ -146,7 +146,7 @@ class Exploit(_Base):
                             resp_payload = icmp_data[8:]
                             print(f"  [+] ICMP Echo reply from {addr[0]} ({len(resp_payload)}B payload)")
                             if _PROBE_TAG in resp_payload:
-                                print("  [+] Probe payload echoed back — ICMP data channel confirmed")
+                                print("  [+] Probe payload echoed back  -  ICMP data channel confirmed")
                                 print("  [!] DINO-style ICMP covert channel is POSSIBLE on this host")
                     except socket.timeout:
                         print("  [-] No ICMP reply (filtered or host down)")

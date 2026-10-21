@@ -1,4 +1,4 @@
-"""EmbedXPL Runtime — Go Executor.
+"""EmbedXPL Runtime  -  Go Executor.
 
 Builds Go source trees or single .go files and executes the resulting binary.
 Supports cross-compilation via GOOS/GOARCH environment variables.

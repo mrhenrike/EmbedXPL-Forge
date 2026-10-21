@@ -30,7 +30,7 @@ class HatSploitModule(_Exploit):
             self.__info__ = self.details
 
     def execute(self, *args, **kwargs):
-        """HatSploit uses execute() — alias to run()."""
+        """HatSploit uses execute()  -  alias to run()."""
         return self.run(*args, **kwargs)
 
     def run(self):

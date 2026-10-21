@@ -312,7 +312,7 @@ Attempting to predict the future in a document is usually a bad idea, but someti
 
 However, the fact that the reader will be writing and running code in the future isn't a good reason to use future tense.
 
-Also avoid the hypothetical future would—for example:
+Also avoid the hypothetical future would - for example:
 
 <table>
 <thead><tr><th>Bad</th><th>Good</th></tr></thead>

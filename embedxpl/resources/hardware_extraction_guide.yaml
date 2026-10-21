@@ -1,5 +1,5 @@
 # Author: André Henrique (LinkedIn/X: @mrhenrike)
-# Hardware Extraction & Firmware Analysis Field Guide — EmbedXPL-Forge v2.0
+# Hardware Extraction & Firmware Analysis Field Guide  -  EmbedXPL-Forge v2.0
 # Guidance for physical firmware extraction from common IoT/OT device hardware.
 
 overview: |
@@ -10,7 +10,7 @@ overview: |
 techniques:
   uart_console:
     name: "UART Serial Console Access"
-    difficulty: "Low–Medium"
+    difficulty: "Low-Medium"
     equipment:
       - "USB-to-UART (3.3V) adapter (e.g. CP2102, CH340)"
       - "Logic analyzer or multimeter"
@@ -29,7 +29,7 @@ techniques:
 
   jtag_debug:
     name: "JTAG Boundary Scan / Debug Access"
-    difficulty: "Medium–High"
+    difficulty: "Medium-High"
     equipment:
       - "JTAG adapter (OpenOCD-compatible: Olimex ARM-USB-OCD, J-Link)"
       - "JTAGulator (for identifying pins)"

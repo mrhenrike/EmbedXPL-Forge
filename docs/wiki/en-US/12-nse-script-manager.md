@@ -30,16 +30,16 @@ python -m embedxpl.nse <command>   # from source
 | `dahua-vuln` | `embedxpl-dahua-vuln.nse` | Dahua CVE checker (CVE-2021-33044, CVE-2020-25078, CVE-2013-6117) |
 | `rtsp-creds` | `embedxpl-rtsp-creds.nse` | Quick RTSP default credential tester (Basic auth) |
 | `iot-cve-check` | `embedxpl-iot-cve-check.nse` | Multi-vendor IoT CVE fingerprint and validation (15+ CVEs including 2026) |
-| `perimeter-vuln` | `embedxpl-perimeter-vuln.nse` | Firewall/VPN CVE checker — 15 vendors, 19+ CVEs (Fortinet/Cisco/PAN-OS/SonicWall...) |
-| `router-vuln` | `embedxpl-router-vuln.nse` | SOHO router CVE checker — 15 vendors, 14+ CVEs (TP-Link/Netgear/ASUS/MikroTik...) |
-| `printer-vuln` | `embedxpl-printer-vuln.nse` | Network printer CVE checker — 11 vendors, PJL/IPP/HTTP probes (HP/Canon/Lexmark...) |
+| `perimeter-vuln` | `embedxpl-perimeter-vuln.nse` | Firewall/VPN CVE checker  -  15 vendors, 19+ CVEs (Fortinet/Cisco/PAN-OS/SonicWall...) |
+| `router-vuln` | `embedxpl-router-vuln.nse` | SOHO router CVE checker  -  15 vendors, 14+ CVEs (TP-Link/Netgear/ASUS/MikroTik...) |
+| `printer-vuln` | `embedxpl-printer-vuln.nse` | Network printer CVE checker  -  11 vendors, PJL/IPP/HTTP probes (HP/Canon/Lexmark...) |
 | `suite-ref` | `embedxpl-suite-ref.nse` | XPL-Forge full suite reference + GTFOBins embedded Linux quick guide |
 
 Default scan ports: `80,443,554,5554,8080,8443,8554,9100,37777,631`
 
 ---
 
-## `install` — copy scripts to Nmap
+## `install`  -  copy scripts to Nmap
 
 ### Syntax
 
@@ -129,7 +129,7 @@ Updating nmap script database...
 Installation complete.
 ```
 
-### Install — Nmap not found (graceful fallback)
+### Install  -  Nmap not found (graceful fallback)
 
 ```
 $ embedxpl-nse install
@@ -161,7 +161,7 @@ Once installed, run:  embedxpl-nse install
 ====================================================================
 ```
 
-### Install — custom directory
+### Install  -  custom directory
 
 ```
 $ sudo embedxpl-nse install --nse-dir /opt/nmap/scripts
@@ -176,7 +176,7 @@ EmbedXPL-Forge NSE Script Installer v2.0.0
 ...
 ```
 
-### Install — permission denied
+### Install  -  permission denied
 
 ```
 $ embedxpl-nse install
@@ -195,7 +195,7 @@ Results:
 
 ---
 
-## `list` — show installation status
+## `list`  -  show installation status
 
 ### Syntax
 
@@ -260,7 +260,7 @@ Manual usage (copy from):
 
 ---
 
-## `check` — validate Nmap installation
+## `check`  -  validate Nmap installation
 
 ### Syntax
 
@@ -296,7 +296,7 @@ $ echo $?
 
 ---
 
-## `run` — execute NSE scripts via Nmap
+## `run`  -  execute NSE scripts via Nmap
 
 ### Syntax
 
@@ -412,7 +412,7 @@ Starting Nmap 7.95 ...
 
 ---
 
-## `info` — show script details
+## `info`  -  show script details
 
 ### Syntax
 
@@ -454,7 +454,7 @@ Installed   : YES -- /usr/share/nmap/scripts/embedxpl-hikvision-vuln.nse
   -- Version: 2.0.0
 ```
 
-### Error — unknown script
+### Error  -  unknown script
 
 ```
 $ embedxpl-nse info bad-script-name
@@ -468,7 +468,7 @@ Available: embedxpl-rtsp-discover, embedxpl-camera-identify, embedxpl-camera-sna
 
 ---
 
-## `uninstall` — remove scripts from Nmap
+## `uninstall`  -  remove scripts from Nmap
 
 ### Syntax
 
@@ -496,7 +496,7 @@ $ sudo embedxpl-nse uninstall
 Removed 11 script(s).
 ```
 
-### Error — nothing to uninstall
+### Error  -  nothing to uninstall
 
 ```
 $ embedxpl-nse uninstall
@@ -536,7 +536,7 @@ nmap -sV -p 80,9100,631 --script embedxpl-printer-vuln 192.168.1.0/24
 If automatic installation fails, copy the `.nse` files manually:
 
 ```bash
-# Linux — find the NSE source directory
+# Linux  -  find the NSE source directory
 python -c "import embedxpl.nse.manager as m; print(m._NSE_PACKAGE_DIR)"
 # Output: /home/user/.local/lib/python3.12/site-packages/nse
 
@@ -546,7 +546,7 @@ sudo nmap --script-updatedb
 ```
 
 ```powershell
-# Windows — find the NSE source directory
+# Windows  -  find the NSE source directory
 python -c "import embedxpl.nse.manager as m; print(m._NSE_PACKAGE_DIR)"
 # Output: C:\Users\user\AppData\Local\Programs\Python\Python312\Lib\site-packages\nse
 

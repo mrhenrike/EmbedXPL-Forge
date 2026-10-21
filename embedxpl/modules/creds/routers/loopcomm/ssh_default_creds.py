@@ -7,7 +7,7 @@ class Exploit(SSHDefault):
     __info__ = {
         "name": "Loopcomm Router Default SSH Creds",
         "description": "Dictionary attack with default credentials against Loopcomm Router SSH service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Loopcomm Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

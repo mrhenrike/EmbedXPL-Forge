@@ -1,4 +1,4 @@
-"""EmbedXPL AutoPwn — Automated exploitation by segment.
+"""EmbedXPL AutoPwn  -  Automated exploitation by segment.
 
 Usage:
     from embedxpl.modules.autopwn import RouterAutoPwn, PrinterAutoPwn, FirewallAutoPwn

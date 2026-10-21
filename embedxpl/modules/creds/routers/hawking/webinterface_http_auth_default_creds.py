@@ -7,7 +7,7 @@ class Exploit(HTTPBasicDigestDefault):
     __info__ = {
         "name": "Hawking Router Default Web Interface Creds",
         "description": "Dictionary attack against Hawking Router Web Interface (HTTP Basic/Digest Auth).",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Hawking Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

@@ -1,4 +1,4 @@
-"""EmbedXPL Runtime — Binary Cache.
+"""EmbedXPL Runtime  -  Binary Cache.
 
 Caches compiled binaries keyed by a SHA-256 hash of the source file(s).
 Avoids recompilation on every run for C/C++/Go/Rust modules.

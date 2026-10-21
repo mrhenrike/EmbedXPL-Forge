@@ -19,7 +19,7 @@ exf (AutoPwn) > run
 
 ---
 
-### `show options` — standard options
+### `show options`  -  standard options
 
 ```text
 exf (AutoPwn) > show options
@@ -42,7 +42,7 @@ Target options:
 └───────────────────┴──────────────────┴──────────────────────────────────────────────────────────────────────────┘
 ```
 
-### `show advanced` — advanced options
+### `show advanced`  -  advanced options
 
 ```text
 exf (AutoPwn) > show advanced
@@ -83,8 +83,8 @@ Advanced options:
 |-----------|------|----------|---------|-----------------|-------------|
 | `target` | `OptIP` | Yes | `""` | IPv4 / IPv6 | Single target host to scan |
 | `vendor` | `OptString` | No | `any` | vendor name or `any` | Restrict modules to a specific vendor subfolder |
-| `timing_template` | `OptString` | No | `balanced` | `T0`–`T5`, `paranoid`, `sneaky`, `polite`, `balanced`, `aggressive`, `insane` | Nmap-style timing profile |
-| `target_device_class` | `OptString` (adv) | No | `multi` | `multi`, `router`, `switch`, `tap`, `fw`, `ngfw`, `isp_cpe` | Scope filter — skips out-of-class modules |
+| `timing_template` | `OptString` | No | `balanced` | `T0`-`T5`, `paranoid`, `sneaky`, `polite`, `balanced`, `aggressive`, `insane` | Nmap-style timing profile |
+| `target_device_class` | `OptString` (adv) | No | `multi` | `multi`, `router`, `switch`, `tap`, `fw`, `ngfw`, `isp_cpe` | Scope filter  -  skips out-of-class modules |
 | `check_exploits` | `OptBool` (adv) | No | `True` | `true/false` | Run exploit modules |
 | `check_creds` | `OptBool` (adv) | No | `True` | `true/false` | Run credential modules |
 | `http_use` | `OptBool` | No | `True` | `true/false` | Include HTTP modules |
@@ -105,30 +105,30 @@ Advanced options:
 | `snmp_port` | `OptPort` (adv) | No | `161` | 1-65535 | Override SNMP port |
 | `tcp_use` | `OptBool` (adv) | No | `True` | `true/false` | Include custom TCP modules |
 | `udp_use` | `OptBool` (adv) | No | `True` | `true/false` | Include custom UDP modules |
-| `threads` | `OptInteger` | No | `8` | 1–300 | Concurrent threads (overridden by timing profile if at default 8) |
+| `threads` | `OptInteger` | No | `8` | 1-300 | Concurrent threads (overridden by timing profile if at default 8) |
 | `verify_positive_twice` | `OptBool` (adv) | No | `True` | `true/false` | Re-run `check()` on positives to reduce false positives |
 | `show_timing_help` | `OptBool` (adv) | No | `True` | `true/false` | Print timing profile table before scan |
-| `module_timeout_s` | `OptInteger` (adv) | No | `20` | 0–∞ | Per-module execution timeout in seconds (0 = disable) |
+| `module_timeout_s` | `OptInteger` (adv) | No | `20` | 0-∞ | Per-module execution timeout in seconds (0 = disable) |
 | `ml_advisor` | `OptBool` (adv) | No | `False` | `true/false` | Enable ML heuristic module prioritization |
 | `ml_auto_timing` | `OptBool` (adv) | No | `False` | `true/false` | Let ML advisor overwrite timing template |
 | `ml_use_gpu` | `OptBool` (adv) | No | `False` | `true/false` | Run ML scoring on CUDA GPU (requires PyTorch + CUDA) |
 
 ---
 
-### Timing templates T0–T5
+### Timing templates T0-T5
 
 AutoPwn uses Nmap-style timing profiles. Each profile controls thread count, confirmation passes, retry behavior for inconclusive results, and inter-probe delay.
 
 | Template | Alias | Threads | Confirm passes | Inconclusive retries | Delay (s) | Use case |
 |----------|-------|---------|----------------|----------------------|-----------|----------|
-| T0 | paranoid | 1 | 3 | 2 | 1.0 | Slow/stealthy — evade IDS, fragile targets |
-| T1 | sneaky | 2 | 2 | 2 | 0.5 | Low-profile — minimal network noise |
-| T2 | polite | 4 | 2 | 1 | 0.2 | Careful — reduced load on target |
-| T3 | balanced | 8 | 2 | 1 | 0.0 | Default — good accuracy vs. speed tradeoff |
-| T4 | aggressive | 16 | 1 | 0 | 0.0 | Fast — lab/authorized pentest environments |
-| T5 | insane | 32 | 1 | 0 | 0.0 | Maximum speed — may miss flaky results |
+| T0 | paranoid | 1 | 3 | 2 | 1.0 | Slow/stealthy  -  evade IDS, fragile targets |
+| T1 | sneaky | 2 | 2 | 2 | 0.5 | Low-profile  -  minimal network noise |
+| T2 | polite | 4 | 2 | 1 | 0.2 | Careful  -  reduced load on target |
+| T3 | balanced | 8 | 2 | 1 | 0.0 | Default  -  good accuracy vs. speed tradeoff |
+| T4 | aggressive | 16 | 1 | 0 | 0.0 | Fast  -  lab/authorized pentest environments |
+| T5 | insane | 32 | 1 | 0 | 0.0 | Maximum speed  -  may miss flaky results |
 
-**Terminal session — T0 (paranoid, stealthy single thread):**
+**Terminal session  -  T0 (paranoid, stealthy single thread):**
 
 ```text
 exf > use scanners/autopwn
@@ -178,7 +178,7 @@ exf (AutoPwn) > run
 └─────────────┴──────┴─────────┴──────────┴──────────┘
 ```
 
-**Terminal session — T3 (balanced, default) with full discovery workflow:**
+**Terminal session  -  T3 (balanced, default) with full discovery workflow:**
 
 ```text
 exf > use scanners/autopwn
@@ -213,7 +213,7 @@ exf (AutoPwn) > run
 └──────────┴──────┴─────────┴──────────┴──────────┘
 ```
 
-**Terminal session — T4 (aggressive) with NGFW class filter:**
+**Terminal session  -  T4 (aggressive) with NGFW class filter:**
 
 ```text
 exf (AutoPwn) > set target 10.0.0.5
@@ -243,7 +243,7 @@ exf (AutoPwn) > run
 [*] Skipped 12 module(s) not permitted for target_device_class=ngfw
 ```
 
-**Terminal session — T5 (insane) with ML advisor:**
+**Terminal session  -  T5 (insane) with ML advisor:**
 
 ```text
 exf (AutoPwn) > set target 192.168.50.1
@@ -274,7 +274,7 @@ exf (AutoPwn) > run
 └─────────────┴──────┴────────┴──────────────────────────────────────────────────────────────────────┘
 ```
 
-**Terminal session — T2 (polite) targeting firewall class only:**
+**Terminal session  -  T2 (polite) targeting firewall class only:**
 
 ```text
 exf (AutoPwn) > set target 10.10.10.1
@@ -302,7 +302,7 @@ exf (AutoPwn) > run
 [*] Skipped 247 module(s) not permitted for target_device_class=fw
 ```
 
-**Error cases — AutoPwn:**
+**Error cases  -  AutoPwn:**
 
 ```text
 [!] ALERT: 250 threads configured. This may consume high CPU/RAM and impact scan host stability.
@@ -334,16 +334,16 @@ AutoPwn integrates with the `discover` command for pre-scan OUI-based vendor fin
 exf > discover 192.168.1.0/24
 [*] ARP sweep on 192.168.1.0/24...
 [*] OUI lookup: 38:6b:1c -> SHENZHEN MERCURY COMMUNICATION (Mercusys/TP-Link)
-[+] 192.168.1.1   — TP-Link (Mercusys)
+[+] 192.168.1.1    -  TP-Link (Mercusys)
     Suggested: exploits/routers/tplink/*, creds/routers/tplink/*
 [*] OUI lookup: cc:29:bd -> ZTE CORPORATION
-[+] 192.168.1.2   — ZTE
+[+] 192.168.1.2    -  ZTE
     Suggested: exploits/routers/zte/zxhn_h168n_rce_auth_bypass
 [*] OUI lookup: 3c:a3:7e -> HUAWEI TECHNOLOGIES CO.,LTD
-[+] 192.168.1.3   — Huawei
+[+] 192.168.1.3    -  Huawei
     Suggested: exploits/routers/huawei/*, creds/routers/huawei/*
 [*] OUI lookup: 2c:6f:51 -> HIKVISION DIGITAL TECHNOLOGY CO.,LTD
-[+] 192.168.1.60  — Hikvision (camera)
+[+] 192.168.1.60   -  Hikvision (camera)
     Suggested: exploits/cameras/hikvision/rtsp_rce_cve_2021_36260
 
 exf > use scanners/autopwn
@@ -390,7 +390,7 @@ exf (AutoPwn) > run
 | `misc_scan` | `scanners/firewalls/misc_scan` | Generic firewall misconfiguration scanner |
 | `proxmox_discover` | `scanners/hypervisors/proxmox_discover` | Proxmox VE management interface discovery |
 | `papi_service_scanner` | `scanners/aruba/papi_service_scanner` | Aruba PAPI service scanner |
-| **ICS scanners** | — | — |
+| **ICS scanners** |  -  |  -  |
 | `modbus_scanner` | `scanners/ics/modbus_scanner` | Modbus TCP device discovery and register read |
 | `modbus_id_fuzzer` | `scanners/ics/modbus_id_fuzzer` | Modbus unit ID fuzzer |
 | `bacnet_scanner` | `scanners/ics/bacnet_scanner` | BACnet/IP device discovery |
@@ -423,13 +423,13 @@ exf (RTSP Scanner) > set target 192.168.1.0/24
 exf (RTSP Scanner) > run
 [*] Running module ...
 [*] Scanning 254 hosts on port 554...
-[+] 192.168.1.60  — RTSP service detected (Hikvision DS-2CD2143G2-I, firmware 5.7.16)
-[+] 192.168.1.61  — RTSP service detected (Dahua IPC-HDW2831T-AS, firmware 2.840.0005.0.R)
-[+] 192.168.1.62  — RTSP service detected (generic H.265 NVR)
+[+] 192.168.1.60   -  RTSP service detected (Hikvision DS-2CD2143G2-I, firmware 5.7.16)
+[+] 192.168.1.61   -  RTSP service detected (Dahua IPC-HDW2831T-AS, firmware 2.840.0005.0.R)
+[+] 192.168.1.62   -  RTSP service detected (generic H.265 NVR)
 [*] Testing default credentials on discovered RTSP services...
-[+] 192.168.1.60 — credentials found: admin:(empty)    rtsp://192.168.1.60/Streaming/Channels/101
-[+] 192.168.1.61 — credentials found: admin:admin      rtsp://192.168.1.61/cam/realmonitor?channel=1&subtype=0
-[-] 192.168.1.62 — no default credentials matched
+[+] 192.168.1.60  -  credentials found: admin:(empty)    rtsp://192.168.1.60/Streaming/Channels/101
+[+] 192.168.1.61  -  credentials found: admin:admin      rtsp://192.168.1.61/cam/realmonitor?channel=1&subtype=0
+[-] 192.168.1.62  -  no default credentials matched
 ```
 
 > Full RTSP engine documentation: [21-rtsp-camera-engine.md](21-rtsp-camera-engine.md)
@@ -449,7 +449,7 @@ Target options:
 │ target   │                  │ Target IP or CIDR                            │
 │ port     │ 502              │ Modbus TCP port                              │
 │ timeout  │ 3                │ Connection timeout (seconds)                 │
-│ read_regs│ True             │ Read holding registers 0–9 from each device  │
+│ read_regs│ True             │ Read holding registers 0-9 from each device  │
 └──────────┴──────────────────┴──────────────────────────────────────────────┘
 
 exf (Modbus Scanner) > set target 10.0.50.0/24
@@ -457,13 +457,13 @@ exf (Modbus Scanner) > set target 10.0.50.0/24
 exf (Modbus Scanner) > run
 [*] Running module ...
 [*] Scanning 254 hosts on Modbus TCP port 502...
-[+] 10.0.50.10  — Modbus device responding (unit_id=1)
+[+] 10.0.50.10   -  Modbus device responding (unit_id=1)
     Device ID: Schneider Electric Modicon M340
     Holding registers [0..9]: [100, 0, 4096, 1, 0, 0, 0, 0, 0, 0]
-[+] 10.0.50.11  — Modbus device responding (unit_id=1)
+[+] 10.0.50.11   -  Modbus device responding (unit_id=1)
     Device ID: Siemens S7-1200 PLC (Modbus emulation)
     Holding registers [0..9]: [0, 0, 1500, 245, 0, 0, 0, 0, 0, 0]
-[-] 10.0.50.12  — No Modbus response (port closed or filtered)
+[-] 10.0.50.12   -  No Modbus response (port closed or filtered)
 ```
 
 > Full ICS/OT exploit modules: [20-ics-ot-modules.md](20-ics-ot-modules.md)

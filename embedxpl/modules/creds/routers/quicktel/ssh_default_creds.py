@@ -7,7 +7,7 @@ class Exploit(SSHDefault):
     __info__ = {
         "name": "Quicktel Router Default SSH Creds",
         "description": "Dictionary attack with default credentials against Quicktel Router SSH service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Quicktel Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

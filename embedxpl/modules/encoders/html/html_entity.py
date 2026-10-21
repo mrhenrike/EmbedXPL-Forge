@@ -1,4 +1,4 @@
-"""HTML Entity encoder — &#xXX; format."""
+"""HTML Entity encoder  -  &#xXX; format."""
 
 import re
 from embedxpl.core.exploit.encoders import BaseEncoder
@@ -8,7 +8,7 @@ from embedxpl.core.exploit.payloads import Architectures
 class Encoder(BaseEncoder):
     __info__ = {
         "name": "HTML Entity Encoder",
-        "description": "Encodes bytes as &#xXX; HTML entities — bypasses WAF for web contexts.",
+        "description": "Encodes bytes as &#xXX; HTML entities  -  bypasses WAF for web contexts.",
         "authors": ("André Henrique (@mrhenrike)", "União Geek"),
         "evasion_score": 5,
     }

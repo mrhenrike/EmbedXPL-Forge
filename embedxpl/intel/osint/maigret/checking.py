@@ -198,7 +198,7 @@ class SimpleAiohttpChecker(CheckerBase):
         self.cookie_jar = kwargs.get('cookie_jar')
         # 'async' (default) uses aiohttp's DefaultResolver, which is AsyncResolver
         # (powered by aiodns / c-ares) when aiodns is installed. 'threaded' uses
-        # ThreadedResolver, which wraps the OS getaddrinfo via a threadpool —
+        # ThreadedResolver, which wraps the OS getaddrinfo via a threadpool  - 
         # slower for high concurrency, but respects the system DNS config
         # (resolv.conf, Windows network adapter settings) instead of having
         # aiodns rediscover it. See issue #2688: aiodns can fail to find any
@@ -248,9 +248,9 @@ class SimpleAiohttpChecker(CheckerBase):
         # (ClientPayloadError, wrapping the underlying TransferEncodingError
         # or ContentLengthError), a dropped connection (ServerDisconnectedError),
         # or a failure to reach/handshake with the picked proxy node
-        # (aiohttp_socks' ProxyConnectionError/ProxyTimeoutError — NOT
+        # (aiohttp_socks' ProxyConnectionError/ProxyTimeoutError  -  NOT
         # python_socks' same-named classes, which this connector never
-        # raises). One retry on a fresh connection is enough — the pooled
+        # raises). One retry on a fresh connection is enough  -  the pooled
         # connection is already discarded, so the retry goes out through a
         # new exit node. A generic ProxyError (e.g. bad credentials) is
         # deliberately NOT retried: it fails identically every time, so
@@ -267,7 +267,7 @@ class SimpleAiohttpChecker(CheckerBase):
                     # roughly one request in five to seven): that is not a
                     # not-found, it is a retry request. The session keeps the
                     # cookie, so one repeat returns the real page. Set-Cookie
-                    # is what makes it a handshake — without it, a site that
+                    # is what makes it a handshake  -  without it, a site that
                     # always self-redirects would just cost two requests.
                     if (
                         not allow_redirects
@@ -431,7 +431,7 @@ class CurlCffiChecker(CheckerBase):
 
         # Mirrors SimpleAiohttpChecker's payload-error retry: a rotating
         # proxy's CONNECT tunnel occasionally 502s or drops the TLS
-        # handshake mid-way (curl_cffi surfaces both as CurlError — e.g.
+        # handshake mid-way (curl_cffi surfaces both as CurlError  -  e.g.
         # "curl: (56) CONNECT tunnel failed, response 502" or
         # "curl: (35) TLS connect error"). One retry on a fresh connection
         # is enough to usually land on a working exit node.
@@ -492,7 +492,7 @@ class CloudflareWebgateChecker(CheckerBase):
     Supports two backends, selected by ``modules[0].method`` in settings:
 
     - ``json_api`` (FlareSolverr): POST to ``/v1`` with ``cmd: request.get``.
-      Preserves real upstream status_code, headers and final URL — drop-in
+      Preserves real upstream status_code, headers and final URL  -  drop-in
       replacement for SimpleAiohttpChecker.
     - ``url_rewrite`` (CloudflareBypassForScraping ``/html`` endpoint):
       legacy mode. Returns rendered HTML only. Real upstream status is
@@ -576,7 +576,7 @@ class CloudflareWebgateChecker(CheckerBase):
                 f"{err.type}: {err.desc}. Trying next module if any."
             )
         # All modules failed. The most common case is "user opted into
-        # cloudflare_bypass but the solver isn't running" — every per-module
+        # cloudflare_bypass but the solver isn't running"  -  every per-module
         # attempt ends with "Webgate unreachable" (TCP refused / DNS fail at
         # the configured URL). Detect that case and emit a clear, actionable
         # message; fall back to a generic summary otherwise.
@@ -672,7 +672,7 @@ class CloudflareWebgateChecker(CheckerBase):
             self.logger.warning(
                 f"Webgate response from {self.url} still contains CF challenge "
                 f"markers (status={upstream_status}, body={len(response_text)}b). "
-                f"FlareSolverr likely did not solve the challenge — site checks "
+                f"FlareSolverr likely did not solve the challenge  -  site checks "
                 f"with weak markers may produce false CLAIMED."
             )
 
@@ -1376,7 +1376,7 @@ async def maigret(
         # silently absorbs the first SIGINT (it draws a "⚠" mark on the bar
         # and keeps going), so the user has to press it twice. With
         # ctrl_c=False the signal propagates immediately to asyncio, which
-        # cancels the main task — caught in maigret.maigret.main() as
+        # cancels the main task  -  caught in maigret.maigret.main() as
         # CancelledError so the search loop falls through to report
         # generation. See issue: "ctrl+c needs two presses + traceback".
         try:
@@ -1387,7 +1387,7 @@ async def maigret(
                 async for result in executor.run(list(tasks_dict.values())):  # type: ignore[arg-type]
                     cur_results.append(result)
                     # `all_results` may be an output container supplied by
-                    # the caller — flush each completed site check into it
+                    # the caller  -  flush each completed site check into it
                     # immediately, so partial progress survives a Ctrl+C
                     # cancellation (issue #2688 follow-up). dict.update
                     # accepts an iterable of (k, v) 2-tuples, which is what
@@ -1785,7 +1785,7 @@ async def run_url_mutations(checker, site, results_info, options, logger, query_
         if len(onsite) != len(mutations) and query_notify is not None:
             query_notify.enrich(
                 f"{site.name}: skip {len(mutations) - len(onsite)} mutation(s) "
-                f"— cross-site (site domain {site_tail})",
+                f" -  cross-site (site domain {site_tail})",
                 verbose_only=True,
             )
         mutations = onsite
@@ -1801,7 +1801,7 @@ async def run_url_mutations(checker, site, results_info, options, logger, query_
         if len(deduped) != len(mutations) and query_notify is not None:
             query_notify.enrich(
                 f"{site.name}: skip {len(mutations) - len(deduped)} mutation(s) "
-                f"— maigret has built-in check for this mutation",
+                f" -  maigret has built-in check for this mutation",
                 verbose_only=True,
             )
         mutations = deduped
@@ -1864,7 +1864,7 @@ async def run_url_mutations(checker, site, results_info, options, logger, query_
                 )
                 continue
 
-            # мутация дополняет, а не переопределяет — сохраняем поля от основной страницы
+            # мутация дополняет, а не переопределяет  -  сохраняем поля от основной страницы
             new_field_keys = []
             for k, v in extra.items():
                 if k not in result.ids_data:

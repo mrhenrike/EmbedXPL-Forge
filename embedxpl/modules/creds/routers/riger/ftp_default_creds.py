@@ -7,7 +7,7 @@ class Exploit(FTPDefault):
     __info__ = {
         "name": "Riger Router Default FTP Creds",
         "description": "Dictionary attack with default credentials against Riger Router FTP service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Riger Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

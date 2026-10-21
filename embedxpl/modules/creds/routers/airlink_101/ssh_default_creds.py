@@ -7,7 +7,7 @@ class Exploit(SSHDefault):
     __info__ = {
         "name": "Airlink 101 Router Default SSH Creds",
         "description": "Dictionary attack with default credentials against Airlink 101 Router SSH service.",
-        "authors": ("André Henrique (@mrhenrike) — EmbedXPL-Forge",),
+        "authors": ("André Henrique (@mrhenrike)  -  EmbedXPL-Forge",),
         "devices": ("Airlink 101 Router",),
     }
     target = OptIP("", "Target IPv4, IPv6 address or file with ip:port (file://)")

