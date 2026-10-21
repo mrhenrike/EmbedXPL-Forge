@@ -1,146 +1,22 @@
-"""
-pipeline_engine.py - Orquestrador multi-estágio para geração de wordlists de perfil.
+"""Profile pipeline core class."""
 
-Coordena os motores de geração na ordem correta, com deduplicação streaming,
-controle de limite/timeout, e feedback loop contra alvos conhecidos.
-
-Pipeline padrão (profile OSINT):
-  1. Profiler core (tokens + depth combos + date tokens + CUPP)
-  2. Módulos órfãos (osint_perm, password_dna, pattern_engine, num2text)
-  3. Pós-processamento (rsmangler, builtin_mangle, prince)
-  4. Ranking (pattern_ranker, anomaly_scorer)
-  5. Feedback loop (benchmark vs known_targets)
-  6. Finalização (sanitize + sort + archive export)
-
-Author: André Henrique (@mrhenrike)
-"""
 from __future__ import annotations
 
+from __future__ import annotations
 import logging
 import time
 import zlib
-from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Generator, Optional
+                from embedxpl.engines.wordlists.generation_engines import parse_engine_selection, resolve_engines
+
+from embedxpl.engines.wordlists.pipeline_engine._config import (
+    PipelineConfig,
+    CRC32Deduplicator,
+)
 
 logger = logging.getLogger(__name__)
 
-_PROJECT_ROOT = Path(__file__).resolve().parent.parent
-_PROJECT_TMP = _PROJECT_ROOT / ".tmp"
-_PROJECT_TMP.mkdir(parents=True, exist_ok=True)
-
-
-# ── Configuração de pipeline ───────────────────────────────────────────────────
-
-@dataclass
-class PipelineConfig:
-    """Configuração completa de um pipeline de geração."""
-
-    # Seleção de motores
-    engine_ids: set[int] = field(default_factory=lambda: set())
-    engine_preset: str = "default"  # light | medium | potent | nuclear | default
-
-    # Limites globais
-    max_candidates: int = 0   # 0 = ilimitado
-    timeout_secs: float = 0.0  # 0 = sem timeout
-    min_len: int = 6
-    max_len: int = 32
-
-    # Locale
-    locale: str = "en"
-
-    # Alvos conhecidos (para feedback loop pós-geração)
-    known_targets: list[str] = field(default_factory=list)
-
-    # Profundidade de combinações
-    depth: int = 3
-
-    # Opções de mangling
-    leet_mode: str = "basic"
-    with_spaces: bool = False
-
-    # Opções de saída final
-    output_path: str = ""
-    output_format: str = "lst"  # lst | txt | tar | tar.gz | zip
-    sanitize: bool = True
-    dedupe: bool = True
-    sort: str = "none"  # none | alpha | alpha-desc | length | length-desc
-
-    # Mutações de keywords
-    keyword_mutations_enabled: bool = False
-    keyword_mutations_modes: list[str] = field(default_factory=list)
-
-    @classmethod
-    def from_profile(cls, profile: dict) -> "PipelineConfig":
-        """Constrói PipelineConfig a partir de um dict de perfil."""
-        cfg = cls()
-        cfg.locale      = profile.get("locale", "en")
-        cfg.depth       = profile.get("depth", 3)
-        cfg.leet_mode   = profile.get("leet_mode", "basic")
-        cfg.with_spaces = profile.get("with_spaces", False)
-        cfg.min_len     = profile.get("min_len", 6)
-        cfg.max_len     = profile.get("max_len", 32)
-        cfg.known_targets = list(profile.get("known_targets") or [])
-        if cfg.known_targets:
-            cfg.max_len = max(cfg.max_len, max(len(t) for t in cfg.known_targets if t))
-            cfg.min_len = min(cfg.min_len, min(len(t) for t in cfg.known_targets if t))
-
-        # Engine selection
-        engines_raw = profile.get("engines")
-        if engines_raw:
-            try:
-                from embedxpl.engines.wordlists.generation_engines import parse_engine_selection, resolve_engines
-                cfg.engine_ids = resolve_engines(str(engines_raw))
-            except ImportError:
-                pass
-        preset_raw = profile.get("engine_presets")
-        if preset_raw:
-            cfg.engine_preset = preset_raw
-
-        # Output
-        out_block = profile.get("output") or profile.get("_export_options") or {}
-        if isinstance(out_block, dict):
-            cfg.output_format  = out_block.get("format", "lst")
-            cfg.sanitize       = out_block.get("sanitize", True)
-            cfg.dedupe         = out_block.get("dedupe", True)
-            cfg.sort           = out_block.get("sort", "none")
-        cfg.output_path = profile.get("output_path", "")
-
-        # Keyword mutations
-        km = profile.get("keyword_mutations") or {}
-        if isinstance(km, dict):
-            cfg.keyword_mutations_enabled = km.get("enabled", False)
-            cfg.keyword_mutations_modes   = list(km.get("modes") or [])
-
-        return cfg
-
-
-# ── Deduplicação CRC32 streaming ──────────────────────────────────────────────
-
-class CRC32Deduplicator:
-    """Deduplicador leve usando CRC32 (menor footprint que set[str])."""
-
-    def __init__(self) -> None:
-        self._seen: set[int] = set()
-        self.count_emitted = 0
-        self.count_duped = 0
-
-    def is_new(self, word: str) -> bool:
-        crc = zlib.crc32(word.encode("utf-8", errors="replace")) & 0xFFFFFFFF
-        if crc in self._seen:
-            self.count_duped += 1
-            return False
-        self._seen.add(crc)
-        self.count_emitted += 1
-        return True
-
-    def reset(self) -> None:
-        self._seen.clear()
-        self.count_emitted = 0
-        self.count_duped = 0
-
-
-# ── Orquestrador principal ─────────────────────────────────────────────────────
 
 class ProfilePipeline:
     """
@@ -1190,65 +1066,3 @@ class ProfilePipeline:
 
 # ── Sugestões de motores para misses ─────────────────────────────────────────
 
-def _suggest_engines_for_misses(
-    missing_targets: list[str],
-    config: PipelineConfig,
-) -> list[str]:
-    """
-    Analisa senhas não encontradas e sugere motores que aumentariam cobertura.
-
-    Heurísticas baseadas em padrões dos alvos:
-    - Leet agressivo → motor 1 (token_variants com leet=aggressive)
-    - Separadores estruturados (_#@) → motor 11 (rsmangler), 21 (pattern_templates)
-    - Anos 1990-atual → motor 2 (date_tokens), 11 (years)
-    - Inversão de palavras → motor 9 (reversed_tokens), 28 (keyword_mutations)
-    - Combinações PRINCE → motor 10
-    """
-    suggestions = []
-    engines = config.engine_ids
-
-    for pw in missing_targets:
-        has_leet = any(c in pw for c in ("4", "@", "0", "1", "$", "3", "7"))
-        has_year = any(str(y) in pw for y in range(1990, 2030))
-        has_sep = any(c in pw for c in ("_", "#", "@", "!", "."))
-        has_multi_token = len([c for c in pw if c.isupper()]) > 2
-
-        if has_leet and 1 in engines:
-            suggestions.append("Use leet_mode=aggressive (motor 1) para cobrir substituicoes numericas")
-        if has_year and 11 not in engines:
-            suggestions.append("Habilitar motor 11 (rsmangler com --years) para sufixos/prefixos de anos")
-        if has_sep and 21 not in engines:
-            suggestions.append("Habilitar motor 21 (pattern_templates) para padrões com separadores _#@")
-        if has_multi_token and 10 not in engines:
-            suggestions.append("Habilitar motor 10 (PRINCE) para combinacoes multi-token (marca + pet + ano)")
-        if 28 not in engines:
-            suggestions.append("Habilitar motor 28 (keyword_mutations) para reversões de sílabas")
-
-    return list(dict.fromkeys(suggestions))  # dedup preservando ordem
-
-
-# ── Função de conveniência ────────────────────────────────────────────────────
-
-def run_profile_pipeline(
-    profile: dict,
-    config: Optional[PipelineConfig] = None,
-    output_path: Optional[str] = None,
-) -> dict:
-    """
-    Executa o pipeline completo para um perfil e retorna estatísticas.
-
-    Args:
-        profile: Dict de perfil (de load_profile_yaml ou interactive_profile).
-        config: Configuração opcional; derivada do profile se None.
-        output_path: Caminho de saída; usa profile['output_path'] se None.
-
-    Returns:
-        Dict com stats: lines_written, elapsed_secs, feedback (se known_targets).
-    """
-    if config is None:
-        config = PipelineConfig.from_profile(profile)
-    if output_path:
-        config.output_path = output_path
-
-    pipeline = ProfilePipeline(profile, config)
-    return pipeline.run_to_file()
