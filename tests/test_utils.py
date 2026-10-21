@@ -1,15 +1,13 @@
 """Tests for embedxpl.core.exploit.utils."""
 from __future__ import annotations
 
-import pytest
-
 from embedxpl.core.exploit.utils import (
+    MODULES_DIR,
+    RESOURCES_DIR,
+    _module_path_disabled,
     is_ipv4,
     is_ipv6,
     random_text,
-    _module_path_disabled,
-    MODULES_DIR,
-    RESOURCES_DIR,
 )
 
 

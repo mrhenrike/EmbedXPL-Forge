@@ -3,7 +3,14 @@
 Fast parallel LAN sweep for IoT targets on 192.168.18.0/24.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
-import os, sys, tempfile, socket, threading, json, datetime, re
+import os
+import sys
+import tempfile
+import socket
+import threading
+import json
+import datetime
+import re
 from queue import Queue
 import requests
 

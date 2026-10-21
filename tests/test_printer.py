@@ -1,28 +1,23 @@
 """Tests for embedxpl.core.exploit.printer."""
 from __future__ import annotations
 
-from io import StringIO
-from unittest.mock import patch
-
-import pytest
-
 from embedxpl.core.exploit.printer import (
-    PrintResource,
     PrinterThread,
+    PrintResource,
     color_blue,
     color_green,
     color_red,
     console,
+    create_scan_progress,
+    pprint_dict_in_order,
+    print_banner,
     print_error,
     print_info,
+    print_panel,
     print_status,
     print_success,
-    print_warning,
-    pprint_dict_in_order,
     print_table,
-    print_banner,
-    print_panel,
-    create_scan_progress,
+    print_warning,
 )
 
 

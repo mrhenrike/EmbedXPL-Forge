@@ -391,7 +391,7 @@ def cmd_download(
         print("       Use --force to re-download.")
         return
 
-    print(f"[download] Starting download...")
+    print("[download] Starting download...")
     success = download_file(resolved_url, dest_path)
 
     if success:
@@ -451,7 +451,7 @@ def cmd_download_direct(
             "failed", "download failed after retries"
         )
         append_manifest_entry(entry)
-        print(f"[FAIL] Download failed. Recorded in manifest.")
+        print("[FAIL] Download failed. Recorded in manifest.")
         sys.exit(2)
 
 

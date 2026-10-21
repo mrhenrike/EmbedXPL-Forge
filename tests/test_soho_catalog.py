@@ -1,8 +1,6 @@
 """Tests for embedxpl.core.soho_exploit_catalog."""
 from __future__ import annotations
 
-import pytest
-
 from embedxpl.core.soho_exploit_catalog import resolve_soho_catalog_root
 
 

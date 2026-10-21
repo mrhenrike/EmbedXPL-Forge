@@ -153,7 +153,7 @@ def main():
             boa_count += 1
             print(f"  [+] Boa DETECTED — {len(result['boa_references'])} references")
         else:
-            print(f"  [-] Boa not detected in firmware strings")
+            print("  [-] Boa not detected in firmware strings")
 
     live_results = []
     if len(sys.argv) > 1:
@@ -168,7 +168,7 @@ def main():
 
     print(f"\n{'='*60}")
     print(f"[*] Summary: {boa_count}/{len(all_results)} firmware images contain Boa")
-    print(f"[*] Boa last release: February 2005 (v0.94.14rc21)")
+    print("[*] Boa last release: February 2005 (v0.94.14rc21)")
     print(f"[*] Known CVEs: {', '.join(c['cve'] for c in BOA_KNOWN_CVES)}")
 
     output = {

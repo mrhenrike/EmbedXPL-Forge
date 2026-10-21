@@ -4,8 +4,18 @@ Generate "YOU HAVE BEEN PWNED" video frames and serve as MJPEG stream + MP4.
 Uses OpenCV + Pillow to produce video without ffmpeg.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
-import os, sys, tempfile, struct, time, threading, json, io, socket
-import http.server, socketserver, datetime
+import os
+import sys
+import tempfile
+import struct
+import time
+import threading
+import json
+import io
+import socket
+import http.server
+import socketserver
+import datetime
 import numpy as np
 
 _tmp = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -318,7 +328,7 @@ def main():
 
     for uri, label in URIs_to_try:
         set_code, play_code = inject_and_play(uri, label)
-        print(f"  Waiting 15s for TV to render...")
+        print("  Waiting 15s for TV to render...")
         deadline = time.time() + 15
         while time.time() < deadline:
             time.sleep(0.5)

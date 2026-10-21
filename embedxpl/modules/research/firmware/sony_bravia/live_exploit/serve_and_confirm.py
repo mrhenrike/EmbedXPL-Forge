@@ -3,8 +3,15 @@
 Keep media server up for 60s after injection and capture full download evidence.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
-import os, tempfile, time, threading, json, datetime, re
-import http.server, socketserver
+import os
+import tempfile
+import time
+import threading
+import json
+import datetime
+import re
+import http.server
+import socketserver
 import requests
 
 _tmp = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -193,7 +200,7 @@ def main():
     with open(out, "w") as f:
         json.dump(evidence, f, indent=2)
 
-    print(f"\n=== RESULTS ===")
+    print("\n=== RESULTS ===")
     print(f"  Total requests from TV : {len(HITS)}")
     print(f"  Total bytes served     : {BYTES_SENT[0]//1024} KB")
     print(f"  Video downloaded       : {evidence['video_downloaded']}")

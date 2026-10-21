@@ -182,7 +182,7 @@ def test_luci_injection():
                     add_finding(
                         "F-OW-LUCI-CMDINJECT", "CRITICAL",
                         f"Command injection via LuCI: {desc}",
-                        f"Injected payload executed. Output contains system data.",
+                        "Injected payload executed. Output contains system data.",
                         r.text[:500],
                     )
             except Exception as e:
@@ -412,7 +412,7 @@ def generate_report():
 
 if __name__ == "__main__":
     print(f"\n{'='*70}")
-    print(f"  OPENWRT 25.12.1 LIVE SECURITY AUDIT")
+    print("  OPENWRT 25.12.1 LIVE SECURITY AUDIT")
     print(f"  SSH: {SSH_HOST}:{SSH_PORT} | HTTP: {HTTP_HOST}:{HTTP_PORT}")
     print(f"  Time: {datetime.now(timezone.utc).isoformat()}")
     print(f"{'='*70}")

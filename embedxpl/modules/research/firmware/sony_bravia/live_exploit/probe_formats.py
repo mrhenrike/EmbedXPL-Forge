@@ -4,8 +4,17 @@ Probe what media formats the TV supports via ConnectionManager GetProtocolInfo,
 then try various formats until one renders on screen.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
-import os, tempfile, time, threading, json, datetime, re, struct, wave
-import http.server, socketserver
+import os
+import tempfile
+import time
+import threading
+import json
+import datetime
+import re
+import struct
+import wave
+import http.server
+import socketserver
 import numpy as np
 import requests
 from PIL import Image, ImageDraw, ImageFont

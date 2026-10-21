@@ -1,8 +1,6 @@
 """Tests for embedxpl.core.multi_lang_module."""
 from __future__ import annotations
 
-import pytest
-
 from embedxpl.core.multi_lang_module import _workspace_tmp
 
 

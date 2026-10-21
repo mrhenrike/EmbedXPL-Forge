@@ -3,8 +3,18 @@
 SSRF confirmation: keep listener up 30s, inject URI, capture TV callback.
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
-import os, sys, tempfile, time, threading, json, datetime, re, io
-import http.server, socketserver, requests
+import os
+import sys
+import tempfile
+import time
+import threading
+import json
+import datetime
+import re
+import io
+import http.server
+import socketserver
+import requests
 
 _tmp = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                     "..", "..", "..", "..", "..", ".tmp")
@@ -136,7 +146,7 @@ def main():
     for uri, label in uris_to_try:
         hits_before = len(HITS)
         set_code, play_code = try_inject(uri, label)
-        print(f"  Waiting 12s for callback...")
+        print("  Waiting 12s for callback...")
         deadline = time.time() + 12
         while time.time() < deadline:
             time.sleep(0.5)

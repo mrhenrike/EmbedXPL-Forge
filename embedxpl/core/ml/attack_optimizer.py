@@ -18,6 +18,30 @@ from typing import Dict, List, Optional, Tuple
 logger = logging.getLogger("embedxpl.ml.attack_optimizer")
 
 
+class ScanOutcome:
+    """Result of a single attack module execution against a target."""
+
+    __slots__ = ("duration_ms", "findings_count", "module_id", "success")
+
+    def __init__(
+        self,
+        module_id: str,
+        success: bool,
+        duration_ms: float = 0.0,
+        findings_count: int = 0,
+    ) -> None:
+        self.module_id = module_id
+        self.success = success
+        self.duration_ms = duration_ms
+        self.findings_count = findings_count
+
+    def __repr__(self) -> str:
+        return (
+            f"ScanOutcome({self.module_id!r}, success={self.success}, "
+            f"findings={self.findings_count})"
+        )
+
+
 class AttackOptimizer:
     """Multi-Armed Bandit optimizer for attack module sequencing."""
 

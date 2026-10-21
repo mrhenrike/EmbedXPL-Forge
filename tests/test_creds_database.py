@@ -1,8 +1,6 @@
 """Tests for embedxpl.core.creds.database (DefaultCredsDatabase)."""
 from __future__ import annotations
 
-import pytest
-
 from embedxpl.core.creds.database import DefaultCredsDatabase
 
 

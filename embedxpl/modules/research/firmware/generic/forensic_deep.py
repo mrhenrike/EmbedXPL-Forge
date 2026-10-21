@@ -740,7 +740,7 @@ def run_forensic(target_id: str, target: dict[str, Any]) -> dict[str, Any]:
     print(f"       Disk image: {img_path.name} ({results['img_size_mb']} MB)")
 
     # ── Stage 2: read image into memory (or mmap for large files) ────────────
-    print(f"  [2/6] Reading image into memory ...")
+    print("  [2/6] Reading image into memory ...")
     # Cap at 200 MB to avoid OOM; for MikroTik (128 MB) we read all
     read_limit = min(img_size, 200 * 1024 * 1024)
     with open(img_path, "rb") as f:
@@ -901,15 +901,15 @@ def generate_markdown_report(r: dict[str, Any], out_path: Path) -> None:
     lines = [
         f"# Forensic Analysis Report — {r['label']}",
         f"> Generated: {ts}  ",
-        f"> Analyst: Andre Henrique (@mrhenrike) | Uniao Geek",
-        f"> Methodology: Static forensic analysis (pure Python, no binwalk)",
+        "> Analyst: Andre Henrique (@mrhenrike) | Uniao Geek",
+        "> Methodology: Static forensic analysis (pure Python, no binwalk)",
         "",
         "---",
         "",
         "## 1. Target Overview",
         "",
-        f"| Field | Value |",
-        f"|-------|-------|",
+        "| Field | Value |",
+        "|-------|-------|",
         f"| Target ID | `{r['target_id']}` |",
         f"| Study Priority | #{r['study_order']} |",
         f"| Tier | {r['tier']} (1=bootable VM, 2=ARM/extract, 3=decrypt-first) |",
@@ -946,8 +946,8 @@ def generate_markdown_report(r: dict[str, Any], out_path: Path) -> None:
                 "",
                 "**Superblock**",
                 "",
-                f"| Field | Value |",
-                f"|-------|-------|",
+                "| Field | Value |",
+                "|-------|-------|",
                 f"| Volume name | `{sb['vol_name'] or '(none)'}` |",
                 f"| UUID | `{sb['uuid']}` |",
                 f"| Block size | {sb['block_size']} bytes |",
@@ -978,7 +978,7 @@ def generate_markdown_report(r: dict[str, Any], out_path: Path) -> None:
                 lines += ["**Key files extracted**", ""]
                 for fpath, content in kfiles.items():
                     lines += [
-                        f"<details>",
+                        "<details>",
                         f"<summary><code>{fpath}</code></summary>",
                         "",
                         "```",
@@ -1011,8 +1011,8 @@ def generate_markdown_report(r: dict[str, Any], out_path: Path) -> None:
         lines += [
             "## 4. Entropy Analysis",
             "",
-            f"| Metric | Value |",
-            f"|--------|-------|",
+            "| Metric | Value |",
+            "|--------|-------|",
             f"| Average entropy | {ent.get('avg_entropy','?')} / 8.0 bits |",
             f"| Min entropy | {ent.get('min','?')} |",
             f"| Max entropy | {ent.get('max','?')} |",
@@ -1158,8 +1158,8 @@ def generate_markdown_report(r: dict[str, Any], out_path: Path) -> None:
         "> **Disclaimer**: This report is generated for authorized security research only.  ",
         "> All findings must be handled responsibly. Do not use against production systems without explicit authorization.",
         "",
-        f"*Forensic engine: forensic_deep.py | Embedded Firmware Research Lab*  ",
-        f"*Andre Henrique (@mrhenrike) | Uniao Geek — https://github.com/Uniao-Geek*",
+        "*Forensic engine: forensic_deep.py | Embedded Firmware Research Lab*  ",
+        "*Andre Henrique (@mrhenrike) | Uniao Geek — https://github.com/Uniao-Geek*",
     ]
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1219,7 +1219,7 @@ def main() -> None:
 
         report_dir = REPORTS_DIR / tid
         report_path = report_dir / "forensic_report.md"
-        print(f"\n  Generating Markdown report ...")
+        print("\n  Generating Markdown report ...")
         generate_markdown_report(results, report_path)
         print(f"  [OK] Report: {report_path}")
 

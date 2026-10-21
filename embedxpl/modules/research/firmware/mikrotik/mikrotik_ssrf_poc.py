@@ -105,7 +105,7 @@ def main():
         else:
             print(f"  Response: {body[:200]}")
             if status in (400, 500, -1):
-                print(f"  (request failed or blocked)")
+                print("  (request failed or blocked)")
 
         time.sleep(1)
 

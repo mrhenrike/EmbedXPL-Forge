@@ -459,7 +459,7 @@ def binary_hardening_audit() -> tuple[list[dict], str]:
     no_canary = sum(1 for r in results if not r["canary"])
     with_danger = sum(1 for r in results if r["dangerous"])
 
-    print(f"\n  HARDENING SUMMARY:")
+    print("\n  HARDENING SUMMARY:")
     print(f"    Total ELF: {len(results)}")
     print(f"    No PIE:    {no_pie}/{len(results)}")
     print(f"    No NX:     {no_nx}/{len(results)}")
@@ -533,7 +533,7 @@ def boot_script_audit() -> list[dict]:
                 add_finding(
                     f"F-V462-BOOT-{os.path.basename(rel)[:12].upper()}-{len(findings):03d}",
                     "MEDIUM", f"Boot script {rel}: {issue}",
-                    f"Insecure pattern in init script.", issue)
+                    "Insecure pattern in init script.", issue)
 
     # Check credentials
     print("\n  --- /etc/passwd & /etc/shadow ---")
@@ -667,10 +667,10 @@ def generate_report(
         "",
         "### Key Findings",
         "",
-        f"1. **Encryption Upgrade**: V4.84.101 implements **AES encryption** on "
-        f"firmware payloads, a significant improvement over V4.62.225 which used "
-        f"XOR-only protection. File content (kernel, rootfs, applications) cannot "
-        f"be extracted without the AES key from `/dev/hikded`.",
+        "1. **Encryption Upgrade**: V4.84.101 implements **AES encryption** on "
+        "firmware payloads, a significant improvement over V4.62.225 which used "
+        "XOR-only protection. File content (kernel, rootfs, applications) cannot "
+        "be extracted without the AES key from `/dev/hikded`.",
         f"2. **RSA Keys (V4.62.225 baseline)**: {len(rsa_keys)} RSA keys extracted "
         f"from V4.62 psh binary -- all {rsa_keys[0]['modulus_bits']}-bit "
         f"(RSA-1024, deprecated since NIST 2013)" if rsa_keys else
@@ -687,9 +687,9 @@ def generate_report(
         "",
         "### 1.1 DAV Container (V4.84.101)",
         "",
-        f"| Field | Value |",
-        f"|-------|-------|",
-        f"| File | `Firmware_3000693671_ML_V4.84.101_251212.zip` |",
+        "| Field | Value |",
+        "|-------|-------|",
+        "| File | `Firmware_3000693671_ML_V4.84.101_251212.zip` |",
         f"| DAV Size | {dav_info['size']:,} bytes ({dav_info['size']//1024//1024} MB) |",
         f"| SHA256 | `{dav_info['sha256']}` |",
         f"| Magic | {dav_info['magic']} (HKWS) |",
@@ -880,15 +880,15 @@ def generate_report(
         "",
         "| Aspect | V4.62.225 | V4.84.101 |",
         "|--------|-----------|-----------|",
-        f"| DAV Magic | 0x484B5753 | 0x484B5753 |",
+        "| DAV Magic | 0x484B5753 | 0x484B5753 |",
         f"| Device Class | 1538 | {dav_info['device_class']} |",
         f"| DAV Files | 16 | {dav_info['files']} |",
-        f"| Firmware Encryption | XOR only | **AES + XOR** |",
-        f"| Rootfs Extractable | Yes | No (AES) |",
-        f"| RSA Keys | 1024-bit (3 DER + 1 hex) | Unknown (AES encrypted) |",
-        f"| glibc | 2.16 | Unknown (likely same) |",
-        f"| New Components | -- | K20A9 AI models (DFR, FD, FRCNN, HMS, PED, PEDRECLS) |",
-        f"| RSA Result Files | -- | 6 rsa_result_p*.bin (signature verification) |",
+        "| Firmware Encryption | XOR only | **AES + XOR** |",
+        "| Rootfs Extractable | Yes | No (AES) |",
+        "| RSA Keys | 1024-bit (3 DER + 1 hex) | Unknown (AES encrypted) |",
+        "| glibc | 2.16 | Unknown (likely same) |",
+        "| New Components | -- | K20A9 AI models (DFR, FD, FRCNN, HMS, PED, PEDRECLS) |",
+        "| RSA Result Files | -- | 6 rsa_result_p*.bin (signature verification) |",
         "",
         "### New in V4.84.101",
         "",

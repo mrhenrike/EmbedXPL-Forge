@@ -1,15 +1,11 @@
 """Tests for embedxpl.core.oui MAC vendor lookup."""
 from __future__ import annotations
 
-from unittest.mock import patch
-
-import pytest
-
 from embedxpl.core.oui import (
     _mac_to_prefix,
-    normalize_vendor,
     clear_session_cache,
     get_stats,
+    normalize_vendor,
 )
 
 

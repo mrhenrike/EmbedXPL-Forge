@@ -281,7 +281,7 @@ def probe_photo_sharing(target):
                         "headers": dict(r.headers),
                     }
                     # Check if CVE-2019-10886 traversal path exists
-                    if "contentshare" in path or "/" == path:
+                    if "contentshare" in path or path == "/":
                         traversal_paths = [
                             "/contentshare/image/../../../etc/passwd",
                             "/contentshare/image/../../../../../../etc/passwd",

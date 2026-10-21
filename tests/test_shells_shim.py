@@ -15,6 +15,7 @@ if str(ROOT) not in sys.path:
 
 from embedxpl.core import shells
 
+
 def test_shim_imports_successfully():
     assert hasattr(shells, "ShellEngine")
     assert hasattr(shells, "ShellHandler")

@@ -96,19 +96,19 @@ def extract_gzip_regions(data):
                     # Quick signature check on decompressed data
                     first4 = decompressed[:4]
                     if first4 == b"\x7fELF":
-                        print(f"         -> ELF binary!")
+                        print("         -> ELF binary!")
                         out_path.rename(out_path.with_suffix(".elf"))
                     elif first4 == b"hsqs":
-                        print(f"         -> SquashFS filesystem!")
+                        print("         -> SquashFS filesystem!")
                         out_path.rename(out_path.with_suffix(".sqfs"))
                     elif decompressed[:2] == b"#!":
-                        print(f"         -> Shell script!")
+                        print("         -> Shell script!")
                         out_path.rename(out_path.with_suffix(".sh"))
                     elif b"<html" in decompressed[:1024].lower() or b"<!doctype" in decompressed[:1024].lower():
-                        print(f"         -> HTML content!")
+                        print("         -> HTML content!")
                         out_path.rename(out_path.with_suffix(".html"))
                     elif first4 == b"\x27\x05\x19\x56":
-                        print(f"         -> uImage!")
+                        print("         -> uImage!")
                         out_path.rename(out_path.with_suffix(".uimage"))
 
                     # Check for strings of interest
@@ -255,7 +255,7 @@ def extract_hikvision_partitions(data):
             potential_offsets.append((i, val))
 
     if potential_offsets:
-        print(f"\n  Potential partition offsets found in header:")
+        print("\n  Potential partition offsets found in header:")
         for hdr_off, val in potential_offsets:
             chunk = data[val:val + 16]
             print(f"    Header@0x{hdr_off:02X} -> 0x{val:08X}: {chunk.hex()[:32]}")
@@ -266,7 +266,7 @@ def extract_hikvision_partitions(data):
         r = subprocess.run(
             ["binwalk", str(DECRYPTED)],
             capture_output=True, text=True, timeout=120)
-        print(f"  binwalk output:")
+        print("  binwalk output:")
         for line in r.stdout.strip().split("\n")[:30]:
             print(f"    {line}")
 
@@ -338,7 +338,7 @@ def analyze_extracted_elfs():
                     add_finding(
                         f"F-HK-ELF-DANGER-{name[:15]}", "MEDIUM",
                         f"Dangerous imports in {name}: {dlist}",
-                        f"Binary imports potentially exploitable functions.",
+                        "Binary imports potentially exploitable functions.",
                         dlist)
 
                 nx = binary.has_nx if hasattr(binary, "has_nx") else True
@@ -623,7 +623,7 @@ def generate_report():
         "",
         "## 2. Extraction Results",
         "",
-        f"- Decryption: XOR key `0x73738E8E` (classic Hikvision key)",
+        "- Decryption: XOR key `0x73738E8E` (classic Hikvision key)",
         f"- **Total findings: {len(findings)}**",
         "",
     ]

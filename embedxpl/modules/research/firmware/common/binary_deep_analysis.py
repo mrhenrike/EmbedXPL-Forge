@@ -330,7 +330,7 @@ def generate_report(target_name, target_id, results):
 
 if __name__ == "__main__":
     print(f"\n{'='*70}")
-    print(f"  DEEP BINARY ANALYSIS ENGINE")
+    print("  DEEP BINARY ANALYSIS ENGINE")
     print(f"  Time: {datetime.now(timezone.utc).isoformat()}")
     print(f"{'='*70}")
 
