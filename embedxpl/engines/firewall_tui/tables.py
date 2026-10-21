@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Any, List, Sequence, Tuple
 
-from firewallxpl.core.tui.console import console, has_rich
+from embedxpl.core.tui.console import console, has_rich
 
 if has_rich:
     from rich.table import Table

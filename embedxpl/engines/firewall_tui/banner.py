@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Dict, List
 
-from firewallxpl.core.tui.console import console, has_rich
+from embedxpl.core.tui.console import console, has_rich
 
 if has_rich:
     from rich.panel import Panel

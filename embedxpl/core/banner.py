@@ -36,7 +36,7 @@ _CACHE_TTL = 300   # segundos  -  recontar se cache tiver mais de 5 min
 TOOL_BANNERS: Dict[str, Path] = {
     "embedxpl":     _BANNERS_DIR / "embedxpl.txt",
     "industrialxpl": _BANNERS_DIR / "industrialxpl.txt",
-    "firewallxpl":  _BANNERS_DIR / "firewallxpl.txt",
+    "embedxpl_fw":  _BANNERS_DIR / "embedxpl.txt",
     "printerxpl":   _BANNERS_DIR / "printerxpl.txt",
     "wirelessxpl":  _BANNERS_DIR / "wirelessxpl.txt",
     "wordlistxpl":  _BANNERS_DIR / "wordlistxpl.txt",

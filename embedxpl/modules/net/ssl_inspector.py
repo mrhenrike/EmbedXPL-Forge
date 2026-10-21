@@ -1,5 +1,5 @@
 """
-firewallxpl/modules/net/ssl_inspector.py - SSL/TLS Certificate Inspector.
+embedxpl/modules/net/ssl_inspector.py - SSL/TLS Certificate Inspector.
 
 Inspects SSL/TLS certificates on target hosts to detect:
   - Self-signed certificates (common on IoT/embedded devices)

@@ -11,9 +11,9 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, List, Optional
 
-from firewallxpl.core.tui.console import console, has_rich
+from embedxpl.core.tui.console import console, has_rich
 
-logger = logging.getLogger("firewallxpl.tui.dashboard")
+logger = logging.getLogger("embedxpl.tui.dashboard")
 
 if has_rich:
     from rich.layout import Layout

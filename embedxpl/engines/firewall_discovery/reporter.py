@@ -9,10 +9,10 @@ import json
 import logging
 from typing import Any, List
 
-from firewallxpl.core.tui.console import console, has_rich
-from firewallxpl.core.discovery.scan_engines.base import DiscoveredHost
+from embedxpl.core.tui.console import console, has_rich
+from embedxpl.core.discovery.scan_engines.base import DiscoveredHost
 
-logger = logging.getLogger("firewallxpl.discovery.reporter")
+logger = logging.getLogger("embedxpl.discovery.reporter")
 
 if has_rich:
     from rich.panel import Panel

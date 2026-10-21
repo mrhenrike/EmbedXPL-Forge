@@ -1,5 +1,5 @@
 """
-firewallxpl/modules/intel/shodan_enricher.py - Shodan Host Profiler.
+embedxpl/modules/intel/shodan_enricher.py - Shodan Host Profiler.
 
 Queries the Shodan API to enrich target IP addresses with:
   - Open ports and services

@@ -8,7 +8,7 @@ from __future__ import annotations
 import sys
 from typing import Any, Optional
 
-from firewallxpl.core.tui.console import has_rich
+from embedxpl.core.tui.console import has_rich
 
 if has_rich:
     from rich.progress import (

@@ -1,4 +1,4 @@
-from firewallxpl.modules.scanners.autopwn import Exploit
+from embedxpl.modules.scanners.autopwn import Exploit
 
 
 class Exploit(Exploit):

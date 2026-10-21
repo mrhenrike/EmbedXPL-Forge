@@ -13,9 +13,9 @@ import logging
 import socket
 from typing import Dict, List
 
-from firewallxpl.core.discovery.scan_engines.base import DiscoveredHost, ScanEngine, ScanOptions
+from embedxpl.core.discovery.scan_engines.base import DiscoveredHost, ScanEngine, ScanOptions
 
-logger = logging.getLogger("firewallxpl.discovery.builtin")
+logger = logging.getLogger("embedxpl.discovery.builtin")
 
 APPLIANCE_PORTS = [22, 23, 53, 80, 161, 443, 541, 830, 4443, 8080, 8443, 9090, 10443]
 

@@ -7,8 +7,8 @@ device identification and vuln mapping.
 Author: André Henrique (@mrhenrike) | União Geek
 """
 
-from firewallxpl.core.discovery.engine import DiscoveryEngine
-from firewallxpl.core.discovery.device_identifier import DeviceIdentifier
-from firewallxpl.core.discovery.vuln_mapper import VulnMapper
+from embedxpl.core.discovery.engine import DiscoveryEngine
+from embedxpl.core.discovery.device_identifier import DeviceIdentifier
+from embedxpl.core.discovery.vuln_mapper import VulnMapper
 
 __all__ = ["DeviceIdentifier", "DiscoveryEngine", "VulnMapper"]

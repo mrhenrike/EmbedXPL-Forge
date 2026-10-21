@@ -9,9 +9,9 @@ import asyncio
 import logging
 from typing import Any, Dict, List, Optional
 
-from firewallxpl.core.discovery.scan_engines.base import DiscoveredHost, ScanEngine, ScanOptions
+from embedxpl.core.discovery.scan_engines.base import DiscoveredHost, ScanEngine, ScanOptions
 
-logger = logging.getLogger("firewallxpl.discovery.nmap")
+logger = logging.getLogger("embedxpl.discovery.nmap")
 
 try:
     import nmap
