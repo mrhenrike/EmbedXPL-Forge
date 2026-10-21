@@ -13,7 +13,7 @@ import statistics
 from dataclasses import dataclass
 from typing import List, Optional
 
-logger = logging.getLogger("embedxpl.core.ml.auto_tuner")
+logger = logging.getLogger("embedxpl.ml.auto_tuner")
 
 
 @dataclass

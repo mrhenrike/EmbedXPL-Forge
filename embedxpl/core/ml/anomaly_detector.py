@@ -14,7 +14,7 @@ import statistics
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 
-logger = logging.getLogger("embedxpl.core.ml.anomaly_detector")
+logger = logging.getLogger("embedxpl.ml.anomaly_detector")
 
 
 @dataclass
