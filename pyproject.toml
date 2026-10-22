@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "embedxpl"
-version = "6.0.0"
+version = "7.0.0-dev"
 description = "Embedded & Perimeter Security Assessment Framework -- 2800+ modules, 900+ CVEs, 114+ vendors. Covers routers, IP cameras, GPON ONTs, ISP CPEs, IoT/embedded edge, firewalls (Fortinet/Cisco/PAN-OS/SonicWall), VPN appliances, printers, drones, switches, UPS/PDU, ICS/OT."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { text = "BSD-3-Clause" }
@@ -159,6 +159,7 @@ python_version = "3.12"
 strict = true
 mypy_path = "."
 exclude = [
+    "embedxpl/lab/",
     "embedxpl/malware_research/",
     "embedxpl/modules/exploits/",
     "embedxpl/engines/fingerprint/tenable/",
@@ -273,7 +274,7 @@ module = ["venv_bootstrap", "tools.*"]
 ignore_errors = true
 
 [tool.ruff]
-target-version = "py39"
+target-version = "py312"
 line-length = 120
 
 [tool.ruff.lint]
@@ -343,7 +344,25 @@ exclude = [
 [tool.ruff.lint.isort]
 known-first-party = ["embedxpl"]
 
+[tool.coverage.run]
+source = ["embedxpl"]
+omit = [
+    "embedxpl/.tmp/*",
+    "embedxpl/.claude/*",
+    "embedxpl/lab/*",
+    "embedxpl/malware_research/*",
+]
+
+[tool.coverage.report]
+fail_under = 5
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.",
+]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-addopts = "-v --tb=short --cov=embedxpl --cov-fail-under=1"
+addopts = "-v --tb=short --cov=embedxpl --cov-fail-under=5"

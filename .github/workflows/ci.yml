@@ -26,7 +26,6 @@ jobs:
   typecheck:
     name: "mypy typecheck"
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -37,7 +36,7 @@ jobs:
           pip install mypy
           pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
           pip install -e ".[dev]" || pip install -e .
-      - run: mypy embedxpl/__init__.py embedxpl/core/config.py embedxpl/core/pool.py || true
+      - run: mypy embedxpl/
 
   test:
     name: "pytest / py${{ matrix.python-version }}"
@@ -54,7 +53,7 @@ jobs:
           allow-prereleases: true
       - run: |
           pip install --upgrade pip setuptools wheel
-          pip install pytest
+          pip install pytest pytest-cov
           pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
-          pip install -e . || pip install -e ".[dev]"
+          pip install -e ".[dev]" || pip install -e .
       - run: pytest tests/ -v --tb=short
