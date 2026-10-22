@@ -22,7 +22,7 @@ import time
 from typing import Dict, List, Optional, Set, Tuple
 
 from embedxpl.core.exploit import (
-
+    Exploit as BaseExploit,
     OptIP,
     OptPort,
     OptString,
@@ -62,7 +62,7 @@ _IP_PATTERN = re.compile(
 _MAC_PATTERN = re.compile(
     r"([0-9a-fA-F]{2}(?::[0-9a-fA-F]{2}){5})"
 )
-class Exploit:
+class Exploit(BaseExploit):
     """IoT Network Reconnaissance from Compromised Device.
 
     Performs network discovery and pivot scanning from an already-compromised
