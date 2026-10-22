@@ -1037,7 +1037,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         os.system(args[0])
 
     def command_search(self, *args, **kwargs):
-        """Rich search: keyword, CVE, vendor, type, tested flag  -  integrates tools/search.py engine."""
+        """Rich search: keyword, CVE/CWE/MS/EDB, vendor, type, tested flag."""
         try:
             query = " ".join(args).strip("'\"") if args else ""
         except Exception:
@@ -1045,9 +1045,11 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
         if not query and not kwargs:
             print_error(
-                "Usage: search <keyword>  |  search cve-2024-54085  |  "
-                "search type:router  |  search vendor:cisco  |  "
-                "search tested:yes  |  search tested:no"
+                "Usage: search <keyword>  |  search cve-2024-54085\n"
+                "       search cve202454085  |  search cve huawei\n"
+                "       search cwe79  |  search ms17010  |  search edb36913\n"
+                "       search type:router  |  search vendor:cisco\n"
+                "       search tested:yes  |  search tested:no"
             )
             return
 

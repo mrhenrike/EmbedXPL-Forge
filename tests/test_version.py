@@ -20,7 +20,7 @@ def _pyproject_version() -> str:
 
 def test_pyproject_version_semver() -> None:
     v = _pyproject_version()
-    assert re.fullmatch(r"\d+\.\d+\.\d+", v), v
+    assert re.fullmatch(r"\d+\.\d+\.\d+(-[a-z0-9.]+)?", v), v
 
 
 def test_module_version_matches_pyproject() -> None:

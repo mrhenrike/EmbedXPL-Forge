@@ -1040,7 +1040,7 @@ def _build_catalog() -> None:
                     "Disables protective relays enabling physical damage to electrical equipment."
                 ),
                 cves=["CVE-2015-5374"],
-                modules=["exploits/ics/siemens/siprotec_relay_dos_cve_2015_5374"],
+                modules=["industrialxpl:exploits/scada/siemens/siprotec_relay_dos_cve_2015_5374"],
                 mitre_techniques=["T0835", "T0813"],
                 target_devices=["Siemens SIPROTEC 4", "Siemens SIPROTEC 5"],
                 phase="Impact  -  Denial of Safety",
@@ -1054,7 +1054,7 @@ def _build_catalog() -> None:
                     "No CVE  -  exploits design weaknesses in unauthenticated ICS protocols."
                 ),
                 cves=[],
-                modules=["exploits/ics/schneider/modicon_modbus_control_cve_2018_7841"],
+                modules=["industrialxpl:exploits/scada/schneider/modicon_modbus_control_cve_2018_7841"],
                 mitre_techniques=["T0866", "T0839", "T0820"],
                 target_devices=["Schneider Electric Modicon M340", "Modicon M580", "Modicon TM251/TM241"],
                 phase="Impact  -  Control Logic Manipulation",
