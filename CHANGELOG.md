@@ -6,6 +6,66 @@ Format: [Semantic Versioning](https://semver.org) -- `MAJOR.MINOR.PATCH`.
 
 ---
 
+## [7.0.0]  -  2026-10-22
+
+### Added (W22 Evolution)
+
+#### CVE Exploit Modules
+- 7 missing CVE exploit modules for routers (PR #65): Genexis, Intelbras, Tenda, D-Link (4 models)
+- TP-Link HomeShield RCE (CVE-2024-53375) + 18 router modules (PR #66)
+- 8 additional router CVE modules: ASUS, Cisco, Huawei, Ubiquiti, WPA3, TP-Link (PR #70)
+- CVE catalog expanded to 632 entries, 613 with module references
+
+#### New Protocols (W22.6)
+- `scanners/voip/sip_endpoint_scan.py`: SIP OPTIONS probe scanner
+- `exploits/voip/sip_register_hijack.py`: unauthenticated REGISTER hijack test
+- `exploits/protocols/iot/mqtt/mqtt_topic_bruteforce.py`: wildcard topic enumeration
+- `exploits/protocols/iot/coap/coap_dtls_psk_bruteforce.py`: PSK identity/key bruteforce
+
+#### Post-Exploitation (W22.8)
+- `post/embedded_credential_harvest.py`: credential extraction from embedded devices
+- `post/router_config_exfil.py`: running-config exfiltration (HTTP/SNMP/CLI)
+- `post/iot_network_recon.py`: network recon from compromised IoT device
+- `post/firmware_persistence_inject.py`: persistence injection in firmware rootfs
+- `post/embedded_log_cleanup.py`: log cleanup on embedded devices
+
+#### Evasion Techniques (W22.8)
+- `exploits/evasion/dns_tunnel_exfil.py`: data exfiltration via DNS tunneling
+- `exploits/evasion/icmp_covert_channel.py`: ICMP covert C2 channel
+- `exploits/evasion/http_header_steganography.py`: steganography in HTTP headers
+- `exploits/evasion/firmware_integrity_bypass.py`: firmware checksum/integrity bypass
+
+#### AutoPwn (W22.8)
+- `autopwn/nas.py`: NAS devices (QNAP, Synology, WD, Netgear)
+- `autopwn/smart_home.py`: smart home hubs (Hue, SmartThings, Tuya)
+- `autopwn/voip.py`: VoIP/IP telephony (Cisco, Polycom, Yealink)
+- `autopwn/iot_generic.py`: generic IoT with device classification and delegation
+
+#### Lateral Movement and Firmware (W22.8)
+- `exploits/lateral/dhcp_starvation_pivot.py`: DHCP starvation for IoT pivot
+- `exploits/lateral/dns_rebind_iot.py`: DNS rebinding against IoT devices
+- `exploits/lateral/upnp_proxy_pivot.py`: UPnP proxy pivot
+- `exploits/firmware/busybox_shell_dropper.py`: BusyBox shell dropper
+- `exploits/firmware/config_cred_extractor.py`: config credential extractor
+- `encoders/firmware/arm_xor_encoder.py`: ARM XOR payload encoder
+
+#### Hardware Scanners (W22.6)
+- `scanners/protocols/hw/jtag_swd_scan.py`: JTAG/SWD debug interface scanner
+- `scanners/protocols/hw/uart_console_scan.py`: UART console baud rate scanner
+- `scanners/protocols/hw/i2c_spi_probe.py`: I2C/SPI bus probe
+
+### Fixed
+- HatSploit shim: added Module and Handler stub classes for absorbed modules
+- 80 CVE catalog entries auto-linked to existing modules (W22.7)
+- 46 ruff lint violations resolved across existing modules
+
+### Changed
+- Version bumped to 7.0.0 (MAJOR: W22 Evolution with 22+ new attack modules)
+- Total module count: ~4,920 indexed, 6,811 .py files
+- Test suite: 1,095 passed, ruff 0 errors suite-wide
+
+---
+
 ## [6.0.0]  -  2026-10-19
 
 ### Added (Consolidation)

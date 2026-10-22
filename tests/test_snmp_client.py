@@ -3,7 +3,15 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock, patch
 
-from embedxpl.core.snmp.snmp_client import SNMP_TIMEOUT, SNMPCli, SNMPClient
+import pytest
+
+try:
+    from embedxpl.core.snmp.snmp_client import SNMP_IMPORT_ERROR, SNMP_TIMEOUT, SNMPCli, SNMPClient
+except (ImportError, ModuleNotFoundError, RuntimeError):
+    pytest.skip("pysnmp not available", allow_module_level=True)
+
+if SNMP_IMPORT_ERROR is not None:
+    pytest.skip("pysnmp backend unavailable: {}".format(SNMP_IMPORT_ERROR), allow_module_level=True)
 
 # -------------------------------------------------------
 # SNMPCli construction
