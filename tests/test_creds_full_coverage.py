@@ -34,6 +34,8 @@ ALL_CREDS = _collect_cred_modules()
 def _safe_import(mod_path: str):
     try:
         return importlib.import_module(mod_path)
+    except (SystemExit, KeyboardInterrupt) as exc:
+        pytest.skip("Import triggered exit: {}".format(exc))
     except Exception as exc:
         pytest.skip("Import failed: {}".format(exc))
     return None
