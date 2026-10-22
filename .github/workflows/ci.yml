@@ -35,7 +35,7 @@ jobs:
       - run: |
           pip install --upgrade pip setuptools wheel
           pip install mypy
-          pip install git+https://github.com/mrhenrike/xpl-core.git@main
+          pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
           pip install -e ".[dev]" || pip install -e .
       - run: mypy embedxpl/__init__.py embedxpl/core/config.py embedxpl/core/pool.py || true
 
@@ -55,6 +55,6 @@ jobs:
       - run: |
           pip install --upgrade pip setuptools wheel
           pip install pytest
-          pip install git+https://github.com/mrhenrike/xpl-core.git@main
+          pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
           pip install -e . || pip install -e ".[dev]"
       - run: pytest tests/ -v --tb=short
