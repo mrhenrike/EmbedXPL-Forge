@@ -6,48 +6,54 @@
 
 **Framework de Avaliação de Segurança em Dispositivos Embarcados e de Perímetro**
 
-EmbedXPL-Forge é um framework open-source de exploração e scanning para profissionais de segurança auditarem roteadores, switches, câmeras IP, NVR/DVR, GPON ONTs, CPEs de ISP, impressoras, dispositivos IoT, OT/ICS e dispositivos embarcados. Oferece **2800+ módulos ativos** cobrindo testes de credenciais, exploração de vulnerabilidades, varredura de rede, geração de payloads, ataques a câmeras RTSP, manipulação de firmware, arsenal completo de impressoras e orquestração PolyExploit multilinguagem - com **700+ CVEs** mapeados em **114+ fabricantes** e um **APT Group Attack Engine** que reproduz cadeias de ataque reais de grupos nação-estado.
+EmbedXPL-Forge é um framework open-source de exploração e scanning para profissionais de segurança auditarem roteadores, switches, câmeras IP, NVR/DVR, GPON ONTs, CPEs de ISP, impressoras, NAS, firewalls, dispositivos IoT, OT/ICS e dispositivos embarcados. Oferece **4.700+ módulos ativos** cobrindo testes de credenciais, exploração de vulnerabilidades, varredura de rede, geração de payloads, ataques a câmeras RTSP, manipulação de firmware, pos-exploração, evasão, movimentação lateral, arsenal completo de impressoras e orquestração PolyExploit multilinguagem - com **1.475+ CVEs** mapeados em **129+ fabricantes** e um **APT Group Attack Engine** que reproduz cadeias de ataque reais de grupos nação-estado.
 
-> **Versão:** 2.0.0
+> **Versão:** 7.0.0
 
 
 ## Funcionalidades
 
-- **625+ módulos de exploit** - RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt, gerador WPA/WPS, gerador de senha de fábrica, chains de heap/stack BOF
-- **88 módulos de credenciais** - ataques de dicionário contra FTP, SSH, Telnet, HTTP, SNMP, SFTP
-- **185+ módulos para impressoras** - HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; PJL/IPP/LPD/WSD/CUPS; chains Pwn2Own 2026; PrintingShellz; MS-RPRN NTLM coercion
-- **Motor RTSP completo** - portado do [cameradar](https://github.com/ullaakut/cameradar): brute-force de rotas (195+ rotas), brute-force de credenciais (80+ pares), auth Basic/Digest, RTSPS/TLS, **tunelamento RTSP-over-HTTP (Python puro, RFC 2326 App-C)**, scanner nmap/masscan/direto, ONVIF WS-Discovery
-- **7 scripts NSE Nmap personalizados** - descoberta RTSP, fingerprint de câmera, validação CVE Hikvision/Dahua, teste de credenciais padrão, verificação multi-vendor CVE, captura de snapshot (`pip install embedxpl[nse]`)
-- **Suite de exploração de firmware** - detecção de formato, injeção de backdoor, patch de checksum, bypass de flash por fabricante (NETGEAR, TP-Link, D-Link, ASUS)
+- **2.847 módulos de exploit** - RCE, auth bypass, path traversal, info disclosure, buffer overflow, DNS hijacking, command injection, backdoor, CSRF, config decrypt, gerador WPA/WPS, gerador de senha de fábrica, chains de heap/stack BOF, pos-exploração, evasão, movimentação lateral, persistência em firmware
+- **1.528 módulos de credenciais** - ataques de dicionário contra FTP, SSH, Telnet, HTTP, SNMP, SFTP, MQTT, RTSP, VNC, RDP
+- **269 módulos de scanner** - AutoPwn chains, scanners específicos por dispositivo, descoberta WSD/mDNS de impressoras, scanners de hardware/JTAG/SWD/UART, enumeração de serviços de rede
+- **255+ módulos para impressoras** - HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; PJL/IPP/LPD/WSD/CUPS; chains Pwn2Own 2026; PrintingShellz; MS-RPRN NTLM coercion
+- **172+ módulos para câmeras** - Hikvision, Dahua, Axis, Reolink, Amcrest, Uniview, Tapo, Swann, ANNKE, Foscam, Xiongmai OEM, Grandstream, Intelbras
+- **338+ módulos de firewall/VPN** - Palo Alto, Fortinet, Cisco ASA/FTD, Check Point, Juniper, SonicWall, Sophos, WatchGuard, Zyxel, F5 BIG-IP, Citrix/NetScaler, Ivanti, pfSense, OPNsense, MikroTik
+- **Motor RTSP completo** - brute-force de rotas (195+ rotas), brute-force de credenciais (80+ pares), auth Basic/Digest, RTSPS/TLS, **tunelamento RTSP-over-HTTP (Python puro, RFC 2326 App-C)**, scanner nmap/masscan/direto, ONVIF WS-Discovery, saída M3U
+- **114 scripts NSE Nmap personalizados** - descoberta RTSP, fingerprint de câmera, validação CVE Hikvision/Dahua, teste de credenciais padrão, verificação multi-vendor CVE, captura de snapshot (`pip install embedxpl[nse]`)
+- **Suite de exploração de firmware** - detecção de formato, injeção de backdoor, patch de checksum, bypass de flash por fabricante (NETGEAR, TP-Link, D-Link, ASUS), injeção de persistência em firmware, bypass de integridade
+- **Módulos de pos-exploração** - coleta de credenciais embarcadas, exfiltração de configuração de roteadores, reconhecimento de rede IoT, injeção de persistência em firmware, limpeza de logs
+- **Módulos de evasão** - exfiltração por túnel DNS, canais C2 covert via ICMP, esteganografia em cabeçalhos HTTP, bypass de integridade de firmware
+- **Movimentação lateral** - DHCP starvation pivot, ARP cache poisoning relay, UPnP IGD port-forward pivot, mDNS/LLMNR poisoning, SNMP credential chain, MQTT broker hijack, TR-069 command injection, CoAP amplification relay
 - **Orquestrador PolyExploit** - compilação C/C++ em tempo de execução (gcc/clang/mingw/cross), execução de exploits Ruby/Node.js/PHP/Bash/Perl, integração msfconsole, integração ExploitDB/searchsploit
 - **Módulos ICS/OT** - Universal Robots PolyScope 5, RIOT OS, Modbus, S7comm, EtherNet/IP, BACnet, DNP3
 - **Smart home / marítimo / especializado** - eNet SMART HOME, OpenRemote, Metis maritime IoT (WIC/DFS)
-- **5+ módulos de scanner** - AutoPwn, scanners específicos por dispositivo, descoberta WSD/mDNS de impressoras
-- **32 módulos de payload** - reverse/bind TCP shells para x86, x64, ARM, MIPS, Python, Perl, PHP
-- **13 módulos de encoder** - Base64 e hex encoding para Python, PHP, Perl
-- **14 módulos genéricos** - Heartbleed, ShellShock, UPnP IGD, SNMP bruteforce, TCP Xmas, amplificação UDP, consulta CVE, detector DNS hijack, interceptor AITM
-- **700+ CVEs mapeados** - de 2001 a 2026, incluindo chains Pwn2Own 2026 e CVEs críticos de IoT/OT/marítimo
+- **21 módulos AutoPwn** - chains de exploração multi-fase por fabricante (GPON, Huawei, CUPS Pwn2Own, Lexmark Pwn2Own, NAS, Smart Home, VoIP, IoT genérico e mais)
+- **62 módulos de payload** - reverse/bind TCP shells para x86, x64, ARM, MIPS, Python, Perl, PHP; ARM XOR encoder; BusyBox shell dropper
+- **33 módulos de encoder** - Base64, hex, XOR encoding para Python, PHP, Perl, shellcode
+- **25 módulos genéricos** - Heartbleed, ShellShock, UPnP IGD, SNMP bruteforce, TCP Xmas, amplificação UDP, consulta CVE, detector DNS hijack, interceptor AITM
+- **1.475+ CVEs mapeados** - de 2001 a 2026, incluindo chains Pwn2Own 2026 e CVEs críticos de IoT/OT/marítimo
 - **APT Group Attack Engine** - reproduz cadeias de ataque do APT28, Volt Typhoon, Sandworm, Quad7, Turla, APT40 com mapeamento MITRE ATT&CK
-- **23+ wordlists por fabricante** - credenciais padrão externalizadas por vendor (incluindo ISPs brasileiros específicos)
+- **1.022 wordlists por fabricante** - credenciais padrão externalizadas por vendor (incluindo ISPs brasileiros específicos)
 - **Módulos ISP Brasil** - CPEs ZTE, Huawei, Intelbras e TP-Link distribuídos pelos principais provedores brasileiros (Vivo, Claro, OI, TIM)
 - **FCC-ID Lookup** - consulta ao banco FCC para recuperar firmware, manuais e fotos internas de qualquer dispositivo registrado
 - **iSpy Camera DB** - integração com banco de 6.000+ modelos de câmera para rotas RTSP e credenciais padrão
-- **7 automated quality gates** - `tools/phase_gate.py` garante que cada módulo passa verificações de importação, anti-falso-positivo, referências e qualidade de código
+- **7 quality gates automatizados** - `tools/phase_gate.py` garante que cada módulo passa verificações de importação, anti-falso-positivo, referências e qualidade de código
 
 ## Tipos de Dispositivos Suportados
 
 | Tipo | Cobertura | Descrição |
 |------|-----------|-----------|
-| **Roteadores / GPON ONT / CPE** | 580+ módulos | Roteadores SOHO, gateways enterprise, CPE/ONT GPON |
-| **Câmeras IP / NVR / DVR** | 60+ módulos | Hikvision, Dahua, Axis, Reolink, Amcrest, Uniview, Tapo, Swann, ANNKE, Edimax, Intelbras e mais |
-| **Impressoras / MFP** | 185+ módulos | HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; IPP/PJL/LPD/WSD/CUPS |
-| **NAS (Armazenamento em Rede)** | 20+ módulos | QNAP, Synology, D-Link NAS, Zyxel |
-| **VPN / Firewall / NGFW / Segurança de Perímetro** | **202 módulos** | Palo Alto, Fortinet, Cisco ASA/FTD/FMC, Check Point, Juniper, SonicWall, Sophos, WatchGuard, Zyxel, F5 BIG-IP, Citrix/NetScaler, Ivanti, Pulse Secure, pfSense, OPNsense, Barracuda, Imperva, MikroTik, Huawei USG, Stormshield, Hillstone, Sangfor, H3C, Radware, Symantec ProxySG, Trend Micro TippingPoint, Trellix, Arista EOS, OpenVPN AS, Phoenix Contact mGuard, Siemens SCALANCE, Moxa EDR, VyOS, IPFire, Kerio, Cisco Meraki, Array Networks + módulos de bypass de protocolo OT/ICS |
-| **Switches L2/L3** | 3 módulos | Switches gerenciados (Cisco, D-Link, NETGEAR) |
-| **SOHO Edge** | 9 módulos | Roteadores de viagem, NAS, APs wireless |
-| **ICS / OT / Industrial** | 35+ módulos | PLCs, SCADA, Modbus, S7comm, EtherNet/IP, Universal Robots PolyScope 5 |
-| **Smart Home / Marítimo** | 10+ módulos | eNet SMART HOME, OpenRemote IoT, Metis maritime WIC/DFS |
-| **SO Embarcado** | 25+ módulos | RIOT OS, OpenWrt, VxWorks, QNX, wolfSSL, Tuya Arduino SDK |
+| **Roteadores / GPON ONT / CPE** | 1.069+ módulos | Roteadores SOHO, gateways enterprise, CPE/ONT GPON em 129 fabricantes (foco principal) |
+| **Câmeras IP / NVR / DVR** | 172+ módulos | Hikvision, Dahua, Axis, Reolink, Amcrest, Uniview, Tapo, Swann, ANNKE, Edimax, Intelbras, Grandstream, Foscam, Xiongmai OEM, MVPower e mais 20+ |
+| **Impressoras / MFP** | 255+ módulos | HP, Canon, Lexmark, Xerox, Ricoh, Brother, Epson, Kyocera, Samsung; IPP/PJL/LPD/WSD/CUPS chains |
+| **NAS (Armazenamento em Rede)** | 64+ módulos | QNAP, Synology, D-Link NAS, Zyxel NAS, WD, Netgear ReadyNAS |
+| **VPN / Firewall / NGFW / Segurança de Perímetro** | **338 módulos** | Palo Alto, Fortinet, Cisco ASA/FTD/FMC, Check Point, Juniper, SonicWall, Sophos, WatchGuard, Zyxel, F5 BIG-IP, Citrix/NetScaler, Ivanti, Pulse Secure, pfSense, OPNsense, Barracuda, Imperva, MikroTik, Huawei USG, Stormshield, Hillstone, Sangfor, H3C, Radware, Symantec ProxySG, Trend Micro TippingPoint, Trellix, Arista EOS, OpenVPN AS, Phoenix Contact mGuard, Siemens SCALANCE, Moxa EDR, VyOS, IPFire, Kerio, Cisco Meraki, Array Networks + módulos de bypass de protocolo OT/ICS |
+| **Switches L2/L3** | 61 módulos | Switches gerenciados (Cisco, D-Link, NETGEAR, HP/Aruba, Juniper, Extreme) |
+| **SOHO Edge** | 16 módulos | Roteadores de viagem, NAS, APs wireless |
+| **ICS / OT / Industrial** | 26+ módulos | PLCs, SCADA, Modbus, S7comm, EtherNet/IP, Universal Robots PolyScope 5 |
+| **Smart Home / Marítimo** | 20+ módulos | eNet SMART HOME, OpenRemote IoT, Metis maritime WIC/DFS, Tuya, Hue, SmartThings |
+| **SO Embarcado** | 54+ módulos | RIOT OS, OpenWrt, VxWorks, QNX, wolfSSL, Tuya Arduino SDK, Zephyr |
 
 ## Fabricantes Suportados
 
