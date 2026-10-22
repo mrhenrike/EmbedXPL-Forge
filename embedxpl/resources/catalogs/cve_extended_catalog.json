@@ -1,6 +1,6 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 631,
+  "entry_count": 632,
   "last_updated": "2026-10-22",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
@@ -7961,6 +7961,19 @@
         "https://nvd.nist.gov/vuln/detail/CVE-2026-34472",
         "https://www.tenable.com/cve/CVE-2026-34472"
       ]
+    },
+    {
+      "cve_id": "CVE-2024-53375",
+      "vendor": "tp-link",
+      "modules": [
+        "exploits/routers/tplink/archer_deco_tapo_homeshield_rce_cve_2024_53375.py"
+      ],
+      "devices": [
+        "TP-Link Archer (HomeShield)",
+        "TP-Link Deco (HomeShield)",
+        "TP-Link Tapo (HomeShield)"
+      ],
+      "exploit_available": true
     }
   ]
 }
