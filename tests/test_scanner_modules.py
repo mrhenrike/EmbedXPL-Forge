@@ -45,11 +45,11 @@ SCANNER_MODULES = [
     ),
     (
         "embedxpl.modules.scanners.cameras.camera_scan",
-        ["target", "port"],
+        ["target"],
     ),
     (
         "embedxpl.modules.scanners.routers.router_scan",
-        ["target", "port"],
+        ["target"],
     ),
 ]
 
