@@ -4,10 +4,8 @@ from __future__ import annotations
 from unittest.mock import MagicMock, patch
 
 import paramiko
-import pytest
 
 from embedxpl.core.sftp.sftp_client import SFTP_TIMEOUT, SFTPCli, SFTPClient
-
 
 # -------------------------------------------------------
 # SFTPCli construction

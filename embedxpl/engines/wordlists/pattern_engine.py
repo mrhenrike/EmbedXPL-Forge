@@ -139,7 +139,7 @@ def render_template(template: str, variables: dict[str, list[str]]) -> Generator
 
     for combo in product(*resolved):
         result = template
-        for var_name, value in zip(var_names, combo):
+        for var_name, value in zip(var_names, combo, strict=False):
             result = result.replace(f"{{{var_name}}}", value)
         yield result
 

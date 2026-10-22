@@ -472,7 +472,7 @@ def score_candidates(
         for batch_start in range(0, len(words), batch_size):
             batch = words[batch_start: batch_start + batch_size]
             scores = _torch_score_batch(batch, device)
-            for word, score in zip(batch, scores):
+            for word, score in zip(batch, scores, strict=False):
                 pat_hits = [pid for pid, pat in patterns.items() if pat.match(word)]
                 boost = 0.05 if any(bw in word.lower() for bw in boost_words) else 0.0
                 results.append(ScoredCandidate(

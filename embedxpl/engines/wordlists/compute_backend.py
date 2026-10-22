@@ -63,7 +63,7 @@ class ComputeBackend(ABC):
             List of dot product scores, one per row of B.
         """
         # Default pure-Python implementation (overridden by fast backends)
-        return [sum(x * y for x, y in zip(a, row)) for row in B]
+        return [sum(x * y for x, y in zip(a, row, strict=False)) for row in B]
 
     def rank_by_weights(
         self,
@@ -83,7 +83,7 @@ class ComputeBackend(ABC):
             List of (candidate, score) sorted descending.
         """
         scores = self.dot_product_batch(weight_vec, feature_vecs)
-        ranked = sorted(zip(candidates, scores), key=lambda x: -x[1])
+        ranked = sorted(zip(candidates, scores, strict=False), key=lambda x: -x[1])
         return ranked
 
 

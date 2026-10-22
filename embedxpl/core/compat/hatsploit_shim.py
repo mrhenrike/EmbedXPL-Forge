@@ -78,13 +78,13 @@ def output_warning(msg): from embedxpl.core.exploit.printer import print_warning
 
 # Export all
 __all__ = [
-    'Handler',
     'HTTP',
-    'Module',
     'SSH',
     'TCP',
     'HTTPClient',
+    'Handler',
     'HatSploitModule',
+    'Module',
     'SSHClient',
     'TCPClient',
     'Telnet',

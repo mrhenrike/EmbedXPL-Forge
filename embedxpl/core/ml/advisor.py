@@ -65,7 +65,7 @@ def _softmax(logits: Sequence[float]) -> List[float]:
 
 
 def _dot(a: Sequence[float], b: Sequence[float]) -> float:
-    return sum(x * y for x, y in zip(a, b))
+    return sum(x * y for x, y in zip(a, b, strict=False))
 
 
 def build_feature_vector(ctx: AdvisorContext) -> List[float]:
@@ -133,7 +133,7 @@ class AttackAdvisor:
         labels: List[str] = list(timing["labels"])
         logits = logits_for_timing(feats, timing, use_gpu=use_gpu)
         probs = _softmax(logits)
-        ranked = sorted(zip(labels, probs), key=lambda x: x[1], reverse=True)
+        ranked = sorted(zip(labels, probs, strict=False), key=lambda x: x[1], reverse=True)
         best = ranked[0][0]
         return best, ranked
 

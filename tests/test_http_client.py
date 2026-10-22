@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
 
-import pytest
 import requests
 
 from embedxpl.core.http.http_client import HTTP_TIMEOUT, HTTPClient

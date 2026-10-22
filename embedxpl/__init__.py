@@ -1,1 +1,1 @@
-from embedxpl.version import __version__
+from embedxpl.version import __version__ as __version__

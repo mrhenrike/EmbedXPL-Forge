@@ -302,9 +302,9 @@ def score_passwords(passwords: Sequence[str]) -> List[Tuple[str, float]]:
     iso_norm = _normalise(iso_raw)
     hbos_norm = _normalise(hbos_raw)
 
-    ensemble = [(a + b) / 2.0 for a, b in zip(iso_norm, hbos_norm)]
+    ensemble = [(a + b) / 2.0 for a, b in zip(iso_norm, hbos_norm, strict=False)]
 
-    return list(zip(passwords, ensemble))
+    return list(zip(passwords, ensemble, strict=False))
 
 
 def deleet(password: str, aggressive: bool = False) -> str:

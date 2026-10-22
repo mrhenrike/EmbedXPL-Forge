@@ -1,7 +1,6 @@
 """Tests for embedxpl.core.database (SQLite operational database)."""
 from __future__ import annotations
 
-import json
 import xml.etree.ElementTree as ET
 from pathlib import Path
 

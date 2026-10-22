@@ -15,7 +15,7 @@ import random
 
 import pytest
 
-from embedxpl.core.exploit.utils import MODULES_DIR, index_modules
+from embedxpl.core.exploit.utils import index_modules
 
 ALL_MODULES = index_modules()
 REQUIRED_INFO_KEYS = {"name", "description", "authors"}
@@ -204,7 +204,7 @@ class TestCheckMethodPresence:
                 cls = _get_exploit_class(mod)
                 if cls and hasattr(cls, "check"):
                     base_check = getattr(cls.__bases__[0], "check", None) if cls.__bases__ else None
-                    own_check = getattr(cls, "check")
+                    own_check = cls.check
                     if own_check is not base_check:
                         check_count += 1
             except Exception:
