@@ -1,7 +1,7 @@
 {
   "catalog_note": "CVE index for EmbedXPL-Forge modules. Cross-reference with NVD/CISA.",
-  "entry_count": 557,
-  "last_updated": "2026-10-21",
+  "entry_count": 631,
+  "last_updated": "2026-10-22",
   "affected_families_note": "EG8145 family: OptiXstar X6-10, EchoLife X6, EchoLife V5-V2, EchoLife V5, EG8141A5 — all share Dopra Linux + BBSP/ASP web stack",
   "entries": [
     {
@@ -6874,6 +6874,1072 @@
       ],
       "exploit_available": false,
       "wave": "12"
+    },
+    {
+      "cve_id": "CVE-2020-15498",
+      "vendor": "asus",
+      "product": "home_router",
+      "affected_versions": "RT-AC1900P",
+      "description": "Improper certificate validation in firmware update",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-15498",
+        "https://www.tenable.com/cve/CVE-2020-15498",
+        "https://www.asus.com/content/asus-product-security-advisory/"
+      ]
+    },
+    {
+      "cve_id": "CVE-2020-25015",
+      "vendor": "genexis",
+      "product": "home_router",
+      "affected_versions": "Platinum 4410",
+      "description": "Broken access control / CSRF",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-25015",
+        "https://www.tenable.com/cve/CVE-2020-25015",
+        "https://www.exploit-db.com/exploits/49000"
+      ]
+    },
+    {
+      "cve_id": "CVE-2020-8958",
+      "vendor": "guangzhou v-solution",
+      "product": "onu/router",
+      "affected_versions": "1GE ONU V2801RW / V2804RGW",
+      "description": "Command injection via ping diagnostic",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-8958",
+        "https://www.tenable.com/cve/CVE-2020-8958"
+      ]
+    },
+    {
+      "cve_id": "CVE-2020-36963",
+      "vendor": "intelbras",
+      "product": "home_router",
+      "affected_versions": "RF 301K 1.1.2",
+      "description": "Authentication bypass with configuration disclosure",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-36963",
+        "https://www.tenable.com/cve/CVE-2020-36963",
+        "https://www.exploit-db.com/exploits/49126"
+      ]
+    },
+    {
+      "cve_id": "CVE-2020-5721",
+      "vendor": "mikrotik",
+      "product": "routeros_/_winbox",
+      "affected_versions": "WinBox",
+      "description": "Cleartext password in memory/traffic context",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-5721",
+        "https://www.tenable.com/cve/CVE-2020-5721"
+      ]
+    },
+    {
+      "cve_id": "CVE-2020-27655",
+      "vendor": "synology",
+      "product": "router_manager",
+      "affected_versions": "SRM before 1.2.4-8081",
+      "description": "Improper access control",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-27655",
+        "https://www.tenable.com/cve/CVE-2020-27655",
+        "https://www.synology.com/en-us/security/advisory"
+      ]
+    },
+    {
+      "cve_id": "CVE-2020-17891",
+      "vendor": "tp-link",
+      "product": "home_router",
+      "affected_versions": "Archer C1200",
+      "description": "Cross-site scripting leading to code execution context",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-17891",
+        "https://www.tenable.com/cve/CVE-2020-17891"
+      ]
+    },
+    {
+      "cve_id": "CVE-2020-8423",
+      "vendor": "tp-link",
+      "product": "home_router",
+      "affected_versions": "TL-WR841N V10",
+      "description": "Buffer overflow in httpd",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2020-8423",
+        "https://www.tenable.com/cve/CVE-2020-8423"
+      ]
+    },
+    {
+      "cve_id": "CVE-2021-32030",
+      "vendor": "asus",
+      "product": "gaming_/_mesh_router",
+      "affected_versions": "GT-AC2900 / Lyra Mini",
+      "description": "Authentication bypass",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-32030",
+        "https://www.tenable.com/cve/CVE-2021-32030",
+        "https://www.asus.com/content/asus-product-security-advisory/"
+      ]
+    },
+    {
+      "cve_id": "CVE-2021-40556",
+      "vendor": "asus",
+      "product": "home_router",
+      "affected_versions": "RT-AX56U",
+      "description": "Stack overflow in httpd",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-40556",
+        "https://www.tenable.com/cve/CVE-2021-40556"
+      ]
+    },
+    {
+      "cve_id": "CVE-2021-43702",
+      "vendor": "asus",
+      "product": "home_router",
+      "affected_versions": "RT-A88U",
+      "description": "Stored XSS in Wi-Fi logs",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-43702",
+        "https://www.tenable.com/cve/CVE-2021-43702"
+      ]
+    },
+    {
+      "cve_id": "CVE-2021-41449",
+      "vendor": "netgear",
+      "product": "home_router",
+      "affected_versions": "RAX35 / RAX38 / RAX40",
+      "description": "Path traversal",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-41449",
+        "https://www.tenable.com/cve/CVE-2021-41449"
+      ]
+    },
+    {
+      "cve_id": "CVE-2021-31755",
+      "vendor": "tenda",
+      "product": "home_router",
+      "affected_versions": "AC11",
+      "description": "Stack-based buffer overflow",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-31755",
+        "https://www.tenable.com/cve/CVE-2021-31755"
+      ]
+    },
+    {
+      "cve_id": "CVE-2021-47802",
+      "vendor": "tenda",
+      "product": "dsl_router",
+      "affected_versions": "D151 / D301",
+      "description": "Unauthenticated configuration download",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2021-47802",
+        "https://www.tenable.com/cve/CVE-2021-47802",
+        "https://www.exploit-db.com/exploits/49782"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-32988",
+      "vendor": "asus",
+      "product": "dsl_router",
+      "affected_versions": "DSL-N14U-B1",
+      "description": "Cross-site scripting",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-32988",
+        "https://www.tenable.com/cve/CVE-2022-32988"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-38105",
+      "vendor": "asus",
+      "product": "home_router",
+      "affected_versions": "RT-AX82U",
+      "description": "Configuration service information disclosure",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-38105",
+        "https://www.tenable.com/cve/CVE-2022-38105"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-38393",
+      "vendor": "asus",
+      "product": "home_router",
+      "affected_versions": "RT-AX82U",
+      "description": "Configuration service denial of service",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-38393",
+        "https://www.tenable.com/cve/CVE-2022-38393"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-20699",
+      "vendor": "cisco",
+      "product": "small_business_router",
+      "affected_versions": "RV160 / RV260 / RV340 / RV345 series",
+      "description": "Multiple vulnerabilities in web-based management interface",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-20699",
+        "https://www.tenable.com/cve/CVE-2022-20699",
+        "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-rv-thinclientmultx2-7kqXFkPZ"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-30521",
+      "vendor": "d-link",
+      "product": "home_router",
+      "affected_versions": "DIR-890L",
+      "description": "Stack-based buffer overflow",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-30521",
+        "https://www.tenable.com/cve/CVE-2022-30521"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-35191",
+      "vendor": "d-link",
+      "product": "dsl_router",
+      "affected_versions": "DSL-3782",
+      "description": "Unauthenticated denial of service",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-35191",
+        "https://www.tenable.com/cve/CVE-2022-35191"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-36786",
+      "vendor": "d-link",
+      "product": "dsl_router",
+      "affected_versions": "DSL-224",
+      "description": "Post-auth remote code execution",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-36786",
+        "https://www.tenable.com/cve/CVE-2022-36786"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-37055",
+      "vendor": "d-link",
+      "product": "home_router",
+      "affected_versions": "GO-RT-AC750",
+      "description": "Buffer overflow",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-37055",
+        "https://www.tenable.com/cve/CVE-2022-37055",
+        "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "https://supportannouncement.us.dlink.com/announcement/publication.aspx?name=SAP10352"
+      ]
+    },
+    {
+      "cve_id": "CVE-2023-25280",
+      "vendor": "d-link",
+      "product": "home_router",
+      "affected_versions": "DIR-820L/LW",
+      "description": "Command injection",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-25280",
+        "https://www.tenable.com/cve/CVE-2023-25280",
+        "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "https://supportannouncement.us.dlink.com/security/publication.aspx?name=SAP10388"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-31876",
+      "vendor": "netgear",
+      "product": "wireless_access/router",
+      "affected_versions": "WNAP320",
+      "description": "Incorrect access control exposing cookies",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-31876",
+        "https://www.tenable.com/cve/CVE-2022-31876"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-37232",
+      "vendor": "netgear",
+      "product": "home_router",
+      "affected_versions": "WNR2000v4",
+      "description": "Buffer overflow in uhttpd",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-37232",
+        "https://www.tenable.com/cve/CVE-2022-37232"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-37234",
+      "vendor": "netgear",
+      "product": "home_router",
+      "affected_versions": "R7000",
+      "description": "Buffer overflow",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-37234",
+        "https://www.tenable.com/cve/CVE-2022-37234"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-37337",
+      "vendor": "netgear",
+      "product": "mesh_router",
+      "affected_versions": "Orbi RBR750",
+      "description": "Command execution",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-37337",
+        "https://www.tenable.com/cve/CVE-2022-37337"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-47052",
+      "vendor": "netgear",
+      "product": "home_router",
+      "affected_versions": "R6220",
+      "description": "CRLF injection leading to reflected XSS/HTML injection",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-47052",
+        "https://www.tenable.com/cve/CVE-2022-47052"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-48196",
+      "vendor": "netgear",
+      "product": "multiple_routers",
+      "affected_versions": "Multiple unsupported devices",
+      "description": "Unauthenticated buffer overflow",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-48196",
+        "https://www.tenable.com/cve/CVE-2022-48196"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-43932",
+      "vendor": "synology",
+      "product": "router_manager",
+      "affected_versions": "SRM",
+      "description": "CGI injection / arbitrary file read",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-43932",
+        "https://www.tenable.com/cve/CVE-2022-43932",
+        "https://www.synology.com/en-us/security/advisory/Synology_SA_22_25"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-0162",
+      "vendor": "tp-link",
+      "product": "home_router",
+      "affected_versions": "TL-WR841N",
+      "description": "Credentials sent base64/cleartext",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-0162",
+        "https://www.tenable.com/cve/CVE-2022-0162"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-25061",
+      "vendor": "tp-link",
+      "product": "home_router",
+      "affected_versions": "TL-WR840N",
+      "description": "Command injection via IPv6 route parameter",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-25061",
+        "https://www.tenable.com/cve/CVE-2022-25061"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-25062",
+      "vendor": "tp-link",
+      "product": "home_router",
+      "affected_versions": "TL-WR840N",
+      "description": "Integer overflow causing DoS",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-25062",
+        "https://www.tenable.com/cve/CVE-2022-25062"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-25064",
+      "vendor": "tp-link",
+      "product": "home_router",
+      "affected_versions": "TL-WR840N",
+      "description": "Remote code execution via WAN config parameter",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-25064",
+        "https://www.tenable.com/cve/CVE-2022-25064"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-40486",
+      "vendor": "tp-link",
+      "product": "home_router",
+      "affected_versions": "Archer AX10 V1",
+      "description": "Backup file import RCE",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-40486",
+        "https://www.tenable.com/cve/CVE-2022-40486"
+      ]
+    },
+    {
+      "cve_id": "CVE-2022-45957",
+      "vendor": "zte",
+      "product": "isp_router",
+      "affected_versions": "ZXHN-H108NS",
+      "description": "Remote stack buffer overflow",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-45957",
+        "https://www.tenable.com/cve/CVE-2022-45957"
+      ]
+    },
+    {
+      "cve_id": "CVE-2023-20118",
+      "vendor": "cisco",
+      "product": "small_business_router",
+      "affected_versions": "RV016 / RV042 / RV042G / RV082 / RV320 / RV325",
+      "description": "Authenticated remote command execution",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-20118",
+        "https://www.tenable.com/cve/CVE-2023-20118",
+        "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-sbr042-multi-vuln-ej76Pke5"
+      ]
+    },
+    {
+      "cve_id": "CVE-2023-7266",
+      "vendor": "huawei",
+      "product": "home_router",
+      "affected_versions": "Multiple home router products",
+      "description": "Connection hijacking / information leak / DoS",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-7266",
+        "https://www.tenable.com/cve/CVE-2023-7266"
+      ]
+    },
+    {
+      "cve_id": "CVE-2023-33538",
+      "vendor": "tp-link",
+      "product": "multiple_home_routers",
+      "affected_versions": "Archer AX21 and other router families reported",
+      "description": "Command injection",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-33538",
+        "https://www.tenable.com/cve/CVE-2023-33538",
+        "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+        "https://unit42.paloaltonetworks.com/tp-link-archer-vulnerability-cve-2023-33538/"
+      ]
+    },
+    {
+      "cve_id": "CVE-2024-20362",
+      "vendor": "cisco",
+      "product": "small_business_router",
+      "affected_versions": "RV016 / RV042 / RV042G / RV082 / RV320 / RV325",
+      "description": "Cross-site scripting in web UI",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-20362",
+        "https://www.tenable.com/cve/CVE-2024-20362",
+        "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/"
+      ]
+    },
+    {
+      "cve_id": "CVE-2024-48418",
+      "vendor": "edimax",
+      "product": "home_router",
+      "affected_versions": "BR-6476AC",
+      "description": "Command injection",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-48418",
+        "https://www.tenable.com/cve/CVE-2024-48418"
+      ]
+    },
+    {
+      "cve_id": "CVE-2024-27686",
+      "vendor": "mikrotik",
+      "product": "routeros",
+      "affected_versions": "SMB service on RouterOS",
+      "description": "SMB denial of service",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-27686",
+        "https://www.tenable.com/cve/CVE-2024-27686",
+        "https://www.exploit-db.com/exploits/51931"
+      ]
+    },
+    {
+      "cve_id": "CVE-2024-12988",
+      "vendor": "netgear",
+      "product": "home_router",
+      "affected_versions": "R6900P / R7000P",
+      "description": "Host header buffer overflow",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-12988",
+        "https://www.tenable.com/cve/CVE-2024-12988"
+      ]
+    },
+    {
+      "cve_id": "CVE-2024-11398",
+      "vendor": "synology",
+      "product": "router_manager",
+      "affected_versions": "SRM OTP reset flow",
+      "description": "Path traversal enabling arbitrary file deletion",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-11398",
+        "https://www.tenable.com/cve/CVE-2024-11398",
+        "https://www.synology.com/en-us/security/advisory"
+      ]
+    },
+    {
+      "cve_id": "CVE-2024-39348",
+      "vendor": "synology",
+      "product": "router_manager",
+      "affected_versions": "SRM",
+      "description": "AirPrint man-in-the-middle arbitrary code execution",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-39348",
+        "https://www.tenable.com/cve/CVE-2024-39348",
+        "https://www.synology.com/en-us/security/advisory"
+      ]
+    },
+    {
+      "cve_id": "CVE-2024-53283",
+      "vendor": "synology",
+      "product": "router_manager",
+      "affected_versions": "SRM / Router Port Forward",
+      "description": "Stored XSS with limited file R/W and DoS",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-53283",
+        "https://www.tenable.com/cve/CVE-2024-53283",
+        "https://www.synology.com/en-us/security/advisory"
+      ]
+    },
+    {
+      "cve_id": "CVE-2024-53286",
+      "vendor": "synology",
+      "product": "router_manager",
+      "affected_versions": "SRM / DDNS Record",
+      "description": "Command injection in DDNS record feature",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-53286",
+        "https://www.tenable.com/cve/CVE-2024-53286",
+        "https://www.synology.com/en-us/security/advisory"
+      ]
+    },
+    {
+      "cve_id": "CVE-2024-54134",
+      "vendor": "tp-link",
+      "product": "home_router",
+      "affected_versions": "Archer C50",
+      "description": "Improper signature verification",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-54134",
+        "https://www.tenable.com/cve/CVE-2024-54134",
+        "https://www.cisa.gov/news-events/alerts/2025/01/23/cisa-adds-four-known-exploited-vulnerabilities-catalog"
+      ]
+    },
+    {
+      "cve_id": "CVE-2024-57049",
+      "vendor": "tp-link",
+      "product": "home_router",
+      "affected_versions": "Archer C20",
+      "description": "Authentication bypass (disputed)",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-57049",
+        "https://www.tenable.com/cve/CVE-2024-57049",
+        "https://github.com/search?q=CVE-2024-57049"
+      ]
+    },
+    {
+      "cve_id": "CVE-2024-22066",
+      "vendor": "zte",
+      "product": "intelligent_multi-service_router",
+      "affected_versions": "ZXR10 ZSR V2",
+      "description": "Privilege escalation",
+      "cvss_score": 0.0,
+      "access_vector": "LOCAL",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-22066",
+        "https://www.tenable.com/cve/CVE-2024-22066"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-15101",
+      "vendor": "asus",
+      "product": "home_router",
+      "affected_versions": "Multiple ASUS router models",
+      "description": "CSRF in web management with command execution possibility",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-15101",
+        "https://www.tenable.com/cve/CVE-2025-15101"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-59367",
+      "vendor": "asus",
+      "product": "dsl_router",
+      "affected_versions": "DSL-N16 / DSL-AX82U and related DSL models",
+      "description": "Authentication bypass",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-59367",
+        "https://www.tenable.com/cve/CVE-2025-59367",
+        "https://www.asus.com/content/asus-product-security-advisory/"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-59368",
+      "vendor": "asus",
+      "product": "home_router",
+      "affected_versions": "AiCloud-enabled router models",
+      "description": "Integer underflow in AiCloud",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-59368",
+        "https://www.tenable.com/cve/CVE-2025-59368"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-4344",
+      "vendor": "d-link",
+      "product": "home_router",
+      "affected_versions": "DIR-600L",
+      "description": "Buffer overflow in formLogin host parameter",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-4344",
+        "https://www.tenable.com/cve/CVE-2025-4344"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-60672",
+      "vendor": "d-link",
+      "product": "home_router",
+      "affected_versions": "DIR-878",
+      "description": "Unauthenticated command injection",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-60672",
+        "https://www.tenable.com/cve/CVE-2025-60672"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-60698",
+      "vendor": "d-link",
+      "product": "home_router",
+      "affected_versions": "DIR-882",
+      "description": "Command injection in SysLogRemote_IPAddress",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-60698",
+        "https://www.tenable.com/cve/CVE-2025-60698",
+        "https://github.com/search?q=CVE-2025-60698"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-60700",
+      "vendor": "d-link",
+      "product": "home_router",
+      "affected_versions": "DIR-882",
+      "description": "Command injection in DMZIPAddress",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-60700",
+        "https://www.tenable.com/cve/CVE-2025-60700",
+        "https://github.com/search?q=CVE-2025-60700"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-60701",
+      "vendor": "d-link",
+      "product": "home_router",
+      "affected_versions": "DIR-882",
+      "description": "Command injection in email configuration",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-60701",
+        "https://www.tenable.com/cve/CVE-2025-60701",
+        "https://github.com/search?q=CVE-2025-60701"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-8949",
+      "vendor": "d-link",
+      "product": "home_router",
+      "affected_versions": "DIR-825",
+      "description": "Stack overflow",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-8949",
+        "https://www.tenable.com/cve/CVE-2025-8949"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-63422",
+      "vendor": "each italy",
+      "product": "wireless_mini_router",
+      "affected_versions": "Wireless Mini Router",
+      "description": "Incorrect access control",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-63422",
+        "https://www.tenable.com/cve/CVE-2025-63422"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-68706",
+      "vendor": "kuwfi",
+      "product": "4g_lte_router",
+      "affected_versions": "4G LTE AC900",
+      "description": "Stack-based buffer overflow in GoAhead formMultiApnSetting",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-68706",
+        "https://www.tenable.com/cve/CVE-2025-68706"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-12943",
+      "vendor": "netgear",
+      "product": "home_router",
+      "affected_versions": "RAX30 / RAXE300 and others",
+      "description": "Improper certificate validation leading to command execution",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-12943",
+        "https://www.tenable.com/cve/CVE-2025-12943"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-12945",
+      "vendor": "netgear",
+      "product": "home_router",
+      "affected_versions": "R7000P",
+      "description": "Authenticated OS command injection",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-12945",
+        "https://www.tenable.com/cve/CVE-2025-12945"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-12946",
+      "vendor": "netgear",
+      "product": "nighthawk_routers",
+      "affected_versions": "Multiple Nighthawk models",
+      "description": "Speedtest feature command execution",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-12946",
+        "https://www.tenable.com/cve/CVE-2025-12946"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-29044",
+      "vendor": "netgear",
+      "product": "home_router",
+      "affected_versions": "R6100",
+      "description": "Buffer overflow with RCE potential",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-29044",
+        "https://www.tenable.com/cve/CVE-2025-29044"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-15517",
+      "vendor": "tp-link",
+      "product": "4g/5g_router",
+      "affected_versions": "Archer NX200 / NX210 / NX500 / NX600",
+      "description": "Missing authentication for privileged CGI actions",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-15517",
+        "https://www.tenable.com/cve/CVE-2025-15517"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-15606",
+      "vendor": "tp-link",
+      "product": "dsl_router",
+      "affected_versions": "TD-W8961N",
+      "description": "Denial of service",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-15606",
+        "https://www.tenable.com/cve/CVE-2025-15606"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-40634",
+      "vendor": "tp-link",
+      "product": "home_router",
+      "affected_versions": "Archer AX50",
+      "description": "Stack-based buffer overflow",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-40634",
+        "https://www.tenable.com/cve/CVE-2025-40634"
+      ]
+    },
+    {
+      "cve_id": "CVE-2025-7850",
+      "vendor": "tp-link",
+      "product": "business/soho_router",
+      "affected_versions": "ER605 / ER706W-4G and related families",
+      "description": "Command injection",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2025-7850",
+        "https://www.tenable.com/cve/CVE-2025-7850",
+        "https://www.forescout.com/resources/"
+      ]
+    },
+    {
+      "cve_id": "CVE-2026-0625",
+      "vendor": "d-link",
+      "product": "home/dsl_routers",
+      "affected_versions": "Multiple DSL / DIR / DNS devices",
+      "description": "Authentication bypass with DNS hijack and possible command injection context",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": true,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-0625",
+        "https://www.tenable.com/cve/CVE-2026-0625",
+        "https://supportannouncement.us.dlink.com/security/publication.aspx?name=SAP10317"
+      ]
+    },
+    {
+      "cve_id": "CVE-2026-22079",
+      "vendor": "tenda",
+      "product": "home_router",
+      "affected_versions": "F3 / N300 Easy Setup",
+      "description": "Cleartext credential transmission",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-22079",
+        "https://www.tenable.com/cve/CVE-2026-22079"
+      ]
+    },
+    {
+      "cve_id": "CVE-2026-22082",
+      "vendor": "tenda",
+      "product": "home_router",
+      "affected_versions": "F3 / N300 Easy Setup",
+      "description": "Session fixation using credentials as session ID",
+      "cvss_score": 0.0,
+      "access_vector": "ADJACENT",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-22082",
+        "https://www.tenable.com/cve/CVE-2026-22082"
+      ]
+    },
+    {
+      "cve_id": "CVE-2026-30140",
+      "vendor": "tenda",
+      "product": "business_router",
+      "affected_versions": "W15E",
+      "description": "Unauthenticated configuration download exposing admin credentials",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-30140",
+        "https://www.tenable.com/cve/CVE-2026-30140"
+      ]
+    },
+    {
+      "cve_id": "CVE-2026-34472",
+      "vendor": "zte",
+      "product": "home_router",
+      "affected_versions": "ZXHN H188A",
+      "description": "Credential disclosure",
+      "cvss_score": 0.0,
+      "access_vector": "REMOTE",
+      "exploit_available": false,
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-34472",
+        "https://www.tenable.com/cve/CVE-2026-34472"
+      ]
     }
   ]
 }
