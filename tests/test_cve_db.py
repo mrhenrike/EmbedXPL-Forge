@@ -316,3 +316,11 @@ class TestEdgeCases:
         all_entries = db.lookup()
         physical = [r for r in all_entries if r.access_vector == "PHYSICAL"]
         assert len(physical) >= 1
+
+    def test_csv_integrated_vendors_present(self, db: CVEDatabase):
+        for vendor, min_count in [("tp-link", 14), ("synology", 6), ("tenda", 3)]:
+            results = db.lookup(vendor=vendor)
+            assert len(results) >= min_count, f"{vendor}: expected >= {min_count}, got {len(results)}"
+
+    def test_total_exceeds_baseline(self, db: CVEDatabase):
+        assert db.total >= 600
