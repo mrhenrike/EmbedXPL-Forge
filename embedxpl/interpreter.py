@@ -1,6 +1,9 @@
 import atexit
+import csv
 import getopt
+import io
 import itertools
+import json
 import os
 import signal
 import sys
@@ -164,7 +167,8 @@ class BaseInterpreter:
         # Banner figlet com stats em tempo real
         try:
             from embedxpl.core.banner import show_banner
-            show_banner("embedxpl", version="v5.0.0")
+            from embedxpl.version import __version__
+            show_banner("embedxpl", version=f"v{__version__}")
         except Exception:
             if getattr(self, "banner", None):
                 print_info(self.banner)
@@ -255,25 +259,24 @@ class EmbedXPLInterpreter(BaseInterpreter):
     use <module>                    Select a module for usage
     exec <shell command> <args>     Execute a command in a shell
     search <keyword>                Search modules by keyword (CVE, vendor, product, type)
-    search cve-2018-14847           Search by CVE ID
-    search type:router              Search by category (router/camera/firewall/ics/printer/wireless)
+    search cve-2024-54085           Search by CVE ID (auto-normalized)
+    search cwe79 | ms17010         Search by CWE/MS ID
+    search type:router              Search by category (router/camera/firewall/printer/nas)
     search vendor:hikvision         Search by vendor name
+    search tested:yes|no            Filter by test status
     autopwn <segment> <target>      Run all modules for a segment against a target
     sysinfo                         Show detected hardware (CPU, RAM, GPU)
+    compute [cpu|gpu|hybrid|auto]   Set compute mode for GPU-accelerated tasks
     discover <subnet/CIDR>          Scan network and match targets to exploit catalog
+    apt <group|search> [query]      Query APT/threat actor intelligence database
+    stats                           Show quick overview: modules, CVEs, workspace
     workspace [list|<name>]         Manage workspaces
-    hosts                           List discovered hosts in current workspace
-    vulns                           List found vulnerabilities
-    creds                           List captured credentials
+    hosts [output=json|csv]         List discovered hosts in current workspace
+    vulns [output=json|csv]         List found vulnerabilities
+    creds [output=json|csv]         List captured credentials
     sessions [list|show|delete]     Manage scan session history
     build <component> [options]     Build malware (dropper|rat|wiper|ransomware|backdoor|rootkit)
-      Examples:
-        build dropper --lang python --arch armle --transport https --c2 10.0.0.1
-        build rat --lang go --arch arm64 --persist cron --evasion defender
-        build wiper --lang c --arch x64
-        build ransomware --lang python --evasion defender
-    nse install                     Install EmbedXPL NSE scripts into nmap
-    nse list                        List NSE scripts and install status
+    nse install|list|run            Manage EmbedXPL NSE scripts
     exit                            Exit EmbedXPL"""
 
     module_help = """Module commands:
@@ -297,8 +300,8 @@ class EmbedXPLInterpreter(BaseInterpreter):
         self.search_sub_commands = ("type", "device", "language", "payload", "vendor")
 
         self.global_commands = sorted(["use ", "exec ", "help", "exit", "show ", "search ",
-                                        "sysinfo", "compute ", "discover ", "sessions ",
-                                        "build ", "nse ", "workspace ", "hosts ", "vulns ", "creds "])
+                                        "sysinfo", "stats", "compute ", "discover ", "sessions ",
+                                        "build ", "nse ", "workspace ", "hosts ", "vulns ", "creds ", "apt "])
         self.module_commands = ["run", "back", "set ", "setg ", "check"]
         self.module_commands.extend(self.global_commands)
         self.module_commands.sort()
@@ -1032,6 +1035,17 @@ class EmbedXPLInterpreter(BaseInterpreter):
         print_info(self.global_help)
         if self.current_module:
             print_info("\n", self.module_help)
+            try:
+                meta = self.module_metadata
+                name = meta.get("name", "")
+                desc = meta.get("description", "")
+                if name:
+                    print_info(f"\n  Active module: {name}")
+                if desc:
+                    for line in desc.strip().split("\n"):
+                        print_info(f"    {line.strip()}")
+            except Exception:
+                pass
 
     def command_exec(self, *args, **kwargs):
         os.system(args[0])
@@ -1927,6 +1941,60 @@ class EmbedXPLInterpreter(BaseInterpreter):
                 self._exf_db = None
         return self._exf_db
 
+    @staticmethod
+    def _export_data(headers: list, rows: list, fmt: str, label: str = "data") -> bool:
+        """Export tabular data in json or csv format. Returns True if exported."""
+        if fmt == "json":
+            records = [dict(zip(headers, row, strict=False)) for row in rows]
+            output = json.dumps(records, indent=2, ensure_ascii=False, default=str)
+            print(output)
+            print_info(f"Exported {len(records)} {label} records as JSON")
+            return True
+        if fmt == "csv":
+            buf = io.StringIO()
+            writer = csv.writer(buf)
+            writer.writerow(headers)
+            writer.writerows(rows)
+            print(buf.getvalue())
+            print_info(f"Exported {len(rows)} {label} records as CSV")
+            return True
+        return False
+
+    def command_stats(self, *args, **kwargs):
+        """stats  -  show quick overview of modules, CVEs and test status."""
+        try:
+            from embedxpl.core.banner import _load_stats
+            stats = _load_stats()
+        except Exception:
+            print_error("Could not load stats")
+            return
+
+        from embedxpl.version import __version__
+
+        exploits = stats.get("exploits", 0)
+        scanners = stats.get("scanners", 0)
+        creds_mod = stats.get("creds", 0)
+        payloads = stats.get("payloads", 0)
+        encoders = stats.get("encoders", 0)
+        cves = stats.get("cves", 0)
+        total = exploits + scanners + payloads + encoders + creds_mod
+
+        print_info(f"EmbedXPL v{__version__}")
+        print_info(f"  Total modules: {total:,}")
+        print_info(f"  Exploits: {exploits:,}  Scanners: {scanners:,}  Creds: {creds_mod:,}")
+        print_info(f"  Payloads: {payloads:,}  Encoders: {encoders:,}")
+        print_info(f"  CVEs cataloged: {cves:,}")
+
+        db = self._get_db()
+        if db is not None:
+            try:
+                hosts = db.hosts()
+                vulns = db.vulns()
+                creds = db.creds()
+                print_info(f"  Workspace: {len(hosts)} hosts, {len(vulns)} vulns, {len(creds)} creds")
+            except Exception:
+                pass
+
     def command_workspace(self, *args, **kwargs):
         """workspace [list | <name>]  -  create/select workspaces."""
         db = self._get_db()
@@ -1946,7 +2014,7 @@ class EmbedXPLInterpreter(BaseInterpreter):
         print_success(f"Workspace: {name}")
 
     def command_hosts(self, *args, **kwargs):
-        """hosts  -  list discovered hosts in current workspace."""
+        """hosts [--output json|csv]  -  list discovered hosts in current workspace."""
         db = self._get_db()
         if db is None:
             print_error("EXFDatabase not available")
@@ -1955,11 +2023,15 @@ class EmbedXPLInterpreter(BaseInterpreter):
         if not hosts:
             print_info("No hosts yet. Run modules with set rhost / run to discover.")
             return
+        headers = ["Address", "OS", "Status", "Services", "Vulns", "Creds"]
         rows = [[h["address"], h.get("os",""), h.get("status",""), h["svc_count"], h["vuln_count"], h["cred_count"]] for h in hosts]
-        print_table(["Address", "OS", "Status", "Services", "Vulns", "Creds"], *rows)
+        fmt = kwargs.get("output", "").lower()
+        if fmt and self._export_data(headers, rows, fmt, "hosts"):
+            return
+        print_table(headers, *rows)
 
     def command_vulns(self, *args, **kwargs):
-        """vulns  -  list all found vulnerabilities in current workspace."""
+        """vulns [--output json|csv]  -  list all found vulnerabilities in current workspace."""
         db = self._get_db()
         if db is None:
             print_error("EXFDatabase not available")
@@ -1968,11 +2040,15 @@ class EmbedXPLInterpreter(BaseInterpreter):
         if not vulns:
             print_info("No vulnerabilities recorded yet.")
             return
+        headers = ["Host", "Severity", "CVEs", "Module", "Found At"]
         rows = [[v.get("address",""), v.get("severity","").upper(), ",".join(v.get("cve_ids",[])), v.get("module_path","").split(".")[-1], v.get("found_at","")[:16]] for v in vulns]
-        print_table(["Host", "Severity", "CVEs", "Module", "Found At"], *rows)
+        fmt = kwargs.get("output", "").lower()
+        if fmt and self._export_data(headers, rows, fmt, "vulns"):
+            return
+        print_table(headers, *rows)
 
     def command_creds(self, *args, **kwargs):
-        """creds  -  list all captured credentials in current workspace."""
+        """creds [--output json|csv]  -  list all captured credentials in current workspace."""
         db = self._get_db()
         if db is None:
             print_error("EXFDatabase not available")
@@ -1981,8 +2057,12 @@ class EmbedXPLInterpreter(BaseInterpreter):
         if not creds:
             print_info("No credentials captured yet.")
             return
+        headers = ["Host", "Username", "Password", "Type", "Found At"]
         rows = [[c.get("address",""), c.get("username",""), c.get("password",""), c.get("cred_type",""), c.get("found_at","")[:16]] for c in creds]
-        print_table(["Host", "Username", "Password", "Type", "Found At"], *rows)
+        fmt = kwargs.get("output", "").lower()
+        if fmt and self._export_data(headers, rows, fmt, "creds"):
+            return
+        print_table(headers, *rows)
 
     def command_nse(self, *args, **kwargs):
         """nse install | list | run <script> <target>  -  Manage EmbedXPL NSE scripts."""

@@ -118,9 +118,17 @@ def _count_modules() -> Dict[str, int]:
             if p.is_file() and p.suffix in {".txt", ".lst", ".json"}
         )
 
-    # CVE catalog
+    # CVE catalog: try JSON catalogs first, then sqlite fallback
+    cve_catalog_json = _ROOT / "resources" / "catalogs" / "cve_extended_catalog.json"
+    if cve_catalog_json.exists():
+        try:
+            data = json.loads(cve_catalog_json.read_text(encoding="utf-8"))
+            counts["cves"] = data.get("entry_count", len(data.get("entries", [])))
+        except Exception:
+            pass
+
     cve_db_path = _ROOT / "data" / "cve_catalog.db"
-    if cve_db_path.exists():
+    if cve_db_path.exists() and counts["cves"] == 0:
         try:
             import sqlite3
             conn = sqlite3.connect(str(cve_db_path))
@@ -134,6 +142,15 @@ def _count_modules() -> Dict[str, int]:
             if kev_row:
                 counts["kev"] = kev_row[0]
             conn.close()
+        except Exception:
+            pass
+
+    # Count embedded CVEs from cve_db.py _EMBEDDED_CVES if JSON catalog yielded 0
+    if counts["cves"] == 0:
+        try:
+            from embedxpl.core.cve.cve_db import CVEDatabase
+            db = CVEDatabase(modules_root=None)
+            counts["cves"] = db.total
         except Exception:
             pass
 
