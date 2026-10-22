@@ -175,14 +175,14 @@ def main():
     # Try using this "keystream" to decrypt adjacent data
     test_start = off - 256
     test_data = raw[test_start:test_start + 16]
-    dec_with_ks = bytes(a ^ b for a, b in zip(test_data, potential_keystream))
+    dec_with_ks = bytes(a ^ b for a, b in zip(test_data, potential_keystream, strict=False))
     ascii_ct = sum(1 for b in dec_with_ks if 32 <= b < 127)
     print(f"  Decrypt 0x{test_start:08X} with keystream: {dec_with_ks.hex()} "
           f"(ASCII: {ascii_ct}/16)")
 
     # Try 0x00 as padding
     potential_keystream_0 = repeat_raw  # If padding is 0x00, keystream = ciphertext
-    test_dec = bytes(a ^ b for a, b in zip(test_data, potential_keystream_0))
+    test_dec = bytes(a ^ b for a, b in zip(test_data, potential_keystream_0, strict=False))
     ascii_ct2 = sum(1 for b in test_dec if 32 <= b < 127)
     print(f"  Decrypt with raw block as keystream: {test_dec.hex()} "
           f"(ASCII: {ascii_ct2}/16)")

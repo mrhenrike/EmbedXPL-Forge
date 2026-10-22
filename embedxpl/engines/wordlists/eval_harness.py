@@ -64,7 +64,7 @@ def evaluate_candidates(
     labels = labels or [Path(p).stem for p in candidate_paths]
 
     results: dict[str, dict] = {}
-    for path, label in zip(candidate_paths, labels):
+    for path, label in zip(candidate_paths, labels, strict=False):
         p = Path(path)
         if not p.exists():
             logger.warning("candidate not found: %s", path)

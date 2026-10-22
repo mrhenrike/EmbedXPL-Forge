@@ -355,5 +355,5 @@ logo = generate_logo()
 
 
 if __name__ == '__main__':
-    for left, right in zip(*logo):
+    for left, right in zip(*logo, strict=False):
         print(f"{left}  {right}")

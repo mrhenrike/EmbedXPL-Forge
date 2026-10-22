@@ -1,8 +1,6 @@
 """Tests for embedxpl.core.wordlist.generator (offline, no network)."""
 from __future__ import annotations
 
-import pytest
-
 from embedxpl.core.wordlist.generator import (
     CORPORATE_BASE_WORDS,
     PERSONAL_BASE_WORDS,
@@ -21,7 +19,6 @@ from embedxpl.core.wordlist.generator import (
     generate_wordlist,
     save_wordlist,
 )
-
 
 # -------------------------------------------------------
 # TargetProfile dataclass

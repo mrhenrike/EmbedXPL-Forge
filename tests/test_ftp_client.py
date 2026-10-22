@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import ftplib
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from embedxpl.core.ftp.ftp_client import FTP_TIMEOUT, FTPCli
 

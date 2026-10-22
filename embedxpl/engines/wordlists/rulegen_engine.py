@@ -120,7 +120,7 @@ def _find_base_word(password: str, dictionary: set[str]) -> Optional[tuple[str, 
     deleeted = _deleet(password.lower())
     if deleeted in dictionary and deleeted != password.lower():
         rules = []
-        for i, (orig, clean) in enumerate(zip(password.lower(), deleeted)):
+        for i, (orig, clean) in enumerate(zip(password.lower(), deleeted, strict=False)):
             if orig != clean:
                 rules.append(f"s{clean}{orig}")
         if password[0].isupper():
@@ -133,7 +133,7 @@ def _find_base_word(password: str, dictionary: set[str]) -> Optional[tuple[str, 
             deleeted_core = _deleet(core.lower())
             if deleeted_core in dictionary:
                 rules = []
-                for orig_ch, clean_ch in zip(core.lower(), deleeted_core):
+                for orig_ch, clean_ch in zip(core.lower(), deleeted_core, strict=False):
                     if orig_ch != clean_ch:
                         rules.append(f"s{clean_ch}{orig_ch}")
                 if core[0:1].isupper():

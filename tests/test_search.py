@@ -5,7 +5,6 @@ import pytest
 
 from embedxpl.tools.search import _normalize_security_id
 
-
 # ---------------------------------------------------------------------------
 # _normalize_security_id
 # ---------------------------------------------------------------------------

@@ -64,7 +64,7 @@ class ServiceFingerprinter:
                 proba = self._model.predict_proba(vec)[0]
                 classes = self._model.classes_
                 results = []
-                for cls, prob in zip(classes, proba):
+                for cls, prob in zip(classes, proba, strict=False):
                     if prob > 0.1:
                         parts = cls.split("/", 1)
                         results.append(Prediction(

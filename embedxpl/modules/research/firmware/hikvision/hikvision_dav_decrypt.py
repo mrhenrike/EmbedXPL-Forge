@@ -154,7 +154,7 @@ def try_hikvision_known_keys(data: bytes):
     first4 = data[:4]
     for target_magic in [b"HIKV", b"IKVH", b"\x27\x05\x19\x56", b"hsqs",
                          b"\x7fELF", b"PK\x03\x04", b"\x1f\x8b\x08\x00"]:
-        key = bytes(a ^ b for a, b in zip(first4, target_magic))
+        key = bytes(a ^ b for a, b in zip(first4, target_magic, strict=False))
         known_keys.append((f"derive-{target_magic.hex()}", key))
 
     for name, key in known_keys:

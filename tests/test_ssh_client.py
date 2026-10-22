@@ -1,14 +1,11 @@
 """Tests for embedxpl.core.ssh.ssh_client (offline, mocked network)."""
 from __future__ import annotations
 
-import io
-from unittest.mock import MagicMock, PropertyMock, call, patch
+from unittest.mock import MagicMock, patch
 
 import paramiko
-import pytest
 
 from embedxpl.core.ssh.ssh_client import SSH_TIMEOUT, SSHCli, SSHClient
-
 
 # -------------------------------------------------------
 # SSHCli construction
@@ -47,7 +44,7 @@ class TestLoadPrivateKey:
         )
         with patch.object(paramiko.RSAKey, "from_private_key") as mock_rsa:
             mock_rsa.return_value = MagicMock()
-            result = SSHCli._load_private_key(rsa_pem)
+            SSHCli._load_private_key(rsa_pem)
             assert mock_rsa.called
 
     def test_ecdsa_key(self):
@@ -58,7 +55,7 @@ class TestLoadPrivateKey:
         )
         with patch.object(paramiko.ECDSAKey, "from_private_key") as mock_ec:
             mock_ec.return_value = MagicMock()
-            result = SSHCli._load_private_key(ec_pem)
+            SSHCli._load_private_key(ec_pem)
             assert mock_ec.called
 
     def test_openssh_key_tries_loaders(self):
@@ -81,7 +78,7 @@ class TestLoadPrivateKey:
         if hasattr(paramiko, "DSSKey"):
             with patch.object(paramiko.DSSKey, "from_private_key") as mock_dss:
                 mock_dss.return_value = MagicMock()
-                result = SSHCli._load_private_key(dsa_pem)
+                SSHCli._load_private_key(dsa_pem)
                 assert mock_dss.called
 
     def test_unknown_key_type(self):

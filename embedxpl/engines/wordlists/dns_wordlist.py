@@ -265,7 +265,7 @@ def clusterbomb_generate(
 
         for combo in product(*lists):
             result = resolved
-            for name, val in zip(unique_names, combo):
+            for name, val in zip(unique_names, combo, strict=False):
                 result = result.replace("{{" + name + "}}", val)
 
             if not result or result in seen:

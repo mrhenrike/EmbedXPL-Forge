@@ -9,7 +9,6 @@ import base64
 
 import pytest
 
-from embedxpl.core.rtsp.models import AuthType, RTSPStream
 from embedxpl.core.rtsp.client import (
     RTSP_FORBIDDEN,
     RTSP_NOT_FOUND,
@@ -21,7 +20,7 @@ from embedxpl.core.rtsp.client import (
     _parse_digest_challenge,
     _parse_rtsp_response,
 )
-
+from embedxpl.core.rtsp.models import AuthType, RTSPStream
 
 # -------------------------------------------------------
 # RTSPStream model
@@ -232,7 +231,8 @@ class TestRTSPConstants:
 # RTSPClient (socket-level, mocked)
 # -------------------------------------------------------
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
+
 from embedxpl.core.rtsp.client import RTSPClient, RTSPOverHTTPTunnel
 
 

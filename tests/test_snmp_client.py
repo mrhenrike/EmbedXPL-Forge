@@ -1,12 +1,9 @@
 """Tests for embedxpl.core.snmp.snmp_client (offline, mocked network)."""
 from __future__ import annotations
 
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
-import pytest
-
-from embedxpl.core.snmp.snmp_client import SNMPCli, SNMPClient, SNMP_TIMEOUT
-
+from embedxpl.core.snmp.snmp_client import SNMP_TIMEOUT, SNMPCli, SNMPClient
 
 # -------------------------------------------------------
 # SNMPCli construction
