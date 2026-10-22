@@ -6,8 +6,6 @@ import io
 import json
 import re
 
-import pytest
-
 from embedxpl.core.banner import _count_modules, _load_stats
 
 
