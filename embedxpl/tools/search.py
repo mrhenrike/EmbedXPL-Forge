@@ -8,8 +8,19 @@ Usage:
     results = search("dlink rce 2024")
     results = search("cve-2021-36260")   # Hikvision RCE
 
-    # Busca direta por CVE
+    # Busca direta por CVE (aceita variantes de digitacao)
     results = search_cve("CVE-2024-4577")
+    results = search_cve("cve20244577")     # sem hifens
+    results = search_cve("cve2024-4577")    # hifen parcial
+
+    # Busca por CWE, MS, EDB
+    results = search("cwe79")              # CWE-79
+    results = search("ms17010")            # MS17-010
+    results = search("edb36913")           # EDB-36913
+
+    # CVE + vendor (filtra CVEs de um vendor)
+    results = search("cve huawei")         # modulos com CVE do vendor huawei
+    results = search("cve dlink 2024")     # CVEs dlink de 2024
 
     # Busca por vendor
     results = search_vendor("hikvision")
@@ -21,6 +32,10 @@ CLI (python -m embedxpl):
     exf> search dlink
     exf> search type:printer
     exf> search cve-2021-36260
+    exf> search cve202136260
+    exf> search cve huawei
+    exf> search cwe79
+    exf> search ms17010
     exf> search vendor:fortinet severity:critical
 
 Author: Andre Henrique (@mrhenrike) | Uniao Geek
@@ -41,6 +56,44 @@ from typing import Iterator, Optional
 _EMBEDXPL_ROOT = Path(__file__).resolve().parents[2]
 _MODULES_ROOT = _EMBEDXPL_ROOT / "embedxpl" / "modules"
 _TEST_STATUS_FILE = _EMBEDXPL_ROOT / "embedxpl" / "data" / "module_test_status.json"
+
+# ---------------------------------------------------------------------------
+# Security identifier normalization
+# ---------------------------------------------------------------------------
+
+_RE_CVE = re.compile(r"^cve[- ]?(\d{4})[- ]?(\d{4,})$", re.I)
+_RE_CWE = re.compile(r"^cwe[- ]?(\d+)$", re.I)
+_RE_MS = re.compile(r"^ms[- ]?(\d{2})[- ]?(\d{3})$", re.I)
+_RE_EDB = re.compile(r"^edb[- ]?(\d+)$", re.I)
+_RE_NVD = re.compile(r"^nvd[- ]?(\d{4})[- ]?(\d{4,})$", re.I)
+_RE_GHSA = re.compile(r"^ghsa[- ]?([a-z0-9]{4})[- ]?([a-z0-9]{4})[- ]?([a-z0-9]{4})$", re.I)
+
+
+def _normalize_security_id(token: str) -> tuple[str, str]:
+    """Normalize a security identifier to its canonical form.
+
+    Accepts CVE, CWE, MS, EDB, NVD, GHSA with or without hyphens/spaces.
+    Returns (canonical_id, id_type). id_type is '' when no match.
+    """
+    m = _RE_CVE.match(token)
+    if m:
+        return f"CVE-{m.group(1)}-{m.group(2)}", "cve"
+    m = _RE_NVD.match(token)
+    if m:
+        return f"CVE-{m.group(1)}-{m.group(2)}", "cve"
+    m = _RE_CWE.match(token)
+    if m:
+        return f"CWE-{m.group(1)}", "cwe"
+    m = _RE_MS.match(token)
+    if m:
+        return f"MS{m.group(1)}-{m.group(2)}", "ms"
+    m = _RE_EDB.match(token)
+    if m:
+        return f"EDB-{m.group(1)}", "edb"
+    m = _RE_GHSA.match(token)
+    if m:
+        return f"GHSA-{m.group(1)}-{m.group(2)}-{m.group(3)}".lower(), "ghsa"
+    return token, ""
 
 # ---------------------------------------------------------------------------
 # Module record
@@ -272,44 +325,73 @@ def search(
     limit: int = 50,
     category: Optional[str] = None,
 ) -> list[ModuleRecord]:
-    """
-    MSF-style search. Supports:
-      search dlink
-      search cve-2021-36260
-      search type:router
-      search vendor:fortinet
-      search type:printer severity:critical
+    """MSF-style search with smart identifier normalization.
+
+    Supports free keywords, structured filters, and security identifiers
+    typed with or without hyphens (CVE, CWE, MS, EDB, NVD, GHSA).
+
+    When 'cve' appears as a standalone word next to a vendor/keyword,
+    it activates a combined filter: only modules with CVEs for that vendor.
     """
     records = _get_cache()
 
     # Parse filter tokens
-    tokens = []
-    filter_type = None
-    filter_vendor = None
-    filter_severity = None
-    filter_cve = None
-    filter_tested = None  # True = tested:yes, False = tested:no
+    tokens: list[str] = []
+    filter_type: Optional[str] = None
+    filter_vendor: Optional[str] = None
+    filter_severity: Optional[str] = None
+    filter_cve: Optional[str] = None
+    filter_cwe: Optional[str] = None
+    filter_sec_ids: list[str] = []
+    filter_tested: Optional[bool] = None
+    has_bare_cve_keyword = False
 
-    for tok in query.lower().split():
-        if tok.startswith("type:"):
-            filter_type = tok[5:]
-        elif tok.startswith("vendor:"):
-            filter_vendor = tok[7:]
-        elif tok.startswith("severity:"):
-            filter_severity = tok[9:]
-        elif tok in ("tested:yes", "tested:true", "tested:1"):
+    for tok in query.split():
+        tok_lower = tok.lower().strip()
+        if not tok_lower:
+            continue
+
+        if tok_lower.startswith("type:"):
+            filter_type = tok_lower[5:]
+            continue
+        if tok_lower.startswith("vendor:"):
+            filter_vendor = tok_lower[7:]
+            continue
+        if tok_lower.startswith("severity:"):
+            filter_severity = tok_lower[9:]
+            continue
+        if tok_lower in ("tested:yes", "tested:true", "tested:1"):
             filter_tested = True
-        elif tok in ("tested:no", "tested:false", "tested:0"):
+            continue
+        if tok_lower in ("tested:no", "tested:false", "tested:0"):
             filter_tested = False
-        elif tok.startswith("cve-") or re.match(r"cve-\d{4}-\d+", tok, re.I):
-            filter_cve = tok.upper()
-            if not filter_cve.startswith("CVE-"):
-                filter_cve = "CVE-" + filter_cve[4:]
-        else:
-            tokens.append(tok)
+            continue
+
+        normalized, id_type = _normalize_security_id(tok_lower)
+        if id_type == "cve":
+            filter_cve = normalized
+            continue
+        if id_type == "cwe":
+            filter_cwe = normalized
+            filter_sec_ids.append(normalized)
+            continue
+        if id_type in ("ms", "edb", "ghsa"):
+            filter_sec_ids.append(normalized)
+            continue
+
+        if tok_lower == "cve":
+            has_bare_cve_keyword = True
+            continue
+
+        tokens.append(tok_lower)
+
+    # "cve <vendor>" pattern: require CVEs + filter by vendor keyword
+    if has_bare_cve_keyword and tokens and not filter_cve:
+        if not filter_vendor:
+            filter_vendor = tokens.pop(0)
 
     keyword = " ".join(tokens)
-    results = []
+    results: list[ModuleRecord] = []
 
     for rec in records:
         score = 0
@@ -322,7 +404,7 @@ def search(
             rec.category.lower(),
         ])
 
-        # Apply filters
+        # Structured filters
         if filter_type and filter_type not in rec.category.lower():
             continue
         if filter_vendor and not any(filter_vendor in v.lower() for v in rec.vendors) \
@@ -334,11 +416,23 @@ def search(
         if filter_cve:
             if filter_cve not in [c.upper() for c in rec.cves]:
                 continue
+        if filter_cwe:
+            if filter_cwe.lower() not in searchable:
+                continue
+        for sid in filter_sec_ids:
+            if sid.lower() not in searchable:
+                break
+        else:
+            pass
+        if filter_sec_ids and any(sid.lower() not in searchable for sid in filter_sec_ids):
+            continue
         if filter_tested is True and rec.tested is not True:
             continue
         if filter_tested is False and rec.tested is not False:
             continue
         if category and category.lower() not in rec.category.lower():
+            continue
+        if has_bare_cve_keyword and not filter_cve and not rec.cves:
             continue
 
         # Keyword scoring
@@ -355,7 +449,13 @@ def search(
             if score == 0:
                 continue
         else:
-            score = 1  # no keyword = show all matching filters
+            score = 1
+
+        # Bonus for exact CVE/security ID match
+        if filter_cve:
+            score += 20
+        if filter_sec_ids:
+            score += 15
 
         rec.rank = score
         results.append(rec)
@@ -365,11 +465,20 @@ def search(
 
 
 def search_cve(cve_id: str) -> list[ModuleRecord]:
-    """Find all modules covering a specific CVE."""
-    cve_norm = cve_id.upper().strip()
-    if not cve_norm.startswith("CVE-"):
-        cve_norm = "CVE-" + cve_norm
-    return search(cve_norm, limit=20)
+    """Find all modules covering a specific CVE.
+
+    Accepts any typing variant: CVE-2024-4577, cve20244577, cve2024-4577.
+    """
+    normalized, _ = _normalize_security_id(cve_id.strip())
+    if not normalized.upper().startswith("CVE-"):
+        normalized = "CVE-" + normalized
+    return search(normalized, limit=20)
+
+
+def search_cwe(cwe_id: str) -> list[ModuleRecord]:
+    """Find all modules related to a CWE. Accepts cwe79, CWE-79, etc."""
+    normalized, _ = _normalize_security_id(cwe_id.strip())
+    return search(normalized, limit=50)
 
 
 def search_vendor(vendor: str) -> list[ModuleRecord]:
@@ -402,7 +511,8 @@ def print_results(results: list[ModuleRecord], query: str = "") -> None:
         badge = rec.tested_badge()
         print(f"  {rec.display_path():<60} {cve_str:<25} {badge:<10} {rec.name[:50]}")
     print(f"{'='*110}")
-    print(f"  {len(results)} module(s) found  |  Tip: search tested:yes / tested:no")
+    print(f"  {len(results)} module(s) found  |  Filters: type: vendor: severity: tested:yes/no")
+    print(f"  IDs: cve202412345 cwe79 ms17010 edb36913  |  Combined: cve <vendor>")
     print()
 
 
