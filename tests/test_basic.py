@@ -28,4 +28,4 @@ def test_import_embedxpl() -> None:
 def test_pyproject_version_semver() -> None:
     """Declared package version must be semver X.Y.Z."""
     version = _pyproject_version()
-    assert re.fullmatch(r"\d+\.\d+\.\d+", version), version
+    assert re.fullmatch(r"\d+\.\d+\.\d+(-[a-z0-9.]+)?", version), version

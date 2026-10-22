@@ -1,1 +1,1 @@
-__version__ = "6.0.0"
+from embedxpl.version import __version__

@@ -240,13 +240,13 @@ class ShodanEnricher:
         if 9100 in ports or 631 in ports:
             suggestions.append("exploits/printers/")
 
-        # ICS/OT
+        # ICS/OT (migrated to IndustrialXPL)
         if 502 in ports:
-            suggestions.append("exploits/ics/modbus/")
+            suggestions.append("industrialxpl:exploits/modbus/")
         if 102 in ports:
-            suggestions.append("exploits/ics/siemens/")
+            suggestions.append("industrialxpl:exploits/scada/siemens/")
         if 44818 in ports:
-            suggestions.append("exploits/ics/rockwell/")
+            suggestions.append("industrialxpl:exploits/scada/rockwell/")
 
         # CVE-based suggestions
         for vuln in profile.all_vulns[:5]:
