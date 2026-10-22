@@ -6903,6 +6903,9 @@
         "https://nvd.nist.gov/vuln/detail/CVE-2020-25015",
         "https://www.tenable.com/cve/CVE-2020-25015",
         "https://www.exploit-db.com/exploits/49000"
+      ],
+      "modules": [
+        "exploits/routers/multi/genexis_platinum_4410_broken_access_control_cve_2020_25015.py"
       ]
     },
     {
@@ -6932,6 +6935,9 @@
         "https://nvd.nist.gov/vuln/detail/CVE-2020-36963",
         "https://www.tenable.com/cve/CVE-2020-36963",
         "https://www.exploit-db.com/exploits/49126"
+      ],
+      "modules": [
+        "exploits/routers/multi/intelbras_rf301k_auth_bypass_cve_2020_36963.py"
       ]
     },
     {
@@ -7075,6 +7081,9 @@
         "https://nvd.nist.gov/vuln/detail/CVE-2021-47802",
         "https://www.tenable.com/cve/CVE-2021-47802",
         "https://www.exploit-db.com/exploits/49782"
+      ],
+      "modules": [
+        "exploits/routers/tenda/d151_d301_config_download_cve_2021_47802.py"
       ]
     },
     {
@@ -7190,6 +7199,9 @@
         "https://www.tenable.com/cve/CVE-2022-37055",
         "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
         "https://supportannouncement.us.dlink.com/announcement/publication.aspx?name=SAP10352"
+      ],
+      "modules": [
+        "exploits/routers/dlink/go_rt_ac750_buffer_overflow_cve_2022_37055.py"
       ]
     },
     {
@@ -7206,6 +7218,9 @@
         "https://www.tenable.com/cve/CVE-2023-25280",
         "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
         "https://supportannouncement.us.dlink.com/security/publication.aspx?name=SAP10388"
+      ],
+      "modules": [
+        "exploits/routers/dlink/dir820l_lw_cmd_injection_cve_2023_25280.py"
       ]
     },
     {
@@ -7713,6 +7728,9 @@
         "https://nvd.nist.gov/vuln/detail/CVE-2025-60701",
         "https://www.tenable.com/cve/CVE-2025-60701",
         "https://github.com/search?q=CVE-2025-60701"
+      ],
+      "modules": [
+        "exploits/routers/dlink/dir882_email_cmd_injection_cve_2025_60701.py"
       ]
     },
     {
@@ -7727,6 +7745,9 @@
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-8949",
         "https://www.tenable.com/cve/CVE-2025-8949"
+      ],
+      "modules": [
+        "exploits/routers/dlink/dir825_stack_overflow_cve_2025_8949.py"
       ]
     },
     {
