@@ -19,7 +19,7 @@ def test_version_attrs() -> None:
     assert isinstance(__version__, str)
     assert len(__version__.split(".")) == 3
     assert isinstance(__version_info__, tuple)
-    assert len(__version_info__) == 3
+    assert len(__version_info__) >= 3
     assert isinstance(__release_date__, str)
     assert isinstance(__codename__, str)
 

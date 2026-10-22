@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -9,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from embedxpl.core.session import HostSession, ModuleResult, host_id
+from embedxpl.core.session import HostSession, ModuleResult, SessionManager, host_id
 
 
 def test_host_id_deterministic():
@@ -165,3 +166,151 @@ def test_host_session_modules_vulnerable():
     vulns = s.modules_vulnerable()
     assert "mod.vuln" in vulns
     assert "mod.safe" not in vulns
+
+
+def test_host_session_to_dict_roundtrip():
+    s = HostSession(host_id="rt1", ip="10.0.0.1", mac="AA:BB:CC:DD:EE:FF")
+    s.vendor = "MikroTik"
+    s.model = "RB750"
+    s.open_ports = [22, 8291]
+    s.add_result(ModuleResult(module_path="winbox_auth", vulnerable=True, port=8291))
+    d = s.to_dict()
+    s2 = HostSession.from_dict(d)
+    assert s2.host_id == "rt1"
+    assert s2.vendor == "MikroTik"
+    assert s2.open_ports == [22, 8291]
+    assert len(s2.module_results) == 1
+    assert s2.module_results[0].vulnerable is True
+
+
+def test_host_session_summary_line():
+    s = HostSession(host_id="test", ip="10.0.0.1", vendor="TP-Link", model="WR940N")
+    s.total_scans = 3
+    s.matched_modules = ["a", "b", "c"]
+    s.module_results = [ModuleResult(module_path="a", vulnerable=True)]
+    s.vulns_found = ["a"]
+    line = s.summary_line()
+    assert "10.0.0.1" in line
+    assert "TP-Link" in line
+    assert "scans:3" in line
+
+
+# -------------------------------------------------------
+# SessionManager persistence tests
+# -------------------------------------------------------
+
+
+def test_session_manager_create_and_save(tmp_path):
+    mgr = SessionManager(sessions_dir=tmp_path)
+    session = mgr.create("192.168.1.1", "AA:BB:CC:DD:EE:FF")
+    assert session.ip == "192.168.1.1"
+    assert session.host_id
+    mgr.save(session)
+    assert (tmp_path / f"{session.host_id}.json").exists()
+    assert (tmp_path / "_index.json").exists()
+
+
+def test_session_manager_load(tmp_path):
+    mgr = SessionManager(sessions_dir=tmp_path)
+    session = mgr.create("10.0.0.1")
+    session.vendor = "Netgear"
+    session.add_result(ModuleResult(module_path="rce_test", vulnerable=True, port=80))
+    mgr.save(session)
+
+    loaded = mgr.load("10.0.0.1")
+    assert loaded is not None
+    assert loaded.vendor == "Netgear"
+    assert len(loaded.module_results) == 1
+    assert loaded.module_results[0].vulnerable is True
+
+
+def test_session_manager_get_or_create_existing(tmp_path):
+    mgr = SessionManager(sessions_dir=tmp_path)
+    s1 = mgr.create("10.0.0.2")
+    s1.vendor = "Cisco"
+    mgr.save(s1)
+
+    s2, is_existing = mgr.get_or_create("10.0.0.2")
+    assert is_existing is True
+    assert s2.vendor == "Cisco"
+
+
+def test_session_manager_get_or_create_new(tmp_path):
+    mgr = SessionManager(sessions_dir=tmp_path)
+    s, is_existing = mgr.get_or_create("10.0.0.99")
+    assert is_existing is False
+    assert s.ip == "10.0.0.99"
+
+
+def test_session_manager_list_sessions(tmp_path):
+    mgr = SessionManager(sessions_dir=tmp_path)
+    for ip in ("10.0.0.1", "10.0.0.2", "10.0.0.3"):
+        s = mgr.create(ip)
+        mgr.save(s)
+    listing = mgr.list_sessions()
+    assert len(listing) == 3
+    ips = {e["ip"] for e in listing}
+    assert ips == {"10.0.0.1", "10.0.0.2", "10.0.0.3"}
+
+
+def test_session_manager_exists(tmp_path):
+    mgr = SessionManager(sessions_dir=tmp_path)
+    assert mgr.exists("10.0.0.1") is False
+    s = mgr.create("10.0.0.1")
+    mgr.save(s)
+    assert mgr.exists("10.0.0.1") is True
+
+
+def test_session_manager_find_by_ip_only(tmp_path):
+    mgr = SessionManager(sessions_dir=tmp_path)
+    s = mgr.create("10.0.0.5", "11:22:33:44:55:66")
+    mgr.save(s)
+    found = mgr.find("10.0.0.5")
+    assert found is not None
+
+
+def test_session_manager_delete(tmp_path):
+    mgr = SessionManager(sessions_dir=tmp_path)
+    s = mgr.create("10.0.0.7")
+    mgr.save(s)
+    assert mgr.exists("10.0.0.7") is True
+    result = mgr.delete("10.0.0.7")
+    assert result is True
+    assert mgr.exists("10.0.0.7") is False
+    assert mgr.load("10.0.0.7") is None
+
+
+def test_session_manager_delete_by_id(tmp_path):
+    mgr = SessionManager(sessions_dir=tmp_path)
+    s = mgr.create("10.0.0.8")
+    mgr.save(s)
+    hid = s.host_id
+    result = mgr.delete_by_id(hid)
+    assert result is True
+    assert mgr.load("10.0.0.8") is None
+
+
+def test_session_manager_purge_all(tmp_path):
+    mgr = SessionManager(sessions_dir=tmp_path)
+    for i in range(5):
+        s = mgr.create(f"10.0.0.{i}")
+        mgr.save(s)
+    count = mgr.purge_all()
+    assert count == 5
+    assert mgr.list_sessions() == []
+
+
+def test_session_manager_export(tmp_path):
+    mgr = SessionManager(sessions_dir=tmp_path)
+    s = mgr.create("10.0.0.10")
+    s.vendor = "ASUS"
+    mgr.save(s)
+    exported = mgr.export_session("10.0.0.10")
+    assert exported is not None
+    data = json.loads(exported)
+    assert data["vendor"] == "ASUS"
+
+
+def test_session_manager_export_nonexistent(tmp_path):
+    mgr = SessionManager(sessions_dir=tmp_path)
+    assert mgr.export_session("1.2.3.4") is None

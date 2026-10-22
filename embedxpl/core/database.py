@@ -44,6 +44,8 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
 from __future__ import annotations
 
+import csv
+import io
 import json
 import sqlite3
 import xml.etree.ElementTree as ET
@@ -543,6 +545,57 @@ class XplDatabase:
         ET.indent(tree)
         tree.write(output_path, encoding="unicode", xml_declaration=True)
         return len(self.hosts())
+
+    def export_csv(self, output_path: str, section: str = "vulns") -> int:
+        """Export workspace data as CSV.
+
+        Args:
+            output_path: Destination file path.
+            section: One of 'hosts', 'vulns', 'creds', 'services', 'runs'.
+
+        Returns:
+            Number of rows written.
+        """
+        ws_id = self._ws()
+        buf = io.StringIO()
+
+        if section == "hosts":
+            rows = self.hosts()
+            fields = ["address", "os", "hostname", "status", "last_seen",
+                       "svc_count", "vuln_count", "cred_count"]
+        elif section == "vulns":
+            rows = self.vulns()
+            for r in rows:
+                if isinstance(r.get("cve_ids"), list):
+                    r["cve_ids"] = ";".join(r["cve_ids"])
+            fields = ["address", "module_path", "cve_ids", "severity", "detail", "found_at"]
+        elif section == "creds":
+            rows = self.creds()
+            fields = ["address", "username", "cred_type", "source", "found_at"]
+        elif section == "services":
+            host_rows = self.hosts()
+            rows = []
+            for h in host_rows:
+                svcs = self._conn.execute(
+                    "SELECT * FROM services WHERE host_id=?", (h["id"],)
+                ).fetchall()
+                for s in svcs:
+                    d = dict(s)
+                    d["address"] = h["address"]
+                    rows.append(d)
+            fields = ["address", "port", "proto", "name", "version", "banner"]
+        elif section == "runs":
+            rows = self.runs(limit=10_000)
+            fields = ["module_path", "target", "result", "detail", "ran_at"]
+        else:
+            raise ValueError(f"unknown section: {section!r}")
+
+        writer = csv.DictWriter(buf, fieldnames=fields, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(rows)
+
+        Path(output_path).write_text(buf.getvalue(), encoding="utf-8")
+        return len(rows)
 
     # ------------------------------------------------------------------
     # Helpers
