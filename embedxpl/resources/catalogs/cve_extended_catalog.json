@@ -4553,8 +4553,10 @@
       "description": "CVSS 9.1. MikroTik RouterOS privilege escalation from admin to super-admin (root) via RouterOS API. Missing authorization check enables unrestricted access to all router functions.",
       "cvss_score": 9.1,
       "access_vector": "REMOTE",
-      "exploit_available": false,
-      "modules": [],
+      "exploit_available": true,
+      "modules": [
+        "exploits/firewalls/mikrotik/mikrotik_foisted_privesc_cve_2023_30799.py"
+      ],
       "devices": [
         "MikroTik RouterOS 6.x < 6.49.9",
         "MikroTik RouterOS 7.x < 7.9.1"
@@ -6371,7 +6373,12 @@
       "exploitation": "Technical details public (watchTowr)",
       "references": [
         "https://www.cybersecbrazil.com.br/post/falha-critica-no-splunk-enterprise-permite-execucao-remota-de-codigo-sem-autenticacao"
-      ]
+      ],
+      "modules": [
+        "exploits/siem/splunk/splunk_postgres_sidecar_preauth_rce_cve_2026_20253.py",
+        "exploits/siem/splunk/splunk_rce_cve_2026_20253.py"
+      ],
+      "exploit_available": true
     },
     {
       "vendor": "paloalto",
@@ -6392,7 +6399,11 @@
       "exploitation": "No known active exploitation",
       "references": [
         "https://security.paloaltonetworks.com/CVE-2026-0273"
-      ]
+      ],
+      "modules": [
+        "exploits/firewalls/paloalto/panos_root_cmd_injection_cve_2026_0273.py"
+      ],
+      "exploit_available": true
     },
     {
       "vendor": "ivanti",
@@ -6433,7 +6444,11 @@
       "exploitation": "No confirmed active exploitation (ransomware risk)",
       "references": [
         "https://boletimsec.com/servidores-de-backup-veeam-entram-em-alerta-apos-falha-de-rce/"
-      ]
+      ],
+      "modules": [
+        "exploits/infrastructure/veeam/veeam_backup_domain_rce_cve_2026_44963.py"
+      ],
+      "exploit_available": true
     },
     {
       "vendor": "linux",
@@ -6451,7 +6466,11 @@
       "exploitation": "PoC released (ITScape by V4bel/Hyunwoo Kim)",
       "references": [
         "https://cybersecuritynews.com/poc-exploit-released-for-guest-to-host-escape-linux-kernel/"
-      ]
+      ],
+      "modules": [
+        "exploits/linux/kernel/kvm_arm64_itscape_guest_host_escape_cve_2026_46316.py"
+      ],
+      "exploit_available": true
     },
     {
       "vendor": "litellm",
@@ -6469,7 +6488,11 @@
       "exploitation": "Actively exploited (CISA KEV)",
       "references": [
         "https://boletimsec.com/cisa-alerta-para-exploracao-ativa-de-falha-no-litellm/"
-      ]
+      ],
+      "modules": [
+        "exploits/ai_infra/litellm/litellm_mcp_cmd_injection_cve_2026_42271.py"
+      ],
+      "exploit_available": true
     },
     {
       "vendor": "jenkins",
@@ -6487,7 +6510,11 @@
       "exploitation": "No confirmed active exploitation",
       "references": [
         "https://www.jenkins.io/security/advisories/"
-      ]
+      ],
+      "modules": [
+        "exploits/ci_cd/jenkins/jenkins_deserialization_rce_cve_2026_53435.py"
+      ],
+      "exploit_available": true
     },
     {
       "vendor": "mariadb",
@@ -6511,7 +6538,11 @@
       "exploitation": "No confirmed active exploitation",
       "references": [
         "https://mariadb.com/kb/en/security/"
-      ]
+      ],
+      "modules": [
+        "exploits/databases/mariadb/mariadb_rce_cve_2026_49261.py"
+      ],
+      "exploit_available": true
     },
     {
       "vendor": "oracle",
@@ -6565,7 +6596,11 @@
       "exploitation": "No confirmed active exploitation",
       "references": [
         "https://www.securityweek.com/ics-patch-tuesday-vulnerabilities-fixed-by-siemens-schneider-phoenix-contact/"
-      ]
+      ],
+      "modules": [
+        "exploits/crypto/openssl/openssl_rce_cve_2025_15467.py"
+      ],
+      "exploit_available": true
     },
     {
       "vendor": "microsoft",
@@ -6739,7 +6774,12 @@
       "date": "2026-06",
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2026-35616"
-      ]
+      ],
+      "modules": [
+        "exploits/firewalls/fortinet/forticlient_ems_preauth_api_bypass_cve_2026_35616.py",
+        "exploits/firewalls/fortinet/forticlient_ems_preauth_rce_cve_2026_35616.py"
+      ],
+      "exploit_available": true
     },
     {
       "id": "CVE-2025-20333",
@@ -6765,7 +6805,11 @@
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-20362",
         "https://www.cisa.gov/news-events/cybersecurity-advisories/ar26-113a"
-      ]
+      ],
+      "modules": [
+        "exploits/firewalls/cisco/cisco_asa_ftd_firestarter_chain_cve_2025_20362_20333.py"
+      ],
+      "exploit_available": true
     },
     {
       "id": "CVE-2024-50562",
@@ -6777,7 +6821,11 @@
       "date": "2024-11",
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2024-50562"
-      ]
+      ],
+      "modules": [
+        "exploits/firewalls/fortinet/fortios_sslvpn_session_reuse_cve_2024_50562.py"
+      ],
+      "exploit_available": true
     },
     {
       "id": "CVE-2026-24858",
@@ -6789,7 +6837,11 @@
       "date": "2026-03",
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2026-24858"
-      ]
+      ],
+      "modules": [
+        "exploits/firewalls/fortinet/forticloud_sso_auth_bypass_cve_2026_24858.py"
+      ],
+      "exploit_available": true
     },
     {
       "cve_id": "CVE-2026-106173",
@@ -6883,11 +6935,14 @@
       "description": "Improper certificate validation in firmware update",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2020-15498",
         "https://www.tenable.com/cve/CVE-2020-15498",
         "https://www.asus.com/content/asus-product-security-advisory/"
+      ],
+      "modules": [
+        "exploits/routers/asus/rt_firmware_cert_bypass_cve_2020_15498.py"
       ]
     },
     {
@@ -6916,10 +6971,13 @@
       "description": "Command injection via ping diagnostic",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2020-8958",
         "https://www.tenable.com/cve/CVE-2020-8958"
+      ],
+      "modules": [
+        "exploits/routers/multi/vsol_olt_cmdinject_cve_2020_8958.py"
       ]
     },
     {
@@ -6948,10 +7006,13 @@
       "description": "Cleartext password in memory/traffic context",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2020-5721",
         "https://www.tenable.com/cve/CVE-2020-5721"
+      ],
+      "modules": [
+        "exploits/routers/multi/mikrotik_winbox_creds_cve_2020_5721.py"
       ]
     },
     {
@@ -6962,11 +7023,14 @@
       "description": "Improper access control",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2020-27655",
         "https://www.tenable.com/cve/CVE-2020-27655",
         "https://www.synology.com/en-us/security/advisory"
+      ],
+      "modules": [
+        "exploits/routers/synology/dsm_access_control_cve_2020_27655.py"
       ]
     },
     {
@@ -6977,10 +7041,13 @@
       "description": "Cross-site scripting leading to code execution context",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2020-17891",
         "https://www.tenable.com/cve/CVE-2020-17891"
+      ],
+      "modules": [
+        "exploits/routers/tplink/archer_xss_cve_2020_17891.py"
       ]
     },
     {
@@ -6991,10 +7058,13 @@
       "description": "Buffer overflow in httpd",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2020-8423",
         "https://www.tenable.com/cve/CVE-2020-8423"
+      ],
+      "modules": [
+        "exploits/routers/tplink/tl_wr841n_httpd_auth_bof_cve_2020_8423.py"
       ]
     },
     {
@@ -7005,11 +7075,14 @@
       "description": "Authentication bypass",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2021-32030",
         "https://www.tenable.com/cve/CVE-2021-32030",
         "https://www.asus.com/content/asus-product-security-advisory/"
+      ],
+      "modules": [
+        "exploits/routers/asus/gt_ac2900_auth_bypass_cve_2021_32030.py"
       ]
     },
     {
@@ -7020,10 +7093,13 @@
       "description": "Stack overflow in httpd",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2021-40556",
         "https://www.tenable.com/cve/CVE-2021-40556"
+      ],
+      "modules": [
+        "exploits/routers/asus/rt_ax56u_httpd_bof_cve_2021_40556.py"
       ]
     },
     {
@@ -7034,10 +7110,13 @@
       "description": "Stored XSS in Wi-Fi logs",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2021-43702",
         "https://www.tenable.com/cve/CVE-2021-43702"
+      ],
+      "modules": [
+        "exploits/routers/asus/rt_ax88u_xss_wifi_log_cve_2021_43702.py"
       ]
     },
     {
@@ -7048,10 +7127,13 @@
       "description": "Path traversal",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2021-41449",
         "https://www.tenable.com/cve/CVE-2021-41449"
+      ],
+      "modules": [
+        "exploits/routers/netgear/r6700_path_traversal_cve_2021_41449.py"
       ]
     },
     {
@@ -7062,10 +7144,13 @@
       "description": "Stack-based buffer overflow",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2021-31755",
         "https://www.tenable.com/cve/CVE-2021-31755"
+      ],
+      "modules": [
+        "exploits/routers/tenda/ac11_stack_bof_cve_2021_31755.py"
       ]
     },
     {
@@ -7094,10 +7179,13 @@
       "description": "Cross-site scripting",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-32988",
         "https://www.tenable.com/cve/CVE-2022-32988"
+      ],
+      "modules": [
+        "exploits/routers/asus/rt_ac68u_xss_cve_2022_32988.py"
       ]
     },
     {
@@ -7108,10 +7196,13 @@
       "description": "Configuration service information disclosure",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-38105",
         "https://www.tenable.com/cve/CVE-2022-38105"
+      ],
+      "modules": [
+        "exploits/routers/asus/rt_ax82u_info_disclosure_cve_2022_38105.py"
       ]
     },
     {
@@ -7122,10 +7213,13 @@
       "description": "Configuration service denial of service",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-38393",
         "https://www.tenable.com/cve/CVE-2022-38393"
+      ],
+      "modules": [
+        "exploits/routers/asus/rt_ax82u_cfg_dos_cve_2022_38393.py"
       ]
     },
     {
@@ -7136,11 +7230,14 @@
       "description": "Multiple vulnerabilities in web-based management interface",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-20699",
         "https://www.tenable.com/cve/CVE-2022-20699",
         "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-rv-thinclientmultx2-7kqXFkPZ"
+      ],
+      "modules": [
+        "exploits/routers/cisco/rv340_rce_cve_2022_20699.py"
       ]
     },
     {
@@ -7151,10 +7248,13 @@
       "description": "Stack-based buffer overflow",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-30521",
         "https://www.tenable.com/cve/CVE-2022-30521"
+      ],
+      "modules": [
+        "exploits/routers/dlink/dir890l_bof_cve_2022_30521.py"
       ]
     },
     {
@@ -7165,10 +7265,13 @@
       "description": "Unauthenticated denial of service",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-35191",
         "https://www.tenable.com/cve/CVE-2022-35191"
+      ],
+      "modules": [
+        "exploits/routers/dlink/dir_867_dos_cve_2022_35191.py"
       ]
     },
     {
@@ -7179,10 +7282,13 @@
       "description": "Post-auth remote code execution",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-36786",
         "https://www.tenable.com/cve/CVE-2022-36786"
+      ],
+      "modules": [
+        "exploits/routers/dlink/dsl224_rce_cve_2022_36786.py"
       ]
     },
     {
@@ -7231,10 +7337,13 @@
       "description": "Incorrect access control exposing cookies",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-31876",
         "https://www.tenable.com/cve/CVE-2022-31876"
+      ],
+      "modules": [
+        "exploits/routers/netgear/wac124_access_control_cve_2022_31876.py"
       ]
     },
     {
@@ -7245,10 +7354,13 @@
       "description": "Buffer overflow in uhttpd",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-37232",
         "https://www.tenable.com/cve/CVE-2022-37232"
+      ],
+      "modules": [
+        "exploits/routers/netgear/r6900p_uhttpd_bof_cve_2022_37232.py"
       ]
     },
     {
@@ -7259,10 +7371,13 @@
       "description": "Buffer overflow",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-37234",
         "https://www.tenable.com/cve/CVE-2022-37234"
+      ],
+      "modules": [
+        "exploits/routers/netgear/r6900p_bof_cve_2022_37234.py"
       ]
     },
     {
@@ -7273,10 +7388,13 @@
       "description": "Command execution",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-37337",
         "https://www.tenable.com/cve/CVE-2022-37337"
+      ],
+      "modules": [
+        "exploits/routers/netgear/wac124_cmd_exec_cve_2022_37337.py"
       ]
     },
     {
@@ -7287,10 +7405,13 @@
       "description": "CRLF injection leading to reflected XSS/HTML injection",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-47052",
         "https://www.tenable.com/cve/CVE-2022-47052"
+      ],
+      "modules": [
+        "exploits/routers/netgear/rax30_crlf_inject_cve_2022_47052.py"
       ]
     },
     {
@@ -7301,10 +7422,13 @@
       "description": "Unauthenticated buffer overflow",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-48196",
         "https://www.tenable.com/cve/CVE-2022-48196"
+      ],
+      "modules": [
+        "exploits/routers/netgear/orbi_bof_cve_2022_48196.py"
       ]
     },
     {
@@ -7315,11 +7439,14 @@
       "description": "CGI injection / arbitrary file read",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-43932",
         "https://www.tenable.com/cve/CVE-2022-43932",
         "https://www.synology.com/en-us/security/advisory/Synology_SA_22_25"
+      ],
+      "modules": [
+        "exploits/routers/synology/dsm_cgiscript_inject_cve_2022_43932.py"
       ]
     },
     {
@@ -7330,10 +7457,13 @@
       "description": "Credentials sent base64/cleartext",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-0162",
         "https://www.tenable.com/cve/CVE-2022-0162"
+      ],
+      "modules": [
+        "exploits/routers/tplink/tl_wr940n_cleartext_creds_cve_2022_0162.py"
       ]
     },
     {
@@ -7344,10 +7474,13 @@
       "description": "Command injection via IPv6 route parameter",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-25061",
         "https://www.tenable.com/cve/CVE-2022-25061"
+      ],
+      "modules": [
+        "exploits/routers/tplink/tl_wr840n_ipv6_cmd_injection_cve_2022_25061.py"
       ]
     },
     {
@@ -7358,10 +7491,13 @@
       "description": "Integer overflow causing DoS",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-25062",
         "https://www.tenable.com/cve/CVE-2022-25062"
+      ],
+      "modules": [
+        "exploits/routers/tplink/tl_wr841n_integer_overflow_cve_2022_25062.py"
       ]
     },
     {
@@ -7372,10 +7508,13 @@
       "description": "Remote code execution via WAN config parameter",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-25064",
         "https://www.tenable.com/cve/CVE-2022-25064"
+      ],
+      "modules": [
+        "exploits/routers/tplink/archer_wan_rce_cve_2022_25064.py"
       ]
     },
     {
@@ -7386,10 +7525,13 @@
       "description": "Backup file import RCE",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-40486",
         "https://www.tenable.com/cve/CVE-2022-40486"
+      ],
+      "modules": [
+        "exploits/routers/tplink/tl_wr841n_backup_rce_cve_2022_40486.py"
       ]
     },
     {
@@ -7400,10 +7542,13 @@
       "description": "Remote stack buffer overflow",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2022-45957",
         "https://www.tenable.com/cve/CVE-2022-45957"
+      ],
+      "modules": [
+        "exploits/routers/multi/zte_mc801a_bof_cve_2022_45957.py"
       ]
     },
     {
@@ -7420,6 +7565,9 @@
         "https://www.tenable.com/cve/CVE-2023-20118",
         "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
         "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-sbr042-multi-vuln-ej76Pke5"
+      ],
+      "modules": [
+        "exploits/routers/cisco/rv_series_auth_cmd_exec_cve_2023_20118.py"
       ]
     },
     {
@@ -7430,10 +7578,13 @@
       "description": "Connection hijacking / information leak / DoS",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2023-7266",
         "https://www.tenable.com/cve/CVE-2023-7266"
+      ],
+      "modules": [
+        "exploits/routers/multi/huawei_conn_hijack_cve_2023_7266.py"
       ]
     },
     {
@@ -7450,6 +7601,9 @@
         "https://www.tenable.com/cve/CVE-2023-33538",
         "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
         "https://unit42.paloaltonetworks.com/tp-link-archer-vulnerability-cve-2023-33538/"
+      ],
+      "modules": [
+        "exploits/routers/tplink/wr940n_740n_841n_ssid_cmd_injection_cve_2023_33538.py"
       ]
     },
     {
@@ -7460,11 +7614,14 @@
       "description": "Cross-site scripting in web UI",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2024-20362",
         "https://www.tenable.com/cve/CVE-2024-20362",
         "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/"
+      ],
+      "modules": [
+        "exploits/routers/cisco/small_biz_xss_cve_2024_20362.py"
       ]
     },
     {
@@ -7475,10 +7632,13 @@
       "description": "Command injection",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2024-48418",
         "https://www.tenable.com/cve/CVE-2024-48418"
+      ],
+      "modules": [
+        "exploits/routers/edimax/br6476ac_cmd_injection_cve_2024_48418.py"
       ]
     },
     {
@@ -7494,6 +7654,9 @@
         "https://nvd.nist.gov/vuln/detail/CVE-2024-27686",
         "https://www.tenable.com/cve/CVE-2024-27686",
         "https://www.exploit-db.com/exploits/51931"
+      ],
+      "modules": [
+        "exploits/routers/mikrotik/cve_2024_27686_routeros_smb_dos.py"
       ]
     },
     {
@@ -7508,6 +7671,9 @@
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2024-12988",
         "https://www.tenable.com/cve/CVE-2024-12988"
+      ],
+      "modules": [
+        "exploits/routers/netgear/r6900p_host_header_bof_cve_2024_12988.py"
       ]
     },
     {
@@ -7518,11 +7684,14 @@
       "description": "Path traversal enabling arbitrary file deletion",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2024-11398",
         "https://www.tenable.com/cve/CVE-2024-11398",
         "https://www.synology.com/en-us/security/advisory"
+      ],
+      "modules": [
+        "exploits/routers/synology/srm_otp_traversal_cve_2024_11398.py"
       ]
     },
     {
@@ -7533,11 +7702,14 @@
       "description": "AirPrint man-in-the-middle arbitrary code execution",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2024-39348",
         "https://www.tenable.com/cve/CVE-2024-39348",
         "https://www.synology.com/en-us/security/advisory"
+      ],
+      "modules": [
+        "exploits/routers/synology/rt2600ac_airprint_rce_cve_2024_39348.py"
       ]
     },
     {
@@ -7548,11 +7720,14 @@
       "description": "Stored XSS with limited file R/W and DoS",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2024-53283",
         "https://www.tenable.com/cve/CVE-2024-53283",
         "https://www.synology.com/en-us/security/advisory"
+      ],
+      "modules": [
+        "exploits/routers/synology/dsm_xss_file_rw_cve_2024_53283.py"
       ]
     },
     {
@@ -7563,11 +7738,14 @@
       "description": "Command injection in DDNS record feature",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2024-53286",
         "https://www.tenable.com/cve/CVE-2024-53286",
         "https://www.synology.com/en-us/security/advisory"
+      ],
+      "modules": [
+        "exploits/routers/synology/srm_ddns_cmd_injection_cve_2024_53286.py"
       ]
     },
     {
@@ -7578,11 +7756,14 @@
       "description": "Improper signature verification",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2024-54134",
         "https://www.tenable.com/cve/CVE-2024-54134",
         "https://www.cisa.gov/news-events/alerts/2025/01/23/cisa-adds-four-known-exploited-vulnerabilities-catalog"
+      ],
+      "modules": [
+        "exploits/routers/multi/tplink_tapo_c210_sig_bypass_cve_2024_54134.py"
       ]
     },
     {
@@ -7598,6 +7779,9 @@
         "https://nvd.nist.gov/vuln/detail/CVE-2024-57049",
         "https://www.tenable.com/cve/CVE-2024-57049",
         "https://github.com/search?q=CVE-2024-57049"
+      ],
+      "modules": [
+        "exploits/routers/tplink/archer_c20_auth_bypass_cve_2024_57049.py"
       ]
     },
     {
@@ -7608,10 +7792,13 @@
       "description": "Privilege escalation",
       "cvss_score": 0.0,
       "access_vector": "LOCAL",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2024-22066",
         "https://www.tenable.com/cve/CVE-2024-22066"
+      ],
+      "modules": [
+        "exploits/routers/zte/zxr10_privesc_cve_2024_22066.py"
       ]
     },
     {
@@ -7622,10 +7809,13 @@
       "description": "CSRF in web management with command execution possibility",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-15101",
         "https://www.tenable.com/cve/CVE-2025-15101"
+      ],
+      "modules": [
+        "exploits/routers/asus/router_csrf_rce_cve_2025_15101.py"
       ]
     },
     {
@@ -7636,11 +7826,14 @@
       "description": "Authentication bypass",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-59367",
         "https://www.tenable.com/cve/CVE-2025-59367",
         "https://www.asus.com/content/asus-product-security-advisory/"
+      ],
+      "modules": [
+        "exploits/routers/asus/dsl_n16_auth_bypass_cve_2025_59367.py"
       ]
     },
     {
@@ -7651,10 +7844,13 @@
       "description": "Integer underflow in AiCloud",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-59368",
         "https://www.tenable.com/cve/CVE-2025-59368"
+      ],
+      "modules": [
+        "exploits/routers/asus/rt_ax86u_aicloud_underflow_cve_2025_59368.py"
       ]
     },
     {
@@ -7665,10 +7861,13 @@
       "description": "Buffer overflow in formLogin host parameter",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-4344",
         "https://www.tenable.com/cve/CVE-2025-4344"
+      ],
+      "modules": [
+        "exploits/routers/dlink/dir600l_formlogin_bof_cve_2025_4344.py"
       ]
     },
     {
@@ -7679,10 +7878,13 @@
       "description": "Unauthenticated command injection",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-60672",
         "https://www.tenable.com/cve/CVE-2025-60672"
+      ],
+      "modules": [
+        "exploits/routers/dlink/dir878_unauth_cmd_injection_cve_2025_60672.py"
       ]
     },
     {
@@ -7698,6 +7900,9 @@
         "https://nvd.nist.gov/vuln/detail/CVE-2025-60698",
         "https://www.tenable.com/cve/CVE-2025-60698",
         "https://github.com/search?q=CVE-2025-60698"
+      ],
+      "modules": [
+        "exploits/routers/dlink/dir882_syslog_cmd_injection_cve_2025_60698.py"
       ]
     },
     {
@@ -7713,6 +7918,9 @@
         "https://nvd.nist.gov/vuln/detail/CVE-2025-60700",
         "https://www.tenable.com/cve/CVE-2025-60700",
         "https://github.com/search?q=CVE-2025-60700"
+      ],
+      "modules": [
+        "exploits/routers/dlink/dir882_dmz_cmd_injection_cve_2025_60700.py"
       ]
     },
     {
@@ -7758,10 +7966,13 @@
       "description": "Incorrect access control",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-63422",
         "https://www.tenable.com/cve/CVE-2025-63422"
+      ],
+      "modules": [
+        "exploits/routers/multi/eachitaly_access_control_cve_2025_63422.py"
       ]
     },
     {
@@ -7772,10 +7983,13 @@
       "description": "Stack-based buffer overflow in GoAhead formMultiApnSetting",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-68706",
         "https://www.tenable.com/cve/CVE-2025-68706"
+      ],
+      "modules": [
+        "exploits/routers/kuwfi/4g_lte_ac900_bof_cve_2025_68706.py"
       ]
     },
     {
@@ -7786,10 +8000,13 @@
       "description": "Improper certificate validation leading to command execution",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-12943",
         "https://www.tenable.com/cve/CVE-2025-12943"
+      ],
+      "modules": [
+        "exploits/routers/netgear/rax30_cert_validation_rce_cve_2025_12943.py"
       ]
     },
     {
@@ -7800,10 +8017,13 @@
       "description": "Authenticated OS command injection",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-12945",
         "https://www.tenable.com/cve/CVE-2025-12945"
+      ],
+      "modules": [
+        "exploits/routers/netgear/rax30_cmdinject_cve_2025_12945.py"
       ]
     },
     {
@@ -7814,10 +8034,13 @@
       "description": "Speedtest feature command execution",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-12946",
         "https://www.tenable.com/cve/CVE-2025-12946"
+      ],
+      "modules": [
+        "exploits/routers/netgear/nighthawk_speedtest_rce_cve_2025_12946.py"
       ]
     },
     {
@@ -7832,6 +8055,11 @@
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-29044",
         "https://www.tenable.com/cve/CVE-2025-29044"
+      ],
+      "modules": [
+        "exploits/routers/netgear/r6100_bof_rce_cve_2025_29044.py",
+        "exploits/routers/netgear/r6100_cgimain_bof_cve_2025_29044.py",
+        "exploits/routers/netgear/r6100_query_string_overflow_cve_2025_29044.py"
       ]
     },
     {
@@ -7842,10 +8070,13 @@
       "description": "Missing authentication for privileged CGI actions",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-15517",
         "https://www.tenable.com/cve/CVE-2025-15517"
+      ],
+      "modules": [
+        "exploits/routers/tplink/archer_nx_missing_auth_cve_2025_15517.py"
       ]
     },
     {
@@ -7856,10 +8087,13 @@
       "description": "Denial of service",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-15606",
         "https://www.tenable.com/cve/CVE-2025-15606"
+      ],
+      "modules": [
+        "exploits/routers/tplink/tl_wr841n_dos_cve_2025_15606.py"
       ]
     },
     {
@@ -7874,6 +8108,10 @@
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-40634",
         "https://www.tenable.com/cve/CVE-2025-40634"
+      ],
+      "modules": [
+        "exploits/routers/tplink/archer_ax50_bof_cve_2025_40634.py",
+        "exploits/routers/tplink/archer_ax50_rce_cve_2025_40634.py"
       ]
     },
     {
@@ -7884,11 +8122,14 @@
       "description": "Command injection",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2025-7850",
         "https://www.tenable.com/cve/CVE-2025-7850",
         "https://www.forescout.com/resources/"
+      ],
+      "modules": [
+        "exploits/routers/tplink/er605_cmd_injection_cve_2025_7850.py"
       ]
     },
     {
@@ -7904,6 +8145,10 @@
         "https://nvd.nist.gov/vuln/detail/CVE-2026-0625",
         "https://www.tenable.com/cve/CVE-2026-0625",
         "https://supportannouncement.us.dlink.com/security/publication.aspx?name=SAP10317"
+      ],
+      "modules": [
+        "exploits/routers/dlink/dlink_ghostdns_dnscfg_rce_cve_2026_0625.py",
+        "exploits/routers/dlink/dsl_legacy_unauth_rce_cve_2026_0625.py"
       ]
     },
     {
@@ -7914,10 +8159,13 @@
       "description": "Cleartext credential transmission",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2026-22079",
         "https://www.tenable.com/cve/CVE-2026-22079"
+      ],
+      "modules": [
+        "exploits/routers/tenda/ac11_cleartext_cve_2026_22079.py"
       ]
     },
     {
@@ -7928,10 +8176,13 @@
       "description": "Session fixation using credentials as session ID",
       "cvss_score": 0.0,
       "access_vector": "ADJACENT",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2026-22082",
         "https://www.tenable.com/cve/CVE-2026-22082"
+      ],
+      "modules": [
+        "exploits/routers/tenda/ac11_session_fixation_cve_2026_22082.py"
       ]
     },
     {
@@ -7942,10 +8193,13 @@
       "description": "Unauthenticated configuration download exposing admin credentials",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2026-30140",
         "https://www.tenable.com/cve/CVE-2026-30140"
+      ],
+      "modules": [
+        "exploits/routers/tenda/w15e_config_download_cve_2026_30140.py"
       ]
     },
     {
@@ -7956,10 +8210,13 @@
       "description": "Credential disclosure",
       "cvss_score": 0.0,
       "access_vector": "REMOTE",
-      "exploit_available": false,
+      "exploit_available": true,
       "references": [
         "https://nvd.nist.gov/vuln/detail/CVE-2026-34472",
         "https://www.tenable.com/cve/CVE-2026-34472"
+      ],
+      "modules": [
+        "exploits/routers/zte/zxhn_h188a_cred_disclosure_cve_2026_34472.py"
       ]
     },
     {
