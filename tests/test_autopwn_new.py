@@ -92,7 +92,7 @@ AUTOPWN_NEW_MODULES = [
     (
         "embedxpl.modules.autopwn.iot_generic",
         "IoTGenericAutoPwn",
-        "iot_generic",
+        "iot",
         _AUTOPWN_DIR / "iot_generic.py",
     ),
 ]
@@ -190,7 +190,7 @@ class TestAutoPwnNewModuleStructure:
     ) -> None:
         cls = _get_class(mod_path, class_name, file_path)
         assert hasattr(cls, "run"), "{} missing run() method".format(class_name)
-        assert callable(getattr(cls, "run"))
+        assert callable(cls.run)
 
     def test_inherits_from_segment_autopwn(
         self, mod_path: str, class_name: str, expected_segment: str,
@@ -413,7 +413,7 @@ class TestIoTGenericAutoPwn:
 
     def test_instantiation(self, iot_cls) -> None:
         instance = iot_cls(targets=["172.16.0.1"])
-        assert instance.segment == "iot_generic"
+        assert instance.segment == "iot"
 
     def test_iot_fingerprint_dataclass(self) -> None:
         mod = _safe_import(
