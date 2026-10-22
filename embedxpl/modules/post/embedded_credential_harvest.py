@@ -34,8 +34,6 @@ from embedxpl.core.exploit import (
     print_table,
     print_warning,
 )
-
-
 # Credential extraction commands grouped by category
 _CREDENTIAL_COMMANDS: List[Tuple[str, str]] = [
     # System accounts
@@ -82,8 +80,6 @@ _CREDENTIAL_PATTERNS = [
     re.compile(r"(\$[156]\$[^\s:]+)", re.IGNORECASE),  # crypt hashes
     re.compile(r"(-----BEGIN (?:RSA |DSA |EC )?PRIVATE KEY-----)", re.IGNORECASE),
 ]
-
-
 class Exploit(BaseExploit):
     """Embedded Device Credential Harvester.
 

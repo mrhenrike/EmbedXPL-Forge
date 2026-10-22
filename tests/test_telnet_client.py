@@ -4,7 +4,12 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
 
-from embedxpl.core.telnet.telnet_client import TELNET_TIMEOUT, TelnetCli
+import pytest
+
+try:
+    from embedxpl.core.telnet.telnet_client import TELNET_TIMEOUT, TelnetCli
+except (ImportError, ModuleNotFoundError):
+    pytest.skip("telnetlib/telnetlib3 not available", allow_module_level=True)
 
 
 class TestTelnetCliInit:

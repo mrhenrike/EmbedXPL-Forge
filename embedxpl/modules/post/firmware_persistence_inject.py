@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from embedxpl.core.exploit import (
-    Exploit as BaseExploit,
+
     OptIP,
     OptPort,
     OptString,
@@ -38,8 +38,6 @@ from embedxpl.core.exploit import (
     print_success,
     print_warning,
 )
-
-
 # Standard init script locations in embedded Linux
 _INIT_SCRIPTS = [
     "etc/init.d/rcS",
@@ -58,9 +56,7 @@ _CRON_PATHS = [
 
 # Marker used to identify injected content
 _INJECTION_MARKER = "# XPL-persistence"
-
-
-class Exploit(BaseExploit):
+class Exploit:
     """Firmware Persistence Injector.
 
     Injects persistence mechanisms into extracted firmware filesystem images.

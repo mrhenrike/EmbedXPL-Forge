@@ -25,7 +25,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
 from embedxpl.core.exploit import (
-    Exploit as BaseExploit,
+
     OptIP,
     OptPort,
     OptString,
@@ -36,8 +36,6 @@ from embedxpl.core.exploit import (
     print_table,
     print_warning,
 )
-
-
 # HTTP backup endpoints common on SOHO routers
 _HTTP_BACKUP_PATHS: List[Tuple[str, str]] = [
     # Netgear
@@ -121,9 +119,7 @@ _SNMP_CONFIG_OIDS = {
     "ipAddrTable": "1.3.6.1.2.1.4.20",
     "ipRouteTable": "1.3.6.1.2.1.4.21",
 }
-
-
-class Exploit(BaseExploit):
+class Exploit:
     """Router Running Configuration Exfiltrator.
 
     Exfiltrates router running configuration via HTTP backup download,

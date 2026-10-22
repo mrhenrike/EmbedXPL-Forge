@@ -35,8 +35,6 @@ from embedxpl.core.exploit import (
     print_table,
     print_warning,
 )
-
-
 # Log file locations common on embedded Linux systems
 _LOG_TARGETS: List[Tuple[str, str, str]] = [
     # (path, description, cleanup_method)
@@ -69,9 +67,7 @@ _LOG_TARGETS: List[Tuple[str, str, str]] = [
     ("/root/.sh_history", "Shell history", "truncate"),
     ("/tmp/.ash_history", "Temp ash history", "truncate"),
 ]
-
-
-class Exploit(BaseExploit):
+class Exploit:
     """Embedded Device Log Cleanup.
 
     Post-exploitation module that removes or sanitizes log entries on

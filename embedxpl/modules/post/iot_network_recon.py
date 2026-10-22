@@ -22,7 +22,7 @@ import time
 from typing import Dict, List, Optional, Set, Tuple
 
 from embedxpl.core.exploit import (
-    Exploit as BaseExploit,
+
     OptIP,
     OptPort,
     OptString,
@@ -33,8 +33,6 @@ from embedxpl.core.exploit import (
     print_table,
     print_warning,
 )
-
-
 # Recon commands executed on the compromised device
 _RECON_COMMANDS: List[Tuple[str, str]] = [
     ("arp -a 2>/dev/null || cat /proc/net/arp 2>/dev/null", "arp_table"),
@@ -64,9 +62,7 @@ _IP_PATTERN = re.compile(
 _MAC_PATTERN = re.compile(
     r"([0-9a-fA-F]{2}(?::[0-9a-fA-F]{2}){5})"
 )
-
-
-class Exploit(BaseExploit):
+class Exploit:
     """IoT Network Reconnaissance from Compromised Device.
 
     Performs network discovery and pivot scanning from an already-compromised
