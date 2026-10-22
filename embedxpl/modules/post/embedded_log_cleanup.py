@@ -67,7 +67,7 @@ _LOG_TARGETS: List[Tuple[str, str, str]] = [
     ("/root/.sh_history", "Shell history", "truncate"),
     ("/tmp/.ash_history", "Temp ash history", "truncate"),
 ]
-class Exploit:
+class Exploit(BaseExploit):
     """Embedded Device Log Cleanup.
 
     Post-exploitation module that removes or sanitizes log entries on
