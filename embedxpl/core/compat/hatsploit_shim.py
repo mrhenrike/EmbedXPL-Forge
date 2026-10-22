@@ -37,6 +37,14 @@ class HatSploitModule(_Exploit):
         raise NotImplementedError("Implement run() or execute()")
 
 
+# HatSploit name stubs: absorbed modules inherit from these alongside HTTP/SSH/etc.
+class Module:
+    """Stub for HatSploit Module base; real logic lives in HatSploitModule."""
+
+class Handler:
+    """Stub for HatSploit Handler mixin."""
+
+
 # HatSploit protocol aliases
 class TCP(HatSploitModule, TCPClient):
     pass
@@ -70,7 +78,9 @@ def output_warning(msg): from embedxpl.core.exploit.printer import print_warning
 
 # Export all
 __all__ = [
+    'Handler',
     'HTTP',
+    'Module',
     'SSH',
     'TCP',
     'HTTPClient',
