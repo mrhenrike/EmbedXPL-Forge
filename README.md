@@ -3,7 +3,7 @@
 </p>
 
 ![Python](https://img.shields.io/badge/Python-%3E%3D3.12-blue?style=flat-square&logo=python)
-[![Platform](https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows-informational?style=flat-square)](README.md#compatibility)
+[![Platform](https://img.shields.io/badge/Platform-Linux-brightgreen?style=flat-square&logo=linux&logoColor=white)](README.md#requirements)
 [![License](https://img.shields.io/badge/License-BSD-3-Clause--1.0-blue?style=flat-square)](LICENSE)
 [![XPL Suite](https://img.shields.io/badge/XPL--Forge-Suite-red?style=flat-square)](https://github.com/mrhenrike)
 [![Issues](https://img.shields.io/github/issues/mrhenrike/EmbedXPL-Forge?style=flat-square)](https://github.com/mrhenrike/EmbedXPL-Forge/issues)
@@ -11,7 +11,7 @@
 
 ---
 
-> **Platform Note:** This framework is designed and tested primarily on **Linux** (Debian/Ubuntu/Kali). Most hardware-dependent modules (wireless adapters, USB devices, raw socket access, firmware tools) require Linux. Running on Windows or macOS may cause errors or limited functionality in many modules. Linux is strongly recommended for maximum compatibility.
+> **Platform:** This framework is officially supported on **Linux** only (Debian/Ubuntu/Kali). Most modules rely on raw sockets, kernel interfaces, USB device access, and platform-specific tools that are exclusive to Linux. Windows and macOS were tested but produced errors across many modules due to missing kernel drivers and libraries — they are **not supported**.
 
 ---
 
