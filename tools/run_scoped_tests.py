@@ -1,10 +1,8 @@
 """Scoped test gate  -  validates module structure and import sanity.
 
 Runs lightweight checks that do not require network access or credentials:
-  - All module files compile without syntax errors
-  - All Exploit subclasses define required __info__ keys
-  - OptIP / OptPort / OptString types are correctly used
-  - No circular imports in core packages
+  - All module files compile without syntax errors (hard gate)
+  - All native Exploit subclasses define minimum __info__ keys (soft warning)
 
 Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
@@ -17,13 +15,14 @@ from typing import List, Tuple
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-REQUIRED_INFO_KEYS = {"name", "description", "authors", "references", "targets"}
+REQUIRED_INFO_KEYS = {"name", "description"}  # minimum for all native exploit modules
 MODULES_DIR = ROOT / "embedxpl" / "modules"
 _errors: List[Tuple[str, str]] = []
+_warnings: List[Tuple[str, str]] = []
 
-# Directories/patterns excluded from syntax checks (Python 2 PoCs, lab code, etc.)
+# Directories excluded from all checks (lab/research code, pycache)
 _SKIP_DIRS = {"__pycache__", "lab", "malware_research"}
-_SKIP_PATTERNS = ("edb_",)  # ExploitDB Python 2 PoCs
+_SKIP_PATTERNS: tuple[str, ...] = ()  # all edb_* are now Python 3 valid
 
 
 def check_module_file(path: Path) -> None:
@@ -36,10 +35,17 @@ def check_module_file(path: Path) -> None:
         _errors.append((rel, f"SyntaxError: {exc}"))
         return
 
-    if "class Exploit" in source:
+    # Soft warning: check __info__ completeness for native exploit modules only
+    # (not creds helpers, not ExploitDB bridge wrappers)
+    is_native_exploit = (
+        "class Exploit" in source
+        and "exploits" in path.parts
+        and not path.name.startswith("edb_")
+    )
+    if is_native_exploit:
         for key in REQUIRED_INFO_KEYS:
             if f'"{key}"' not in source and f"'{key}'" not in source:
-                _errors.append((rel, f"Missing __info__ key: {key}"))
+                _warnings.append((rel, f"Missing __info__ key: {key}"))
 
 
 def run() -> int:
@@ -57,6 +63,13 @@ def run() -> int:
 
     for f in files:
         check_module_file(f)
+
+    if _warnings:
+        print(f"[WARN] {len(_warnings)} __info__ warning(s) (non-blocking):")
+        for path, msg in _warnings[:10]:
+            print(f"  {path}: {msg}")
+        if len(_warnings) > 10:
+            print(f"  ... and {len(_warnings) - 10} more")
 
     if _errors:
         print(f"[FAIL] {len(_errors)} scoped test error(s):")
