@@ -19,8 +19,11 @@ jobs:
         with:
           enable-cache: true
           python-version: "3.12"
-      # uvx runs ruff in its own tool environment — no venv or --system needed
-      - run: uvx ruff check .
+      - name: Create virtualenv
+        run: uv venv .venv
+      - name: Install ruff
+        run: uv pip install 'ruff>=0.4'
+      - run: uv run ruff check .
 
   typecheck:
     name: "mypy typecheck"

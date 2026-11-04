@@ -80,7 +80,12 @@ jobs:
         run: uv run python tools/run_scoped_tests.py
 
       - name: Validate Python syntax compilation
-        run: uv run python -m compileall -q embedxpl tools
+        # Exclude intentionally-legacy Python 2 directories (Triton malware artifact,
+        # Tenable PoCs, EDB exploits) — these are forensic research files, not runtime code.
+        run: |
+          uv run python -m compileall -q \
+            -x "embedxpl/malware_research|embedxpl/engines/fingerprint/tenable|embedxpl/modules/exploits" \
+            embedxpl tools
 
       - name: Validate market priority yearly minimums
         run: uv run python tools/validate_market_priority_minimums.py
