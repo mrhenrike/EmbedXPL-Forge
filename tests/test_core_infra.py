@@ -2,14 +2,11 @@
 hardware.py, multi_lang_module.py, banner.py, and related infra modules."""
 
 import json
-import os
 import threading
-import time
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
-
 
 # ── Config ──
 
@@ -212,17 +209,17 @@ class TestSmartPool:
         assert pool.max_workers > 0
 
     def test_threads_strategy(self):
-        from embedxpl.core.pool import SmartPool, PoolStrategy
+        from embedxpl.core.pool import PoolStrategy, SmartPool
         pool = SmartPool(strategy=PoolStrategy.THREADS)
         assert pool.strategy == "threads"
 
     def test_processes_strategy(self):
-        from embedxpl.core.pool import SmartPool, PoolStrategy
+        from embedxpl.core.pool import PoolStrategy, SmartPool
         pool = SmartPool(strategy=PoolStrategy.PROCESSES)
         assert pool.strategy == "processes"
 
     def test_auto_strategy_low_workers(self):
-        from embedxpl.core.pool import SmartPool, PoolStrategy
+        from embedxpl.core.pool import PoolStrategy, SmartPool
         pool = SmartPool(max_workers=2, strategy=PoolStrategy.AUTO)
         assert pool.strategy == "threads"
 
@@ -359,7 +356,7 @@ class TestHWProfile:
         assert p.has_gpu() is False
 
     def test_has_gpu_true(self):
-        from embedxpl.core.hw_profiler import HWProfile, GPUDevice
+        from embedxpl.core.hw_profiler import GPUDevice, HWProfile
         p = HWProfile(gpus=[GPUDevice(name="G", vendor="v", backend="b")])
         assert p.has_gpu() is True
 
@@ -368,7 +365,7 @@ class TestHWProfile:
         assert HWProfile().gpu_summary() == "No GPU detected"
 
     def test_gpu_summary_with_gpu(self):
-        from embedxpl.core.hw_profiler import HWProfile, GPUDevice
+        from embedxpl.core.hw_profiler import GPUDevice, HWProfile
         p = HWProfile(gpus=[GPUDevice(name="RTX", vendor="nvidia", vram_mb=8192, backend="cuda")])
         s = p.gpu_summary()
         assert "RTX" in s
@@ -398,12 +395,12 @@ class TestHWReq:
         assert HWReq.UART_ADAPTER == "uart_ttl_adapter"
 
     def test_all_have_descriptions(self):
-        from embedxpl.core.hardware import HWReq, HARDWARE_DESCRIPTIONS
+        from embedxpl.core.hardware import HARDWARE_DESCRIPTIONS, HWReq
         for member in HWReq:
             assert member in HARDWARE_DESCRIPTIONS
 
     def test_all_have_examples(self):
-        from embedxpl.core.hardware import HWReq, HARDWARE_EXAMPLES
+        from embedxpl.core.hardware import HARDWARE_EXAMPLES, HWReq
         for member in HWReq:
             assert member in HARDWARE_EXAMPLES
             ex = HARDWARE_EXAMPLES[member]

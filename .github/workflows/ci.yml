@@ -9,6 +9,9 @@ on:
 permissions:
   contents: read
 
+env:
+  UV_SYSTEM_PYTHON: "true"
+
 jobs:
   lint:
     name: "ruff lint"
@@ -18,7 +21,8 @@ jobs:
       - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
-      - run: uv tool run ruff check .
+      - run: uv pip install ruff
+      - run: ruff check .
 
   typecheck:
     name: "mypy typecheck"
@@ -28,12 +32,13 @@ jobs:
       - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
+          python-version: "3.12"
       - name: Install dependencies
         run: |
-          uv pip install --system mypy
-          uv pip install --system git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
-          uv pip install --system -e ".[dev]" || uv pip install --system -e .
-      - run: uv tool run mypy embedxpl/
+          uv pip install mypy
+          uv pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
+          uv pip install -e ".[dev]" || uv pip install -e .
+      - run: mypy embedxpl/
 
   test:
     name: "pytest / py${{ matrix.python-version }}"
@@ -50,7 +55,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          uv pip install --system pytest pytest-cov
-          uv pip install --system git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
-          uv pip install --system -e ".[dev]" || uv pip install --system -e .
+          uv pip install pytest pytest-cov
+          uv pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
+          uv pip install -e ".[dev]" || uv pip install -e .
       - run: pytest tests/ -v --tb=short

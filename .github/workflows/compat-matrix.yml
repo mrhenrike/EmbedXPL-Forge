@@ -9,6 +9,9 @@ on:
 permissions:
   contents: write
 
+env:
+  UV_SYSTEM_PYTHON: "true"
+
 jobs:
   smoke:
     name: "${{ matrix.os }} / py${{ matrix.python-version }}"
