@@ -292,7 +292,7 @@ def format_report(metrics: dict, filepath: str) -> str:
 
 
 def _char_to_mask_token(ch: str) -> str:
-    """Converte um caractere para o token de máscara Hashcat correspondente."""
+    """Convert a character to its corresponding Hashcat mask token."""
     if ch.isupper():
         return "?u"
     if ch.islower():
@@ -307,21 +307,21 @@ def analyze_masks(
     top_n: int = 20,
 ) -> dict:
     """
-    Analisa máscaras de senha estilo Hashcat a partir de uma wordlist.
+    Analyze Hashcat-style password masks from a wordlist.
 
-    Converte cada entrada para uma máscara (ex: 'Admin@123' → '?u?l?l?l?l?s?d?d?d')
-    e conta as máscaras mais frequentes. Útil para criar regras de ataque direcionadas.
+    Converts each entry to a mask (e.g. 'Admin@123' → '?u?l?l?l?l?s?d?d?d')
+    and counts the most frequent masks. Useful for creating targeted attack rules.
 
     Args:
-        filepath: Caminho da wordlist.
-        top_n: Número de máscaras mais frequentes a listar.
+        filepath: Wordlist file path.
+        top_n: Number of most frequent masks to return.
 
     Returns:
-        Dict com 'mask_frequency' (Counter), 'top_masks' e 'unique_masks'.
+        Dict with 'mask_frequency' (Counter), 'top_masks' and 'unique_masks'.
     """
     path = Path(filepath)
     if not path.exists():
-        raise FileNotFoundError(f"Wordlist não encontrada: {filepath}")
+        raise FileNotFoundError(f"Wordlist not found: {filepath}")
 
     mask_counter: Counter = Counter()
     with path.open(encoding="utf-8", errors="replace") as f:
@@ -344,21 +344,21 @@ def extract_base_words(
     min_len: int = 4,
 ) -> list[str]:
     """
-    Extrai palavras-base removendo sufixos/prefixos numéricos e especiais.
+    Extract base words by stripping numeric and special-character suffixes/prefixes.
 
-    Por exemplo, 'password123!' → 'password', 'Admin@2024' → 'Admin'.
-    Útil para identificar o vocabulário raiz de uma wordlist comprometida.
+    For example, 'password123!' → 'password', 'Admin@2024' → 'Admin'.
+    Useful for identifying the root vocabulary of a compromised wordlist.
 
     Args:
-        filepath: Caminho da wordlist.
-        min_len: Comprimento mínimo da palavra-base extraída.
+        filepath: Wordlist file path.
+        min_len: Minimum length for extracted base words.
 
     Returns:
-        Lista de palavras-base únicas ordenadas.
+        Sorted list of unique base words.
     """
     path = Path(filepath)
     if not path.exists():
-        raise FileNotFoundError(f"Wordlist não encontrada: {filepath}")
+        raise FileNotFoundError(f"Wordlist not found: {filepath}")
 
     seen: set[str] = set()
     bases: list[str] = []
@@ -429,15 +429,15 @@ def analyze_char_position_frequency(
 
 def export_stats_json(metrics: dict, filepath: str, mask_data: Optional[dict] = None) -> str:
     """
-    Exporta métricas de análise em formato JSON.
+    Export analysis metrics as JSON.
 
     Args:
-        metrics: Dict retornado por analyze_wordlist().
-        filepath: Caminho da wordlist analisada (para metadados).
-        mask_data: Dict retornado por analyze_masks() (opcional).
+        metrics: Dict returned by analyze_wordlist().
+        filepath: Path of the analyzed wordlist (for metadata).
+        mask_data: Dict returned by analyze_masks() (optional).
 
     Returns:
-        String JSON formatada.
+        Formatted JSON string.
     """
     export: dict = {
         "source": filepath,
@@ -476,14 +476,14 @@ def export_stats_json(metrics: dict, filepath: str, mask_data: Optional[dict] = 
 
 def export_stats_csv(metrics: dict, mask_data: Optional[dict] = None) -> str:
     """
-    Exporta distribuição de comprimento e top senhas em formato CSV.
+    Export length distribution and top passwords as CSV.
 
     Args:
-        metrics: Dict retornado por analyze_wordlist().
-        mask_data: Dict retornado por analyze_masks() (opcional).
+        metrics: Dict returned by analyze_wordlist().
+        mask_data: Dict returned by analyze_masks() (optional).
 
     Returns:
-        String CSV completa.
+        Complete CSV string.
     """
     buf = io.StringIO()
     writer = csv.writer(buf)
@@ -593,13 +593,13 @@ def export_stats_markdown(
 
 def format_mask_report(mask_data: dict) -> str:
     """
-    Formata relatório de análise de máscaras Hashcat.
+    Format Hashcat mask analysis report.
 
     Args:
-        mask_data: Dict retornado por analyze_masks().
+        mask_data: Dict returned by analyze_masks().
 
     Returns:
-        String formatada do relatório de máscaras.
+        Formatted mask report string.
     """
     lines: list[str] = []
     lines.append("=" * 60)
