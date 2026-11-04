@@ -41,8 +41,8 @@ coverage.xml
 .mypy_cache/
 .ruff_cache/
 
-# === Dev tooling (removido do repo) ===
-/tools/
+# === Dev tooling ===
+/tools/__pycache__/
 .githooks/
 .travis.yml
 .travis/
