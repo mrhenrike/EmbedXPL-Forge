@@ -9,9 +9,6 @@ on:
 permissions:
   contents: read
 
-env:
-  UV_SYSTEM_PYTHON: "true"
-
 jobs:
   lint:
     name: "ruff lint"
@@ -21,6 +18,7 @@ jobs:
       - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
+          python-version: "3.12"
       - run: uv pip install ruff
       - run: ruff check .
 
