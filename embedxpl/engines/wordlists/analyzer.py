@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 _NUM_RE = re.compile(r"\d")
 _SPECIAL_RE = re.compile(r"[^a-zA-Z0-9]")
 _LETTER_RE = re.compile(r"[a-zA-ZÀ-ÿ]")
-# Regex para strip de sufixo numérico/especial ao extrair palavras-base
+# Regex to strip numeric/special suffix when extracting base words
 _TRAILING_JUNK_RE = re.compile(r"[^a-zA-ZÀ-ÿ]+$")
 _LEADING_JUNK_RE = re.compile(r"^[^a-zA-ZÀ-ÿ]+")
 
@@ -99,19 +99,19 @@ def analyze_wordlist(
     top_n: int = 20,
 ) -> dict:
     """
-    Analisa uma wordlist e retorna métricas estatísticas.
+    Analyze a wordlist and return statistical metrics.
 
     Args:
-        filepath: Caminho da wordlist.
-        top_n: Número de entradas mais frequentes a listar.
+        filepath: Wordlist path.
+        top_n: Number of most frequent entries to list.
 
     Returns:
-        Dict com métricas: total, unique, duplicates, length_distribution,
+        Dict with metrics: total, unique, duplicates, length_distribution,
         char_types, top_passwords, number_positions, special_positions.
     """
     path = Path(filepath)
     if not path.exists():
-        raise FileNotFoundError(f"Wordlist não encontrada: {filepath}")
+        raise FileNotFoundError(f"Wordlist not found: {filepath}")
 
     entries: list[str] = []
     with path.open(encoding="utf-8", errors="replace") as f:
@@ -125,14 +125,14 @@ def analyze_wordlist(
     unique = len(counter)
     duplicates = total - unique
 
-    # Distribuição de comprimentos
+    # Length distribution
     lengths = [len(e) for e in entries]
     length_dist: Counter = Counter(lengths)
     min_len = min(lengths) if lengths else 0
     max_len = max(lengths) if lengths else 0
     avg_len = sum(lengths) / len(lengths) if lengths else 0
 
-    # Tipos de char
+    # Char types
     only_alpha = sum(1 for e in entries if e.isalpha())
     only_digits = sum(1 for e in entries if e.isdigit())
     only_lower = sum(1 for e in entries if e.islower())
@@ -144,11 +144,11 @@ def analyze_wordlist(
     # Top N
     top = counter.most_common(top_n)
 
-    # Posição de números
+    # Number positions
     num_start = sum(1 for e in entries if e and _NUM_RE.match(e[0]))
     num_end = sum(1 for e in entries if e and _NUM_RE.match(e[-1]))
 
-    # Posição de especiais
+    # Special character positions
     sp_start = sum(1 for e in entries if e and _SPECIAL_RE.match(e[0]))
     sp_end = sum(1 for e in entries if e and _SPECIAL_RE.match(e[-1]))
 
@@ -238,50 +238,50 @@ def analyze_wordlist(
 
 def format_report(metrics: dict, filepath: str) -> str:
     """
-    Formata métricas de análise em relatório texto.
+    Format analysis metrics into a text report.
 
     Args:
-        metrics: Dict retornado por analyze_wordlist().
-        filepath: Caminho da wordlist analisada.
+        metrics: Dict returned by analyze_wordlist().
+        filepath: Path of the analyzed wordlist.
 
     Returns:
-        String formatada do relatório.
+        Formatted report string.
     """
     lines: list[str] = []
     lines.append("=" * 60)
-    lines.append(f"Análise de Wordlist: {filepath}")
+    lines.append(f"Wordlist Analysis: {filepath}")
     lines.append("=" * 60)
-    lines.append(f"Total de entradas:  {metrics['total']:,}")
-    lines.append(f"Entradas únicas:    {metrics['unique']:,}")
-    lines.append(f"Duplicatas:         {metrics['duplicates']:,}")
-    lines.append(f"Comprimento: min={metrics['min_length']}  max={metrics['max_length']}  "
-                 f"média={metrics['avg_length']}")
+    lines.append(f"Total entries:    {metrics['total']:,}")
+    lines.append(f"Unique entries:   {metrics['unique']:,}")
+    lines.append(f"Duplicates:       {metrics['duplicates']:,}")
+    lines.append(f"Length: min={metrics['min_length']}  max={metrics['max_length']}  "
+                 f"avg={metrics['avg_length']}")
     lines.append("")
-    lines.append("--- Tipos de Caractere ---")
+    lines.append("--- Character Types ---")
     ct = metrics["char_types"]
-    lines.append(f"  Só letras:          {ct['only_alpha']:,}")
-    lines.append(f"  Só dígitos:         {ct['only_digits']:,}")
-    lines.append(f"  Só minúsculas:      {ct['only_lower']:,}")
-    lines.append(f"  Só maiúsculas:      {ct['only_upper']:,}")
-    lines.append(f"  Tem especial:       {ct['has_special']:,}")
-    lines.append(f"  Tem número:         {ct['has_number']:,}")
-    lines.append(f"  Misto letra+num:    {ct['mixed']:,}")
+    lines.append(f"  Alpha only:         {ct['only_alpha']:,}")
+    lines.append(f"  Digits only:        {ct['only_digits']:,}")
+    lines.append(f"  Lowercase only:     {ct['only_lower']:,}")
+    lines.append(f"  Uppercase only:     {ct['only_upper']:,}")
+    lines.append(f"  Has special:        {ct['has_special']:,}")
+    lines.append(f"  Has number:         {ct['has_number']:,}")
+    lines.append(f"  Mixed alpha+num:    {ct['mixed']:,}")
     lines.append("")
-    lines.append("--- Posição de Números ---")
+    lines.append("--- Number Positions ---")
     np_ = metrics["number_positions"]
-    lines.append(f"  Começa com número:  {np_['starts_with_number']:,}")
-    lines.append(f"  Termina com número: {np_['ends_with_number']:,}")
+    lines.append(f"  Starts with number: {np_['starts_with_number']:,}")
+    lines.append(f"  Ends with number:   {np_['ends_with_number']:,}")
     lines.append("")
-    lines.append("--- Posição de Especiais ---")
+    lines.append("--- Special Positions ---")
     sp = metrics["special_positions"]
-    lines.append(f"  Começa com especial:  {sp['starts_with_special']:,}")
-    lines.append(f"  Termina com especial: {sp['ends_with_special']:,}")
+    lines.append(f"  Starts with special:  {sp['starts_with_special']:,}")
+    lines.append(f"  Ends with special:    {sp['ends_with_special']:,}")
     lines.append("")
-    lines.append(f"--- Top {len(metrics['top_passwords'])} Entradas Mais Frequentes ---")
+    lines.append(f"--- Top {len(metrics['top_passwords'])} Most Frequent Entries ---")
     for i, (entry, count) in enumerate(metrics["top_passwords"], 1):
         lines.append(f"  {i:3d}. {entry!r} ({count}x)")
     lines.append("")
-    lines.append("--- Distribuição por Comprimento ---")
+    lines.append("--- Length Distribution ---")
     for length, count in sorted(metrics["length_distribution"].items()):
         pct = count / metrics["total"] * 100 if metrics["total"] else 0
         bar = "█" * int(pct / 2)

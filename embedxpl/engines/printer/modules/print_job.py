@@ -1107,8 +1107,8 @@ def send_os_print(path: str, printer_name: str = '',
                     file_path=path, file_size=p.stat().st_size,
                     elapsed_ms=(time.time() - t0) * 1000,
                     error=f'OS print failed (rc={r.returncode}): {stderr}',
-                    hint=('Verifique se a impressora está instalada em Configurações → '
-                          'Impressoras. Execute --install-printer para adicioná-la.'),
+                    hint=('Check that the printer is installed in Settings → '
+                          'Printers. Run --install-printer to add it.'),
                 )
         else:
             lpr = shutil.which('lpr') or shutil.which('lp')
@@ -1265,9 +1265,9 @@ def send_print_job(
             _log.info("All network protocols failed for %s — OS printing may work", path)
             if not result.hint:
                 result.hint = (
-                    "Não foi possível imprimir via protocolos de rede (IPP/LPD). "
-                    "Tente instalar a impressora no SO com --install-printer e "
-                    "imprimir normalmente pelo spooler do sistema operacional."
+                    "Could not print via network protocols (IPP/LPD). "
+                    "Try installing the printer in the OS with --install-printer and "
+                    "printing normally through the operating system spooler."
                 )
 
     elif proto == 'lpd':
@@ -1275,9 +1275,8 @@ def send_print_job(
                           job_name=p.stem, timeout=timeout)
         if not result.success and not result.hint:
             result.hint = (
-                "Falha no envio via LPD. Se a impressora estiver instalada "
-                "localmente via driver do SO, tente imprimir normalmente. "
-                "Caso contrário, use --install-printer."
+                "LPD send failed. If the printer is installed locally via "
+                "OS driver, try printing normally. Otherwise, use --install-printer."
             )
     else:
         return PrintJobResult(
