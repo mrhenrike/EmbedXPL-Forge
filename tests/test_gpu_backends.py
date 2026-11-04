@@ -6,8 +6,9 @@ auto-selection logic, and structural compliance of GPU-specific backends
 """
 from __future__ import annotations
 
-import numpy as np
 import pytest
+
+np = pytest.importorskip("numpy", reason="numpy not installed (pip install embedxpl[ml])")
 
 from embedxpl.core.gpu.backend import ComputeBackend, auto_select_backend
 from embedxpl.core.gpu.cpu_backend import CPUBackend
