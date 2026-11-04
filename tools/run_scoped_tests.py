@@ -21,6 +21,10 @@ REQUIRED_INFO_KEYS = {"name", "description", "authors", "references", "targets"}
 MODULES_DIR = ROOT / "embedxpl" / "modules"
 _errors: List[Tuple[str, str]] = []
 
+# Directories/patterns excluded from syntax checks (Python 2 PoCs, lab code, etc.)
+_SKIP_DIRS = {"__pycache__", "lab", "malware_research"}
+_SKIP_PATTERNS = ("edb_",)  # ExploitDB Python 2 PoCs
+
 
 def check_module_file(path: Path) -> None:
     """Compile and basic-validate one module file."""
@@ -46,7 +50,9 @@ def run() -> int:
 
     files = [
         f for f in MODULES_DIR.rglob("*.py")
-        if f.name != "__init__.py" and "__pycache__" not in f.parts
+        if f.name != "__init__.py"
+        and not any(skip in f.parts for skip in _SKIP_DIRS)
+        and not any(f.name.startswith(pat) for pat in _SKIP_PATTERNS)
     ]
 
     for f in files:
