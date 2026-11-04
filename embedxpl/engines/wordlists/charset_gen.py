@@ -50,7 +50,7 @@ BUILTIN_CHARSETS: dict[str, str] = {
     "hex-upper":       "0123456789ABCDEF",
 }
 
-# Mapeamento de placeholders estilo Crunch
+# Crunch-style placeholder map
 PLACEHOLDER_MAP: dict[str, str] = {
     "@": BUILTIN_CHARSETS["lalpha"],
     ",": BUILTIN_CHARSETS["ualpha"],
@@ -58,7 +58,7 @@ PLACEHOLDER_MAP: dict[str, str] = {
     "^": BUILTIN_CHARSETS["special"],
 }
 
-# Mapeamento de placeholders estilo Hashcat (?u ?l ?d ?s ?a)
+# Hashcat-style placeholder map (?u ?l ?d ?s ?a)
 HASHCAT_MASK_MAP: dict[str, str] = {
     "?u": BUILTIN_CHARSETS["ualpha"],
     "?l": BUILTIN_CHARSETS["lalpha"],
@@ -69,7 +69,7 @@ HASHCAT_MASK_MAP: dict[str, str] = {
     "?H": "0123456789ABCDEF",
 }
 
-# DDDs brasileiros para modo phone
+# Brazilian DDDs for phone mode
 DDDS_BR = [
     "11", "12", "13", "14", "15", "16", "17", "18", "19",
     "21", "22", "24", "27", "28",

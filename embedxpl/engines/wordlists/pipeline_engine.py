@@ -1,16 +1,16 @@
 """
-pipeline_engine.py - Orquestrador multi-estágio para geração de wordlists de perfil.
+pipeline_engine.py - Multi-stage orchestrator for profile-based wordlist generation.
 
-Coordena os motores de geração na ordem correta, com deduplicação streaming,
-controle de limite/timeout, e feedback loop contra alvos conhecidos.
+Coordinates generation engines in the correct order, with streaming deduplication,
+limit/timeout control, and feedback loop against known targets.
 
-Pipeline padrão (profile OSINT):
+Default pipeline (OSINT profile):
   1. Profiler core (tokens + depth combos + date tokens + CUPP)
-  2. Módulos órfãos (osint_perm, password_dna, pattern_engine, num2text)
-  3. Pós-processamento (rsmangler, builtin_mangle, prince)
+  2. Orphan modules (osint_perm, password_dna, pattern_engine, num2text)
+  3. Post-processing (rsmangler, builtin_mangle, prince)
   4. Ranking (pattern_ranker, anomaly_scorer)
   5. Feedback loop (benchmark vs known_targets)
-  6. Finalização (sanitize + sort + archive export)
+  6. Finalization (sanitize + sort + archive export)
 
 Author: André Henrique (@mrhenrike)
 """
@@ -30,49 +30,49 @@ _PROJECT_TMP = _PROJECT_ROOT / ".tmp"
 _PROJECT_TMP.mkdir(parents=True, exist_ok=True)
 
 
-# ── Configuração de pipeline ───────────────────────────────────────────────────
+# ── Pipeline configuration ─────────────────────────────────────────────────────
 
 @dataclass
 class PipelineConfig:
-    """Configuração completa de um pipeline de geração."""
+    """Full configuration for a generation pipeline."""
 
-    # Seleção de motores
+    # Engine selection
     engine_ids: set[int] = field(default_factory=lambda: set())
     engine_preset: str = "default"  # light | medium | potent | nuclear | default
 
-    # Limites globais
-    max_candidates: int = 0   # 0 = ilimitado
-    timeout_secs: float = 0.0  # 0 = sem timeout
+    # Global limits
+    max_candidates: int = 0   # 0 = unlimited
+    timeout_secs: float = 0.0  # 0 = no timeout
     min_len: int = 6
     max_len: int = 32
 
     # Locale
     locale: str = "en"
 
-    # Alvos conhecidos (para feedback loop pós-geração)
+    # Known targets (for post-generation feedback loop)
     known_targets: list[str] = field(default_factory=list)
 
-    # Profundidade de combinações
+    # Combination depth
     depth: int = 3
 
-    # Opções de mangling
+    # Mangling options
     leet_mode: str = "basic"
     with_spaces: bool = False
 
-    # Opções de saída final
+    # Final output options
     output_path: str = ""
     output_format: str = "lst"  # lst | txt | tar | tar.gz | zip
     sanitize: bool = True
     dedupe: bool = True
     sort: str = "none"  # none | alpha | alpha-desc | length | length-desc
 
-    # Mutações de keywords
+    # Keyword mutations
     keyword_mutations_enabled: bool = False
     keyword_mutations_modes: list[str] = field(default_factory=list)
 
     @classmethod
     def from_profile(cls, profile: dict) -> "PipelineConfig":
-        """Constrói PipelineConfig a partir de um dict de perfil."""
+        """Build PipelineConfig from a profile dict."""
         cfg = cls()
         cfg.locale      = profile.get("locale", "en")
         cfg.depth       = profile.get("depth", 3)
@@ -115,10 +115,10 @@ class PipelineConfig:
         return cfg
 
 
-# ── Deduplicação CRC32 streaming ──────────────────────────────────────────────
+# ── CRC32 streaming deduplication ─────────────────────────────────────────────
 
 class CRC32Deduplicator:
-    """Deduplicador leve usando CRC32 (menor footprint que set[str])."""
+    """Lightweight deduplicator using CRC32 (smaller footprint than set[str])."""
 
     def __init__(self) -> None:
         self._seen: set[int] = set()
@@ -140,13 +140,13 @@ class CRC32Deduplicator:
         self.count_duped = 0
 
 
-# ── Orquestrador principal ─────────────────────────────────────────────────────
+# ── Main orchestrator ──────────────────────────────────────────────────────────
 
 class ProfilePipeline:
     """
-    Orquestrador multi-estágio para geração de wordlist de perfil.
+    Multi-stage orchestrator for profile-based wordlist generation.
 
-    Uso:
+    Usage:
         pipeline = ProfilePipeline(profile, config)
         for word in pipeline.run():
             write(word)
@@ -162,17 +162,17 @@ class ProfilePipeline:
         self._word_count: int = 0
 
     def _active_engines(self) -> set[int]:
-        """Resolve o set final de motores ativos."""
+        """Resolve the final set of active engines."""
         if self.config.engine_ids:
             return self.config.engine_ids
         try:
             from embedxpl.engines.wordlists.generation_engines import resolve_engines
             return resolve_engines(None)
         except ImportError:
-            return set(range(1, 16))  # fallback: motores 1-15
+            return set(range(1, 16))  # fallback: engines 1-15
 
     def _within_limits(self) -> bool:
-        """Retorna False se limite de candidatos ou timeout atingido."""
+        """Return False if candidate limit or timeout is reached."""
         if self.config.max_candidates and self._word_count >= self.config.max_candidates:
             return False
         if self.config.timeout_secs and (time.time() - self._start_time) >= self.config.timeout_secs:
@@ -180,7 +180,7 @@ class ProfilePipeline:
         return True
 
     def _emit(self, word: str) -> Optional[str]:
-        """Filtra por len e dedup; retorna a palavra ou None."""
+        """Filter by length and dedup; return the word or None."""
         word = word.strip()
         if not word:
             return None
@@ -243,14 +243,14 @@ class ProfilePipeline:
         return {k: v for k, v in variables.items() if v}
 
     def _run_stage_profiler(self) -> Generator[str, None, None]:
-        """Estágio 1: geração core do profiler (motores 1-8, 12, 20, 24, 25)."""
+        """Stage 1: core profiler generation (engines 1-8, 12, 20, 24, 25)."""
         try:
             from embedxpl.engines.wordlists.profiler import generate_from_profile
         except ImportError:
             return
         engines = self._active_engines()
-        # O profiler executa todos os sub-geradores internamente
-        # Os motores ativos são passados via profile["_active_engines"]
+        # The profiler runs all sub-generators internally
+        # Active engines are passed via profile["_active_engines"]
         profile_with_engines = dict(self.profile)
         profile_with_engines["_active_engines"] = engines
         for word in generate_from_profile(profile_with_engines):
@@ -261,7 +261,7 @@ class ProfilePipeline:
                 yield result
 
     def _run_stage_keyword_mutations(self) -> Generator[str, None, None]:
-        """Estágio 2: mutações de keywords (motor 28)."""
+        """Stage 2: keyword mutations (engine 28)."""
         if not self.config.keyword_mutations_enabled:
             return
         engines = self._active_engines()
@@ -270,7 +270,7 @@ class ProfilePipeline:
         try:
             from embedxpl.engines.wordlists.keyword_mutations import MutationMode, mutate
         except ImportError:
-            logger.debug("keyword_mutations não disponível")
+            logger.debug("keyword_mutations not available")
             return
 
         modes = []
@@ -298,14 +298,14 @@ class ProfilePipeline:
                 yield result
 
     def _run_stage_rsmangler(self) -> Generator[str, None, None]:
-        """Estágio 3a: RSMangler pós-processamento (motor 11)."""
+        """Stage 3a: RSMangler post-processing (engine 11)."""
         engines = self._active_engines()
         if 11 not in engines:
             return
         try:
             from embedxpl.engines.wordlists.rsmangler_engine import ManglerOptions, mangle
         except ImportError:
-            logger.debug("rsmangler_engine não disponível")
+            logger.debug("rsmangler_engine not available")
             return
 
         name_tokens = []
@@ -335,14 +335,14 @@ class ProfilePipeline:
                 yield result
 
     def _run_stage_prince(self) -> Generator[str, None, None]:
-        """Estágio 3b: PRINCE chains (motor 10)."""
+        """Stage 3b: PRINCE chains (engine 10)."""
         engines = self._active_engines()
         if 10 not in engines:
             return
         try:
             from embedxpl.engines.wordlists.prince_engine import generate_prince_candidates
         except ImportError:
-            logger.debug("prince_engine não disponível")
+            logger.debug("prince_engine not available")
             return
 
         tokens = []
@@ -372,14 +372,14 @@ class ProfilePipeline:
             pass
 
     def _run_stage_osint_perm(self) -> Generator[str, None, None]:
-        """Estágio 4: OSINT permutações elpscrk-style (motor 17)."""
+        """Stage 4: OSINT permutations elpscrk-style (engine 17)."""
         engines = self._active_engines()
         if 17 not in engines:
             return
         try:
             from embedxpl.engines.wordlists.osint_perm import generate_osint_permutations
         except (ImportError, AttributeError):
-            logger.debug("osint_perm não disponível como generate_osint_permutations")
+            logger.debug("osint_perm not available as generate_osint_permutations")
             return
 
         try:
@@ -397,14 +397,14 @@ class ProfilePipeline:
             logger.debug("osint_perm error: %s", exc)
 
     def _run_stage_num2text(self) -> Generator[str, None, None]:
-        """Estágio 5: Anos/números por extenso multilíngue (motor 20)."""
+        """Stage 5: Years/numbers as multilingual text (engine 20)."""
         engines = self._active_engines()
         if 20 not in engines:
             return
         try:
             from embedxpl.engines.wordlists.num2text import num2text_variants
         except ImportError:
-            logger.debug("num2text não disponível")
+            logger.debug("num2text not available")
             return
 
         locale = self.config.locale
@@ -416,13 +416,13 @@ class ProfilePipeline:
             yr = self.profile.get(key)
             if yr and isinstance(yr, int) and 1900 <= yr <= 2100:
                 years_to_expand.append(yr)
-        # Também incluir year_range do DateProfile se disponível
+        # Also include year_range from DateProfile if available
         if self.profile.get("birth_year_min") and self.profile.get("birth_year_max"):
             for yr in range(self.profile["birth_year_min"], self.profile["birth_year_max"] + 1):
                 if yr not in years_to_expand:
                     years_to_expand.append(yr)
 
-        for yr in years_to_expand[:3]:  # limitar a 3 anos para não explodir
+        for yr in years_to_expand[:3]:  # limit to 3 years to avoid explosion
             try:
                 for word in num2text_variants(yr, lang=lang):
                     if not self._within_limits():
@@ -434,7 +434,7 @@ class ProfilePipeline:
                 logger.debug("num2text error for %d: %s", yr, exc)
 
     def _run_stage_password_dna(self) -> Generator[str, None, None]:
-        """Estágio 6: Password DNA mutations (motor 14), só se old_passwords."""
+        """Stage 6: Password DNA mutations (engine 14), only if old_passwords."""
         engines = self._active_engines()
         if 14 not in engines:
             return
@@ -444,7 +444,7 @@ class ProfilePipeline:
         try:
             from embedxpl.engines.wordlists.password_dna import PasswordDNA
         except ImportError:
-            logger.debug("password_dna não disponível")
+            logger.debug("password_dna not available")
             return
 
         try:
@@ -459,7 +459,7 @@ class ProfilePipeline:
             logger.debug("password_dna error: %s", exc)
 
     def _run_stage_pattern_engine(self) -> Generator[str, None, None]:
-        """Estágio 7: Pattern templates estruturados (motor 21), se patterns configurados."""
+        """Stage 7: Structured pattern templates (engine 21), if patterns configured."""
         engines = self._active_engines()
         if 21 not in engines:
             return
@@ -492,7 +492,7 @@ class ProfilePipeline:
             logger.debug("pattern_engine error: %s", exc)
 
     def _run_stage_builtin_mangle(self) -> Generator[str, None, None]:
-        """Estágio: builtin mangling rules (motor 12)."""
+        """Stage: builtin mangling rules (engine 12)."""
         engines = self._active_engines()
         if 12 not in engines:
             return
@@ -514,7 +514,7 @@ class ProfilePipeline:
             logger.debug("builtin_mangle error: %s", exc)
 
     def _run_stage_pymangler_masks(self) -> Generator[str, None, None]:
-        """Estágio: PyMangler mask expansion (profile pymangler block or motor 12)."""
+        """Stage: PyMangler mask expansion (profile pymangler block or engine 12)."""
         engines = self._active_engines()
         pm = self.profile.get("pymangler") or {}
         enabled = pm.get("enabled", 12 in engines)
@@ -546,14 +546,14 @@ class ProfilePipeline:
             logger.debug("pymangler_masks error: %s", exc)
 
     def _run_stage_cupp(self) -> Generator[str, None, None]:
-        """Estágio: CUPP engine concat combos (motor 8)."""
+        """Stage: CUPP engine concat combos (engine 8)."""
         engines = self._active_engines()
         if 8 not in engines:
             return
         try:
             from embedxpl.engines.wordlists.cupp_engine import CuppEngine, CuppProfile
         except ImportError:
-            logger.debug("cupp_engine não disponível")
+            logger.debug("cupp_engine not available")
             return
 
         full = (self.profile.get("full_name") or "").strip()
@@ -603,7 +603,7 @@ class ProfilePipeline:
                 yield result
 
     def _run_stage_positional_leet(self) -> Generator[str, None, None]:
-        """Estágio: combinatorial leet perm post-pass (motor 23)."""
+        """Stage: combinatorial leet perm post-pass (engine 23)."""
         engines = self._active_engines()
         if 23 not in engines:
             return
@@ -623,14 +623,14 @@ class ProfilePipeline:
             logger.debug("positional_leet error: %s", exc)
 
     def _run_stage_pcfg(self) -> Generator[str, None, None]:
-        """Estágio: PCFG hybrid generation (motor 18)."""
+        """Stage: PCFG hybrid generation (engine 18)."""
         engines = self._active_engines()
         if 18 not in engines:
             return
         try:
             from embedxpl.engines.wordlists.pcfg_engine import PCFGGrammar
         except ImportError:
-            logger.debug("pcfg_engine não disponível")
+            logger.debug("pcfg_engine not available")
             return
 
         grammar = PCFGGrammar()
@@ -670,7 +670,7 @@ class ProfilePipeline:
             logger.debug("pcfg error: %s", exc)
 
     def _run_stage_rulegen(self) -> Generator[str, None, None]:
-        """Estágio 8: Rule generation de senhas conhecidas (motor 22)."""
+        """Stage 8: Rule generation from known passwords (engine 22)."""
         engines = self._active_engines()
         if 22 not in engines:
             return
@@ -680,7 +680,7 @@ class ProfilePipeline:
         try:
             from embedxpl.engines.wordlists.rulegen_engine import generate_rule_variants
         except (ImportError, AttributeError):
-            logger.debug("rulegen_engine.generate_rule_variants não disponível")
+            logger.debug("rulegen_engine.generate_rule_variants not available")
             return
 
         tokens = []
@@ -702,14 +702,14 @@ class ProfilePipeline:
             logger.debug("rulegen error: %s", exc)
 
     def _run_stage_markov(self) -> Generator[str, None, None]:
-        """Estágio: OMEN Markov generation (motor 19)."""
+        """Stage: OMEN Markov generation (engine 19)."""
         engines = self._active_engines()
         if 19 not in engines:
             return
         try:
             from embedxpl.engines.wordlists.markov_engine import MarkovModel
         except ImportError:
-            logger.debug("markov_engine não disponível")
+            logger.debug("markov_engine not available")
             return
 
         mk = self.profile.get("markov") or {}
@@ -732,7 +732,7 @@ class ProfilePipeline:
                     )
 
         if model.total_trained == 0:
-            logger.debug("markov: sem corpus de treino; pulando estágio")
+            logger.debug("markov: no training corpus; skipping stage")
             return
 
         max_cand = int(mk.get("max_candidates", 2000))
@@ -753,7 +753,7 @@ class ProfilePipeline:
             logger.debug("markov error: %s", exc)
 
     def _run_stage_osint_scrape(self) -> Generator[str, None, None]:
-        """Estágio: OSINT web scrape tokens (motor 13)."""
+        """Stage: OSINT web scrape tokens (engine 13)."""
         engines = self._active_engines()
         if 13 not in engines:
             return
@@ -819,7 +819,7 @@ class ProfilePipeline:
                 logger.debug("target_spider error for %s: %s", url, exc)
 
     def _run_stage_scrape_merge(self) -> Generator[str, None, None]:
-        """Estágio: merge de wordlists scrapeadas (motor 26)."""
+        """Stage: merge scraped wordlists (engine 26)."""
         engines = self._active_engines()
         if 26 not in engines:
             return
@@ -862,7 +862,7 @@ class ProfilePipeline:
                 logger.debug("scrape_merge read error %s: %s", path, exc)
 
     def _run_stage_cewl_mut(self) -> Generator[str, None, None]:
-        """Estágio 9: cewl_mut preset (scrape -> rsmangler -> john rules).
+        """Stage 9: cewl_mut preset (scrape -> rsmangler -> john rules).
 
         Requires profile to have a 'target_url' or 'cewl_wordlist' key.
         If 'target_url' is set, attempts to scrape words via web_scraper.
@@ -949,10 +949,10 @@ class ProfilePipeline:
 
     def run(self) -> Generator[str, None, None]:
         """
-        Executa todos os estágios em ordem, retornando um gerador de candidatos.
+        Execute all stages in order, returning a generator of candidates.
 
         Yields:
-            Strings únicas que passam pelos filtros de comprimento e deduplicação.
+            Unique strings that pass length and deduplication filters.
         """
         self._start_time = time.time()
         self._word_count = 0
@@ -981,7 +981,7 @@ class ProfilePipeline:
 
         for stage_name, stage_fn in stages:
             if not self._within_limits():
-                logger.info("Pipeline: limite atingido antes do estágio '%s'", stage_name)
+                logger.info("Pipeline: limit reached before stage '%s'", stage_name)
                 break
             stage_count = 0
             for word in stage_fn():
@@ -989,11 +989,11 @@ class ProfilePipeline:
                     break
                 stage_count += 1
                 yield word
-            logger.debug("Pipeline estágio '%s': %d candidatos", stage_name, stage_count)
+            logger.debug("Pipeline stage '%s': %d candidates", stage_name, stage_count)
 
         elapsed = time.time() - self._start_time
         logger.info(
-            "Pipeline concluído: %d candidatos únicos em %.1fs (dupes ignorados: %d)",
+            "Pipeline complete: %d unique candidates in %.1fs (dupes skipped: %d)",
             self._word_count,
             elapsed,
             self._dedup.count_duped,
@@ -1001,13 +1001,13 @@ class ProfilePipeline:
 
     def run_to_file(self, output_path: Optional[str] = None) -> dict:
         """
-        Executa o pipeline e escreve saída em arquivo.
+        Execute the pipeline and write output to a file.
 
         Args:
-            output_path: Caminho de saída (usa config.output_path se None).
+            output_path: Output path (uses config.output_path if None).
 
         Returns:
-            Dict com stats: lines_written, elapsed_secs, feedback (se known_targets).
+            Dict with stats: lines_written, elapsed_secs, feedback (if known_targets).
         """
         out = output_path or self.config.output_path
         if not out:
@@ -1029,7 +1029,7 @@ class ProfilePipeline:
             "elapsed_secs": round(elapsed, 2),
         }
 
-        # Post-rank passes (motors 15 / 16)
+        # Post-rank passes (engines 15 / 16)
         rank_info = self._apply_post_rank(str(out_path))
         if rank_info:
             result["post_rank"] = rank_info
@@ -1040,7 +1040,7 @@ class ProfilePipeline:
                 archive_result = self._run_archive_export(str(out_path))
                 result["archive"] = archive_result
             except Exception as exc:
-                logger.warning("archive_export falhou: %s", exc)
+                logger.warning("archive_export failed: %s", exc)
 
         # Feedback loop: benchmark vs known_targets (after final export)
         if self.config.known_targets:
@@ -1050,15 +1050,15 @@ class ProfilePipeline:
 
     def run_feedback(self, wordlist_path: Optional[str] = None) -> dict:
         """
-        Executa feedback loop: benchmark vs known_targets.
+        Run feedback loop: benchmark vs known_targets.
 
-        Se houver misses, sugere motores adicionais que aumentariam cobertura.
+        If there are misses, suggest additional engines that would improve coverage.
 
         Args:
-            wordlist_path: Caminho da wordlist gerada (usa output_path se None).
+            wordlist_path: Path to the generated wordlist (uses output_path if None).
 
         Returns:
-            Dict com resultado do benchmark e sugestões de motores.
+            Dict with benchmark result and engine suggestions.
         """
         if not self.config.known_targets:
             return {}
@@ -1070,7 +1070,7 @@ class ProfilePipeline:
 
         wl = wordlist_path or self.config.output_path
         if not wl or not Path(wl).exists():
-            return {"error": "wordlist não encontrada para feedback"}
+            return {"error": "wordlist not found for feedback"}
 
         fb = benchmark_known_targets(wl, self.config.known_targets)
 
@@ -1083,7 +1083,7 @@ class ProfilePipeline:
         return fb
 
     def _apply_post_rank(self, output_path: str) -> dict:
-        """Reordena wordlist final quando motores 15 ou 16 estão ativos."""
+        """Reorder final wordlist when engines 15 or 16 are active."""
         engines = self._active_engines()
         info: dict = {}
 
@@ -1115,7 +1115,7 @@ class ProfilePipeline:
                     "backend": rr.backend_used,
                 }
             except Exception as exc:
-                logger.warning("maya_rank post-pass falhou: %s", exc)
+                logger.warning("maya_rank post-pass failed: %s", exc)
                 info["maya_rank_error"] = str(exc)
             return info
 
@@ -1123,13 +1123,13 @@ class ProfilePipeline:
             try:
                 info["pattern_rank"] = self._post_rank_by_pattern(output_path)
             except Exception as exc:
-                logger.warning("pattern_rank post-pass falhou: %s", exc)
+                logger.warning("pattern_rank post-pass failed: %s", exc)
                 info["pattern_rank_error"] = str(exc)
 
         return info
 
     def _post_rank_by_pattern(self, output_path: str) -> dict:
-        """Ordena wordlist por score de keyboard-walk (motor 15)."""
+        """Sort wordlist by keyboard-walk score (engine 15)."""
         from embedxpl.engines.wordlists.pattern_ranker import score_keyboard_walk
 
         layout = str((self.profile.get("pattern_rank") or {}).get("layout", "qwerty"))
@@ -1158,11 +1158,11 @@ class ProfilePipeline:
         }
 
     def _run_archive_export(self, wordlist_path: str) -> dict:
-        """Pós-processa wordlist com sanitize/sort/export."""
+        """Post-process wordlist with sanitize/sort/export."""
         try:
             from embedxpl.engines.wordlists.archive_export import ExportFormat, ExportOptions, export_wordlist
         except ImportError:
-            logger.debug("archive_export não disponível")
+            logger.debug("archive_export not available")
             return {}
 
         fmt_map = {
@@ -1188,21 +1188,21 @@ class ProfilePipeline:
         return export_wordlist(wordlist_path, out, opts)
 
 
-# ── Sugestões de motores para misses ─────────────────────────────────────────
+# ── Engine suggestions for misses ─────────────────────────────────────────────
 
 def _suggest_engines_for_misses(
     missing_targets: list[str],
     config: PipelineConfig,
 ) -> list[str]:
     """
-    Analisa senhas não encontradas e sugere motores que aumentariam cobertura.
+    Analyze unfound passwords and suggest engines that would improve coverage.
 
-    Heurísticas baseadas em padrões dos alvos:
-    - Leet agressivo → motor 1 (token_variants com leet=aggressive)
-    - Separadores estruturados (_#@) → motor 11 (rsmangler), 21 (pattern_templates)
-    - Anos 1990-atual → motor 2 (date_tokens), 11 (years)
-    - Inversão de palavras → motor 9 (reversed_tokens), 28 (keyword_mutations)
-    - Combinações PRINCE → motor 10
+    Heuristics based on target patterns:
+    - Aggressive leet -> engine 1 (token_variants with leet=aggressive)
+    - Structured separators (_#@) -> engine 11 (rsmangler), 21 (pattern_templates)
+    - Years 1990-current -> engine 2 (date_tokens), 11 (years)
+    - Word reversal -> engine 9 (reversed_tokens), 28 (keyword_mutations)
+    - PRINCE combinations -> engine 10
     """
     suggestions = []
     engines = config.engine_ids
@@ -1214,20 +1214,20 @@ def _suggest_engines_for_misses(
         has_multi_token = len([c for c in pw if c.isupper()]) > 2
 
         if has_leet and 1 in engines:
-            suggestions.append("Use leet_mode=aggressive (motor 1) para cobrir substituicoes numericas")
+            suggestions.append("Use leet_mode=aggressive (engine 1) to cover numeric substitutions")
         if has_year and 11 not in engines:
-            suggestions.append("Habilitar motor 11 (rsmangler com --years) para sufixos/prefixos de anos")
+            suggestions.append("Enable engine 11 (rsmangler with --years) for year suffixes/prefixes")
         if has_sep and 21 not in engines:
-            suggestions.append("Habilitar motor 21 (pattern_templates) para padrões com separadores _#@")
+            suggestions.append("Enable engine 21 (pattern_templates) for patterns with _#@ separators")
         if has_multi_token and 10 not in engines:
-            suggestions.append("Habilitar motor 10 (PRINCE) para combinacoes multi-token (marca + pet + ano)")
+            suggestions.append("Enable engine 10 (PRINCE) for multi-token combinations (brand + pet + year)")
         if 28 not in engines:
-            suggestions.append("Habilitar motor 28 (keyword_mutations) para reversões de sílabas")
+            suggestions.append("Enable engine 28 (keyword_mutations) for syllable reversals")
 
-    return list(dict.fromkeys(suggestions))  # dedup preservando ordem
+    return list(dict.fromkeys(suggestions))  # dedup preserving order
 
 
-# ── Função de conveniência ────────────────────────────────────────────────────
+# ── Convenience function ───────────────────────────────────────────────────────
 
 def run_profile_pipeline(
     profile: dict,
@@ -1235,15 +1235,15 @@ def run_profile_pipeline(
     output_path: Optional[str] = None,
 ) -> dict:
     """
-    Executa o pipeline completo para um perfil e retorna estatísticas.
+    Execute the full pipeline for a profile and return statistics.
 
     Args:
-        profile: Dict de perfil (de load_profile_yaml ou interactive_profile).
-        config: Configuração opcional; derivada do profile se None.
-        output_path: Caminho de saída; usa profile['output_path'] se None.
+        profile: Profile dict (from load_profile_yaml or interactive_profile).
+        config: Optional configuration; derived from profile if None.
+        output_path: Output path; uses profile['output_path'] if None.
 
     Returns:
-        Dict com stats: lines_written, elapsed_secs, feedback (se known_targets).
+        Dict with stats: lines_written, elapsed_secs, feedback (if known_targets).
     """
     if config is None:
         config = PipelineConfig.from_profile(profile)

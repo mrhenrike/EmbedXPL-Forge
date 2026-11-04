@@ -161,13 +161,13 @@ def load_profile_yaml(filepath: str) -> dict:
 
 def _normalize_date_fields(data: dict) -> dict:
     """
-    Normaliza campos de data do perfil YAML para o formato legado esperado pelo profiler.
+    Normalize YAML profile date fields to the legacy format expected by the profiler.
 
-    Suporta dois formatos:
-      - Legado: birth_day, birth_month, birth_year como inteiros separados.
-      - Estruturado: birth: {mode: age_sign, age: 26, sign: touro} ou birth: "dd/mm/yyyy".
+    Supports two formats:
+      - Legacy: birth_day, birth_month, birth_year as separate integers.
+      - Structured: birth: {mode: age_sign, age: 26, sign: taurus} or birth: "dd/mm/yyyy".
 
-    Também processa ``hire`` para entidades corporativas (mesma lógica).
+    Also processes ``hire`` for corporate entities (same logic).
     """
     try:
         from embedxpl.engines.wordlists.date_profile import build_date_tokens, date_profile_from_yaml
@@ -177,31 +177,31 @@ def _normalize_date_fields(data: dict) -> dict:
 
     locale = data.get("locale") or get_session_locale()
 
-    # ── Campo birth ────────────────────────────────────────────────────────────
+    # ── Birth field ────────────────────────────────────────────────────────────
     birth_raw = data.get("birth")
     if birth_raw is not None and not isinstance(birth_raw, int):
         dp = date_profile_from_yaml(birth_raw, locale)
         if dp:
             dp_dict = dp.to_dict()
-            # Preservar campos legados: só sobrescrever se ainda em zero (não definidos)
+            # Preserve legacy fields: only overwrite if still zero (not set)
             if not data.get("birth_day"):
                 data["birth_day"] = dp_dict["birth_day"]
             if not data.get("birth_month"):
                 data["birth_month"] = dp_dict["birth_month"]
             if not data.get("birth_year"):
                 data["birth_year"] = dp_dict["birth_year"]
-            # Campos novos (sem conflito com legado)
+            # New fields (no conflict with legacy)
             data["birth_mode"] = dp_dict["birth_mode"]
             data["birth_age"] = dp_dict["birth_age"]
             data["birth_sign_index"] = dp_dict["birth_sign_index"]
             data["birth_year_min"] = dp_dict["birth_year_min"]
             data["birth_year_max"] = dp_dict["birth_year_max"]
             data["birth_locale"] = dp_dict["birth_locale"]
-            # Pré-calcular tokens de data para uso posterior
+            # Pre-compute date tokens for later use
             data.setdefault("_date_tokens", [])
             data["_date_tokens"] = build_date_tokens(dp, locale)
 
-    # ── Campo hire (empresa) ───────────────────────────────────────────────────
+    # ── Hire field (corporate entity) ─────────────────────────────────────────
     hire_raw = data.get("hire")
     if hire_raw is not None and not isinstance(hire_raw, int):
         dp = date_profile_from_yaml(hire_raw, locale)
@@ -218,7 +218,7 @@ def _normalize_date_fields(data: dict) -> dict:
             data.setdefault("_hire_date_tokens", [])
             data["_hire_date_tokens"] = build_date_tokens(dp, locale)
 
-    # ── Normalizar partner birth estruturado ──────────────────────────────────
+    # ── Normalize structured partner birth ────────────────────────────────────
     if isinstance(data.get("partner"), dict):
         partner = data["partner"]
         pb_raw = partner.get("birth")

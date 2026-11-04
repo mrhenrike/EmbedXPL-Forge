@@ -1,14 +1,14 @@
 """
-date_profile.py - Perfil de data flexível para geração de wordlists.
+date_profile.py - Flexible date profile for wordlist generation.
 
-Substitui o tratamento limitado de datas em profiler.py, suportando:
-  - Data completa (dd/mm/yyyy)
-  - Mês e ano (mm/yyyy)
-  - Apenas ano (yyyy)
-  - Idade aproximada (deriva janela de anos possíveis)
-  - Idade + signo do zodíaco (sem precisar da data exata)
+Replaces the limited date handling in profiler.py, supporting:
+  - Full date (dd/mm/yyyy)
+  - Month and year (mm/yyyy)
+  - Year only (yyyy)
+  - Approximate age (derives a window of possible birth years)
+  - Age + zodiac sign (without needing the exact date)
 
-Integra com i18n para tokens multilíngues de meses, signos, elementos e regentes.
+Integrates with i18n for multilingual tokens: months, signs, elements, and rulers.
 
 Author: André Henrique (@mrhenrike)
 """
@@ -42,13 +42,13 @@ _CURRENT_YEAR = datetime.now().year
 # ── Enums ─────────────────────────────────────────────────────────────────────
 
 class DateMode(str, Enum):
-    """Modo de entrada de data do usuário."""
+    """User date input mode."""
     FULL = "full"            # dd/mm/yyyy
     MONTH_YEAR = "month_year"  # mm/yyyy
     YEAR = "year"            # yyyy
-    AGE = "age"              # idade → janela de anos
-    AGE_SIGN = "age_sign"    # idade + signo
-    SKIP = "skip"            # sem data
+    AGE = "age"              # age → year window
+    AGE_SIGN = "age_sign"    # age + zodiac sign
+    SKIP = "skip"            # no date
 
 
 # ── Dataclass principal ───────────────────────────────────────────────────────
@@ -56,23 +56,23 @@ class DateMode(str, Enum):
 @dataclass
 class DateProfile:
     """
-    Perfil de data para uma entidade (pessoa, parceiro, empresa, etc.).
+    Date profile for an entity (person, partner, company, etc.).
 
-    Campos de data são opcionais; 0 indica desconhecido.
-    O campo sign_index aponta para ZODIAC_KEYS[sign_index].
+    Date fields are optional; 0 means unknown.
+    sign_index points to ZODIAC_KEYS[sign_index].
     """
     mode: DateMode = DateMode.SKIP
     day: int = 0
     month: int = 0
     year: int = 0
     age: Optional[int] = None
-    sign_index: Optional[int] = None  # 0-11, mapeado em i18n/locale.py
+    sign_index: Optional[int] = None  # 0-11, mapped in i18n/locale.py
 
-    # janela de anos derivada da idade (para modo AGE/AGE_SIGN)
+    # year window derived from age (for AGE/AGE_SIGN modes)
     year_min: int = 0
     year_max: int = 0
 
-    # locale que foi usado ao criar este perfil (para tokens corretos)
+    # locale used when this profile was created (for correct tokens)
     locale: str = "en"
 
     def __post_init__(self) -> None:
@@ -82,16 +82,16 @@ class DateProfile:
             self._resolve_sign_from_full()
 
     def _resolve_age_window(self) -> None:
-        """Deriva janela de ano de nascimento a partir da idade."""
+        """Derive birth-year window from age."""
         base = _CURRENT_YEAR - self.age
-        # pessoa com X anos pode ter nascido em base ou base-1
+        # a person aged X may have been born in base or base-1
         self.year_min = base - 1
         self.year_max = base
         if not self.year:
-            self.year = base  # estimativa central
+            self.year = base  # central estimate
 
     def _resolve_sign_from_full(self) -> None:
-        """Se data completa e signo ainda desconhecido, derivar signo."""
+        """If full date is known and sign is still unknown, derive the sign."""
         if self.sign_index is None:
             self.sign_index = sign_index_from_day_month(self.day, self.month)
 
@@ -108,7 +108,7 @@ class DateProfile:
         return self.day > 0
 
     def year_range(self) -> range:
-        """Retorna range de anos possíveis para esta entidade."""
+        """Return the range of possible years for this entity."""
         if self.mode in (DateMode.AGE, DateMode.AGE_SIGN) and self.year_min and self.year_max:
             return range(self.year_min, self.year_max + 1)
         if self.has_year():
@@ -116,7 +116,7 @@ class DateProfile:
         return range(0)
 
     def to_dict(self) -> dict:
-        """Converte para dicionário compatível com o formato legado do profiler."""
+        """Convert to a dict compatible with the profiler's legacy format."""
         return {
             "birth_day":   self.day,
             "birth_month": self.month,
@@ -131,7 +131,7 @@ class DateProfile:
 
     @classmethod
     def from_dict(cls, d: dict) -> "DateProfile":
-        """Reconstrói DateProfile a partir de dicionário do perfil."""
+        """Reconstruct a DateProfile from a profile dictionary."""
         return cls(
             mode=DateMode(d.get("birth_mode", "skip")),
             day=d.get("birth_day", 0),
@@ -149,12 +149,12 @@ class DateProfile:
 
 def parse_full_date(raw: str) -> Optional[tuple[int, int, int]]:
     """
-    Parseia data completa em múltiplos formatos.
+    Parse a full date in multiple formats.
 
-    Formatos aceitos: dd/mm/yyyy, dd-mm-yyyy, dd.mm.yyyy, ddmmyyyy.
+    Accepted formats: dd/mm/yyyy, dd-mm-yyyy, dd.mm.yyyy, ddmmyyyy.
 
     Returns:
-        Tupla (day, month, year) ou None.
+        Tuple (day, month, year) or None.
     """
     raw = raw.strip()
     if not raw:
@@ -174,12 +174,12 @@ def parse_full_date(raw: str) -> Optional[tuple[int, int, int]]:
 
 def parse_month_year(raw: str) -> Optional[tuple[int, int]]:
     """
-    Parseia entrada de mês/ano.
+    Parse a month/year entry.
 
-    Formatos aceitos: mm/yyyy, mm-yyyy, mm.yyyy.
+    Accepted formats: mm/yyyy, mm-yyyy, mm.yyyy.
 
     Returns:
-        Tupla (month, year) ou None.
+        Tuple (month, year) or None.
     """
     raw = raw.strip()
     match = re.fullmatch(r"(\d{1,2})[/\-.](\d{4})", raw)
@@ -191,10 +191,10 @@ def parse_month_year(raw: str) -> Optional[tuple[int, int]]:
 
 def parse_year_only(raw: str) -> Optional[int]:
     """
-    Parseia apenas o ano (4 dígitos).
+    Parse a year only (4 digits).
 
     Returns:
-        Ano inteiro ou None.
+        Integer year or None.
     """
     raw = raw.strip()
     if re.fullmatch(r"\d{4}", raw):
@@ -205,10 +205,10 @@ def parse_year_only(raw: str) -> Optional[int]:
 
 def parse_age(raw: str) -> Optional[int]:
     """
-    Parseia idade aproximada (número inteiro positivo).
+    Parse an approximate age (positive integer).
 
     Returns:
-        Idade inteira ou None.
+        Integer age or None.
     """
     raw = raw.strip()
     if re.fullmatch(r"\d{1,3}", raw):
@@ -220,7 +220,7 @@ def parse_age(raw: str) -> Optional[int]:
 # ── Construção de DateProfile a partir de raw input ───────────────────────────
 
 def date_profile_from_full(raw: str, locale: str = "en") -> Optional[DateProfile]:
-    """Cria DateProfile no modo FULL a partir de string de data."""
+    """Create a DateProfile in FULL mode from a date string."""
     parsed = parse_full_date(raw)
     if not parsed:
         return None
@@ -229,7 +229,7 @@ def date_profile_from_full(raw: str, locale: str = "en") -> Optional[DateProfile
 
 
 def date_profile_from_month_year(raw: str, locale: str = "en") -> Optional[DateProfile]:
-    """Cria DateProfile no modo MONTH_YEAR."""
+    """Create a DateProfile in MONTH_YEAR mode."""
     parsed = parse_month_year(raw)
     if not parsed:
         return None
@@ -238,7 +238,7 @@ def date_profile_from_month_year(raw: str, locale: str = "en") -> Optional[DateP
 
 
 def date_profile_from_year(raw: str, locale: str = "en") -> Optional[DateProfile]:
-    """Cria DateProfile no modo YEAR."""
+    """Create a DateProfile in YEAR mode."""
     y = parse_year_only(raw)
     if y is None:
         return None
@@ -246,7 +246,7 @@ def date_profile_from_year(raw: str, locale: str = "en") -> Optional[DateProfile
 
 
 def date_profile_from_age(raw: str, locale: str = "en") -> Optional[DateProfile]:
-    """Cria DateProfile no modo AGE."""
+    """Create a DateProfile in AGE mode."""
     age = parse_age(raw)
     if age is None:
         return None
@@ -255,53 +255,53 @@ def date_profile_from_age(raw: str, locale: str = "en") -> Optional[DateProfile]
 
 def date_profile_from_age_sign(age_raw: str, sign_raw: str, locale: str = "en") -> Optional[DateProfile]:
     """
-    Cria DateProfile no modo AGE_SIGN a partir de idade e nome do signo.
+    Create a DateProfile in AGE_SIGN mode from an age and a sign name.
 
     Args:
-        age_raw: string com a idade (ex: '26').
-        sign_raw: nome do signo no locale ativo (ex: 'touro', 'taurus').
-        locale: locale para lookup do signo.
+        age_raw: Age string (e.g. '26').
+        sign_raw: Sign name in the active locale (e.g. 'touro', 'taurus').
+        locale: Locale for sign lookup.
 
     Returns:
-        DateProfile com age + sign_index, ou None se parsing falhar.
+        DateProfile with age + sign_index, or None if parsing fails.
     """
     age = parse_age(age_raw)
     if age is None:
         return None
     sign_idx = sign_index_from_name(sign_raw, locale)
     if sign_idx is None:
-        logger.warning("Signo não reconhecido: '%s' (locale: %s)", sign_raw, locale)
+        logger.warning("Unrecognized sign: '%s' (locale: %s)", sign_raw, locale)
         return None
     return DateProfile(mode=DateMode.AGE_SIGN, age=age, sign_index=sign_idx, locale=locale)
 
 
 def date_profile_from_yaml(entry: dict | str, locale: str = "en") -> Optional[DateProfile]:
     """
-    Cria DateProfile a partir de entrada YAML.
+    Create a DateProfile from a YAML entry.
 
-    Suporta ambos os formatos:
-      - Legado (string): birth: "dd/mm/yyyy" ou yyyy
-      - Estruturado (dict): {mode: age_sign, age: 26, sign: touro}
+    Supports both formats:
+      - Legacy (string): birth: "dd/mm/yyyy" or yyyy
+      - Structured (dict): {mode: age_sign, age: 26, sign: touro}
 
     Args:
-        entry: valor do campo birth/hire do YAML.
-        locale: locale ativo da sessão.
+        entry: Value of the birth/hire YAML field.
+        locale: Active session locale.
 
     Returns:
-        DateProfile ou None.
+        DateProfile or None.
     """
     if entry is None:
         return DateProfile(mode=DateMode.SKIP, locale=locale)
 
     if isinstance(entry, str):
-        # formato legado: tenta parsear como data completa, mês/ano ou apenas ano
+        # Legacy format: try to parse as full date, month/year, or year only
         dp = date_profile_from_full(entry, locale)
         if dp:
             return dp
         dp = date_profile_from_month_year(entry, locale)
         if dp:
             return dp
-        # Pode ser apenas idade
+        # May be just an age
         if re.fullmatch(r"\d{1,3}", entry.strip()) and int(entry.strip()) < 120:
             return date_profile_from_age(entry, locale)
         dp = date_profile_from_year(entry, locale)
@@ -312,7 +312,7 @@ def date_profile_from_yaml(entry: dict | str, locale: str = "en") -> Optional[Da
         try:
             mode = DateMode(mode_str)
         except ValueError:
-            logger.warning("Modo de data desconhecido: '%s'", mode_str)
+            logger.warning("Unknown date mode: '%s'", mode_str)
             mode = DateMode.SKIP
 
         if mode == DateMode.FULL:
@@ -342,20 +342,20 @@ def date_profile_from_yaml(entry: dict | str, locale: str = "en") -> Optional[Da
 
 def build_date_tokens(dp: DateProfile, locale: Optional[str] = None) -> list[str]:
     """
-    Gera lista de tokens de wordlist a partir de um DateProfile.
+    Build a wordlist token list from a DateProfile.
 
-    Tokens incluídos (dependendo do modo):
-      - Fragmentos numéricos: dia, mês, ano, yy, ddmm, mmyyyy, etc.
-      - Nomes de meses no locale ativo
-      - Nomes de signo + variações + elemento + regente
-      - Anos da janela de idade (modo AGE/AGE_SIGN)
+    Tokens included (depending on mode):
+      - Numeric fragments: day, month, year, yy, ddmm, mmyyyy, etc.
+      - Month names in the active locale
+      - Sign names + variations + element + ruler
+      - Years in the age window (AGE/AGE_SIGN modes)
 
     Args:
-        dp: DateProfile da entidade.
-        locale: override de locale (usa dp.locale por padrão).
+        dp: DateProfile for the entity.
+        locale: Locale override (uses dp.locale by default).
 
     Returns:
-        Lista de strings de token (sem duplicatas, lowercase).
+        List of token strings (no duplicates, lowercase).
     """
     active_locale = locale or dp.locale or get_session_locale()
     tokens: list[str] = []
@@ -395,7 +395,7 @@ def build_date_tokens(dp: DateProfile, locale: Optional[str] = None) -> list[str
         if dp.has_day():
             add(f"{dp.day:02d}{dp.month:02d}{yy}" if dp.has_month() else f"{dp.day:02d}{yy}")
 
-    # ── Tokens da janela de idade ─────────────────────────────────────────────
+    # ── Age window tokens ─────────────────────────────────────────────────────
     for yr in dp.year_range():
         if yr > 0:
             add(str(yr))
@@ -404,10 +404,10 @@ def build_date_tokens(dp: DateProfile, locale: Optional[str] = None) -> list[str
     if dp.age is not None:
         add(str(dp.age))
 
-    # ── Tokens de signo ───────────────────────────────────────────────────────
+    # ── Sign tokens ───────────────────────────────────────────────────────────
     if dp.has_sign():
         idx = dp.sign_index
-        # nome principal no locale ativo
+        # primary name in the active locale
         names = get_zodiac_names(active_locale)
         if 0 <= idx < len(names):
             add(names[idx])
@@ -429,14 +429,14 @@ def build_date_tokens(dp: DateProfile, locale: Optional[str] = None) -> list[str
 
 def ask_date_profile(label: str, locale: Optional[str] = None) -> DateProfile:
     """
-    Wizard interativo para coleta de data de uma entidade.
+    Interactive wizard to collect a date for an entity.
 
     Args:
-        label: nome da entidade (ex: 'target', 'partner').
-        locale: override de locale (usa sessão se None).
+        label: Entity name (e.g. 'target', 'partner').
+        locale: Locale override (uses session locale if None).
 
     Returns:
-        DateProfile preenchido.
+        Populated DateProfile.
     """
     active_locale = locale or get_session_locale()
 
