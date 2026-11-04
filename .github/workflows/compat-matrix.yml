@@ -29,19 +29,20 @@ jobs:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
 
+      - name: Create virtualenv
+        run: uv venv .venv
+
       - name: Install runtime requirements
         run: |
-          uv pip install --system -r requirements.txt
-          uv pip install --system -e . --no-deps
+          uv pip install -r requirements.txt
+          uv pip install -e . --no-deps
 
       - name: Run compatibility smoke check
-        run: |
-          python tools/compat_smoke.py
+        run: uv run python tools/compat_smoke.py
 
       - name: Validate market priority yearly minimums
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
-        run: |
-          python tools/validate_market_priority_minimums.py
+        run: uv run python tools/validate_market_priority_minimums.py
 
   quality-security:
     name: "quality-security / ubuntu / py3.12"
@@ -57,53 +58,44 @@ jobs:
           enable-cache: true
           python-version: "3.12"
 
+      - name: Create virtualenv
+        run: uv venv .venv
+
       - name: Install runtime requirements
-        run: |
-          uv pip install --system -r requirements.txt
+        run: uv pip install -r requirements.txt
 
       - name: Install security audit tooling
-        run: |
-          uv pip install --system pip-audit flake8 pytest bandit
+        run: uv pip install pip-audit flake8 pytest bandit
 
       - name: Validate dependency graph integrity
-        run: |
-          uv pip check --system
+        run: uv pip check
 
       - name: Install package (editable, no extra deps)
-        run: |
-          uv pip install --system -e . --no-deps
+        run: uv pip install -e . --no-deps
 
       - name: Lint gate (critical errors)
-        run: |
-          flake8 tools exf.py --count --select=E9,F63,F7,F82 --show-source --statistics
+        run: uv run flake8 tools exf.py --count --select=E9,F63,F7,F82 --show-source --statistics
 
       - name: Scoped tests gate
-        run: |
-          python tools/run_scoped_tests.py
+        run: uv run python tools/run_scoped_tests.py
 
       - name: Validate Python syntax compilation
-        run: |
-          python -m compileall -q embedxpl tools
+        run: uv run python -m compileall -q embedxpl tools
 
       - name: Validate market priority yearly minimums
-        run: |
-          python tools/validate_market_priority_minimums.py
+        run: uv run python tools/validate_market_priority_minimums.py
 
       - name: Validate governance baseline
-        run: |
-          python tools/validate_governance.py
+        run: uv run python tools/validate_governance.py
 
       - name: Build OSI/TCP-IP attack-test matrix snapshot
-        run: |
-          python tools/build_osi_tcpip_attack_matrix.py
+        run: uv run python tools/build_osi_tcpip_attack_matrix.py
 
       - name: Build curated arsenal index
-        run: |
-          python tools/build_arsenal_index.py
+        run: uv run python tools/build_arsenal_index.py
 
       - name: Validate curated arsenal architecture
-        run: |
-          python tools/validate_arsenal_architecture.py
+        run: uv run python tools/validate_arsenal_architecture.py
 
       - name: Validate generated coverage matrix is up to date
         # Non-gating: regenerate and show diff for awareness.
@@ -111,23 +103,21 @@ jobs:
         # Run locally: python tools/generate_coverage_matrix.py && python tools/build_arsenal_index.py
         continue-on-error: true
         run: |
-          python tools/generate_coverage_matrix.py
-          python tools/build_arsenal_index.py
+          uv run python tools/generate_coverage_matrix.py
+          uv run python tools/build_arsenal_index.py
           git diff --stat -- docs/COVERAGE_MATRIX.md docs/COVERAGE_MATRIX.txt embedxpl/resources/catalogs/arsenal_index.json || true
           echo "Coverage matrix regenerated (diff shown above  -  non-gating)."
 
       - name: Dependency vulnerability audit
-        run: |
-          uv tool run pip-audit -r requirements.txt --progress-spinner off
+        run: uv run pip-audit -r requirements.txt --progress-spinner off
 
       - name: Static security review (bandit)
-        run: |
-          bandit -q -r tools -lll
+        run: uv run bandit -q -r tools -lll
 
       - name: Refresh deep intel and honeypot snapshots (non-gating)
         run: |
-          python tools/deep_intel_backlog.py
-          python tools/phase6b_honeypot_validation.py
+          uv run python tools/deep_intel_backlog.py
+          uv run python tools/phase6b_honeypot_validation.py
 
   dependency-review:
     name: "dependency-review / pull_request"

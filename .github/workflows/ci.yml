@@ -19,8 +19,8 @@ jobs:
         with:
           enable-cache: true
           python-version: "3.12"
-      - run: uv pip install --system ruff
-      - run: ruff check .
+      # uvx runs ruff in its own tool environment — no venv or --system needed
+      - run: uvx ruff check .
 
   typecheck:
     name: "mypy typecheck"
@@ -31,12 +31,14 @@ jobs:
         with:
           enable-cache: true
           python-version: "3.12"
+      - name: Create virtualenv
+        run: uv venv .venv
       - name: Install dependencies
         run: |
-          uv pip install --system mypy
-          uv pip install --system git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
-          uv pip install --system -e ".[dev]" || uv pip install --system -e .
-      - run: mypy embedxpl/
+          uv pip install mypy
+          uv pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
+          uv pip install -e ".[dev]" || uv pip install -e .
+      - run: uv run mypy embedxpl/
 
   test:
     name: "pytest / py${{ matrix.python-version }}"
@@ -51,9 +53,11 @@ jobs:
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
+      - name: Create virtualenv
+        run: uv venv .venv
       - name: Install dependencies
         run: |
-          uv pip install --system pytest pytest-cov
-          uv pip install --system git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
-          uv pip install --system -e ".[dev]" || uv pip install --system -e .
-      - run: pytest tests/ -v --tb=short
+          uv pip install pytest pytest-cov
+          uv pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
+          uv pip install -e ".[dev]" || uv pip install -e .
+      - run: uv run pytest tests/ -v --tb=short
