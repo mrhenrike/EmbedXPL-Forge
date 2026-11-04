@@ -1,0 +1,115 @@
+name: author-gate
+
+# Enforce that every commit merged into main was authored by @mrhenrike.
+# External contributors submit PRs; @mrhenrike reviews, squash-merges or
+# cherry-picks — so the final commit author is always mrhenrike.
+# This workflow runs on pull_request and push to main/master and fails
+# if any commit in the diff has an unexpected author.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: ["main", "master"]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  commit-author-check:
+    name: "Verify all commits authored by mrhenrike"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check commit authors in diff
+        id: author-check
+        run: |
+          # Determine the base ref to diff against
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+          else
+            # Push to main: compare with previous commit
+            BASE="${{ github.event.before }}"
+            HEAD="${{ github.sha }}"
+          fi
+
+          ALLOWED_EMAILS="andre.santos@intelliway.com.br henrique.santos@uniaogeek.com.br"
+          ALLOWED_NAMES="mrhenrike André Henrique"
+
+          VIOLATIONS=""
+
+          while IFS= read -r line; do
+            HASH=$(echo "$line" | cut -d'|' -f1)
+            AUTHOR_NAME=$(echo "$line" | cut -d'|' -f2)
+            AUTHOR_EMAIL=$(echo "$line" | cut -d'|' -f3)
+
+            MATCH=false
+            for email in $ALLOWED_EMAILS; do
+              if [ "$AUTHOR_EMAIL" = "$email" ]; then
+                MATCH=true
+              fi
+            done
+            for name in $ALLOWED_NAMES; do
+              if echo "$AUTHOR_NAME" | grep -qi "$name"; then
+                MATCH=true
+              fi
+            done
+
+            if [ "$MATCH" = "false" ]; then
+              VIOLATIONS="$VIOLATIONS\n  $HASH | $AUTHOR_NAME <$AUTHOR_EMAIL>"
+            fi
+          done < <(git log "${BASE}..${HEAD}" --format="%H|%an|%ae" 2>/dev/null || true)
+
+          if [ -n "$VIOLATIONS" ]; then
+            echo "VIOLATIONS<<EOF" >> "$GITHUB_OUTPUT"
+            printf "%b" "$VIOLATIONS" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+            echo "has_violations=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_violations=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Block PR — unauthorized commit authors
+        if: steps.author-check.outputs.has_violations == 'true'
+        run: |
+          echo "::error::Commits with unauthorized authors detected."
+          echo "Only @mrhenrike (mrhenrike / André Henrique) may author commits merged into this repo."
+          echo ""
+          echo "Unauthorized commits:"
+          printf "%b\n" "${{ steps.author-check.outputs.VIOLATIONS }}"
+          echo ""
+          echo "External contributors: submit a PR — @mrhenrike will review and squash-merge."
+          exit 1
+
+      - name: Comment on PR — unauthorized authors
+        if: >
+          steps.author-check.outputs.has_violations == 'true' &&
+          github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "🚫 **Author gate failed**\n\n" +
+                "This PR contains commits not authored by **@mrhenrike**.\n\n" +
+                "**Policy:** Only `mrhenrike` may author commits that land in this repository. " +
+                "External contributions are welcome as PRs — @mrhenrike reviews them and " +
+                "squash-merges or cherry-picks so that all commits in `main` carry their own authorship.\n\n" +
+                "**What to do:**\n" +
+                "- Leave the PR as-is — @mrhenrike will review and merge manually if accepted.\n" +
+                "- Do **not** amend or rebase to change author info — that would be deceptive.\n\n" +
+                "_This gate exists to prevent supply-chain attacks via commit authorship spoofing._"
+            })
+
+      - name: All commits authorized
+        if: steps.author-check.outputs.has_violations != 'true'
+        run: echo "✓ All commits in this diff are authored by an authorized identity."

@@ -32,6 +32,14 @@
 - [ ] `ruff check .` passes (or explain exclusions)
 - [ ] Manually tested on a lab target
 
+## Authorship acknowledgement
+
+> **Policy:** Only `@mrhenrike` authors commits that land in `main`.
+> External contributors submit PRs; the maintainer reviews and squash-merges.
+> The `author-gate` CI check enforces this automatically.
+
+- [ ] I understand that @mrhenrike will squash-merge or cherry-pick this PR under their own authorship if accepted.
+
 ## Notes for reviewer
 
 <!-- Anything the maintainer should pay special attention to. -->
