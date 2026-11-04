@@ -155,14 +155,16 @@ class TestExploitOptions:
         assert e.scan_mem is False
 
     def test_info_has_required_keys(self):
-        info = Exploit.__info__
+        # Base Exploit metaclass name-mangles __info__ to _Exploit__info__
+        info = vars(Exploit).get("_Exploit__info__", {})
         assert "name" in info
         assert "description" in info
         assert "attack_class" in info
         assert info["attack_class"] == "remote_code_execution"
 
     def test_cwe_missing_auth(self):
-        assert Exploit.__info__["cwe"] == "CWE-306"
+        info = vars(Exploit).get("_Exploit__info__", {})
+        assert info["cwe"] == "CWE-306"
 
     def test_check_returns_false_on_no_response(self):
         e = Exploit()
