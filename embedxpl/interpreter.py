@@ -1073,17 +1073,17 @@ class EmbedXPLInterpreter(BaseInterpreter):
 
         print_info(f"Searching: {query!r}")
 
-        # --- Use rich search engine from tools/search.py ---
         try:
             from embedxpl.tools.search import print_results
             from embedxpl.tools.search import search as _xpl_search
+
             results = _xpl_search(query, limit=60)
             if results:
                 print_results(results, query)
                 print_info("Tip: use <module_path> to load a module")
                 return
-        except Exception:
-            pass
+        except Exception as error:
+            print_warning(f"Advanced search failed: {error}. Searching module paths instead.")
 
         # --- Fallback: legacy path-based search ---
         keyword = query.lower()

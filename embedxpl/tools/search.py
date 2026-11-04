@@ -43,10 +43,9 @@ Author: Andre Henrique (@mrhenrike) | Uniao Geek
 """
 from __future__ import annotations
 
-import importlib
-import inspect
+import ast
 import json
-import pkgutil
+import logging
 import re
 import sys
 from dataclasses import dataclass, field
@@ -56,6 +55,7 @@ from typing import Iterator, Optional
 _EMBEDXPL_ROOT = Path(__file__).resolve().parents[2]
 _MODULES_ROOT = _EMBEDXPL_ROOT / "embedxpl" / "modules"
 _TEST_STATUS_FILE = _EMBEDXPL_ROOT / "embedxpl" / "data" / "module_test_status.json"
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Security identifier normalization
@@ -142,38 +142,55 @@ class ModuleRecord:
 # ---------------------------------------------------------------------------
 
 def _iter_modules(base_pkg: str = "embedxpl.modules") -> Iterator[str]:
-    """Yield all importable module paths under base_pkg."""
+    """List source modules without executing package initializers or PoCs."""
+    from embedxpl.core.exploit.utils import index_modules
+
+    for path in index_modules(str(_MODULES_ROOT)):
+        name = f"embedxpl.modules.{path}"
+        if name.startswith(base_pkg + "."):
+            yield name
+
+
+def _read_metadata(source: str, file_path: str) -> dict:
+    """Read literal metadata fields, leaving dynamic expressions unexecuted."""
     try:
-        base = importlib.import_module(base_pkg)
-    except ImportError:
-        return
-    base_path = getattr(base, "__path__", None)
-    if not base_path:
-        return
-    for finder, name, ispkg in pkgutil.walk_packages(base_path, prefix=base_pkg + "."):
-        yield name
+        tree = ast.parse(source, filename=file_path)
+    except SyntaxError as exc:
+        logger.debug("Cannot parse legacy module %s: %s", file_path, exc)
+        return {}
+    classes = [node for node in tree.body if isinstance(node, ast.ClassDef)]
+    classes.sort(key=lambda node: node.name != "Exploit")
+    for scope in [*classes, tree]:
+        for node in scope.body:
+            if not isinstance(node, (ast.Assign, ast.AnnAssign)):
+                continue
+            targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+            if not any(isinstance(target, ast.Name) and target.id == "__info__" for target in targets):
+                continue
+            if not isinstance(node.value, ast.Dict):
+                continue
+            info = {}
+            for key, value in zip(node.value.keys, node.value.values):
+                try:
+                    info[ast.literal_eval(key)] = ast.literal_eval(value)
+                except (ValueError, TypeError) as exc:
+                    logger.debug("Skipping dynamic metadata in %s: %s", file_path, exc)
+            if info:
+                return info
+    return {}
 
 
 def _extract_info(module_path: str) -> Optional[ModuleRecord]:
-    """Import a module and extract its metadata."""
+    """Extract searchable metadata from source without importing the module."""
+    relative = module_path.removeprefix("embedxpl.modules.")
+    source_path = _MODULES_ROOT.joinpath(*relative.split(".")).with_suffix(".py")
     try:
-        mod = importlib.import_module(module_path)
-    except Exception:
+        source = source_path.read_text(encoding="utf-8", errors="replace")
+    except OSError as exc:
+        logger.warning("Cannot read module %s: %s", source_path, exc)
         return None
-
-    # Get source file
-    file_path = getattr(mod, "__file__", "") or ""
-
-    # Look for __info__ dict or class-level attributes
-    info = getattr(mod, "__info__", {}) or {}
-
-    # Also look for the main Exploit class
-    exploit_cls = None
-    for name, obj in inspect.getmembers(mod, inspect.isclass):
-        if hasattr(obj, "__info__"):
-            exploit_cls = obj
-            info = obj.__info__ if isinstance(obj.__info__, dict) else info
-            break
+    file_path = str(source_path)
+    info = _read_metadata(source, file_path)
 
     name = info.get("name", "") or info.get("title", "")
     description = info.get("description", "") or info.get("desc", "")
@@ -184,7 +201,7 @@ def _extract_info(module_path: str) -> Optional[ModuleRecord]:
     rank = info.get("rank", 0) or 0
 
     # Extract CVEs from module path + description + __info__
-    cve_text = f"{module_path} {name} {description} {file_path}"
+    cve_text = f"{module_path} {name} {description} {source}"
     if "references" in info:
         for ref in info.get("references", []):
             if isinstance(ref, str):
