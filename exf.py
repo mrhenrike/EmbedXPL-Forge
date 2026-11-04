@@ -9,7 +9,10 @@ _ROOT = Path(__file__).resolve().parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from tools.venv_bootstrap import ensure_runtime
+try:
+    from embedxpl.tools.venv_bootstrap import ensure_runtime
+except ImportError:
+    from tools.venv_bootstrap import ensure_runtime  # type: ignore[no-redef]  # source checkout fallback
 
 ensure_runtime(__file__)
 
@@ -46,7 +49,10 @@ def _launcher(argv):
 
 
 def embedxpl(argv):
-    from tools.xpl_cli import ProductInfo, bootstrap
+    try:
+        from embedxpl.tools.xpl_cli import ProductInfo, bootstrap
+    except ImportError:
+        from tools.xpl_cli import ProductInfo, bootstrap  # type: ignore[no-redef]  # source checkout fallback
 
     try:
         import tomllib

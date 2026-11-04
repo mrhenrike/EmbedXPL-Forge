@@ -42,7 +42,7 @@ coverage.xml
 .ruff_cache/
 
 # === Dev tooling (removido do repo) ===
-tools/
+/tools/
 .githooks/
 .travis.yml
 .travis/
