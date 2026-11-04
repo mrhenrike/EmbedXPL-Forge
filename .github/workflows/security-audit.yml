@@ -16,7 +16,7 @@ jobs:
   # ------------------------------------------------------------------ #
   backdoor-scan:
     name: "Backdoor & malicious-code scan"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout (full history for diff)
@@ -128,7 +128,7 @@ jobs:
   # ------------------------------------------------------------------ #
   notify-maintainer:
     name: "Flag external PR for manual review"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     if: github.event_name == 'pull_request' && github.event.pull_request.author_association == 'NONE'
 
     steps:

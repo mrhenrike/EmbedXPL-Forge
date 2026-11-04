@@ -12,7 +12,7 @@ permissions:
 jobs:
   lint:
     name: "ruff lint"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
@@ -27,7 +27,7 @@ jobs:
 
   typecheck:
     name: "mypy typecheck"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
@@ -45,7 +45,7 @@ jobs:
 
   test:
     name: "pytest / py${{ matrix.python-version }}"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       fail-fast: false
       matrix:

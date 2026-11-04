@@ -19,7 +19,7 @@ permissions:
 jobs:
   commit-author-check:
     name: "Verify all commits authored by mrhenrike"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout (full history)

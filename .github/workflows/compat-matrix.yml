@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [self-hosted, windows-latest, macos-latest]
         python-version: ["3.12", "3.13", "3.14"]
 
     steps:
@@ -46,7 +46,7 @@ jobs:
 
   quality-security:
     name: "quality-security / ubuntu / py3.12"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout
@@ -127,7 +127,7 @@ jobs:
   dependency-review:
     name: "dependency-review / pull_request"
     if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     # Non-gating: requires Dependency Graph enabled in GitHub Settings → Security & analysis.
     # Enable it at: https://github.com/mrhenrike/EmbedXPL-Forge/settings/security_analysis
     continue-on-error: true
