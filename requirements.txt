@@ -1,7 +1,7 @@
 requests>=2.33.0; python_version >= "3.10"
 requests==2.32.4; python_version < "3.10"
 paramiko
-pysnmp
+pysnmp>=7.1
 pycryptodome
 scapy
 colorama

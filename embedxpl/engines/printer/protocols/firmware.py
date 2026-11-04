@@ -92,7 +92,7 @@ FIRMWARE_UPLOAD_PATHS = [
 
 
 def get_firmware_version(
-    host: str, timeout: float = 8,
+    host: str, timeout: float = 8, snmp_port: int = 161,
 ) -> Dict[str, str]:
     """
     Extract firmware version from all available sources.
@@ -143,29 +143,16 @@ def get_firmware_version(
 
     # 3. SNMP hrSWRunName / prtInterpreter
     try:
-        from pysnmp.hlapi import (
-            getCmd, CommunityData, UdpTransportTarget,
-            ContextData, ObjectType, ObjectIdentity, SnmpEngine,
-        )
-        import warnings
-        warnings.filterwarnings('ignore', category=RuntimeWarning)
-        from utils.ports import PortConfig as _PC
-        _snmp_port = _PC.resolve('snmp')
+        from embedxpl.core.snmp.session import SNMPSession
 
         oids = [
             '1.3.6.1.2.1.1.1.0',            # sysDescr (often has firmware)
             '1.3.6.1.2.1.43.5.1.1.16.1',    # prtConsoleDisplayBufferText
             '1.3.6.1.4.1.11.2.3.9.4.2.1.1.3.5.0',  # HP: Firmware Revision
         ]
-        engine = SnmpEngine()
-        for oid in oids:
-            for err_ind, err_stat, _, binds in getCmd(
-                engine,
-                CommunityData('public', mpModel=0),
-                UdpTransportTarget((host, _snmp_port), timeout=timeout, retries=0),
-                ContextData(),
-                ObjectType(ObjectIdentity(oid)),
-            ):
+        with SNMPSession(host, snmp_port, version=0, timeout=timeout) as session:
+            for oid in oids:
+                err_ind, err_stat, _, binds = session.get(oid)
                 if not err_ind and not err_stat and binds:
                     val = str(binds[0][1])
                     for pat, src in FIRMWARE_PATTERNS:
@@ -174,8 +161,8 @@ def get_firmware_version(
                             result['version'] = m.group(1)
                             result['source']  = f'snmp:{oid}'
                             return result
-    except Exception:
-        pass
+    except Exception as exc:
+        _log.debug("SNMP firmware query failed: %s", exc)
 
     return result
 

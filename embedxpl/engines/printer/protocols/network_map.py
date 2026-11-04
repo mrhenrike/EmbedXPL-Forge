@@ -165,23 +165,13 @@ def _snmp_get(host: str, oid: str, community: str = 'public',
               timeout: float = 3) -> str:
     """Get a single SNMP OID value."""
     try:
-        from pysnmp.hlapi import (
-            getCmd, CommunityData, UdpTransportTarget,
-            ContextData, ObjectType, ObjectIdentity, SnmpEngine,
-        )
-        import warnings
-        warnings.filterwarnings('ignore', category=RuntimeWarning)
-        for err_ind, err_stat, _, binds in getCmd(
-            SnmpEngine(),
-            CommunityData(community, mpModel=1),
-            UdpTransportTarget((host, 161), timeout=timeout, retries=0),
-            ContextData(),
-            ObjectType(ObjectIdentity(oid)),
-        ):
+        from embedxpl.core.snmp.session import SNMPSession
+        with SNMPSession(host, community=community, timeout=timeout) as session:
+            err_ind, err_stat, _, binds = session.get(oid)
             if not err_ind and not err_stat and binds:
                 return str(binds[0][1])
-    except Exception:
-        pass
+    except Exception as exc:
+        _log.debug("SNMP GET %s failed: %s", oid, exc)
     return ''
 
 
@@ -190,27 +180,15 @@ def _snmp_walk(host: str, base_oid: str, community: str = 'public',
     """Walk SNMP subtree and return {oid: value}."""
     result = {}
     try:
-        from pysnmp.hlapi import (
-            nextCmd, CommunityData, UdpTransportTarget,
-            ContextData, ObjectType, ObjectIdentity, SnmpEngine,
-        )
-        import warnings
-        warnings.filterwarnings('ignore', category=RuntimeWarning)
-        for err_ind, err_stat, _, binds in nextCmd(
-            SnmpEngine(),
-            CommunityData(community, mpModel=1),
-            UdpTransportTarget((host, 161), timeout=timeout, retries=0),
-            ContextData(),
-            ObjectType(ObjectIdentity(base_oid)),
-            lexicographicMode=False,
-            maxRows=max_rows,
-        ):
-            if err_ind or err_stat:
-                break
-            for oid, val in binds:
-                result[str(oid)] = str(val)
-    except Exception:
-        pass
+        from embedxpl.core.snmp.session import SNMPSession
+        with SNMPSession(host, community=community, timeout=timeout) as session:
+            for err_ind, err_stat, _, binds in session.walk(base_oid, max_rows=max_rows):
+                if err_ind or err_stat:
+                    break
+                for oid, val in binds:
+                    result[str(oid)] = str(val)
+    except Exception as exc:
+        _log.debug("SNMP WALK %s failed: %s", base_oid, exc)
     return result
 
 

@@ -43,7 +43,7 @@ requires-python = ">=3.12"
 dependencies = [
     "requests>=2.32.4",
     "paramiko>=3.0",
-    "pysnmp>=4.4.12",
+    "pysnmp>=7.1",
     "pycryptodome>=3.18",
     "scapy>=2.5",
     "colorama>=0.4.6",
@@ -87,7 +87,7 @@ at = [
 ]
 routers = []
 printers = [
-    "pysnmp-lextudio>=6.0",
+    "pysnmp>=7.1",
     "pyasn1>=0.5",
 ]
 firewalls = [
