@@ -85,7 +85,7 @@ at = [
 ]
 routers = []
 printers = [
-    "pyasn1>=0.5",
+    "pyasn1>=0.6.5",
 ]
 firewalls = [
     "textual>=0.40",
