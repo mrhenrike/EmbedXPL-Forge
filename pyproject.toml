@@ -151,8 +151,8 @@ include = ["embedxpl*"]
     "**/*.yaml",
 ]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "build>=1.0",
     "twine>=5.0",
     "ruff>=0.4",
