@@ -1,13 +1,13 @@
 """EmbedXPL Suite  -  Banner Engine.
 
-Exibe o banner figlet da ferramenta com estatísticas em tempo real.
-Banners pré-gerados estão em embedxpl/resources/banners/*.txt.
-Stats contadas via pkgutil.walk_packages() com cache em ~/.embedxpl/stats_cache.json.
+Displays the figlet banner with real-time statistics.
+Pre-generated banners are stored in embedxpl/resources/banners/*.txt.
+Stats are counted via pkgutil.walk_packages() and cached in ~/.embedxpl/stats_cache.json.
 
-Uso::
+Usage::
     from embedxpl.core.banner import show_banner
-    show_banner("embedxpl")          # EmbedXPL principal
-    show_banner("industrialxpl")     # IndustrialXPL
+    show_banner("embedxpl")          # EmbedXPL main banner
+    show_banner("industrialxpl")     # IndustrialXPL banner
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Dict
 
 # ---------------------------------------------------------------------------
-# Caminhos
+# Paths
 # ---------------------------------------------------------------------------
 
 _HERE = Path(__file__).resolve().parent          # embedxpl/core/
@@ -27,10 +27,10 @@ _ROOT = _HERE.parent                             # embedxpl/
 _BANNERS_DIR = _ROOT / "resources" / "banners"
 _CACHE_DIR = Path.home() / ".embedxpl"
 _CACHE_FILE = _CACHE_DIR / "stats_cache.json"
-_CACHE_TTL = 300   # segundos  -  recontar se cache tiver mais de 5 min
+_CACHE_TTL = 300   # seconds  -  recount if cache is older than 5 min
 
 # ---------------------------------------------------------------------------
-# Mapeamento tool_name → arquivo de banner
+# Mapping tool_name → banner file
 # ---------------------------------------------------------------------------
 
 TOOL_BANNERS: Dict[str, Path] = {
@@ -44,7 +44,7 @@ TOOL_BANNERS: Dict[str, Path] = {
     "tupa":         _BANNERS_DIR / "tupaxpl.txt",
 }
 
-# Cor ANSI
+# ANSI colors
 _CYAN   = "\033[96m"
 _GREEN  = "\033[92m"
 _YELLOW = "\033[93m"
@@ -54,11 +54,11 @@ _RESET  = "\033[0m"
 _DIM    = "\033[2m"
 
 # ---------------------------------------------------------------------------
-# Contagem de módulos
+# Module counting
 # ---------------------------------------------------------------------------
 
 def _count_modules() -> Dict[str, int]:
-    """Conta módulos por categoria varrendo o pacote embedxpl."""
+    """Count modules per category by scanning the embedxpl package."""
     counts: Dict[str, int] = {
         "exploits": 0,
         "scanners": 0,
@@ -169,7 +169,7 @@ def _count_modules() -> Dict[str, int]:
 
 
 def _load_stats() -> Dict[str, int]:
-    """Carrega stats do cache ou recalcula se expirado."""
+    """Load stats from cache, or recompute if expired."""
     _CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
     if _CACHE_FILE.exists():
@@ -191,12 +191,12 @@ def _load_stats() -> Dict[str, int]:
 
 
 def invalidate_cache() -> None:
-    """Força recontagem na próxima chamada (usar após instalar novos módulos)."""
+    """Force recount on next call (use after installing new modules)."""
     if _CACHE_FILE.exists():
         _CACHE_FILE.unlink(missing_ok=True)
 
 # ---------------------------------------------------------------------------
-# Exibição do banner
+# Banner display
 # ---------------------------------------------------------------------------
 
 def _read_banner(tool_name: str) -> str:
@@ -204,7 +204,7 @@ def _read_banner(tool_name: str) -> str:
     banner_path = TOOL_BANNERS.get(key)
     if banner_path and banner_path.exists():
         return banner_path.read_text()
-    # fallback: gera via figlet se disponível
+    # fallback: generate via figlet if available
     try:
         import subprocess
         result = subprocess.run(
@@ -224,15 +224,15 @@ def show_banner(
     db=None,
     color: bool = True,
 ) -> None:
-    """Exibe o banner figlet + stats em tempo real.
+    """Display the figlet banner with real-time stats.
 
     Args:
-        tool_name: Nome da ferramenta (embedxpl, industrialxpl, etc.)
-        version:   String de versão exibida ao lado do banner.
-        db:        Instância EXFDatabase (opcional  -  usado para stats de workspace).
-        color:     Se False, desativa cores ANSI.
+        tool_name: Tool name (embedxpl, industrialxpl, etc.)
+        version:   Version string displayed beside the banner.
+        db:        EXFDatabase instance (optional  -  used for workspace stats).
+        color:     If False, disable ANSI colors.
     """
-    # Desativa cores se não for terminal
+    # Disable colors when not in a terminal
     if not sys.stdout.isatty():
         color = False
 
@@ -245,7 +245,7 @@ def show_banner(
 
     art = _read_banner(tool_name)
 
-    # Colorir a arte ASCII em ciano
+    # Colorize ASCII art in cyan
     colored_art = f"{bold}{c}{art}{rst}"
 
     stats = _load_stats()
@@ -262,7 +262,7 @@ def show_banner(
     tested    = stats.get("tested",    0)
     untested  = stats.get("untested",  0)
 
-    # Total de módulos
+    # Total modules
     total = exploits + scanners + payloads + encoders + creds_mod
 
     print(colored_art, end="")
@@ -296,12 +296,12 @@ def show_banner(
 
 
 def show_banner_for_suite(tool_name: str, **kwargs) -> None:
-    """Alias público  -  usado pelos interpreters dos tools especializados."""
+    """Public alias  -  used by specialized tool interpreters."""
     show_banner(tool_name, **kwargs)
 
 
 # ---------------------------------------------------------------------------
-# CLI rápido para teste
+# Quick CLI for testing
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":

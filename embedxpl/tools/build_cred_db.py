@@ -1,20 +1,20 @@
 """EmbedXPL Credential Database Builder.
 
-Consolida múltiplas fontes de credenciais default em um único
-data/default_creds.json estruturado com 10.000+ entradas.
+Consolidates multiple default credential sources into a single
+data/default_creds.json with 10,000+ structured entries.
 
-Fontes integradas:
-  1. embedxpl/modules/creds/      -  módulos Python existentes (extrai pares hardcoded)
-  2. embedxpl/data/default_creds.json   -  base existente (1.019 entries)
+Integrated sources:
+  1. embedxpl/modules/creds/      -  existing Python modules (extracts hardcoded pairs)
+  2. embedxpl/data/default_creds.json   -  existing base (1,019 entries)
   3. embedxpl/data/ics_default_creds.json   -  ICS (38 entries)
   4. embedxpl/data/wordlists/iot/mirai_default_creds.json
-  5. RouterSploit creds (se disponível em .tmp/routersploit/)
-  6. SecLists Default-Credentials (se disponível)
-  7. Creds ICS curadas (Siemens, Rockwell, Schneider, ABB)
+  5. RouterSploit creds (if available at .tmp/routersploit/)
+  6. SecLists Default-Credentials (if available)
+  7. Curated ICS creds (Siemens, Rockwell, Schneider, ABB)
   8. Camera defaults (Hikvision, Dahua, Axis, Intelbras, ONVIF)
   9. Printer defaults (HP, Canon, Ricoh, Xerox, Brother)
   10. NAS defaults (QNAP, Synology, Netgear, Seagate)
-  11. Router defaults expandidos (por vendor)
+  11. Expanded router defaults (by vendor)
 
 Uso:
     python3 -m embedxpl.tools.build_cred_db [--output PATH] [--stats]
@@ -32,17 +32,17 @@ _MODULES_CREDS = _HERE / "modules" / "creds"
 _OUTPUT = _DATA / "default_creds.json"
 
 # ---------------------------------------------------------------------------
-# Schema de uma entrada:
+# Entry schema:
 # {
 #   "vendor": str,
-#   "product": str,         # modelo/produto específico (opcional)
+#   "product": str,         # specific model/product (optional)
 #   "category": str,        # router|camera|printer|ics|nas|wireless|voip|generic
 #   "protocol": str,        # http|telnet|ssh|ftp|snmp|modbus|api
 #   "username": str,
 #   "password": str,
 #   "port": int | None,
-#   "path": str | None,     # URL path (para HTTP)
-#   "source": str,          # onde veio essa entrada
+#   "path": str | None,     # URL path (for HTTP)
+#   "source": str,          # where this entry came from
 # }
 # ---------------------------------------------------------------------------
 

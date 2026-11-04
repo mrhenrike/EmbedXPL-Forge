@@ -1,17 +1,17 @@
 """EmbedXPL Suite Auditor.
 
-Executa code review automático de toda a suite:
-  1. Import health  -  detecta ImportError em todos os módulos
-  2. Unused imports  -  detecta F401 (pyflakes) se disponível
-  3. Missing __info__  -  módulos sem metadados
-  4. Missing deps  -  dependências externas não instaladas
-  5. Bad patterns  -  print() direto, hardcoded creds, missing check/run
-  6. Stats check  -  valida contadores do banner
+Runs automatic code review of the entire suite:
+  1. Import health  -  detects ImportError in all modules
+  2. Unused imports  -  detects F401 (pyflakes) if available
+  3. Missing __info__  -  modules without metadata
+  4. Missing deps  -  external dependencies not installed
+  5. Bad patterns  -  direct print(), hardcoded creds, missing check/run
+  6. Stats check  -  validates banner counters
 
-Uso:
+Usage:
     python3 -m embedxpl.tools.audit_suite [--fix] [--path embedxpl/modules]
-    python3 -m embedxpl.tools.audit_suite --step 1    # só AUDIT-STEP-1
-    python3 -m embedxpl.tools.audit_suite --json       # output JSON para CI
+    python3 -m embedxpl.tools.audit_suite --step 1    # run only AUDIT-STEP-1
+    python3 -m embedxpl.tools.audit_suite --json       # JSON output for CI
 """
 
 from __future__ import annotations

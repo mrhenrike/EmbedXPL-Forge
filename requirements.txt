@@ -1,12 +1,11 @@
 requests>=2.33.0; python_version >= "3.10"
 requests==2.32.4; python_version < "3.10"
-paramiko
-pysnmp
-pycryptodome
-scapy
-colorama
-setuptools
-telnetlib3; python_version >= "3.13"
+paramiko>=3.0
+pysnmp-lextudio>=6.0
+pycryptodome>=3.18
+scapy>=2.5
+colorama>=0.4.6
+telnetlib3>=2.0.0; python_version >= "3.13"
 rich>=13.0
 aiohttp>=3.9
 numpy>=1.24
