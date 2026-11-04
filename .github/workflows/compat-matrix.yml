@@ -31,8 +31,8 @@ jobs:
 
       - name: Install runtime requirements
         run: |
-          uv pip install -r requirements.txt
-          uv pip install -e . --no-deps
+          uv pip install --system -r requirements.txt
+          uv pip install --system -e . --no-deps
 
       - name: Run compatibility smoke check
         run: |
@@ -59,19 +59,19 @@ jobs:
 
       - name: Install runtime requirements
         run: |
-          uv pip install -r requirements.txt
+          uv pip install --system -r requirements.txt
 
       - name: Install security audit tooling
         run: |
-          uv pip install pip-audit flake8 pytest bandit
+          uv pip install --system pip-audit flake8 pytest bandit
 
       - name: Validate dependency graph integrity
         run: |
-          uv pip check
+          uv pip check --system
 
       - name: Install package (editable, no extra deps)
         run: |
-          uv pip install -e . --no-deps
+          uv pip install --system -e . --no-deps
 
       - name: Lint gate (critical errors)
         run: |
