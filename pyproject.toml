@@ -350,7 +350,7 @@ exclude = [
 "tools/**" = ["F841", "SIM201", "E402"]
 "docs/**" = ["F841"]
 "exf.py" = ["E402"]
-"tests/**" = ["E402"]
+"tests/**" = ["E402", "F841", "B017"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["embedxpl"]
