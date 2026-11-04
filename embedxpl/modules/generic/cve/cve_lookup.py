@@ -9,6 +9,7 @@ modules available for immediate use.
 Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
 """
 
+import os
 from embedxpl.core.exploit import *
 from embedxpl.core.cve.cve_db import CVEDatabase
 
