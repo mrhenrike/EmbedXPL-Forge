@@ -62,7 +62,7 @@ class Exploit(HTTPClient):
                 SnmpEngine, UdpTransportTarget, getCmd,
             )
         except ImportError:
-            print_error("pysnmp not installed  -  run: pip install pysnmp")
+            print_error("pysnmp-lextudio not installed  -  run: pip install pysnmp-lextudio")
             return
 
         communities = self._load_communities()
