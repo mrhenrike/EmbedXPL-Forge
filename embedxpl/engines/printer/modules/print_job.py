@@ -885,40 +885,40 @@ def send_ipp(host: str, port: int, data: bytes,
 def _classify_ipp_error(status: int, mime: str) -> str:
     """Return an operator-friendly hint for a given IPP error status."""
     install_hint = (
-        "Como alternativa, instale a impressora no SO com --install-printer "
-        "e tente imprimir normalmente pelo driver do sistema operacional."
+        "Alternatively, install the printer in the OS with --install-printer "
+        "and print normally via the operating system driver."
     )
     if status == _IPP_FORMAT_NOT_SUPPORTED:
         return (
-            f"A impressora não aceita o formato '{mime}' via IPP. "
-            f"Tente --send-proto lpd (LPD/ESC-P) ou: {install_hint}"
+            f"The printer does not accept format '{mime}' via IPP. "
+            f"Try --send-proto lpd (LPD/ESC-P) or: {install_hint}"
         )
     if status == 0x0400:   # client-error-bad-request
         return (
-            "Requisição IPP rejeitada pela impressora (Bad Request). "
-            "A impressora pode estar ocupada ou o formato de dados é incompatível. "
+            "IPP request rejected by the printer (Bad Request). "
+            "The printer may be busy or the data format is incompatible. "
             f"{install_hint}"
         )
     if status == _IPP_STATUS_BUSY:
         return (
-            "A impressora está ocupada processando outro job. "
-            "Aguarde o LED do painel frontal apagar e tente novamente. "
+            "The printer is busy processing another job. "
+            "Wait for the front-panel LED to turn off and try again. "
             f"{install_hint}"
         )
     if status in (_IPP_NOT_AUTHORIZED, 0x0402):
         return (
-            "A impressora exige autenticação para impressão via IPP (configuração reforçada). "
+            "The printer requires authentication for IPP printing (enforced configuration). "
             f"{install_hint}"
         )
     if status == _IPP_DEVICE_ERROR:
-        return "Erro de hardware na impressora — verifique papel, tinta e tampa."
+        return "Hardware error on the printer — check paper, ink, and cover."
     if status == _IPP_OP_NOT_SUPPORTED:
         return (
-            "A impressora não suporta operação IPP Print-Job via rede. "
+            "The printer does not support IPP Print-Job operation over the network. "
             f"{install_hint}"
         )
     return (
-        f"Verifique o status da impressora (IPP 0x{status:04X}). "
+        f"Check printer status (IPP 0x{status:04X}). "
         f"{install_hint}"
     )
 

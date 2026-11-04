@@ -1,22 +1,22 @@
 """
-web_scraper.py - Spider web para extração de palavras (estilo CeWL + CeWLeR).
+web_scraper.py - Web spider for word extraction (CeWL + CeWLeR style).
 
-Funcionalidades:
-  - Spider de URL com controle de profundidade
-  - Extração de palavras únicas com filtro de comprimento
-  - Extração de emails e metadados (Author, Generator)
-  - Suporte a proxy HTTP/SOCKS (--proxy)
-  - Suporte a cookies, User-Agent customizável e headers adicionais
-  - Autenticação HTTP básica
-  - Exclusão de stop-words (EN/PT-BR) via --no-stopwords ou arquivo customizado
+Features:
+  - URL spider with depth control
+  - Unique word extraction with length filter
+  - Email and metadata extraction (Author, Generator)
+  - HTTP/SOCKS proxy support (--proxy)
+  - Cookie support, customizable User-Agent and extra headers
+  - HTTP Basic Auth
+  - Stop-word exclusion (EN/PT-BR) via --no-stopwords or custom file
   - JS/CSS extraction (--include-js, --include-css)
   - PDF text extraction during crawl (--include-pdf)
   - Lowercase mode (--lowercase)
   - Subdomain strategy (exact/children/all)
   - Separate email/URL output files (--output-emails, --output-urls)
 
-Autor: André Henrique (@mrhenrike)
-Versão: 1.2.0
+Author: Andre Henrique (@mrhenrike)
+Version: 1.2.0
 """
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ try:
     _DEPS_OK = True
 except ImportError:
     _DEPS_OK = False
-    logger.warning("requests e beautifulsoup4 não instalados. web_scraper desativado.")
+    logger.warning("requests and beautifulsoup4 not installed. web_scraper disabled.")
 
 try:
     from pypdf import PdfReader
@@ -45,12 +45,12 @@ except ImportError:
     _PDF_OK = False
 
 
-# Padrão para extração de palavras (sem números puros)
+# Pattern for word extraction (excluding pure numbers)
 _WORD_RE = re.compile(r"[a-zA-ZÀ-ÿ\u0100-\u024F][a-zA-ZÀ-ÿ\u0100-\u024F'-]*[a-zA-ZÀ-ÿ\u0100-\u024F]")
 _EMAIL_RE = re.compile(r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}")
 _META_FIELDS = ["author", "generator", "description", "keywords", "creator"]
 
-# Stop-words padrão EN + PT-BR (fusão para uso offline, sem dependências externas)
+# Default EN + PT-BR stop-words (merged for offline use, no external dependencies)
 DEFAULT_STOPWORDS: frozenset[str] = frozenset({
     # EN
     "the", "and", "for", "are", "but", "not", "you", "all", "can", "her",
@@ -77,22 +77,22 @@ DEFAULT_STOPWORDS: frozenset[str] = frozenset({
 
 class WebScraper:
     """
-    Spider de URL com extração de palavras, emails e metadados.
+    URL spider with word, email and metadata extraction.
 
-    Atributos:
-        start_url: URL inicial de crawl.
-        depth: Profundidade máxima de seguimento de links.
-        min_word_len: Comprimento mínimo de palavra a extrair.
-        max_word_len: Comprimento máximo de palavra a extrair.
-        extract_emails: Se True, extrai emails.
-        extract_meta: Se True, extrai metadados Author/Generator.
-        user_agent: User-Agent HTTP.
-        delay: Delay em segundos entre requisições.
-        timeout: Timeout HTTP em segundos.
-        auth: Tupla (usuario, senha) para HTTP Basic Auth.
-        proxy: URL do proxy HTTP/SOCKS (ex: 'http://127.0.0.1:8080').
-        extra_headers: Headers HTTP adicionais.
-        stopwords: Set de palavras a excluir do resultado.
+    Attributes:
+        start_url: Starting crawl URL.
+        depth: Maximum link-following depth.
+        min_word_len: Minimum word length to extract.
+        max_word_len: Maximum word length to extract.
+        extract_emails: If True, extract emails.
+        extract_meta: If True, extract Author/Generator metadata.
+        user_agent: HTTP User-Agent.
+        delay: Delay in seconds between requests.
+        timeout: HTTP timeout in seconds.
+        auth: Tuple (user, password) for HTTP Basic Auth.
+        proxy: HTTP/SOCKS proxy URL (e.g. 'http://127.0.0.1:8080').
+        extra_headers: Additional HTTP headers.
+        stopwords: Set of words to exclude from results.
     """
 
     DEFAULT_UA = (
@@ -291,25 +291,25 @@ class WebScraper:
 
     def _extract_emails(self, html: str) -> set[str]:
         """
-        Extrai emails únicos de um HTML.
+        Extract unique emails from HTML.
 
         Args:
-            html: Conteúdo HTML.
+            html: HTML content.
 
         Returns:
-            Set de emails encontrados.
+            Set of found emails.
         """
         return set(_EMAIL_RE.findall(html))
 
     def _extract_meta(self, html: str) -> set[str]:
         """
-        Extrai valores de metadados (Author, Generator, Keywords).
+        Extract metadata values (Author, Generator, Keywords).
 
         Args:
-            html: Conteúdo HTML.
+            html: HTML content.
 
         Returns:
-            Set de palavras extraídas de metadados.
+            Set of words extracted from metadata.
         """
         soup = BeautifulSoup(html, "lxml")
         values: set[str] = set()
