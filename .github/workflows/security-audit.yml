@@ -24,13 +24,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v4
         with:
+          enable-cache: true
           python-version: "3.12"
 
+      - name: Create virtualenv
+        run: uv venv .venv
+
       - name: Install audit tools
-        run: pip install bandit semgrep
+        run: uv pip install bandit semgrep
 
       - name: Bandit security scan (informational — pentest framework)
         # Non-blocking: bandit will always find HIGH issues in a pentest framework
@@ -38,11 +41,10 @@ jobs:
         # pattern scan below is the actual malicious-code gate.
         continue-on-error: true
         run: |
-          bandit -r embedxpl/ tools/ -ll \
+          uv run bandit -r embedxpl/ tools/ -ll \
             -x embedxpl/modules/exploits/,embedxpl/lab/,embedxpl/malware_research/,embedxpl/engines/fingerprint/tenable/ \
             --format txt --output bandit-report.txt || true
-          echo "=== Bandit summary (non-gating) ==="
-          tail -20 bandit-report.txt || true
+          echo "=== Bandit summary (non-gating) ===" || true
 
       - name: Custom backdoor pattern scan
         run: |
@@ -111,7 +113,7 @@ jobs:
 
       - name: Semgrep security rules
         run: |
-          semgrep --config=p/python --config=p/secrets \
+          uv run semgrep --config=p/python --config=p/secrets \
             --exclude="embedxpl/modules/exploits/**" \
             --exclude="embedxpl/lab/**" \
             --exclude="embedxpl/malware_research/**" \
@@ -120,8 +122,8 @@ jobs:
 
       - name: Dependency vulnerability audit
         run: |
-          pip install pip-audit
-          pip-audit -r requirements.txt --progress-spinner off
+          uv pip install pip-audit
+          uv run pip-audit -r requirements.txt --progress-spinner off
 
   # ------------------------------------------------------------------ #
   # Notify maintainer when a PR arrives from an external contributor    #
