@@ -61,6 +61,6 @@ jobs:
       - name: Install dependencies
         run: |
           uv pip install pytest pytest-cov
-          uv pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
+          uv pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main || true
           uv pip install -e ".[dev]" || uv pip install -e .
       - run: uv run pytest tests/ -v --tb=short
