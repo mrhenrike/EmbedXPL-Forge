@@ -1,6 +1,12 @@
+---
+layout: default
+title: "20. ICS/OT Modules"
+nav_order: 30
+parent: Wiki
+---
+
 # ICS / OT Modules
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/20-modulos-ics-ot.md](../pt-BR/20-modulos-ics-ot.md)
 
 ---
 

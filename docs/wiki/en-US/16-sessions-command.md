@@ -1,6 +1,12 @@
+---
+layout: default
+title: "16. Sessions Command"
+nav_order: 26
+parent: Wiki
+---
+
 # sessions Command
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/16-comando-sessions.md](../pt-BR/16-comando-sessions.md)
 
 ---
 

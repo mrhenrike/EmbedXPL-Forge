@@ -1,6 +1,12 @@
+---
+layout: default
+title: "9. Payloads & Encoders"
+nav_order: 19
+parent: Wiki
+---
+
 # Payloads and Encoders
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/09-payloads-e-encoders.md](../pt-BR/09-payloads-e-encoders.md)
 
 ---
 

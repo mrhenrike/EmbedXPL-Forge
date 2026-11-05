@@ -1,12 +1,10 @@
-# EmbedXPL-Forge  -  Wiki (bilingual)
+# EmbedXPL-Forge — Wiki
 
-
-## Languages / Idiomas
+## Documentation
 
 | Locale | Hub |
 |--------|-----|
-| **English (en-US)**  -  default | [en-US/README.md](en-US/README.md) |
-| **Português (pt-BR)** | [pt-BR/README.md](pt-BR/README.md) |
+| **English (en-US)** | [en-US/README.md](en-US/README.md) |
 
 ## Architecture Diagrams
 
@@ -26,7 +24,7 @@ PNG gallery. Mermaid sources: [../diagrams/architecture/README.md](../diagrams/a
 
 ## Shared Resources
 
-- **Module path index (all locales):** [ANEXO-INDICE-MODULOS.md](ANEXO-INDICE-MODULOS.md)  -  regenerate with `python tools/gen_wiki_module_index.py`
+- **Module path index:** [ANEXO-INDICE-MODULOS.md](ANEXO-INDICE-MODULOS.md)  —  regenerate with `python tools/gen_wiki_module_index.py`
 
 ## Governance
 
@@ -36,8 +34,9 @@ PNG gallery. Mermaid sources: [../diagrams/architecture/README.md](../diagrams/a
 | Code of Conduct | [CODE_OF_CONDUCT.md](../../CODE_OF_CONDUCT.md) |
 | Security | [SECURITY.md](../../SECURITY.md) |
 | Contributors | [CONTRIBUTORS.md](../../CONTRIBUTORS.md) |
+| Contributing | [CONTRIBUTING.md](../../CONTRIBUTING.md) |
 
 ## Repository Root
 
-- [README.md](../../README.md) (en-US) · [README.pt-BR.md](../../README.pt-BR.md)
-- [docs/README.md](../README.md)  -  docs folder hub
+- [README.md](../../README.md)
+- [docs/README.md](../README.md)

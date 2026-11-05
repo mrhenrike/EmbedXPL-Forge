@@ -1,6 +1,12 @@
+---
+layout: default
+title: "10. Catalogs & Tools"
+nav_order: 20
+parent: Wiki
+---
+
 # Catalogs and Tools
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/10-catalogos-e-ferramentas.md](../pt-BR/10-catalogos-e-ferramentas.md)
 
 ---
 

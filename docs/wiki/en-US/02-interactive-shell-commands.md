@@ -1,6 +1,12 @@
+---
+layout: default
+title: "2. Interactive Shell"
+nav_order: 12
+parent: Wiki
+---
+
 # Interactive Shell Commands
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/02-shell-interativo-comandos.md](../pt-BR/02-shell-interativo-comandos.md)
 
 ---
 

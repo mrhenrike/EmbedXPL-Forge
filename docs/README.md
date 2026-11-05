@@ -1,18 +1,16 @@
-# Documentation  -  EmbedXPL-Forge
-
-
-**Languages:** Files below are primarily **English (en-US)**. **Português (pt-BR)** hub: [README.pt-BR.md](README.pt-BR.md). Wiki: [wiki/pt-BR/README.md](wiki/pt-BR/README.md).
+# EmbedXPL-Forge — Documentation
 
 ## Contents
 
-| Path | Language | Description |
-|------|----------|-------------|
-| [wiki/README.md](wiki/README.md) | bilingual hub | Wiki index (en-US + pt-BR) |
-| [diagrams/architecture/README.md](diagrams/architecture/README.md) | en-US + pt-BR | Attack-surface architecture diagrams (Mermaid) |
-| [img/architecture/](img/architecture/) | en-US labels | Exported architecture PNGs |
-| [modules/](modules/) | en-US | Per-module documentation |
+| Path | Description |
+|------|-------------|
+| [wiki/README.md](wiki/README.md) | Wiki index |
+| [wiki/en-US/](wiki/en-US/) | Full wiki (23 chapters) |
+| [diagrams/architecture/README.md](diagrams/architecture/README.md) | Attack-surface architecture diagrams (Mermaid) |
+| [img/architecture/](img/architecture/) | Exported architecture PNGs |
+| [modules/](modules/) | Per-module documentation |
 
-## Attack-Surface Architecture (PNGs)
+## Attack-Surface Architecture
 
 Mermaid sources: [diagrams/architecture/](diagrams/architecture/). Gallery:
 
@@ -27,11 +25,6 @@ Mermaid sources: [diagrams/architecture/](diagrams/architecture/). Gallery:
 | Mixed Edge |
 |:---:|
 | ![Mixed edge](img/architecture/exf_arch_edge_mixed.png) |
-
-## Wiki Locales
-
-- **English (default):** [wiki/en-US/README.md](wiki/en-US/README.md)
-- **Português (Brazil):** [wiki/pt-BR/README.md](wiki/pt-BR/README.md)
 
 ## Regeneration
 

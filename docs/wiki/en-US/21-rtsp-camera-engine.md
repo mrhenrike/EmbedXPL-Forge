@@ -1,6 +1,12 @@
+---
+layout: default
+title: "21. RTSP Camera Engine"
+nav_order: 31
+parent: Wiki
+---
+
 # RTSP Camera Engine
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/21-rtsp-camera-engine.md](../pt-BR/21-rtsp-camera-engine.md)
 
 ---
 

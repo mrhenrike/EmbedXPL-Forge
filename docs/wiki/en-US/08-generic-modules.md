@@ -1,6 +1,12 @@
+---
+layout: default
+title: "8. Generic Modules"
+nav_order: 18
+parent: Wiki
+---
+
 # Generic Modules
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/08-modulos-generic.md](../pt-BR/08-modulos-generic.md)
 
 ---
 

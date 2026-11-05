@@ -1,6 +1,12 @@
+---
+layout: default
+title: "17. APT Catalog"
+nav_order: 27
+parent: Wiki
+---
+
 # APT Catalog (`apt` Command)
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/17-catalogo-apt.md](../pt-BR/17-catalogo-apt.md)
 
 ---
 

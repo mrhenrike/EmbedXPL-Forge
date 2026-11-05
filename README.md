@@ -1313,4 +1313,3 @@ BSD-3-Clause License. See [LICENSE](LICENSE) for details.
 **License:** BSD-3-Clause - Copyright (c) 2024-2026 Andre Henrike de Oliveira / Uniao Geek
 **Created by:** André Henrique ([@mrhenrike](https://github.com/mrhenrike)) | [União Geek](https://uniaogeek.com.br/)
 
-[Leia em Português](README.pt-BR.md) - [Command coverage](docs/commands.md) - [Wiki](../../wiki)

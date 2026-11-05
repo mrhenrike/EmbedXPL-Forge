@@ -1,6 +1,12 @@
+---
+layout: default
+title: "23. Vendor Reference"
+nav_order: 33
+parent: Wiki
+---
+
 # Vendor Reference  -  Firewalls and Network Appliances
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/23-referencia-vendors-firewalls.md](../pt-BR/23-referencia-vendors-firewalls.md)
 
 ---
 

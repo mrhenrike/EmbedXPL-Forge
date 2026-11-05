@@ -1,6 +1,12 @@
+---
+layout: default
+title: "13. Shell Stager"
+nav_order: 23
+parent: Wiki
+---
+
 # Shell Stager and Post-Exploitation
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/13-shell-stager.md](../pt-BR/13-shell-stager.md)
 
 ---
 

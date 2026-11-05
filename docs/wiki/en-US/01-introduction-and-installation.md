@@ -1,6 +1,12 @@
+---
+layout: default
+title: "1. Introduction & Installation"
+nav_order: 11
+parent: Wiki
+---
+
 # Introduction, Scope, and Installation
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/01-introducao-e-instalacao.md](../pt-BR/01-introducao-e-instalacao.md)
 
 ---
 

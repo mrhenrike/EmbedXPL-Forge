@@ -1,6 +1,12 @@
+---
+layout: default
+title: "7. Scanners & AutoPwn"
+nav_order: 17
+parent: Wiki
+---
+
 # Scanners and AutoPwn
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/07-scanners-e-autopwn.md](../pt-BR/07-scanners-e-autopwn.md)
 
 ---
 

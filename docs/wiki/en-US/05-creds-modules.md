@@ -1,6 +1,12 @@
+---
+layout: default
+title: "5. Credentials Modules"
+nav_order: 15
+parent: Wiki
+---
+
 # Credential Modules
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/05-modulos-creds.md](../pt-BR/05-modulos-creds.md)
 
 ---
 

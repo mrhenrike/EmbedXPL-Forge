@@ -1,6 +1,12 @@
+---
+layout: default
+title: "18. Firmware Tools"
+nav_order: 28
+parent: Wiki
+---
+
 # Firmware Tools: `firmware-dl` and `firmware-analyze`
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/18-firmware-tools.md](../pt-BR/18-firmware-tools.md)
 
 ---
 

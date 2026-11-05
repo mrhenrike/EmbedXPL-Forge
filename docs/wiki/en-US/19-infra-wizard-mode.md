@@ -1,6 +1,12 @@
+---
+layout: default
+title: "19. Infra Wizard Mode"
+nav_order: 29
+parent: Wiki
+---
+
 # Infrastructure Wizard Mode
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/19-infra-wizard-mode.md](../pt-BR/19-infra-wizard-mode.md)
 
 ---
 

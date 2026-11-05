@@ -1,6 +1,12 @@
+---
+layout: default
+title: "3. Search & Listing"
+nav_order: 13
+parent: Wiki
+---
+
 # Search and Listing
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/03-busca-e-listagem.md](../pt-BR/03-busca-e-listagem.md)
 
 ---
 

@@ -1,6 +1,12 @@
+---
+layout: default
+title: "15. Discover Command"
+nav_order: 25
+parent: Wiki
+---
+
 # discover Command
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/15-comando-discover.md](../pt-BR/15-comando-discover.md)
 
 ---
 

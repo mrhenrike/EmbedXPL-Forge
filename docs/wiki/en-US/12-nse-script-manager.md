@@ -1,6 +1,12 @@
+---
+layout: default
+title: "12. NSE Script Manager"
+nav_order: 22
+parent: Wiki
+---
+
 # NSE Script Manager
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/12-nse-script-manager.md](../pt-BR/12-nse-script-manager.md)
 
 ---
 

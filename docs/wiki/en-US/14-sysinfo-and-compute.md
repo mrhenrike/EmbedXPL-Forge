@@ -1,6 +1,12 @@
+---
+layout: default
+title: "14. Sysinfo & Compute"
+nav_order: 24
+parent: Wiki
+---
+
 # sysinfo and compute Commands
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/14-sysinfo-e-compute.md](../pt-BR/14-sysinfo-e-compute.md)
 
 ---
 

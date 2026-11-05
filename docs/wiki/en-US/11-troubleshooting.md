@@ -1,6 +1,12 @@
+---
+layout: default
+title: "11. Troubleshooting"
+nav_order: 21
+parent: Wiki
+---
+
 # Troubleshooting
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/11-troubleshooting.md](../pt-BR/11-troubleshooting.md)
 
 ---
 

@@ -1,6 +1,12 @@
+---
+layout: default
+title: "4. Non-Interactive Mode"
+nav_order: 14
+parent: Wiki
+---
+
 # Non-Interactive Mode
 
-**Language:** English (en-US) | **pt-BR:** [../pt-BR/04-modo-nao-interativo.md](../pt-BR/04-modo-nao-interativo.md)
 
 ---
 
