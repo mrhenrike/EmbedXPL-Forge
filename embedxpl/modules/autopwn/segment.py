@@ -157,7 +157,19 @@ class SegmentAutoPwn:
                     break
 
             if self.check_only and hasattr(instance, "check"):
-                result = instance.check()
+                # Disable simulate during check() so fingerprinting actually runs.
+                # Modules that return True when simulate=True produce false positives
+                # in autopwn scans — check() must do real network verification.
+                _orig_sim = None
+                if hasattr(instance, "simulate"):
+                    _orig_sim = instance.simulate
+                    instance.simulate = False
+                try:
+                    result = instance.check()
+                finally:
+                    if _orig_sim is not None:
+                        instance.simulate = _orig_sim
+
                 if result is True or (isinstance(result, dict) and result.get("vulnerable")):
                     status = "vulnerable"
                     detail = str(result) if isinstance(result, dict) else "check() returned True"
