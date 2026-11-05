@@ -4,53 +4,47 @@ title: "Architecture Diagrams"
 nav_order: 40
 ---
 
-# Architecture Diagrams  -  EmbedXPL-Forge
+# Architecture Diagrams - EmbedXPL-Forge v7.0.0
 
+These high-resolution SVG diagrams are curated to match the documented version 7 feature set. They summarize **research coverage and assessment surfaces**, not verified vulnerabilities for arbitrary device versions.
 
-**Languages:** Diagram labels are **English (en-US)** by default. **Português (pt-BR):** [README.pt-BR.md](README.pt-BR.md).
+## Framework and research diagrams
 
-Diagrams show device attack surfaces with coverage indicators for EmbedXPL-Forge modules (`creds`, `exploits`, `scanners`, `generic`).
+| Illustration | Current SVG |
+|---|---|
+| Component architecture | [Open](../../assets/embedxpl_architecture.svg) |
+| Authorized assessment flow | [Open](../../assets/embedxpl_flow.svg) |
+| Module overview | [Open](exf_arch_overview.svg) |
+| APT group research catalog | [Open](exf_arch_apt_chains.svg) |
+| SOHO router | [Open](exf_arch_soho_router.svg) |
+| TP-Link / APT28 research mapping | [Open](exf_arch_tplink_apt28.svg) |
+| MikroTik RouterOS | [Open](exf_arch_mikrotik.svg) |
+| GPON ONT | [Open](exf_arch_gpon_ont.svg) |
 
-## Files
+## Device-specific Mermaid source files
 
-| File | Category |
-|------|----------|
-| [01-router-soho.mmd](01-router-soho.mmd) | SOHO / home gateway (Linux / RTOS firmware) |
-| [02-switch-l2-l3.mmd](02-switch-l2-l3.mmd) | Managed L2/L3 switch (limited coverage  -  3 modules) |
-| [04-isp-cpe.mmd](04-isp-cpe.mmd) | ISP CPE / GPON ONT (Huawei EchoLife/OptiXstar, validated) |
-| [05-edge-mixed.mmd](05-edge-mixed.mmd) | Mixed small-office edge (router + basic security combo) |
-| [07-gpon-ont-attack.mmd](07-gpon-ont-attack.mmd) | GPON ONT full attack surface map (validated on EG8145X6-10) |
+| File | Scope |
+|---|---|
+| [01-router-soho.mmd](01-router-soho.mmd) | Router / SOHO gateway |
+| [02-switch-l2-l3.mmd](02-switch-l2-l3.mmd) | Managed L2/L3 switch |
+| [04-isp-cpe.mmd](04-isp-cpe.mmd) | ISP CPE / GPON ONT |
+| [05-edge-mixed.mmd](05-edge-mixed.mmd) | Mixed edge / UTM-lite |
+| [07-gpon-ont-attack.mmd](07-gpon-ont-attack.mmd) | Huawei EG8145 research |
 
-## Rendered PNGs
+The legacy Mermaid files preserve detailed research notes and are **not one-to-one exports** of the new overview SVGs. PNGs from earlier versions remain for link compatibility.
 
-| PNG | Source |
-|-----|--------|
-| [exf_arch_router_soho.png](../../img/architecture/exf_arch_router_soho.png) | SOHO router |
-| [exf_arch_switch_l2l3.png](../../img/architecture/exf_arch_switch_l2l3.png) | Switch |
-| [exf_arch_isp_cpe.png](../../img/architecture/exf_arch_isp_cpe.png) | ISP CPE / GPON ONT |
-| [exf_arch_edge_mixed.png](../../img/architecture/exf_arch_edge_mixed.png) | Mixed edge |
-| [exf_arch_gpon_ont_attack.png](../../img/architecture/exf_arch_gpon_ont_attack.png) | GPON ONT full attack map |
+## Gallery
 
-### Gallery
-
-| SOHO Router | Switch |
+| Module architecture | APT research chain |
 |:---:|:---:|
-| ![SOHO router](../../img/architecture/exf_arch_router_soho.png) | ![Switch](../../img/architecture/exf_arch_switch_l2l3.png) |
+| ![v7 architecture](exf_arch_overview.svg) | ![v7 APT research](exf_arch_apt_chains.svg) |
 
-| ISP CPE / GPON ONT | Mixed Edge |
+| SOHO router | MikroTik |
 |:---:|:---:|
-| ![ISP CPE](../../img/architecture/exf_arch_isp_cpe.png) | ![Mixed edge](../../img/architecture/exf_arch_edge_mixed.png) |
+| ![SOHO](exf_arch_soho_router.svg) | ![MikroTik](exf_arch_mikrotik.svg) |
 
-| GPON ONT Full Attack Map |
-|:---:|
-| ![GPON ONT](../../img/architecture/exf_arch_gpon_ont_attack.png) |
+| TP-Link research | GPON ONT |
+|:---:|:---:|
+| ![TP-Link](exf_arch_tplink_apt28.svg) | ![GPON](exf_arch_gpon_ont.svg) |
 
-**GPON ONT attack map:** validated against Huawei EG8145X6-10 (OptiXstar, Loga Internet) and EG8145V5-V2 (EchoLife, Sumicity/Giga+). Maps all 11 exploit modules with their attack vectors.
-
-## Render Locally
-
-With [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli):
-
-```bash
-npx @mermaid-js/mermaid-cli -i docs/diagrams/architecture/01-router-soho.mmd -o docs/img/architecture/router_soho.png -b transparent
-```
+**Legal note:** Test only devices covered by written authorization, and follow the applicable rules of engagement.

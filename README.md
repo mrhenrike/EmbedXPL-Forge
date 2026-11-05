@@ -1198,14 +1198,14 @@ embedxpl (KapschRSU) > run
 
 ---
 
-## Framework Architecture (v3.1.0)
+## Framework Architecture (v7.0.0)
 
 ### Component Architecture
 
 Full layered view of the framework: CLI layer, Core Engine (orchestrator, protocol clients, shell engines), Intelligence Layer (ML, OUI, CVE DB), Quality Gates, and the 2800+ module arsenal organized by category.
 
 <p align="center">
-  <img src="docs/assets/embedxpl_architecture.png" width="960" alt="EmbedXPL-Forge Component Architecture v3.1.0"/>
+  <img src="docs/assets/embedxpl_architecture.svg" width="960" alt="EmbedXPL-Forge Component Architecture v7.0.0"/>
 </p>
 
 ### Audit & Exploitation Flow
@@ -1213,7 +1213,7 @@ Full layered view of the framework: CLI layer, Core Engine (orchestrator, protoc
 End-to-end data flow from target input through discovery, fingerprinting, module selection, exploitation, and reporting.
 
 <p align="center">
-  <img src="docs/assets/embedxpl_flow.png" width="960" alt="EmbedXPL-Forge Exploitation Flow v3.1.0"/>
+  <img src="docs/assets/embedxpl_flow.svg" width="960" alt="EmbedXPL-Forge Assessment Flow v7.0.0"/>
 </p>
 
 
@@ -1225,37 +1225,37 @@ Source files in [`docs/diagrams/architecture/`](docs/diagrams/architecture/).
 ### Module Architecture Overview
 
 <p align="center">
-  <img src="docs/diagrams/architecture/exf_arch_overview.png" width="900" alt="EmbedXPL-Forge Architecture Overview"/>
+  <img src="docs/diagrams/architecture/exf_arch_overview.svg" width="900" alt="EmbedXPL-Forge Architecture Overview"/>
 </p>
 
 ### APT Group Attack Chains
 
 <p align="center">
-  <img src="docs/diagrams/architecture/exf_arch_apt_chains.png" width="900" alt="APT Group Attack Chains"/>
+  <img src="docs/diagrams/architecture/exf_arch_apt_chains.svg" width="900" alt="APT Group Attack Chains"/>
 </p>
 
 ### SOHO Router Attack Surface
 
 <p align="center">
-  <img src="docs/diagrams/architecture/exf_arch_soho_router.png" width="900" alt="SOHO Router Attack Surface"/>
+  <img src="docs/diagrams/architecture/exf_arch_soho_router.svg" width="900" alt="SOHO Router Attack Surface"/>
 </p>
 
 ### TP-Link Attack Surface (APT28/GRU Campaign)
 
 <p align="center">
-  <img src="docs/diagrams/architecture/exf_arch_tplink_apt28.png" width="900" alt="TP-Link APT28 Attack Surface"/>
+  <img src="docs/diagrams/architecture/exf_arch_tplink_apt28.svg" width="900" alt="TP-Link APT28 Attack Surface"/>
 </p>
 
 ### MikroTik RouterOS Attack Surface
 
 <p align="center">
-  <img src="docs/diagrams/architecture/exf_arch_mikrotik.png" width="900" alt="MikroTik Attack Surface"/>
+  <img src="docs/diagrams/architecture/exf_arch_mikrotik.svg" width="900" alt="MikroTik Attack Surface"/>
 </p>
 
 ### GPON ONT Attack Surface (Huawei EG8145)
 
 <p align="center">
-  <img src="docs/diagrams/architecture/exf_arch_gpon_ont.png" width="900" alt="GPON ONT Attack Surface"/>
+  <img src="docs/diagrams/architecture/exf_arch_gpon_ont.svg" width="900" alt="GPON ONT Attack Surface"/>
 </p>
 
 ## Requirements
