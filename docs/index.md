@@ -58,6 +58,24 @@ uv pip install embedxpl
 
 ---
 
+## Architecture diagrams
+
+| SOHO Gateway | L2/L3 Switch |
+|:---:|:---:|
+| ![SOHO router](img/architecture/rxf_arch_router_soho.svg) | ![Switch](img/architecture/rxf_arch_switch_l2l3.svg) |
+
+| ISP CPE / GPON | NGFW / UTM |
+|:---:|:---:|
+| ![ISP CPE](img/architecture/rxf_arch_isp_cpe.svg) | ![NGFW](img/architecture/rxf_arch_ngfw_utm.svg) |
+
+| Mixed Edge |
+|:---:|
+| ![Mixed edge](img/architecture/rxf_arch_edge_mixed.svg) |
+
+→ Full diagram gallery: [Architecture Diagrams](diagrams/architecture/)
+
+---
+
 ## Links
 
 - [GitHub Repository](https://github.com/mrhenrike/EmbedXPL-Forge)

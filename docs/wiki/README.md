@@ -8,23 +8,19 @@
 
 ## Architecture Diagrams
 
-PNG gallery. Mermaid sources: [../diagrams/architecture/README.md](../diagrams/architecture/README.md).
+SVG gallery — [full page](../diagrams/architecture/).
 
-| SOHO Router | Managed Switch |
-|:-----------:|:--------------:|
-| ![SOHO](../img/architecture/exf_arch_router_soho.png) | ![Switch](../img/architecture/exf_arch_switch_l2l3.png) |
+| SOHO Gateway | L2/L3 Switch |
+|:---:|:---:|
+| ![SOHO](../img/architecture/rxf_arch_router_soho.svg) | ![Switch](../img/architecture/rxf_arch_switch_l2l3.svg) |
 
-| ISP CPE / GPON ONT | Mixed Edge |
-|:------------------:|:----------:|
-| ![ISP CPE](../img/architecture/exf_arch_isp_cpe.png) | ![Mixed edge](../img/architecture/exf_arch_edge_mixed.png) |
+| ISP CPE / GPON | Mixed Edge |
+|:---:|:---:|
+| ![ISP CPE](../img/architecture/rxf_arch_isp_cpe.svg) | ![Mixed edge](../img/architecture/rxf_arch_edge_mixed.svg) |
 
-| GPON ONT Full Attack Map |
-|:------------------------:|
-| ![GPON ONT](../img/architecture/exf_arch_gpon_ont_attack.png) |
-
-## Shared Resources
-
-- **Module path index:** [ANEXO-INDICE-MODULOS.md](ANEXO-INDICE-MODULOS.md)  —  regenerate with `python tools/gen_wiki_module_index.py`
+| NGFW / UTM | GPON ONT Attack |
+|:---:|:---:|
+| ![NGFW](../img/architecture/rxf_arch_ngfw_utm.svg) | ![GPON ONT](../img/architecture/rxf_arch_gpon_ont_attack.svg) |
 
 ## Governance
 

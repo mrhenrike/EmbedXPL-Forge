@@ -1,3 +1,7 @@
+---
+nav_exclude: true
+---
+
 # EmbedXPL-Forge Device Architecture Images
 
 **Current diagram baseline:** v7.0.0 source tag, cross-checked with the newer `main` README.

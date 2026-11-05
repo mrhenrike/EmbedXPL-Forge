@@ -52,7 +52,6 @@ exclude:
   - PLAN-*.md
   - UBUNTU-*.md
   - ANNOUNCEMENT.md
-  - assets/
 
 # Plugins (GitHub Pages safe list)
 plugins:
