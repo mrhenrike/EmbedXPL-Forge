@@ -111,6 +111,7 @@ secrets.json
 
 # === Scratch ===
 /exploit.txt
+/poc.txt
 
 # === OS ===
 .DS_Store
