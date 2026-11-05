@@ -1,7 +1,7 @@
 """
-embedxpl.engines.wordlists.i18n - Registry de localização e funções de tradução.
+embedxpl.engines.wordlists.i18n - Localisation registry and translation helpers.
 
-Uso básico:
+Basic usage:
     from embedxpl.engines.wordlists.i18n import t, set_session_locale, get_session_locale
 
     set_session_locale("pt-br")
@@ -34,51 +34,49 @@ from embedxpl.engines.wordlists.i18n.prompts import get_catalog
 
 logger = logging.getLogger(__name__)
 
-# ── Estado de sessão (thread-local) ───────────────────────────────────────────
+# ── Session state (thread-local) ──────────────────────────────────────────────
 
 _session = threading.local()
 _CATALOG: dict[str, dict[str, str]] = get_catalog()
 
 
 def set_session_locale(locale: str) -> str:
-    """
-    Define o locale da sessão atual (thread-safe via threading.local).
+    """Set the session locale (thread-safe via threading.local).
 
     Args:
-        locale: string de locale (ex: 'pt-br', 'en', 'es').
+        locale: locale string (e.g. 'pt-br', 'en', 'es').
 
     Returns:
-        Locale normalizado que foi salvo.
+        Normalised locale that was saved.
     """
     normalised = normalise_locale(locale)
     if normalised not in SUPPORTED_LOCALES:
-        logger.warning("Locale '%s' não suportado, usando '%s'.", locale, DEFAULT_LOCALE)
+        logger.warning("Locale '%s' not supported, falling back to '%s'.", locale, DEFAULT_LOCALE)
         normalised = DEFAULT_LOCALE
     _session.locale = normalised
     return normalised
 
 
 def get_session_locale() -> str:
-    """Retorna o locale da sessão atual, ou DEFAULT_LOCALE se não definido."""
+    """Return the active session locale, or DEFAULT_LOCALE if not set."""
     return getattr(_session, "locale", DEFAULT_LOCALE)
 
 
 def t(key: str, locale: Optional[str] = None, **kwargs) -> str:
-    """
-    Traduz uma chave do catálogo para o locale ativo (ou o fornecido).
+    """Translate a catalog key to the active locale (or the one provided).
 
     Args:
-        key: chave hierárquica com ponto (ex: 'wizard.header').
-        locale: override de locale (usa sessão se None).
-        **kwargs: variáveis de interpolação (ex: name='Pedro').
+        key: dot-separated hierarchical key (e.g. 'wizard.header').
+        locale: locale override — uses session locale when None.
+        **kwargs: interpolation variables (e.g. name='Pedro').
 
     Returns:
-        String traduzida; se chave ausente, retorna a própria chave como fallback.
+        Translated string; falls back to the key itself if missing.
     """
     active_locale = locale or get_session_locale()
     entry = _CATALOG.get(key)
     if entry is None:
-        logger.debug("Chave i18n ausente: '%s'", key)
+        logger.debug("i18n key missing: '%s'", key)
         return key
 
     text = entry.get(active_locale) or entry.get(DEFAULT_LOCALE) or key
@@ -86,14 +84,14 @@ def t(key: str, locale: Optional[str] = None, **kwargs) -> str:
         try:
             text = text.format(**kwargs)
         except KeyError as exc:
-            logger.debug("Interpolação i18n falhou em '%s': %s", key, exc)
+            logger.debug("i18n interpolation failed for '%s': %s", key, exc)
     return text
 
 
 def ask_language_selection() -> str:
-    """
-    Exibe menu de seleção de idioma e lê escolha via stdin.
-    Retorna locale normalizado (default 'en' se Enter em branco).
+    """Display language selection menu and read choice from stdin.
+
+    Returns the normalised locale (defaults to 'en' on blank Enter).
     """
     print()
     print(t("lang.select_header", locale="en"))
@@ -111,16 +109,15 @@ def ask_language_selection() -> str:
 
 
 def register_extra_strings(extra: dict[str, dict[str, str]]) -> None:
-    """
-    Registra strings adicionais no catálogo (útil para plugins/extensões).
+    """Register additional strings into the catalog (useful for plugins/extensions).
 
     Args:
-        extra: dicionário no mesmo formato do _CATALOG.
+        extra: dict in the same format as _CATALOG.
     """
     _CATALOG.update(extra)
 
 
-# ── Re-exports convenientes ────────────────────────────────────────────────────
+# ── Convenience re-exports ────────────────────────────────────────────────────
 
 __all__ = [
     "DEFAULT_LOCALE",

@@ -1,20 +1,20 @@
 """
-merger.py - Fusão, filtragem e deduplicação de wordlists.
+merger.py - Wordlist merging, filtering, and deduplication.
 
-Funcionalidades:
-  - Merge de múltiplos arquivos com deduplicação
-  - Filtragem por comprimento, charset, padrão regex
-  - Ordenação (alfabética, por comprimento, aleatória)
-  - Remoção de entradas puramente numéricas
-  - Output streaming para grandes volumes
+Features:
+  - Merge multiple files with deduplication
+  - Filtering by length, charset, regex pattern
+  - Sorting (alphabetical, by length, random)
+  - Removal of purely numeric entries
+  - Streaming output for large volumes
 
-Uso:
-  wlf.py merge lista1.lst lista2.lst -o merged.lst
+Usage:
+  wlf.py merge list1.lst list2.lst -o merged.lst
   wlf.py merge *.lst --min-len 8 --no-numeric --sort alpha
-  wlf.py merge lista.lst --filter "^[a-z]+$" --dedupe
+  wlf.py merge list.lst --filter "^[a-z]+$" --dedupe
 
-Autor: André Henrique (@mrhenrike)
-Versão: 1.0.0
+Author: André Henrique (@mrhenrike)
+Version: 1.0.0
 """
 from __future__ import annotations
 
@@ -30,13 +30,13 @@ logger = logging.getLogger(__name__)
 
 def _is_purely_numeric(s: str) -> bool:
     """
-    Verifica se uma string é composta apenas de dígitos.
+    Check whether a string consists entirely of digits.
 
     Args:
-        s: String a verificar.
+        s: String to check.
 
     Returns:
-        True se a string for puramente numérica.
+        True if the string is purely numeric.
     """
     return bool(re.fullmatch(r"\d+", s))
 
@@ -51,19 +51,19 @@ def stream_merged(
     sort_mode: Optional[str] = None,
 ) -> Generator[str, None, None]:
     """
-    Faz merge de múltiplas wordlists com filtragem e deduplicação.
+    Merge multiple wordlists with filtering and deduplication.
 
     Args:
-        filepaths: Lista de caminhos das wordlists a fundir.
-        min_len: Comprimento mínimo das entradas.
-        max_len: Comprimento máximo das entradas.
-        no_numeric: Se True, remove entradas puramente numéricas.
-        filter_pattern: Regex para filtrar entradas (apenas matches passam).
-        dedupe: Se True, remove duplicatas.
-        sort_mode: 'alpha', 'length', 'random' ou None (ordem de input).
+        filepaths: List of wordlist paths to merge.
+        min_len: Minimum entry length.
+        max_len: Maximum entry length.
+        no_numeric: If True, remove purely numeric entries.
+        filter_pattern: Regex to filter entries (only matches pass).
+        dedupe: If True, remove duplicates.
+        sort_mode: 'alpha', 'length', 'random', or None (input order).
 
     Yields:
-        Entradas filtradas e deduplicadas.
+        Filtered and deduplicated entries.
     """
     compiled_filter = re.compile(filter_pattern) if filter_pattern else None
     seen: set[str] = set()
@@ -72,7 +72,7 @@ def stream_merged(
     for filepath in filepaths:
         path = Path(filepath)
         if not path.exists():
-            logger.warning("Arquivo não encontrado: %s", filepath)
+            logger.warning("File not found: %s", filepath)
             continue
 
         with path.open(encoding="utf-8", errors="replace") as f:
@@ -92,7 +92,7 @@ def stream_merged(
                     seen.add(entry)
                 entries.append(entry)
 
-    # Ordenação
+    # Sorting
     if sort_mode == "alpha":
         entries.sort(key=str.lower)
     elif sort_mode == "length":
@@ -117,20 +117,20 @@ def merge_to_file(
     sort_mode: Optional[str] = None,
 ) -> int:
     """
-    Faz merge de wordlists e salva em arquivo.
+    Merge wordlists and save to a file.
 
     Args:
-        filepaths: Lista de arquivos de entrada.
-        output_path: Caminho do arquivo de saída.
-        min_len: Comprimento mínimo.
-        max_len: Comprimento máximo.
-        no_numeric: Se True, remove entradas numéricas.
-        filter_pattern: Regex de filtragem.
-        dedupe: Se True, remove duplicatas.
-        sort_mode: Modo de ordenação.
+        filepaths: List of input files.
+        output_path: Output file path.
+        min_len: Minimum entry length.
+        max_len: Maximum entry length.
+        no_numeric: If True, remove numeric entries.
+        filter_pattern: Filtering regex.
+        dedupe: If True, remove duplicates.
+        sort_mode: Sort mode.
 
     Returns:
-        Total de entradas escritas.
+        Total entries written.
     """
     out = Path(output_path)
     count = 0
@@ -142,5 +142,5 @@ def merge_to_file(
             f.write(entry + "\n")
             count += 1
 
-    logger.info("Merge concluído: %d entradas em %s", count, output_path)
+    logger.info("Merge complete: %d entries in %s", count, output_path)
     return count

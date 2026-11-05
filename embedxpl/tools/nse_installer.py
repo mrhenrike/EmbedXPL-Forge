@@ -1,10 +1,10 @@
 """EmbedXPL NSE Installer.
 
-Detecta o Nmap no sistema, copia nossos NSE customizados para
-/usr/share/nmap/scripts/ e executa 'nmap --script-updatedb'.
+Detects Nmap on the system, copies our custom NSE scripts to
+/usr/share/nmap/scripts/ and runs 'nmap --script-updatedb'.
 
-Apenas NSE *customizados* do EmbedXPL são instalados  -  os scripts
-absorvidos do Nmap original não são reinstalados (já estão lá).
+Only EmbedXPL *custom* NSE scripts are installed  -  scripts
+absorbed from the original Nmap are not reinstalled (they are already there).
 
 Uso:
     python3 -m embedxpl.tools.nse_installer [--dry-run] [--force]
@@ -26,26 +26,26 @@ _HERE = Path(__file__).resolve().parent.parent   # embedxpl/
 _NSE_ROOT = _HERE / "resources" / "nse"
 _NMAP_SCRIPTS = Path("/usr/share/nmap/scripts")
 
-# NSE customizados do EmbedXPL (prefixo embedxpl-)
+# EmbedXPL custom NSE scripts (prefix embedxpl-)
 _EMBEDXPL_PREFIX = "embedxpl-"
 
 
 def find_nmap() -> str | None:
-    """Retorna caminho do nmap se instalado."""
+    """Return nmap path if installed."""
     nmap = shutil.which("nmap")
     return nmap
 
 
 def list_our_nse() -> list[Path]:
-    """Lista todos os NSE customizados do EmbedXPL."""
+    """List all EmbedXPL custom NSE scripts."""
     return sorted(_NSE_ROOT.rglob(f"{_EMBEDXPL_PREFIX}*.nse"))
 
 
 def install(dry_run: bool = False, force: bool = False) -> dict:
-    """Instala NSE customizados no diretório do Nmap.
+    """Install custom NSE scripts into the Nmap directory.
 
     Returns:
-        dict com listas: added, updated, skipped, errors
+        dict with lists: added, updated, skipped, errors
     """
     nmap = find_nmap()
     if not nmap:
@@ -104,7 +104,7 @@ def install(dry_run: bool = False, force: bool = False) -> dict:
 
 
 def status() -> None:
-    """Lista todos os NSE do EmbedXPL e seu status de instalação."""
+    """List all EmbedXPL NSE scripts and their installation status."""
     print("\n  NSE Scripts  -  EmbedXPL Arsenal\n  " + "─" * 60)
     print(f"  {'Script':<45} {'Category':<15} {'Installed'}")
     print("  " + "─" * 60)
@@ -123,13 +123,13 @@ def status() -> None:
 
 
 def run_nse(script_name: str, target: str, extra_args: list | None = None) -> None:
-    """Executa um NSE via nmap contra um alvo."""
+    """Run an NSE script via nmap against a target."""
     nmap = find_nmap()
     if not nmap:
         print("[-] nmap not installed")
         return
 
-    # Tenta encontrar o script
+    # Try to find the script
     script_path = None
     for nse in _NSE_ROOT.rglob(f"*{script_name}*"):
         script_path = str(nse)

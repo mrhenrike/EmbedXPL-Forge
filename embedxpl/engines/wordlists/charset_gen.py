@@ -1,17 +1,17 @@
 """
-charset_gen.py - Geração de wordlists por charset e pattern (estilo Crunch).
+charset_gen.py - Wordlist generation by charset and pattern (Crunch-style).
 
-Suporta:
-  - Placeholders Crunch-style: @ minúsculas, , maiúsculas, % números, ^ especiais
-  - Hashcat-style masks: ?u ?l ?d ?s ?a ?b em qualquer posição
-  - Geração com restrições de composição: N dígitos + M minúsculas em comprimento L
-  - Charsets built-in: alpha, ualpha, lalpha, numeric, mixalpha, mixalpha-numeric
-  - Charset files externos (.cfg) com charsets nomeados
-  - Modo phone: geração de telefones com DDDs brasileiros
-  - Estimativa de tamanho antes de gerar
-  - Wizard interativo para criar charset files (--create-charset)
+Supports:
+  - Crunch-style placeholders: @ lowercase, , uppercase, % digits, ^ specials
+  - Hashcat-style masks: ?u ?l ?d ?s ?a ?b at any position
+  - Constrained composition generation: N digits + M lowercase at length L
+  - Built-in charsets: alpha, ualpha, lalpha, numeric, mixalpha, mixalpha-numeric
+  - External charset files (.cfg) with named charsets
+  - Phone mode: Brazilian phone number generation with area codes (DDDs)
+  - Size estimation before generating
+  - Interactive wizard to create charset files (--create-charset)
 
-Exemplos:
+Examples:
   wlf.py charset 6 8 abc123
   wlf.py charset 8 8 -p "@,%,^" --pattern "Pass@@@%%%"
   wlf.py charset 8 8 --mask "?u?l?l?l?d?d?s"
@@ -20,8 +20,8 @@ Exemplos:
   wlf.py charset 6 8 -f my_charsets.cfg mixalpha-numeric
   wlf.py charset --create-charset my_charsets.cfg
 
-Autor: André Henrique (@mrhenrike)
-Versão: 1.1.0
+Author: André Henrique (@mrhenrike)
+Version: 1.1.0
 """
 from __future__ import annotations
 
@@ -50,7 +50,7 @@ BUILTIN_CHARSETS: dict[str, str] = {
     "hex-upper":       "0123456789ABCDEF",
 }
 
-# Mapeamento de placeholders estilo Crunch
+# Crunch-style placeholder map
 PLACEHOLDER_MAP: dict[str, str] = {
     "@": BUILTIN_CHARSETS["lalpha"],
     ",": BUILTIN_CHARSETS["ualpha"],
@@ -58,7 +58,7 @@ PLACEHOLDER_MAP: dict[str, str] = {
     "^": BUILTIN_CHARSETS["special"],
 }
 
-# Mapeamento de placeholders estilo Hashcat (?u ?l ?d ?s ?a)
+# Hashcat-style placeholder map (?u ?l ?d ?s ?a)
 HASHCAT_MASK_MAP: dict[str, str] = {
     "?u": BUILTIN_CHARSETS["ualpha"],
     "?l": BUILTIN_CHARSETS["lalpha"],
@@ -69,7 +69,7 @@ HASHCAT_MASK_MAP: dict[str, str] = {
     "?H": "0123456789ABCDEF",
 }
 
-# DDDs brasileiros para modo phone
+# Brazilian DDDs for phone mode
 DDDS_BR = [
     "11", "12", "13", "14", "15", "16", "17", "18", "19",
     "21", "22", "24", "27", "28",
@@ -85,26 +85,26 @@ DDDS_BR = [
 
 def load_charset_file(filepath: str, charset_name: str) -> str:
     """
-    Carrega um charset nomeado de um arquivo .cfg.
+    Load a named charset from a .cfg file.
 
-    Formato do arquivo:
+    File format:
       [mixalpha-numeric]
       abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
     Args:
-        filepath: Caminho para o arquivo .cfg.
-        charset_name: Nome do charset a carregar.
+        filepath: Path to the .cfg file.
+        charset_name: Name of the charset to load.
 
     Returns:
-        String com os caracteres do charset.
+        String containing the charset characters.
 
     Raises:
-        FileNotFoundError: Se o arquivo não existir.
-        KeyError: Se o charset_name não existir no arquivo.
+        FileNotFoundError: If the file does not exist.
+        KeyError: If charset_name is not found in the file.
     """
     path = Path(filepath)
     if not path.exists():
-        raise FileNotFoundError(f"Charset file não encontrado: {filepath}")
+        raise FileNotFoundError(f"Charset file not found: {filepath}")
 
     cfg = ConfigParser()
     cfg.read(str(path), encoding="utf-8")
@@ -112,11 +112,11 @@ def load_charset_file(filepath: str, charset_name: str) -> str:
     if charset_name not in cfg:
         available = list(cfg.sections())
         raise KeyError(
-            f"Charset '{charset_name}' não encontrado em {filepath}. "
-            f"Disponíveis: {available}"
+            f"Charset '{charset_name}' not found in {filepath}. "
+            f"Available: {available}"
         )
 
-    # O valor do charset é a primeira key do bloco (pode ser multilinha)
+    # The charset value is the first key in the section (may span multiple lines)
     section = cfg[charset_name]
     chars = ""
     for key in section:
@@ -130,37 +130,37 @@ def get_charset(
     charset_file: Optional[str] = None,
 ) -> str:
     """
-    Resolve um charset pelo nome (built-in ou de arquivo externo).
+    Resolve a charset by name (built-in or from an external file).
 
     Args:
-        charset: Nome do charset ou string de caracteres direta.
-        charset_file: Caminho para arquivo .cfg opcional.
+        charset: Charset name or direct character string.
+        charset_file: Optional path to a .cfg file.
 
     Returns:
-        String com os caracteres únicos do charset.
+        String of unique charset characters.
     """
     if charset_file:
         return load_charset_file(charset_file, charset)
     if charset in BUILTIN_CHARSETS:
         return BUILTIN_CHARSETS[charset]
-    # Trata como string de chars diretos
+    # Treat as a direct character string
     return "".join(dict.fromkeys(charset))
 
 
 def estimate_size(charset_len: int, min_len: int, max_len: int) -> tuple[int, str]:
     """
-    Estima o número de palavras e tamanho em disco antes de gerar.
+    Estimate the number of words and disk size before generating.
 
     Args:
-        charset_len: Tamanho do charset.
-        min_len: Comprimento mínimo.
-        max_len: Comprimento máximo.
+        charset_len: Charset size.
+        min_len: Minimum length.
+        max_len: Maximum length.
 
     Returns:
-        Tupla (total_palavras, tamanho_formatado).
+        Tuple (total_words, formatted_size).
     """
     total = sum(charset_len ** length for length in range(min_len, max_len + 1))
-    # Estimativa de bytes: tamanho médio de palavra + newline
+    # Bytes estimate: average word length + newline
     avg_len = (min_len + max_len) / 2
     bytes_est = total * (avg_len + 1)
 
@@ -184,15 +184,15 @@ def generate_by_charset(
     max_len: int,
 ) -> Generator[str, None, None]:
     """
-    Gera todas as combinações de caracteres do charset para comprimentos min..max.
+    Generate all character combinations from charset for lengths min..max.
 
     Args:
-        charset: String de caracteres a usar.
-        min_len: Comprimento mínimo.
-        max_len: Comprimento máximo.
+        charset: Character string to use.
+        min_len: Minimum length.
+        max_len: Maximum length.
 
     Yields:
-        Strings geradas em ordem lexicográfica.
+        Generated strings in lexicographic order.
     """
     chars = list(dict.fromkeys(charset))
     for length in range(min_len, max_len + 1):
@@ -206,24 +206,24 @@ def generate_by_pattern(
     extra_charset: Optional[str] = None,
 ) -> Generator[str, None, None]:
     """
-    Gera strings com base em um pattern com placeholders.
+    Generate strings from a pattern with placeholders.
 
-    Placeholders suportados (estilo Crunch):
-      @  -> letras minúsculas
-      ,  -> letras maiúsculas
-      %  -> dígitos
-      ^  -> caracteres especiais
-      ?  -> custom (requer extra_charset)
+    Supported placeholders (Crunch-style):
+      @  -> lowercase letters
+      ,  -> uppercase letters
+      %  -> digits
+      ^  -> special characters
+      ?  -> custom (requires extra_charset)
 
-    Caracteres literais são mantidos como estão.
+    Literal characters are kept as-is.
 
     Args:
-        pattern: String de pattern com placeholders.
-        charset_file: Arquivo de charset para lookup adicional.
-        extra_charset: Charset extra para placeholder '?'.
+        pattern: Pattern string with placeholders.
+        charset_file: Charset file for additional lookup.
+        extra_charset: Extra charset for the '?' placeholder.
 
     Yields:
-        Strings geradas pelo pattern.
+        Strings generated by the pattern.
     """
     slots: list[list[str]] = []
     for ch in pattern:
@@ -243,21 +243,21 @@ def generate_phone_numbers(
     ddds: Optional[list[str]] = None,
 ) -> Generator[str, None, None]:
     """
-    Gera números de telefone brasileiros com DDDs.
+    Generate Brazilian phone numbers with area codes (DDDs).
 
     Args:
-        prefix: Prefixo internacional (ex: '+55', '0055').
-        ddds: Lista de DDDs; se None, usa todos os DDDs BR.
+        prefix: International prefix (e.g. '+55', '0055').
+        ddds: List of DDDs; if None, uses all Brazilian DDDs.
 
     Yields:
-        Números de telefone formatados.
+        Formatted phone numbers.
     """
     ddd_list = ddds or DDDS_BR
     for ddd in ddd_list:
-        # Celular: 9XXXX-XXXX (9 dígitos)
+        # Mobile: 9XXXX-XXXX (9 digits)
         for i in product("0123456789", repeat=8):
             yield f"{prefix}{ddd}9{''.join(i)}"
-        # Fixo: XXXX-XXXX (8 dígitos)
+        # Landline: XXXX-XXXX (8 digits)
         for i in product("0123456789", repeat=8):
             yield f"{prefix}{ddd}{''.join(i)}"
 
@@ -267,9 +267,9 @@ def generate_by_mask(
     custom_charset: Optional[str] = None,
 ) -> Generator[str, None, None]:
     """
-    Gera wordlist a partir de uma máscara estilo Hashcat.
+    Generate a wordlist from a Hashcat-style mask.
 
-    Tokens suportados:
+    Supported tokens:
       ?u  → uppercase letters (A-Z)
       ?l  → lowercase letters (a-z)
       ?d  → digits (0-9)
@@ -277,15 +277,15 @@ def generate_by_mask(
       ?a  → all printable (alpha+digits+special)
       ?h  → hex lowercase (0-9a-f)
       ?H  → hex uppercase (0-9A-F)
-      ?1  → custom charset (requer custom_charset)
-      Qualquer outro char → literal
+      ?1  → custom charset (requires custom_charset)
+      Any other char → literal
 
     Args:
-        mask: String de máscara (ex: "?u?l?l?l?d?d?s").
-        custom_charset: Charset para ?1 (user-defined).
+        mask: Mask string (e.g. "?u?l?l?l?d?d?s").
+        custom_charset: Charset for ?1 (user-defined).
 
     Yields:
-        Strings geradas.
+        Generated strings.
 
     Examples:
         generate_by_mask("?u?l?l?d?d")   # Aabb12-style
@@ -313,14 +313,14 @@ def generate_by_mask(
 
 def estimate_mask_size(mask: str, custom_charset: Optional[str] = None) -> tuple[int, str]:
     """
-    Estima o número de entradas para uma máscara Hashcat.
+    Estimate the number of entries for a Hashcat mask.
 
     Args:
-        mask: Máscara estilo Hashcat.
-        custom_charset: Charset para ?1.
+        mask: Hashcat-style mask string.
+        custom_charset: Charset for ?1.
 
     Returns:
-        Tupla (total_entradas, tamanho_formatado).
+        Tuple (total_entries, formatted_size).
     """
     slot_sizes: list[int] = []
     i = 0
@@ -368,23 +368,23 @@ def generate_constrained(
     n_special: int = 0,
 ) -> Generator[str, None, None]:
     """
-    Gera combinações com composição exata de tipos de caracteres.
+    Generate combinations with an exact character-type composition.
 
-    Garante exatamente N dígitos, M minúsculas, K maiúsculas e P especiais
-    no comprimento total L. Útil para atender políticas de senha.
+    Guarantees exactly N digits, M lowercase, K uppercase, and P specials
+    within total length L. Useful for satisfying password policies.
 
     Args:
-        length: Comprimento total da senha.
-        n_digits: Quantidade exata de dígitos.
-        n_lower: Quantidade exata de letras minúsculas.
-        n_upper: Quantidade exata de letras maiúsculas.
-        n_special: Quantidade exata de caracteres especiais.
+        length: Total password length.
+        n_digits: Exact number of digits.
+        n_lower: Exact number of lowercase letters.
+        n_upper: Exact number of uppercase letters.
+        n_special: Exact number of special characters.
 
     Yields:
-        Strings geradas com a composição especificada.
+        Strings with the specified composition.
 
     Raises:
-        ValueError: Se a soma das restrições não cobrir o comprimento total.
+        ValueError: If the sum of constraints exceeds the total length.
 
     Examples:
         generate_constrained(8, n_digits=2, n_lower=4, n_upper=1, n_special=1)
@@ -393,8 +393,8 @@ def generate_constrained(
     free = length - required
     if free < 0:
         raise ValueError(
-            f"Restrições somam {required} mas comprimento é {length}. "
-            "Reduza as contagens ou aumente o comprimento."
+            f"Constraints sum to {required} but length is {length}. "
+            "Reduce counts or increase the length."
         )
 
     digits_chars = list(BUILTIN_CHARSETS["numeric"])
@@ -403,8 +403,7 @@ def generate_constrained(
     special_chars = list(BUILTIN_CHARSETS["special"])
     all_chars = list(BUILTIN_CHARSETS["mixalpha-numeric-special"])
 
-    # Cada slot de posição → charsets possíveis
-    # Construir pool de slots baseado nas restrições
+    # Each position slot → possible charsets; build pool based on constraints
     slot_pools: list[list[str]] = []
     slot_pools.extend([digits_chars] * n_digits)
     slot_pools.extend([lower_chars] * n_lower)
@@ -412,7 +411,7 @@ def generate_constrained(
     slot_pools.extend([special_chars] * n_special)
     slot_pools.extend([all_chars] * free)
 
-    # Gerar todas as permutações de posições dos slots
+    # Generate all slot-position permutations
     seen: set[str] = set()
     n_slots = len(slot_pools)
 
@@ -433,17 +432,17 @@ def estimate_constrained_size(
     n_special: int = 0,
 ) -> tuple[int, str]:
     """
-    Estima o número de entradas para geração com restrições de composição.
+    Estimate the number of entries for constrained composition generation.
 
     Args:
-        length: Comprimento total.
-        n_digits: Quantidade de dígitos obrigatórios.
-        n_lower: Quantidade de minúsculas obrigatórias.
-        n_upper: Quantidade de maiúsculas obrigatórias.
-        n_special: Quantidade de especiais obrigatórios.
+        length: Total length.
+        n_digits: Required digit count.
+        n_lower: Required lowercase count.
+        n_upper: Required uppercase count.
+        n_special: Required special-character count.
 
     Returns:
-        Tupla (total_estimado, tamanho_formatado).
+        Tuple (estimated_total, formatted_size).
     """
     from math import factorial
 
@@ -457,7 +456,7 @@ def estimate_constrained_size(
     if free < 0:
         return 0, "0 B"
 
-    # Combinações de valores × permutações de posições
+    # Value combinations × position permutations
     value_combos = (d ** n_digits) * (l_ ** n_lower) * (u ** n_upper) * (s ** n_special) * (a ** free)
 
     # Multinomial coefficient for position arrangements
@@ -483,39 +482,38 @@ def estimate_constrained_size(
 
 def create_charset_wizard(output_file: str) -> None:
     """
-    Wizard interativo para criar um arquivo de charset .cfg.
+    Interactive wizard to create a .cfg charset file.
 
-    Guia o usuário pelo processo de definição de charsets nomeados
-    e salva no formato .cfg compatível com wlf.py.
+    Guides the user through defining named charsets and saves
+    the result in .cfg format compatible with wlf.py.
 
     Args:
-        output_file: Caminho do arquivo de saída.
+        output_file: Output file path.
     """
-    print("\n=== Wizard de Criação de Charset File ===\n")
-    print(f"Destino: {output_file}")
-    print("Defina charsets nomeados. Digite 'fim' para encerrar.\n")
+    print("\n=== Charset File Creation Wizard ===\n")
+    print(f"Destination: {output_file}")
+    print("Define named charsets. Type 'done' to finish.\n")
 
     charsets: dict[str, str] = {}
 
     while True:
-        name = input("Nome do charset (ex: 'mixalpha', 'custom-corp', ou 'fim' para encerrar): ").strip()
-        if name.lower() == "fim":
+        name = input("Charset name (e.g. 'mixalpha', 'custom-corp', or 'done' to finish): ").strip()
+        if name.lower() in ("done", "fim"):
             break
         if not name:
-            print("Nome não pode ser vazio.")
+            print("Name cannot be empty.")
             continue
-        chars = input(f"Caracteres para '{name}': ").strip()
+        chars = input(f"Characters for '{name}': ").strip()
         if not chars:
-            print("Charset não pode ser vazio.")
+            print("Charset cannot be empty.")
             continue
         charsets[name] = "".join(dict.fromkeys(chars))
-        print(f"  OK '{name}' com {len(charsets[name])} caracteres únicos.\n")
+        print(f"  OK '{name}' with {len(charsets[name])} unique characters.\n")
 
     if not charsets:
-        print("Nenhum charset definido. Abortando.")
+        print("No charsets defined. Aborting.")
         return
 
-    # Gerar arquivo
     lines = []
     for name, chars in charsets.items():
         lines.append(f"[{name}]")
@@ -523,6 +521,6 @@ def create_charset_wizard(output_file: str) -> None:
         lines.append("")
 
     Path(output_file).write_text("\n".join(lines), encoding="utf-8")
-    print(f"\nCharset file salvo em: {output_file}")
-    print(f"Charsets criados: {list(charsets.keys())}")
-    print(f"\nUso: wlf.py charset 6 8 -f {output_file} <nome_do_charset>")
+    print(f"\nCharset file saved to: {output_file}")
+    print(f"Charsets created: {list(charsets.keys())}")
+    print(f"\nUsage: wlf.py charset 6 8 -f {output_file} <charset_name>")

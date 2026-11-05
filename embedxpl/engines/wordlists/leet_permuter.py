@@ -1,15 +1,15 @@
 """
-leet_permuter.py - Geração de permutações leet speak e variações de escrita.
+leet_permuter.py - Leet speak permutation and writing variation generation.
 
-Modos disponíveis:
-  basic      - Substituições mais comuns (a->@, e->3, i->1, o->0, s->$)
-  medium     - Substituições expandidas (t->7, l->1, b->6, etc.)
-  aggressive - Todas as substituições possíveis + combinações
-  custom     - Mapeamento definido pelo usuário (ex: a=@,4;t=7;s=$)
+Available modes:
+  basic      - Most common substitutions (a->@, e->3, i->1, o->0, s->$)
+  medium     - Extended substitutions (t->7, l->1, b->6, etc.)
+  aggressive - All possible substitutions + combinations
+  custom     - User-defined mapping (e.g. a=@,4;t=7;s=$)
 
-Referência: C code permutation engine (GeekUniao), CUPP 1337 mode.
-Autor: André Henrique (@mrhenrike)
-Versão: 1.0.0
+Reference: C code permutation engine (GeekUniao), CUPP 1337 mode.
+Author: André Henrique (@mrhenrike)
+Version: 1.0.0
 """
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ from typing import Generator, Iterable
 
 logger = logging.getLogger(__name__)
 
-# ── Mapeamentos de substituição leet ────────────────────────────────────────
+# ── Leet substitution mappings ───────────────────────────────────────────────
 
 LEET_BASIC: dict[str, list[str]] = {
     "a": ["a", "@"],
@@ -175,16 +175,16 @@ def leet_perm_wordlist(
 
 def parse_custom_mapping(mapping_str: str) -> dict[str, list[str]]:
     """
-    Converte string de mapeamento customizado em dict de substituições.
+    Convert a custom mapping string into a substitution dict.
 
-    Formato: 'a=@,4;t=7;s=$;l=1,|'
-    Cada par char=subs separado por ';', subs separadas por ','
+    Format: 'a=@,4;t=7;s=$;l=1,|'
+    Each char=subs pair separated by ';', subs separated by ','
 
     Args:
-        mapping_str: String de mapeamento no formato descrito.
+        mapping_str: Mapping string in the described format.
 
     Returns:
-        Dict mapeando cada char para lista de substituições.
+        Dict mapping each char to a list of substitutions.
     """
     mapping: dict[str, list[str]] = {}
     if not mapping_str:
@@ -205,14 +205,14 @@ def parse_custom_mapping(mapping_str: str) -> dict[str, list[str]]:
 
 def _get_table(mode: str, custom_mapping: str = "") -> dict[str, list[str]]:
     """
-    Retorna a tabela de substituições para o modo especificado.
+    Return the substitution table for the specified mode.
 
     Args:
-        mode: 'basic', 'medium', 'aggressive' ou 'custom'.
-        custom_mapping: String de mapeamento (apenas para modo 'custom').
+        mode: 'basic', 'medium', 'aggressive', or 'custom'.
+        custom_mapping: Mapping string (only for 'custom' mode).
 
     Returns:
-        Dict de substituições leet para o modo escolhido.
+        Leet substitution dict for the chosen mode.
     """
     if mode == "basic":
         return LEET_BASIC
@@ -223,7 +223,7 @@ def _get_table(mode: str, custom_mapping: str = "") -> dict[str, list[str]]:
     elif mode == "custom":
         return parse_custom_mapping(custom_mapping)
     else:
-        raise ValueError(f"Modo leet inválido: {mode}. Use basic|medium|aggressive|custom")
+        raise ValueError(f"Invalid leet mode: {mode}. Use basic|medium|aggressive|custom")
 
 
 def generate_leet(
@@ -233,23 +233,23 @@ def generate_leet(
     max_results: int = 10000,
 ) -> Generator[str, None, None]:
     """
-    Gera todas as permutações leet para uma palavra no modo especificado.
+    Generate all leet permutations for a word in the specified mode.
 
-    No modo 'aggressive', o número de combinações pode ser muito alto.
-    Use max_results para limitar o output.
+    In 'aggressive' mode, the number of combinations can be very high.
+    Use max_results to cap the output.
 
     Args:
-        word: Palavra de entrada.
-        mode: Modo de substituição ('basic', 'medium', 'aggressive', 'custom').
-        custom_mapping: Mapeamento customizado (apenas para mode='custom').
-        max_results: Limite máximo de resultados gerados.
+        word: Input word.
+        mode: Substitution mode ('basic', 'medium', 'aggressive', 'custom').
+        custom_mapping: Custom mapping string (only for mode='custom').
+        max_results: Maximum number of results to generate.
 
     Yields:
-        Strings com variações leet da palavra.
+        Strings with leet variations of the word.
     """
     table = _get_table(mode, custom_mapping)
 
-    # Para cada caractere, obtém lista de possíveis substituições
+    # For each character, get the list of possible substitutions
     char_options: list[list[str]] = []
     for ch in word:
         opts = table.get(ch, [ch])
@@ -260,7 +260,7 @@ def generate_leet(
     count = 0
     for combination in product(*char_options):
         if count >= max_results:
-            logger.debug("Limite de %d resultados atingido para '%s'", max_results, word)
+            logger.debug("Result limit of %d reached for '%s'", max_results, word)
             break
         yield "".join(combination)
         count += 1
@@ -268,13 +268,13 @@ def generate_leet(
 
 def generate_case_variations(word: str) -> Generator[str, None, None]:
     """
-    Gera variações de caixa (uppercase, lowercase, title, toggle).
+    Generate case variations (uppercase, lowercase, title, toggle).
 
     Args:
-        word: Palavra de entrada.
+        word: Input word.
 
     Yields:
-        Variações de escrita: original, upper, lower, title, swapcase.
+        Writing variations: original, upper, lower, title, swapcase.
     """
     seen: set[str] = set()
     for variant in [word, word.upper(), word.lower(), word.title(), word.swapcase()]:
@@ -291,17 +291,17 @@ def generate_all_variations(
     max_leet: int = 5000,
 ) -> Generator[str, None, None]:
     """
-    Gera variações completas: case + leet para uma palavra.
+    Generate full variations: case + leet for a word.
 
     Args:
-        word: Palavra base.
-        leet_mode: Modo leet a aplicar.
-        custom_mapping: Mapeamento customizado.
-        include_case: Se True, aplica variações de case antes do leet.
-        max_leet: Limite de permutações leet por variação de case.
+        word: Base word.
+        leet_mode: Leet mode to apply.
+        custom_mapping: Custom mapping string.
+        include_case: If True, apply case variations before leet.
+        max_leet: Maximum leet permutations per case variation.
 
     Yields:
-        Todas as variações únicas geradas.
+        All unique generated variations.
     """
     seen: set[str] = set()
 
@@ -316,18 +316,18 @@ def generate_all_variations(
 
 def permute_geek_uniao(password: str) -> Generator[str, None, None]:
     """
-    Porta Python do algoritmo C de permutação GeekUniao.
+    Python port of the GeekUniao C permutation algorithm.
 
-    Gera todas as combinações caractere-a-caractere para uma senha,
-    usando o mapeamento agressivo de substituições.
+    Generates all character-by-character combinations for a password
+    using the aggressive substitution mapping.
 
-    Equivalente ao código C fornecido com strU, strN, strI, strA, strO,
-    strG, strE, strK e strNumEsp combinados em loops aninhados.
+    Equivalent to the C code with strU, strN, strI, strA, strO,
+    strG, strE, strK and strNumEsp combined in nested loops.
 
     Args:
-        password: Senha base a permutar.
+        password: Base password to permute.
 
     Yields:
-        Todas as permutações da senha.
+        All permutations of the password.
     """
     yield from generate_leet(password, mode="aggressive", max_results=100000)

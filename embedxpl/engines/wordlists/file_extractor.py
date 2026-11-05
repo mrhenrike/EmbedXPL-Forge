@@ -1,15 +1,15 @@
 """
-file_extractor.py - Extração de conteúdo de múltiplos tipos de arquivo.
+file_extractor.py - Content extraction from multiple file types.
 
-Suporta até 50 arquivos de entrada dos tipos:
+Supports up to 50 input files of types:
   xlsx, xls, docx, doc, rtf, txt, md, py, c, rb,
   jpeg, jpg, bmp, tiff, png (via OCR), pdf
 
-Exemplo:
-  wlf.py extract arq1.pdf arq2.xlsx imagem.png -o wordlist_extraida.txt
+Example:
+  wlf.py extract file1.pdf file2.xlsx image.png -o extracted_wordlist.txt
 
-Autor: André Henrique (@mrhenrike)
-Versão: 1.0.0
+Author: André Henrique (@mrhenrike)
+Version: 1.0.0
 """
 from __future__ import annotations
 
@@ -36,30 +36,30 @@ PDF_EXTS = {".pdf"}
 
 def _extract_text_file(path: Path) -> str:
     """
-    Lê um arquivo de texto simples (txt, md, py, c, rb, etc.).
+    Read a plain text file (txt, md, py, c, rb, etc.).
 
     Args:
-        path: Caminho do arquivo.
+        path: File path.
 
     Returns:
-        Conteúdo textual.
+        Text content.
     """
     try:
         return path.read_text(encoding="utf-8", errors="replace")
     except Exception as exc:
-        logger.warning("Erro ao ler %s: %s", path, exc)
+        logger.warning("Error reading %s: %s", path, exc)
         return ""
 
 
 def _extract_xlsx(path: Path) -> str:
     """
-    Extrai texto de todas as células de um XLSX.
+    Extract text from all cells of an XLSX file.
 
     Args:
-        path: Caminho do arquivo XLSX.
+        path: XLSX file path.
 
     Returns:
-        Conteúdo concatenado das células.
+        Concatenated cell content.
     """
     try:
         import openpyxl
@@ -73,57 +73,57 @@ def _extract_xlsx(path: Path) -> str:
         wb.close()
         return " ".join(parts)
     except Exception as exc:
-        logger.warning("Erro ao ler XLSX %s: %s", path, exc)
+        logger.warning("Error reading XLSX %s: %s", path, exc)
         return ""
 
 
 def _extract_docx(path: Path) -> str:
     """
-    Extrai texto de um documento DOCX.
+    Extract text from a DOCX document.
 
     Args:
-        path: Caminho do arquivo DOCX.
+        path: DOCX file path.
 
     Returns:
-        Texto extraído.
+        Extracted text.
     """
     try:
         import docx
         doc = docx.Document(str(path))
         return "\n".join(p.text for p in doc.paragraphs)
     except Exception as exc:
-        logger.warning("Erro ao ler DOCX %s: %s", path, exc)
+        logger.warning("Error reading DOCX %s: %s", path, exc)
         return ""
 
 
 def _extract_rtf(path: Path) -> str:
     """
-    Extrai texto de um arquivo RTF.
+    Extract text from an RTF file.
 
     Args:
-        path: Caminho do arquivo RTF.
+        path: RTF file path.
 
     Returns:
-        Texto sem formatação RTF.
+        Plain text without RTF formatting.
     """
     try:
         from striprtf.striprtf import rtf_to_text
         raw = path.read_bytes().decode("utf-8", errors="replace")
         return rtf_to_text(raw)
     except Exception as exc:
-        logger.warning("Erro ao ler RTF %s: %s", path, exc)
+        logger.warning("Error reading RTF %s: %s", path, exc)
         return ""
 
 
 def _extract_pdf(path: Path) -> str:
     """
-    Extrai texto de um PDF usando pdfplumber.
+    Extract text from a PDF using pdfplumber.
 
     Args:
-        path: Caminho do arquivo PDF.
+        path: PDF file path.
 
     Returns:
-        Texto extraído de todas as páginas.
+        Text extracted from all pages.
     """
     try:
         import pdfplumber
@@ -135,38 +135,38 @@ def _extract_pdf(path: Path) -> str:
                     parts.append(text)
         return "\n".join(parts)
     except Exception as exc:
-        logger.warning("Erro ao ler PDF %s: %s", path, exc)
+        logger.warning("Error reading PDF %s: %s", path, exc)
         return ""
 
 
 def _extract_image(path: Path) -> str:
     """
-    Extrai texto de imagem via OCR (easyocr).
+    Extract text from an image via OCR (easyocr).
 
     Args:
-        path: Caminho do arquivo de imagem.
+        path: Image file path.
 
     Returns:
-        Texto extraído via OCR.
+        Text extracted via OCR.
     """
     try:
         from .ocr_extractor import extract_from_image
         result = extract_from_image(str(path), classify=False)
         return " ".join(result.get("words", []) + result.get("usernames", []) + result.get("passwords", []))
     except Exception as exc:
-        logger.warning("Erro ao processar imagem %s: %s", path, exc)
+        logger.warning("Error processing image %s: %s", path, exc)
         return ""
 
 
 def extract_from_file(path: Path) -> str:
     """
-    Extrai texto de um arquivo baseado em sua extensão.
+    Extract text from a file based on its extension.
 
     Args:
-        path: Caminho do arquivo.
+        path: File path.
 
     Returns:
-        Texto extraído.
+        Extracted text.
     """
     ext = path.suffix.lower()
 
@@ -183,7 +183,7 @@ def extract_from_file(path: Path) -> str:
     elif ext in IMAGE_EXTS:
         return _extract_image(path)
     else:
-        logger.warning("Tipo de arquivo não suportado: %s", ext)
+        logger.warning("Unsupported file type: %s", ext)
         return ""
 
 
@@ -194,23 +194,23 @@ def extract_wordlist_from_files(
     dedup: bool = True,
 ) -> Generator[str, None, None]:
     """
-    Extrai conteúdo de múltiplos arquivos e gera wordlist.
+    Extract content from multiple files and generate a wordlist.
 
-    Aceita até 50 arquivos. Suporta: xlsx, docx, rtf, txt, md,
+    Accepts up to 50 files. Supports: xlsx, docx, rtf, txt, md,
     py, c, rb, jpeg, bmp, jpg, tiff, png (OCR), pdf.
 
     Args:
-        file_paths: Lista de caminhos de arquivos (máximo 50).
-        min_len: Comprimento mínimo dos tokens extraídos.
-        max_len: Comprimento máximo dos tokens extraídos.
-        dedup: Se True, remove duplicatas no output.
+        file_paths: List of file paths (maximum 50).
+        min_len: Minimum length of extracted tokens.
+        max_len: Maximum length of extracted tokens.
+        dedup: If True, deduplicate the output.
 
     Yields:
-        Tokens únicos extraídos.
+        Unique extracted tokens.
     """
     if len(file_paths) > _MAX_FILES:
         logger.warning(
-            "Máximo de %d arquivos permitidos. Usando apenas os primeiros %d.",
+            "Maximum %d files allowed. Using only the first %d.",
             _MAX_FILES, _MAX_FILES,
         )
         file_paths = file_paths[:_MAX_FILES]
@@ -220,10 +220,10 @@ def extract_wordlist_from_files(
     for filepath in file_paths:
         path = Path(filepath)
         if not path.exists():
-            logger.warning("Arquivo não encontrado: %s", filepath)
+            logger.warning("File not found: %s", filepath)
             continue
 
-        logger.info("Extraindo: %s", filepath)
+        logger.info("Extracting: %s", filepath)
         text = extract_from_file(path)
 
         for match in _WORD_RE.finditer(text):

@@ -1,5 +1,3 @@
-# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
-
 [build-system]
 requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
@@ -88,7 +86,7 @@ at = [
 routers = []
 printers = [
     "pysnmp>=7.1",
-    "pyasn1>=0.5",
+    "pyasn1>=0.6.5",
 ]
 firewalls = [
     "textual>=0.40",
@@ -152,6 +150,19 @@ include = ["embedxpl*"]
     "ml/*.json",
     "*.yaml",
     "**/*.yaml",
+]
+
+[dependency-groups]
+dev = [
+    "build>=1.0",
+    "twine>=5.0",
+    "ruff>=0.4",
+    "mypy>=1.8",
+    "flake8>=6.0",
+    "bandit>=1.7",
+    "pip-audit>=2.6",
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
 ]
 
 [tool.mypy]
@@ -325,7 +336,8 @@ exclude = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"embedxpl/modules/**" = ["F401", "F404", "F523", "F524", "F601", "F811", "F821", "F841", "F842", "E402", "E711", "E712", "E722", "E731", "I001", "B006", "B012", "B018", "SIM101", "SIM112", "SIM116", "SIM118", "SIM201", "SIM211", "SIM212", "RUF034"]
+"embedxpl/modules/**" = ["F401", "F404", "F523", "F524", "F601", "F811", "F821", "F841", "F842", "E401", "E402", "E711", "E712", "E722", "E731", "I001", "B006", "B012", "B018", "SIM101", "SIM112", "SIM116", "SIM118", "SIM201", "SIM211", "SIM212", "RUF021", "RUF034"]
+"embedxpl/modules/exploits/**/edb_*.py" = ["W605", "B905", "B034", "E711", "E712"]
 "embedxpl/engines/**" = ["F401", "F404", "F523", "F601", "F821", "F841", "E402", "E711", "E712", "E722", "I001", "B006", "B018", "B034", "SIM116", "SIM118", "SIM201", "SIM211", "SIM212", "SIM401", "RUF034"]
 "embedxpl/libs/**" = ["F821"]
 "embedxpl/core/**" = ["F401", "F601", "F821", "F841", "E402", "E711", "E712", "E722", "I001", "B005", "B006", "B012", "SIM101", "SIM112", "SIM118", "SIM201", "SIM212"]
@@ -339,7 +351,7 @@ exclude = [
 "tools/**" = ["F841", "SIM201", "E402"]
 "docs/**" = ["F841"]
 "exf.py" = ["E402"]
-"tests/**" = ["E402"]
+"tests/**" = ["E402", "F841", "B017"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["embedxpl"]

@@ -1,11 +1,9 @@
 """Tests for compat shims, bridges, evasion, plugins, poly, creds, cve, shells."""
 
-import json
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
-
 
 # ── Compat: HatSploit shim ──
 
@@ -64,13 +62,13 @@ class TestISFShim:
         assert ISFUDPClient is not None
 
     def test_isf_exceptions(self):
-        from embedxpl.core.compat.isf_shim import ISFExploitError, ISFCommunicationError
+        from embedxpl.core.compat.isf_shim import ISFCommunicationError, ISFExploitError
         assert issubclass(ISFCommunicationError, ISFExploitError)
         with pytest.raises(ISFExploitError):
             raise ISFCommunicationError("test")
 
     def test_isf_print_functions(self):
-        from embedxpl.core.compat.isf_shim import print_success, print_error, print_status
+        from embedxpl.core.compat.isf_shim import print_error, print_status, print_success
         with patch("embedxpl.core.exploit.printer.print_success"):
             print_success("ok")
         with patch("embedxpl.core.exploit.printer.print_error"):
@@ -106,8 +104,8 @@ class TestPluginLoader:
         assert isinstance(result, list)
 
     def test_load_plugin_class_not_found(self):
-        from embedxpl.core.plugins.loader import load_plugin_class
         from embedxpl.core.plugins import PluginLoadError
+        from embedxpl.core.plugins.loader import load_plugin_class
         with pytest.raises(PluginLoadError):
             load_plugin_class("nonexistent_plugin", "embedxpl.plugins")
 
@@ -211,7 +209,7 @@ class TestShellShims:
 
 class TestAPTCatalog:
     def test_import(self):
-        from embedxpl.core.apt_catalog import APT_CATALOG  # noqa: F401
+        from embedxpl.core.apt_catalog import APT_CATALOG
         assert isinstance(APT_CATALOG, (dict, list))
 
 

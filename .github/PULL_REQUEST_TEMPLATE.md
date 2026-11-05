@@ -1,35 +1,45 @@
-## Status
-**READY / IN DEVELOPMENT / HOLD**
-
-**Languages / Idiomas:** PR descriptions **English (en-US)** preferred; Portuguese acceptable if the change is pt-BR-only docs. Prefer **en-US + pt-BR** when editing user-facing docs. | PRs: texto preferencialmente em **inglês (en-US)**; português aceitável se for só documentação pt-BR. Documentação de utilizador: ideal **en-US e pt-BR**.
-
 ## Description
-Explain the change and why. Link issues: `closes #`.
 
-## Scope
-- [ ] In scope (router/switch/TAP/fw/NGFW)
-- [ ] Does not introduce camera/printer/DVR as primary focus
+<!-- Briefly describe what this PR does and why. -->
 
-## Verification
-Reproducible steps and outcome.
+## Type of change
 
-1.
-2.
-3.
+- [ ] Bug fix
+- [ ] New exploit module / engine
+- [ ] Dependency update
+- [ ] Refactor / code quality
+- [ ] Documentation
+- [ ] Other:
 
-## Required local checks
+## Security checklist (required for all PRs)
 
-- [ ] `python tools/env_doctor.py`
-- [ ] `python tools/compile_first_party.py`
-- [ ] `python tools/compat_smoke.py`
-- [ ] `python tools/validate_market_priority_minimums.py` (if catalogs changed)
-- [ ] `python tools/generate_coverage_matrix.py` (if modules/docs matrix affected)
-- [ ] `python tools/gen_wiki_module_index.py` (if modules added/removed)
+> This project is a security tool used by real operators. Malicious code in
+> non-exploit modules could harm end users. All items below must be checked
+> before this PR can be reviewed.
 
-## Risk notes
-- Operational:
-- Security:
-- Rollback:
+- [ ] No reverse shells, bind shells, or C2 beacons in non-exploit modules
+- [ ] No hard-coded attacker-controlled IPs/domains outside `modules/exploits/`
+- [ ] No base64/obfuscated blobs that decode to shellcode in core/engine code
+- [ ] No credential or key exfiltration to external hosts
+- [ ] No unauthorized persistence (cron, registry Run keys, startup entries)
+- [ ] No download-and-execute chains in non-exploit code
+- [ ] All new network connections go to user-supplied targets only
+- [ ] Dependencies added are well-known PyPI packages (not typosquats)
 
+## Testing
 
-Governance: [CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md) · [CONTRIBUTING.md](../CONTRIBUTING.md) · [CONTRIBUTING.pt-BR.md](../CONTRIBUTING.pt-BR.md)
+- [ ] `python tools/run_scoped_tests.py` passes
+- [ ] `ruff check .` passes (or explain exclusions)
+- [ ] Manually tested on a lab target
+
+## Authorship acknowledgement
+
+> **Policy:** Only `@mrhenrike` authors commits that land in `main`.
+> External contributors submit PRs; the maintainer reviews and squash-merges.
+> The `author-gate` CI check enforces this automatically.
+
+- [ ] I understand that @mrhenrike will squash-merge or cherry-pick this PR under their own authorship if accepted.
+
+## Notes for reviewer
+
+<!-- Anything the maintainer should pay special attention to. -->

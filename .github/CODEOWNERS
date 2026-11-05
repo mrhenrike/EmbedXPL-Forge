@@ -1,0 +1,4 @@
+# All files require review and approval from @mrhenrike before merging.
+# This ensures every external contribution is manually audited for
+# backdoors, C2 implants, and malicious code before it can reach users.
+* @mrhenrike

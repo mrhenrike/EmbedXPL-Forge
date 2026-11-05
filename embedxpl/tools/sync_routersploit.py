@@ -1,14 +1,14 @@
 """EmbedXPL RouterSploit Absorption Tool.
 
-Absorve módulos RouterSploit não importados ainda:
+Absorbs RouterSploit modules not yet imported:
 - exploits/cameras/  (21 modules)
 - exploits/misc/     (4 modules)
-- creds/             (156 restantes de 171)
+- creds/             (156 remaining of 171)
 
-Converte automaticamente para o padrão EmbedXPL:
-- Import: embedxpl.core.exploit (não routersploit.core.exploit)
-- Mantém __info__, execute/run, check
-- Adiciona wrapper de compatibilidade para OptIP/OptPort
+Automatically converts to the EmbedXPL standard:
+- Import: embedxpl.core.exploit (not routersploit.core.exploit)
+- Keeps __info__, execute/run, check
+- Adds compatibility wrapper for OptIP/OptPort
 
 Uso:
     python3 -m embedxpl.tools.sync_routersploit [--dry-run] [--creds-only] [--cameras-only]
@@ -27,7 +27,7 @@ _EXF_CREDS   = _HERE / "modules" / "creds" / "rsf"
 _EXF_CREDS.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
-# Transformação de código RSF → EmbedXPL
+# RSF → EmbedXPL code transformation
 # ---------------------------------------------------------------------------
 
 _IMPORT_MAP = {
@@ -52,7 +52,7 @@ _HEADER = """\
 
 
 def _transform_source(src: str, vendor: str = "") -> str:
-    """Transforma imports RSF em imports EmbedXPL."""
+    """Transform RSF imports into EmbedXPL imports."""
     result = _HEADER + "\n"
 
     for line in src.splitlines():
@@ -63,13 +63,13 @@ def _transform_source(src: str, vendor: str = "") -> str:
                 mapped = True
                 break
         if not mapped:
-            # Remover imports RSF não mapeados
+            # Remove unmapped RSF imports
             if "routersploit" in line:
                 result += f"# SKIPPED: {line}\n"
             else:
                 result += line + "\n"
 
-    # Adicionar crédito EmbedXPL aos authors
+    # Add EmbedXPL credit to authors
     result = result.replace(
         '"authors": (',
         '"authors": (\n            "EmbedXPL absorption: André Henrique (@mrhenrike) | União Geek",',
@@ -80,7 +80,7 @@ def _transform_source(src: str, vendor: str = "") -> str:
 
 
 def _get_module_info(py_file: Path) -> dict:
-    """Extrai __info__ de um módulo RSF via AST."""
+    """Extract __info__ from an RSF module via AST."""
     try:
         src = py_file.read_text(errors="replace")
         tree = ast.parse(src)
@@ -96,7 +96,7 @@ def _get_module_info(py_file: Path) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Absorção de camera exploits RSF
+# Absorption of RSF camera exploits
 # ---------------------------------------------------------------------------
 
 def absorb_cameras(dry_run: bool = False) -> int:
@@ -137,7 +137,7 @@ def absorb_cameras(dry_run: bool = False) -> int:
 
 
 # ---------------------------------------------------------------------------
-# Absorção de misc RSF
+# Absorption of RSF misc exploits
 # ---------------------------------------------------------------------------
 
 def absorb_misc(dry_run: bool = False) -> int:
@@ -166,7 +166,7 @@ def absorb_misc(dry_run: bool = False) -> int:
 
 
 # ---------------------------------------------------------------------------
-# Absorção de creds RSF
+# Absorption of RSF creds
 # ---------------------------------------------------------------------------
 
 def absorb_creds(dry_run: bool = False) -> int:

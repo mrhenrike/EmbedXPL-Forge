@@ -170,7 +170,7 @@ def _read_metadata(source: str, file_path: str) -> dict:
             if not isinstance(node.value, ast.Dict):
                 continue
             info = {}
-            for key, value in zip(node.value.keys, node.value.values):
+            for key, value in zip(node.value.keys, node.value.values, strict=False):
                 try:
                     info[ast.literal_eval(key)] = ast.literal_eval(value)
                 except (ValueError, TypeError) as exc:
@@ -324,7 +324,7 @@ def _get_cache(rebuild: bool = False, use_db_cache: bool = True) -> list[ModuleR
                 db.close()
             except Exception:
                 pass
-        print("[*] Indexando módulos EmbedXPL (primeira execução  -  aguarde)...")
+        print("[*] Indexing EmbedXPL modules (first run  -  please wait)...")
         records = []
         for path in _iter_modules():
             rec = _extract_info(path)
@@ -333,7 +333,7 @@ def _get_cache(rebuild: bool = False, use_db_cache: bool = True) -> list[ModuleR
         # Enrich with tested status from module_test_status.json
         _enrich_tested_status(records)
         _MODULE_CACHE = records
-        print(f"[*] {len(records)} módulos indexados.")
+        print(f"[*] {len(records)} modules indexed.")
     return _MODULE_CACHE
 
 
@@ -529,7 +529,7 @@ def print_results(results: list[ModuleRecord], query: str = "") -> None:
         print(f"  {rec.display_path():<60} {cve_str:<25} {badge:<10} {rec.name[:50]}")
     print(f"{'='*110}")
     print(f"  {len(results)} module(s) found  |  Filters: type: vendor: severity: tested:yes/no")
-    print(f"  IDs: cve202412345 cwe79 ms17010 edb36913  |  Combined: cve <vendor>")
+    print("  IDs: cve202412345 cwe79 ms17010 edb36913  |  Combined: cve <vendor>")
     print()
 
 

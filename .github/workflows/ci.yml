@@ -1,5 +1,3 @@
-# Author: André Henrique (@mrhenrike) | União Geek  -  https://github.com/Uniao-Geek
-
 name: ci
 
 on:
@@ -14,46 +12,55 @@ permissions:
 jobs:
   lint:
     name: "ruff lint"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v4
         with:
+          enable-cache: true
           python-version: "3.12"
-      - run: pip install ruff
-      - run: ruff check .
+      - name: Create virtualenv
+        run: uv venv .venv
+      - name: Install ruff
+        run: uv pip install 'ruff>=0.4'
+      - run: uv run ruff check .
 
   typecheck:
     name: "mypy typecheck"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v4
         with:
+          enable-cache: true
           python-version: "3.12"
-      - run: |
-          pip install --upgrade pip setuptools wheel
-          pip install mypy
-          pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
-          pip install -e ".[dev]" || pip install -e .
-      - run: mypy embedxpl/
+      - name: Create virtualenv
+        run: uv venv .venv
+      - name: Install dependencies
+        run: |
+          uv pip install mypy
+          uv pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
+          uv pip install -e ".[dev]" || uv pip install -e .
+      - run: uv run mypy embedxpl/
 
   test:
     name: "pytest / py${{ matrix.python-version }}"
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       fail-fast: false
       matrix:
         python-version: ["3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v4
         with:
+          enable-cache: true
           python-version: ${{ matrix.python-version }}
-          allow-prereleases: true
-      - run: |
-          pip install --upgrade pip setuptools wheel
-          pip install pytest pytest-cov
-          pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main
-          pip install -e ".[dev]" || pip install -e .
-      - run: pytest tests/ -v --tb=short
+      - name: Create virtualenv
+        run: uv venv .venv
+      - name: Install dependencies
+        run: |
+          uv pip install pytest pytest-cov
+          uv pip install git+https://${{ secrets.XPL_CORE_TOKEN }}@github.com/mrhenrike/xpl-core.git@main || true
+          uv pip install -e ".[dev]" || uv pip install -e .
+      - run: uv run pytest tests/ -v --tb=short

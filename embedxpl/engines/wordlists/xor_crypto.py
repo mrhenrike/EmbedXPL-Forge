@@ -1,20 +1,20 @@
 """
-xor_crypto.py - Ferramenta XOR de criptografia e brute-force de chave.
+xor_crypto.py - XOR encryption and key brute-force tool.
 
-Port Python 3 do decriptorxor.py original (Python 2).
-Funcionalidades:
-  - Criptografia XOR com chave arbitrária
-  - Descriptografia XOR com chave conhecida
-  - Brute-force de chave XOR de 1 byte (256 tentativas)
-  - Scoring de texto legível para identificar resultado correto
+Python 3 port of the original decriptorxor.py (Python 2).
+Features:
+  - XOR encryption with arbitrary key
+  - XOR decryption with known key
+  - Single-byte XOR key brute-force (256 attempts)
+  - Readable text scoring to identify correct result
 
-Uso:
+Usage:
   wlf.py xor --brute HEXSTRING
-  wlf.py xor --encrypt "texto" --key "chave"
-  wlf.py xor --decrypt HEXSTRING --key "chave"
+  wlf.py xor --encrypt "text" --key "key"
+  wlf.py xor --decrypt HEXSTRING --key "key"
 
-Autor: André Henrique (@mrhenrike)
-Versão: 1.0.0
+Author: Andre Henrique (@mrhenrike)
+Version: 1.0.0
 """
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Charset de texto legível para scoring
+# Readable text charset for scoring
 _READABLE_CHARSET = (
     "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -33,29 +33,29 @@ _READABLE_CHARSET = (
 
 def score_text(text: str) -> int:
     """
-    Calcula score de legibilidade de um texto.
+    Calculate readability score for a text.
 
-    Quanto maior o score, mais legível é o texto (mais chars do charset).
+    Higher score means more readable text (more chars from the charset).
 
     Args:
-        text: String a avaliar.
+        text: String to evaluate.
 
     Returns:
-        Número de caracteres legíveis no texto.
+        Number of readable characters in the text.
     """
     return sum(1 for ch in text if ch in _READABLE_CHARSET)
 
 
 def xor_decrypt(ciphertext: bytes, key: bytes) -> bytes:
     """
-    Descriptografa bytes com chave XOR (repeating key).
+    Decrypt bytes with XOR key (repeating key).
 
     Args:
-        ciphertext: Bytes cifrados.
-        key: Chave XOR (pode ser de qualquer comprimento).
+        ciphertext: Encrypted bytes.
+        key: XOR key (any length).
 
     Returns:
-        Bytes descriptografados.
+        Decrypted bytes.
     """
     key_len = len(key)
     return bytes(b ^ key[i % key_len] for i, b in enumerate(ciphertext))
@@ -63,14 +63,14 @@ def xor_decrypt(ciphertext: bytes, key: bytes) -> bytes:
 
 def xor_encrypt(plaintext: bytes, key: bytes) -> bytes:
     """
-    Criptografa bytes com chave XOR (repeating key).
+    Encrypt bytes with XOR key (repeating key).
 
     Args:
-        plaintext: Bytes em texto plano.
-        key: Chave XOR (pode ser de qualquer comprimento).
+        plaintext: Plaintext bytes.
+        key: XOR key (any length).
 
     Returns:
-        Bytes cifrados.
+        Encrypted bytes.
     """
     key_len = len(key)
     return bytes(b ^ key[i % key_len] for i, b in enumerate(plaintext))
@@ -78,30 +78,30 @@ def xor_encrypt(plaintext: bytes, key: bytes) -> bytes:
 
 def xor_encrypt_str(plaintext: str, key: str, encoding: str = "utf-8") -> bytes:
     """
-    Criptografa string com chave XOR.
+    Encrypt a string with XOR key.
 
     Args:
-        plaintext: Texto em claro.
-        key: Chave como string.
-        encoding: Encoding para conversão.
+        plaintext: Plaintext string.
+        key: Key as string.
+        encoding: Encoding for conversion.
 
     Returns:
-        Bytes cifrados.
+        Encrypted bytes.
     """
     return xor_encrypt(plaintext.encode(encoding), key.encode(encoding))
 
 
 def xor_decrypt_str(ciphertext: bytes, key: str, encoding: str = "utf-8") -> str:
     """
-    Descriptografa bytes com chave XOR e retorna string.
+    Decrypt bytes with XOR key and return string.
 
     Args:
-        ciphertext: Bytes cifrados.
-        key: Chave como string.
-        encoding: Encoding para decodificação do resultado.
+        ciphertext: Encrypted bytes.
+        key: Key as string.
+        encoding: Encoding for decoding the result.
 
     Returns:
-        Texto descriptografado (erros substituídos).
+        Decrypted text (errors replaced).
     """
     decrypted = xor_decrypt(ciphertext, key.encode(encoding))
     return decrypted.decode(encoding, errors="replace")
@@ -109,22 +109,22 @@ def xor_decrypt_str(ciphertext: bytes, key: str, encoding: str = "utf-8") -> str
 
 def brute_force_single_byte(hex_string: str) -> list[dict]:
     """
-    Brute-force de chave XOR de 1 byte sobre dados hexadecimais.
+    Single-byte XOR key brute-force over hex data.
 
-    Testa todos os 256 valores possíveis de chave de 1 byte e
-    ranqueia os resultados por score de legibilidade.
+    Tests all 256 possible single-byte key values and
+    ranks results by readability score.
 
     Args:
-        hex_string: String hexadecimal dos dados cifrados (ex: "1a2b3c4d").
+        hex_string: Hex string of encrypted data (e.g. "1a2b3c4d").
 
     Returns:
-        Lista de dicts com 'key', 'key_char', 'score', 'result',
-        ordenada por score decrescente. Inclui apenas top 10.
+        List of dicts with 'key', 'key_char', 'score', 'result',
+        sorted by descending score. Includes only top 10.
     """
     try:
         data = bytes.fromhex(hex_string.strip())
     except ValueError as exc:
-        logger.error("Hex inválido: %s", exc)
+        logger.error("Invalid hex: %s", exc)
         return []
 
     candidates: list[dict] = []

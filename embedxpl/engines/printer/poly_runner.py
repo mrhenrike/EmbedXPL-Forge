@@ -1,22 +1,22 @@
 """
-poly_runner — Orquestrador multi-linguagem para execução de exploits em
-qualquer linguagem (Python, C/C++, Ruby/Metasploit, Node.js, Go, Rust, PHP, Perl).
+poly_runner — Multi-language orchestrator for running exploits in any language
+(Python, C/C++, Ruby/Metasploit, Node.js, Go, Rust, PHP, Perl).
 
-Suporta compilação (C/C++/Go/Rust) e execução de runtimes externos
+Supports compilation (C/C++/Go/Rust) and external runtime execution
 (Ruby/MSF, Node, PHP, Perl, PowerShell).
 
-Todos os builds usam .tmp/build/ do projeto (nunca diretórios externos).
+All builds use .tmp/build/ inside the project workspace (never external directories).
 
-Funções públicas principais:
-  detect(lang)            → caminho do compilador/runtime ou None
-  detect_msf()            → caminho do msfconsole ou None
-  available_langs()       → dict {lang: path_or_None} para todas as linguagens
-  build(src, lang, ...)   → compila source → binário em .tmp/build/
-  run(src, lang, ...)     → detect + build (se compilado) + executa + retorna dict
-  run_msf(module, ...)    → gera RC script + msfconsole -r → retorna dict
-  run_from_dir(dir, ...)  → auto-detecta source no diretório + despacha para run()
+Public API:
+  detect(lang)            → compiler/runtime path or None
+  detect_msf()            → msfconsole path or None
+  available_langs()       → dict {lang: path_or_None} for all languages
+  build(src, lang, ...)   → compile source → binary in .tmp/build/
+  run(src, lang, ...)     → detect + build (if compiled) + execute + return dict
+  run_msf(module, ...)    → generate RC script + msfconsole -r → return dict
+  run_from_dir(dir, ...)  → auto-detect source in directory + dispatch to run()
 
-# Autor: André Henrique (@mrhenrike) | União Geek
+Author: André Henrique (@mrhenrike) | União Geek
 """
 from __future__ import annotations
 

@@ -1,12 +1,12 @@
 """EmbedXPL HatSploit Absorption Tool.
 
-Absorve os 210 módulos Python do HatSploit (EntySec) para EmbedXPL.
-Categorias: exploit (android, apple_ios, generic, linux, ...) | auxiliary | post
+Absorbs the 210 Python modules from HatSploit (EntySec) into EmbedXPL.
+Categories: exploit (android, apple_ios, generic, linux, ...) | auxiliary | post
 
-Conversão:
+Conversion:
 - Imports HatSploit → EmbedXPL
-- Preserva __info__, __categories__, execute/run
-- Destino: modules/exploits/routers/hatsploit/ e sub-categorias
+- Preserves __info__, __categories__, execute/run
+- Destination: modules/exploits/routers/hatsploit/ and sub-categories
 
 Uso:
     python3 -m embedxpl.tools.sync_hatsploit [--dry-run]

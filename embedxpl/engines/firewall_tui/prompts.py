@@ -26,7 +26,7 @@ def confirm_prompt(text: str, default: bool = True) -> bool:
     answer = input(f"{text} [{'Y/n' if default else 'y/N'}]: ").strip().lower()
     if not answer:
         return default
-    return answer in ("y", "yes", "s", "sim")
+    return answer in ("y", "yes")
 
 
 def select_prompt(text: str, choices: List[str], default: str = "") -> str:

@@ -1,34 +1,34 @@
 from __future__ import annotations
 
 """
-rsmangler_engine.py - Port Python do RSMangler v1.5 (Robin Wood / digininja).
+rsmangler_engine.py - Python port of RSMangler v1.5 (Robin Wood / digininja).
 
-Porta as regras de mangling do RSMangler original (Ruby) para Python nativo,
-sem dependência do interpretador Ruby. Inspirado em: https://github.com/digininja/RSMangler
+Ports the mangling rules from the original RSMangler (Ruby) to native Python,
+without requiring a Ruby interpreter. Inspired by: https://github.com/digininja/RSMangler
 
-Regras implementadas (todas ON por default, desativar via ManglerOptions):
-  perms         Permutações ordenadas de todas as palavras (aviso se >5 palavras)
-  acronym       Acrônimo das palavras de entrada
-  double        Palavra duplicada (passpass)
-  reverse       Inverter a palavra
-  capital       Capitalizar primeira letra
-  upper         Uppercase completo
-  lower         Lowercase completo
+Implemented rules (all ON by default, disable via ManglerOptions):
+  perms         Ordered permutations of all words (warn if >5 words)
+  acronym       Acronym of input words
+  double        Doubled word (passpass)
+  reverse       Reverse the word
+  capital       Capitalize first letter
+  upper         Full uppercase
+  lower         Full lowercase
   swap          Swap case (togglecase)
-  ed            Adicionar sufixo "ed"
-  ing           Adicionar sufixo "ing"
-  leet          Leet speak simples (um char de cada vez)
-  full_leet     Todas combinações de leet (produto cartesiano)
-  punctuation   Sufixos de pontuação: !@$%^&*()
-  years         Anos 1990..ano_atual prefixo/sufixo
+  ed            Add "ed" suffix
+  ing           Add "ing" suffix
+  leet          Simple leet speak (one char at a time)
+  full_leet     All leet combinations (cartesian product)
+  punctuation   Punctuation suffixes: !@$%^&*()
+  years         Years 1990..current_year as prefix/suffix
   common        Prepend/append: admin, sys, pw, pwd
-  pna           Sufixo 01-09
-  pnb           Prefixo 01-09
-  na            Sufixo 1-123
-  nb            Prefixo 1-123
-  space         Espaço entre palavras permutadas
+  pna           Suffix 01-09
+  pnb           Prefix 01-09
+  na            Suffix 1-123
+  nb            Prefix 1-123
+  space         Space between permuted words
 
-Author: André Henrique (@mrhenrike) - baseado em RSMangler 1.5 por Robin Wood
+Author: Andre Henrique (@mrhenrike) - based on RSMangler 1.5 by Robin Wood
 """
 
 import datetime

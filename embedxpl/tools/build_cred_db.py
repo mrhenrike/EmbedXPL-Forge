@@ -1,20 +1,20 @@
 """EmbedXPL Credential Database Builder.
 
-Consolida múltiplas fontes de credenciais default em um único
-data/default_creds.json estruturado com 10.000+ entradas.
+Consolidates multiple default credential sources into a single
+data/default_creds.json with 10,000+ structured entries.
 
-Fontes integradas:
-  1. embedxpl/modules/creds/      -  módulos Python existentes (extrai pares hardcoded)
-  2. embedxpl/data/default_creds.json   -  base existente (1.019 entries)
+Integrated sources:
+  1. embedxpl/modules/creds/      -  existing Python modules (extracts hardcoded pairs)
+  2. embedxpl/data/default_creds.json   -  existing base (1,019 entries)
   3. embedxpl/data/ics_default_creds.json   -  ICS (38 entries)
   4. embedxpl/data/wordlists/iot/mirai_default_creds.json
-  5. RouterSploit creds (se disponível em .tmp/routersploit/)
-  6. SecLists Default-Credentials (se disponível)
-  7. Creds ICS curadas (Siemens, Rockwell, Schneider, ABB)
+  5. RouterSploit creds (if available at .tmp/routersploit/)
+  6. SecLists Default-Credentials (if available)
+  7. Curated ICS creds (Siemens, Rockwell, Schneider, ABB)
   8. Camera defaults (Hikvision, Dahua, Axis, Intelbras, ONVIF)
   9. Printer defaults (HP, Canon, Ricoh, Xerox, Brother)
   10. NAS defaults (QNAP, Synology, Netgear, Seagate)
-  11. Router defaults expandidos (por vendor)
+  11. Expanded router defaults (by vendor)
 
 Uso:
     python3 -m embedxpl.tools.build_cred_db [--output PATH] [--stats]
@@ -32,17 +32,17 @@ _MODULES_CREDS = _HERE / "modules" / "creds"
 _OUTPUT = _DATA / "default_creds.json"
 
 # ---------------------------------------------------------------------------
-# Schema de uma entrada:
+# Entry schema:
 # {
 #   "vendor": str,
-#   "product": str,         # modelo/produto específico (opcional)
+#   "product": str,         # specific model/product (optional)
 #   "category": str,        # router|camera|printer|ics|nas|wireless|voip|generic
 #   "protocol": str,        # http|telnet|ssh|ftp|snmp|modbus|api
 #   "username": str,
 #   "password": str,
 #   "port": int | None,
-#   "path": str | None,     # URL path (para HTTP)
-#   "source": str,          # onde veio essa entrada
+#   "path": str | None,     # URL path (for HTTP)
+#   "source": str,          # where this entry came from
 # }
 # ---------------------------------------------------------------------------
 
@@ -62,7 +62,7 @@ def _normalize(entry: dict) -> dict:
 
 
 def _load_existing_json(path: Path, source: str) -> list[dict]:
-    """Carrega arquivo JSON de creds existente."""
+    """Load existing creds JSON file."""
     if not path.exists():
         return []
     try:
@@ -70,7 +70,7 @@ def _load_existing_json(path: Path, source: str) -> list[dict]:
         if isinstance(data, list):
             return [_normalize({**e, "source": source}) for e in data if isinstance(e, dict)]
         elif isinstance(data, dict):
-            # Formato {vendor: [{user, pass}]}
+            # Format {vendor: [{user, pass}]}
             result = []
             for vendor, entries in data.items():
                 if isinstance(entries, list):
@@ -83,12 +83,12 @@ def _load_existing_json(path: Path, source: str) -> list[dict]:
 
 
 def _extract_from_module(py_file: Path) -> list[dict]:
-    """Extrai pares usuario/senha hardcoded de módulos Python de creds."""
+    """Extract hardcoded username/password pairs from Python creds modules."""
     creds = []
     try:
         src = py_file.read_text(errors="replace")
 
-        # Padrões comuns em módulos de creds EmbedXPL/RSF
+        # Common patterns in EmbedXPL/RSF creds modules
         # 1. self.credentials = [("user", "pass"), ...]
         patterns = [
             r'\(\s*["\']([^"\']+)["\']\s*,\s*["\']([^"\']*)["\']',    # ("user", "pass")
@@ -96,7 +96,7 @@ def _extract_from_module(py_file: Path) -> list[dict]:
         ]
 
         vendor = "Unknown"
-        # Tenta inferir vendor do path
+        # Try to infer vendor from path
         parts = py_file.parts
         if "creds" in parts:
             idx = parts.index("creds")
@@ -120,7 +120,7 @@ def _extract_from_module(py_file: Path) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
-# Catálogo curado de creds por categoria (hardcoded  -  fontes públicas)
+# Curated creds catalog by category (hardcoded  -  public sources)
 # ---------------------------------------------------------------------------
 
 _CURATED_ICS = [
@@ -213,10 +213,10 @@ _CURATED_NAS = [
 
 
 def build(output: Path = _OUTPUT, verbose: bool = True) -> int:
-    """Constrói o banco consolidado de creds.
+    """Build the consolidated creds database.
 
     Returns:
-        Total de entradas no banco final.
+        Total entries in the final database.
     """
     all_creds: list[dict] = []
     seen: set[tuple] = set()
@@ -241,7 +241,7 @@ def build(output: Path = _OUTPUT, verbose: bool = True) -> int:
     add(_load_existing_json(_DATA / "ics_default_creds.json", "embedxpl-ics"), "Existing ics_default_creds.json")
     add(_load_existing_json(_DATA / "wordlists/iot/mirai_default_creds.json", "mirai"), "Mirai IoT creds")
 
-    # 2. Módulos de creds existentes
+    # 2. Existing creds modules
     module_creds = []
     for py_file in _MODULES_CREDS.rglob("*.py"):
         if py_file.name != "__init__.py":
@@ -257,7 +257,7 @@ def build(output: Path = _OUTPUT, verbose: bool = True) -> int:
     )
     add(curated, "Curated ICS/Camera/Printer/NAS creds")
 
-    # 4. RouterSploit creds (se disponível)
+    # 4. RouterSploit creds (if available)
     rsf_path = _HERE.parent / ".tmp" / "routersploit" / "routersploit" / "modules" / "creds"
     if rsf_path.exists():
         rsf_creds = []
@@ -265,7 +265,7 @@ def build(output: Path = _OUTPUT, verbose: bool = True) -> int:
             rsf_creds.extend(_extract_from_module(py_file))
         add(rsf_creds, "RouterSploit creds modules")
 
-    # 5. SecLists (se disponível)
+    # 5. SecLists (if available)
     seclist_paths = [
         Path("/usr/share/seclists/Passwords/Default-Credentials"),
         Path.home() / "SecLists/Passwords/Default-Credentials",

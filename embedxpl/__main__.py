@@ -12,7 +12,10 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from tools.venv_bootstrap import ensure_runtime
+try:
+    from embedxpl.tools.venv_bootstrap import ensure_runtime
+except ImportError:
+    from tools.venv_bootstrap import ensure_runtime  # type: ignore[no-redef]  # source checkout fallback
 
 ensure_runtime(_ROOT / "exf.py")
 

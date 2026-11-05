@@ -24,7 +24,7 @@ try:
     _EASYOCR_OK = True
 except ImportError:
     _EASYOCR_OK = False
-    logger.warning("easyocr não instalado. Instale com: pip install easyocr")
+    logger.warning("easyocr not installed. Run: pip install easyocr")
 
 try:
     from PIL import Image
@@ -34,7 +34,7 @@ except ImportError:
 
 
 # ── Heurística de classificação user/password ────────────────────────────────
-# Padrões típicos de usernames
+# Typical username patterns
 _USERNAME_PATTERNS = [
     re.compile(r"^[A-Z]{2}\d{4,8}$"),              # DS1206, IJ275601
     re.compile(r"^[a-z]+\d+@[a-z.]+$"),            # email corporativo
@@ -44,12 +44,12 @@ _USERNAME_PATTERNS = [
     re.compile(r"^[a-z]+\d{1,2}$"),                # mng1, mng2
 ]
 
-# Padrões típicos de passwords
+# Typical password patterns
 _PASSWORD_PATTERNS = [
     re.compile(r"^[a-zA-Z]+#\d+$"),                # Company#1206
     re.compile(r"^[a-zA-Z]+\d{4,}$"),              # company1206, brandx61585...
     re.compile(r".*[!@#$%&*_\-].*"),               # tem caractere especial
-    re.compile(r"^[a-zA-Z0-9]{8,}$"),              # string alfanumérica longa
+    re.compile(r"^[a-zA-Z0-9]{8,}$"),              # long alphanumeric string
 ]
 
 _MIN_TOKEN_LEN = 4

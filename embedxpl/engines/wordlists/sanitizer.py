@@ -1,26 +1,26 @@
 """
-sanitizer.py - Sanitização, ordenação e transformação de wordlists.
+sanitizer.py - Wordlist sanitization, sorting and transformation.
 
-Funcionalidades:
-  - Remover linhas em branco
-  - Remover comentários (linhas iniciando com #)
-  - Deduplicação (manter apenas linhas únicas)
-  - Ordenação: alfabética, por comprimento, reversa, aleatória, frequência
-  - Filtros de comprimento: --min-len, --max-len
-  - Reverse de arquivo (cat -> tac, última linha primeiro)
-  - Filtros customizados por regex
+Features:
+  - Remove blank lines
+  - Remove comments (lines starting with #)
+  - Deduplication (keep only unique lines)
+  - Sorting: alphabetical, by length, reverse, random, frequency
+  - Length filters: --min-len, --max-len
+  - File reversal (cat -> tac, last line first)
+  - Custom regex filters
   - Strip control characters (tabs, null bytes, escape sequences)
-  - Replace in-place ou para arquivo de saída
+  - Replace in-place or to output file
 
-Uso:
-  wlf.py sanitize lista.lst
-  wlf.py sanitize lista.lst --min-len 8 --max-len 20 --sort alpha -o saida.lst
-  wlf.py sanitize lista.lst --strip-control --sort frequency -o saida.lst
-  wlf.py sanitize lista.lst --filter "^[a-zA-Z]" --no-comments --dedupe
-  wlf.py reverse lista.lst -o invertida.lst
+Usage:
+  wlf.py sanitize list.lst
+  wlf.py sanitize list.lst --min-len 8 --max-len 20 --sort alpha -o out.lst
+  wlf.py sanitize list.lst --strip-control --sort frequency -o out.lst
+  wlf.py sanitize list.lst --filter "^[a-zA-Z]" --no-comments --dedupe
+  wlf.py reverse list.lst -o reversed.lst
 
-Autor: André Henrique (@mrhenrike)
-Versão: 1.1.0
+Author: Andre Henrique (@mrhenrike)
+Version: 1.1.0
 """
 from __future__ import annotations
 
@@ -48,20 +48,20 @@ def _is_comment_line(line: str) -> bool:
 
 def _read_lines(filepath: str) -> list[str]:
     """
-    Lê linhas de um arquivo preservando conteúdo original.
+    Read lines from a file preserving original content.
 
     Args:
-        filepath: Caminho do arquivo.
+        filepath: File path.
 
     Returns:
-        Lista de linhas sem terminadores.
+        List of lines without line terminators.
 
     Raises:
-        FileNotFoundError: Se o arquivo não existir.
+        FileNotFoundError: If the file does not exist.
     """
     path = Path(filepath)
     if not path.exists():
-        raise FileNotFoundError(f"Arquivo não encontrado: {filepath}")
+        raise FileNotFoundError(f"File not found: {filepath}")
     with path.open(encoding="utf-8", errors="replace") as f:
         return [line.rstrip("\n\r") for line in f]
 
@@ -81,33 +81,33 @@ def sanitize(
     strip_control: bool = False,
 ) -> dict:
     """
-    Sanitiza uma wordlist aplicando todos os filtros configurados.
+    Sanitize a wordlist applying all configured filters.
 
-    A ordem de aplicação é:
+    Application order:
       0. Strip control characters (if strip_control=True)
-      1. Remover comentários (# no início)
-      2. Remover linhas em branco
-      3. Filtro de comprimento (min_len / max_len)
-      4. Filtro por regex (filter_pattern)
-      5. Exclusão por regex (exclude_pattern)
-      6. Deduplicação
-      7. Ordenação (alpha, length, random, frequency)
+      1. Remove comments (# at start)
+      2. Remove blank lines
+      3. Length filter (min_len / max_len)
+      4. Regex inclusion filter (filter_pattern)
+      5. Regex exclusion filter (exclude_pattern)
+      6. Deduplication
+      7. Sorting (alpha, length, random, frequency)
 
     Args:
-        filepath: Caminho do arquivo de entrada.
-        output: Arquivo de saída. Se None e inplace=False, vai para stdout.
-        no_blank: Remove linhas em branco.
-        no_comments: Remove linhas iniciando com '#'.
-        dedupe: Remove entradas duplicadas mantendo a primeira ocorrência.
-        sort_mode: 'alpha', 'alpha-rev', 'length', 'length-rev', 'random' ou None.
-        min_len: Comprimento mínimo (inclui linhas >= min_len).
-        max_len: Comprimento máximo (inclui linhas <= max_len).
-        filter_pattern: Regex - mantém apenas linhas que fazem match.
-        exclude_pattern: Regex - remove linhas que fazem match.
-        inplace: Se True, sobrescreve o arquivo de entrada.
+        filepath: Input file path.
+        output: Output file. If None and inplace=False, writes to stdout.
+        no_blank: Remove blank lines.
+        no_comments: Remove lines starting with '#'.
+        dedupe: Remove duplicate entries keeping the first occurrence.
+        sort_mode: 'alpha', 'alpha-rev', 'length', 'length-rev', 'random' or None.
+        min_len: Minimum length (includes lines >= min_len).
+        max_len: Maximum length (includes lines <= max_len).
+        filter_pattern: Regex - keep only matching lines.
+        exclude_pattern: Regex - remove matching lines.
+        inplace: If True, overwrite the input file.
 
     Returns:
-        Dict com estatísticas: total_input, total_output, removed_blank,
+        Dict with stats: total_input, total_output, removed_blank,
         removed_comments, removed_length, removed_filter, removed_dupes.
     """
     lines = _read_lines(filepath)
@@ -135,17 +135,17 @@ def sanitize(
     result: list[str] = []
 
     for line in lines:
-        # Remover comentários
+        # Remove comments
         if no_comments and _is_comment_line(line):
             stats["removed_comments"] += 1
             continue
 
-        # Remover linhas em branco
+        # Remove blank lines
         if no_blank and not line.strip():
             stats["removed_blank"] += 1
             continue
 
-        # Filtro de comprimento
+        # Length filter
         if min_len is not None and len(line) < min_len:
             stats["removed_length"] += 1
             continue
@@ -153,19 +153,19 @@ def sanitize(
             stats["removed_length"] += 1
             continue
 
-        # Filtro de inclusão por regex
+        # Regex inclusion filter
         if filter_pattern and not re.search(filter_pattern, line):
             stats["removed_filter"] += 1
             continue
 
-        # Filtro de exclusão por regex
+        # Regex exclusion filter
         if exclude_pattern and re.search(exclude_pattern, line):
             stats["removed_exclude"] += 1
             continue
 
         result.append(line)
 
-    # Deduplicação preservando ordem de primeira ocorrência
+    # Deduplication preserving first-occurrence order
     if dedupe:
         seen: set[str] = set()
         deduped: list[str] = []
@@ -177,7 +177,7 @@ def sanitize(
                 stats["removed_dupes"] += 1
         result = deduped
 
-    # Ordenação
+    # Sorting
     if sort_mode == "alpha":
         result.sort(key=str.lower)
     elif sort_mode == "alpha-rev":
@@ -194,7 +194,7 @@ def sanitize(
 
     stats["total_output"] = len(result)
 
-    # Destino de saída
+    # Output destination
     dest = output or (filepath if inplace else None)
     if dest:
         Path(dest).write_text("\n".join(result) + "\n", encoding="utf-8")
@@ -211,15 +211,15 @@ def reverse_file(
     inplace: bool = False,
 ) -> int:
     """
-    Inverte a ordem das linhas de um arquivo (cat -> tac).
+    Reverse the line order of a file (cat -> tac).
 
     Args:
-        filepath: Caminho do arquivo de entrada.
-        output: Arquivo de saída. Se None e inplace=False, usa stdout.
-        inplace: Se True, sobrescreve o arquivo de entrada.
+        filepath: Input file path.
+        output: Output file. If None and inplace=False, writes to stdout.
+        inplace: If True, overwrite the input file.
 
     Returns:
-        Total de linhas processadas.
+        Total lines processed.
     """
     lines = _read_lines(filepath)
     reversed_lines = list(reversed(lines))
@@ -236,26 +236,26 @@ def reverse_file(
 
 def format_sanitize_stats(stats: dict, filepath: str) -> str:
     """
-    Formata estatísticas de sanitização para exibição.
+    Format sanitization statistics for display.
 
     Args:
-        stats: Dict retornado por sanitize().
-        filepath: Caminho do arquivo processado.
+        stats: Dict returned by sanitize().
+        filepath: Processed file path.
 
     Returns:
-        String formatada com as estatísticas.
+        Formatted string with statistics.
     """
     lines = [
-        f"Sanitização: {filepath}",
-        f"  Entrada:            {stats['total_input']:>10,}",
-        f"  Comentários removidos: {stats['removed_comments']:>7,}",
-        f"  Linhas em branco:   {stats['removed_blank']:>10,}",
-        f"  Fora do comprimento:{stats['removed_length']:>10,}",
-        f"  Filtro regex (excl):{stats['removed_filter']:>10,}",
-        f"  Exclusão regex:     {stats['removed_exclude']:>10,}",
-        f"  Duplicatas:         {stats['removed_dupes']:>10,}",
+        f"Sanitize: {filepath}",
+        f"  Input:              {stats['total_input']:>10,}",
+        f"  Comments removed:   {stats['removed_comments']:>10,}",
+        f"  Blank lines:        {stats['removed_blank']:>10,}",
+        f"  Out of length:      {stats['removed_length']:>10,}",
+        f"  Regex filter (incl):{stats['removed_filter']:>10,}",
+        f"  Regex exclusion:    {stats['removed_exclude']:>10,}",
+        f"  Duplicates:         {stats['removed_dupes']:>10,}",
         f"  Control chars strip:{stats.get('stripped_control', 0):>10,}",
         f"  {'─'*30}",
-        f"  Saída final:        {stats['total_output']:>10,}",
+        f"  Final output:       {stats['total_output']:>10,}",
     ]
     return "\n".join(lines)

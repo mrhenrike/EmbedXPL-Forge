@@ -1,27 +1,27 @@
 """
-pattern_engine.py - Geração de wordlists por templates e variáveis.
+pattern_engine.py - Wordlist generation via templates and variables.
 
-Inspirado no sistema de templates do alterx (projectdiscovery).
+Inspired by the alterx (projectdiscovery) template system.
 
-Suporta variáveis:
-  {empresa}       -> nome de empresa
-  {empresa_lower} -> nome em minúsculas
-  {empresa_upper} -> nome em maiúsculas
-  {cod}           -> código de loja (numérico)
-  {cnpj}          -> CNPJ sem pontuação (14 dígitos)
-  {ano}           -> ano (2016..2026)
-  {cidade}        -> cidade brasileira
-  {dominio}       -> domínio corporativo
-  {portal}        -> portal/sistema
-  {seq6}          -> sequencial de 6 dígitos
+Supported variables:
+  {empresa}       -> company name
+  {empresa_lower} -> company name in lowercase
+  {empresa_upper} -> company name in uppercase
+  {cod}           -> store code (numeric)
+  {cnpj}          -> CNPJ without punctuation (14 digits)
+  {ano}           -> year (2016..2026)
+  {cidade}        -> Brazilian city
+  {dominio}       -> corporate domain
+  {portal}        -> portal/system
+  {seq6}          -> 6-digit sequential number
 
-Exemplos de uso:
+Usage examples:
   wlf.py pattern -t "SVC{cod}@acme.example" --vars cod=1000-9999
   wlf.py pattern -t "{empresa}#{ano}" --vars empresa=BrandX,CorpX ano=2020-2026
   wlf.py pattern -f patterns.txt --vars empresa=BrandX cod=1000-1999
 
-Autor: André Henrique (@mrhenrike)
-Versão: 1.0.0
+Author: André Henrique (@mrhenrike)
+Version: 1.0.0
 """
 from __future__ import annotations
 
@@ -33,10 +33,10 @@ from typing import Generator, Optional
 
 logger = logging.getLogger(__name__)
 
-# ── Anos padrão para variações de senha ─────────────────────────────────────
+# ── Default years for password variations ────────────────────────────────────
 DEFAULT_ANOS = [str(a) for a in range(2016, 2027)]
 
-# ── Cidades brasileiras para padrões cidade@ano ──────────────────────────────
+# ── Brazilian cities for city@year patterns ───────────────────────────────────
 DEFAULT_CIDADES = [
     "belem", "manaus", "natal", "recife", "fortaleza", "salvador",
     "saopaulo", "riodejaneiro", "curitiba", "goiania", "brasilia",
@@ -46,10 +46,10 @@ DEFAULT_CIDADES = [
     "portovelho", "macapa", "boa vista", "palmas", "maceioeduardo",
 ]
 
-# ── Separadores comuns em senhas brasileiras ─────────────────────────────────
+# ── Common password separators ───────────────────────────────────────────────
 SEPARATORS = ["", "@", "#", ".", "-", "_", "!", "$", "%", "&"]
 
-# ── Substituições de acentos para variações ──────────────────────────────────
+# ── Accent substitutions for variations ──────────────────────────────────────
 ACCENT_MAP: dict[str, str] = {
     "á": "a", "à": "a", "â": "a", "ã": "a", "ä": "a",
     "é": "e", "ê": "e", "ë": "e",
@@ -68,13 +68,13 @@ ACCENT_MAP: dict[str, str] = {
 
 def strip_accents(text: str) -> str:
     """
-    Remove acentos de uma string usando mapeamento PT-BR.
+    Remove accents from a string using the PT-BR mapping.
 
     Args:
-        text: String com possíveis acentos.
+        text: String possibly containing accents.
 
     Returns:
-        String sem acentos.
+        Unaccented string.
     """
     for accented, plain in ACCENT_MAP.items():
         text = text.replace(accented, plain)
@@ -83,28 +83,28 @@ def strip_accents(text: str) -> str:
 
 def expand_variable(var_name: str, var_value: str) -> list[str]:
     """
-    Expande uma variável de template para lista de valores.
+    Expand a template variable to a list of values.
 
-    Suporta:
-      - Lista: 'val1,val2,val3'
-      - Faixa numérica: '1000-9999'
-      - Faixa de anos: '2016-2026'
-      - Valor único: 'valor'
+    Supports:
+      - List: 'val1,val2,val3'
+      - Numeric range: '1000-9999'
+      - Year range: '2016-2026'
+      - Single value: 'value'
 
     Args:
-        var_name: Nome da variável.
-        var_value: Valor ou especificação da variável.
+        var_name: Variable name.
+        var_value: Value or variable specification.
 
     Returns:
-        Lista de strings com todos os valores possíveis.
+        List of strings with all possible values.
     """
-    # Faixa numérica: 1000-9999
+    # Numeric range: 1000-9999
     range_match = re.match(r"^(\d+)-(\d+)$", var_value.strip())
     if range_match:
         start, end = int(range_match.group(1)), int(range_match.group(2))
         return [str(i) for i in range(start, end + 1)]
 
-    # Lista separada por vírgula
+    # Comma-separated list
     if "," in var_value:
         return [v.strip() for v in var_value.split(",") if v.strip()]
 
@@ -113,21 +113,21 @@ def expand_variable(var_name: str, var_value: str) -> list[str]:
 
 def render_template(template: str, variables: dict[str, list[str]]) -> Generator[str, None, None]:
     """
-    Renderiza um template substituindo todas as variáveis com seus valores.
+    Render a template by substituting all variables with their values.
 
-    Para cada combinação de valores das variáveis, gera uma string resultante.
+    For each combination of variable values, yields a resulting string.
 
     Args:
-        template: String de template com variáveis {var}.
-        variables: Dict mapeando nome de variável para lista de valores.
+        template: Template string with {var} placeholders.
+        variables: Dict mapping variable name to list of values.
 
     Yields:
-        Strings com todas as combinações de variáveis substituídas.
+        Strings with all variable combinations substituted.
     """
-    # Encontra todas as variáveis únicas no template
+    # Find all unique variables in the template
     var_names = list(dict.fromkeys(re.findall(r"\{(\w+)\}", template)))
 
-    # Para vars não fornecidas, usa lista vazia substituída pelo nome
+    # For unresolved vars, fall back to the literal placeholder name
     resolved: list[list[str]] = []
     for var in var_names:
         values = variables.get(var, [f"{{{var}}}"])
@@ -150,21 +150,21 @@ def generate_company_patterns(
     separators: Optional[list[str]] = None,
 ) -> Generator[str, None, None]:
     """
-    Gera variações de senha baseadas em nome de empresa e anos.
+    Generate password variations based on a company name and years.
 
-    Padrões gerados:
+    Generated patterns:
       {empresa}{sep}{ano}    -> BrandX@2024
       {empresa}{sep}{cod}    -> BrandX#1206
       {empresa_upper}{ano}   -> BrandX2024
       {empresa_lower}{ano}   -> brandx2024
 
     Args:
-        empresa: Nome da empresa.
-        anos: Lista de anos. Padrão: 2016-2026.
-        separators: Lista de separadores. Padrão: @, #, ., -, _.
+        empresa: Company name.
+        anos: List of years. Default: 2016-2026.
+        separators: List of separators. Default: @, #, ., -, _.
 
     Yields:
-        Strings de senhas geradas.
+        Generated password strings.
     """
     anos_list = anos or DEFAULT_ANOS
     seps = separators or ["@", "#", ".", "-", "_", "!", ""]
@@ -187,7 +187,7 @@ def generate_company_patterns(
                     seen.add(result)
                     yield result
 
-    # Variações cidade@ano / cidade#ano
+    # City@year / city#year variations
     for cidade in DEFAULT_CIDADES:
         for sep in ["@", "#", "%", ""]:
             for ano in anos_list:
@@ -203,9 +203,9 @@ def generate_pharma_patterns(
     anos: Optional[list[str]] = None,
 ) -> Generator[str, None, None]:
     """
-    Gera variações de senha baseadas nos padrões identificados via OCR.
+    Generate password variations based on patterns identified via OCR.
 
-    Padrões:
+    Patterns:
       SVC{cod}@acme.example
       company{cnpj}
       Company#{cod}
@@ -213,12 +213,12 @@ def generate_pharma_patterns(
       company{cod}
 
     Args:
-        store_codes: Lista de códigos de loja (ex: ['1206', '1207']).
-        cnpjs: Lista de CNPJs de 14 dígitos.
-        anos: Lista de anos para variações.
+        store_codes: List of store codes (e.g. ['1206', '1207']).
+        cnpjs: List of 14-digit CNPJs.
+        anos: List of years for variations.
 
     Yields:
-        Strings de senhas/logins geradas.
+        Generated password/login strings.
     """
     base_cnpjs = cnpjs or []
     health_plan_prefixes = [
@@ -228,9 +228,9 @@ def generate_pharma_patterns(
 
     anos_list = anos or DEFAULT_ANOS
 
-    # Códigos de loja: se não fornecidos, usa amostra pequena (OCR + vizinhos)
+    # Store codes: if not provided, use a small OCR-derived sample
     if store_codes is None:
-        store_codes = [str(c) for c in range(1200, 1215)]  # amostra OCR
+        store_codes = [str(c) for c in range(1200, 1215)]
 
     seen: set[str] = set()
 
@@ -267,18 +267,18 @@ def generate_from_template_file(
     variables: dict[str, list[str]],
 ) -> Generator[str, None, None]:
     """
-    Lê templates de um arquivo (um por linha) e renderiza cada um.
+    Read templates from a file (one per line) and render each one.
 
     Args:
-        template_file: Caminho para arquivo de templates.
-        variables: Variáveis para substituição.
+        template_file: Path to the templates file.
+        variables: Variables for substitution.
 
     Yields:
-        Strings geradas para cada template.
+        Strings generated for each template.
     """
     path = Path(template_file)
     if not path.exists():
-        raise FileNotFoundError(f"Arquivo de templates não encontrado: {template_file}")
+        raise FileNotFoundError(f"Template file not found: {template_file}")
 
     for line in path.read_text(encoding="utf-8").splitlines():
         line = line.strip()
