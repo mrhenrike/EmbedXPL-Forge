@@ -85,11 +85,11 @@ class Exploit(HTTPClient):
         for path in self.STREAM_PATHS:
             try:
                 url = "http://{}:{}{}".format(self.target, self.port, path)
-                r = requests.get(url, auth=(user, pwd) if user else None, timeout=5, stream=True)
+                # Use HEAD to avoid blocking on MJPEG streams
+                r = requests.head(url, auth=(user, pwd) if user else None, timeout=(3, 3))
                 ct = r.headers.get("Content-Type", "")
-                print_success("  {} -> HTTP {} ({}) [{}]".format(
-                    path, r.status_code, ct, len(r.content)))
-                if r.status_code == 200 and ("image" in ct or "video" in ct or "mjpeg" in ct):
+                print_status("  {} -> HTTP {} ({})".format(path, r.status_code, ct))
+                if r.status_code in (200, 206) and ("image" in ct or "video" in ct or "mjpeg" in ct or "multipart" in ct):
                     print_success("  LIVE STREAM/SNAPSHOT available at: {}".format(url))
             except Exception:
                 pass
