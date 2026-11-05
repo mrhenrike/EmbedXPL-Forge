@@ -2,12 +2,14 @@
   <img src="docs/img/embedxpl-forge-banner_16x9.png" alt="EmbedXPL-Forge" width="100%">
 </p>
 
-![Python](https://img.shields.io/badge/Python-%3E%3D3.12-blue?style=flat-square&logo=python)
+[![PyPI version](https://img.shields.io/pypi/v/embedxpl?style=flat-square&logo=pypi&logoColor=white&label=PyPI)](https://pypi.org/project/embedxpl/)
+[![Python](https://img.shields.io/pypi/pyversions/embedxpl?style=flat-square&logo=python&logoColor=white)](https://pypi.org/project/embedxpl/)
 [![Platform](https://img.shields.io/badge/Platform-Linux-brightgreen?style=flat-square&logo=linux&logoColor=white)](README.md#requirements)
-[![License](https://img.shields.io/badge/License-BSD-3-Clause--1.0-blue?style=flat-square)](LICENSE)
-[![XPL Suite](https://img.shields.io/badge/XPL--Forge-Suite-red?style=flat-square)](https://github.com/mrhenrike)
-[![Issues](https://img.shields.io/github/issues/mrhenrike/EmbedXPL-Forge?style=flat-square)](https://github.com/mrhenrike/EmbedXPL-Forge/issues)
-[![Last Commit](https://img.shields.io/github/last-commit/mrhenrike/EmbedXPL-Forge?style=flat-square)](https://github.com/mrhenrike/EmbedXPL-Forge/commits)
+[![License](https://img.shields.io/badge/License-BSD--3--Clause-blue?style=flat-square)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/mrhenrike/EmbedXPL-Forge?style=flat-square&logo=github)](https://github.com/mrhenrike/EmbedXPL-Forge/stargazers)
+[![Issues](https://img.shields.io/github/issues/mrhenrike/EmbedXPL-Forge?style=flat-square&logo=github)](https://github.com/mrhenrike/EmbedXPL-Forge/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/mrhenrike/EmbedXPL-Forge?style=flat-square&logo=github)](https://github.com/mrhenrike/EmbedXPL-Forge/commits/main)
+[![Docs](https://img.shields.io/badge/Docs-mrhenrike.github.io-red?style=flat-square&logo=jekyll&logoColor=white)](https://mrhenrike.github.io/EmbedXPL-Forge/)
 
 ---
 
