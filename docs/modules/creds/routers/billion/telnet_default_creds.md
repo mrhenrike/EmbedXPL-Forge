@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Billion — Telnet Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Billion Router Telnet service.

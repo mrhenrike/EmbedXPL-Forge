@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Pfsense — Ssh Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against PFSense Router SSH service.

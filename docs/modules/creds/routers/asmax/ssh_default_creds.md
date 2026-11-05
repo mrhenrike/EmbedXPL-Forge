@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Asmax — Ssh Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Asmax Camera SSH service.

@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Herospeed/Longsee NVR — Security Research Report"
+nav_order: 50
+---
+
 # Herospeed / Longsee NVR  -  Comprehensive Security Research Report
 
 **Research scope:** All publicly available Herospeed/Longsee N-series NVR firmware (2023-2026) + full NAND flash dump

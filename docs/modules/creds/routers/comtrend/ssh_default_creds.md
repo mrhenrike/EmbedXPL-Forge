@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Comtrend — Ssh Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Comtrend Router SSH service.

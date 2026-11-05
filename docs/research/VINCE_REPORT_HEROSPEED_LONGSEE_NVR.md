@@ -1,3 +1,9 @@
+---
+layout: default
+title: "CERT/CC VINCE — Herospeed/Longsee NVR"
+nav_order: 52
+---
+
 # CERT/CC VINCE Submission  -  Herospeed / Longsee NVR
 <!-- Template v2, adapted to NIST NVD risk-based enrichment model (eff. 2026-04-15) -->
 <!-- Research IDs: HSLS-2026-001 through HSLS-2026-004 -->

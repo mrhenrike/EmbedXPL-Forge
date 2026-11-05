@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Tplink — Ssh Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against TP-Link Router SSH service.

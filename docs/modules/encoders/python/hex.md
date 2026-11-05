@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Python — Hex"
+nav_exclude: true
+---
+
 ## Description
 
 Module encodes Python payload to hex format. 

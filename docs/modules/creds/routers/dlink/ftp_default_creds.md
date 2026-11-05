@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Dlink — Ftp Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against D-Link Router FTP service.

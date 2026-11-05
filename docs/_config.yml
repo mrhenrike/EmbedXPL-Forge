@@ -8,8 +8,8 @@ remote_theme: just-the-docs/just-the-docs@v0.10.0
 # Site logo
 # logo: "/assets/img/logo.png"
 
-# Color scheme: dark fits an offensive security tool
-color_scheme: dark
+# Color scheme: red team / offensive security
+color_scheme: redteam
 
 # Search
 search_enabled: true

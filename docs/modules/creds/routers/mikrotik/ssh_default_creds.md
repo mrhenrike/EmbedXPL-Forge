@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Mikrotik — Ssh Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Mikrotik Router SSH service.

@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Upnp — Ssdp Msearch"
+nav_exclude: true
+---
+
 ## Description
 
 Module sends M-SEARCH request to target and retrieve information from UPnP enabled systems.

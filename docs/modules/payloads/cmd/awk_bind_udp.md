@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Cmd — Awk Bind Udp"
+nav_exclude: true
+---
+
 ## Description
 
 Module generates payload that creates interactive udp bind shell by using awk. 

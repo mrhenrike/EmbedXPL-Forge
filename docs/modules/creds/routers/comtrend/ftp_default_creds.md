@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Comtrend — Ftp Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Comtrend Router FTP service.

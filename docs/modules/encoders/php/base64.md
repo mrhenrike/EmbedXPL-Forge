@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Php — Base64"
+nav_exclude: true
+---
+
 ## Description
 
 Module encodes PHP payload to base64 format. 

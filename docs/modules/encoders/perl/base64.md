@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Perl — Base64"
+nav_exclude: true
+---
+
 ## Description
 
 Module encodes Perl payload to base64 format. 

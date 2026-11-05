@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Ipfire — Ssh Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against IPFire Router SSH service.

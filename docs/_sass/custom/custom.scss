@@ -1,0 +1,144 @@
+// EmbedXPL-Forge — Custom overrides on top of redteam color scheme
+
+// ── Typography — monospace everywhere ─────────────────────────────────────
+body {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas',
+               'Liberation Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: inherit;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+h1 { color: #ff2222; border-bottom: 1px solid #330000; padding-bottom: 0.3em; }
+h2 { color: #cc1a1a; }
+h3 { color: #aa1515; }
+
+// ── Site header ───────────────────────────────────────────────────────────
+.site-header {
+  background-color: #0a0a0a;
+  border-bottom: 1px solid #330000;
+}
+
+.site-title {
+  color: #ff2222 !important;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+// ── Sidebar ───────────────────────────────────────────────────────────────
+.site-nav {
+  background-color: #111111;
+  border-right: 1px solid #220000;
+}
+
+.nav-list-item a {
+  color: #aaaaaa;
+  &:hover { color: #ff3333; }
+}
+
+.nav-list-item.active > a {
+  color: #ff3333 !important;
+  font-weight: 600;
+}
+
+// ── Code blocks — green-on-black terminal feel ────────────────────────────
+pre, code {
+  background-color: #050505;
+  color: #39ff14;        // neon green
+  border: 1px solid #1a1a1a;
+  border-radius: 3px;
+}
+
+pre {
+  padding: 1em;
+  overflow-x: auto;
+  &::before {
+    content: '$ ';
+    color: #ff3333;
+    font-weight: bold;
+  }
+}
+
+div.highlight pre::before { content: ''; }  // don't double-prefix highlighted blocks
+
+// ── Inline code ──────────────────────────────────────────────────────────
+code {
+  color: #39ff14;
+  background-color: #0a0a0a;
+  padding: 0.1em 0.4em;
+}
+
+// ── Tables ────────────────────────────────────────────────────────────────
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  background-color: #1a0000;
+  color: #ff4444;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid #330000;
+}
+
+td {
+  border: 1px solid #222222;
+  color: #c8c8c8;
+}
+
+tr:nth-child(even) td { background-color: #0f0f0f; }
+tr:hover td { background-color: #180000; }
+
+// ── Warning / note callouts ───────────────────────────────────────────────
+.warning {
+  background-color: #1a0000;
+  border-left: 4px solid #cc0000;
+  color: #ffaaaa;
+}
+
+.note {
+  background-color: #001a00;
+  border-left: 4px solid #006600;
+  color: #aaffaa;
+}
+
+.tip {
+  background-color: #0a0a1a;
+  border-left: 4px solid #3333cc;
+  color: #aaaaff;
+}
+
+// ── Search ────────────────────────────────────────────────────────────────
+.search-input {
+  background-color: #0a0a0a;
+  color: #c8c8c8;
+  border: 1px solid #330000;
+  &:focus { border-color: #cc0000; outline: none; }
+}
+
+// ── Links ─────────────────────────────────────────────────────────────────
+a {
+  color: #cc2200;
+  &:hover { color: #ff4422; text-decoration: underline; }
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────
+.site-footer {
+  background-color: #0a0a0a;
+  border-top: 1px solid #220000;
+  color: #555555;
+  font-size: 12px;
+}
+
+// ── Scrollbar (Webkit) ────────────────────────────────────────────────────
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #330000; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #660000; }

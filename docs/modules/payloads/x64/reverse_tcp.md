@@ -1,3 +1,9 @@
+---
+layout: default
+title: "X64 — Reverse Tcp"
+nav_exclude: true
+---
+
 ## Description
 
 Module generates payload that creates interactive tcp reverse shell for X64 architecture.

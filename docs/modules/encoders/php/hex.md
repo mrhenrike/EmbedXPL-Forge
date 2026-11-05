@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Php — Hex"
+nav_exclude: true
+---
+
 ## Description
 
 Module encodes PHP payload to Hex format. 

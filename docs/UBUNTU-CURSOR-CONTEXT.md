@@ -1,3 +1,7 @@
+---
+nav_exclude: true
+---
+
 # EmbedXPL v5.0.0  -  Ubuntu Cursor Context
 ## Read this at the start of every session on Ubuntu
 

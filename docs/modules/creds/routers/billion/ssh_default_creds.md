@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Billion — Ssh Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Billion Router SSH service.

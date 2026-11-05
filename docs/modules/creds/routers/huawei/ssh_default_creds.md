@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Huawei — Ssh Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Huawei Router SSH service.

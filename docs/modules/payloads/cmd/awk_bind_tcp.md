@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Cmd — Awk Bind Tcp"
+nav_exclude: true
+---
+
 ## Description
 
 Module generates payload that creates interactive tcp bind shell by using awk one-liner. 

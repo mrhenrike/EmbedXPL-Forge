@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Juniper — Telnet Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Juniper Router Telnet service.

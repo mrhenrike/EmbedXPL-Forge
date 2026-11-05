@@ -1,3 +1,9 @@
+---
+layout: default
+title: "X64 — Bind Tcp"
+nav_exclude: true
+---
+
 ## Description
 
 Module generates payload that creates interactive tcp bind shell for X64 architecture.

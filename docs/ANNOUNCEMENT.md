@@ -1,3 +1,7 @@
+---
+nav_exclude: true
+---
+
 # EmbedXPL-Forge, Public Launch Announcement
 
 > **Languages / Idiomas:** [English (en-US)](#english-en-us) · [Português (pt-BR)](#português-pt-br)

@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Ipfire — Telnet Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against IPFire Router Telnet service.

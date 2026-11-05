@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Mipsbe — Reverse Tcp"
+nav_exclude: true
+---
+
 ## Description
 
 Module generates payload that creates interactive tcp reverse shell for MIPSBE architecture.

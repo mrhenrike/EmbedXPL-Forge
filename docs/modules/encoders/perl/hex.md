@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Perl — Hex"
+nav_exclude: true
+---
+
 ## Description
 
 Module encodes Perl payload to hex format. 

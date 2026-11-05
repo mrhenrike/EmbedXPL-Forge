@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Asmax — Telnet Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Asmax Router Telnet service.

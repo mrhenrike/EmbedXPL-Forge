@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Cmd — Bash Reverse Tcp"
+nav_exclude: true
+---
+
 ## Description
 
 Module generates payload that creates interactive tcp reverse shell by using bash one-liner. 

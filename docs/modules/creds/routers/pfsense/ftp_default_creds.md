@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Pfsense — Ftp Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against PFSense Router FTP service.

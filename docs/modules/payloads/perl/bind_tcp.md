@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Perl — Bind Tcp"
+nav_exclude: true
+---
+
 ## Description
 
 Module generates payload that creates interactive tcp bind shell by using perl. 

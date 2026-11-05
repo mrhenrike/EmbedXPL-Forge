@@ -1,0 +1,33 @@
+// EmbedXPL-Forge — Red Team color scheme for Just the Docs
+// Based on: terminal black + blood red + dim green for code
+
+// ── Background & surfaces ──────────────────────────────────────────────────
+$body-background-color:        #0d0d0d;
+$sidebar-color:                #111111;
+$search-background-color:      #1a1a1a;
+$table-background-color:       #141414;
+$code-background-color:        #0a0a0a;
+$feedback-color:               #0f0f0f;
+
+// ── Text ───────────────────────────────────────────────────────────────────
+$body-text-color:              #c8c8c8;
+$body-heading-color:           #e63333;
+$nav-child-link-color:         #999999;
+$search-result-preview-color:  #888888;
+$muted-yellow:                 #c8a000;
+
+// ── Accent / Links ─────────────────────────────────────────────────────────
+$link-color:                   #e02020;
+$btn-primary-color:            #cc1a1a;
+$base-button-color:            #1e1e1e;
+
+// ── Borders ────────────────────────────────────────────────────────────────
+$border-color:                 #2a2a2a;
+$table-border-color:           #333333;
+
+// ── Navigation ─────────────────────────────────────────────────────────────
+$nav-width:                    260px;
+$content-width:                900px;
+
+// ── Custom overrides injected after theme variables ────────────────────────
+// (Just the Docs picks up this file automatically when color_scheme matches)

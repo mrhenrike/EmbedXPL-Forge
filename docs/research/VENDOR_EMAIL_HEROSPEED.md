@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Vendor Disclosure — Herospeed Technology"
+nav_order: 51
+---
+
 # Vendor Disclosure Email  -  Herospeed Technology Limited
 
 **To:** support@herospeed.net

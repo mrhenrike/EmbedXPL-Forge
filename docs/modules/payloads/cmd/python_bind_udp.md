@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Cmd — Python Bind Udp"
+nav_exclude: true
+---
+
 ## Description
 
 Module generates payload that creates interactive udp bind shell by using python one-liner. 

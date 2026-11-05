@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Cmd — Python Reverse Udp"
+nav_exclude: true
+---
+
 ## Description
 
 Module generates payload that creates interactive udp reverse shell by using python one-liner. 

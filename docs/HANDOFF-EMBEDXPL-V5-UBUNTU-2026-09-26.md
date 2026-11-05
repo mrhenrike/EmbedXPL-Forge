@@ -1,3 +1,7 @@
+---
+nav_exclude: true
+---
+
 # HANDOFF  -  EmbedXPL v5.0.0 Ubuntu Continuation
 ## Session: Sep 26, 2026 | Source: Windows 11 → Target: Ubuntu Linux
 

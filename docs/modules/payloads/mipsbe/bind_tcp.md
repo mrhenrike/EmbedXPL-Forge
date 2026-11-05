@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Mipsbe — Bind Tcp"
+nav_exclude: true
+---
+
 ## Description
 
 Module generates payload that creates interactive tcp bind shell for MIPSBE architecture.

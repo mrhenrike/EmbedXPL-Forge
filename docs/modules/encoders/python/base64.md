@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Python — Base64"
+nav_exclude: true
+---
+
 ## Description
 
 Module encodes Python payload to base64 format. 

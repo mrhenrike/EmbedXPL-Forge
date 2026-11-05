@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Linksys — Telnet Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Linksys Router Telnet service.

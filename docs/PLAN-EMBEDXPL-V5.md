@@ -1,3 +1,7 @@
+---
+nav_exclude: true
+---
+
 # EmbedXPL v5.0.0  -  XPL Suite Unified + Specialized Tools
 
 ---

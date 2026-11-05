@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Linksys — Ftp Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Linksys Router FTP service.

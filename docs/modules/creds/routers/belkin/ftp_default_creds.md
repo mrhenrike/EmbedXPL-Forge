@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Belkin — Ftp Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Belkin Router FTP service.

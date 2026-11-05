@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Tplink — Telnet Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against TP-Link Router Telnet service.

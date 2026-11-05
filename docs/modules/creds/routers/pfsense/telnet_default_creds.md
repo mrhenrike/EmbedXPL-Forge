@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Pfsense — Telnet Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against PFSense Router Telnet service.

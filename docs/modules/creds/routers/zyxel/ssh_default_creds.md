@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Zyxel — Ssh Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Zyxel Router SSH service.

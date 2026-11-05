@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Fortinet — Telnet Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Fortinet Router Telnet service.

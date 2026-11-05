@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Architecture Diagrams"
+nav_order: 40
+---
+
 # Architecture Diagrams  -  EmbedXPL-Forge
 
 

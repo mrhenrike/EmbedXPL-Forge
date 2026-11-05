@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Netsys — Ssh Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Netsys Router SSH service.

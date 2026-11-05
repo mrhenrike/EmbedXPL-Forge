@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Zte — Telnet Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against ZTE Router Telnet service.

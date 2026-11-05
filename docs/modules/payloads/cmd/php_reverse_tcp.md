@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Cmd — Php Reverse Tcp"
+nav_exclude: true
+---
+
 ## Description
 
 Module generates payload that creates interactive tcp reverse shell by using php one-liner. 

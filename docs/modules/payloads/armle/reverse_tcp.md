@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Armle — Reverse Tcp"
+nav_exclude: true
+---
+
 ## Description
 
 Module generates payload that creates interactive tcp reverse shell for ARMLE architecture.

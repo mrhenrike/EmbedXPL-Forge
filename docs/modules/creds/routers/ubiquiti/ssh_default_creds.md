@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Ubiquiti — Ssh Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Ubiquiti Router SSH service.

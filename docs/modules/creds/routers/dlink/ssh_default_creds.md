@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Dlink — Ssh Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against D-Link Router SSH service.

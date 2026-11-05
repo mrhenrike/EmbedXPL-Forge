@@ -1,3 +1,9 @@
+---
+layout: default
+title: "Netcore — Telnet Default Creds"
+nav_exclude: true
+---
+
 ## Description
 
 Module performs dictionary attack with default credentials against Netcore Router Telnet service.
