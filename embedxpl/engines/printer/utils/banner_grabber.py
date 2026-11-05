@@ -724,19 +724,11 @@ def _grab_wsd(host: str, timeout: float) -> dict:
     return result
 
 
-def _grab_snmp(host: str, timeout: float) -> dict:
+def _grab_snmp(host: str, timeout: float, port: int = 161) -> dict:
     """Query SNMP for device description and language support."""
     result = {}
     try:
-        from pysnmp.hlapi import (
-            getCmd, nextCmd, CommunityData, UdpTransportTarget,
-            ContextData, ObjectType, ObjectIdentity, SnmpEngine,
-        )
-        from utils.ports import PortConfig
-        engine    = SnmpEngine()
-        community = CommunityData('public', mpModel=0)
-        transport = UdpTransportTarget((host, PortConfig.resolve('snmp')), timeout=timeout, retries=0)
-        context   = ContextData()
+        from embedxpl.core.snmp.session import SNMPSession
 
         oids = {
             '1.3.6.1.2.1.1.1.0':          'sys_descr',
@@ -744,11 +736,9 @@ def _grab_snmp(host: str, timeout: float) -> dict:
             '1.3.6.1.2.1.25.3.2.1.3.1':   'hr_device_descr',
             '1.3.6.1.2.1.43.5.1.1.16.1':  'prt_console_display',
         }
-        for oid, key in oids.items():
-            for err_ind, err_stat, _, binds in getCmd(
-                engine, community, transport, context,
-                ObjectType(ObjectIdentity(oid)),
-            ):
+        with SNMPSession(host, port, version=0, timeout=timeout) as session:
+            for oid, key in oids.items():
+                err_ind, err_stat, _, binds = session.get(oid)
                 if not err_ind and not err_stat and binds:
                     result[f'snmp_{key}'] = str(binds[0][1])[:200]
 
@@ -762,8 +752,6 @@ def _grab_snmp(host: str, timeout: float) -> dict:
         import subprocess
         snmpget = shutil.which('snmpget')
         if snmpget:
-            from utils.ports import PortConfig
-            port = PortConfig.resolve('snmp')
             for oid, key in (
                 ('1.3.6.1.2.1.1.1.0', 'sys_descr'),
                 ('1.3.6.1.2.1.25.3.2.1.3.1', 'hr_device_descr'),

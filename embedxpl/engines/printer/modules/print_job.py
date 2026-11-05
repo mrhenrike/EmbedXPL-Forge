@@ -162,23 +162,15 @@ def _snmp_printer_status(host: str, timeout: float = 3.0) -> int:
     Status codes: 1=other 2=unknown 3=idle 4=printing 5=warmup
     """
     try:
-        from pysnmp.hlapi import (  # type: ignore
-            SnmpEngine, CommunityData, UdpTransportTarget, ContextData,
-            ObjectType, ObjectIdentity, getCmd,
-        )
-        for ei, es, eI, vbs in getCmd(
-            SnmpEngine(),
-            CommunityData('public', mpModel=0),
-            UdpTransportTarget((host, 161), timeout=timeout, retries=0),
-            ContextData(),
-            ObjectType(ObjectIdentity('1.3.6.1.2.1.25.3.5.1.1.1')),
-        ):
+        from embedxpl.core.snmp.session import SNMPSession
+        with SNMPSession(host, version=0, timeout=timeout) as session:
+            ei, es, _, vbs = session.get('1.3.6.1.2.1.25.3.5.1.1.1')
             if ei or es:
                 return -1
             for vb in vbs:
                 return int(vb[1])
-    except Exception:
-        pass
+    except Exception as exc:
+        _log.debug("SNMP printer status failed: %s", exc)
     return -1
 
 

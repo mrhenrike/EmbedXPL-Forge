@@ -62,14 +62,24 @@ from embedxpl.core.exploit.printer import print_error, print_success
 SNMP_TIMEOUT = 15.0
 
 
-async def _build_transport_target(snmp_target: str, snmp_port: int, retries: int):
+def _close_engine(engine) -> None:
+    """Close both modern and legacy PySNMP dispatchers."""
+    close = getattr(engine, "close_dispatcher", None)
+    if close is not None:
+        close()
+    elif engine.transportDispatcher is not None:
+        engine.transportDispatcher.closeDispatcher()
+
+
+async def _build_transport_target(snmp_target: str, snmp_port: int, retries: int,
+                                  timeout: float = SNMP_TIMEOUT):
     """Build SNMP transport target across pysnmp API variants."""
     if UdpTransportTarget is None:
         raise RuntimeError("SNMP backend unavailable: {}".format(SNMP_IMPORT_ERROR))
     if hasattr(UdpTransportTarget, "create"):
-        return await UdpTransportTarget.create((snmp_target, snmp_port), timeout=SNMP_TIMEOUT, retries=retries)
+        return await UdpTransportTarget.create((snmp_target, snmp_port), timeout=timeout, retries=retries)
 
-    return UdpTransportTarget((snmp_target, snmp_port), timeout=SNMP_TIMEOUT, retries=retries)
+    return UdpTransportTarget((snmp_target, snmp_port), timeout=timeout, retries=retries)
 
 
 class SNMPCli:
@@ -121,18 +131,17 @@ class SNMPCli:
         """
 
         snmpEngine = SnmpEngine()
-        transport_target = await _build_transport_target(self.snmp_target, self.snmp_port, retries)
-
-        iterator = get_cmd(
-            snmpEngine,
-            CommunityData(community_string, mpModel=version),
-            transport_target,
-            ContextData(),
-            ObjectType(ObjectIdentity(oid))
-        )
-
-        errorIndication, errorStatus, errorIndex, varBinds = await iterator
-        snmpEngine.close_dispatcher()
+        try:
+            transport_target = await _build_transport_target(self.snmp_target, self.snmp_port, retries)
+            errorIndication, errorStatus, _, varBinds = await get_cmd(
+                snmpEngine,
+                CommunityData(community_string, mpModel=version),
+                transport_target,
+                ContextData(),
+                ObjectType(ObjectIdentity(oid)),
+            )
+        finally:
+            _close_engine(snmpEngine)
 
         if errorIndication:
             print_error(
@@ -183,9 +192,6 @@ class SNMPCli:
         priv_key: str = "",
         retries: int = 0,
     ):
-        snmpEngine = SnmpEngine()
-        transport_target = await _build_transport_target(self.snmp_target, self.snmp_port, retries)
-
         auth_proto = self._resolve_auth_protocol(auth_protocol)
         priv_proto = self._resolve_priv_protocol(priv_protocol)
         level = str(security_level or "authPriv").strip()
@@ -194,7 +200,9 @@ class SNMPCli:
             print_error(self.peer, "SNMPv3 invalid protocol selection", verbose=self.verbosity)
             return None
 
+        snmpEngine = SnmpEngine()
         try:
+            transport_target = await _build_transport_target(self.snmp_target, self.snmp_port, retries)
             if level == "noAuthNoPriv":
                 user_data = UsmUserData(
                     userName=username,
@@ -226,7 +234,6 @@ class SNMPCli:
             )
 
             errorIndication, errorStatus, _, varBinds = await iterator
-            snmpEngine.close_dispatcher()
 
             if errorIndication:
                 print_error(
@@ -245,6 +252,8 @@ class SNMPCli:
                 return varBinds
         except Exception as err:
             print_error(self.peer, "SNMPv3 authentication error", err, verbose=self.verbosity)
+        finally:
+            _close_engine(snmpEngine)
         return None
 
     def get_v3(

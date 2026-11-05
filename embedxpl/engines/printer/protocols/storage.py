@@ -348,6 +348,7 @@ def snmp_dump(
     timeout:   float = 5,
     output_file: Optional[str] = None,
     verbose:   bool  = True,
+    port:      int   = 161,
 ) -> Dict[str, str]:
     """
     Perform a full SNMP MIB walk on the printer.
@@ -364,46 +365,26 @@ def snmp_dump(
     result: Dict[str, str] = {}
 
     try:
-        from pysnmp.hlapi import (
-            nextCmd, CommunityData, UdpTransportTarget,
-            ContextData, ObjectType, ObjectIdentity, SnmpEngine,
-        )
-        import warnings
-        warnings.filterwarnings('ignore', category=RuntimeWarning)
+        from embedxpl.core.snmp.session import SNMPSession
     except ImportError:
         _log.error("pysnmp not installed  -  SNMP dump unavailable")
         return result
 
-    from utils.ports import PortConfig as _PC
-    engine    = SnmpEngine()
-    community_obj = CommunityData(community, mpModel=1)   # v2c
-    transport = UdpTransportTarget(
-        (host, _PC.resolve('snmp')), timeout=timeout, retries=1,
-    )
-    context   = ContextData()
-
     if verbose:
         print(f"  [SNMP] Walking MIB on {host} (community={community!r}) ...")
 
-    start_oid = ObjectIdentity('1.3.6.1')  # all of MIB-2 and enterprise
-
     count = 0
-    for err_ind, err_stat, err_idx, var_binds in nextCmd(
-        engine, community_obj, transport, context,
-        ObjectType(start_oid),
-        lexicographicMode=False,
-        maxRows=2000,
-    ):
-        if err_ind:
-            _log.debug("SNMP walk error: %s", err_ind)
-            break
-        if err_stat:
-            break
-        for oid, val in var_binds:
-            oid_str = str(oid)
-            val_str = str(val)
-            result[oid_str] = val_str
-            count += 1
+    try:
+        with SNMPSession(host, port, community, timeout=timeout, retries=1) as session:
+            for err_ind, err_stat, _, var_binds in session.walk('1.3.6.1', max_rows=2000):
+                if err_ind or err_stat:
+                    _log.debug("SNMP walk error: %s", err_ind or err_stat)
+                    break
+                for oid, val in var_binds:
+                    result[str(oid)] = str(val)
+                    count += 1
+    except Exception as exc:
+        _log.debug("SNMP dump failed: %s", exc)
 
     if verbose:
         print(f"  [SNMP] Retrieved {count} OID values")
@@ -426,6 +407,7 @@ def snmp_write(
     value:     str,
     community: str   = 'private',
     timeout:   float = 5,
+    port:      int   = 161,
 ) -> bool:
     """
     Attempt to write a value via SNMP SET (requires 'private' or writable community).
@@ -437,23 +419,10 @@ def snmp_write(
       1.3.6.1.4.1.11.2.3.9.1.1.6.0  -  HP: job-info-name1 (printed name)
     """
     try:
-        from pysnmp.hlapi import (
-            setCmd, CommunityData, UdpTransportTarget,
-            ContextData, ObjectType, ObjectIdentity,
-            OctetString, SnmpEngine,
-        )
-        import warnings
-        warnings.filterwarnings('ignore', category=RuntimeWarning)
+        from embedxpl.core.snmp.session import SNMPSession
 
-        from utils.ports import PortConfig as _PC
-        engine = SnmpEngine()
-        for err_ind, err_stat, _, var_binds in setCmd(
-            engine,
-            CommunityData(community, mpModel=1),
-            UdpTransportTarget((host, _PC.resolve('snmp')), timeout=timeout, retries=0),
-            ContextData(),
-            ObjectType(ObjectIdentity(oid), OctetString(value)),
-        ):
+        with SNMPSession(host, port, community, timeout=timeout) as session:
+            err_ind, err_stat, _, _ = session.set(oid, value)
             if not err_ind and not err_stat:
                 return True
     except Exception as exc:

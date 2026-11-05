@@ -972,12 +972,7 @@ def bruteforce_snmp(
     results: List[LoginResult] = []
 
     try:
-        import warnings
-        warnings.filterwarnings('ignore', category=RuntimeWarning)
-        from pysnmp.hlapi import (
-            getCmd, CommunityData, UdpTransportTarget,
-            ContextData, ObjectType, ObjectIdentity, SnmpEngine,
-        )
+        from embedxpl.core.snmp.session import SNMPSession
     except ImportError:
         _log.debug("pysnmp not available — skipping SNMP brute force")
         return results
@@ -1023,13 +1018,8 @@ def bruteforce_snmp(
             print(f"  {_DIM}» community={comm!r}{_RST}", end='\r')
 
         try:
-            for err_ind, err_stat, _, var_binds in getCmd(
-                SnmpEngine(),
-                CommunityData(comm, mpModel=1),
-                UdpTransportTarget((host, port), timeout=timeout, retries=0),
-                ContextData(),
-                ObjectType(ObjectIdentity(_SNMP_TEST_OID)),
-            ):
+            with SNMPSession(host, port, comm, timeout=timeout) as session:
+                err_ind, err_stat, _, var_binds = session.get(_SNMP_TEST_OID)
                 if not err_ind and not err_stat:
                     descr = str(var_binds[0][1])[:80] if var_binds else ''
                     result = LoginResult(
@@ -1048,9 +1038,8 @@ def bruteforce_snmp(
                         print(f"       sysDescr: {descr}")
                     if stop_on_first:
                         return results
-                    break
-        except Exception:
-            pass
+        except Exception as exc:
+            _log.debug("SNMP community probe failed: %s", exc)
 
     return results
 
