@@ -47,6 +47,15 @@ class Exploit(SNMPClient):
             print_error("Valid community strings not found")
 
     def target_function(self, running, data):
+        try:
+            # Pre-check backend availability once per thread before looping
+            test_client = self.snmp_create()
+            del test_client
+        except RuntimeError as e:
+            print_error("SNMP backend unavailable: {}".format(e))
+            running.clear()
+            return
+
         while running.is_set():
             try:
                 community_string = data.next()
@@ -59,6 +68,9 @@ class Exploit(SNMPClient):
                     self.strings.append((self.target, self.port, self.target_protocol, community_string))
 
             except StopIteration:
+                break
+            except RuntimeError:
+                running.clear()
                 break
 
     @mute
