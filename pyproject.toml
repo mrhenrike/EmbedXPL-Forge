@@ -41,7 +41,7 @@ requires-python = ">=3.12"
 dependencies = [
     "requests>=2.32.4",
     "paramiko>=3.0",
-    "pysnmp-lextudio>=6.0",
+    "pysnmp>=7.1",
     "pycryptodome>=3.18",
     "scapy>=2.5",
     "colorama>=0.4.6",
@@ -190,7 +190,6 @@ module = [
     "scapy.*",
     "paramiko.*",
     "pysnmp.*",
-    "pysnmp_lextudio.*",
     "Crypto.*",
     "cryptography.*",
     "colorama.*",

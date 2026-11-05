@@ -41,7 +41,7 @@ EmbedXPL-Forge is an open-source exploitation and scanning framework for securit
 - **PolyExploit orchestrator**  -  runtime C/C++ compilation (gcc/clang/mingw/cross), execution of Ruby/Node.js/PHP/Bash/Perl exploits, msfconsole integration, ExploitDB/searchsploit integration
 - **ICS/OT modules**  -  Universal Robots PolyScope 5, RIOT OS, Modbus, S7comm, EtherNet/IP, BACnet, DNP3
 - **Smart home / maritime / specialized**  -  eNet SMART HOME, OpenRemote, Metis maritime IoT (WIC/DFS)
-- **21 AutoPwn modules**  -  multi-phase vendor-specific exploitation chains (GPON, Huawei, CUPS Pwn2Own, Lexmark Pwn2Own, NAS, Smart Home, VoIP, IoT generic, and more)
+- **23 AutoPwn modules**  -  multi-phase vendor-specific exploitation chains (GPON, Huawei, CUPS Pwn2Own, Lexmark Pwn2Own, NAS, Smart Home, VoIP, IoT generic, HP printers (PJL/LEDM/LDAP passback), Sony Bravia Smart TV (UPnP/SSRF/DIAL/EventSub), and more)
 - **62 payload modules**  -  reverse/bind TCP shells for x86, x64, ARM, MIPS, Python, Perl, PHP; ARM XOR encoder; BusyBox shell dropper
 - **33 encoder modules**  -  Base64, hex, XOR encoding for Python, PHP, Perl, shellcode
 - **25 generic modules**  -  Heartbleed, ShellShock, UPnP IGD, SNMP bruteforce, TCP Xmas, UDP amplification, CVE lookup, DNS hijack detector, AITM interceptor
@@ -88,6 +88,17 @@ EmbedXPL-Forge is an open-source exploitation and scanning framework for securit
 ```bash
 pip install embedxpl
 embedxpl
+```
+
+### Option 1b  -  With uv (faster)
+
+```bash
+# Install uv first: https://docs.astral.sh/uv/
+uv pip install embedxpl
+embedxpl
+
+# Or add to a uv project:
+uv add embedxpl
 ```
 
 ### Option 2  -  With Nmap NSE scripts
@@ -1249,14 +1260,15 @@ Source files in [`docs/diagrams/architecture/`](docs/diagrams/architecture/).
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.12+
 - Optional: `nmap` (binary) for enhanced network discovery and NSE scripts
 - Optional: `masscan` for high-speed RTSP discovery
 - Optional: `gcc`/`clang` for PolyExploit C/C++ runtime compilation
 - Optional: `msfconsole` for Metasploit integration via PolyRunner
+- Optional: `uv` for faster installs (`pip install uv`)
 
 **Python dependencies (auto-installed):**
-`requests`, `paramiko`, `pysnmp`, `pycryptodome`, `scapy`, `colorama`, `rich`, `python-nmap`, `aiohttp`
+`requests`, `paramiko`, `pysnmp>=7.1`, `pycryptodome`, `scapy`, `colorama`, `rich`, `python-nmap`, `aiohttp`
 
 **NSE extras (`pip install "embedxpl[nse]"`):**
 `python-nmap` (already included in core)
