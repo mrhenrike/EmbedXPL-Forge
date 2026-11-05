@@ -99,7 +99,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install build tools
-        run: uv pip install --system build twine
+        run: pip install build twine
 
       - name: Build sdist and wheel
         run: python -m build
